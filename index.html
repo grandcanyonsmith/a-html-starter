@@ -1,96 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script defer src="/_vercel/insights/script.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css"
-    />
-    <title>Vercel HTML Starter</title>
-    <meta
-      name="description"
-      content="High-performance HTML based website template."
-    />
-  </head>
-  <body>
-    <h1>Vercel HTML Starter</h1>
-    <p>
-      This template is a simple, but powerful single
-      <code>index.html</code> file deployed to
-      <a href="https://vercel.com">Vercel</a>. When your site is deployed, all
-      static assets (like HTML, JavaScript, CSS, images, and more) are deployed
-      globally to every
-      <a href="https://vercel.com/docs/concepts/edge-network/overview"
-        >Vercel Edge Network</a
-      >
-      region.
-    </p>
-    <h2>Simple, privacy-friendly analytics</h2>
-    <p>
-      Want to understand your visitor traffic? Vercel Analytics gives you
-      first-party, privacy-friendly traffic analytics for your HTML site. This
-      template is already configured using the following script:
-    </p>
-    <pre><code>&lt;script defer src="/_vercel/insights/script.js"&gt;&lt;/script&gt;</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/analytics">Vercel Analytics</a>.
-    </p>
-    <h2>Integrated with git</h2>
-    <p>
-      Deploying updates to your site is as simple as
-      <code>git push</code> thanks to Vercel's advanced
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-      Support for GitHub, GitLab, Bitbucket is zero-configuration, and with the
-      flexible Vercel CLI and API, you can integrate with any tool possible.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/git">Git Integration</a>.
-    </p>
-    <h2>Fast <code>gzip</code> compression</h2>
-    <p>
-      To help ensure the smallest possible file sizes for your static assets,
-      the Vercel Edge Network compresses files by default using
-      <code>gzip</code>. You can also optionally use
-      <code>brotli</code> compressesion if you prefer.
-    </p>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/edge-network/compression"
-        >compression</a
-      >.
-    </p>
-    <h2>Advanced routing configuration</h2>
-    <p>
-      Vercel gives you a variety of ways to configure the routing of your
-      website. For example, adding redirects, rewrites, or headers to your page.
-      While you can use <code>vercel.json</code> to define these through JSON,
-      you can also express your routing configuration as code using
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-    <p>
-      Middleware runs before the
-      <a href="https://vercel.com/docs/concepts/edge-network/caching"
-        >Vercel Edge Network Cache</a
-      >, so you can configure routing exactly as your application needs. For
-      example, this template uses <code>middleware.js</code> defined in the root
-      of the repository to add additional security headers to the site:
-    </p>
-    <pre><code>referrer-policy: origin-when-cross-origin
-strict-transport-security: max-age=31536000; includeSubDomains; preload
-x-content-type-options: nosniff
-x-dns-prefetch-control: on
-x-frame-options: DENY</code></pre>
-    <p>
-      Learn more about
-      <a href="https://vercel.com/docs/concepts/functions/edge-middleware"
-        >Vercel Edge Middleware</a
-      >.
-    </p>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Tests Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-900 text-white">
+  <nav class="nav dark-theme" data-view="Nav" data-page="automated_tests"></nav>
+
+  <main class="mx-auto p-5 mt-20 overflow-auto h-screen">
+    <h1 class="text-4xl font-bold text-white mb-10">Automated Tests</h1>
+    <header class="mb-5">
+      <section class="flex justify-between">
+<div class="flex flex-col mr-5">
+        <label for="team" class="text-sm font-bold mb-1">Team</label>
+        <select id="team" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
+          <option value="Celebrations">Celebrations</option>
+          <option value="Legacy">Legacy</option>
+        </select>
+      </div>
+
+        <div class="flex flex-col">
+          <label for="testing_type" class="text-sm font-bold mb-1 text-gray-300">Test Type</label>
+          <select id="testing_type" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
+            <option value="Performance Test">Performance Test</option>
+            <option value="Acceptance Tests">Acceptance Tests</option>
+            <option value="Regression Tests">Regression Tests</option>
+            <option value="Unit Tests">Unit Tests</option>
+          </select>
+        </div>
+      </section>
+    </header>
+
+    <section class="grid grid-cols-4 gap-4 mb-5">
+      <div class="p-4 bg-gray-800 rounded shadow text-center">
+        <span class="text-gray-400">Tests</span>
+        <div class="text-white text-3xl" id="totalTests"></div>
+      </div>
+      <div class="p-4 bg-green-600 rounded shadow text-center">
+        <span class="text-gray-200">Passed</span>
+        <div class="text-white text-3xl" id="totalPassed"></div>
+      </div>
+      <div class="p-4 bg-red-600 rounded shadow text-center">
+        <span class="text-gray-200">Failed</span>
+        <div class="text-white text-3xl" id="totalFailed"></div>
+      </div>
+      <div class="p-4 bg-gray-800 rounded shadow text-center">
+        <span class="text-gray-400">Runs</span>
+        <div class="text-white text-3xl" id="totalRuns"></div>
+      </div>
+    </section>
+
+    <section class="relative bg-gray-800 rounded p-5 shadow mb-5">
+      <div id="graph" class="w-full h-96"></div>
+      <div class="absolute top-2 right-2">
+        <select id="timeframe" class="p-2 text-white border-white border bg-gray-900" onchange="updatePastRunsTitle()">
+          <option value="1">Last 1 Day</option>
+          <option value="7">Last 7 Days</option>
+          <option value="14">Last 14 Days</option>
+          <option value="30">Last 30 Days</option>
+        </select>
+      </div>
+    </section>
+
+    <button id="runTestsBtn" class="px-4 py-2 bg-blue-500 text-white rounded shadow mb-5 text-sm">Run Tests</button>
+
+    <div id="testResult" class="p-4 bg-gray-800 text-white rounded shadow mb-5"></div>
+
+    <div class="border-t border-gray-700 my-5"></div>
+
+    <section class="past-runs">
+      <h2 id="pastRunsTitle" class="text-2xl font-bold mb-5 text-gray-300">Runs over the Last 1 Day</h2>
+      <table class="w-full border-collapse text-center">
+        <thead>
+          <tr>
+            <th class="p-2 border border-gray-800 text-gray-300">Date</th>
+            <th class="p-2 border border-gray-800 text-gray-300">Test ID</th>
+            <th class="p-2 border border-gray-800 text-gray-300">Status</th>
+            <th class="p-2 border border-gray-800 text-gray-300">Duration</th>
+            <th class="p-2 border border-gray-800 text-gray-300">Tests</th>
+            <th class="p-2 border border-gray-800 text-gray-300">Passed</th>
+            <th class="p-2 border border-gray-800 text-gray-300">Failed</th>
+            <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th>
+          </tr>
+        </thead>
+        <tbody id="pastRunsBody" class="bg-gray-800">
+          <tr class="table-row border-b-4 border-gray-800">
+            <td class="p-2 border border-gray-800 text-gray-300">2022-01-01</td>
+            <td class="p-2 border border-gray-800 test-id hover:bg-gray-700 cursor-pointer"><a href="#" class="text-white no-underline">123456</a></td>
+            <td class="p-2 border border-gray-800 status flex justify-center items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-green-500 mr-2" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+              </svg>
+              Passed
+            </td>
+            <td class="p-2 border border-gray-800 text-gray-300">1h 30m</td>
+            <td class="p-2 border border-gray-800 text-gray-300">100</td>
+            <td class="p-2 border border-gray-800 text-gray-300">100</td>
+            <td class="p-2 border border-gray-800 text-gray-300">0</td>
+            <td class="p-2 border border-gray-800 text-green-500">100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</body>
+
 </html>
