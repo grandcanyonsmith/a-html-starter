@@ -153,11 +153,12 @@
     };
 
     elements.runTestsBtn.on('click', () => {
-        showLoadingAnimation();
-        $.post('https://caudrbbckdes2nheqylqmyiery0oykzh.lambda-url.us-west-2.on.aws/', { body: 'Celebrations' })
-          .done(handleTestResult)
-          .fail(handleError);
-    });
+    showLoadingAnimation();
+    var team = document.getElementById('team').value; // Get the selected team
+    $.post('https://caudrbbckdes2nheqylqmyiery0oykzh.lambda-url.us-west-2.on.aws/', { body: team }) // Send the team in the request body
+      .done(handleTestResult)
+      .fail(handleError);
+});
 
 function updateAggregateValues() {
     var totalTests = 0;
