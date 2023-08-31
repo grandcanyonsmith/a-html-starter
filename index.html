@@ -1,7 +1,7 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Automated Tests Page</title>
@@ -15,13 +15,13 @@
     <h1 class="text-4xl font-bold text-white mb-10">Automated Tests</h1>
     <header class="mb-5">
       <section class="flex justify-between">
-<div class="flex flex-col mr-5">
-        <label for="team" class="text-sm font-bold mb-1">Team</label>
-        <select id="team" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
-          <option value="Celebrations">Celebrations</option>
-          <option value="Legacy">Legacy</option>
-        </select>
-      </div>
+        <div class="flex flex-col mr-5">
+          <label for="team" class="text-sm font-bold mb-1">Team</label>
+          <select id="team" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
+            <option value="Celebrations">Celebrations</option>
+            <option value="Legacy">Legacy</option>
+          </select>
+        </div>
 
         <div class="flex flex-col">
           <label for="testing_type" class="text-sm font-bold mb-1 text-gray-300">Test Type</label>
@@ -72,41 +72,206 @@
 
     <div class="border-t border-gray-700 my-5"></div>
 
-    <section class="past-runs">
-      <h2 id="pastRunsTitle" class="text-2xl font-bold mb-5 text-gray-300">Runs over the Last 1 Day</h2>
-      <table class="w-full border-collapse text-center">
-        <thead>
-          <tr>
-            <th class="p-2 border border-gray-800 text-gray-300">Date</th>
-            <th class="p-2 border border-gray-800 text-gray-300">Test ID</th>
-            <th class="p-2 border border-gray-800 text-gray-300">Status</th>
-            <th class="p-2 border border-gray-800 text-gray-300">Duration</th>
-            <th class="p-2 border border-gray-800 text-gray-300">Tests</th>
-            <th class="p-2 border border-gray-800 text-gray-300">Passed</th>
-            <th class="p-2 border border-gray-800 text-gray-300">Failed</th>
-            <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th>
-          </tr>
-        </thead>
-        <tbody id="pastRunsBody" class="bg-gray-800">
-          <tr class="table-row border-b-4 border-gray-800">
-            <td class="p-2 border border-gray-800 text-gray-300">2022-01-01</td>
-            <td class="p-2 border border-gray-800 test-id hover:bg-gray-700 cursor-pointer"><a href="#" class="text-white no-underline">123456</a></td>
-            <td class="p-2 border border-gray-800 status flex justify-center items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-green-500 mr-2" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-              </svg>
-              Passed
-            </td>
-            <td class="p-2 border border-gray-800 text-gray-300">1h 30m</td>
-            <td class="p-2 border border-gray-800 text-gray-300">100</td>
-            <td class="p-2 border border-gray-800 text-gray-300">100</td>
-            <td class="p-2 border border-gray-800 text-gray-300">0</td>
-            <td class="p-2 border border-gray-800 text-green-500">100%</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+<section class="past-runs">
+  <h2 id="pastRunsTitle" class="text-2xl font-bold mb-5 text-gray-300">Runs over the Last 1 Day</h2>
+  <div class="overflow-x-auto">
+    <table class="w-full text-center">
+      <thead>
+        <tr>
+          <th class="p-2 border border-gray-800 text-gray-300">Date</th>
+          <th class="p-2 border border-gray-800 text-gray-300">Test ID</th>
+          <th class="p-2 border border-gray-800 text-gray-300">Status</th>
+          <th class="p-2 border border-gray-800 text-gray-300">Duration</th>
+          <th class="p-2 border border-gray-800 text-gray-300">Tests</th>
+          <th class="p-2 border border-gray-800 text-gray-300">Passed</th>
+          <th class="p-2 border border-gray-800 text-gray-300">Failed</th>
+          <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th>
+        </tr>
+      </thead>
+      <tbody id="pastRunsBody" class="bg-gray-800">
+        <!-- The rows will be populated dynamically by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+</section>
   </main>
 </body>
+<script>
+    document.getElementById('runTestsBtn').addEventListener('click', function() {
+        document.getElementById('uploadToTestrailBtn').classList.remove('hidden');
+    });
+
+    function updatePastRunsTitle() {
+        var team = document.getElementById('team').value;
+        var testType = document.getElementById('testing_type').value;
+        var timeframe = document.getElementById('timeframe').value;
+        var title = team + ' ' + testType + ' over the Last ' + timeframe + ' Day(s)';
+        document.getElementById('pastRunsTitle').innerText = title;
+    }
+
+    window.onload = function() {
+        updatePastRunsTitle();
+    }
+
+    const elements = {
+        runTestsBtn: $('#runTestsBtn'),
+        testResult: $('#testResult')
+    };
+
+    const showLoadingAnimation = () => {
+        elements.runTestsBtn.prop('disabled', true).text('Loading...');
+    };
+
+    const hideLoadingAnimation = () => {
+        elements.runTestsBtn.prop('disabled', false).text('Run Tests');
+    };
+
+    const handleTestResult = (response) => {
+        hideLoadingAnimation();
+        let html = '';
+        response.tests.forEach((test, index) => {
+            const statusIcon = test.status === 'PASSED'
+              ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill stylish-svg-pass text-green-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>'
+              : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-red-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>';
+
+            const statusClass = test.status === 'PASSED' ? 'text-green-500' : 'text-red-500';
+            const zebraClass = index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-800';
+            html += `<div class="stylish-p dark-theme ${zebraClass}"><div class="flex justify-between items-center w-full">${statusIcon} ${test.name} <span class="${statusClass}">${test.status}</span></div></div>`;
+        });
+
+        html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Tests:<span>${response.total_tests}</span></div></p>`;
+        html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Time:<span>${response.total_time}</span></div></p>`;
+
+        html += '<button id="uploadToTestrailBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm">Upload to Testrail</button>';
+
+        elements.testResult.html(html);
+    };
+
+    const handleError = (error) => {
+        hideLoadingAnimation();
+        console.log(error);
+    };
+
+    elements.runTestsBtn.on('click', () => {
+        showLoadingAnimation();
+        $.post('https://caudrbbckdes2nheqylqmyiery0oykzh.lambda-url.us-west-2.on.aws/', { body: 'Celebrations' })
+          .done(handleTestResult)
+          .fail(handleError);
+    });
+
+function updateAggregateValues() {
+    var totalTests = 0;
+    var totalPassed = 0;
+    var totalFailed = 0;
+    var totalRuns = 0;
+
+    // Get all rows from the table
+    var rows = document.getElementById('pastRunsBody').getElementsByTagName('tr');
+
+    for (var i = 0; i < rows.length; i++) {
+        // Get all cells from the current row
+        var cells = rows[i].getElementsByTagName('td');
+
+        // Update the total values
+        totalTests += isNaN(parseInt(cells[3].innerText)) ? 0 : parseInt(cells[3].innerText); // Total Tests
+        totalPassed += isNaN(parseInt(cells[4].innerText)) ? 0 : parseInt(cells[4].innerText); // Total Passed
+        totalFailed += isNaN(parseInt(cells[5].innerText)) ? 0 : parseInt(cells[5].innerText); // Total Failed
+        totalRuns += 1; // Each row represents a run
+    }
+    document.getElementById('totalTests').innerText = totalTests;
+    document.getElementById('totalPassed').innerText = totalPassed;
+    document.getElementById('totalFailed').innerText = totalFailed;
+    document.getElementById('totalRuns').innerText = totalRuns;
+}
+
+
+    // Call updateAggregateValues whenever the timestamp or team changes
+    document.getElementById('timeframe').addEventListener('change', updateAggregateValues);
+    document.getElementById('team').addEventListener('change', updateAggregateValues);
+
+function fetchTestRuns() {
+    var timeframe = parseInt(document.getElementById('timeframe').value);
+    var endDate = new Date();
+    var startDate = new Date();
+    startDate.setDate(endDate.getDate() - timeframe);
+
+    // Format the dates as 'YYYY-MM-DD'
+    var endDateStr = endDate.toISOString().split('T')[0];
+    var startDateStr = startDate.toISOString().split('T')[0];
+    var team = document.getElementById('team').value;
+
+    $.ajax({
+        url: 'https://plkvn6skvpjk3cinv3q5jmjyiy0ebrza.lambda-url.us-west-2.on.aws/',
+        type: 'POST',
+        data: JSON.stringify({
+            start_date: '2022-01-01 00:00:00',
+            end_date: '2023-12-31 23:59:59',
+            team: 'Legacy'
+        }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function(response) {
+            // Log the response
+            console.log(response);
+
+            // Clear the table
+            $('#pastRunsBody').empty();
+
+            // Map the response to testRunData fields
+            const testRunData = mapResponseToTestRunData(response);
+
+            // Handle the response here
+            testRunData.forEach(function(testRun) {
+    var dateParts = testRun.Date.split(' '); // Split the date and time
+    var date = dateParts[0];
+    var time = dateParts[1];
+
+    var row = '<tr>' +
+        '<td class="p-2 border border-gray-800 text-gray-300">' + 
+        '<div class="text-white">' + date + '</div>' + 
+        '<div class="text-gray-400 text-xs">' + time + '</div>' + 
+        '</td>' +
+        '<td class="p-2 border border-gray-800 test-id hover:bg-gray-700 cursor-pointer"><a href="#" class="text-white no-underline">' + testRun.TestID + '</a></td>' +
+        '<td class="p-2 border border-gray-800 status flex justify-center items-center">' + (testRun.Status === 'Passed' ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-green-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" /></svg> Passed' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-red-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg> Failed') + '</td>' +
+        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Duration + '</td>' +
+        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Tests + '</td>' +
+        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Passed + '</td>' +
+        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Failed + '</td>' +
+        '<td class="p-2 border border-gray-800 text-green-500">' + testRun.Efficiency + '</td>' +
+        '</tr>';
+    $('#pastRunsBody').append(row);
+});
+        },
+error: function(error) {
+    console.log('error', error.responseText);
+    console.log('status', error.status);
+}
+    });
+}
+
+    // Call fetchTestRuns on page load
+    fetchTestRuns();
+
+    // Call fetchTestRuns whenever the timestamp or team changes
+    document.getElementById('timeframe').addEventListener('change', fetchTestRuns);
+    document.getElementById('team').addEventListener('change', fetchTestRuns);
+
+    // Map response to testRunData fields
+    function mapResponseToTestRunData(response) {
+        return response.map(testRun => {
+                    return {
+            Date: testRun.Date,
+            TestID: testRun.TestID,
+            Status: testRun.Status,
+            Duration: testRun.Duration,
+            Tests: testRun.Tests,
+            Passed: testRun.Passed,
+            Failed: testRun.Failed,
+            Efficiency: testRun.Efficiency
+        };
+    });
+    }
+</script>
 
 </html>
+
