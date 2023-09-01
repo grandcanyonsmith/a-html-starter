@@ -1,3 +1,4 @@
+$(document).ready(function() {
 (function() {
   const API_URL =
     "https://plkvn6skvpjk3cinv3q5jmjyiy0ebrza.lambda-url.us-west-2.on.aws/";
@@ -171,3 +172,4 @@
   updateTitle();
   fetchTestRuns();
 })();
+});
