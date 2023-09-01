@@ -103,7 +103,6 @@
 
   const handleError = (error) => {
     console.log("error", error);
-    alert("An error occurred. Please try again.");
   };
 
   elements.timeframe.on("change", function() {
