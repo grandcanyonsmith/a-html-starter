@@ -116,41 +116,62 @@ $(document).ready(function() {
       testRunsChart.destroy(); // If the chart was already created, destroy it before creating a new one
     }
 
-    testRunsChart = new Chart(document.getElementById('testRunsChart').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [{
-          label: 'Passed',
-          data: passedData,
-          fill: true,
-          backgroundColor: 'rgba(75, 192, 192, 0.5)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        },
-        {
-          label: 'Failed',
-          data: failedData,
-          fill: true,
-          backgroundColor: 'rgba(255, 99, 132, 0.8)',
-          borderColor: 'rgba(255, 99, 132, 1)',
-          borderWidth: 1
-        }]
+testRunsChart = new Chart(document.getElementById('testRunsChart').getContext('2d'), {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Passed',
+      data: passedData,
+      fill: true,
+      backgroundColor: 'rgba(75, 192, 192, 0.2)', // Lighter fill color
+      borderColor: 'rgba(75, 192, 192, 1)',
+      borderWidth: 2, // Thicker line
+      pointBackgroundColor: 'rgba(75, 192, 192, 1)', // Point color same as line color
+      pointBorderColor: '#fff', // White border for points
+      pointHoverBackgroundColor: '#fff', // White fill for points on hover
+      pointHoverBorderColor: 'rgba(75, 192, 192, 1)' // Line color border for points on hover
+    },
+    {
+      label: 'Failed',
+      data: failedData,
+      fill: true,
+      backgroundColor: 'rgba(255, 99, 132, 0.2)', // Lighter fill color
+      borderColor: 'rgba(255, 99, 132, 1)',
+      borderWidth: 2, // Thicker line
+      pointBackgroundColor: 'rgba(255, 99, 132, 1)', // Point color same as line color
+      pointBorderColor: '#fff', // White border for points
+      pointHoverBackgroundColor: '#fff', // White fill for points on hover
+      pointHoverBorderColor: 'rgba(255, 99, 132, 1)' // Line color border for points on hover
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false, // Allows the chart to resize based on container's dimensions
+    scales: {
+      y: {
+        beginAtZero: true,
+        gridLines: {
+          color: 'rgba(255, 255, 255, 0.1)' // Lighter grid lines
+        }
       },
-      options: {
-        responsive: true, // Add this line
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        },
-        elements: {
-          line: {
-            tension: 0.4 // This makes the lines curved
-          }
+      x: {
+        gridLines: {
+          color: 'rgba(255, 255, 255, 0.1)' // Lighter grid lines
         }
       }
-    });
+    },
+    elements: {
+      line: {
+        tension: 0.4 // This makes the lines curved
+      },
+      point: {
+        radius: 5, // Bigger points
+        hoverRadius: 7 // Bigger points on hover
+      }
+    }
+  }
+});
   };
 
   const handleError = (error) => {
