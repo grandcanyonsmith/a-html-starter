@@ -72,207 +72,205 @@
 
     <div class="border-t border-gray-700 my-5"></div>
 
-<section class="past-runs">
-  <h2 id="pastRunsTitle" class="text-2xl font-bold mb-5 text-gray-300">Runs over the Last 1 Day</h2>
-  <div class="overflow-x-auto">
-    <table class="w-full text-center">
-      <thead>
-        <tr>
-          <th class="p-2 border border-gray-800 text-gray-300">Date</th>
-          <th class="p-2 border border-gray-800 text-gray-300">Test ID</th>
-          <th class="p-2 border border-gray-800 text-gray-300">Status</th>
-          <th class="p-2 border border-gray-800 text-gray-300">Duration</th>
-          <th class="p-2 border border-gray-800 text-gray-300">Tests</th>
-          <th class="p-2 border border-gray-800 text-gray-300">Passed</th>
-          <th class="p-2 border border-gray-800 text-gray-300">Failed</th>
-          <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th>
-        </tr>
-      </thead>
-      <tbody id="pastRunsBody" class="bg-gray-800">
-        <!-- The rows will be populated dynamically by JavaScript -->
-      </tbody>
-    </table>
-  </div>
-</section>
+    <section class="past-runs">
+      <h2 id="pastRunsTitle" class="text-2xl font-bold mb-5 text-gray-300">Runs over the Last 1 Day</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-center">
+          <thead>
+            <tr>
+              <th class="p-2 border border-gray-800 text-gray-300">Date</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Test ID</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Status</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Duration</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Tests</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Passed</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Failed</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th>
+            </tr>
+          </thead>
+          <tbody id="pastRunsBody" class="bg-gray-800">
+            <!-- The rows will be populated dynamically by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
 </body>
 <script>
-    document.getElementById('runTestsBtn').addEventListener('click', function() {
-        document.getElementById('uploadToTestrailBtn').classList.remove('hidden');
-    });
-
-    function updatePastRunsTitle() {
-        var team = document.getElementById('team').value;
-        var testType = document.getElementById('testing_type').value;
-        var timeframe = document.getElementById('timeframe').value;
-        var title = team + ' ' + testType + ' over the Last ' + timeframe + ' Day(s)';
-        document.getElementById('pastRunsTitle').innerText = title;
-    }
-
-    window.onload = function() {
-        updatePastRunsTitle();
-    }
-
+  (function() {
+    const API_URL =
+      "https://plkvn6skvpjk3cinv3q5jmjyiy0ebrza.lambda-url.us-west-2.on.aws/";
+    const TEST_API_URL =
+      "https://caudrbbckdes2nheqylqmyiery0oykzh.lambda-url.us-west-2.on.aws/";
     const elements = {
-        runTestsBtn: $('#runTestsBtn'),
-        testResult: $('#testResult')
+      runTestsBtn: $("#runTestsBtn"),
+      testResult: $("#testResult"),
+      timeframe: $("#timeframe"),
+      team: $("#team"),
+      pastRunsBody: $("#pastRunsBody"),
+      pastRunsTitle: $("#pastRunsTitle"),
+      uploadToTestrailBtn: $("#uploadToTestrailBtn")
     };
-
-    const showLoadingAnimation = () => {
-        elements.runTestsBtn.prop('disabled', true).text('Loading...');
+    const updateTitle = () => {
+      const title = `${elements.team.val()} ${$(
+      "#testing_type"
+    ).val()} over the Last ${elements.timeframe.val()} Day(s)`;
+      elements.pastRunsTitle.text(title);
     };
-
-    const hideLoadingAnimation = () => {
-        elements.runTestsBtn.prop('disabled', false).text('Run Tests');
+    const updateAggregateValues = () => {
+      let totalTests = 0,
+        totalPassed = 0,
+        totalFailed = 0,
+        totalRuns = 0;
+      elements.pastRunsBody.find("tr").each(function() {
+        const cells = $(this).find("td");
+        totalTests += parseInt(cells.eq(3).text()) || 0;
+        totalPassed += parseInt(cells.eq(4).text()) || 0;
+        totalFailed += parseInt(cells.eq(5).text()) || 0;
+        totalRuns++;
+      });
+      $("#totalTests").text(totalTests);
+      $("#totalPassed").text(totalPassed);
+      $("#totalFailed").text(totalFailed);
+      $("#totalRuns").text(totalRuns);
     };
-
-    const handleTestResult = (response) => {
-        hideLoadingAnimation();
-        let html = '';
-        response.tests.forEach((test, index) => {
-            const statusIcon = test.status === 'PASSED'
-              ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill stylish-svg-pass text-green-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>'
-              : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-red-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>';
-
-            const statusClass = test.status === 'PASSED' ? 'text-green-500' : 'text-red-500';
-            const zebraClass = index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-800';
-            html += `<div class="stylish-p dark-theme ${zebraClass}"><div class="flex justify-between items-center w-full">${statusIcon} ${test.name} <span class="${statusClass}">${test.status}</span></div></div>`;
+    const fetchTestRuns = async () => {
+      const timeframe = parseInt(elements.timeframe.val());
+      const endDate = new Date();
+      const startDate = new Date();
+      startDate.setDate(endDate.getDate() - timeframe);
+      const team = elements.team.val();
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            start_date: startDate.toISOString().split("T")[0],
+            end_date: endDate.toISOString().split("T")[0],
+            team: team
+          })
         });
-
-        html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Tests:<span>${response.total_tests}</span></div></p>`;
-        html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Time:<span>${response.total_time}</span></div></p>`;
-
-        html += '<button id="uploadToTestrailBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm">Upload to Testrail</button>';
-
-        elements.testResult.html(html);
+        const data = await response.json();
+        handleTestRunsResponse(data);
+      } catch (error) {
+        handleError(error);
+      }
     };
-
+    const handleTestRunsResponse = (response) => {
+      elements.pastRunsBody.empty();
+      response.forEach((testRun, index) => {
+        const statusIcon =
+          testRun.Status === "Passed" ?
+          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-green-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>' :
+          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-red-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>';
+        const row = `<tr>
+                <td class="p-2 border border-gray-800 text-gray-300">
+                    <div class="text-white">${testRun.Date.split(" ")[0]}</div>
+                    <div class="text-gray-400 text-xs">${
+                      testRun.Date.split(" ")[1]
+                    }</div>
+                </td>
+                <td class="p-2 border border-gray-800 test-id hover:bg-gray-700 cursor-pointer">
+                    <a href="#" class="text-white no-underline">${
+                      testRun.TestID
+                    }</a>
+                </td>
+                <td class="p-2 border border-gray-800 status flex justify-center items-center">${statusIcon} ${
+        testRun.Status
+      }</td>
+                <td class="p-2 border border-gray-800 text-gray-300">${
+                  testRun.Duration
+                }</td>
+                <td class="p-2 border border-gray-800 text-gray-300">${
+                  testRun.Tests
+                }</td>
+                <td class="p-2 border border-gray-800 text-gray-300">${
+                  testRun.Passed
+                }</td>
+                <td class="p-2 border border-gray-800 text-gray-300">${
+                  testRun.Failed
+                }</td>
+                <td class="p-2 border border-gray-800 text-green-500">${
+                  testRun.Efficiency
+                }</td>
+            </tr>`;
+        elements.pastRunsBody.append(row);
+      });
+      updateAggregateValues();
+    };
     const handleError = (error) => {
-        hideLoadingAnimation();
-        console.log(error);
+      console.log("error", error);
+      alert("An error occurred. Please try again.");
     };
-
-    elements.runTestsBtn.on('click', () => {
-    showLoadingAnimation();
-    var team = document.getElementById('team').value; // Get the selected team
-    $.post('https://caudrbbckdes2nheqylqmyiery0oykzh.lambda-url.us-west-2.on.aws/', { body: team }) // Send the team in the request body
-      .done(handleTestResult)
-      .fail(handleError);
-});
-
-function updateAggregateValues() {
-    var totalTests = 0;
-    var totalPassed = 0;
-    var totalFailed = 0;
-    var totalRuns = 0;
-
-    // Get all rows from the table
-    var rows = document.getElementById('pastRunsBody').getElementsByTagName('tr');
-
-    for (var i = 0; i < rows.length; i++) {
-        // Get all cells from the current row
-        var cells = rows[i].getElementsByTagName('td');
-
-        // Update the total values
-        totalTests += isNaN(parseInt(cells[3].innerText)) ? 0 : parseInt(cells[3].innerText); // Total Tests
-        totalPassed += isNaN(parseInt(cells[4].innerText)) ? 0 : parseInt(cells[4].innerText); // Total Passed
-        totalFailed += isNaN(parseInt(cells[5].innerText)) ? 0 : parseInt(cells[5].innerText); // Total Failed
-        totalRuns += 1; // Each row represents a run
-    }
-    document.getElementById('totalTests').innerText = totalTests;
-    document.getElementById('totalPassed').innerText = totalPassed;
-    document.getElementById('totalFailed').innerText = totalFailed;
-    document.getElementById('totalRuns').innerText = totalRuns;
-}
-
-
-    // Call updateAggregateValues whenever the timestamp or team changes
-    document.getElementById('timeframe').addEventListener('change', updateAggregateValues);
-    document.getElementById('team').addEventListener('change', updateAggregateValues);
-
-function fetchTestRuns() {
-    var timeframe = parseInt(document.getElementById('timeframe').value);
-    var endDate = new Date();
-    var startDate = new Date();
-    startDate.setDate(endDate.getDate() - timeframe);
-
-    // Format the dates as 'YYYY-MM-DD'
-    var endDateStr = endDate.toISOString().split('T')[0];
-    var startDateStr = startDate.toISOString().split('T')[0];
-    var team = document.getElementById('team').value;
-
-    $.ajax({
-        url: 'https://plkvn6skvpjk3cinv3q5jmjyiy0ebrza.lambda-url.us-west-2.on.aws/',
-        type: 'POST',
-        data: JSON.stringify({
-            start_date: '2022-01-01 00:00:00',
-            end_date: '2023-12-31 23:59:59',
-            team: 'Legacy'
-        }),
-        contentType: 'application/json; charset=utf-8',
-        dataType: 'json',
-        success: function(response) {
-            // Log the response
-            console.log(response);
-
-            // Clear the table
-            $('#pastRunsBody').empty();
-
-            // Map the response to testRunData fields
-            const testRunData = mapResponseToTestRunData(response);
-
-            // Handle the response here
-            testRunData.forEach(function(testRun) {
-    var dateParts = testRun.Date.split(' '); // Split the date and time
-    var date = dateParts[0];
-    var time = dateParts[1];
-
-    var row = '<tr>' +
-        '<td class="p-2 border border-gray-800 text-gray-300">' + 
-        '<div class="text-white">' + date + '</div>' + 
-        '<div class="text-gray-400 text-xs">' + time + '</div>' + 
-        '</td>' +
-        '<td class="p-2 border border-gray-800 test-id hover:bg-gray-700 cursor-pointer"><a href="#" class="text-white no-underline">' + testRun.TestID + '</a></td>' +
-        '<td class="p-2 border border-gray-800 status flex justify-center items-center">' + (testRun.Status === 'Passed' ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-green-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" /></svg> Passed' : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-red-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg> Failed') + '</td>' +
-        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Duration + '</td>' +
-        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Tests + '</td>' +
-        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Passed + '</td>' +
-        '<td class="p-2 border border-gray-800 text-gray-300">' + testRun.Failed + '</td>' +
-        '<td class="p-2 border border-gray-800 text-green-500">' + testRun.Efficiency + '</td>' +
-        '</tr>';
-    $('#pastRunsBody').append(row);
-});
-        },
-error: function(error) {
-    console.log('error', error.responseText);
-    console.log('status', error.status);
-}
+    const handleTestResult = (data) => {
+      console.log("Data:", data);
+      hideLoadingAnimation();
+      let html = "";
+      data.tests.forEach((test, index) => {
+        const statusIcon =
+          test.status === "PASSED" ?
+          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill stylish-svg-pass text-green-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>' :
+          '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-red-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>';
+        const statusClass =
+          test.status === "PASSED" ? "text-green-500" : "text-red-500";
+        const zebraClass = index % 2 === 0 ? "bg-gray-800" : "bg-gray-800";
+        html += `<div class="stylish-p dark-theme ${zebraClass}"><div class="flex justify-between items-center w-full">${statusIcon} ${test.name} <span class="${statusClass}">${test.status}</span></div></div>`;
+      });
+      html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Tests:<span>${data.total_tests}</span></div></p>`;
+      html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Time:<span>${data.total_time}</span></div></p>`;
+      html +=
+        '<button id="uploadToTestrailBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm">Upload to Testrail</button>';
+      elements.testResult.html(html);
+    };
+    const showLoadingAnimation = () => {
+      elements.runTestsBtn.prop("disabled", true).text("Loading...");
+    };
+    const hideLoadingAnimation = () => {
+      elements.runTestsBtn.prop("disabled", false).text("Run Tests");
+    };
+    elements.runTestsBtn.on("click", async () => {
+      showLoadingAnimation();
+      try {
+        console.log("Sending request...");
+        const response = await fetch(TEST_API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            body: elements.team.val()
+          })
+        });
+        if (!response.ok) {
+          console.log("Response was not OK");
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        console.log("Parsing response...");
+        const data = await response.json();
+        console.log("Handling result...");
+        handleTestResult(data);
+      } catch (error) {
+        console.log("Caught an error");
+        handleError(error);
+      } finally {
+        hideLoadingAnimation();
+      }
     });
-}
-
-    // Call fetchTestRuns on page load
+    elements.timeframe.on("change", function() {
+      updateTitle();
+      fetchTestRuns();
+      updateAggregateValues();
+    });
+    elements.team.on("change", function() {
+      updateTitle();
+      fetchTestRuns();
+      updateAggregateValues();
+    });
+    updateTitle();
     fetchTestRuns();
-
-    // Call fetchTestRuns whenever the timestamp or team changes
-    document.getElementById('timeframe').addEventListener('change', fetchTestRuns);
-    document.getElementById('team').addEventListener('change', fetchTestRuns);
-
-    // Map response to testRunData fields
-    function mapResponseToTestRunData(response) {
-        return response.map(testRun => {
-                    return {
-            Date: testRun.Date,
-            TestID: testRun.TestID,
-            Status: testRun.Status,
-            Duration: testRun.Duration,
-            Tests: testRun.Tests,
-            Passed: testRun.Passed,
-            Failed: testRun.Failed,
-            Efficiency: testRun.Efficiency
-        };
-    });
-    }
+  })();
 </script>
 
 </html>
-
