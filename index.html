@@ -2,6 +2,111 @@
 
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="runsDataHistory.js"></script> <!-- Add this line -->
+  <script src="runTests.js"></script> <!-- Add this line -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Automated Tests Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-900 text-white">
+  <nav class="nav dark-theme" data-view="Nav" data-page="automated_tests"></nav>
+
+  <main class="mx-auto p-5 mt-20 overflow-auto h-screen">
+    <h1 class="text-4xl font-bold text-white mb-10">Automated Tests</h1>
+    <header class="mb-5">
+      <section class="flex justify-between">
+        <div class="flex flex-col mr-5">
+          <label for="team" class="text-sm font-bold mb-1">Team</label>
+          <select id="team" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
+            <option value="Celebrations">Celebrations</option>
+            <option value="Legacy">Legacy</option>
+          </select>
+        </div>
+
+        <div class="flex flex-col">
+          <label for="testing_type" class="text-sm font-bold mb-1 text-gray-300">Test Type</label>
+          <select id="testing_type" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
+            <option value="Performance Test">Performance Test</option>
+            <option value="Acceptance Tests">Acceptance Tests</option>
+            <option value="Regression Tests">Regression Tests</option>
+            <option value="Unit Tests">Unit Tests</option>
+          </select>
+        </div>
+      </section>
+    </header>
+
+    <section class="grid grid-cols-4 gap-4 mb-5">
+      <div class="p-4 bg-gray-800 rounded shadow text-center">
+        <span class="text-gray-400">Tests</span>
+        <div class="text-white text-3xl" id="totalTests"></div>
+      </div>
+      <div class="p-4 bg-green-600 rounded shadow text-center">
+        <span class="text-gray-200">Passed</span>
+        <div class="text-white text-3xl" id="totalPassed"></div>
+      </div>
+      <div class="p-4 bg-red-600 rounded shadow text-center">
+        <span class="text-gray-200">Failed</span>
+        <div class="text-white text-3xl" id="totalFailed"></div>
+      </div>
+      <div class="p-4 bg-gray-800 rounded shadow text-center">
+        <span class="text-gray-400">Runs</span>
+        <div class="text-white text-3xl" id="totalRuns"></div>
+      </div>
+    </section>
+
+    <section class="relative bg-gray-800 rounded p-5 shadow mb-5">
+      <div id="graph" class="w-full h-96"></div>
+      <div class="absolute top-2 right-2">
+        <select id="timeframe" class="p-2 text-white border-white border bg-gray-900" onchange="updatePastRunsTitle()">
+          <option value="1">Last 1 Day</option>
+          <option value="7">Last 7 Days</option>
+          <option value="14">Last 14 Days</option>
+          <option value="30">Last 30 Days</option>
+        </select>
+      </div>
+    </section>
+
+    <button id="runTestsBtn" class="px-4 py-2 bg-blue-500 text-white rounded shadow mb-5 text-sm">Run Tests</button>
+
+    <div id="testResult" class="p-4 bg-gray-800 text-white rounded shadow mb-5"></div>
+
+    <div class="border-t border-gray-700 my-5"></div>
+
+    <section class="past-runs">
+      <h2 id="pastRunsTitle" class="text-2xl font-bold mb-5 text-gray-300">Runs over the Last 1 Day</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-center">
+          <thead>
+            <tr>
+              <th class="p-2 border border-gray-800 text-gray-300">Date</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Test ID</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Status</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Duration</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Tests</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Passed</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Failed</th>
+              <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th>
+            </tr>
+          </thead>
+          <tbody id="pastRunsBody" class="bg-gray-800">
+            <!-- The rows will be populated dynamically by JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>
+
+
+
+<!-- <html lang="en">
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Automated Tests Page</title>
@@ -274,3 +379,4 @@
 </script>
 
 </html>
+ -->
