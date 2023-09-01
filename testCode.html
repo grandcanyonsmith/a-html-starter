@@ -4,28 +4,21 @@
     <title>GitHub Repo Files</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/theme/dracula.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
     <div class="container mx-auto px-2 sm:px-4 lg:px-8 py-5 sm:py-10 lg:py-20">
         <div class="flex flex-col sm:flex-row justify-center">
             <div class="w-full px-2">
-                <textarea id="fileContent" class="w-full h-32 sm:h-96 bg-gray-800 text-white border-gray-700 focus:border-gray-600 focus:outline-none focus:ring-0 mt-5 rounded-lg shadow-lg"></textarea>
+                <pre><code id="fileContent" class="language-python"></code></pre>
             </div>
         </div>
     </div>
 
     <script>
-        var editor = CodeMirror.fromTextArea(document.getElementById('fileContent'), {
-            lineNumbers: true,
-            mode: 'python',
-            theme: 'dracula'
-        });
-
         $(document).ready(function() {
             var urlParams = new URLSearchParams(window.location.search);
             var fileName = urlParams.get('fileName');
@@ -47,7 +40,8 @@
 
         function getFileContent(url) {
             $.get(url, function(data) {
-                editor.setValue(data);
+                document.getElementById('fileContent').textContent = data;
+                Prism.highlightAll();
             });
         }
      </script>
