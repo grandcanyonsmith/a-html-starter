@@ -91,7 +91,7 @@
                     success: function (data) {
                         var formattedData = formatResponseData(data);
                         document.getElementById('fileContent').textContent = formattedData;
-                        Prism.highlightElement(document.getElementById('fileContent'));
+                        Prism.highlightAll();
                         $('#aiInstructions').hide();
                         $('#instructions').val('');
                         $('#logs').show();
@@ -105,7 +105,7 @@
         function getFileContent(url) {
             $.get(url, function(data) {
                 document.getElementById('fileContent').textContent = data;
-                Prism.highlightElement(document.getElementById('fileContent'));
+                Prism.highlightAll();
             });
         }
 
