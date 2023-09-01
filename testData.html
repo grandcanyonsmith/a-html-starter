@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Data</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container mx-auto px-4">
+    <h1 id="testID" class="text-2xl font-bold mb-4"></h1>
+    <table class="table-auto w-full">
+      <thead>
+        <tr>
+          <th class="px-4 py-2">Duration</th>
+          <th class="px-4 py-2">File Name</th>
+          <th class="px-4 py-2">Test Run ID</th>
+          <th class="px-4 py-2">Logs</th>
+          <th class="px-4 py-2">Status</th>
+          <th class="px-4 py-2">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody id="data">
+        <!-- Data will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const table = document.getElementById('data');
+    const testIDHeader = document.getElementById('testID');
+    const urlParams = new URLSearchParams(window.location.search);
+    const testID = urlParams.get('testID');
+    fetch('https://vduheqg77qsdmfdpdbb2xlcpam0gslgw.lambda-url.us-west-2.on.aws/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          testID: testID
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        testIDHeader.textContent = `TestID: ${data[0].testID}`;
+        data.forEach(item => {
+          const row = document.createElement('tr');
+          const orderedData = {
+            duration: item.duration,
+            fileName: item.fileName,
+            testRunID: item.testRunID,
+            logs: item.logs,
+            status: item.status,
+            timestamp: item.timestamp
+          };
+          Object.keys(orderedData).forEach(key => {
+            if (key !== 'testID') {
+              const cell = document.createElement('td');
+              let text = orderedData[key];
+              if (key === 'fileName') {
+                const a = document.createElement('a');
+                a.href = '#'; // Replace with the actual link
+                a.textContent = text;
+                cell.appendChild(a);
+              } else {
+                cell.textContent = text;
+              }
+              cell.classList.add('border', 'px-4', 'py-2');
+              row.appendChild(cell);
+            }
+          });
+          table.appendChild(row);
+        });
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
+  </script>
+</body>
+
+</html>
