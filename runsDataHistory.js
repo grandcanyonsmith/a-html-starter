@@ -106,7 +106,7 @@ $(document).ready(function() {
   };
 
   const generateGraph = (testRuns) => {
-    const labels = testRuns.map(run => run.Date.split(" ")[0]);
+    const labels = testRuns.map(run => run.Date.split(" ")[0].substring(5)); //remove the year with substring the first 5 characters
     const passedData = testRuns.map(run => run.Passed);
     const failedData = testRuns.map(run => run.Failed);
     console.log(passedData,'passedData')
