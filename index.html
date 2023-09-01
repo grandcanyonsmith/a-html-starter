@@ -17,6 +17,7 @@
     }
   }
 </style>
+
 <body class="bg-gray-900 text-white">
   <nav class="nav dark-theme" data-view="Nav" data-page="automated_tests"></nav>
 
@@ -65,10 +66,10 @@
 
     <section class="relative bg-gray-800 rounded p-5 shadow mb-5">
 
-    <canvas class="w-full h-96 md:h-120 lg:h-144" id="testRunsChart"></canvas>
+<canvas class="w-full h-96 md:h-120 lg:h-144 md:mt-0 mt-5" id="testRunsChart"></canvas>
 
-      <div class="absolute top-2 right-2">
-        <select id="timeframe" class="p-2 text-white border-white border bg-gray-900" onchange="updatePastRunsTitle()">
+      <div class="absolute top-2 bottom-2 right-2 mt-5">
+        <select id="timeframe" class="p-2 text-white border-white border bg-gray-800" onchange="updatePastRunsTitle()">
           <option value="1">Last 1 Day</option>
           <option value="7">Last 7 Days</option>
           <option value="14">Last 14 Days</option>
