@@ -35,7 +35,7 @@
         });
 
         function getFiles(fileName) {
-            $.post('https://flask-hello-world2-cgwuxs3zl-grandcanyonsmith.vercel.app/github_repos/a-yb-automation-tests2/contents', function(data) {
+            $.get('https://flask-hello-world2-cgwuxs3zl-grandcanyonsmith.vercel.app/github_repos/a-yb-automation-tests2/contents', function(data) {
                 var file = data.find(function(file) {
                     return file.name === fileName;
                 });
