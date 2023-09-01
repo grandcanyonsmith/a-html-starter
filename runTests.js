@@ -1,4 +1,5 @@
-(function() {
+$(document).ready(function() {
+  (function() {
   const TEST_API_URL =
     "https://caudrbbckdes2nheqylqmyiery0oykzh.lambda-url.us-west-2.on.aws/";
   const elements = {
@@ -54,12 +55,13 @@
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const data = await response.json();
-      handleTestResult(data);
-    } catch (error) {
-      handleError(error);
-    } finally {
-      hideLoadingAnimation();
-    }
-  });
-})();
+        const data = await response.json();
+        handleTestResult(data);
+      } catch (error) {
+        handleError(error);
+      } finally {
+        hideLoadingAnimation();
+      }
+    });
+  })();
+});
