@@ -10,7 +10,13 @@
   <title>Automated Tests Page</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
 </head>
-
+<style>
+  @media (max-width: 768px) {
+    #testRunsChart {
+      height: 400px !important;
+    }
+  }
+</style>
 <body class="bg-gray-900 text-white">
   <nav class="nav dark-theme" data-view="Nav" data-page="automated_tests"></nav>
 
@@ -59,7 +65,7 @@
 
     <section class="relative bg-gray-800 rounded p-5 shadow mb-5">
 
-  <canvas class="w-full h-96" id="testRunsChart"></canvas>
+    <canvas class="w-full h-96 md:h-120 lg:h-144" id="testRunsChart"></canvas>
 
       <div class="absolute top-2 right-2">
         <select id="timeframe" class="p-2 text-white border-white border bg-gray-900" onchange="updatePastRunsTitle()">
