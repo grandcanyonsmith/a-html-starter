@@ -35,8 +35,9 @@
         });
 
         function getFileContent(fileName) {
-            $.get('https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/a-yb-automation-tests2/contents/' + fileName, function(data) {
-                editor.setValue(atob(data.content));
+            $.get('https://api.github.com/repos/a-yb-automation-tests2/contents/' + fileName, function(data) {
+                var decodedData = atob(data.content);
+                editor.setValue(decodedData);
             });
         }
      </script>
