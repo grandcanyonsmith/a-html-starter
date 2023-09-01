@@ -71,9 +71,9 @@ const handleTestRunsResponse = (response) => {
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill text-red-500 mr-2" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>';
     const row = $(`<tr>
             <td class="p-2 border border-gray-800 text-gray-300">
-                <div class="text-white">${testRun.Date.split(" ")[0]}</div>
+                <div class="text-white">${testRun.Date.split(" ")[0].substring(5)}</div>
                 <div class="text-gray-400 text-xs">${
-                  testRun.Date.split(" ")[1]
+                  testRun.Date.split(" ")[1].substring(0, 5)
                 }</div>
             </td>
             <td class="p-2 border border-gray-800 test-id hover:bg-gray-700 cursor-pointer">
@@ -81,11 +81,9 @@ const handleTestRunsResponse = (response) => {
                   testRun.TestID
                 }</a>
             </td>
-            <td class="p-2 border border-gray-800 status flex justify-center items-center">${statusIcon} ${
-    testRun.Status
-  }</td>
+            <td class="p-2 border border-gray-800 status flex justify-center items-center">${statusIcon}</td>
             <td class="p-2 border border-gray-800 text-gray-300">${
-              testRun.Duration
+              testRun.Duration ? testRun.Duration : '-'
             }</td>
             <td class="p-2 border border-gray-800 text-gray-300">${
               testRun.Tests
@@ -95,9 +93,6 @@ const handleTestRunsResponse = (response) => {
             }</td>
             <td class="p-2 border border-gray-800 text-gray-300">${
               testRun.Failed
-            }</td>
-            <td class="p-2 border border-gray-800 text-green-500">${
-              testRun.Efficiency
             }</td>
         </tr>`);
     row.find('.test-id a').on('click', function(e) {
