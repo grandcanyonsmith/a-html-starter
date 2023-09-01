@@ -22,20 +22,17 @@
   <nav class="nav dark-theme" data-view="Nav" data-page="automated_tests"></nav>
 
   <main class="mx-auto p-5 mt-20 overflow-auto h-screen">
-    <h1 class="text-4xl font-bold text-white mb-10">Automated Tests</h1>
     <header class="mb-5">
-      <section class="flex justify-between">
+      <section class="flex flex-col justify-between">
         <div class="flex flex-col mr-5">
-          <label for="team" class="text-sm font-bold mb-1">Team</label>
-          <select id="team" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
+          <select id="team" class="p-2 text-white rounded bg-gray-900 border-white text-4xl font-bold" onchange="updatePastRunsTitle()">
             <option value="Celebrations">Celebrations</option>
             <option value="Legacy">Legacy</option>
           </select>
         </div>
 
         <div class="flex flex-col">
-          <label for="testing_type" class="text-sm font-bold mb-1 text-gray-300">Test Type</label>
-          <select id="testing_type" class="p-2 text-white rounded bg-gray-900 border-white " onchange="updatePastRunsTitle()">
+          <select id="testing_type" class="p-2 text-white rounded bg-gray-900 border-white text-2xl" onchange="updatePastRunsTitle()">
             <option value="Performance Test">Performance Test</option>
             <option value="Acceptance Tests">Acceptance Tests</option>
             <option value="Regression Tests">Regression Tests</option>
@@ -68,8 +65,8 @@
 
 <canvas class="w-full h-96 md:h-120 lg:h-144 md:mt-0 mt-5" id="testRunsChart"></canvas>
 
-            <div class="absolute top-1 bottom-3 right-1 mt-.5">
-        <select id="timeframe" class="p-2 text-white border-white border bg-gray-800" onchange="updatePastRunsTitle()">
+      <div class="absolute top-1 bottom-3 right-1 mt-.5">
+        <select id="timeframe" class="p-1 text-white border-white border bg-gray-800" onchange="updatePastRunsTitle()">
           <option value="1">Last 1 Day</option>
           <option value="7">Last 7 Days</option>
           <option value="14">Last 14 Days</option>
@@ -97,7 +94,7 @@
               <th class="p-2 border border-gray-800 text-gray-300">Tests</th>
               <th class="p-2 border border-gray-800 text-gray-300">Passed</th>
               <th class="p-2 border border-gray-800 text-gray-300">Failed</th>
-              <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th>
+<!--               <th class="p-2 border border-gray-800 text-gray-300">Efficiency</th> -->
             </tr>
           </thead>
           <tbody id="pastRunsBody" class="bg-gray-800">
