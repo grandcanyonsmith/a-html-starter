@@ -8,6 +8,8 @@
     pastRunsTitle: $("#pastRunsTitle")
   };
 
+  let testRunsChart; // This variable will hold the chart instance
+
   const updateTitle = () => {
     const title = `${elements.team.val()} ${$(
       "#testing_type"
@@ -53,6 +55,7 @@
       });
       const data = await response.json();
       handleTestRunsResponse(data);
+      generateGraph(data); // Generate the graph with the fetched data
     } catch (error) {
       handleError(error);
     }
@@ -99,6 +102,54 @@
       elements.pastRunsBody.append(row);
     });
     updateAggregateValues();
+  };
+
+  const generateGraph = (testRuns) => {
+    const labels = testRuns.map(run => run.Date.split(" ")[0]);
+    const passedData = testRuns.map(run => run.Passed);
+    const failedData = testRuns.map(run => run.Failed);
+    console.log(passedData,'passedData')
+    console.log(failedData,'failedData')
+    console.log(labels,'labels')
+    if (testRunsChart) {
+      testRunsChart.destroy(); // If the chart was already created, destroy it before creating a new one
+    }
+
+    testRunsChart = new Chart(document.getElementById('testRunsChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Passed',
+          data: passedData,
+          fill: true,
+          backgroundColor: 'rgba(75, 192, 192, 0.5)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Failed',
+          data: failedData,
+          fill: true,
+          backgroundColor: 'rgba(255, 99, 132, 0.8)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true, // Add this line
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        elements: {
+          line: {
+            tension: 0.4 // This makes the lines curved
+          }
+        }
+      }
+    });
   };
 
   const handleError = (error) => {
