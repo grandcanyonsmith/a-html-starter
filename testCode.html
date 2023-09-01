@@ -14,27 +14,91 @@
         <div class="flex flex-col sm:flex-row justify-center">
             <div class="w-full px-2">
                 <pre><code id="fileContent" class="language-python"></code></pre>
+                <button id="runCode" class="btn btn-primary w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg mt-5">Run Code</button>
+                <button id="changeCode" class="btn btn-secondary w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg mt-5">Change Code with AI</button>
+                <div id="aiInstructions" class="mt-5 hidden">
+                    <textarea id="instructions" class="form-control w-full bg-gray-800 text-white border-gray-700 focus:border-gray-600 focus:outline-none focus:ring-0 h-24 rounded-lg shadow-lg" placeholder="Enter instructions..."></textarea>
+                    <button id="submitInstructions" class="btn btn-primary w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-lg mt-5">Submit</button>
+                </div>
+                <textarea id="logs" class="form-control w-full bg-gray-800 text-white border-gray-700 focus:border-gray-600 focus:outline-none focus:ring-0 mt-5 h-32 sm:h-48 rounded-lg shadow-lg"></textarea>
             </div>
         </div>
     </div>
 
     <script>
         $(document).ready(function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var fileName = urlParams.get('fileName');
-            if (fileName) {
-                getFiles(fileName);
-            }
+            populateRepoDropdown();
+            handleRepoSelection();
+            handleFileSelection();
+            handleRunCode();
+            handleChangeCode();
+            handleSubmitInstructions();
         });
 
-        function getFiles(fileName) {
-            $.get('https://flask-hello-world2-cgwuxs3zl-grandcanyonsmith.vercel.app/github_repos/a-yb-automation-tests2/contents', function(data) {
-                var file = data.find(function(file) {
-                    return file.name === fileName;
+        function populateRepoDropdown() {
+            $.get('https://flask-hello-world2-three.vercel.app/github_repos_list', function(data) {
+                data.forEach(function(repo) {
+                    $('#repoDropdown').append(new Option(repo, repo));
                 });
-                if (file) {
-                    getFileContent(file.download_url);
-                }
+            });
+        }
+
+        function handleRepoSelection() {
+            $('#repoDropdown').change(function() {
+                var selectedRepo = $(this).val();
+                populateFileDropdown(selectedRepo);
+            });
+        }
+
+        function populateFileDropdown(repo) {
+            $.get('https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/' + repo + '/contents', function(data) {
+                $('#fileDropdown').empty().append(new Option('Select a file', ''));
+                data.forEach(function(file) {
+                    $('#fileDropdown').append(new Option(file.name, file.download_url));
+                });
+            });
+        }
+
+        function handleFileSelection() {
+            $('#fileDropdown').change(function() {
+                var selectedFileUrl = $(this).val();
+                getFileContent(selectedFileUrl);
+            });
+        }
+
+        function handleRunCode() {
+            $('#runCode').click(function() {
+                executeCode();
+            });
+        }
+
+        function handleChangeCode() {
+            $('#changeCode').click(function() {
+                $('#aiInstructions').show();
+                $('#logs').hide();
+            });
+        }
+
+        function handleSubmitInstructions() {
+            $('#submitInstructions').click(function() {
+                var code = document.getElementById('fileContent').textContent;
+                var instructions = $('#instructions').val();
+                $.ajax({
+                    url: 'https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/api',
+                    type: 'post',
+                    dataType: 'text',
+                    contentType: 'application/json',
+                    success: function (data) {
+                        var formattedData = formatResponseData(data);
+                        document.getElementById('fileContent').textContent = formattedData;
+                        Prism.highlightAll();
+                        $('#aiInstructions').hide();
+                        $('#instructions').val('');
+                        $('#logs').show();
+                        executeCode();
+                    },
+                    data: JSON.stringify({ code: code, instructions: instructions })
+                });
             });
         }
 
@@ -43,6 +107,22 @@
                 document.getElementById('fileContent').textContent = data;
                 Prism.highlightAll();
             });
+        }
+
+        function executeCode() {
+            var code = document.getElementById('fileContent').textContent;
+            $.post('https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/execute', { code: code }, function(data) {
+                $('#logs').val(data.output);
+            });
+        }
+
+        function formatResponseData(data) {
+            var formattedData = data.replace(/\\n/g, '\n');
+            formattedData = formattedData.substring(1, formattedData.length - 1);
+            if (formattedData.endsWith('"')) {
+                formattedData = formattedData.substring(0, formattedData.length - 1);
+            }
+            return formattedData;
         }
      </script>
 </body>
