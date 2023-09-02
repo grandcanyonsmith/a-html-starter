@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        pre {
+            font-size: 0.875rem;
+        }
+    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
@@ -12,7 +17,7 @@
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
     <div class="container mx-auto px-2 sm:px-4 lg:px-8 py-5 sm:py-10 lg:py-20">
         <button onclick="window.history.back();" class="mb-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</button>
-        <h2 id="fileName" class="text-2xl mb-5"></h2>
+        <h2 id="fileName" class="text-lg mb-5"></h2>
         <div class="flex flex-col sm:flex-row justify-center">
             <div class="w-full px-2">
                 <pre><code id="fileContent" class="language-python"></code></pre>
@@ -37,12 +42,12 @@
             }
 
             $('#editCode').click(function() {
-                $('#outputTitle, #outputBox, #runCode').addClass('hidden');
+                $('#outputTitle, #outputBox').addClass('hidden');
                 $('#requestTitle, #requestBox, #submitButton').removeClass('hidden');
             });
 
             $('#runCode').click(function() {
-                $('#outputTitle, #outputBox, #runCode').removeClass('hidden');
+                $('#outputTitle, #outputBox').removeClass('hidden');
                 $('#requestTitle, #requestBox, #submitButton').addClass('hidden');
             });
         });
@@ -67,4 +72,3 @@
      </script>
 </body>
 </html>
-
