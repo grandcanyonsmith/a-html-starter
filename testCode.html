@@ -11,11 +11,20 @@
 </head>
 <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
     <div class="container mx-auto px-2 sm:px-4 lg:px-8 py-5 sm:py-10 lg:py-20">
+        <button onclick="window.history.back();" class="mb-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</button>
+        <h2 id="fileName" class="text-2xl mb-5"></h2>
         <div class="flex flex-col sm:flex-row justify-center">
             <div class="w-full px-2">
                 <pre><code id="fileContent" class="language-python"></code></pre>
             </div>
         </div>
+        <button id="runCode" class="mt-5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Run Code</button>
+        <button id="editCode" class="mt-5 ml-5 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Edit Code with AI</button>
+        <h3 id="outputTitle" class="mt-5">Code Output</h3>
+        <div id="outputBox" class="mt-5 p-5 bg-gray-800 rounded"></div>
+        <h3 id="requestTitle" class="mt-5 hidden">Enter your request</h3>
+        <textarea id="requestBox" class="mt-5 p-5 bg-gray-800 rounded hidden" placeholder="Enter your request..."></textarea>
+        <button id="submitButton" class="mt-5 hidden bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Submit</button>
     </div>
 
     <script>
@@ -24,7 +33,18 @@
             var fileName = urlParams.get('fileName');
             if (fileName) {
                 getFiles(fileName);
+                document.getElementById('fileName').textContent = fileName;
             }
+
+            $('#editCode').click(function() {
+                $('#outputTitle, #outputBox, #runCode').addClass('hidden');
+                $('#requestTitle, #requestBox, #submitButton').removeClass('hidden');
+            });
+
+            $('#runCode').click(function() {
+                $('#outputTitle, #outputBox, #runCode').removeClass('hidden');
+                $('#requestTitle, #requestBox, #submitButton').addClass('hidden');
+            });
         });
 
         function getFiles(fileName) {
@@ -47,3 +67,4 @@
      </script>
 </body>
 </html>
+
