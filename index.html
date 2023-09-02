@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,12 +47,12 @@
         <span class="text-gray-400">Tests</span>
         <div class="text-white text-3xl" id="totalTests"></div>
       </div>
-      <div class="p-4 bg-green-600 rounded shadow text-center">
-        <span class="text-gray-200">Passed</span>
+      <div class="p-4 bg-gray-800 rounded shadow text-center">
+        <span class="text-gray-400">Passed</span>
         <div class="text-white text-3xl" id="totalPassed"></div>
       </div>
-      <div class="p-4 bg-red-600 rounded shadow text-center">
-        <span class="text-gray-200">Failed</span>
+      <div class="p-4 bg-gray-800 rounded shadow text-center">
+        <span class="text-gray-400">Failed</span>
         <div class="text-white text-3xl" id="totalFailed"></div>
       </div>
       <div class="p-4 bg-gray-800 rounded shadow text-center">
@@ -64,7 +63,6 @@
 
     <section class="relative bg-gray-800 rounded p-5 shadow mb-5">
       <canvas class="w-full h-96 md:h-120 lg:h-144 md:mt-0 mt-5" id="testRunsChart"></canvas>
-
       <div class="absolute top-1 bottom-3 right-1 mt-.5">
         <select id="timeframe" class="p-1 text-white border-white border bg-gray-800" onchange="updatePastRunsTitle()">
           <option value="1">Last 1 Day</option>
