@@ -17,12 +17,13 @@
     }
   </style>
 </head>
-
-<body class="bg-gray-900 text-white">
-  <nav class="nav dark-theme" data-view="Nav" data-page="automated_tests"></nav>
-
-  <main class="mx-auto p-5 mt-20 overflow-auto h-screen">
-    <header class="mb-5">
+<body class="flex flex-col h-screen text-white bg-gray-900">
+  <main class="flex-1 overflow-y-auto p-5" data-view="nav" data-page="automated_tests">
+    <header class="mt-6">
+      <nav class="flex border-b border-white pb-2 mb-5 space-x-6 text-xl font-bold">
+        <a href="reports.html" class="text-white border-b-2 border-white pb-1">Reports</a>
+        <a href="run-tests.html" class="text-white hover:text-gray-300 border-b-2 border-transparent hover:border-white pb-1">Run Tests</a>
+      </nav>
       <section class="flex flex-col justify-between">
         <div class="flex flex-col mr-5">
           <select id="team" class="p-2 text-white rounded bg-gray-900 border-white text-4xl font-bold" onchange="updatePastRunsTitle()">
@@ -30,7 +31,6 @@
             <option value="Legacy">Legacy</option>
           </select>
         </div>
-
         <div class="flex flex-col">
           <select id="testing_type" class="p-2 text-white rounded bg-gray-900 border-white text-2xl" onchange="updatePastRunsTitle()">
             <option value="Performance Test">Performance Test</option>
@@ -40,26 +40,6 @@
           </select>
         </div>
       </section>
-    </header>
-
-    <section class="grid grid-cols-4 gap-4 mb-5">
-      <div class="p-4 bg-gray-800 rounded shadow text-center">
-        <span class="text-gray-400">Tests</span>
-        <div class="text-white text-3xl" id="totalTests"></div>
-      </div>
-      <div class="p-4 bg-gray-800 rounded shadow text-center">
-        <span class="text-gray-400">Passed</span>
-        <div class="text-white text-3xl" id="totalPassed"></div>
-      </div>
-      <div class="p-4 bg-gray-800 rounded shadow text-center">
-        <span class="text-gray-400">Failed</span>
-        <div class="text-white text-3xl" id="totalFailed"></div>
-      </div>
-      <div class="p-4 bg-gray-800 rounded shadow text-center">
-        <span class="text-gray-400">Runs</span>
-        <div class="text-white text-3xl" id="totalRuns"></div>
-      </div>
-    </section>
 
     <section class="relative bg-gray-800 rounded p-5 shadow mb-5">
       <canvas class="w-full h-96 md:h-120 lg:h-144 md:mt-0 mt-5" id="testRunsChart"></canvas>
