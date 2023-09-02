@@ -2,84 +2,95 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Data</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Data</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-800 overflow-hidden">
-  <div class="container mx-auto px-4">
-    <button onclick="window.history.back()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">Back</button>
-    <h1 id="testID" class="text-2xl font-bold mb-4 text-left text-white"></h1>
-    <div class="overflow-auto">
-      <table class="table-auto w-full text-xs sm:text-sm md:text-base">
-        <thead>
-          <tr>
-            <th class="px-4 py-2 text-center text-white">Status</th>
-            <th class="px-4 py-2 text-center text-white">File Name</th>
-            <th class="px-4 py-2 text-center text-white">Duration</th>
-            <th class="px-4 py-2 text-center text-white">Test Run ID</th>
-            <th class="px-4 py-2 text-center text-white">Logs</th>
-            <th class="px-4 py-2 text-center text-white">Timestamp</th>
-          </tr>
-        </thead>
-        <tbody id="data">
-          <!-- Data will be inserted here -->
-        </tbody>
-      </table>
+<body class="bg-gray-900 text-white py-8 overflow-x-auto">
+    <div class="mx-auto max-w-screen-lg px-4 pb-4 rounded-lg shadow-md">
+        <button onclick="window.history.back()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">Back</button>
+        <h1 id="testID" class="mb-4 text-left text-gray-200 font-semibold text-2xl"></h1>
+        <div class="overflow-x-auto">
+            <table class="table-auto w-full border-collapse bg-gray-800 text-gray-100">
+                <thead>
+                    <tr>
+                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Status</th>
+                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">File Name</th>
+                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Duration</th>
+                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Test Run ID</th>
+                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Logs</th>
+                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Timestamp</th>
+                    </tr>
+                </thead>
+                <tbody id="data">
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
+    <script>
+        const table = document.getElementById('data');
+        const testIDHeader = document.getElementById('testID');
+        const urlParams = new URLSearchParams(window.location.search);
+        const testID = urlParams.get('testID');
+        fetch('https://vduheqg77qsdmfdpdbb2xlcpam0gslgw.lambda-url.us-west-2.on.aws/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                testID: testID
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                testIDHeader.textContent = `TestID: ${data[0].testID}`;
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    let dateParts = item.timestamp.split(' ');
+                    let datePart = dateParts[0].slice(5);
+                    let timePart = dateParts[1].slice(0, 5);
 
-  <script>
-    const table = document.getElementById('data');
-    const testIDHeader = document.getElementById('testID');
-    const urlParams = new URLSearchParams(window.location.search);
-    const testID = urlParams.get('testID');
+                    let statusElement;
+                    if (item.status === "passed") {
+                      statusElement = `<span style="color: green;">✔</span>`;
+                    } else {
+                      statusElement = `<span style="color: red;">✖</span>`;
+                    }
 
-    fetch('https://vduheqg77qsdmfdpdbb2xlcpam0gslgw.lambda-url.us-west-2.on.aws/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        testID: testID
-      }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        testIDHeader.textContent = `TestID: ${data[0].testID}`;
-        data.forEach(item => {
-          const row = document.createElement('tr');
-          const orderedData = {
-            status: item.status,
-            fileName: item.fileName,
-            duration: item.duration,
-            testRunID: item.testRunID,
-            logs: item.logs,
-            timestamp: item.timestamp
-          };
-          Object.keys(orderedData).forEach(key => {
-            const cell = document.createElement('td');
-            let text = orderedData[key];
-            if (key === 'fileName') {
-              const a = document.createElement('a');
-              a.href = `testCode.html?fileName=${encodeURIComponent(text)}&logs=${encodeURIComponent(item.logs)}`; // Redirect to testCode.html with fileName and logs parameters
-              a.textContent = text;
-              cell.appendChild(a);
-            } else {
-              cell.textContent = text;
-            }
-            cell.classList.add('border', 'px-4', 'py-2', 'text-center', 'text-white');
-            row.appendChild(cell);
-          });
-          table.appendChild(row);
-        });
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
-  </script>
+                    let processedData = {
+                        status: statusElement,
+                        fileName: item.fileName,
+                        duration: Math.round(item.duration/1000) + " sec",
+                        testRunID: item.testRunID,
+                        logs: item.logs,
+                        timestamp: `<p class="mb-0">${datePart}</p><p class="text-gray-400 text-sm">${timePart}</p>`
+                    };
+
+                    Object.keys(processedData).forEach(key => {
+                        const cell = document.createElement('td');
+                        cell.className = "py-2 px-4 border border-gray-600 bg-gray-800 text-center";
+                        if (key === 'fileName') {
+                            const a = document.createElement('a');
+                            a.href = `testCode.html?fileName=${encodeURIComponent(item.fileName)}&logs=${encodeURIComponent(item.logs)}`;
+                            a.textContent = item.fileName;
+                            a.style.fontSize = '0.75rem';
+                            cell.appendChild(a);
+                        } else if (key === 'timestamp' || key === 'status') {
+                            cell.innerHTML = processedData[key];
+                        } else {
+                            cell.textContent = processedData[key];
+                        }
+                        row.appendChild(cell);
+                    });
+                    table.appendChild(row);
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    </script>
 </body>
 
 </html>
