@@ -4,24 +4,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Data</title>
+    <title>Data Report</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @media (max-width: 640px) {
+            table {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        .highlighted {
+            background-color: lightgray;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-900 text-white py-8 overflow-x-auto">
-    <div class="mx-auto max-w-screen-lg px-4 pb-4 rounded-lg shadow-md">
-        <button onclick="window.history.back()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">Back</button>
-        <h1 id="testID" class="mb-4 text-left text-gray-200 font-semibold text-2xl"></h1>
-        <div class="overflow-x-auto">
-            <table class="table-auto w-full border-collapse bg-gray-800 text-gray-100">
+<body class="bg-gray-900 text-white py-8">
+    <div class="container max-w-screen-lg mx-auto pb-4 px-4 rounded shadow-md">
+        <button onclick="window.history.back()" class="bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded mb-4 font-bold text-white">Back</button>
+        <h1 id="testID" class="font-semibold text-2xl text-gray-200 mb-4">TestID: </h1>
+        <div class="table-responsive overflow-scroll hide-scroll-bar">
+            <table class="table-auto w-full text-gray-100 bg-gray-800 border-collapse">
                 <thead>
                     <tr>
-                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Status</th>
-                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">File Name</th>
-                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Duration</th>
-                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Test Run ID</th>
-                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Logs</th>
-                        <th class="p-2 border border-gray-600 bg-gray-700 text-center">Timestamp</th>
+                        <th class="border border-gray-600 bg-gray-700 py-2 text-center">Status</th>
+                        <th class="border border-gray-600 bg-gray-700 py-2 text-center">File Name</th>
+                        <th class="border border-gray-600 bg-gray-700 py-2 text-center">Duration</th>
+                        <th class="border border-gray-600 bg-gray-700 py-2 text-center">Test Run ID</th>
+                        <th class="border border-gray-600 bg-gray-700 py-2 text-center">Logs</th>
+                        <th class="border border-gray-600 bg-gray-700 py-2 text-center">Timestamp</th>
                     </tr>
                 </thead>
                 <tbody id="data">
@@ -34,6 +48,7 @@
         const testIDHeader = document.getElementById('testID');
         const urlParams = new URLSearchParams(window.location.search);
         const testID = urlParams.get('testID');
+
         fetch('https://vduheqg77qsdmfdpdbb2xlcpam0gslgw.lambda-url.us-west-2.on.aws/', {
             method: 'POST',
             headers: {
@@ -43,54 +58,46 @@
                 testID: testID
             }),
         })
-            .then(response => response.json())
-            .then(data => {
-                testIDHeader.textContent = `TestID: ${data[0].testID}`;
-                data.forEach(item => {
-                    const row = document.createElement('tr');
-                    let dateParts = item.timestamp.split(' ');
-                    let datePart = dateParts[0].slice(5);
-                    let timePart = dateParts[1].slice(0, 5);
+        .then(response => response.json())
+        .then(data => {
+            testIDHeader.textContent += data[0].testID;
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                const statusElement = item.status === "passed" ? `<span class="text-green-500">&#10003;</span>` : `<span class="text-red-500">&#10007;</span>`;
+                let fileName = item.fileName;
+                if (fileName.length > 15) {
+                    fileName = fileName.substring(0, 15) + "...";
+                }
 
-                    let statusElement;
-                    if (item.status === "passed") {
-                      statusElement = `<span style="color: green;">✔</span>`;
-                    } else {
-                      statusElement = `<span style="color: red;">✖</span>`;
+                const processedData = {
+                    status: statusElement,
+                    fileName: fileName,
+                    duration: `${Math.round(item.duration/1000)} sec`,
+                    testRunID: item.testRunID,
+                    logs: item.logs,
+                    timestamp: `${new Date(item.timestamp).toLocaleDateString()} ${new Date(item.timestamp).toLocaleTimeString()}`
+                };
+
+                Object.values(processedData).forEach((value, idx) => {
+                    const cell = document.createElement('td');
+                    cell.className = "p-2 border border-gray-600 bg-gray-800 text-center";
+                    cell.innerHTML = value;
+                    if (idx === 1) {
+                        cell.addEventListener('click', () => {
+                            cell.classList.toggle('highlighted');
+                        });
                     }
-
-                    let processedData = {
-                        status: statusElement,
-                        fileName: item.fileName,
-                        duration: Math.round(item.duration/1000) + " sec",
-                        testRunID: item.testRunID,
-                        logs: item.logs,
-                        timestamp: `<p class="mb-0">${datePart}</p><p class="text-gray-400 text-sm">${timePart}</p>`
-                    };
-
-                    Object.keys(processedData).forEach(key => {
-                        const cell = document.createElement('td');
-                        cell.className = "py-2 px-4 border border-gray-600 bg-gray-800 text-center";
-                        if (key === 'fileName') {
-                            const a = document.createElement('a');
-                            a.href = `testCode.html?fileName=${encodeURIComponent(item.fileName)}&logs=${encodeURIComponent(item.logs)}`;
-                            a.textContent = item.fileName;
-                            a.style.fontSize = '0.75rem';
-                            cell.appendChild(a);
-                        } else if (key === 'timestamp' || key === 'status') {
-                            cell.innerHTML = processedData[key];
-                        } else {
-                            cell.textContent = processedData[key];
-                        }
-                        row.appendChild(cell);
-                    });
-                    table.appendChild(row);
+                    row.appendChild(cell);
                 });
-            })
-            .catch((error) => {
-                console.error('Error:', error);
+
+                table.appendChild(row);
             });
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
     </script>
 </body>
 
 </html>
+
