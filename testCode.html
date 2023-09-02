@@ -1,4 +1,196 @@
 <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <title>Enhanced Code Editor</title>
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <style>
+        #outputBox {
+            width: 100%;
+            overflow: auto;
+        }
+    </style>
+    <body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
+        <div class="container mx-auto p-4">
+            <div class="flex justify-center mb-4">
+                <button id="sourceBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l">Source</button>
+                <button id="outputBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4">Output</button>
+            </div>
+            <div class="flex justify-between mb-4">
+                <select id="repoDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+                    <option>Select a repo</option>
+                </select>
+                <select id="fileDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+                    <option>Select a file</option>
+                </select>
+            </div>
+            <pre id="codeBox" class="w-full h-screen bg-white rounded shadow-lg p-4 language-html"></pre>
+            <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
+            <div class="flex justify-between mt-4">
+                <input type="text" id="requestInput" placeholder="Enter request..." class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+                <button id="submitBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right">
+                    Submit
+                </button>
+                <button id="runBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
+                    Run
+                </button>
+                <div id="loader" class="hidden absolute h-5 w-5 border-t-2 border-white rounded-full animate-spin"></div>
+            </div>
+        </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script>
+    const elements = {
+        sourceBtn: document.getElementById('sourceBtn'),
+        outputBtn: document.getElementById('outputBtn'),
+        submitBtn: document.getElementById('submitBtn'),
+        runBtn: document.getElementById('runBtn'),
+        loader: document.getElementById('loader'),
+        codeBox: document.getElementById('codeBox'),
+        outputBox: document.getElementById('outputBox'),
+        repoDropdown: document.getElementById('repoDropdown'),
+        fileDropdown: document.getElementById('fileDropdown'),
+        requestInput: document.getElementById('requestInput')
+    };
+
+        const urls = {
+            runCode: 'https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/',
+            submitRequest: 'https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/',
+            getRepos: 'https://flask-hello-world2-three.vercel.app/github_repos_list',
+            getFiles: 'https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/'
+        };
+
+        elements.sourceBtn.addEventListener('click', toggleView);
+        elements.outputBtn.addEventListener('click', toggleView);
+        elements.submitBtn.addEventListener('click', submitRequest);
+        elements.runBtn.addEventListener('click', runCode);
+        elements.repoDropdown.addEventListener('change', handleRepoSelection);
+        elements.fileDropdown.addEventListener('change', handleFileSelection);
+
+        function toggleView(ev) {
+            const isSourceEvent = ev.target.id === 'sourceBtn';
+            const isOutputEvent = ev.target.id === 'outputBtn';
+            elements.codeBox.classList.toggle('hidden', !isSourceEvent);
+            elements.outputBox.classList.toggle('hidden', !isOutputEvent);
+            if (!isSourceEvent) {
+                var selectedFileUrl = elements.fileDropdown.value;
+                if (selectedFileUrl.endsWith('.html')) {
+                    var htmlContent = elements.codeBox.textContent;
+                    var iframe = document.createElement('iframe');
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.border = '0';
+                    elements.outputBox.innerHTML = '';
+                    elements.outputBox.appendChild(iframe);
+                    iframe.contentWindow.document.open();
+                    iframe.contentWindow.document.write(htmlContent);
+                    iframe.contentWindow.document.close();
+                } else {
+                    var logContent = elements.outputBox.textContent;
+                    elements.outputBox.textContent = logContent;
+                    elements.outputBox.style.overflow = 'auto';
+                }
+            }
+            Prism.highlightAll();
+        }
+
+        async function runCode() {
+            var code = elements.codeBox.textContent;
+            elements.runBtn.textContent = 'Running...';
+            try {
+                const response = await axios.post(urls.runCode, { code: code });
+                console.log(response.data);
+                elements.outputBox.textContent = response.data;
+                elements.outputBtn.click();
+                elements.runBtn.textContent = 'Run';
+                elements.runBtn.disabled = false;
+                elements.loader.classList.add('hidden');
+                Prism.highlightAll();
+            } catch (error) {
+                console.error(error);
+                elements.runBtn.textContent = 'Run';
+                elements.runBtn.disabled = false;
+                elements.loader.classList.add('hidden');
+            }
+        }
+
+        function submitRequest() {
+            var requestInput = elements.requestInput;
+            elements.submitBtn.textContent = 'Loading...';
+            axios
+                .post(urls.submitRequest, {
+                    code: elements.codeBox.textContent,
+                    request: requestInput.value,
+                })
+                .then((response) => {
+                    elements.codeBox.textContent = elements.outputBox.innerHTML = response.data;
+                    elements.outputBtn.click();
+                    elements.submitBtn.textContent = 'Submit';
+                    requestInput.value = '';
+                    elements.loader.classList.add('hidden');
+                    Prism.highlightAll();
+                })
+                .catch((error) => {
+                    console.error(error);
+                    elements.submitBtn.textContent = 'Submit';
+                    elements.loader.classList.add('hidden');
+                });
+        }
+
+        function populateRepoDropdown() {
+            $.get(urls.getRepos, function(data) {
+                data.forEach(function(repo) {
+                    elements.repoDropdown.append(new Option(repo, repo));
+                });
+            });
+        }
+
+        function handleRepoSelection() {
+            var selectedRepo = elements.repoDropdown.value;
+            populateFileDropdown(selectedRepo);
+        }
+
+        function populateFileDropdown(repo) {
+            $.get(`${urls.getFiles}${repo}/contents`, function(data) {
+                elements.fileDropdown.innerHTML = '';
+                elements.fileDropdown.append(new Option('Select a file', ''));
+                data.forEach(function(file) {
+                    elements.fileDropdown.append(new Option(file.name, file.download_url));
+                });
+            });
+        }
+
+        function handleFileSelection() {
+            var selectedFileUrl = elements.fileDropdown.value;
+            getFileContent(selectedFileUrl);
+            if (selectedFileUrl.endsWith('.py')) {
+                elements.runBtn.classList.remove('hidden');
+            } else {
+                elements.runBtn.classList.add('hidden');
+            }
+        }
+
+        function getFileContent(fileUrl) {
+            $.get(fileUrl, function(data) {
+                elements.codeBox.textContent = data;
+                Prism.highlightAll();
+            });
+        }
+        populateRepoDropdown();
+
+    </script>
+          </body>
+</html>
+
+
+
+
+<!-- <!DOCTYPE html>
 <html>
 <head>
     <title>GitHub Repo Files</title>
@@ -72,3 +264,4 @@
      </script>
 </body>
 </html>
+ -->
