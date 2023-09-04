@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -8,8 +7,9 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://unpkg.com/feather-icons"></script>
     </head>
-    <style>
+      <style>
         #outputBox {
             width: 100%;
             overflow: auto;
@@ -17,9 +17,13 @@
     </style>
     <body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
         <div class="container mx-auto p-4">
-            <div class="flex justify-center mb-4">
-                <button id="sourceBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-l">Source</button>
-                <button id="outputBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4">Output</button>
+            <div class="flex justify-end mb-4">
+                <button id="outputBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg border-r-0">
+                    <i data-feather="eye"></i>
+                </button>
+                <button id="sourceBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg">
+                    <i data-feather="code"></i>
+                </button>
             </div>
             <div class="flex justify-between mb-4">
                 <select id="repoDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
@@ -36,6 +40,9 @@
                 <button id="submitBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right">
                     Submit
                 </button>
+                <button id="saveBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
+                    Save
+                </button>
                 <button id="runBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
                     Run
                 </button>
@@ -49,6 +56,7 @@
         sourceBtn: document.getElementById('sourceBtn'),
         outputBtn: document.getElementById('outputBtn'),
         submitBtn: document.getElementById('submitBtn'),
+        saveBtn: document.getElementById('saveBtn'),
         runBtn: document.getElementById('runBtn'),
         loader: document.getElementById('loader'),
         codeBox: document.getElementById('codeBox'),
@@ -62,16 +70,33 @@
             runCode: 'https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/',
             submitRequest: 'https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/',
             getRepos: 'https://flask-hello-world2-three.vercel.app/github_repos_list',
-            getFiles: 'https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/'
+            getFiles: 'https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/',
+            update: 'https://flask-hello-world2-three.vercel.app/update'
         };
 
         elements.sourceBtn.addEventListener('click', toggleView);
         elements.outputBtn.addEventListener('click', toggleView);
         elements.submitBtn.addEventListener('click', submitRequest);
+        elements.saveBtn.addEventListener('click', saveFile);
         elements.runBtn.addEventListener('click', runCode);
         elements.repoDropdown.addEventListener('change', handleRepoSelection);
         elements.fileDropdown.addEventListener('change', handleFileSelection);
+            outputBtn.addEventListener('click', function() {
+                outputBtn.classList.remove('bg-gray-200');
+                outputBtn.classList.add('bg-gray-300');
+                sourceBtn.classList.remove('bg-gray-300');
+                sourceBtn.classList.add('bg-gray-200');
+            });
 
+            sourceBtn.addEventListener('click', function() {
+                sourceBtn.classList.remove('bg-gray-200');
+                sourceBtn.classList.add('bg-gray-300');
+                outputBtn.classList.remove('bg-gray-300');
+                outputBtn.classList.add('bg-gray-200');
+            });
+
+            feather.replace();
+      
         function toggleView(ev) {
             const isSourceEvent = ev.target.id === 'sourceBtn';
             const isOutputEvent = ev.target.id === 'outputBtn';
@@ -130,18 +155,53 @@
                 .then((response) => {
                     elements.codeBox.textContent = elements.outputBox.innerHTML = response.data;
                     elements.outputBtn.click();
-                    elements.submitBtn.textContent = 'Submit';
-                    requestInput.value = '';
-                    elements.loader.classList.add('hidden');
-                    Prism.highlightAll();
-                })
-                .catch((error) => {
-                    console.error(error);
-                    elements.submitBtn.textContent = 'Submit';
-                    elements.loader.classList.add('hidden');
-                });
+elements.submitBtn.textContent = 'Submit';
+                requestInput.value = '';
+                elements.loader.classList.add('hidden');
+                elements.saveBtn.classList.remove('hidden');
+                Prism.highlightAll();
+            })
+            .catch((error) => {
+                console.error(error);
+                elements.submitBtn.textContent = 'Submit';
+                elements.loader.classList.add('hidden');
+            });
         }
 
+function saveFile() {
+    var file_url = elements.fileDropdown.value;
+    var url_parts = file_url.split("/");
+    var repo_index = url_parts.indexOf("grandcanyonsmith") + 1;
+    var repo_name = url_parts[repo_index];
+    var branch_name = url_parts[repo_index + 1];
+    var file_name = url_parts.slice(repo_index + 2).join("/");
+    var file_contents = elements.codeBox.textContent;
+
+    console.log(`Saving file: ${file_name} in repo: ${repo_name} on branch: ${branch_name}`);
+    console.log(file_url,'file_url')
+    axios
+        .post(urls.update, {
+            repo_name: repo_name,
+            file_name: file_name,
+            file_contents: file_contents,
+            branch_name: branch_name
+        })
+        .then((response) => {
+            console.log('Response from server:', response.data);
+            elements.saveBtn.classList.add('hidden');
+        })
+        .catch((error) => {
+            console.error('Error occurred while saving file:', error);
+            // If the error response is available, log it
+            if (error.response) {
+                console.error('Server responded with:', error.response.data);
+            }
+            // Add error handling here
+            if (error.response && error.response.status === 500) {
+                alert('Server error. Please try again later.');
+            }
+        });
+}
         function populateRepoDropdown() {
             $.get(urls.getRepos, function(data) {
                 data.forEach(function(repo) {
@@ -186,82 +246,3 @@
     </script>
           </body>
 </html>
-
-
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>GitHub Repo Files</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
-    <style>
-        pre {
-            font-size: 0.875rem;
-        }
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
-</head>
-<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
-    <div class="container mx-auto px-2 sm:px-4 lg:px-8 py-5 sm:py-10 lg:py-20">
-        <button onclick="window.history.back();" class="mb-5 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Back</button>
-        <h2 id="fileName" class="text-lg mb-5"></h2>
-        <div class="flex flex-col sm:flex-row justify-center">
-            <div class="w-full px-2">
-                <pre><code id="fileContent" class="language-python"></code></pre>
-            </div>
-        </div>
-        <button id="runCode" class="mt-5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Run Code</button>
-        <button id="editCode" class="mt-5 ml-5 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Edit Code with AI</button>
-        <h3 id="outputTitle" class="mt-5">Code Output</h3>
-        <div id="outputBox" class="mt-5 p-5 bg-gray-800 rounded"></div>
-        <h3 id="requestTitle" class="mt-5 hidden">Enter your request</h3>
-        <textarea id="requestBox" class="mt-5 p-5 bg-gray-800 rounded hidden" placeholder="Enter your request..."></textarea>
-        <button id="submitButton" class="mt-5 hidden bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-    </div>
-
-    <script>
-        $(document).ready(function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            var fileName = urlParams.get('fileName');
-            if (fileName) {
-                getFiles(fileName);
-                document.getElementById('fileName').textContent = fileName;
-            }
-
-            $('#editCode').click(function() {
-                $('#outputTitle, #outputBox').addClass('hidden');
-                $('#requestTitle, #requestBox, #submitButton').removeClass('hidden');
-            });
-
-            $('#runCode').click(function() {
-                $('#outputTitle, #outputBox').removeClass('hidden');
-                $('#requestTitle, #requestBox, #submitButton').addClass('hidden');
-            });
-        });
-
-        function getFiles(fileName) {
-            $.get('https://flask-hello-world2-cgwuxs3zl-grandcanyonsmith.vercel.app/github_repos/a-yb-automation-tests2/contents', function(data) {
-                var file = data.find(function(file) {
-                    return file.name === fileName;
-                });
-                if (file) {
-                    getFileContent(file.download_url);
-                }
-            });
-        }
-
-        function getFileContent(url) {
-            $.get(url, function(data) {
-                document.getElementById('fileContent').textContent = data;
-                Prism.highlightAll();
-            });
-        }
-     </script>
-</body>
-</html>
- -->
