@@ -1,5 +1,6 @@
 window.onload = function() {
     let updatedCode = null;
+    let activeTab = null; // New variable to keep track of the active tab
     const elements = {
         sourceBtn: document.getElementById("sourceBtn"),
         outputBtn: document.getElementById("outputBtn"),
@@ -146,11 +147,13 @@ const createTab = (file) => {
         <i data-feather="x-circle" class="ml-2 hover:bg-gray-400 rounded-full p-1 cursor-pointer"></i>
     `;
     tab.dataset.content = file.fileContents;
+    tab.setAttribute('newFile', file.newFile ? 'true' : 'false'); // Set the newFile attribute
     feather.replace();
     tab.addEventListener('click', () => {
         elements.codeBox.textContent = tab.dataset.content;
         $('.tab').removeClass('bg-gray-300');
         tab.classList.add('bg-gray-300');
+        activeTab = tab; // Update the activeTab when a tab is clicked
     });
     tab.querySelector('i').addEventListener('click', (e) => {
         e.stopPropagation();
@@ -159,20 +162,44 @@ const createTab = (file) => {
     return tab;
 };
 
+
 const saveCodeFile = async () => {
+    if (!activeTab) {
+        console.error("No active tab found.");
+        return;
+    }
+
+    const fileName = activeTab.querySelector('span').textContent;
+    const fileContents = activeTab.dataset.content;
+    console.log(activeTab,'activeTab')
+    const isNewFile = activeTab.getAttribute('newFile') === 'true'; // Check if the tab is a new file
+
     const fileUrlParts = elements.fileDropdown.value.split("/");
     const repoIndex = fileUrlParts.indexOf("grandcanyonsmith") + 1;
     const repoName = fileUrlParts[repoIndex];
     const branchName = fileUrlParts[repoIndex + 1];
-    const fileName = fileUrlParts.slice(repoIndex + 2).join("/");
-    const fileContents = elements.codeBox.textContent;
+
     try {
-        const { data } = await axios.post(urls.update, {
-            repo_name: repoName,
-            file_name: fileName,
-            file_contents: fileContents,
-            branch_name: branchName
-        });
+        let data;
+        if (isNewFile) {
+            // If it's a new file, send a POST request to the specified URL
+            const response = await axios.post('https://flask-hello-world2-three.vercel.app/create_new_file', {
+                repo_name: repoName,
+                file_name: fileName,
+                file_contents: fileContents,
+                branch_name: branchName
+            });
+            data = response.data;
+        } else {
+            // If it's not a new file, send a POST request to the original URL
+            const response = await axios.post(urls.update, {
+                repo_name: repoName,
+                file_name: fileName,
+                file_contents: fileContents,
+                branch_name: branchName
+            });
+            data = response.data;
+        }
         console.log("Response from server:", data);
     } catch (error) {
         console.error("Error occurred while saving file:", error);
