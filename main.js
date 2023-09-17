@@ -1,0 +1,223 @@
+window.onload = function() {
+    let updatedCode = null;
+    const elements = {
+        sourceBtn: document.getElementById("sourceBtn"),
+        outputBtn: document.getElementById("outputBtn"),
+        submitBtn: document.getElementById("submitBtn"),
+        saveBtn: document.getElementById("saveBtn"),
+        runBtn: document.getElementById("runBtn"),
+        repoDropdown: document.getElementById("repoDropdown"),
+        fileDropdown: document.getElementById("fileDropdown"),
+        codeBox: document.getElementById("codeBox"),
+        outputBox: document.getElementById("outputBox"),
+        loader: document.getElementById("loader"),
+        requestInput: document.getElementById("requestInput"),
+    };
+const addEventListeners = () => {
+    elements.sourceBtn.addEventListener("click", () => toggleView("sourceBtn"));
+    elements.outputBtn.addEventListener("click", () => toggleView("outputBtn"));
+    elements.submitBtn.addEventListener("click", submitCodeRequest);
+    elements.saveBtn.addEventListener("click", saveCodeFile);
+    elements.runBtn.addEventListener("click", executeCode);
+    elements.repoDropdown.addEventListener("change", updateFileDropdown);
+    elements.fileDropdown.addEventListener("change", updateCodeBox);
+    feather.replace();
+};
+
+const toggleView = (targetId) => {
+    const isSourceEvent = targetId === "sourceBtn";
+    elements.codeBox.classList.toggle("hidden", !isSourceEvent);
+    elements.outputBox.classList.toggle("hidden", isSourceEvent);
+    if (!isSourceEvent) {
+        displayOutput(elements.fileDropdown.value, elements.codeBox.textContent, elements.outputBox);
+    }
+    Prism.highlightAll();
+};
+
+const displayOutput = (selectedFileUrl, codeBoxContent, outputBoxElement) => {
+    if (selectedFileUrl.endsWith(".html")) {
+        const iframe = document.createElement("iframe");
+        iframe.style.width = "100%";
+        iframe.style.height = "100%";
+        iframe.style.border = "0";
+        outputBoxElement.innerHTML = "";
+        outputBoxElement.appendChild(iframe);
+        iframe.contentWindow.document.open();
+        // Inject CSS and JS code into HTML code
+        const injectedCode = injectCode(codeBoxContent);
+        iframe.contentWindow.document.write(injectedCode);
+        iframe.contentWindow.document.close();
+    } else {
+        outputBoxElement.textContent = codeBoxContent;
+        outputBoxElement.style.overflow = "auto";
+    }
+};
+
+const injectCode = (htmlCode) => {
+    // Get all tabs
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    let cssCode = '';
+    let jsCode = '';
+    tabs.forEach(tab => {
+        const fileName = tab.querySelector('span').textContent;
+        if (fileName.endsWith('.css')) {
+            cssCode += tab.dataset.content;
+        } else if (fileName.endsWith('.js')) {
+            jsCode += tab.dataset.content;
+        }
+    });
+    // Inject CSS and JS code into HTML code
+    const injectedCode = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>${cssCode}</style>
+        </head>
+        <body>
+            ${htmlCode}
+            <script>${jsCode}</script>
+        </body>
+        </html>
+    `;
+    return injectedCode;
+};
+
+const executeCode = async () => {
+    elements.runBtn.textContent = "Running...";
+    try {
+        const { data } = await axios.post(urls.runCode, { code: elements.codeBox.textContent });
+        elements.outputBox.textContent = data;
+        toggleView("outputBtn");
+    } catch (error) {
+        console.error(error);
+    } finally {
+        elements.runBtn.textContent = "Run";
+        elements.loader.classList.add("hidden");
+    }
+};
+
+const submitCodeRequest = async () => {
+    elements.submitBtn.textContent = "Loading...";
+    try {
+        const { data } = await axios.post(urls.submitRequest, {
+            code: elements.codeBox.textContent,
+            request: elements.requestInput.value,
+            fileName: elements.fileDropdown.options[elements.fileDropdown.selectedIndex].text,
+            repoName: elements.repoDropdown.options[elements.repoDropdown.selectedIndex].text
+        });
+        handleResponse(data);
+    } catch (error) {
+        console.error(error);
+    } finally {
+        elements.submitBtn.textContent = "Submit";
+        elements.loader.classList.add("hidden");
+    }
+};
+
+const handleResponse = (response) => {
+    response.forEach(file => {
+        const existingTab = Array.from(document.querySelectorAll('.tab')).find(tab => tab.querySelector('span').textContent === file.fileName);
+        if (existingTab) {
+            // Update existing tab content
+            existingTab.dataset.content = file.fileContents;
+        } else {
+            // Create new tab
+            const tab = createTab(file);
+            document.getElementById('tabs').appendChild(tab);
+        }
+        // Store the updated code
+        updatedCode = file.fileContents;
+    });
+    // Activate the first tab
+    $('.tab').first().click();
+    // Always switch to the code view
+    toggleView("outputBtn");
+    // Refresh the code content
+    updateCodeContent(elements.fileDropdown.value);
+};
+
+
+const createTab = (file) => {
+    const tab = document.createElement('div');
+    tab.className = `tab px-4 py-2 mr-2 bg-gray-200 hover:bg-gray-300 rounded-t-lg flex items-center justify-between ${file.newFile ? 'border-b-2 border-green-400' : ''}`;
+    tab.innerHTML = `
+        <span class="text-sm">${file.fileName}</span>
+        <i data-feather="x-circle" class="ml-2 hover:bg-gray-400 rounded-full p-1 cursor-pointer"></i>
+    `;
+    tab.dataset.content = file.fileContents;
+    feather.replace();
+    tab.addEventListener('click', () => {
+        elements.codeBox.textContent = tab.dataset.content;
+        $('.tab').removeClass('bg-gray-300');
+        tab.classList.add('bg-gray-300');
+    });
+    tab.querySelector('i').addEventListener('click', (e) => {
+        e.stopPropagation();
+        tab.remove();
+    });
+    return tab;
+};
+
+const saveCodeFile = async () => {
+    const fileUrlParts = elements.fileDropdown.value.split("/");
+    const repoIndex = fileUrlParts.indexOf("grandcanyonsmith") + 1;
+    const repoName = fileUrlParts[repoIndex];
+    const branchName = fileUrlParts[repoIndex + 1];
+    const fileName = fileUrlParts.slice(repoIndex + 2).join("/");
+    const fileContents = elements.codeBox.textContent;
+    try {
+        const { data } = await axios.post(urls.update, {
+            repo_name: repoName,
+            file_name: fileName,
+            file_contents: fileContents,
+            branch_name: branchName
+        });
+        console.log("Response from server:", data);
+    } catch (error) {
+        console.error("Error occurred while saving file:", error);
+        if (error.response && error.response.status === 500) {
+            alert("Server error. Please try again later.");
+        }
+    } finally {
+        elements.saveBtn.classList.add("hidden");
+    }
+};
+
+const updateCodeBox = () => {
+    updateCodeContent(elements.fileDropdown.value);
+    elements.runBtn.classList.toggle("hidden", !elements.fileDropdown.value.endsWith(".py"));
+    const tabs = document.getElementById('tabs');
+    tabs.innerHTML = '';
+};
+
+const updateFileDropdown = () => {
+    populateFileDropdown(elements.repoDropdown.value);
+    const tabs = document.getElementById('tabs');
+    tabs.innerHTML = '';
+};
+
+const populateRepoDropdown = async () => {
+    const { data } = await axios.get(urls.getRepos);
+    data.forEach(repo => elements.repoDropdown.append(new Option(repo, repo)));
+};
+
+const populateFileDropdown = async (repo) => {
+    const { data } = await axios.get(`${urls.getFiles}${repo}/contents`);
+    elements.fileDropdown.innerHTML = "";
+    elements.fileDropdown.append(new Option("Select a file", ""));
+    data.forEach(file => elements.fileDropdown.append(new Option(file.name, file.download_url)));
+};
+
+const updateCodeContent = async (fileUrl) => {
+    if (updatedCode) {
+        elements.codeBox.textContent = updatedCode;
+    } else {
+        const { data } = await axios.get(fileUrl);
+        elements.codeBox.textContent = data;
+    }
+    Prism.highlightAll();
+};
+
+addEventListeners();
+populateRepoDropdown();
+};
