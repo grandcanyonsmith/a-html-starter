@@ -1,21 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Barbie World</title>
-  
-  <!-- External stylesheets -->
-  <link href='https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap' rel='stylesheet'>
-  <link href='https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.2/tailwind.min.css' rel='stylesheet'>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Barbie World</title>
+        
+        <!-- External stylesheets -->
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.2/tailwind.min.css">
+        <style>
+            body {
+                background-color: #FFC0CB; /* Lighter pink for a softer look */
+                font-family: 'Playfair Display', serif; /* Specifying the font from Google Fonts */
+            }
 
-<body class="flex items-center justify-center h-screen bg-pink-300 font-serif m-0 p-0 overflow-hidden">
-  <div class="flex flex-col items-center justify-center">
-    <h1 class="text-6xl text-center text-shadow-md leading-snug text-white">
-        Welcome to the Barbie World!
-    </h1>
-  </div>
-</body>
+            h1 {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Increased text-shadow for better readability */
+                color: white; 
+                text-align: center;
+                font-size: 3em; /* Adjust font size */
+                margin: 0 auto; /* Center the heading horizontally */
+            }
 
+            .center {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh; /* Make div take up the full viewport height */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="center">
+            <h1>Welcome to the Barbie World!</h1>
+        </div>
+    </body>
 </html>
