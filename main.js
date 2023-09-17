@@ -134,8 +134,9 @@ const handleResponse = (response) => {
     toggleView("outputBtn");
     // Refresh the code content
     updateCodeContent(elements.fileDropdown.value);
+    // Make the save button visible
+    elements.saveBtn.classList.remove("hidden");
 };
-
 
 const createTab = (file) => {
     const tab = document.createElement('div');
