@@ -3,5 +3,7 @@
     "Objectives": "The main objective of this project is to automate the process of drivers license verification to improve efficiency and accuracy. This will involve the use of AWS services such as Amazon Rekognition for image analysis and Amazon DynamoDB for data storage.",
     "Scope": "This project will involve the development of a web application that allows users to upload a photo of a drivers license for verification. The application will use Amazon Rekognition to analyze the photo and extract the necessary information, which will then be stored in Amazon DynamoDB.",
     "Business Requirements": "The web application must be user-friendly and easy to navigate. It must allow users to upload a photo of a drivers license and receive confirmation of successful upload. The application must use Amazon Rekognition to accurately extract information from the uploaded photo. The extracted information must be securely stored in Amazon DynamoDB.",
+    "Budget": "The estimated budget for this project is $50,000. This includes the cost of AWS services, development resources, and testing.",
+    "Timeline": "The project is expected to take approximately 6 months to complete. This includes 2 months for planning and design, 3 months for development, and 1 month for testing and deployment.",
     "Conclusion": "The successful implementation of this project will significantly improve the efficiency and accuracy of drivers license verification at Sterling Enterprises. It will also provide a foundation for further automation initiatives in the future."
 }
