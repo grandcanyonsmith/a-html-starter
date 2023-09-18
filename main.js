@@ -195,39 +195,37 @@ window.onload = function() {
 
 
         const saveCodeFile = async () => {
-        if (!activeTab) {
-            console.error("No active tab found.");
-            return;
-        }
+    if (!activeTab) {
+        console.error("No active tab found.");
+        return;
+    }
 
-        const fileName = activeTab.querySelector('span').textContent;
-        const fileContents = activeTab.dataset.content;
-        const isNewFile = activeTab.getAttribute('newFile') === 'true';
+    const fileName = activeTab.querySelector('span').textContent;
+    const fileContents = activeTab.dataset.content;
+    const isNewFile = activeTab.getAttribute('newFile') === 'true';
 
-        const [, , , repoName, branchName] = elements.fileDropdown.value.split("/");
+    const [, , , repoName, branchName] = elements.fileDropdown.value.split("/");
 
-        const url = isNewFile ? urls.create : urls.update;
-        const payload = {
-            repo_name: repoName,
-            file_name: fileName,
-            file_contents: fileContents,
-            branch_name: branchName
-        };
-
-        try {
-            const {
-                data
-            } = await axios.post(url, payload);
-            console.log("Response from server:", data);
-        } catch (error) {
-            console.error("Error occurred while saving file:", error);
-            if (error.response?.status === 500) {
-                alert("Server error. Please try again later.");
-            }
-        } finally {
-            elements.saveBtn.classList.add("hidden");
-        }
+    const url = isNewFile ? 'https://flask-hello-world2-three.vercel.app/create_new_file' : `https://flask-hello-world2-three.vercel.app/update/${repoName}/${fileName}`;
+    const payload = {
+        repo_name: repoName,
+        file_name: fileName,
+        file_contents: fileContents,
+        branch_name: branchName
     };
+
+    try {
+        const { data } = await axios.post(url, payload);
+        console.log("Response from server:", data);
+    } catch (error) {
+        console.error("Error occurred while saving file:", error);
+        if (error.response?.status === 500) {
+            alert("Server error. Please try again later.");
+        }
+    } finally {
+        elements.saveBtn.classList.add("hidden");
+    }
+};
 
     const updateCodeBox = () => {
         updateCodeContent(elements.fileDropdown.value);
