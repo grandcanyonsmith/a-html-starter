@@ -206,7 +206,7 @@ window.onload = function() {
 
     const [, , , repoName, branchName] = elements.fileDropdown.value.split("/");
 
-    const url = isNewFile ? 'https://flask-hello-world2-three.vercel.app/create_new_file' : `https://flask-hello-world2-three.vercel.app/update/${repoName}/${fileName}`;
+    const url = isNewFile ? 'https://flask-hello-world2-three.vercel.app/create_new_file' : `https://flask-hello-world2-three.vercel.app/update`;
     const payload = {
         repo_name: repoName,
         file_name: fileName,
