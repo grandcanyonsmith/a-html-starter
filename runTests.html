@@ -15,6 +15,10 @@
         height: 400px !important;
       }
     }
+    .test-file-name:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body class="flex flex-col h-screen text-white bg-gray-900">
@@ -43,6 +47,14 @@
 
     <div id="testResult" class="p-4 bg-gray-800 text-white rounded shadow mb-5"></div>
   </main>
+
+  <script>
+    document.querySelectorAll('.test-file-name').forEach(item => {
+      item.addEventListener('click', event => {
+        window.location.href = `https://html-starter-coral.vercel.app/testCode.html?fileName=${event.target.textContent}`;
+      })
+    })
+  </script>
 
 </body>
 
