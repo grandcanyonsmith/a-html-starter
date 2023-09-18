@@ -276,7 +276,18 @@ window.onload = function() {
 //         elements.saveBtn.classList.add("hidden");
 //     }
 // };
+const getActiveTabData = () => {
+    if (!activeTab) {
+        console.error("No active tab found.");
+        return null;
+    }
 
+    const fileName = activeTab.querySelector('span').textContent;
+    const fileContents = activeTab.dataset.content;
+    const isNewFile = activeTab.getAttribute('newFile') === 'true';
+
+    return { fileName, fileContents, isNewFile };
+};
     const saveCodeFile = async () => {
     const activeTabData = getActiveTabData();
     if (!activeTabData) return;
