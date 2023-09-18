@@ -276,6 +276,24 @@ window.onload = function() {
 //         elements.saveBtn.classList.add("hidden");
 //     }
 // };
+    const getRepoData = () => {
+    const fileUrlParts = elements.fileDropdown.value.split("/");
+    const repoIndex = fileUrlParts.indexOf("grandcanyonsmith") + 1;
+    const repoName = fileUrlParts[repoIndex];
+    const branchName = fileUrlParts[repoIndex + 1];
+
+    return { repoName, branchName };
+};
+
+
+const getPayload = (fileName, fileContents, repoName, branchName) => {
+    return {
+        repo_name: repoName,
+        file_name: fileName,
+        file_contents: fileContents,
+        branch_name: branchName
+    };
+};
 const getActiveTabData = () => {
     if (!activeTab) {
         console.error("No active tab found.");
