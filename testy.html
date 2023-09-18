@@ -2,11 +2,12 @@
 <html>
 <head>
     <title>AWS Solution for Drivers License Verification</title>
+    <script src="checkListAnswers.js"></script>
 </head>
 <body>
     <h1>Functional Specification Checklist for AWS Solution for Drivers License Verification</h1>
     <p>Before we start writing this document, we need to ensure we understand and check the following:</p>
-    <ol>
+    <ol id="checklist">
         <li>Check if features were deleted from the vision/scope document.</li>
         <li>Identify assumptions about the solution, customers, and users.</li>
         <li>Identify dependencies the solution may have on other services, technologies, and people within the organization.</li>
@@ -49,5 +50,15 @@
         <li>Use the vision/scope document to integrate the business goals.</li>
         <li>Trace features back to the original requirements.</li>
     </ol>
+    <script>
+        // Function to read checkListAnswers.json for the checklist 1-11 answers
+        function readCheckListAnswers() {
+            fetch('checkListAnswers.json')
+            .then(response => response.json())
+            .then(data => {
+                // Code to map the values goes here
+            });
+        }
+    </script>
 </body>
 </html>
