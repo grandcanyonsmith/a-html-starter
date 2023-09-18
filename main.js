@@ -194,32 +194,82 @@ window.onload = function() {
     };
 
 
-        const saveCodeFile = async () => {
+//         const saveCodeFile = async () => {
+//     if (!activeTab) {
+//         console.error("No active tab found.");
+//         return;
+//     }
+
+//     const fileName = activeTab.querySelector('span').textContent;
+//     const fileContents = activeTab.dataset.content;
+//     const isNewFile = activeTab.getAttribute('newFile') === 'true';
+
+//     const [, , , repoName, branchName] = elements.fileDropdown.value.split("/");
+
+//     const url = isNewFile ? 'https://flask-hello-world2-three.vercel.app/create_new_file' : `https://flask-hello-world2-three.vercel.app/update`;
+//     const payload = {
+//         repo_name: repoName,
+//         file_name: fileName,
+//         file_contents: fileContents,
+//         branch_name: branchName
+//     };
+
+//     try {
+//         const { data } = await axios.post(url, payload);
+//         console.log("Response from server:", data);
+//     } catch (error) {
+//         console.error("Error occurred while saving file:", error);
+//         if (error.response?.status === 500) {
+//             alert("Server error. Please try again later.");
+//         }
+//     } finally {
+//         elements.saveBtn.classList.add("hidden");
+//     }
+// };
+const saveCodeFile = async () => {
     if (!activeTab) {
         console.error("No active tab found.");
         return;
     }
-
+    console.log(activeTab,'active Tab')
     const fileName = activeTab.querySelector('span').textContent;
+    console.log(fileName,'file name')
     const fileContents = activeTab.dataset.content;
-    const isNewFile = activeTab.getAttribute('newFile') === 'true';
+    console.log(activeTab,'activeTab')
+    const isNewFile = activeTab.getAttribute('newFile') === 'true'; // Check if the tab is a new file
 
-    const [, , , repoName, branchName] = elements.fileDropdown.value.split("/");
+    console.log(isNewFile,'newFile')
 
-    const url = isNewFile ? 'https://flask-hello-world2-three.vercel.app/create_new_file' : `https://flask-hello-world2-three.vercel.app/update`;
-    const payload = {
-        repo_name: repoName,
-        file_name: fileName,
-        file_contents: fileContents,
-        branch_name: branchName
-    };
+    const fileUrlParts = elements.fileDropdown.value.split("/");
+    const repoIndex = fileUrlParts.indexOf("grandcanyonsmith") + 1;
+    const repoName = fileUrlParts[repoIndex];
+    const branchName = fileUrlParts[repoIndex + 1];
 
     try {
-        const { data } = await axios.post(url, payload);
+        let data;
+        if (isNewFile) {
+            // If it's a new file, send a POST request to the specified URL
+            const response = await axios.post('https://flask-hello-world2-three.vercel.app/create_new_file', {
+                repo_name: repoName,
+                file_name: fileName,
+                file_contents: fileContents,
+                branch_name: branchName
+            });
+            data = response.data;
+        } else {
+            // If it's not a new file, send a POST request to the original URL
+            const response = await axios.post(urls.update, {
+                repo_name: repoName,
+                file_name: fileName,
+                file_contents: fileContents,
+                branch_name: branchName
+            });
+            data = response.data;
+        }
         console.log("Response from server:", data);
     } catch (error) {
         console.error("Error occurred while saving file:", error);
-        if (error.response?.status === 500) {
+        if (error.response && error.response.status === 500) {
             alert("Server error. Please try again later.");
         }
     } finally {
