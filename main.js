@@ -7,6 +7,11 @@ window.onload = function() {
             [id]: document.getElementById(id)
         }), {});
 
+    const urls = {
+        update: 'https://flask-hello-world2-three.vercel.app/update',
+        create: 'https://flask-hello-world2-three.vercel.app/create_new_file'
+    };
+
     const addEventListeners = () => {
         Object.entries(elements).forEach(([key, element]) => {
             element.addEventListener("click", key === 'sourceBtn' || key === 'outputBtn' ? () => toggleView(key) :
@@ -185,7 +190,7 @@ window.onload = function() {
     };
 
 
-    const saveCodeFile = async () => {
+        const saveCodeFile = async () => {
         if (!activeTab) {
             console.error("No active tab found.");
             return;
@@ -197,7 +202,7 @@ window.onload = function() {
 
         const [, , , repoName, branchName] = elements.fileDropdown.value.split("/");
 
-        const url = isNewFile ? 'https://flask-hello-world2-three.vercel.app/create_new_file' : url.update;
+        const url = isNewFile ? urls.create : urls.update;
         const payload = {
             repo_name: repoName,
             file_name: fileName,
