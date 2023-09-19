@@ -109,6 +109,7 @@ $(document).ready(function() {
     const labels = testRuns.map(run => run.Date.split(" ")[0].substring(5));
     const passedData = testRuns.map(run => run.Passed);
     const failedData = testRuns.map(run => run.Failed);
+    const maxData = Math.max(...passedData, ...failedData);
     if (testRunsChart) {
       testRunsChart.destroy();
     }
@@ -148,6 +149,7 @@ $(document).ready(function() {
         scales: {
           y: {
             beginAtZero: true,
+            max: maxData * 1.2,
             gridLines: {
               color: 'rgba(255, 255, 255, 0.1)'
             }
