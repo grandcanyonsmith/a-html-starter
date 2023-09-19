@@ -19,13 +19,18 @@ $(document).ready(function() {
       const statusClass =
         test.status === "PASSED" ? "text-green-500" : "text-red-500";
       const zebraClass = index % 2 === 0 ? "bg-gray-800" : "bg-gray-800";
-      html += `<div class="stylish-p dark-theme ${zebraClass}"><div class="flex justify-between items-center w-full">${statusIcon} ${test.name} <span class="${statusClass}">${test.status}</span></div></div>`;
+      html += `<div class="stylish-p dark-theme ${zebraClass}"><div class="flex justify-between items-center w-full">${statusIcon} <a href="https://html-starter-coral.vercel.app/testCode.html?fileName=${test.name}" class="file-link">${test.name}</a> <span class="${statusClass}">${test.status}</span></div></div>`;
     });
     html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Tests:<span>${data.total_tests}</span></div></p>`;
     html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Time:<span>${data.total_time}</span></div></p>`;
     html +=
       '<button id="uploadToTestrailBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm">Upload to Testrail</button>';
     elements.testResult.html(html);
+    $('.file-link').hover(function() {
+      $(this).css('text-decoration', 'underline');
+    }, function() {
+      $(this).css('text-decoration', 'none');
+    });
   };
 
   const showLoadingAnimation = () => {
