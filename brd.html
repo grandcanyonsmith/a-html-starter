@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Business Requirements Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="brd" class="container mx-auto px-4">
+        <h1 class="text-4xl font-bold mb-4">Business Requirements Document</h1>
+        <!-- The content will be inserted here -->
+    </div>
+
+    <script>
+        // Fetch the JSON data
+        fetch('businessRequirementsDocument.json')
+            .then(response => response.json())
+            .then(data => {
+                // Get the container to insert the sections into
+                const container = document.getElementById('brd');
+
+                // Loop through each section in the data
+                data.sections.forEach(section => {
+                    // Create a new heading and paragraph for the section
+                    const heading = document.createElement('h2');
+                    heading.className = 'text-2xl font-bold mb-2';
+                    heading.textContent = section.sectionName;
+
+                    const paragraph = document.createElement('p');
+                    paragraph.className = 'mb-4';
+                    paragraph.textContent = section.description;
+
+                    // Append the heading and paragraph to the container
+                    container.appendChild(heading);
+                    container.appendChild(paragraph);
+                });
+            });
+    </script>
+</body>
+</html>
