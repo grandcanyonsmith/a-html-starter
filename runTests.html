@@ -52,7 +52,7 @@
         </div>
       </section>
 
-    <button id="runTestsBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm">Run Tests</button>
+    <button id="runTestsBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm" onclick="runTests()">Run Tests</button>
 
     <div id="testResult" class="p-4 bg-gray-800 text-white rounded shadow mb-5"></div>
   </main>
@@ -63,6 +63,12 @@
         window.location.href = `https://html-starter-coral.vercel.app/testCode.html?fileName=${event.target.textContent}`;
       })
     })
+
+    function runTests() {
+      var teamName = document.getElementById("team").value;
+      document.getElementById("testResult").innerHTML = `Running ${teamName} Tests in EC2 instance`;
+      // Add code here to run the tests and display the results
+    }
   </script>
 
 </body>
