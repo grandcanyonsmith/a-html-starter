@@ -26,7 +26,7 @@ export default class UI {
       elements.outputBox.classList.add("hidden");
     }
   
-    static switchToOutputView() {
+        static switchToOutputView(elements) {
       elements.codeBox.classList.add("hidden");
       elements.outputBox.classList.remove("hidden");
       UI.displayOutput(
