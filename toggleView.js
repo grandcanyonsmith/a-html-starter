@@ -7,3 +7,6 @@ const toggleView = (targetId) => {
     }
     Prism.highlightAll();
 };
+
+window.toggleView = toggleView;
+
