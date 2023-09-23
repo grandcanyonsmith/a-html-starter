@@ -612,7 +612,7 @@ const ELEMENT_IDS = [
         elements.codeBox.textContent = response.data;
         Prism.highlightAll();
         UI.displayOutput(fileUrl, response.data, elements.outputBox); // Add this line
-        UI.switchToOutputView(); // Add this line
+        UI.switchToOutputView(elements);
     }
   }
   
@@ -707,7 +707,7 @@ const ELEMENT_IDS = [
         while (tabs.firstChild) {
           tabs.removeChild(tabs.firstChild);
         }
-        UI.switchToOutputView(); // Change this line
+        UI.switchToOutputView(elements);
       }
   
     static async populateRepoDropdown() {
