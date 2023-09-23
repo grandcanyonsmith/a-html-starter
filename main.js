@@ -8,13 +8,13 @@ window.onload = function() {
         }), {});
 
     const urls = {
-  runCode: "https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/",
-  submitRequest: "https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/",
-  getRepos: "https://flask-hello-world2-three.vercel.app/github_repos_list",
-  getFiles: "https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/",
-  update: "https://flask-hello-world2-three.vercel.app/update",
+        runCode: "https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/",
+        submitRequest: "https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/",
+        getRepos: "https://flask-hello-world2-three.vercel.app/github_repos_list",
+        getFiles: "https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/",
+        update: "https://flask-hello-world2-three.vercel.app/update",
         create: 'https://flask-hello-world2-three.vercel.app/create_new_file'
-};
+    };
 
     const addEventListeners = () => {
         Object.entries(elements).forEach(([key, element]) => {
@@ -137,7 +137,6 @@ window.onload = function() {
         }
     };
 
-
     const handleResponse = (response) => {
         const tabs = Array.from(document.querySelectorAll('.tab'));
         let updatedTab;
@@ -154,7 +153,6 @@ window.onload = function() {
             updatedTab = tab;
         });
 
-        // Activate the updated tab
         $(updatedTab).click();
         toggleView("outputBtn");
         updateCodeContent(elements.fileDropdown.value);
@@ -193,145 +191,63 @@ window.onload = function() {
         return tab;
     };
 
-
-//         const saveCodeFile = async () => {
-//     if (!activeTab) {
-//         console.error("No active tab found.");
-//         return;
-//     }
-
-//     const fileName = activeTab.querySelector('span').textContent;
-//     const fileContents = activeTab.dataset.content;
-//     const isNewFile = activeTab.getAttribute('newFile') === 'true';
-
-//     const [, , , repoName, branchName] = elements.fileDropdown.value.split("/");
-
-//     const url = isNewFile ? 'https://flask-hello-world2-three.vercel.app/create_new_file' : `https://flask-hello-world2-three.vercel.app/update`;
-//     const payload = {
-//         repo_name: repoName,
-//         file_name: fileName,
-//         file_contents: fileContents,
-//         branch_name: branchName
-//     };
-
-//     try {
-//         const { data } = await axios.post(url, payload);
-//         console.log("Response from server:", data);
-//     } catch (error) {
-//         console.error("Error occurred while saving file:", error);
-//         if (error.response?.status === 500) {
-//             alert("Server error. Please try again later.");
-//         }
-//     } finally {
-//         elements.saveBtn.classList.add("hidden");
-//     }
-// };
-// const saveCodeFile = async () => {
-//     if (!activeTab) {
-//         console.error("No active tab found.");
-//         return;
-//     }
-//     console.log(activeTab,'active Tab')
-//     const fileName = activeTab.querySelector('span').textContent;
-//     console.log(fileName,'file name')
-//     const fileContents = activeTab.dataset.content;
-//     console.log(activeTab,'activeTab')
-//     const isNewFile = activeTab.getAttribute('newFile') === 'true'; // Check if the tab is a new file
-
-//     console.log(isNewFile,'newFile')
-
-//     const fileUrlParts = elements.fileDropdown.value.split("/");
-//     const repoIndex = fileUrlParts.indexOf("grandcanyonsmith") + 1;
-//     const repoName = fileUrlParts[repoIndex];
-//     const branchName = fileUrlParts[repoIndex + 1];
-
-//     try {
-//         let data;
-//         if (isNewFile) {
-//             // If it's a new file, send a POST request to the specified URL
-//             const response = await axios.post('https://flask-hello-world2-three.vercel.app/create_new_file', {
-//                 repo_name: repoName,
-//                 file_name: fileName,
-//                 file_contents: fileContents,
-//                 branch_name: branchName
-//             });
-//             data = response.data;
-//         } else {
-//             // If it's not a new file, send a POST request to the original URL
-//             const response = await axios.post(urls.update, {
-//                 repo_name: repoName,
-//                 file_name: fileName,
-//                 file_contents: fileContents,
-//                 branch_name: branchName
-//             });
-//             data = response.data;
-//         }
-//         console.log("Response from server:", data);
-//     } catch (error) {
-//         console.error("Error occurred while saving file:", error);
-//         if (error.response && error.response.status === 500) {
-//             alert("Server error. Please try again later.");
-//         }
-//     } finally {
-//         elements.saveBtn.classList.add("hidden");
-//     }
-// };
     const getRepoData = () => {
-    const fileUrlParts = elements.fileDropdown.value.split("/");
-    const repoIndex = fileUrlParts.indexOf("grandcanyonsmith") + 1;
-    const repoName = fileUrlParts[repoIndex];
-    const branchName = fileUrlParts[repoIndex + 1];
+        const fileUrlParts = elements.fileDropdown.value.split("/");
+        const repoIndex = fileUrlParts.indexOf("grandcanyonsmith") + 1;
+        const repoName = fileUrlParts[repoIndex];
+        const branchName = fileUrlParts[repoIndex + 1];
 
-    return { repoName, branchName };
-};
-
-
-const getPayload = (fileName, fileContents, repoName, branchName) => {
-    return {
-        repo_name: repoName,
-        file_name: fileName,
-        file_contents: fileContents,
-        branch_name: branchName
+        return { repoName, branchName };
     };
-};
-const getActiveTabData = () => {
-    if (!activeTab) {
-        console.error("No active tab found.");
-        return null;
-    }
 
-    const fileName = activeTab.querySelector('span').textContent;
-    const fileContents = activeTab.dataset.content;
-    const isNewFile = activeTab.getAttribute('newFile') === 'true';
+    const getPayload = (fileName, fileContents, repoName, branchName) => {
+        return {
+            repo_name: repoName,
+            file_name: fileName,
+            file_contents: fileContents,
+            branch_name: branchName
+        };
+    };
 
-    return { fileName, fileContents, isNewFile };
-};
-    const saveCodeFile = async () => {
-    const activeTabData = getActiveTabData();
-    if (!activeTabData) return;
-
-    const repoData = getRepoData();
-    const payload = getPayload(activeTabData.fileName, activeTabData.fileContents, repoData.repoName, repoData.branchName);
-
-    let url;
-    if (activeTabData.isNewFile) {
-        url = 'https://flask-hello-world2-three.vercel.app/create_new_file';
-    } else {
-        url = 'https://flask-hello-world2-three.vercel.app/update';
-    }
-
-    try {
-        const { data } = await axios.post(url, payload);
-        console.log("Response from server:", data);
-    } catch (error) {
-        console.error("Error occurred while saving file:", error);
-        if (error.response?.status === 500) {
-            alert("Server error. Please try again later.");
+    const getActiveTabData = () => {
+        if (!activeTab) {
+            console.error("No active tab found.");
+            return null;
         }
-    } finally {
-        elements.saveBtn.classList.add("hidden");
-    }
-};
+
+        const fileName = activeTab.querySelector('span').textContent;
+        const fileContents = activeTab.dataset.content;
+        const isNewFile = activeTab.getAttribute('newFile') === 'true';
+
+        return { fileName, fileContents, isNewFile };
+    };
+
+    const saveCodeFile = async () => {
+        const activeTabData = getActiveTabData();
+        if (!activeTabData) return;
+
+        const repoData = getRepoData();
+        const payload = getPayload(activeTabData.fileName, activeTabData.fileContents, repoData.repoName, repoData.branchName);
+
+        let url;
+        if (activeTabData.isNewFile) {
+            url = urls.create;
+        } else {
+            url = urls.update;
+        }
+
+        try {
+            const { data } = await axios.post(url, payload);
+            console.log("Response from server:", data);
+        } catch (error) {
+            console.error("Error occurred while saving file:", error);
+            if (error.response?.status === 500) {
+                alert("Server error. Please try again later.");
+            }
+        } finally {
+            elements.saveBtn.classList.add("hidden");
+        }
+    };
 
     const updateCodeBox = () => {
         updateCodeContent(elements.fileDropdown.value);
@@ -347,28 +263,38 @@ const getActiveTabData = () => {
     };
 
     const populateRepoDropdown = async () => {
-        const {
-            data
-        } = await axios.get(urls.getRepos);
+        const { data } = await axios.get(urls.getRepos);
         data.forEach(repo => elements.repoDropdown.append(new Option(repo, repo)));
     };
 
     const populateFileDropdown = async (repo) => {
-        const {
-            data
-        } = await axios.get(`${urls.getFiles}${repo}/contents`);
+        const { data } = await axios.post(
+            "https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/get_all_contents",
+            { repo_name: repo }
+        );
         elements.fileDropdown.innerHTML = "";
         elements.fileDropdown.append(new Option("Select a file", ""));
-        data.forEach(file => elements.fileDropdown.append(new Option(file.name, file.download_url)));
+        parseResponseAndPopulateDropdown(data);
+    };
+
+    const parseResponseAndPopulateDropdown = (data, parentPath = '', depth = 0) => {
+        const indent = '\u00A0\u00A0'.repeat(depth * 2); // 2 non-breaking spaces per depth level
+        data.forEach((item) => {
+            const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+            if (item.type === "file") {
+                elements.fileDropdown.append(new Option(`${indent}📄 ${itemPath}`, item.download_url));
+            } else if (item.type === "dir") {
+                elements.fileDropdown.append(new Option(`${indent}📁 ${itemPath}`, ''));
+                parseResponseAndPopulateDropdown(item.contents, itemPath, depth + 1);
+            }
+        });
     };
 
     const updateCodeContent = async (fileUrl) => {
         if (updatedCode) {
             elements.codeBox.textContent = updatedCode;
         } else {
-            const {
-                data
-            } = await axios.get(fileUrl);
+            const { data } = await axios.get(fileUrl);
             elements.codeBox.textContent = data;
         }
         Prism.highlightAll();
