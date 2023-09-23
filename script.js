@@ -23,8 +23,15 @@ document.getElementById('skip').addEventListener('click', () => {
     }
 });
 
+document.getElementById('back').addEventListener('click', () => {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        loadQuestion();
+    }
+});
+
 function loadQuestion() {
-    document.getElementById('question').innerText = (currentQuestionIndex + 1) + '. ' + questions[currentQuestionIndex].question;
+    document.getElementById('question').innerText = questions[currentQuestionIndex].question;
     document.getElementById('answer').value = answers[currentQuestionIndex] || '';
 }
 
@@ -33,7 +40,7 @@ function showSummary() {
     document.getElementById('summary').style.display = 'block';
     let html = '';
     for (let i = 0; i < questions.length; i++) {
-        html += `<p><strong>${i + 1}. ${questions[i].question}</strong><br>${answers[i] || 'Skipped'}</p>`;
+        html += `<p><strong>${questions[i].question}</strong><br>${answers[i] || 'Skipped'}</p>`;
     }
     document.getElementById('answers').innerHTML = html;
 }
