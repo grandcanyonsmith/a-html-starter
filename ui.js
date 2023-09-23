@@ -95,4 +95,34 @@ export default class UI {
         </html>
       `;
     }
+  
+    static getFileType(fileName) {
+      if (fileName.endsWith(".css")) return "css";
+      if (fileName.endsWith(".js")) return "js";
+      if (fileName.endsWith(".json")) return "json";
+    }
+  
+    static updateUIBeforeExecution() {
+      elements.runBtn.textContent = "Running...";
+    }
+  
+    static updateUIAfterExecution() {
+      elements.runBtn.textContent = "Run";
+      elements.loader.classList.add("hidden");
+    }
+  
+    static updateUIBeforeSubmission() {
+      elements.submitBtn.textContent = "Loading...";
+    }
+  
+    static updateUIAfterSubmission() {
+      elements.submitBtn.textContent = "Submit";
+      elements.loader.classList.add("hidden");
+    }
+  
+    static updateUIAfterResponse(updatedTab) {
+      $(updatedTab).click();
+      UI.toggleView("outputBtn");
+    }
+  }
 
