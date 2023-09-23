@@ -29,15 +29,15 @@ window.onload = function() {
         feather.replace();
     };
 
-    // const toggleView = (targetId) => {
-    //     const isSourceEvent = targetId === "sourceBtn";
-    //     elements.codeBox.classList.toggle("hidden", !isSourceEvent);
-    //     elements.outputBox.classList.toggle("hidden", isSourceEvent);
-    //     if (!isSourceEvent) {
-    //         displayOutput(elements.fileDropdown.value, elements.codeBox.textContent, elements.outputBox);
-    //     }
-    //     Prism.highlightAll();
-    // };
+    const toggleView = (targetId) => {
+        const isSourceEvent = targetId === "sourceBtn";
+        elements.codeBox.classList.toggle("hidden", !isSourceEvent);
+        elements.outputBox.classList.toggle("hidden", isSourceEvent);
+        if (!isSourceEvent) {
+            displayOutput(elements.fileDropdown.value, elements.codeBox.textContent, elements.outputBox);
+        }
+        Prism.highlightAll();
+    };
 
     const displayOutput = (selectedFileUrl, codeBoxContent, outputBoxElement) => {
         outputBoxElement.innerHTML = "";
