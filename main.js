@@ -304,7 +304,6 @@
 //     populateRepoDropdown();
 // };
 
-import UI from './ui.js';
 
 const ELEMENT_IDS = [
     "sourceBtn",
