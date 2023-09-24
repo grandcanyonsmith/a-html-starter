@@ -16,4 +16,13 @@
         border: 1px solid #333;
         border-radius: 5px;
     }
+    @media screen and (max-width: 600px) {
+        body {
+            flex-direction: column;
+        }
+        h1 {
+            font-size: 18px;
+            padding: 10px;
+        }
+    }
 </style>
