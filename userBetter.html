@@ -2,72 +2,60 @@
 <html>
 <head>
     <title>Widget Tab</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <style>
-        #myBtn {
-            position: fixed;
-            right: 0;
-            middle: 50%;
-            z-index: 99;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <button id="myBtn" class="btn btn-primary">Open Modal</button>
+    <button id="myBtn" class="fixed right-0 top-1/2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Open Modal</button>
 
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Enter your request</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+    <div id="myModal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <h5 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Enter your request</h5>
+                    <input type="text" id="userRequest" class="mt-3 w-full px-2 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                 </div>
-                <div class="modal-body">
-                    <input type="text" id="userRequest" class="form-control" placeholder="Enter your request">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="submitBtn" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">Submit</button>
+                    <button type="button" id="closeBtn" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <script>
-        $(document).ready(function(){
-            $("#myBtn").click(function(){
-                $("#myModal").modal('show');
-            });
+        document.getElementById('myBtn').addEventListener('click', function() {
+            document.getElementById('myModal').classList.remove('hidden');
+        });
 
-            $("#submitBtn").click(function(){
-                $(this).text('Loading...');
-                var userRequest = $("#userRequest").val();
-                var data = {
-                    "userRequest": userRequest,
-                    "repo_name":"a-html-starter",
-                    "branch_name": "main"
-                };
-                $.ajax({
-                    url: "https://clpa2mrkgtskqlc4y64jego5xq0xfqpe.lambda-url.us-west-2.on.aws/",
-                    type: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    data: JSON.stringify(data),
-                    success: function(response) {
-                        alert('Request submitted successfully');
-                        $("#submitBtn").text('Submit');
-                        $("#myModal").modal('hide');
-                    },
-                    error: function(error) {
-                        alert('Error in submission');
-                        $("#submitBtn").text('Submit');
-                    }
-                });
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            document.getElementById('myModal').classList.add('hidden');
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            this.textContent = 'Loading...';
+            var userRequest = document.getElementById('userRequest').value;
+            var data = {
+                "userRequest": userRequest,
+                "repo_name":"a-html-starter",
+                "branch_name": "main"
+            };
+            axios.post("https://clpa2mrkgtskqlc4y64jego5xq0xfqpe.lambda-url.us-west-2.on.aws/", data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(function (response) {
+                alert('Request submitted successfully');
+            })
+            .catch(function (error) {
+                alert('Error in submission');
+            })
+            .finally(function () {
+                document.getElementById('submitBtn').textContent = 'Submit';
+                document.getElementById('myModal').classList.add('hidden');
             });
         });
     </script>
