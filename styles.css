@@ -1,3 +1,7 @@
+body {
+    background-color: yellow;
+}
+
 #question-container, #summary {
     text-align: center;
     margin-top: 50px;
