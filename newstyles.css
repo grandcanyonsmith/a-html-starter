@@ -1,26 +1,28 @@
-body {
-    background-color: pink; /* User requested pink background */
-    font-family: 'Roboto', sans-serif; 
-}
+@media screen and (max-width: 600px) {
+  body {
+    background-color: pink;
+    font-family: 'Roboto', sans-serif;
+  }
 
-h1 {
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
-    color: white; 
+  h1 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: white;
     text-align: center;
-    font-size: 3em; 
-    margin: 0 auto; 
+    font-size: 2em;
+    margin: 0 auto;
     animation: fadeIn 3s ease-in-out infinite;
-}
+  }
 
-.center {
+  .center {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; 
-}
+    height: 100vh;
+  }
 
-@keyframes fadeIn {
+  @keyframes fadeIn {
     0% {opacity: 0;}
     50% {opacity: 1;}
     100% {opacity: 0;}
+  }
 }
