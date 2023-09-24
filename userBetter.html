@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Widget Tab</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        #myBtn {
+            position: fixed;
+            right: 0;
+            middle: 50%;
+            z-index: 99;
+        }
+    </style>
+</head>
+<body>
+    <button id="myBtn" class="btn btn-primary">Open Modal</button>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Enter your request</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="userRequest" class="form-control" placeholder="Enter your request">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#myBtn").click(function(){
+                $("#myModal").modal('show');
+            });
+
+            $("#submitBtn").click(function(){
+                $(this).text('Loading...');
+                var userRequest = $("#userRequest").val();
+                var data = {
+                    "userRequest": userRequest,
+                    "repo_name":"a-html-starter",
+                    "branch_name": "main"
+                };
+                $.ajax({
+                    url: "https://clpa2mrkgtskqlc4y64jego5xq0xfqpe.lambda-url.us-west-2.on.aws/",
+                    type: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: JSON.stringify(data),
+                    success: function(response) {
+                        alert('Request submitted successfully');
+                        $("#submitBtn").text('Submit');
+                        $("#myModal").modal('hide');
+                    },
+                    error: function(error) {
+                        alert('Error in submission');
+                        $("#submitBtn").text('Submit');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
