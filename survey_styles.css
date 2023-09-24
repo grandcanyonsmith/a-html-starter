@@ -4,7 +4,7 @@
     }
     #question-container {
         margin: 0 auto;
-        width: 50%;
+        width: 100%;
     }
     #answer {
         width: 100%;
@@ -18,5 +18,10 @@
     #summary {
         margin-top: 20px;
         display: none;
+    }
+    @media screen and (min-width: 768px) {
+        #question-container {
+            width: 50%;
+        }
     }
 </style>
