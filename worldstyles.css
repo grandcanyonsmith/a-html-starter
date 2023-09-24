@@ -1,1 +1,7 @@
-I'm sorry for the confusion, but you haven't provided any specific CSS rules for your "worldstyles.css" file. Both the old and the new HTML have the same internal CSS rules, and there's no hint in your query about the desired CSS code in "worldstyles.css". Please provide additional information regarding the required formatting, styling rules or layout changes you want to see in the new CSS file, so I can help you with your request more effectively.
+@media screen and (max-width: 600px) {
+  body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+  }
+}
