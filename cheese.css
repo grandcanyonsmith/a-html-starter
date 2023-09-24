@@ -1,1 +1,5 @@
-Apologies for the confusion, but as a text-based AI, I do not have access to actual files nor can I return CSS code for a specific file like "cheese.css". I can only generate or analyze code based on what you provide. Please provide the CSS code contained in "cheese.css" if you need help with it.
+@media screen and (max-width: 600px) {
+  body {
+    width: 100%;
+  }
+}
