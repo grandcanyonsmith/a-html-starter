@@ -1,19 +1,21 @@
-body {
-    background-color: pink;
-}
+@media screen and (max-width: 600px) {
+    body {
+        background-color: pink;
+    }
 
-header {
-    background-color: hotpink;
-}
+    header {
+        background-color: hotpink;
+    }
 
-nav a {
-    color: palevioletred;
-}
+    nav a {
+        color: palevioletred;
+    }
 
-section {
-    background-color: lightpink;
-}
+    section {
+        background-color: lightpink;
+    }
 
-footer {
-    background-color: hotpink;
+    footer {
+        background-color: hotpink;
+    }
 }
