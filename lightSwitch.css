@@ -1,5 +1,6 @@
 body {
-  background-color: blue;
+  background-color: #000;
+  color: #fff;
 }
 
 @media screen and (max-width: 600px) {
@@ -8,6 +9,7 @@ body {
   }
   body, input {
     font: 0.8em/1.5 sans-serif;
+    color: #fff;
   }
   .switch__input {
     width: 1.5em;
