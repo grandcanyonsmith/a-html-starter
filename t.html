@@ -1,0 +1,59 @@
+<html lang="en">
+
+ <head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>Enhanced Code Editor</title>
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script src="https://unpkg.com/feather-icons"></script>
+   <script type="module" src="main.js"></script>
+ </head>
+ <style>
+   #outputBox {
+     width: 100%;
+     overflow: auto;
+   }
+ </style>
+ 
+ <body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
+   <div class="container mx-auto p-4">
+     <div class="flex justify-end mb-4">
+       <button id="outputBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg border-r-0">
+         <i data-feather="eye"></i>
+       </button>
+       <button id="sourceBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg">
+         <i data-feather="code"></i>
+       </button>
+     </div>
+     <div class="flex justify-between mb-4">
+       <input type="hidden" id="repoDropdown" value="a-canyon-yb-tests">
+       <select id="fileDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+         <option>Select a file</option>
+       </select>
+     </div>
+     <div id="tabs" class="flex overflow-x-auto mb-4"></div>
+     <pre id="codeBox" class="w-full h-screen bg-white rounded shadow-lg p-4 language-html"></pre>
+     <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
+     <div class="flex justify-between mt-4">
+       <input type="text" id="requestInput" placeholder="Enter request..." class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+       <button id="submitBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded float-right">
+         Submit
+       </button>
+       <button id="saveBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
+         Save
+       </button>
+       <button id="runBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
+         Run
+       </button>
+       <div id="loader" class="hidden absolute h-5 w-5 border-t-2 border-white rounded-full animate-spin"></div>
+     </div>
+   </div>
+ 
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+   
+ </body>
+ 
+ </html>
