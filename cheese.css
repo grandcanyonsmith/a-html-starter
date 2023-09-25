@@ -1,6 +1,7 @@
 @media screen and (max-width: 600px) {
   body {
     width: 100%;
-    background-color: blue;
+    background-color: #000;
+    color: #fff;
   }
 }
