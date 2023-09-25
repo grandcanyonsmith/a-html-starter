@@ -1,3 +1,7 @@
+body {
+  background-color: blue;
+}
+
 @media screen and (max-width: 600px) {
   :root {
     font-size: calc(20px + (40 - 20) * (100vw - 320px) / (2560 - 320));
