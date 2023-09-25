@@ -1,6 +1,6 @@
 .navbar {
     overflow: hidden;
-    background-color: blue;
+    background-color: #000;
 }
 
 .navbar a {
@@ -15,7 +15,7 @@
 
 .navbar a:hover {
     background: #ddd;
-    color: black;
+    color: #000;
 }
 
 .navbar .icon {
