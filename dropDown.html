@@ -1,0 +1,41 @@
+<div class="container mx-auto">
+  <h2 class="text-xl font-bold mb-4">Selected: <span id="selected">None</span></h2>
+  <div class="relative inline-block text-left">
+    <div>
+      <button type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500" id="options-menu" aria-haspopup="true" aria-expanded="true">
+        Select a file
+        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fill-rule="evenodd" d="M10 6a2 2 0 100-4 2 2 0 000 4zm0 8a2 2 0 100-4 2 2 0 000 4zm0 8a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+
+    <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+      <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu" id="file-list">
+        <!-- Files will be inserted here -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const files = [{"name":"start.sh","path":"start.sh","sha":"64b07ff04173299750a987c0fd1a51d379421a99","size":181,"url":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/contents/start.sh?ref=master","html_url":"https://github.com/grandcanyonsmith/a-canyon-yb-tests/blob/master/start.sh","git_url":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/git/blobs/64b07ff04173299750a987c0fd1a51d379421a99","download_url":"https://raw.githubusercontent.com/grandcanyonsmith/a-canyon-yb-tests/master/start.sh?token=ALDBFSZ6AJ7F5PRKJVXXJRDFCHZHO","type":"file","_links":{"self":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/contents/start.sh?ref=master","git":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/git/blobs/64b07ff04173299750a987c0fd1a51d379421a99","html":"https://github.com/grandcanyonsmith/a-canyon-yb-tests/blob/master/start.sh"}},{"name":"testrail","path":"testrail","sha":"ae29d8ebc210db355ff2e18de97bffa3146b272b","size":0,"url":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/contents/testrail?ref=master","html_url":"https://github.com/grandcanyonsmith/a-canyon-yb-tests/tree/master/testrail","git_url":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/git/trees/ae29d8ebc210db355ff2e18de97bffa3146b272b","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/contents/testrail?ref=master","git":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/git/trees/ae29d8ebc210db355ff2e18de97bffa3146b272b","html":"https://github.com/grandcanyonsmith/a-canyon-yb-tests/tree/master/testrail"}},{"name":"tests","path":"tests","sha":"ad7731b6b8cc38f22d137b93bb6d978fdd4ccae4","size":0,"url":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/contents/tests?ref=master","html_url":"https://github.com/grandcanyonsmith/a-canyon-yb-tests/tree/master/tests","git_url":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/git/trees/ad7731b6b8cc38f22d137b93bb6d978fdd4ccae4","download_url":null,"type":"dir","_links":{"self":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/contents/tests?ref=master","git":"https://api.github.com/repos/grandcanyonsmith/a-canyon-yb-tests/git/trees/ad7731b6b8cc38f22d137b93bb6d978fdd4ccae4","html":"https://github.com/grandcanyonsmith/a-canyon-yb-tests/tree/master/tests"}}]
+
+
+  const fileList = document.getElementById('file-list');
+  const selected = document.getElementById('selected');
+
+  files.forEach(file => {
+    const fileElement = document.createElement('a');
+    fileElement.href = "#";
+    fileElement.classList.add('block', 'px-4', 'py-2', 'text-sm', 'text-gray-700', 'hover:bg-gray-100', 'hover:text-gray-900');
+    fileElement.role = "menuitem";
+    fileElement.textContent = file.name;
+
+    fileElement.addEventListener('click', () => {
+      selected.textContent = file.name;
+    });
+
+    fileList.appendChild(fileElement);
+  });
+</script>
