@@ -1,20 +1,43 @@
-@media screen and (max-width: 600px) {
-    body {
-        background-color: green;
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 1em;
+}
+
+.navbar-links {
+    display: flex;
+    list-style: none;
+}
+
+.navbar-links li {
+    margin: 0 0.5em;
+}
+
+.navbar-links a {
+    text-decoration: none;
+    color: inherit;
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
     }
 
-    #question-container, #summary {
-        text-align: center;
-        margin-top: 50px;
+    .navbar-links {
+        display: none;
     }
 
-    textarea {
-        width: 100%;
-        height: 100px;
+    .navbar .menu-icon {
+        display: block;
     }
 
-    button {
-        margin-top: 20px;
-        padding: 10px 20px;
+    .navbar.active .navbar-links {
+        display: flex;
+        flex-direction: column;
     }
+}
+
+.menu-icon {
+    display: none;
+    cursor: pointer;
 }
