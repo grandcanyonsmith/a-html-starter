@@ -1,21 +1,25 @@
 @media screen and (max-width: 600px) {
     body {
-        background-color: blue;
+        background-color: #000;
+        color: #fff;
     }
 
     header {
-        background-color: blue;
+        background-color: #000;
+        color: #fff;
     }
 
     nav a {
-        color: palevioletred;
+        color: #fff;
     }
 
     section {
-        background-color: blue;
+        background-color: #000;
+        color: #fff;
     }
 
     footer {
-        background-color: blue;
+        background-color: #000;
+        color: #fff;
     }
 }
