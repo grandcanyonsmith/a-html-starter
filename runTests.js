@@ -23,8 +23,6 @@ $(document).ready(function() {
     });
     html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Tests:<span>${data.total_tests}</span></div></p>`;
     html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Time:<span>${data.total_time}</span></div></p>`;
-    html +=
-      '<button id="uploadToTestrailBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm">Upload to Testrail</button>';
     elements.testResult.html(html);
     $('.file-link').hover(function() {
       $(this).css('text-decoration', 'underline');
