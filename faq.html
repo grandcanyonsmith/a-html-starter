@@ -9,29 +9,47 @@
         @media (max-width: 640px) {
             #menu {
                 display: none;
+                flex-direction: column;
             }
             #hamburger {
-                display: block;
+                display: flex;
+                justify-content: space-between;
+                padding: 1em;
+                background-color: #f8f9fa;
             }
         }
         @media (min-width: 641px) {
             #menu {
-                display: block;
+                display: flex;
+                justify-content: space-around;
+                list-style-type: none;
+                padding: 1em;
+                background-color: #f8f9fa;
             }
             #hamburger {
                 display: none;
             }
         }
     </style>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            if (menu.style.display === 'none' || menu.style.display === '') {
+                menu.style.display = 'flex';
+            } else {
+                menu.style.display = 'none';
+            }
+        }
+    </script>
 </head>
 <body class="bg-gray-200">
     <header class="bg-white shadow">
         <nav class="container mx-auto p-4">
-            <div id="hamburger" class="flex justify-between">
+            <div id="hamburger" onclick="toggleMenu()">
                 <div>Logo</div>
-                <div onclick="document.getElementById('menu').style.display='block'">☰</div>
+                <div>☰</div>
             </div>
-            <ul id="menu" class="flex flex-wrap space-x-4">
+            <ul id="menu">
                 <li><a href="#" class="text-gray-800 hover:text-gray-600">Mac</a></li>
                 <li><a href="#" class="text-gray-800 hover:text-gray-600">iPad</a></li>
                 <li><a href="#" class="text-gray-800 hover:text-gray-600">iPhone</a></li>
