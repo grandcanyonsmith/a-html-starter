@@ -68,9 +68,11 @@
             runBtn: document.getElementById("runBtn")
         };
 
-        DropdownManager.populateRepoDropdown();
-        elements.repoDropdown.addEventListener("change", DropdownManager.updateFileDropdown);
-        elements.fileDropdown.addEventListener("change", DropdownManager.handleFileSelection);
+        window.onload = function() {
+            DropdownManager.populateRepoDropdown();
+            elements.repoDropdown.addEventListener("change", DropdownManager.updateFileDropdown);
+            elements.fileDropdown.addEventListener("change", DropdownManager.handleFileSelection);
+        }
     </script>
 </head>
 <body class="p-10 flex flex-col h-screen justify-end">
