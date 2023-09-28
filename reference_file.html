@@ -26,15 +26,17 @@
 <body class="p-10 flex flex-col h-screen justify-end">
     <div class="flex items-center">
         <input type="text" id="textBox" class="border-2 border-blue-500 p-2 inline-block mt-4 mr-2">
-        <button onclick="openModal()" class="p-2 inline-block mt-4">
-            <i data-feather="plus"></i>
-        </button>
-        <button class="p-2 inline-block mt-4">
-            <i data-feather="send"></i>
-        </button>
-        <button class="p-2 inline-block mt-4">
-            <i data-feather="save"></i>
-        </button>
+        <div class="absolute top-0 right-0 mt-4 mr-4">
+            <button onclick="openModal()" class="p-1">
+                <i data-feather="plus" class="h-4 w-4"></i>
+            </button>
+            <button class="p-1">
+                <i data-feather="send" class="h-4 w-4"></i>
+            </button>
+            <button class="p-1">
+                <i data-feather="save" class="h-4 w-4"></i>
+            </button>
+        </div>
     </div>
     <div id="myModal" class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
@@ -69,3 +71,5 @@
     <script>
         feather.replace()
     </script>
+</body>
+</html>
