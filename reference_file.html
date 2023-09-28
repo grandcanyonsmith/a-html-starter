@@ -4,23 +4,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        function showOptions() {
-            var selectBox = document.getElementById("options");
-            var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-            var textBox = document.getElementById("textBox");
-            textBox.value += '<<<' + selectedValue + '>>>';
-            selectBox.selectedIndex = 0;
-            closeModal();
+        class DropdownManager {
+            static async updateFileDropdown() {
+                await DropdownManager.populateFileDropdown(elements.repoDropdown.value);
+                const tabs = document.getElementById("tabs");
+                tabs.innerHTML = "";
+            }
+
+            static handleFileSelection() {
+                CodeSubmitter.getFileContent(elements.fileDropdown.value);
+                elements.runBtn.classList.toggle(
+                    "hidden",
+                    !elements.fileDropdown.value.endsWith(".py")
+                );
+                const tabs = document.getElementById("tabs");
+                while (tabs.firstChild) {
+                    tabs.removeChild(tabs.firstChild);
+                }
+                UI.switchToOutputView();
+            }
+
+            static async populateRepoDropdown() {
+                const { data } = await axios.get(URLS.getRepos);
+                data.forEach((repo) => elements.repoDropdown.append(new Option(repo, repo)));
+            }
+
+            static async populateFileDropdown(repo) {
+                const { data } = await axios.post(
+                    "https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/get_all_contents",
+                    { repo_name: repo }
+                );
+                elements.fileDropdown.innerHTML = "";
+                elements.fileDropdown.append(new Option("Select a file", ""));
+                DropdownManager.populateDropdownWithResponseData(data);
+            }
+
+            static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
+                const indent = "\u00A0\u00A0".repeat(depth * 2);
+                data.forEach((item) => {
+                    const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+                    if (item.type === "file") {
+                        elements.fileDropdown.append(
+                            new Option(`${indent}📄 ${itemPath}`, item.download_url)
+                        );
+                    } else if (item.type === "dir") {
+                        elements.fileDropdown.append(new Option(`${indent}📁 ${itemPath}`, ""));
+                        DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
+                    }
+                });
+            }
         }
 
-        function openModal() {
-            document.getElementById('myModal').style.display = "block";
-        }
+        const URLS = {
+            getRepos: "https://flask-hello-world2-three.vercel.app/github_repos_list",
+            getFiles: "https://flask-hello-world2-git-main-grandcanyonsmith.vercel.app/github_repos/"
+        };
 
-        function closeModal() {
-            document.getElementById('myModal').style.display = "none";
-        }
+        const elements = {
+            repoDropdown: document.getElementById("repoOptions"),
+            fileDropdown: document.getElementById("options"),
+            runBtn: document.getElementById("runBtn")
+        };
+
+        DropdownManager.populateRepoDropdown();
+        elements.repoDropdown.addEventListener("change", DropdownManager.updateFileDropdown);
+        elements.fileDropdown.addEventListener("change", DropdownManager.handleFileSelection);
     </script>
 </head>
 <body class="p-10 flex flex-col h-screen justify-end">
@@ -32,7 +82,7 @@
         <button class="p-1">
             <i data-feather="send" class="h-4 w-4"></i>
         </button>
-        <button class="p-1">
+        <button id="runBtn" class="p-1">
             <i data-feather="save" class="h-4 w-4"></i>
         </button>
     </div>
@@ -55,16 +105,12 @@
                                     <div class="relative mt-2">
                                         <select id="repoOptions" class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                             <option value="">Select...</option>
-                                            <!-- Add repo options here -->
                                         </select>
                                     </div>
                                     <label id="listbox-label" class="block text-sm font-medium leading-6 text-gray-900">Select a File</label>
                                     <div class="relative mt-2">
-                                        <select id="options" onchange="showOptions()" class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                        <select id="options" class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                             <option value="">Select...</option>
-                                            <option value="index.html">index.html</option>
-                                            <option value="main.js">main.js</option>
-                                            <option value="styles.css">styles.css</option>
                                         </select>
                                     </div>
                                 </div>
