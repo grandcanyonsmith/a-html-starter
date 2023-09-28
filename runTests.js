@@ -23,6 +23,7 @@ $(document).ready(function() {
     });
     html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Tests:<span>${data.total_tests}</span></div></p>`;
     html += `<p class="stylish-p dark-theme"><div class="flex justify-between items-center w-full">Total Time:<span>${data.total_time}</span></div></p>`;
+    html += `<button onclick="window.location.href='${data.testrail_url}'" class="view-in-testrail-btn">View in Testrail</button>`;
     elements.testResult.html(html);
     $('.file-link').hover(function() {
       $(this).css('text-decoration', 'underline');
