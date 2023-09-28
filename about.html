@@ -2,32 +2,21 @@
 <html>
 <head>
     <title></title>
-    <link rel="stylesheet" type="text/css" href="lightSwitch.css">
-    <style>
-        body {
-            background-color: #000;
-            color: #fff;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <label class="switch">
-        <input class="switch__input" type="checkbox" role="switch">
-        <svg class="switch__letters" viewBox="0 0 24 24" width="24px" height="24px" aria-hidden="true">
-            <g stroke="currentcolor" stroke-linecap="round" stroke-width="4" transform="translate(0,4)">
-                <g class="switch__letter">
-                    <polyline class="switch__letter-stroke" points="2 2,2 14" />
-                    <polyline class="switch__letter-stroke" points="2 2,16 2" stroke-dasharray="14 16" stroke-dashoffset="8" transform="rotate(0,2,2)" />
-                    <polyline class="switch__letter-stroke" points="2 8,6 8" stroke-dasharray="4 6" />
-                </g>
-                <g class="switch__letter" transform="translate(14,0)">
-                    <polyline class="switch__letter-stroke" points="2 2,2 14" />
-                    <polyline class="switch__letter-stroke" points="2 2,8 2" stroke-dasharray="6 8" />
-                    <polyline class="switch__letter-stroke" points="2 8,6 8" stroke-dasharray="4 6" />
-                </g>
-            </g>
-        </svg>
-        <span class="switch__text">Power</span>
-    </label>
+    <div class="relative">
+        <button type="button" class="inline-flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900" aria-expanded="false">
+            <span>Solutions</span>
+            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <div class="absolute left-1/2 z-10 mt-5 flex w-screen max-w-max -translate-x-1/2 px-4">
+            <div class="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                <!-- Content goes here -->
+            </div>
+        </div>
+    </div>
 </body>
 </html>
