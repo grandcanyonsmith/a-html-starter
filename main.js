@@ -485,9 +485,6 @@
 
 
 
-
-// new functions
-
       function closeModal() {
         document.getElementById("myModal").style.display = "none";
       }
@@ -822,7 +819,7 @@ const ELEMENT_IDS = [
     static preparePayload() {
       return {
         code: elements.codeBox.textContent,
-        request: elements.requestInput.value,
+        request: elements.textBox.value,
         fileName: CodeSubmitter.getSelectedOptionText(elements.fileDropdown),
         repoName: CodeSubmitter.getSelectedOptionText(elements.repoDropdown)
       };
