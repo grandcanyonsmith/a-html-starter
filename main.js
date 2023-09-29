@@ -486,6 +486,7 @@
 
 
 
+
 // new functions
 
       function closeModal() {
@@ -1101,3 +1102,10 @@ class Main {
   }
   
   window.onload = Main.init;
+window.openModal = function() {
+  document.getElementById("myModal").style.display = "block";
+  newDropDownManager.populateRepoDropdown(); // populate the dropdown when the modal is opened
+}
+window.closeModal = function() {
+  document.getElementById("myModal").style.display = "none";
+}
