@@ -1,0 +1,3 @@
+my favorite band is Coldplay
+my favorite color is blue
+my favorite style of website is tailwindcss
