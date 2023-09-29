@@ -486,6 +486,7 @@
 
 
 
+// new functions
 
       function closeModal() {
         document.getElementById("myModal").style.display = "none";
@@ -594,7 +595,7 @@
   fileDropdown: document.getElementById("options"),
   runBtn: document.getElementById("runBtn")
 };
-      window.onload = function() {
+window.onload = function() {
   newDropDownManager.populateRepoDropdown();
   document.getElementById("options").addEventListener(
     "change",
@@ -607,7 +608,7 @@
 };
 
 
-
+// old functions
 const ELEMENT_IDS = [
     "sourceBtn",
     "outputBtn",
@@ -1050,11 +1051,20 @@ const ELEMENT_IDS = [
     }
   }
   
-  class Main {
+class Main {
     static async init() {
+      
       elements = Main.getElementsById(ELEMENT_IDS);
       Main.addEventListeners();
-      await DropdownManager.populateRepoDropdown();
+      await newDropDownManager.populateRepoDropdown(); // Initialize new function
+      document.getElementById("options").addEventListener(
+        "change",
+        function() {
+          if (this.value) {
+            newDropDownManager.handleFileSelection(); // Initialize new function
+          }
+        }
+      );
     }
   
     static getElementsById(ids) {
