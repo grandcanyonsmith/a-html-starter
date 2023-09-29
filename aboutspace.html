@@ -3,56 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Space</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="askLogan.js"></script>
+    <title>Business Requirements Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 50px;
+        }
+        h2 {
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        table {
+            margin-top: 20px;
+            width: 100%;
+            text-align: left;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
 </head>
-<body class="bg-black text-white">
-    <nav class="bg-gray-900 p-4">
-        <div class="flex justify-between">
-            <div>
-                <a href="index.html">Home</a>
-                <a href="aboutspace.html">About Space</a>
-                <a href="#exploration">Space Exploration</a>
-                <a href="faq.html">FAQ's</a>
-            </div>
-            <div class="md:hidden">
-                <button id="nav-toggle" class="hamburger hamburger--spin">
-                    <span class="hamburger-box">
-                        <span class="hamburger-inner"></span>
-                    </span>
-                </button>
-            </div>
-        </div>
-        <div id="nav-content" class="hidden md:flex justify-around">
-            <a href="index.html">Home</a>
-            <a href="aboutspace.html">About Space</a>
-            <a href="#exploration">Space Exploration</a>
-            <a href="faq.html">FAQ's</a>
-        </div>
-    </nav>
-    <header class="text-center py-5">
-        <h1 class="text-4xl font-bold">About Space</h1>
-    </header>
-    <main class="container mx-auto">
-        <section id="about" class="my-5">
-            <h2 class="text-2xl font-semibold">About Space</h2>
-            <p class="mt-2">Space is a vast, seemingly infinite expanse that exists beyond the Earth and between celestial bodies. It is a place of mystery and wonder, filled with countless stars, galaxies, and other celestial bodies. It is the final frontier of human exploration.</p>
-            <p class="mt-2">Space is not completely empty but consists of a hard vacuum containing a low density of particles, predominantly a plasma of hydrogen and helium, as well as electromagnetic radiation, magnetic fields, neutrinos, dust, and cosmic rays. The baseline temperature of outer space, as set by the background radiation from the Big Bang, is 2.7 kelvins.</p>
-            <p class="mt-2">The concept of space is considered to be of fundamental importance to an understanding of the physical universe. However, disagreement continues between philosophers over whether it is itself an entity, a relationship between entities, or part of a conceptual framework.</p>
-        </section>
-    </main>
-    <footer class="text-center py-5">
-        <p>&copy; 2022 Space Exploration Site</p>
-    </footer>
-    <script>
-        $(document).ready(function(){
-            $('#nav-toggle').click(function(){
-                $(this).toggleClass('is-active');
-                $('#nav-content').toggleClass('hidden');
-            });
-        });
-    </script>
+<body>
+    <div class="container">
+        <h1 class="text-center">Business Requirements Document</h1>
+        <table class="table" id="brd">
+            <thead>
+                <tr>
+                    <th>Section Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Technical Requirements</td>
+                </tr>
+                <tr>
+                    <td>AWS Lambda</td>
+                </tr>
+                <tr>
+                    <td>AWS DynamoDB</td>
+                </tr>
+                <tr>
+                    <td>AWS EC2</td>
+                </tr>
+                <tr>
+                    <td>Terraform</td>
+                </tr>
+                <tr>
+                    <td>OpenAI</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="questions_data.js"></script>
 </body>
 </html>
