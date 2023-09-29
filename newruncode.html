@@ -75,15 +75,17 @@
     <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
     <div class="flex justify-between mt-4">
       <textarea id="textBox" class="border-2 border-blue-500 p-2 inline-block mt-4 mr-2 w-full"></textarea>
-      <button onclick="openModal()" class="p-1">
-        <i data-feather="plus" class="h-4 w-4"></i>
-      </button>
-      <button id="submitBtn" class="p-1">
-        <i data-feather="send" class="h-4 w-4"></i>
-      </button>
-      <button id="saveBtn" class="p-1">
-        <i data-feather="save" class="h-4 w-4"></i>
-      </button>
+      <div class="flex flex-col justify-between h-full">
+        <button onclick="openModal()" class="p-1">
+          <i data-feather="plus" class="h-4 w-4"></i>
+        </button>
+        <button id="submitBtn" class="p-1">
+          <i data-feather="send" class="h-4 w-4"></i>
+        </button>
+        <button id="saveBtn" class="p-1">
+          <i data-feather="save" class="h-4 w-4"></i>
+        </button>
+      </div>
       <button id="runBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
         Run
       </button>
