@@ -486,14 +486,13 @@
 
 
 
-
 // new functions
 
       function closeModal() {
         document.getElementById("myModal").style.display = "none";
       }
 
-    export function openModal() {
+      function openModal() {
   document.getElementById("myModal").style.display = "block";
   newDropDownManager.populateRepoDropdown(); // populate the dropdown when the modal is opened
 }
@@ -1052,22 +1051,29 @@ const ELEMENT_IDS = [
     }
   }
   
-class Main {
-    static async init() {
-      
-      elements = Main.getElementsById(ELEMENT_IDS);
-      Main.addEventListeners();
-      await newDropDownManager.populateRepoDropdown(); // Initialize new function
-      document.getElementById("options").addEventListener(
-        "change",
-        function() {
-          if (this.value) {
-            newDropDownManager.handleFileSelection(); // Initialize new function
-          }
+  class Main {
+  static async init() {
+    elements = Main.getElementsById(ELEMENT_IDS);
+    Main.addEventListeners();
+    await DropdownManager.populateRepoDropdown();
+
+    // Initialize new function
+    newDropDownManager.populateRepoDropdown();
+    document.getElementById("options").addEventListener(
+      "change",
+      function() {
+        if (this.value) {
+          newDropDownManager.handleFileSelection(); // Initialize new function
         }
-      );
-    }
+      }
+    );
+  }
   
+    
+    
+    
+    
+    
     static getElementsById(ids) {
       return ids.reduce(
         (obj, id) => ({ ...obj, [id]: document.getElementById(id) }),
@@ -1095,12 +1101,20 @@ class Main {
       });
     }
   
-    static addChangeListenersToDropdowns() {
-      elements.repoDropdown.addEventListener("change", DropdownManager.updateFileDropdown);
-      elements.fileDropdown.addEventListener("change", DropdownManager.handleFileSelection);
-    }
+      static addChangeListenersToDropdowns() {
+    elements.repoDropdown.addEventListener("change", DropdownManager.updateFileDropdown);
+    elements.fileDropdown.addEventListener("change", DropdownManager.handleFileSelection);
+
+    // Add new event listener
+    document.getElementById("options").addEventListener(
+      "change",
+      function() {
+        if (this.value) {
+          newDropDownManager.handleFileSelection();
+        }
+      }
+    );
   }
-  
-  window.onload = Main.init;
-  const button = document.querySelector('button[onclick="openModal()"]');
-  button.addEventListener('click', openModal);
+}
+
+window.onload = Main.init;
