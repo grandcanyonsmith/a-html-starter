@@ -493,7 +493,7 @@
         document.getElementById("myModal").style.display = "none";
       }
 
-      function openModal() {
+    export function openModal() {
   document.getElementById("myModal").style.display = "block";
   newDropDownManager.populateRepoDropdown(); // populate the dropdown when the modal is opened
 }
@@ -1102,10 +1102,5 @@ class Main {
   }
   
   window.onload = Main.init;
-window.openModal = function() {
-  document.getElementById("myModal").style.display = "block";
-  newDropDownManager.populateRepoDropdown(); // populate the dropdown when the modal is opened
-}
-window.closeModal = function() {
-  document.getElementById("myModal").style.display = "none";
-}
+  const button = document.querySelector('button[onclick="openModal()"]');
+  button.addEventListener('click', openModal);
