@@ -1,15 +1,15 @@
 let questions = [
     {
         "id": 1,
-        "question": "What is the purpose or objective of the business or project?"
+        "question": "What is the purpose or objective of the sales email funnel?"
     },
     {
         "id": 2,
-        "question": "What is the vision of the company?"
+        "question": "What is the target audience for the sales email funnel?"
     },
     {
         "id": 3,
-        "question": "What problem does the project aim to solve?"
+        "question": "What problem does the sales email funnel aim to solve?"
     },
     {
         "id": 4,
@@ -25,7 +25,7 @@ let questions = [
     },
     {
         "id": 7,
-        "question": "What are the specific goals and objectives of the project?"
+        "question": "What are the specific goals and objectives of the sales email funnel?"
     },
     {
         "id": 8,
