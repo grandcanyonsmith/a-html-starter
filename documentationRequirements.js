@@ -38,4 +38,4 @@ function populateDocumentationRequirements() {
     document.getElementById('documentationRequirements').innerHTML = documentationRequirementsTable;
 }
 
-document.addEventListener('DOMContentLoaded', populateDocumentationRequirements);
+window.onload = populateDocumentationRequirements;
