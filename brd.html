@@ -35,7 +35,7 @@
         }
     </style>
 </head>
-<body onload="populateData(); populateTechUsed();">
+<body onload="populateData(); populateTechUsed(); populateDocumentationRequirements(); populateSuccessCriteria();">
     <div class="container">
         <h1 class="text-center">Business Requirements Document</h1>
         <div id="brd">
@@ -45,54 +45,12 @@
     <div class="container" id="techUsed">
         <!-- The technologies used will be inserted here -->
     </div>
-    <div class="container">
-        <h2>Success Criteria</h2>
-        <div class="scrollable-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Test Metric</th>
-                        <th>Description</th>
-                        <th>Current</th>
-                        <th>Goal</th>
-                        <th>% Change</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Setup <i class="fas fa-clock"></i></td>
-                        <td>Time to prepare and initiate a test run</td>
-                        <td>30 min</td>
-                        <td>3 min</td>
-                        <td>90% <i class="fas fa-arrow-down red-arrow"></i> Reduction</td>
-                    </tr>
-                    <tr>
-                        <td>Responsibility Diagnosis <i class="fas fa-clock"></i></td>
-                        <td>Time to determine cause of broken test and assign responsibility</td>
-                        <td>15 min</td>
-                        <td>3 min</td>
-                        <td>80% <i class="fas fa-arrow-down red-arrow"></i> Reduction</td>
-                    </tr>
-                    <tr>
-                        <td>Running Tests <i class="fas fa-clock"></i></td>
-                        <td>Time to run an entire test suite</td>
-                        <td>1 hour</td>
-                        <td>20 min</td>
-                        <td>67% <i class="fas fa-arrow-down red-arrow"></i> Reduction</td>
-                    </tr>
-                    <tr>
-                        <td>Fix Bugs <i class="fas fa-clock"></i></td>
-                        <td>Time to fix a broken test</td>
-                        <td>30 min - 1 hour</td>
-                        <td>3-5 min</td>
-                        <td>90% <i class="fas fa-arrow-down red-arrow"></i> Reduction</td>
-                    </tr>
-                    <!-- The KPI success data will be inserted here -->
-                </tbody>
-            </table>
-        </div>
+    <div class="container" id="successCriteria">
+        <!-- The success criteria will be inserted here -->
     </div>
     <script src="datascript.js"></script>
     <script src="technologiesUsedTable.js"></script>
+    <script src="documentationRequirements.js"></script>
+    <script src="successCriteria.js"></script>
 </body>
 </html>
