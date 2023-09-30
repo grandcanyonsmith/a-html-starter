@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', populateSuccessCriteria);
+
 function populateSuccessCriteria() {
     let successCriteriaTable = `
         <h2>Success Criteria</h2>
@@ -41,7 +43,6 @@ function populateSuccessCriteria() {
                         <td>3-5 min</td>
                         <td>90% <i class="fas fa-arrow-down red-arrow"></i> Reduction</td>
                     </tr>
-                    <!-- The KPI success data will be inserted here -->
                 </tbody>
             </table>
         </div>
