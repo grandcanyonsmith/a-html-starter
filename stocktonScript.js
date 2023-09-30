@@ -42,6 +42,7 @@ function showSummary() {
     for (let i = 0; i < questions.length; i++) {
         html += `<p><strong>${questions[i].question}</strong><br>${answers[i] || 'Skipped'}</p>`;
     }
+    html += '<button id="generate-email">Generate Email Sequence</button>';
     document.getElementById('answers').innerHTML = html;
 }
 
