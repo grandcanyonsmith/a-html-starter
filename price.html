@@ -3,6 +3,24 @@
 <head>
     <title>CourseCreator360 Resource Expense Chart</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        tr:nth-child(even){background-color: #f2f2f2;}
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container mx-auto">
@@ -31,7 +49,7 @@
                     </tr>
                     <tr>
                         <td>Total Tier Cost (USD)</td>
-                        <td>30.83</td>
+                        <td>$30.83</td>
                     </tr>
                     <tr>
                         <td>Total Monthly Billable Requests</td>
@@ -39,11 +57,11 @@
                     </tr>
                     <tr>
                         <td>Monthly Request Charges (USD)</td>
-                        <td>0.40</td>
+                        <td>$0.40</td>
                     </tr>
                     <tr>
                         <td>Total Lambda Costs with Free Tier (USD)</td>
-                        <td>31.23</td>
+                        <td>$31.23</td>
                     </tr>
                 </tbody>
             </table>
@@ -60,10 +78,18 @@
                 <tbody>
                     <tr>
                         <td>Monthly Cost (USD)</td>
-                        <td>500</td>
+                        <td>$500</td>
+                    </tr>
+                    <tr>
+                        <td>Total Monthly Billable Requests</td>
+                        <td>2,000,000.00</td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="my-5">
+            <h2 class="text-2xl">Conclusion</h2>
+            <p>By analyzing the costs of AWS Lambda and Zapier, we can optimize our resource allocation and reduce expenses.</p>
         </div>
     </div>
 </body>
