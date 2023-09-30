@@ -1,3 +1,5 @@
+document.addEventListener('DOMContentLoaded', populateDocumentationRequirements);
+
 const data = {
     "documents": [
         {
@@ -10,7 +12,6 @@ const data = {
             "description": "The primary goals are to provide real-time status of product readiness for shipping and to reduce the time taken to run and diagnose broken tests. The key stakeholders include Kevin, Matt, Canyon, Patrick, Arialle, Flor, Logan, and Jacob.",
             "author": "Canyon Smith"
         },
-        // More documents...
     ]
 };
 
