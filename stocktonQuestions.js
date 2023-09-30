@@ -1,59 +1,59 @@
 let questions = [
     {
         "id": 1,
-        "question": "What is the purpose or objective of the sales email funnel?"
+        "question": "What is the main product or service that your business offers?"
     },
     {
         "id": 2,
-        "question": "What is the target audience for the sales email funnel?"
+        "question": "Who is your target audience?"
     },
     {
         "id": 3,
-        "question": "What problem does the sales email funnel aim to solve?"
+        "question": "What problem does your product or service solve for your customers?"
     },
     {
         "id": 4,
-        "question": "Who are the key stakeholders involved in this project?"
+        "question": "Who are the key stakeholders in your business?"
     },
     {
         "id": 5,
-        "question": "Who are the decision-makers in the project?"
+        "question": "Who are the decision-makers in your business?"
     },
     {
         "id": 6,
-        "question": "Who will be directly affected by the project's outcome?"
+        "question": "What is the desired outcome of the sales funnel?"
     },
     {
         "id": 7,
-        "question": "What are the specific goals and objectives of the sales email funnel?"
+        "question": "What are the specific goals of the sales funnel?"
     },
     {
         "id": 8,
-        "question": "What are the short-term and long-term goals?"
+        "question": "What are your business's short-term and long-term goals?"
     },
     {
         "id": 9,
-        "question": "How do these goals align with the company's overall objectives?"
+        "question": "How do these goals align with your overall business objectives?"
     },
     {
         "id": 10,
-        "question": "What are the key business processes that will be affected by this project?"
+        "question": "What are the key business processes that will be affected by the sales funnel?"
     },
     {
         "id": 11,
-        "question": "What are the current business processes?"
+        "question": "What are your current business processes?"
     },
     {
         "id": 12,
-        "question": "How will these processes change after the project?"
+        "question": "How will these processes change after the implementation of the sales funnel?"
     },
     {
         "id": 13,
-        "question": "What are the expected deliverables of the project?"
+        "question": "What are the expected deliverables of the sales funnel?"
     },
     {
         "id": 14,
-        "question": "What are the tangible and intangible outputs of the project?"
+        "question": "What are the tangible and intangible outputs of the sales funnel?"
     },
     {
         "id": 15,
@@ -61,22 +61,22 @@ let questions = [
     },
     {
         "id": 16,
-        "question": "What are the functional requirements of the project?"
+        "question": "What are the functional requirements of the sales funnel?"
     },
     {
         "id": 17,
-        "question": "What are the specific functionalities that the project should deliver?"
+        "question": "What are the specific functionalities that the sales funnel should deliver?"
     },
     {
         "id": 18,
-        "question": "How will these functionalities address the project's objectives?"
+        "question": "How will these functionalities address the sales funnel's objectives?"
     },
     {
         "id": 19,
-        "question": "What are the non-functional requirements of the project?"
+        "question": "What are the non-functional requirements of the sales funnel?"
     },
     {
         "id": 20,
-        "question": "What are the performance, security, and usability requirements?"
+        "question": "What are the performance, security, and usability requirements of the sales funnel?"
     }
 ];
