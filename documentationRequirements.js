@@ -1,15 +1,20 @@
-function populateDocumentationRequirements() {
-    const data = {
-        "documents": [
-            {
-                "documentName": "Project Overview",
-                "description": "The project's objective is to develop a centralized platform for managing and executing tests for OC Tanner's Test suite. The vision is to provide a tool that enables managers to determine product readiness for shipping and allows test engineers to run and fix tests from a single location.",
-                "author": "John Doe"
-            },
-            // More documents...
-        ]
-    };
+const data = {
+    "documents": [
+        {
+            "documentName": "Business Requirements Document",
+            "description": "The project's objective is to develop a centralized platform for managing and executing tests for OC Tanner's Test suite. The vision is to provide a tool that enables managers to determine product readiness for shipping and allows test engineers to run and fix tests from a single location.",
+            "author": "Canyon Smith"
+        },
+        {
+            "documentName": "Software Requirements Document",
+            "description": "The primary goals are to provide real-time status of product readiness for shipping and to reduce the time taken to run and diagnose broken tests. The key stakeholders include Kevin, Matt, Canyon, Patrick, Arialle, Flor, Logan, and Jacob.",
+            "author": "Canyon Smith"
+        },
+        // More documents...
+    ]
+};
 
+function populateDocumentationRequirements() {
     const container = document.getElementById('brd');
     const table = document.createElement('table');
     const thead = document.createElement('thead');
@@ -25,19 +30,19 @@ function populateDocumentationRequirements() {
     thead.appendChild(headerRow);
     table.appendChild(thead);
 
-    data.documents.forEach(document => {
+    data.documents.forEach(documentData => {
         const row = document.createElement('tr');
 
         const nameCell = document.createElement('td');
-        nameCell.textContent = document.documentName;
+        nameCell.textContent = documentData.documentName;
         row.appendChild(nameCell);
 
         const descriptionCell = document.createElement('td');
-        descriptionCell.textContent = document.description;
+        descriptionCell.textContent = documentData.description;
         row.appendChild(descriptionCell);
 
         const authorCell = document.createElement('td');
-        authorCell.textContent = document.author;
+        authorCell.textContent = documentData.author;
         row.appendChild(authorCell);
 
         tbody.appendChild(row);
