@@ -79,9 +79,10 @@
             <a href="#" class="text-gray-400 hover:text-white hover:bg-gray-800 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold">
               <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-700 bg-gray-800 text-[0.625rem] font-medium text-gray-400 group-hover:text-white">A</span>
               <span class="truncate">Autosave</span>
-              <button type="button" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 ml-auto" role="switch" aria-checked="false">
+              <input type="checkbox" id="toggle" class="hidden" onclick="var x = document.getElementById('toggle-icon'); if (x.style.display === 'none') {x.style.display = 'block';} else {x.style.display = 'none';}">
+              <label for="toggle" class="bg-gray-200 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2 ml-auto" role="switch" aria-checked="false">
                 <span class="sr-only">Use setting</span>
-                <span class="translate-x-0 pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out">
+                <span id="toggle-icon" class="translate-x-0 pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out">
                   <span class="opacity-100 duration-200 ease-in absolute inset-0 flex h-full w-full items-center justify-center transition-opacity" aria-hidden="true">
                     <svg class="h-3 w-3 text-gray-400" fill="none" viewBox="0 0 12 12">
                       <path d="M4 8l2-2m0 0l2-2M6 6L4 4m2 2l2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -93,7 +94,7 @@
                     </svg>
                   </span>
                 </span>
-              </button>
+              </label>
             </a>
           </li>
         </ul>
