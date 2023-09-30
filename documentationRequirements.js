@@ -1,5 +1,3 @@
-document.addEventListener('DOMContentLoaded', populateDocumentationRequirements);
-
 const data = {
     "documents": [
         {
@@ -52,3 +50,5 @@ function populateDocumentationRequirements() {
     table.appendChild(tbody);
     container.appendChild(table);
 }
+
+document.addEventListener('DOMContentLoaded', populateDocumentationRequirements);
