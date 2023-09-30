@@ -1,62 +1,50 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AWS Solution for Drivers License Verification</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    <script src="checkListAnswers.js"></script>
-</head>
-<body class="bg-green-500">
-    <h1 class="text-3xl font-bold">Functional Specification Checklist for AWS Solution for Drivers License Verification</h1>
-    <p class="mt-4">Before we start writing this document, we need to ensure we understand and check the following:</p>
-    <ol id="checklist" class="list-decimal ml-5 mt-4">
-        <li>Check if features were deleted from the vision/scope document.</li>
-        <li>Identify assumptions about the solution, customers, and users.</li>
-        <li>Identify dependencies the solution may have on other services, technologies, and people within the organization.</li>
-        <li>Plan how to address security.</li>
-        <li>Identify installation and un-installation requirements.</li>
-        <li>Identify integration requirements.</li>
-        <li>Understand the business case and business benefits.</li>
-        <li>Identify the solution’s high-level architecture.</li>
-        <li>Identify the solution’s components, including how they relate to other components.</li>
-        <li>Identify naming standards it must follow.</li>
-        <li>Identify security guidelines that the solution must follow.</li>
-    </ol>
-    <h2 class="text-2xl font-bold mt-4">Inputs</h2>
-    <p class="mt-4">To write the Functional Specification, the following inputs are required:</p>
-    <ol class="list-decimal ml-5 mt-4">
-        <li>Vision/scope document</li>
-        <li>Requirements documents, including:</li>
-        <ul class="list-disc ml-5">
-            <li>Business requirements.</li>
-            <li>Operations requirements.</li>
-            <li>System requirements.</li>
-            <li>User requirements.</li>
-        </ul>
-        <li>Product and technology evaluations</li>
-    </ol>
-    <h2 class="text-2xl font-bold mt-4">Outputs</h2>
-    <p class="mt-4">After writing the Functional Specification, the following outputs are generated:</p>
-    <ol class="list-decimal ml-5 mt-4">
-        <li>Design documents, including:</li>
-        <ul class="list-disc ml-5">
-            <li>Conceptual design.</li>
-            <li>Logical design.</li>
-            <li>Physical design.</li>
-        </ul>
-        <li>Functional specification</li>
-    </ol>
-        <script src="widget.js"></script>
-
-    <script>
-        // Function to read checkListAnswers.json for the checklist 1-11 answers
-        function readCheckListAnswers() {
-            fetch('checkListAnswers.json')
-            .then(response => response.json())
-            .then(data => {
-                // Code to map the values goes here
-            });
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1a202c;
         }
-    </script>
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            bottom: 100%;
+        }
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+<div class="flex flex-col h-screen bg-gray-900 px-6">
+    <div class="-mx-6">
+        <div class="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800">
+            <img class="h-8 w-8 rounded-full bg-gray-800" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+            <span class="sr-only">Your profile</span>
+            <span aria-hidden="true">Canyon Smith</span>
+            <div class="dropdown ml-auto flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-gray-400 hover:text-white">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12h16"></path>
+                </svg>
+                <div class="dropdown-content">
+                    <a href="#">Settings</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
