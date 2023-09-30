@@ -3,6 +3,7 @@
 <head>
     <title></title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/feather-icons" rel="stylesheet">
     <style>
         body {
             background-color: #1a202c;
@@ -22,16 +23,20 @@
 <body>
 <div class="flex flex-col h-screen bg-gray-900 px-6 justify-end">
     <div class="-mx-6">
-        <div class="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800">
-            <img class="h-8 w-8 rounded-full bg-gray-800" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" onclick="showButtonGroup()">
+        <div class="flex flex-row items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-white hover:bg-gray-800" onclick="showButtonGroup()">
+            <img class="h-8 w-8 rounded-full bg-gray-800" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
             <span class="sr-only">Your profile</span>
             <span aria-hidden="true">Canyon Smith</span>
-            <div id="buttonGroup" style="display: none;">
-                <button><i class="fa fa-cog"></i> Settings</button>
-                <button><i class="fa fa-sign-out"></i> Logout</button>
+            <div id="buttonGroup" style="display: none; flex-direction: column;">
+                <button><i data-feather="settings"></i> Settings</button>
+                <button><i data-feather="log-out"></i> Logout</button>
             </div>
         </div>
     </div>
 </div>
+<script src="https://unpkg.com/feather-icons"></script>
+<script>
+    feather.replace()
+</script>
 </body>
 </html>
