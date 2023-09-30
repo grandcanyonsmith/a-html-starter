@@ -17,6 +17,9 @@
             margin-top: 30px;
             margin-bottom: 20px;
         }
+        .scrollable-table {
+            overflow-x: auto;
+        }
         table {
             margin-top: 20px;
             width: 100%;
@@ -42,6 +45,21 @@
     <div class="container">
         <h2>Success Criteria</h2>
         <p>Success will be gauged by improvements in average time spent to run code tests and other KPIs such as Test run setup time improvement %, Test responsibility diagnosis improvement time %, Test fix improvement time %, Test run waiting time % improvement, Average time savings per week per head, and Average annual labor savings.</p>
+        <div class="scrollable-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric Name</th>
+                        <th>Description</th>
+                        <th>Current</th>
+                        <th>Goal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- The KPI success data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
     </div>
     <script src="datascript.js"></script>
     <script src="technologiesUsedTable.js"></script>
