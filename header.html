@@ -4,9 +4,13 @@
     <title></title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
+        body {
+            background-color: #1a202c;
+        }
         #sidebar {
             transform: translateX(-100%);
             transition: transform 0.3s ease-in-out;
+            background-color: #1a202c;
         }
         #hamburger:checked ~ #sidebar {
             transform: translateX(0);
@@ -16,6 +20,12 @@
         }
         #hamburger:checked ~ label[for="hamburger"] .close-icon {
             display: block;
+        }
+        label[for="hamburger"] {
+            background-color: #1a202c;
+        }
+        svg {
+            color: white;
         }
     </style>
 </head>
