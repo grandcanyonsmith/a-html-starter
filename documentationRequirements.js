@@ -14,41 +14,28 @@ const data = {
 };
 
 function populateDocumentationRequirements() {
-    const container = document.getElementById('documentationRequirements');
-    const table = document.createElement('table');
-    const thead = document.createElement('thead');
-    const tbody = document.createElement('tbody');
-    const headerRow = document.createElement('tr');
+    let documentationRequirementsTable = `
+        <table>
+            <thead>
+                <tr>
+                    <th>Document Name</th>
+                    <th>Description</th>
+                    <th>Author</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${data.documents.map(documentData => `
+                    <tr>
+                        <td>${documentData.documentName}</td>
+                        <td>${documentData.description}</td>
+                        <td>${documentData.author}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
 
-    ['Document Name', 'Description', 'Author'].forEach(text => {
-        const th = document.createElement('th');
-        th.textContent = text;
-        headerRow.appendChild(th);
-    });
-
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
-
-    data.documents.forEach(documentData => {
-        const row = document.createElement('tr');
-
-        const nameCell = document.createElement('td');
-        nameCell.textContent = documentData.documentName;
-        row.appendChild(nameCell);
-
-        const descriptionCell = document.createElement('td');
-        descriptionCell.textContent = documentData.description;
-        row.appendChild(descriptionCell);
-
-        const authorCell = document.createElement('td');
-        authorCell.textContent = documentData.author;
-        row.appendChild(authorCell);
-
-        tbody.appendChild(row);
-    });
-
-    table.appendChild(tbody);
-    container.appendChild(table);
+    document.getElementById('documentationRequirements').innerHTML = documentationRequirementsTable;
 }
 
 document.addEventListener('DOMContentLoaded', populateDocumentationRequirements);
