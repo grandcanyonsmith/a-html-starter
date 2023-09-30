@@ -16,7 +16,7 @@ const data = {
 };
 
 function populateDocumentationRequirements() {
-    const container = document.getElementById('brd');
+    const container = document.getElementById('documentationRequirements');
     const table = document.createElement('table');
     const thead = document.createElement('thead');
     const tbody = document.createElement('tbody');
