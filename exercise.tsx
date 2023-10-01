@@ -1,30 +1,23 @@
+import React, { useEffect } from 'react';
 import { IonButtons, IonContent, IonText, IonInput, IonHeader, IonItemOptions, IonItemOption, IonCard, IonIcon, IonProgressBar, IonPage, IonItemSliding, IonToolbar, IonGrid, IonRow, IonCol, IonDatetime, IonItem, IonMenuToggle, IonCardContent,
   IonRefresher, IonRefresherContent,  } from '@ionic/react';
 import { personCircleOutline, calendar, checkmarkOutline, chevronDownCircleOutline, checkmarkSharp, playCircleSharp, playCircleOutline, pencilOutline, pencilSharp, addOutline, addSharp, createOutline, createSharp, trashSharp, trashOutline, personCircleSharp } from 'ionicons/icons';
-import React, { useEffect } from 'react';
 import { CircularProgressbar } from 'react-circular-progressbar';
-import AppHook from '../../hooks/appHook';
 import ExerciseHook from '../../hooks/exerciseHook';
-import Inputcontainer from '../../components/inputContainer/inputContainer';
+import { getProgressExercise, handleKeyboardDisplay, trackGAView } from '../../actions/common';
+import FooterItems from '../../components/footerItems';
+import WeekCalendar from '../../components/weekCalendar';
 import AddNotes from '../../components/addNotes';
 import ExerciseInfo from '../../components/exerciseInfo';
 import AddExercise from '../../components/addExercise';
-import { getProgressExercise, handleKeyboardDisplay } from '../../actions/common';
-import FooterItems from '../../components/footerItems';
-import { trackGAView } from '../../actions/common';
-
-import { Plugins, Capacitor } from "@capacitor/core";
-import WeekCalendar from '../../components/weekCalendar';
 
 const Exercise:React.FC = React.memo((props:any) => {
-  const name = 'Exercise';
-  const { isImpersonated } = AppHook();
-  const { exerciseDate, onExerciseDate, onItemQty, onChangeQty, isDisplayNotes, addNotes, onNotesChange, notes,
+  const { isImpersonated, exerciseDate, onExerciseDate, onItemQty, onChangeQty, isDisplayNotes, addNotes, onNotesChange, notes,
     onSaveNotes, selectednote, isDisplayExerciseInfo, onExerciseInfo, onAddSet,
     isDisplayAddExercise, addExercise, onSearchExercise, searchExercise, exerciseData, onSelectExerciseItem, selectedExercise, getExerciseData,
     epedata, onAddExerciseNew, onDeleteSet, completed, onExerciseSpecSelect, doRefresh, onExerciseDelete, videoData, isNoRecordsExercise,
     isDisplayExerciseLoader, isDisplayProgressBar, onItemQtyChange, isNoActiveProgram, weekList, initiateWeekList, toggleMenu } = ExerciseHook();
-  const percentage = 66;
+
   useEffect(() => {
     getExerciseData(exerciseDate, true);
     trackGAView('Exercise screen');
