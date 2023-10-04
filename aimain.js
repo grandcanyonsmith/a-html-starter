@@ -429,21 +429,36 @@ const ELEMENT_IDS = [
       DropdownManager.populateDropdownWithResponseData(data);
     }
   
-    static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
-      const indent = "\u00A0\u00A0".repeat(depth * 2);
-      data.forEach((item) => {
-        const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
-        if (item.type === "file") {
-          elements.fileDropdown.append(
-            new Option(`${indent}📄 ${itemPath}`, item.download_url)
-          );
-        } else if (item.type === "dir") {
-          elements.fileDropdown.append(new Option(`${indent}📁 ${itemPath}`, ""));
-          DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
-        }
-      });
-    }
-}
+//     static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
+//       const indent = "\u00A0\u00A0".repeat(depth * 2);
+//       data.forEach((item) => {
+//         const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+//         if (item.type === "file") {
+//           elements.fileDropdown.append(
+//             new Option(`${indent}📄 ${itemPath}`, item.download_url)
+//           );
+//         } else if (item.type === "dir") {
+//           elements.fileDropdown.append(new Option(`${indent}📁 ${itemPath}`, ""));
+//           DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
+//         }
+//       });
+//     }
+// }
+static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
+    const indent = "\u00A0\u00A0".repeat(depth * 2);
+    data.forEach((item) => {
+      const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+      const displayName = itemPath.split('/').pop();
+      if (item.type === "file") {
+        elements.fileDropdown.append(
+          new Option(`${indent}📄 ${displayName}`, item.download_url)
+        );
+      } else if (item.type === "dir") {
+        elements.fileDropdown.append(new Option(`${indent}📁 ${displayName}`, ""));
+        DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
+      }
+    });
+  }
   
 class Main {
   static async init() {
