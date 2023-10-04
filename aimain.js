@@ -446,7 +446,7 @@ const ELEMENT_IDS = [
 //   }
 //   }
       
-static populateDropdownWithResponseData(data, parentElement = document.body, depth = 0) {
+static populateDropdownWithResponseData(data, parentElement = document.body, parentPath = "", depth = 0) {
     const indent = "\u00A0\u00A0".repeat(depth * 2);
     const ul = document.createElement('ul');
     parentElement.appendChild(ul);
@@ -473,7 +473,7 @@ static populateDropdownWithResponseData(data, parentElement = document.body, dep
                 const icon = this.textContent.trim().startsWith('+') ? '-' : '+';
                 this.textContent = `${indent}${icon} ${displayName}`;
             });
-            DropdownManager.populateDropdownWithResponseData(item.contents, li, depth + 1);
+            DropdownManager.populateDropdownWithResponseData(item.contents, li, itemPath, depth + 1);
         }
     });
 }
