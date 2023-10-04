@@ -32,10 +32,9 @@
       </button>
     </div>
     <div class="flex justify-between mb-4">
-<!--       <select id="fileDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+      <select id="fileDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
         <option>Select a file</option>
-      </select> -->
-      <div id="fileDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg"></div>
+      </select>
     </div>
     <div id="tabs" class="flex overflow-x-auto mb-4"></div>
     <pre id="codeBox" class="w-full h-screen bg-white rounded shadow-lg p-4 language-html"></pre>
@@ -56,17 +55,7 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
-  <script>
-  function toggleNestedItems(event) {
-    const button = event.currentTarget;
-    const nestedItems = button.parentElement.nextElementSibling;
-    nestedItems.classList.toggle('hidden');
-    const plusIconPath = "M4 10h12v2H4z";
-    const minusIconPath = "M4 10h12v2H4zm0-4h12v2H4z";
-    const icon = button.querySelector('svg path');
-    icon.setAttribute('d', icon.getAttribute('d') === plusIconPath ? minusIconPath : plusIconPath);
-  }
-</script>
+  
 </body>
 
 </html>
