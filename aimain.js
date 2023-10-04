@@ -446,32 +446,37 @@ const ELEMENT_IDS = [
 //   }
 //   }
       
-static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
+static populateDropdownWithResponseData(data, parentElement = document.body, depth = 0) {
     const indent = "\u00A0\u00A0".repeat(depth * 2);
+    const ul = document.createElement('ul');
+    parentElement.appendChild(ul);
+
     data.forEach((item) => {
-      const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
-      const displayName = itemPath.split('/').pop();
-      if (item.type === "file") {
-        const fileOption = new Option(`${indent}📄 ${displayName}`, item.download_url);
-        fileOption.classList.add('nested', `depth-${depth}`);
-        fileOption.style.display = 'none'; // Hide nested files by default
-        elements.fileDropdown.append(fileOption);
-      } else if (item.type === "dir") {
-        const dirOption = new Option(`${indent}+ ${displayName}`, "");
-        dirOption.addEventListener('click', function() {
-          const nestedItems = document.querySelectorAll(`.nested.depth-${depth + 1}`);
-          nestedItems.forEach(nestedItem => {
-            nestedItem.style.display = nestedItem.style.display === 'none' ? 'block' : 'none';
-          });
-          // Change the '+' icon to a '-' icon and vice versa
-          const icon = this.text.trim().startsWith('+') ? '-' : '+';
-          this.text = `${indent}${icon} ${displayName}`;
-        });
-        elements.fileDropdown.append(dirOption);
-        DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
-      }
+        const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+        const displayName = itemPath.split('/').pop();
+        const li = document.createElement('li');
+        ul.appendChild(li);
+
+        if (item.type === "file") {
+            li.textContent = `${indent}📄 ${displayName}`;
+            li.style.display = 'none'; // Hide nested files by default
+            li.classList.add('nested', `depth-${depth}`);
+        } else if (item.type === "dir") {
+            li.textContent = `${indent}+ ${displayName}`;
+            li.addEventListener('click', function(e) {
+                e.stopPropagation(); // Prevent clicks from affecting parent directories
+                const nestedItems = this.querySelectorAll(`.nested.depth-${depth + 1}`);
+                nestedItems.forEach(nestedItem => {
+                    nestedItem.style.display = nestedItem.style.display === 'none' ? 'list-item' : 'none';
+                });
+                // Change the '+' icon to a '-' icon and vice versa
+                const icon = this.textContent.trim().startsWith('+') ? '-' : '+';
+                this.textContent = `${indent}${icon} ${displayName}`;
+            });
+            DropdownManager.populateDropdownWithResponseData(item.contents, li, depth + 1);
+        }
     });
-  }
+}
 }
       
 class Main {
