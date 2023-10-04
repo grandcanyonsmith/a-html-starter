@@ -446,37 +446,31 @@ const ELEMENT_IDS = [
 //   }
 //   }
       
-static populateDropdownWithResponseData(data, parentElement = document.body, parentPath = "", depth = 0) {
+  static async populateDropdownWithResponseData(data, parentElement = elements.fileDropdown, parentPath = "", depth = 0) {
     const indent = "\u00A0\u00A0".repeat(depth * 2);
-    const ul = document.createElement('ul');
-    parentElement.appendChild(ul);
 
     data.forEach((item) => {
-        const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
-        const displayName = itemPath.split('/').pop();
-        const li = document.createElement('li');
-        ul.appendChild(li);
+      const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+      const displayName = itemPath.split('/').pop();
+      const li = document.createElement('li');
+      li.textContent = `${indent}${item.type === "dir" ? '+' : '📄'} ${displayName}`;
+      parentElement.appendChild(li);
 
-        if (item.type === "file") {
-            li.textContent = `${indent}📄 ${displayName}`;
-            li.style.display = 'none'; // Hide nested files by default
-            li.classList.add('nested', `depth-${depth}`);
-        } else if (item.type === "dir") {
-            li.textContent = `${indent}+ ${displayName}`;
-            li.addEventListener('click', function(e) {
-                e.stopPropagation(); // Prevent clicks from affecting parent directories
-                const nestedItems = this.querySelectorAll(`.nested.depth-${depth + 1}`);
-                nestedItems.forEach(nestedItem => {
-                    nestedItem.style.display = nestedItem.style.display === 'none' ? 'list-item' : 'none';
-                });
-                // Change the '+' icon to a '-' icon and vice versa
-                const icon = this.textContent.trim().startsWith('+') ? '-' : '+';
-                this.textContent = `${indent}${icon} ${displayName}`;
-            });
-            DropdownManager.populateDropdownWithResponseData(item.contents, li, itemPath, depth + 1);
-        }
+      if (item.type === "dir") {
+        const ul = document.createElement('ul');
+        ul.style.display = 'none'; // Hide nested items by default
+        li.appendChild(ul);
+        li.addEventListener('click', function(e) {
+          e.stopPropagation(); // Prevent clicks from affecting parent directories
+          ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
+          // Change the '+' icon to a '-' icon and vice versa
+          const icon = li.textContent.trim().startsWith('+') ? '-' : '+';
+          li.textContent = `${indent}${icon} ${displayName}`;
+        });
+        DropdownManager.populateDropdownWithResponseData(item.contents, ul, itemPath, depth + 1);
+      }
     });
-}
+  }
 }
       
 class Main {
