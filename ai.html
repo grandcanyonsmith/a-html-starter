@@ -56,7 +56,17 @@
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
-  
+  <script>
+  function toggleNestedItems(event) {
+    const button = event.currentTarget;
+    const nestedItems = button.parentElement.nextElementSibling;
+    nestedItems.classList.toggle('hidden');
+    const plusIconPath = "M4 10h12v2H4z";
+    const minusIconPath = "M4 10h12v2H4zm0-4h12v2H4z";
+    const icon = button.querySelector('svg path');
+    icon.setAttribute('d', icon.getAttribute('d') === plusIconPath ? minusIconPath : plusIconPath);
+  }
+</script>
 </body>
 
 </html>
