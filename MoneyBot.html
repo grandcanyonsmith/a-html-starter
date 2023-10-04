@@ -4,23 +4,45 @@
     <title>Chat Simulation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        .chat-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .message {
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .message.user {
+            background-color: #d1d1d1;
+        }
+        .message.assistant {
+            background-color: #a1e3a1;
+        }
+    </style>
 </head>
 <body class="font-sans bg-gray-200">
     <div class="container mx-auto p-4">
-        <div class="w-full md:w-96 h-144 border border-black p-4 overflow-y-scroll mb-4 bg-white" id="chatContainer"></div>
+        <div class="chat-container w-full md:w-96 h-144 border border-black p-4 overflow-y-scroll mb-4" id="chatContainer"></div>
+        <div class="text-right text-gray-500 text-sm cursor-pointer" onclick="clearMessages()">Clear Conversation</div>
         <div class="flex flex-col md:flex-row items-center">
             <select id="userSelect" class="mt-4 mr-2">
                 <option value="user">User</option>
                 <option value="assistant">Assistant</option>
             </select>
             <input type="text" id="messageInput" placeholder="Type your message here..." class="mt-4 mr-2 flex-grow">
-            <button onclick="addMessage()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+</button>
+            <button onclick="addMessage()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-plus"></i></button>
         </div>
         <div class="flex flex-col md:flex-row mt-4">
-            <button onclick="send()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Send</button>
-            <button onclick="clearMessages()" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2">Clear</button>
-            <button onclick="eraseLastMessage()" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Erase Last Message</button>
+            <button onclick="send()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"><i class="fas fa-paper-plane"></i></button>
+            <button onclick="eraseLastMessage()" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-eraser"></i></button>
         </div>
     </div>
 
@@ -38,7 +60,7 @@
             chatContainer.innerHTML = '';
             conversation_history.forEach(function(message) {
                 var messageElement = document.createElement('div');
-                messageElement.classList.add('message', 'mb-4', 'p-2', 'rounded', message.role === 'user' ? 'bg-gray-200' : 'bg-green-200');
+                messageElement.classList.add('message', message.role === 'user' ? 'user' : 'assistant');
                 messageElement.innerHTML = '<strong>' + message.role + ':</strong> ' + message.content;
                 chatContainer.appendChild(messageElement);
             });
