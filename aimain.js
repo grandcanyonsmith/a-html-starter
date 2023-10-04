@@ -428,39 +428,49 @@ const ELEMENT_IDS = [
       elements.fileDropdown.append(new Option("Select a file", ""));
       DropdownManager.populateDropdownWithResponseData(data);
     }
-  
-//     static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
-//       const indent = "\u00A0\u00A0".repeat(depth * 2);
-//       data.forEach((item) => {
-//         const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
-//         if (item.type === "file") {
-//           elements.fileDropdown.append(
-//             new Option(`${indent}📄 ${itemPath}`, item.download_url)
-//           );
-//         } else if (item.type === "dir") {
-//           elements.fileDropdown.append(new Option(`${indent}📁 ${itemPath}`, ""));
-//           DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
-//         }
-//       });
-//     }
-// }
+
+// static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
+//     const indent = "\u00A0\u00A0".repeat(depth * 2);
+//     data.forEach((item) => {
+//       const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
+//       const displayName = itemPath.split('/').pop();
+//       if (item.type === "file") {
+//         elements.fileDropdown.append(
+//           new Option(`${indent}📄 ${displayName}`, item.download_url)
+//         );
+//       } else if (item.type === "dir") {
+//         elements.fileDropdown.append(new Option(`${indent}📁 ${displayName}`, ""));
+//         DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
+//       }
+//     });
+//   }
+//   }
+      
 static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
     const indent = "\u00A0\u00A0".repeat(depth * 2);
     data.forEach((item) => {
       const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
       const displayName = itemPath.split('/').pop();
       if (item.type === "file") {
-        elements.fileDropdown.append(
-          new Option(`${indent}📄 ${displayName}`, item.download_url)
-        );
+        const fileOption = new Option(`${indent}📄 ${displayName}`, item.download_url);
+        fileOption.classList.add('nested', `depth-${depth}`);
+        fileOption.style.display = 'none'; // Hide nested files by default
+        elements.fileDropdown.append(fileOption);
       } else if (item.type === "dir") {
-        elements.fileDropdown.append(new Option(`${indent}📁 ${displayName}`, ""));
+        const dirOption = new Option(`${indent}+ ${displayName}`, "");
+        dirOption.addEventListener('click', function() {
+          const nestedItems = document.querySelectorAll(`.nested.depth-${depth + 1}`);
+          nestedItems.forEach(nestedItem => {
+            nestedItem.style.display = nestedItem.style.display === 'none' ? 'block' : 'none';
+          });
+        });
+        elements.fileDropdown.append(dirOption);
         DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
       }
     });
   }
-  }
-  
+}
+      
 class Main {
   static async init() {
     elements = Main.getElementsById(ELEMENT_IDS);
