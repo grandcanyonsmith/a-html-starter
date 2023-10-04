@@ -463,6 +463,9 @@ static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
           nestedItems.forEach(nestedItem => {
             nestedItem.style.display = nestedItem.style.display === 'none' ? 'block' : 'none';
           });
+          // Change the '+' icon to a '-' icon and vice versa
+          const icon = this.text.trim().startsWith('+') ? '-' : '+';
+          this.text = `${indent}${icon} ${displayName}`;
         });
         elements.fileDropdown.append(dirOption);
         DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
