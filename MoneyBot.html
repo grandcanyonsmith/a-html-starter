@@ -50,6 +50,12 @@
             position: absolute;
             right: 20px;
             bottom: 20px;
+            background-color: #ffffff;
+            color: #808080;
+        }
+        .erase-button {
+            color: #808080;
+            font-size: 0.875rem;
         }
         .textarea-container {
             position: relative;
@@ -69,14 +75,14 @@
         <div class="chat-container w-full md:w-96 h-144 border border-black p-4 overflow-y-scroll mb-4" id="chatContainer"></div>
         <div class="flex justify-between items-center">
             <button onclick="openModal()" class="text-gray-500 text-sm"><i class="fas fa-plus"></i> Add message</button>
-            <div class="text-right text-gray-500 text-sm cursor-pointer" onclick="clearMessages()">Clear Conversation</div>
+            <div class="text-right">
+                <div class="text-gray-500 text-sm cursor-pointer" onclick="eraseLastMessage()">Erase Last Message</div>
+                <div class="text-gray-500 text-sm cursor-pointer" onclick="clearMessages()">Clear Conversation</div>
+            </div>
         </div>
         <div class="textarea-container">
             <textarea id="mainTextArea" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" rows="4" placeholder="Enter your message"></textarea>
-            <button onclick="addMessage('user', document.getElementById('mainTextArea').value); send(); document.getElementById('mainTextArea').value='';" class="send-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-paper-plane"></i></button>
-        </div>
-        <div class="flex justify-between mt-4">
-            <button onclick="eraseLastMessage()" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-eraser"></i></button>
+            <button onclick="addMessage('user', document.getElementById('mainTextArea').value); send(); document.getElementById('mainTextArea').value='';" class="send-button text-gray-500 font-bold py-2 px-4 rounded"><i class="fas fa-paper-plane"></i></button>
         </div>
         <div id="myModal" class="modal">
             <div class="modal-content">
