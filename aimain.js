@@ -459,6 +459,7 @@ static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
       }
     });
   }
+  }
   
 class Main {
   static async init() {
