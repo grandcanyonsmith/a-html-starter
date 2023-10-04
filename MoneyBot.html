@@ -26,23 +26,50 @@
         .message.assistant {
             background-color: #a1e3a1;
         }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
     </style>
 </head>
 <body class="font-sans bg-gray-200">
     <div class="container mx-auto p-4">
         <div class="chat-container w-full md:w-96 h-144 border border-black p-4 overflow-y-scroll mb-4" id="chatContainer"></div>
-        <div class="text-right text-gray-500 text-sm cursor-pointer" onclick="clearMessages()">Clear Conversation</div>
-        <div class="flex flex-col md:flex-row items-center">
-            <select id="userSelect" class="mt-4 mr-2">
-                <option value="user">User</option>
-                <option value="assistant">Assistant</option>
-            </select>
-            <input type="text" id="messageInput" placeholder="Type your message here..." class="mt-4 mr-2 flex-grow">
-            <button onclick="addMessage()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-plus"></i></button>
+        <div class="flex justify-between items-center">
+            <button onclick="openModal()" class="text-gray-500 text-sm"><i class="fas fa-plus"></i> Add message</button>
+            <div class="text-right text-gray-500 text-sm cursor-pointer" onclick="clearMessages()">Clear Conversation</div>
         </div>
-        <div class="flex flex-col md:flex-row mt-4">
-            <button onclick="send()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"><i class="fas fa-paper-plane"></i></button>
+        <textarea id="mainTextArea" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" rows="4"></textarea>
+        <div class="flex justify-between mt-4">
+            <button onclick="addMessage('user', document.getElementById('mainTextArea').value); send();" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-paper-plane"></i></button>
             <button onclick="eraseLastMessage()" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-eraser"></i></button>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="flex flex-col md:flex-row items-center">
+                    <select id="userSelect" class="mt-4 mr-2">
+                        <option value="user">User</option>
+                        <option value="assistant">Assistant</option>
+                    </select>
+                    <input type="text" id="messageInput" placeholder="Type your message here..." class="mt-4 mr-2 flex-grow">
+                    <button onclick="addMessage()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -93,6 +120,17 @@
         function eraseLastMessage() {
             conversation_history.pop();
             updateChat();
+        }
+        function openModal() {
+            document.getElementById('myModal').style.display = "block";
+        }
+        document.getElementsByClassName("close")[0].onclick = function() {
+            document.getElementById('myModal').style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('myModal')) {
+                document.getElementById('myModal').style.display = "none";
+            }
         }
     </script>
 </body>
