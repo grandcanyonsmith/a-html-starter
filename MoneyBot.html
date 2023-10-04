@@ -53,6 +53,10 @@
             background-color: #ffffff;
             color: #808080;
         }
+        .send-button.active {
+            background-color: #008000;
+            color: #ffffff;
+        }
         .erase-button {
             color: #808080;
             font-size: 0.875rem;
@@ -82,7 +86,7 @@
         </div>
         <div class="textarea-container">
             <textarea id="mainTextArea" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" rows="4" placeholder="Enter your message"></textarea>
-            <button onclick="addMessage('user', document.getElementById('mainTextArea').value); send(); document.getElementById('mainTextArea').value='';" class="send-button text-gray-500 font-bold py-2 px-4 rounded"><i class="fas fa-paper-plane"></i></button>
+            <button id="sendButton" onclick="addMessage('user', document.getElementById('mainTextArea').value); send(); document.getElementById('mainTextArea').value='';" class="send-button text-gray-500 font-bold py-2 px-4 rounded"><i class="fas fa-paper-plane"></i></button>
         </div>
         <div id="myModal" class="modal">
             <div class="modal-content">
@@ -119,6 +123,8 @@
             });
         }
         function send() {
+            var sendButton = document.getElementById('sendButton');
+            sendButton.classList.add('active');
             var user = document.getElementById('userSelect').value;
             var message = document.getElementById('messageInput').value;
             axios.post('https://lftoi5cib2sgykubshzpqfvwaa0skgkb.lambda-url.us-west-2.on.aws/', {
@@ -133,10 +139,13 @@
                 document.getElementById('userSelect').value = 'assistant';
                 addMessage();
                 updateChat();
+                alert(responseData.actionName);
+                sendButton.classList.remove('active');
             })
             .catch(function (error) {
                 alert("Failed to send message");
                 console.log(error);
+                sendButton.classList.remove('active');
             });
         }
         function clearMessages() {
