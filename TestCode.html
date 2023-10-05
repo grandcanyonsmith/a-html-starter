@@ -54,7 +54,6 @@
   function toggleRepositoryContents() {
     const fileDropdown = document.getElementById('fileDropdown');
     if (fileDropdown.classList.contains('hidden')) {
-      fetchRepositoryContents();
       fileDropdown.classList.remove('hidden');
     } else {
       fileDropdown.classList.add('hidden');
