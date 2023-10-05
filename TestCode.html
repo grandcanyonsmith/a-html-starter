@@ -28,7 +28,7 @@
         <div id="repoDropdown" class="w-full max-w-xs bg-white border-r border-gray-400">
           <div class="flex items-center justify-between px-5 py-2">
             <h3 class="text-lg font-semibold text-gray-600">Repositories</h3>
-            <button id="fetchReposBtn" onclick="fetchGithubRepositories()">
+            <button id="fetchReposBtn" onclick="toggleGithubRepositories()">
               <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
               </svg>
@@ -98,9 +98,18 @@
       const response = await axios.post(API_ENDPOINT, { request: 'github_repos' });
       const repositories = response.data;
       populateRepositoriesDropdown(repositories);
-      document.getElementById('repoList').classList.remove('hidden');
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  function toggleGithubRepositories() {
+    const repoList = document.getElementById('repoList');
+    if (repoList.classList.contains('hidden')) {
+      fetchGithubRepositories();
+      repoList.classList.remove('hidden');
+    } else {
+      repoList.classList.add('hidden');
     }
   }
 
