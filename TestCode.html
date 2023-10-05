@@ -84,11 +84,11 @@
   }
 
   function createFileElement(fileName) {
-    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitle('${fileName}')">${fileName}</a>`;
+    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
   }
 
   function createDirectoryElement(directory) {
-    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitle('${extractNameFromPath(directory.path)}')">${extractNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
+    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${extractNameFromPath(directory.path)}')">${extractNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
       directory.contents.forEach(content => {
         if(content.type === "file") {
           directoryElement += createFileElement(extractNameFromPath(content.path));
@@ -98,8 +98,9 @@
       return directoryElement;
     }
 
-  function changeTitle(title) {
+  function changeTitleAndHide(title) {
     document.getElementById('fileTitle').textContent = title;
+    document.getElementById('fileDropdown').classList.add('hidden');
   }
   
   window.onload = function() {
