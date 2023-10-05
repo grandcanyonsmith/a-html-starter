@@ -34,7 +34,7 @@
               </svg>
             </button>
           </div>
-          <nav id="repoList" class="px-2 text-gray-700">
+          <nav id="repoList" class="px-2 text-gray-700 hidden">
             <!-- Populated by JavaScript -->
           </nav>
         </div>
@@ -98,6 +98,7 @@
       const response = await axios.post(API_ENDPOINT, { request: 'github_repos' });
       const repositories = response.data;
       populateRepositoriesDropdown(repositories);
+      document.getElementById('repoList').classList.remove('hidden');
     } catch (error) {
       console.error(error);
     }
@@ -169,7 +170,6 @@
   
     window.onload = function() {
       feather.replace();
-     fetchGithubRepositories();
     };
  </script>
   
