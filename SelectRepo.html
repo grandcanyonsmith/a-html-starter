@@ -6,22 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Enhanced Code Editor</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .thin-line {
+      border-top: 1px solid gray;
+    }
+  </style>
 </head>
 
 <body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
   <div class="container mx-auto p-4">
     <div class="flex justify-start mb-4">
-      <div class="relative inline-flex">
+      <div class="relative inline-flex w-full">
         <div id="repoDropdown" class="w-full max-w-xs bg-white border-r border-gray-400">
           <div class="flex items-center justify-between px-5 py-2">
-            <h3 id="repoName" class="text-lg font-semibold text-gray-600">Repositories</h3>
+            <h3 id="repoName" class="text-sm font-semibold text-gray-600">Repositories</h3>
             <button id="fetchReposBtn" onclick="toggleGithubRepositories()">
               <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
               </svg>
             </button>
           </div>
-          <input type="text" id="searchInput" onkeyup="filterRepositories()" placeholder="Search for repositories.." title="Type in a name">
+          <div class="thin-line"></div>
+          <div id="searchContainer" class="flex items-center px-5 py-2 hidden">
+            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchInput" onkeyup="filterRepositories()" placeholder="Search for repositories.." title="Type in a name" class="ml-2 w-full">
+          </div>
+          <div class="thin-line"></div>
           <nav id="repoList" class="px-2 text-gray-700 hidden">
             <!-- Populated by JavaScript -->
           </nav>
@@ -33,74 +46,74 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-  const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
-  let selectedRepositoryName = '';
+    const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
+    let selectedRepositoryName = '';
 
-  async function fetchGithubRepositories() {
-    try {
-      const response = await axios.post(API_ENDPOINT, { request: 'github_repos' });
-      const repositories = response.data;
-      populateRepositoriesDropdown(repositories);
-      setSelectedRepository(repositories[0].name);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  function toggleGithubRepositories() {
-    const repoList = document.getElementById('repoList');
-    if (repoList.classList.contains('hidden')) {
-      showRepos();
-    } else {
-      hideRepos();
-    }
-  }
-
-  function showRepos() {
-    document.getElementById('repoList').classList.remove('hidden');
-  }
-
-  function hideRepos() {
-    document.getElementById('repoList').classList.add('hidden');
-  }
-
-  function populateRepositoriesDropdown(repositories) {
-    const repositoriesDropdown = document.getElementById('repoList');
-    repositoriesDropdown.innerHTML = ''; 
-    repositories.forEach(repository => {
-      const repoElement = createRepoElement(repository.name);
-      repositoriesDropdown.innerHTML += repoElement;
-    });
-  }
-
-  function createRepoElement(repositoryName) {
-    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="setSelectedRepository('${repositoryName}'); return false;">${repositoryName}</a>`;
-  }
-
-  function setSelectedRepository(repositoryName) {
-    selectedRepositoryName = repositoryName;
-    document.getElementById('repoName').textContent = repositoryName;
-    hideRepos();
-  }
-
-  function filterRepositories() {
-    const input = document.getElementById('searchInput');
-    const filter = input.value.toUpperCase();
-    const repoList = document.getElementById('repoList');
-    const a = repoList.getElementsByTagName('a');
-    for (let i = 0; i < a.length; i++) {
-      let txtValue = a[i].textContent || a[i].innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        a[i].style.display = "";
-      } else {
-        a[i].style.display = "none";
+    async function fetchGithubRepositories() {
+      try {
+        const response = await axios.post(API_ENDPOINT, { request: 'github_repos' });
+        const repositories = response.data;
+        populateRepositoriesDropdown(repositories);
+        setSelectedRepository(repositories[0].name);
+      } catch (error) {
+        console.error(error);
       }
     }
-  }
 
-  window.onload = fetchGithubRepositories;
- </script>
-  
-  </body>
-  
-  </html>
+    function toggleGithubRepositories() {
+      const repoList = document.getElementById('repoList');
+      if (repoList.classList.contains('hidden')) {
+        showRepos();
+      } else {
+        hideRepos();
+      }
+    }
+
+    function showRepos() {
+      document.getElementById('repoList').classList.remove('hidden');
+    }
+
+    function hideRepos() {
+      document.getElementById('repoList').classList.add('hidden');
+    }
+
+    function populateRepositoriesDropdown(repositories) {
+      const repositoriesDropdown = document.getElementById('repoList');
+      repositoriesDropdown.innerHTML = '';
+      repositories.forEach(repository => {
+        const repoElement = createRepoElement(repository.name);
+        repositoriesDropdown.innerHTML += repoElement;
+      });
+    }
+
+    function createRepoElement(repositoryName) {
+      return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="setSelectedRepository('${repositoryName}'); return false;">${repositoryName}</a>`;
+    }
+
+    function setSelectedRepository(repositoryName) {
+      selectedRepositoryName = repositoryName;
+      document.getElementById('repoName').textContent = repositoryName;
+      hideRepos();
+    }
+
+    function filterRepositories() {
+      const input = document.getElementById('searchInput');
+      const filter = input.value.toUpperCase();
+      const repoList = document.getElementById('repoList');
+      const a = repoList.getElementsByTagName('a');
+      for (let i = 0; i < a.length; i++) {
+        let txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          a[i].style.display = "";
+        } else {
+          a[i].style.display = "none";
+        }
+      }
+    }
+
+    window.onload = fetchGithubRepositories;
+  </script>
+
+</body>
+
+</html>
