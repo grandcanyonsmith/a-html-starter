@@ -21,6 +21,7 @@
               </svg>
             </button>
           </div>
+          <input type="text" id="searchInput" onkeyup="filterRepositories()" placeholder="Search for repositories.." title="Type in a name">
           <nav id="repoList" class="px-2 text-gray-700 hidden">
             <!-- Populated by JavaScript -->
           </nav>
@@ -80,6 +81,21 @@
     selectedRepositoryName = repositoryName;
     document.getElementById('repoName').textContent = repositoryName;
     hideRepos();
+  }
+
+  function filterRepositories() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toUpperCase();
+    const repoList = document.getElementById('repoList');
+    const a = repoList.getElementsByTagName('a');
+    for (let i = 0; i < a.length; i++) {
+      let txtValue = a[i].textContent || a[i].innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        a[i].style.display = "";
+      } else {
+        a[i].style.display = "none";
+      }
+    }
   }
 
   window.onload = fetchGithubRepositories;
