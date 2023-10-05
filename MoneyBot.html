@@ -122,32 +122,31 @@
                 chatContainer.appendChild(messageElement);
             });
         }
-        function send() {
-            var sendButton = document.getElementById('sendButton');
-            sendButton.classList.add('active');
-            var user = document.getElementById('userSelect').value;
-            var message = document.getElementById('messageInput').value;
-            axios.post('https://lftoi5cib2sgykubshzpqfvwaa0skgkb.lambda-url.us-west-2.on.aws/', {
-                conversation_history: conversation_history
-            })
-            .then(function (response) {
-                if(response.data.action === 'REPLY') {
-                    addMessage('assistant', response.data.message);
-                }
-                var responseData = JSON.parse(response.data);
-                document.getElementById('messageInput').value = responseData.messageContent;
-                document.getElementById('userSelect').value = 'assistant';
-                addMessage();
-                updateChat();
-                alert(responseData.actionName);
-                sendButton.classList.remove('active');
-            })
-            .catch(function (error) {
-                alert("Failed to send message");
-                console.log(error);
-                sendButton.classList.remove('active');
-            });
+function send() {
+    var sendButton = document.getElementById('sendButton');
+    sendButton.classList.add('active');
+    var user = document.getElementById('userSelect').value;
+    var message = document.getElementById('messageInput').value;
+    axios.post('https://lftoi5cib2sgykubshzpqfvwaa0skgkb.lambda-url.us-west-2.on.aws/', {
+        conversation_history: conversation_history
+    })
+    .then(function (response) {
+        var responseData = JSON.parse(response.data);
+        if(responseData.actionName === 'REPLY') {
+            addMessage('assistant', responseData.messageContent);
         }
+        document.getElementById('messageInput').value = '';
+        document.getElementById('userSelect').value = 'assistant';
+        updateChat();
+        alert(responseData.actionName);
+        sendButton.classList.remove('active');
+    })
+    .catch(function (error) {
+        alert("Failed to send message");
+        console.log(error);
+        sendButton.classList.remove('active');
+    });
+}
         function clearMessages() {
             conversation_history = [];
             updateChat();
@@ -170,3 +169,4 @@
     </script>
 </body>
 </html>
+
