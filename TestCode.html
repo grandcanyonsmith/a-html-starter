@@ -81,7 +81,7 @@
   }
 
   function createFileElement(fileName) {
-    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">${fileName}</a>`;
+    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="toggleRepositoryContents()">${fileName}</a>`;
   }
 
   function createDirectoryElement(directory) {
