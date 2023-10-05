@@ -166,7 +166,11 @@ function send() {
                 document.getElementById('myModal').style.display = "none";
             }
         }
+        window.onload = function() {
+            document.getElementById('userSelect').value = 'assistant';
+            document.getElementById('messageInput').value = 'Hey this is Olivia with money dolly! How are you?';
+            addMessage();
+        }
     </script>
 </body>
 </html>
-
