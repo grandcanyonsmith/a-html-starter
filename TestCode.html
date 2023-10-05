@@ -29,7 +29,7 @@
         <select id="repoDropdown" class="border border-gray-300 rounded-full text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
           <option>Fetch Repos</option>
         </select>
-        <button id="fetchReposBtn" class="absolute right-0 top-0 mt-2 mr-2" onclick="fetchRepos()">
+        <button id="fetchReposBtn" class="absolute right-0 top-0 mt-2 mr-2" onclick="fetchGithubRepositories()">
           <i data-feather="refresh-cw"></i>
         </button>
       </div>
@@ -42,7 +42,7 @@
         <div id="tree" class="w-full max-w-xs bg-white border-r border-gray-400">
           <div class="flex items-center justify-between px-5 py-2">
             <h3 class="text-lg font-semibold text-gray-600">Files</h3>
-            <button id="fetchFilesBtn" onclick="fetchFilesAndFolders()">
+            <button id="fetchFilesBtn" onclick="fetchRepositoryContents()">
               <i data-feather="refresh-cw"></i>
             </button>
           </div>
@@ -82,65 +82,88 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
   <script>
-    function fetchRepos() {
-      axios.post('https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/', {
-        request: 'github_repos'
-      })
-      .then(function (response) {
-        var repos = response.data;
-        var dropdown = document.getElementById('repoDropdown');
-        dropdown.innerHTML = '<option>Fetch Repos</option>'; // clear the dropdown
-        for (var i = 0; i < repos.length; i++) {
-          var option = document.createElement('option');
-          option.value = repos[i].name;
-          option.text = repos[i].name;
-          dropdown.add(option);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    }
+  const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
 
-function fetchFilesAndFolders() {
-  var repoName = document.getElementById('repoDropdown').value;
-  axios.post('https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/', {
-    request: 'get_all_contents',
-    repo_name: repoName
-  })
-  .then(function (response) {
-    var files = response.data;
-    var dropdown = document.getElementById('fileDropdown');
-    dropdown.innerHTML = ''; // clear the dropdown
-    for (var i = 0; i < files.length; i++) {
-      var displayName = files[i].path.split('/').pop();
-      if(files[i].type === "file") {
-        dropdown.innerHTML += '<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">' + displayName + '</a>';
-      }
-      if(files[i].type === "dir") {
-        var dir = '<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle(\'hidden\'); this.children[1].classList.toggle(\'rotate-180\')">' + displayName + ' <i data-feather="plus-circle" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">';
-        for(var j = 0; j < files[i].contents.length; j++) {
-          var subDisplayName = files[i].contents[j].path.split('/').pop();
-          if(files[i].contents[j].type === "file") {
-            dir += '<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">' + subDisplayName + '</a>';
-          }
-        }
-        dir += '</div></div>';
-        dropdown.innerHTML += dir;
-      }
+  async function fetchGithubRepositories() {
+    try {
+      const response = await axios.post(API_ENDPOINT, { request: 'github_repos' });
+      const repositories = response.data;
+      populateRepositoriesDropdown(repositories);
+    } catch (error) {
+      console.error(error);
     }
+  }
+
+  function populateRepositoriesDropdown(repositories) {
+    const repositoriesDropdown = document.getElementById('repoDropdown');
+    repositoriesDropdown.innerHTML = '<option>Fetch Repos</option>'; 
+    repositories.forEach(repository => {
+      const option = createDropdownOption(repository.name);
+      repositoriesDropdown.add(option);
+    });
+  }
+
+  function createDropdownOption(repositoryName) {
+    const option = document.createElement('option');
+    option.value = repositoryName;
+    option.text = repositoryName;
+    return option;
+  }
+
+  async function fetchRepositoryContents() {
+    try {
+      const selectedRepositoryName = document.getElementById('repoDropdown').value;
+      const response = await axios.post(API_ENDPOINT, {
+        request: 'get_all_contents',
+        repo_name: selectedRepositoryName
+      });
+      const filesAndFolders = response.data;
+      populateFilesDropdown(filesAndFolders);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function populateFilesDropdown(contents) {
+    const filesDropdown = document.getElementById('fileDropdown');
+    filesDropdown.innerHTML = ''; 
+    contents.forEach(content => {
+      const displayName = extractNameFromPath(content.path);
+      if(content.type === "file") {
+        filesDropdown.innerHTML += createFileElement(displayName);
+      }
+      if(content.type === "dir") {
+        filesDropdown.innerHTML += createDirectoryElement(content);
+      }
+    });
     feather.replace();
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-}
-  </script>
-  <script>
+  }
+
+  function extractNameFromPath(path) {
+    return path.split('/').pop();
+  }
+
+  function createFileElement(fileName) {
+    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200">${fileName}</a>`;
+  }
+
+  function createDirectoryElement(directory) {
+    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180')">${extractNameFromPath(directory.path)} <i data-feather="plus-circle" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
+      directory.contents.forEach(content => {
+        if(content.type === "file") {
+          directoryElement += createFileElement(extractNameFromPath(content.path));
+        }
+      });
+      directoryElement += '</div></div>';
+      return directoryElement;
+    }
+  
     window.onload = function() {
       feather.replace();
+      fetchGithubRepositories();
     };
   </script>
-</body>
-
-</html>
+  
+  </body>
+  
+  </html>
