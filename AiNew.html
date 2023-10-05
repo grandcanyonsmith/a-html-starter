@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Enhanced Code Editor</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script type="module" src="aimain.js"></script>
+</head>
+
+<body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
+  <div class="container mx-auto p-4">
+    <div class="flex flex-col md:flex-row justify-between mb-4">
+      <div class="relative inline-flex w-full md:w-auto">
+        <div id="tree" class="w-full md:w-64 bg-white border-r border-gray-400">
+          <div class="flex items-center justify-between px-5 py-2 border-b border-gray-300">
+            <h3 id="fileTitle" class="text-sm font-semibold text-gray-600 md:text-base">Files</h3>
+            <button id="fetchFilesBtn" onclick="toggleRepositoryContents()" class="md:w-8 md:h-8">
+              <svg class="-mr-1 h-5 w-5 text-gray-400 md:h-6 md:w-6" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </button>
+          </div>
+          <nav id="fileDropdown" class="px-2 text-gray-700 hidden w-64 text-sm">
+            <!-- Populated by JavaScript -->
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end mb-4">
+      <button id="outputBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg border-r-0">
+        <i data-feather="eye"></i>
+      </button>
+      <button id="sourceBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg">
+        <i data-feather="code"></i>
+      </button>
+    </div>
+    <div id="tabs" class="flex overflow-x-auto mb-4"></div>
+    <pre id="codeBox" class="w-full h-screen bg-white rounded shadow-lg p-4 language-html"></pre>
+    <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
+    <div class="flex justify-between mt-4">
+      <input type="text" id="requestInput" placeholder="Enter request..." class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+      <button id="submitBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded float-right">
+        <i data-feather="send"></i>
+      </button>
+      <button id="saveBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
+        Save
+      </button>
+      <button id="runBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded float-right hidden">
+        <i data-feather="play"></i>
+      </button>
+      <div id="loader" class="hidden absolute h-5 w-5 border-t-2 border-white rounded-full animate-spin"></div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+  <script>
+  const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
+  let selectedRepositoryName = 'a-canyon-yb-tests';
+
+  const fetchRepositoryContents = async () => {
+    try {
+      const response = await axios.post(API_ENDPOINT, {
+        request: 'get_all_contents',
+        repo_name: selectedRepositoryName
+      });
+      const filesAndFolders = response.data;
+      populateFilesDropdown(filesAndFolders);
+    } catch (error) {
+      console.error(error);
+      // TODO: Display a user-friendly error message on the UI
+    }
+  }
+
+  const toggleRepositoryContents = () => {
+    const fileDropdown = document.getElementById('fileDropdown');
+    fileDropdown.classList.toggle('hidden');
+  }
+
+  const populateFilesDropdown = (contents) => {
+    const filesDropdown = document.getElementById('fileDropdown');
+    filesDropdown.innerHTML = ''; 
+    contents.forEach((content, index) => {
+      const displayName = extractNameFromPath(content.path);
+      if(content.type === "file") {
+        filesDropdown.innerHTML += createFileElement(displayName);
+        if(index === 0) {
+          document.getElementById('fileTitle').textContent = displayName;
+        }
+      }
+      if(content.type === "dir") {
+        filesDropdown.innerHTML += createDirectoryElement(content);
+      }
+    });
+    feather.replace();
+  }
+
+  const extractNameFromPath = (path) => path.split('/').pop();
+
+  const createFileElement = (fileName) => `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
+
+  const createDirectoryElement = (directory) => {
+    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="changeTitleAndHide('${extractNameFromPath(directory.path)}')">${extractNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform" onclick="event.stopPropagation(); toggleDirectory(this.parentElement.nextElementSibling, this);"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
+    directory.contents.forEach(content => {
+      if(content.type === "file") {
+        directoryElement += createFileElement(extractNameFromPath(content.path));
+      }
+      if(content.type === "dir") {
+        directoryElement += createDirectoryElement(content);
+      }
+    });
+    directoryElement += '</div></div>';
+    return directoryElement;
+  }
+
+  const toggleDirectory = (nextElement, icon) => {
+    if (nextElement && icon) {
+      nextElement.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    }
+  }
+
+  const changeTitleAndHide = (title) => {
+    document.getElementById('fileTitle').textContent = title;
+    document.getElementById('fileDropdown').classList.add('hidden');
+  }
+  
+  window.onload = function() {
+    feather.replace();
+    fetchRepositoryContents();
+  };
+ </script>
+
+</body>
+
+</html>
