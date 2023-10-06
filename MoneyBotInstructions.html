@@ -54,7 +54,7 @@
       .edit-icon {
         position: absolute;
         right: 10px;
-        top: -30px;
+        top: 10px;
         cursor: pointer;
         color: gray;
         display: block;
@@ -63,36 +63,43 @@
         display: none;
         position: absolute;
         right: 0;
-        top: -50px;
+        top: 50px;
+      }
+      .edit-buttons button {
+        color: gray;
       }
       pre {
-        white-space: pre-wrap;       /* Since CSS 2.1 */
-        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-        white-space: -pre-wrap;      /* Opera 4-6 */
-        white-space: -o-pre-wrap;    /* Opera 7 */
-        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+        white-space: pre-wrap;
+        white-space: -moz-pre-wrap;
+        white-space: -pre-wrap;
+        white-space: -o-pre-wrap;
+        word-wrap: break-word;
+        background-color: lightgray;
       }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script>
       var reply_instructions = "Step 1) Introduction. Object: Building Trust. Our approach is to build trust, find common ground, and establish rapport. We aim to listen more than we speak, and ask open-ended questions to keep the conversation moving forward. Here is a template for our introduction: “Hi [LeaderFirstName], this is Olivia with Money Dolly, the fundraising platform you requested more information about.” When to move to next step: Once we have established a good rapport and trust, we can move to the next step. Step 2) Discovery. Object: Collecting Information. After the introduction, we lead a ‘Discovery’ session to collect more details about the organization. This helps us to understand their background, needs, beliefs, and motivations. We ask questions like: “Tell me a little bit about your program?” “How many group participants do you have?” “Do you have any experience fundraising for this group?” “What do the other leaders in your group think about running a fundraiser?” “What problems or pains are you currently facing within fundraising?” “How much money do you need to raise?” “When were you hoping to have the funds by?” This information helps us to tailor our service to their needs and ensure a successful fundraiser. When to move to next step: Once we have gathered enough information and feel confident that our service can meet the organization's needs, we can move to the next step.";
       function getReplyInstructions() {
-        document.getElementById('instructions').innerHTML = Prism.highlight(reply_instructions, Prism.languages.javascript, 'javascript');
+        var instructions = document.getElementById('instructions');
+        instructions.innerHTML = Prism.highlight(reply_instructions, Prism.languages.javascript, 'javascript');
+        instructions.contentEditable = false;
       }
       function toggleEditButtons() {
         var editButtons = document.getElementById('edit-buttons');
         var editIcon = document.getElementById('edit-icon');
+        var instructions = document.getElementById('instructions');
         if (editButtons.style.display === 'none') {
           editButtons.style.display = 'block';
           editIcon.style.display = 'none';
+          instructions.contentEditable = true;
         } else {
           editButtons.style.display = 'none';
           editIcon.style.display = 'block';
+          instructions.contentEditable = false;
         }
       }
       function editInstructions() {
-        var instructions = document.getElementById('instructions');
-        instructions.contentEditable = true;
         toggleEditButtons();
       }
       window.onload = getReplyInstructions;
