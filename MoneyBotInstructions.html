@@ -8,6 +8,9 @@
     <meta name="description" content="Web site created using create-react-app" />
     <link rel="apple-touch-icon" href="logo192.png" />
     <link rel="manifest" href="manifest.json" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <title>React App</title>
     <style>
       body {
@@ -45,11 +48,42 @@
         font-style: italic;
         color: #666;
       }
+      .instructions-container {
+        position: relative;
+      }
+      .edit-icon {
+        position: absolute;
+        right: 10px;
+        top: -30px;
+        cursor: pointer;
+      }
+      .edit-buttons {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: -50px;
+      }
+      pre {
+        white-space: pre-wrap;       /* Since CSS 2.1 */
+        white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+        white-space: -pre-wrap;      /* Opera 4-6 */
+        white-space: -o-pre-wrap;    /* Opera 7 */
+        word-wrap: break-word;       /* Internet Explorer 5.5+ */
+      }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script>
       var reply_instructions = "Step 1) Introduction. Object: Building Trust. Our approach is to build trust, find common ground, and establish rapport. We aim to listen more than we speak, and ask open-ended questions to keep the conversation moving forward. Here is a template for our introduction: “Hi [LeaderFirstName], this is Olivia with Money Dolly, the fundraising platform you requested more information about.” When to move to next step: Once we have established a good rapport and trust, we can move to the next step. Step 2) Discovery. Object: Collecting Information. After the introduction, we lead a ‘Discovery’ session to collect more details about the organization. This helps us to understand their background, needs, beliefs, and motivations. We ask questions like: “Tell me a little bit about your program?” “How many group participants do you have?” “Do you have any experience fundraising for this group?” “What do the other leaders in your group think about running a fundraiser?” “What problems or pains are you currently facing within fundraising?” “How much money do you need to raise?” “When were you hoping to have the funds by?” This information helps us to tailor our service to their needs and ensure a successful fundraiser. When to move to next step: Once we have gathered enough information and feel confident that our service can meet the organization's needs, we can move to the next step.";
       function getReplyInstructions() {
-        document.getElementById('instructions').innerHTML = reply_instructions;
+        document.getElementById('instructions').innerHTML = Prism.highlight(reply_instructions, Prism.languages.javascript, 'javascript');
+      }
+      function toggleEditButtons() {
+        var editButtons = document.getElementById('edit-buttons');
+        if (editButtons.style.display === 'none') {
+          editButtons.style.display = 'block';
+        } else {
+          editButtons.style.display = 'none';
+        }
       }
       window.onload = getReplyInstructions;
     </script>
@@ -76,7 +110,14 @@
     </nav>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-      <p id="instructions"></p>
+      <div class="instructions-container">
+        <i class="fas fa-edit edit-icon" onclick="toggleEditButtons()"></i>
+        <div id="edit-buttons" class="edit-buttons">
+          <button>Cancel</button>
+          <button>Save</button>
+        </div>
+        <pre id="instructions"></pre>
+      </div>
     </div>
   </body>
 </html>
