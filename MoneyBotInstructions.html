@@ -56,6 +56,8 @@
         right: 10px;
         top: -30px;
         cursor: pointer;
+        color: gray;
+        display: block;
       }
       .edit-buttons {
         display: none;
@@ -79,15 +81,19 @@
       }
       function toggleEditButtons() {
         var editButtons = document.getElementById('edit-buttons');
+        var editIcon = document.getElementById('edit-icon');
         if (editButtons.style.display === 'none') {
           editButtons.style.display = 'block';
+          editIcon.style.display = 'none';
         } else {
           editButtons.style.display = 'none';
+          editIcon.style.display = 'block';
         }
       }
       function editInstructions() {
         var instructions = document.getElementById('instructions');
         instructions.contentEditable = true;
+        toggleEditButtons();
       }
       window.onload = getReplyInstructions;
     </script>
@@ -115,10 +121,10 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
       <div class="instructions-container">
-        <i class="fas fa-edit edit-icon" onclick="editInstructions()"></i>
+        <i id="edit-icon" class="fas fa-edit edit-icon" onclick="editInstructions()"></i>
         <div id="edit-buttons" class="edit-buttons">
-          <button>Cancel</button>
-          <button>Save</button>
+          <button onclick="toggleEditButtons()">Cancel</button>
+          <button onclick="toggleEditButtons()">Save</button>
         </div>
         <pre id="instructions"></pre>
       </div>
