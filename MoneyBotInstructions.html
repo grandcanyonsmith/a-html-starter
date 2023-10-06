@@ -86,11 +86,8 @@
         }
       }
       function editInstructions() {
-        var instructions = prompt("Edit instructions:", reply_instructions);
-        if (instructions != null) {
-          reply_instructions = instructions;
-          getReplyInstructions();
-        }
+        var instructions = document.getElementById('instructions');
+        instructions.contentEditable = true;
       }
       window.onload = getReplyInstructions;
     </script>
@@ -106,10 +103,10 @@
             <div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
                 <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
                     <li class="mr-3">
-                        <a class="inline-block py-2 px-4 text-white no-underline" href="https://html-starter-coral.vercel.app/MoneyBot.Html">Simulate Bot Conversation</a>
+                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="https://html-starter-coral.vercel.app/MoneyBot.Html">Simulate Bot Conversation</a>
                     </li>
                     <li class="mr-3">
-                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="https://html-starter-coral.vercel.app/MoneyBotInstructions.html">Edit Bot Instructions</a>
+                        <a class="inline-block py-2 px-4 text-white no-underline" href="https://html-starter-coral.vercel.app/MoneyBotInstructions.html">Edit Bot Instructions</a>
                     </li>
                 </ul>
             </div>
