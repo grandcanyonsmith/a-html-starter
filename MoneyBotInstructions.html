@@ -74,7 +74,7 @@
         white-space: -pre-wrap;
         white-space: -o-pre-wrap;
         word-wrap: break-word;
-        background-color: lightgray;
+        background-color: #ffffff;
       }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
@@ -128,10 +128,12 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
       <div class="instructions-container">
-        <i id="edit-icon" class="fas fa-edit edit-icon" onclick="editInstructions()"></i>
-        <div id="edit-buttons" class="edit-buttons">
-          <button onclick="toggleEditButtons()">Cancel</button>
-          <button onclick="toggleEditButtons()">Save</button>
+        <div style="display: flex; justify-content: flex-end;">
+          <i id="edit-icon" class="fas fa-edit edit-icon" onclick="editInstructions()"></i>
+          <div id="edit-buttons" class="edit-buttons">
+            <button onclick="toggleEditButtons()">Cancel</button>
+            <button onclick="toggleEditButtons()">Save</button>
+          </div>
         </div>
         <pre id="instructions"></pre>
       </div>
