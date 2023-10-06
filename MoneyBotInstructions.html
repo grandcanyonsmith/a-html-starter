@@ -85,6 +85,13 @@
           editButtons.style.display = 'none';
         }
       }
+      function editInstructions() {
+        var instructions = prompt("Edit instructions:", reply_instructions);
+        if (instructions != null) {
+          reply_instructions = instructions;
+          getReplyInstructions();
+        }
+      }
       window.onload = getReplyInstructions;
     </script>
   </head>
@@ -111,7 +118,7 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
       <div class="instructions-container">
-        <i class="fas fa-edit edit-icon" onclick="toggleEditButtons()"></i>
+        <i class="fas fa-edit edit-icon" onclick="editInstructions()"></i>
         <div id="edit-buttons" class="edit-buttons">
           <button>Cancel</button>
           <button>Save</button>
