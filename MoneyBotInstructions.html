@@ -13,96 +13,73 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <title>React App</title>
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-      }
-      #root {
-        margin: 0 auto;
-        max-width: 800px;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.1);
-      }
-      h1 {
-        color: #333;
-        font-size: 24px;
-        text-align: center;
-        padding: 20px 0;
-      }
-      h2 {
-        color: #333;
-        font-size: 20px;
-        text-align: left;
-        padding: 10px 0;
-      }
-      p {
-        color: #000;
-        line-height: 1.6;
-        margin-bottom: 20px;
-      }
-      .italic {
-        font-style: italic;
-        color: #666;
-      }
-      .instructions-container {
-        position: relative;
-      }
-      .edit-icon {
-        position: absolute;
-        right: 10px;
-        top: 10px;
-        cursor: pointer;
-        color: gray;
-        display: block;
-      }
-      .edit-buttons {
-        display: none;
-        position: absolute;
-        right: 0;
-        top: 50px;
-      }
-      .edit-buttons button {
-        color: gray;
-      }
-      pre {
-        white-space: pre-wrap;
-        white-space: -moz-pre-wrap;
-        white-space: -pre-wrap;
-        white-space: -o-pre-wrap;
-        word-wrap: break-word;
-        background-color: #ffffff;
-      }
+      /* Your CSS styles here */
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-      var reply_instructions = "Step 1) Introduction. Object: Building Trust. Our approach is to build trust, find common ground, and establish rapport. We aim to listen more than we speak, and ask open-ended questions to keep the conversation moving forward. Here is a template for our introduction: “Hi [LeaderFirstName], this is Olivia with Money Dolly, the fundraising platform you requested more information about.” When to move to next step: Once we have established a good rapport and trust, we can move to the next step. Step 2) Discovery. Object: Collecting Information. After the introduction, we lead a ‘Discovery’ session to collect more details about the organization. This helps us to understand their background, needs, beliefs, and motivations. We ask questions like: “Tell me a little bit about your program?” “How many group participants do you have?” “Do you have any experience fundraising for this group?” “What do the other leaders in your group think about running a fundraiser?” “What problems or pains are you currently facing within fundraising?” “How much money do you need to raise?” “When were you hoping to have the funds by?” This information helps us to tailor our service to their needs and ensure a successful fundraiser. When to move to next step: Once we have gathered enough information and feel confident that our service can meet the organization's needs, we can move to the next step.";
-      function getReplyInstructions() {
-        var instructions = document.getElementById('instructions');
-        instructions.innerHTML = Prism.highlight(reply_instructions, Prism.languages.javascript, 'javascript');
-        instructions.contentEditable = false;
-      }
+      const API_URL = 'https://dl24ca4gcukndmqcceos3ypxce0uybno.lambda-url.us-west-2.on.aws/';
+      const instructionsBox = document.getElementById('instructions');
+
+      async function fetchInstructions() {
+  const instructionsBox = document.getElementById('instructions');
+  const data = {
+    operation: 'get_row',
+    key: {
+      id: 1,
+      version: 1
+    }
+  };
+  try {
+    const response = await axios.post(API_URL, data);
+    if (response.status === 200) {
+      instructionsBox.innerText = response.data.prompt; // Change this line
+    } else {
+      console.error(`Error: ${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
+
+      async function sendInstructions() {
+  const instructionsBox = document.getElementById('instructions');
+  const data = {
+    operation: 'add_row',
+    data: {
+      id: 1,
+      version: 1,
+      prompt: instructionsBox.innerText, // Change this line
+      timestamp: '2022-01-01T00:00:00'
+    }
+  };
+  try {
+    const response = await axios.post(API_URL, data);
+    if (response.status === 200) {
+      alert('Data sent successfully');
+    } else {
+      console.error(`Error: ${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`Error: ${error}`);
+  }
+}
       function toggleEditButtons() {
-        var editButtons = document.getElementById('edit-buttons');
-        var editIcon = document.getElementById('edit-icon');
-        var instructions = document.getElementById('instructions');
-        if (editButtons.style.display === 'none') {
-          editButtons.style.display = 'block';
-          editIcon.style.display = 'none';
-          instructions.contentEditable = true;
-        } else {
-          editButtons.style.display = 'none';
-          editIcon.style.display = 'block';
-          instructions.contentEditable = false;
-        }
-      }
-      function editInstructions() {
-        toggleEditButtons();
-      }
-      window.onload = getReplyInstructions;
+  const editButtons = document.getElementById('edit-buttons');
+  if (editButtons.style.display === 'none') {
+    editButtons.style.display = 'block';
+  } else {
+    editButtons.style.display = 'none';
+  }
+}
+
+function editInstructions() {
+  const instructionsBox = document.getElementById('instructions');
+  instructionsBox.contentEditable = true;
+  toggleEditButtons();
+}
+
+      window.onload = fetchInstructions;
     </script>
   </head>
   <body>
@@ -132,7 +109,7 @@
           <i id="edit-icon" class="fas fa-edit edit-icon" onclick="editInstructions()"></i>
           <div id="edit-buttons" class="edit-buttons">
             <button onclick="toggleEditButtons()">Cancel</button>
-            <button onclick="toggleEditButtons()">Save</button>
+            <button onclick="sendInstructions()">Save</button>
           </div>
         </div>
         <pre id="instructions"></pre>
