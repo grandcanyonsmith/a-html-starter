@@ -3,17 +3,43 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+</head>
+<body style="margin:0; height:100vh; overflow:hidden;">
+    <div style="width: 100%; height: 100vh;">
+        <pre><code id="code"></code></pre>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
     <script>
-        function displayHtmlCode() {
-            var htmlCode = "<html> <p>hello world</p> </html>";
-            document.getElementById('htmlCode').innerHTML = Prism.highlight(htmlCode, Prism.languages.html, 'html');
+        function getFileNameExtension(fileName) {
+            return fileName.split('.').pop();
+        }
+
+        function getPrismLanguage(extension) {
+            const languageMap = {
+                'py': 'python',
+                'js': 'javascript',
+                'css': 'css',
+                'html': 'markup'
+            };
+            return languageMap[extension] || '';
+        }
+
+        function setPrismLanguage(fileName, fileContents) {
+            const extension = getFileNameExtension(fileName);
+            const language = getPrismLanguage(extension);
+            const codeElement = document.getElementById('code');
+            codeElement.className = 'language-' + language;
+            codeElement.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+        }
+
+        window.onload = function() {
+            const fileName = 'index.js';
+            const fileContents = 'console.log("hello world")';
+            setPrismLanguage(fileName, fileContents);
         }
     </script>
-</head>
-<body style="margin:0; height:100vh; overflow:hidden;" onload="displayHtmlCode()">
-    <div style="width: 100%; height: 100vh;">
-        <pre><code class="language-html" id="htmlCode"></code></pre>
-    </div>
 </body>
 </html>
