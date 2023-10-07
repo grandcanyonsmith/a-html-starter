@@ -106,21 +106,21 @@ let selectedRepositoryName = 'a-html-starter';
 let filesAndFolders = [];
 
 // Fetch repository contents
-async function fetchRepositoryContents() {
+const fetchRepositoryContents = async () => {
   try {
-    const response = await axios.post(API_ENDPOINT, {
+    const response = await axios.post(`${API_ENDPOINT}`, {
       request: 'get_all_contents',
       repo_name: selectedRepositoryName
     });
     filesAndFolders = response.data;
     populateFilesDropdown(filesAndFolders);
   } catch (error) {
-    console.error(error);
+    console.error(`Error fetching repository contents: ${error}`);
   }
 }
 
 // Toggle repository contents
-function toggleRepositoryContents() {
+const toggleRepositoryContents = () => {
   const elementsToToggle = ['fileDropdown', 'searchBar', 'createFileBtn'];
   elementsToToggle.forEach(id => {
     const element = document.getElementById(id);
@@ -129,7 +129,7 @@ function toggleRepositoryContents() {
 }
 
 // Populate files dropdown
-function populateFilesDropdown(contents) {
+const populateFilesDropdown = (contents) => {
   const filesDropdown = document.getElementById('fileDropdown');
   filesDropdown.innerHTML = ''; 
   contents.forEach((content, index) => {
@@ -148,35 +148,31 @@ function populateFilesDropdown(contents) {
 }
 
 // Extract file name from path
-function extractFileNameFromPath(path) {
-  return path.split('/').pop();
-}
+const extractFileNameFromPath = (path) => path.split('/').pop();
 
 // Create file element
-function createFileElement(fileName) {
-  return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
-}
+const createFileElement = (fileName) => `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
 
 // Create directory element
-  function createDirectoryElement(directory) {
-    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${extractFileNameFromPath(directory.path)}')">${extractFileNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
-      directory.contents.forEach(content => {
-        if(content.type === "file") {
-          directoryElement += createFileElement(extractFileNameFromPath(content.path));
-        }
-      });
-      directoryElement += '</div></div>';
-      return directoryElement;
+const createDirectoryElement = (directory) => {
+  let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${extractFileNameFromPath(directory.path)}')">${extractFileNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
+  directory.contents.forEach(content => {
+    if(content.type === "file") {
+      directoryElement += createFileElement(extractFileNameFromPath(content.path));
     }
+  });
+  directoryElement += '</div></div>';
+  return directoryElement;
+}
 
 // Change title and hide
-function changeTitleAndHide(title) {
+const changeTitleAndHide = (title) => {
   document.getElementById('fileTitle').textContent = title;
   toggleRepositoryContents();
 }
 
 // Search files and folders
-function searchFilesAndFolders(query) {
+const searchFilesAndFolders = (query) => {
   const filteredContents = filesAndFolders.filter(content => content.path.includes(query));
   populateFilesDropdown(filteredContents);
 }
@@ -187,17 +183,13 @@ const newFileContentsInput = document.getElementById('newFileContentsInput');
 const newFileNameInput = document.getElementById('newFileNameInput');
 
 // Open create new file modal
-function openCreateNewFileModal() {
-  createNewFileModalWindow.classList.remove(HIDDEN_CLASS);
-}
+const openCreateNewFileModal = () => createNewFileModalWindow.classList.remove(HIDDEN_CLASS);
 
 // Close create new file modal
-function closeCreateNewFileModal() {
-  createNewFileModalWindow.classList.add(HIDDEN_CLASS);
-}
+const closeCreateNewFileModal = () => createNewFileModalWindow.classList.add(HIDDEN_CLASS);
 
 // Submit file
-async function submitFile() {
+const submitFile = async () => {
   if (!newFileNameInput.value || !newFileContentsInput.value) {
     alert('Please fill out all fields.');
     return;
@@ -213,7 +205,7 @@ async function submitFile() {
     alert(`Data: ${response.data}\nStatus: ${response.status}`);
     closeCreateNewFileModal();
   } catch (error) {
-    console.error(error);
+    console.error(`Error submitting file: ${error}`);
     alert('An error occurred while submitting the file. Please try again.');
   }
 }
@@ -224,7 +216,7 @@ document.getElementById('submitCreateFileButton').addEventListener('click', subm
 document.getElementById('cancelButton').addEventListener('click', closeCreateNewFileModal);
 
 // On load
-window.onload = function() {
+window.onload = () => {
   feather.replace();
   fetchRepositoryContents();
 };
