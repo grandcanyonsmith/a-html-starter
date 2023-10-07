@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body class="m-0 h-screen overflow-auto">
+    <div class="w-full h-screen">
+        <pre><code id="code"></code></pre>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+    <script>
+        function getFileNameExtension(fileName) {
+            return fileName.split('.').pop();
+        }
+
+        function getPrismLanguage(extension) {
+            const languageMap = {
+                'py': 'python',
+                'js': 'javascript',
+                'css': 'css',
+                'html': 'markup'
+            };
+            return languageMap[extension] || '';
+        }
+
+        function setPrismLanguage(fileName, fileContents) {
+            const extension = getFileNameExtension(fileName);
+            const language = getPrismLanguage(extension);
+            const codeElement = document.getElementById('code');
+            codeElement.className = 'language-' + language;
+            codeElement.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+        }
+
+        function getFileContents() {
+            const filePath = 'index.html';
+            const repo_name = 'a-html-starter';
+            const githubUtilsApiUrl = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
+            axios.post(githubUtilsApiUrl, {
+                request: 'get_file_contents',
+                file_path: filePath,
+                repo_name: repo_name
+            })
+            .then(function (response) {
+                setPrismLanguage(filePath, response.data.file_content);
+            })
+            .catch(function (error) {
+                alert(error);
+            });
+        }
+
+        window.onload = function() {
+            getFileContents();
+        }
+    </script>
+</body>
+</html>
