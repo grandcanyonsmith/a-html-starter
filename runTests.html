@@ -5,54 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Automated Tests Page</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
+  <link href="runteststyles.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="runsDataHistory.js"></script>
   <script src="runTests.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    @media (max-width: 768px) {
-      #testRunsChart {
-        height: 400px !important;
-      }
-      .flex-col {
-        flex-direction: column;
-      }
-      .space-x-6 {
-        space-x-0;
-      }
-      .mr-5 {
-        margin-right: 0;
-      }
-    }
-    .test-file-name:hover {
-      text-decoration: underline;
-      cursor: pointer;
-    }
-    #testResult {
-      background: #000;
-      color: #0f0;
-      font-family: monospace;
-      white-space: pre;
-      border-radius: 10px;
-      padding: 10px;
-      position: relative;
-    }
-    #testResult::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 2px;
-      height: 100%;
-      background: #0f0;
-      animation: blink 1s infinite;
-    }
-    @keyframes blink {
-      0% {opacity: 1;}
-      50% {opacity: 0;}
-      100% {opacity: 1;}
-    }
-  </style>
+  <script src="selectRepoFile.js"></script>
 </head>
 <body class="flex flex-col h-screen text-white bg-gray-900">
   <main class="flex-1 overflow-y-auto p-5" data-view="nav" data-page="automated_tests">
@@ -61,20 +19,23 @@
         <a href="index.html" class="text-white border-b-2 border-transparent hover:border-white pb-1">Reports</a>
         <a href="run-tests.html" class="text-white hover:text-gray-300 border-b-2 border-white pb-1">Run Tests</a>
       </nav>
-      <section class="flex flex-col justify-between mb-5">
-        <div class="flex flex-col mr-5">
-          <select id="team" class="p-2 text-white rounded bg-gray-900 border-white text-4xl font-bold" onchange="updatePastRunsTitle()">
-            <option value="Celebrations">Celebrations</option>
-            <option value="Legacy">Legacy</option>
-          </select>
+    </header>
+
+    <div class="relative inline-flex">
+      <div id="tree" class="w-full max-w-xs bg-white border-r border-gray-400">
+        <div class="flex items-center justify-between px-5 py-2">
+          <h3 id="fileTitle" class="text-lg font-semibold text-gray-600">Files</h3>
+          <button id="fetchFilesBtn" onclick="toggleRepositoryContents()">
+            <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+            </svg>
+          </button>
         </div>
-        <div class="flex flex-col">
-          <select id="testing_type" class="p-2 text-white rounded bg-gray-900 border-white text-2xl" onchange="updatePastRunsTitle()">
-            <option value="Performance Test">Performance Test</option>
-            <option value="Smoke Tests">Smoke Tests</option>
-          </select>
-        </div>
-      </section>
+        <nav id="fileDropdown" class="px-2 text-gray-700 hidden dropdown-content">
+          <!-- Populated by JavaScript -->
+        </nav>
+      </div>
+    </div>
 
     <button id="runTestsBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow mb-5 text-sm" onclick="runTests()">Run Tests</button>
 
@@ -89,8 +50,7 @@
     })
 
     function runTests() {
-      var teamName = document.getElementById("team").value;
-      document.getElementById("testResult").innerHTML = `Running ${teamName} Tests in EC2 instance`;
+      document.getElementById("testResult").innerHTML = `Running Tests in EC2 instance`;
       // Add code here to run the tests and display the results
     }
   </script>
