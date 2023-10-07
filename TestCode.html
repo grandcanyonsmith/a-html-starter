@@ -28,6 +28,19 @@
     body {
       overflow-x: hidden;
     }
+    #tree {
+      border: 1px solid gray;
+    }
+    #searchBar {
+      display: none;
+      align-items: center;
+    }
+    #searchBar i {
+      margin-right: 10px;
+      color: gray;
+      width: 15px;
+      height: 15px;
+    }
   </style>
 </head>
 
@@ -45,8 +58,8 @@
             </button>
           </div>
           <div class="flex items-center justify-between px-5 py-2 hidden" id="searchBar">
-            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchFilesAndFolders(this.value)">
             <i data-feather="search"></i>
+            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchFilesAndFolders(this.value)">
           </div>
           <nav id="fileDropdown" class="px-2 text-gray-700 hidden dropdown-content">
             <!-- Populated by JavaScript -->
