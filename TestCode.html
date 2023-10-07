@@ -53,19 +53,7 @@
 
   function toggleRepositoryContents() {
     const fileDropdown = document.getElementById('fileDropdown');
-    if (fileDropdown.classList.contains('hidden')) {
-      showFiles();
-    } else {
-      hideFiles();
-    }
-  }
-
-  function showFiles() {
-    document.getElementById('fileDropdown').classList.remove('hidden');
-  }
-
-  function hideFiles() {
-    document.getElementById('fileDropdown').classList.add('hidden');
+    fileDropdown.classList.toggle('hidden');
   }
 
   function populateFilesDropdown(contents) {
@@ -107,7 +95,7 @@
 
   function changeTitleAndHide(title) {
     document.getElementById('fileTitle').textContent = title;
-    hideFiles();
+    toggleRepositoryContents();
   }
   
   window.onload = function() {
