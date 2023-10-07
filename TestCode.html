@@ -102,7 +102,7 @@
 // Constants
 const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
 const HIDDEN_CLASS = 'hidden';
-let selectedRepositoryName = 'a-html-starter';
+let selectedRepositoryName = 'a-canyon-yb-tests';
 let filesAndFolders = [];
 
 // Fetch repository contents
@@ -159,6 +159,9 @@ const createDirectoryElement = (directory) => {
   directory.contents.forEach(content => {
     if(content.type === "file") {
       directoryElement += createFileElement(extractFileNameFromPath(content.path));
+    }
+    if(content.type === "dir") {
+      directoryElement += createDirectoryElement(content);
     }
   });
   directoryElement += '</div></div>';
