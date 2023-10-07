@@ -1,44 +1,194 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Chat Simulation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        .chat-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .message {
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .message.user {
+            background-color: #d1d1d1;
+        }
+        .message.assistant {
+            background-color: #a1e3a1;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        .send-button {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            background-color: #ffffff;
+            color: #808080;
+        }
+        .send-button.active {
+            background-color: #008000;
+            color: #ffffff;
+        }
+        .erase-button {
+            color: #808080;
+            font-size: 0.875rem;
+        }
+        .textarea-container {
+            position: relative;
+        }
+        .textarea-container textarea {
+            padding-right: 50px;
+        }
+        .textarea-container button {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+    </style>
 </head>
-<body style="margin:0; height:100vh; overflow:hidden;">
-    <div style="width: 100%; height: 100vh;">
-        <pre><code id="code"></code></pre>
+<body class="font-sans bg-gray-200">
+    <nav class="bg-gray-800 p-2 mt-0 w-full">
+        <div class="container mx-auto flex flex-wrap items-center">
+            <div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
+                <a class="text-white no-underline hover:text-white hover:no-underline" href="#">
+                    <span class="text-2xl pl-2"><i class="em em-grinning"></i> Bot Simulator</span>
+                </a>
+            </div>
+            <div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
+                <ul class="list-reset flex justify-between flex-1 md:flex-none items-center">
+                    <li class="mr-3">
+                        <a class="inline-block py-2 px-4 text-white no-underline" href="https://html-starter-coral.vercel.app/MoneyBot.Html">Simulate Bot Conversation</a>
+                    </li>
+                    <li class="mr-3">
+                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4" href="https://html-starter-coral.vercel.app/MoneyBotInstructions.html">Edit Bot Instructions</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mx-auto p-4">
+        <div class="chat-container w-full md:w-96 h-144 border border-black p-4 overflow-y-scroll mb-4" id="chatContainer"></div>
+        <div class="flex justify-between items-center">
+            <button onclick="openModal()" class="text-gray-500 text-sm"><i class="fas fa-plus"></i> Add message</button>
+            <div class="text-right">
+                <div class="text-gray-500 text-sm cursor-pointer" onclick="eraseLastMessage()">Erase Last Message</div>
+                <div class="text-gray-500 text-sm cursor-pointer" onclick="clearMessages()">Clear Conversation</div>
+            </div>
+        </div>
+        <div class="textarea-container">
+            <textarea id="mainTextArea" class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" rows="4" placeholder="Enter your message"></textarea>
+            <button id="sendButton" onclick="addMessage('user', document.getElementById('mainTextArea').value); send(); document.getElementById('mainTextArea').value='';" class="send-button text-gray-500 font-bold py-2 px-4 rounded"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="flex flex-col md:flex-row items-center">
+                    <select id="userSelect" class="mt-4 mr-2">
+                        <option value="user">User</option>
+                        <option value="assistant">Assistant</option>
+                    </select>
+                    <input type="text" id="messageInput" placeholder="Type your message here..." class="mt-4 mr-2 flex-grow">
+                    <button onclick="addMessage()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-javascript.min.js"></script>
+
     <script>
-        function getFileNameExtension(fileName) {
-            return fileName.split('.').pop();
+        var conversation_history = [];
+        function addMessage(user, message) {
+            var user = user || document.getElementById('userSelect').value;
+            var message = message || document.getElementById('messageInput').value;
+            conversation_history.push({'role': user, 'content': message});
+            updateChat();
+            document.getElementById('messageInput').value = '';
         }
-
-        function getPrismLanguage(extension) {
-            const languageMap = {
-                'py': 'python',
-                'js': 'javascript',
-                'css': 'css',
-                'html': 'markup'
-            };
-            return languageMap[extension] || '';
+        function updateChat() {
+            var chatContainer = document.getElementById('chatContainer');
+            chatContainer.innerHTML = '';
+            conversation_history.forEach(function(message) {
+                var messageElement = document.createElement('div');
+                messageElement.classList.add('message', message.role === 'user' ? 'user' : 'assistant');
+                messageElement.innerHTML = '<strong>' + message.role + ':</strong> ' + message.content;
+                chatContainer.appendChild(messageElement);
+            });
         }
-
-        function setPrismLanguage(fileName, fileContents) {
-            const extension = getFileNameExtension(fileName);
-            const language = getPrismLanguage(extension);
-            const codeElement = document.getElementById('code');
-            codeElement.className = 'language-' + language;
-            codeElement.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+function send() {
+    var sendButton = document.getElementById('sendButton');
+    sendButton.classList.add('active');
+    var user = document.getElementById('userSelect').value;
+    var message = document.getElementById('messageInput').value;
+    axios.post('https://lftoi5cib2sgykubshzpqfvwaa0skgkb.lambda-url.us-west-2.on.aws/', {
+        conversation_history: conversation_history
+    })
+    .then(function (response) {
+        var responseData = JSON.parse(response.data);
+        if(responseData.actionName === 'REPLY') {
+            addMessage('assistant', responseData.messageContent);
         }
-
+        document.getElementById('messageInput').value = '';
+        document.getElementById('userSelect').value = 'assistant';
+        updateChat();
+        alert(responseData.actionName);
+        sendButton.classList.remove('active');
+    })
+    .catch(function (error) {
+        alert("Failed to send message");
+        console.log(error);
+        sendButton.classList.remove('active');
+    });
+}
+        function clearMessages() {
+            conversation_history = [];
+            updateChat();
+        }
+        function eraseLastMessage() {
+            conversation_history.pop();
+            updateChat();
+        }
+        function openModal() {
+            document.getElementById('myModal').style.display = "block";
+        }
+        document.getElementsByClassName("close")[0].onclick = function() {
+            document.getElementById('myModal').style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('myModal')) {
+                document.getElementById('myModal').style.display = "none";
+            }
+        }
         window.onload = function() {
-            const fileName = 'index.js';
-            const fileContents = 'console.log("hello world")';
-            setPrismLanguage(fileName, fileContents);
+            document.getElementById('userSelect').value = 'assistant';
+            document.getElementById('messageInput').value = 'Hi Damion, this is Olivia with Money Dolly, the fundraising platform you requested more information about.';
+            addMessage();
         }
     </script>
 </body>
