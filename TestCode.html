@@ -99,58 +99,65 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
   <script>
-  const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
-  let selectedRepositoryName = 'a-html-starter';
-  let filesAndFolders = [];
+// Constants
+const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
+const HIDDEN_CLASS = 'hidden';
+let selectedRepositoryName = 'a-html-starter';
+let filesAndFolders = [];
 
-  async function fetchRepositoryContents() {
-    try {
-      const response = await axios.post(API_ENDPOINT, {
-        request: 'get_all_contents',
-        repo_name: selectedRepositoryName
-      });
-      filesAndFolders = response.data;
-      populateFilesDropdown(filesAndFolders);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  function toggleRepositoryContents() {
-    const fileDropdown = document.getElementById('fileDropdown');
-    const searchBar = document.getElementById('searchBar');
-    const createFileBtn = document.getElementById('createFileBtn');
-    fileDropdown.classList.toggle('hidden');
-    searchBar.classList.toggle('hidden');
-    createFileBtn.classList.toggle('hidden');
-  }
-
-  function populateFilesDropdown(contents) {
-    const filesDropdown = document.getElementById('fileDropdown');
-    filesDropdown.innerHTML = ''; 
-    contents.forEach((content, index) => {
-      const displayName = extractFileNameFromPath(content.path);
-      if(content.type === "file") {
-        filesDropdown.innerHTML += createFileElement(displayName);
-        if(index === 0) {
-          document.getElementById('fileTitle').textContent = displayName;
-        }
-      }
-      if(content.type === "dir") {
-        filesDropdown.innerHTML += createDirectoryElement(content);
-      }
+// Fetch repository contents
+async function fetchRepositoryContents() {
+  try {
+    const response = await axios.post(API_ENDPOINT, {
+      request: 'get_all_contents',
+      repo_name: selectedRepositoryName
     });
-    feather.replace();
+    filesAndFolders = response.data;
+    populateFilesDropdown(filesAndFolders);
+  } catch (error) {
+    console.error(error);
   }
+}
 
-  function extractFileNameFromPath(path) {
-    return path.split('/').pop();
-  }
+// Toggle repository contents
+function toggleRepositoryContents() {
+  const elementsToToggle = ['fileDropdown', 'searchBar', 'createFileBtn'];
+  elementsToToggle.forEach(id => {
+    const element = document.getElementById(id);
+    element.classList.toggle(HIDDEN_CLASS);
+  });
+}
 
-  function createFileElement(fileName) {
-    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
-  }
+// Populate files dropdown
+function populateFilesDropdown(contents) {
+  const filesDropdown = document.getElementById('fileDropdown');
+  filesDropdown.innerHTML = ''; 
+  contents.forEach((content, index) => {
+    const displayName = extractFileNameFromPath(content.path);
+    if(content.type === "file") {
+      filesDropdown.innerHTML += createFileElement(displayName);
+      if(index === 0) {
+        document.getElementById('fileTitle').textContent = displayName;
+      }
+    }
+    if(content.type === "dir") {
+      filesDropdown.innerHTML += createDirectoryElement(content);
+    }
+  });
+  feather.replace();
+}
 
+// Extract file name from path
+function extractFileNameFromPath(path) {
+  return path.split('/').pop();
+}
+
+// Create file element
+function createFileElement(fileName) {
+  return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
+}
+
+// Create directory element
   function createDirectoryElement(directory) {
     let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${extractFileNameFromPath(directory.path)}')">${extractFileNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
       directory.contents.forEach(content => {
@@ -162,52 +169,65 @@
       return directoryElement;
     }
 
-  function changeTitleAndHide(title) {
-    document.getElementById('fileTitle').textContent = title;
-    toggleRepositoryContents();
+// Change title and hide
+function changeTitleAndHide(title) {
+  document.getElementById('fileTitle').textContent = title;
+  toggleRepositoryContents();
+}
+
+// Search files and folders
+function searchFilesAndFolders(query) {
+  const filteredContents = filesAndFolders.filter(content => content.path.includes(query));
+  populateFilesDropdown(filteredContents);
+}
+
+// Create new file modal window
+const createNewFileModalWindow = document.getElementById('createNewFileModalWindow');
+const newFileContentsInput = document.getElementById('newFileContentsInput');
+const newFileNameInput = document.getElementById('newFileNameInput');
+
+// Open create new file modal
+function openCreateNewFileModal() {
+  createNewFileModalWindow.classList.remove(HIDDEN_CLASS);
+}
+
+// Close create new file modal
+function closeCreateNewFileModal() {
+  createNewFileModalWindow.classList.add(HIDDEN_CLASS);
+}
+
+// Submit file
+async function submitFile() {
+  if (!newFileNameInput.value || !newFileContentsInput.value) {
+    alert('Please fill out all fields.');
+    return;
   }
 
-  function searchFilesAndFolders(query) {
-    const filteredContents = filesAndFolders.filter(content => content.path.includes(query));
-    populateFilesDropdown(filteredContents);
+  try {
+    const response = await axios.post(API_ENDPOINT, {
+      request: 'create_new_file',
+      file_contents: newFileContentsInput.value,
+      file_name: newFileNameInput.value,
+      repo_name: selectedRepositoryName,
+    });
+    alert(`Data: ${response.data}\nStatus: ${response.status}`);
+    closeCreateNewFileModal();
+  } catch (error) {
+    console.error(error);
+    alert('An error occurred while submitting the file. Please try again.');
   }
+}
 
-  const createNewFileModalWindow = document.getElementById('createNewFileModalWindow');
-  const newFileContentsInput = document.getElementById('newFileContentsInput');
-  const newFileNameInput = document.getElementById('newFileNameInput');
+// Event listeners
+document.getElementById('createNewFileButton').addEventListener('click', openCreateNewFileModal);
+document.getElementById('submitCreateFileButton').addEventListener('click', submitFile);
+document.getElementById('cancelButton').addEventListener('click', closeCreateNewFileModal);
 
-  const openCreateNewFileModal = () => createNewFileModalWindow.classList.remove('hidden');
-  const closeCreateNewFileModal = () => createNewFileModalWindow.classList.add('hidden');
-
-  const submitFile = async () => {
-    if (!newFileNameInput.value || !newFileContentsInput.value) {
-      alert('Please fill out all fields.');
-      return;
-    }
-
-    try {
-      const response = await axios.post(API_ENDPOINT, {
-        request: 'create_new_file',
-        file_contents: newFileContentsInput.value,
-        file_name: newFileNameInput.value,
-        repo_name: selectedRepositoryName,
-      });
-      alert(`Data: ${response.data}\nStatus: ${response.status}`);
-      closeCreateNewFileModal();
-    } catch (error) {
-      console.error(error);
-      alert('An error occurred while submitting the file. Please try again.');
-    }
- }
-
-  document.getElementById('createNewFileButton').addEventListener('click', openCreateNewFileModal);
-  document.getElementById('submitCreateFileButton').addEventListener('click', submitFile);
-  document.getElementById('cancelButton').addEventListener('click', closeCreateNewFileModal);
-
-  window.onload = function() {
-    feather.replace();
-    fetchRepositoryContents();
-  };
+// On load
+window.onload = function() {
+  feather.replace();
+  fetchRepositoryContents();
+};
  </script>
   
   </body>
