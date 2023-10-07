@@ -47,6 +47,16 @@
       width: 15px;
       height: 15px;
     }
+    #createNewFileModalWindow {
+      background: rgba(0, 0, 0, 0.5);
+    }
+    #createNewFileModalWindow .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 5px;
+      max-width: 500px;
+      width: 90%;
+    }
   </style>
 </head>
 
@@ -71,10 +81,19 @@
             <!-- Populated by JavaScript -->
           </nav>
           <div class="flex items-center justify-between px-5 py-2 hidden" id="createFileBtn">
-            <button onclick="createNewFile()">+ Create a new file</button>
+            <button id="createNewFileButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Create New File</button>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div id="createNewFileModalWindow" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="bg-white p-5 rounded shadow-lg text-center">
+      <input type="text" id="newFileNameInput" class="w-full p-2 mb-4 border rounded" placeholder="Enter file name" required>
+      <textarea id="newFileContentsInput" class="w-full h-64 p-2 mb-4 border rounded" placeholder="Enter file contents" required></textarea>
+      <button id="submitCreateFileButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+      <button id="cancelButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4">Cancel</button>
     </div>
   </div>
 
@@ -153,10 +172,38 @@
     populateFilesDropdown(filteredContents);
   }
 
-  function createNewFile() {
-    // Add your logic to create a new file
-  }
-  
+  const createNewFileModalWindow = document.getElementById('createNewFileModalWindow');
+  const newFileContentsInput = document.getElementById('newFileContentsInput');
+  const newFileNameInput = document.getElementById('newFileNameInput');
+
+  const openCreateNewFileModal = () => createNewFileModalWindow.classList.remove('hidden');
+  const closeCreateNewFileModal = () => createNewFileModalWindow.classList.add('hidden');
+
+  const submitFile = async () => {
+    if (!newFileNameInput.value || !newFileContentsInput.value) {
+      alert('Please fill out all fields.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(API_ENDPOINT, {
+        request: 'create_new_file',
+        file_contents: newFileContentsInput.value,
+        file_name: newFileNameInput.value,
+        repo_name: selectedRepositoryName,
+      });
+      alert(`Data: ${response.data}\nStatus: ${response.status}`);
+      closeCreateNewFileModal();
+    } catch (error) {
+      console.error(error);
+      alert('An error occurred while submitting the file. Please try again.');
+    }
+ }
+
+  document.getElementById('createNewFileButton').addEventListener('click', openCreateNewFileModal);
+  document.getElementById('submitCreateFileButton').addEventListener('click', submitFile);
+  document.getElementById('cancelButton').addEventListener('click', closeCreateNewFileModal);
+
   window.onload = function() {
     feather.replace();
     fetchRepositoryContents();
