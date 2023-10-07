@@ -54,17 +54,25 @@
   function toggleRepositoryContents() {
     const fileDropdown = document.getElementById('fileDropdown');
     if (fileDropdown.classList.contains('hidden')) {
-      fileDropdown.classList.remove('hidden');
+      showFiles();
     } else {
-      fileDropdown.classList.add('hidden');
+      hideFiles();
     }
+  }
+
+  function showFiles() {
+    document.getElementById('fileDropdown').classList.remove('hidden');
+  }
+
+  function hideFiles() {
+    document.getElementById('fileDropdown').classList.add('hidden');
   }
 
   function populateFilesDropdown(contents) {
     const filesDropdown = document.getElementById('fileDropdown');
     filesDropdown.innerHTML = ''; 
     contents.forEach((content, index) => {
-      const displayName = extractNameFromPath(content.path);
+      const displayName = extractFileNameFromPath(content.path);
       if(content.type === "file") {
         filesDropdown.innerHTML += createFileElement(displayName);
         if(index === 0) {
@@ -78,7 +86,7 @@
     feather.replace();
   }
 
-  function extractNameFromPath(path) {
+  function extractFileNameFromPath(path) {
     return path.split('/').pop();
   }
 
@@ -87,10 +95,10 @@
   }
 
   function createDirectoryElement(directory) {
-    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${extractNameFromPath(directory.path)}')">${extractNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
+    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${extractFileNameFromPath(directory.path)}')">${extractFileNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
       directory.contents.forEach(content => {
         if(content.type === "file") {
-          directoryElement += createFileElement(extractNameFromPath(content.path));
+          directoryElement += createFileElement(extractFileNameFromPath(content.path));
         }
       });
       directoryElement += '</div></div>';
@@ -99,7 +107,7 @@
 
   function changeTitleAndHide(title) {
     document.getElementById('fileTitle').textContent = title;
-    document.getElementById('fileDropdown').classList.add('hidden');
+    hideFiles();
   }
   
   window.onload = function() {
