@@ -44,9 +44,16 @@
               </svg>
             </button>
           </div>
+          <div class="flex items-center justify-between px-5 py-2 hidden" id="searchBar">
+            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchFilesAndFolders(this.value)">
+            <i data-feather="search"></i>
+          </div>
           <nav id="fileDropdown" class="px-2 text-gray-700 hidden dropdown-content">
             <!-- Populated by JavaScript -->
           </nav>
+          <div class="flex items-center justify-between px-5 py-2 hidden" id="createFileBtn">
+            <button onclick="createNewFile()">+ Create a new file</button>
+          </div>
         </div>
       </div>
     </div>
@@ -56,6 +63,7 @@
   <script>
   const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
   let selectedRepositoryName = 'a-html-starter';
+  let filesAndFolders = [];
 
   async function fetchRepositoryContents() {
     try {
@@ -63,7 +71,7 @@
         request: 'get_all_contents',
         repo_name: selectedRepositoryName
       });
-      const filesAndFolders = response.data;
+      filesAndFolders = response.data;
       populateFilesDropdown(filesAndFolders);
     } catch (error) {
       console.error(error);
@@ -72,7 +80,11 @@
 
   function toggleRepositoryContents() {
     const fileDropdown = document.getElementById('fileDropdown');
+    const searchBar = document.getElementById('searchBar');
+    const createFileBtn = document.getElementById('createFileBtn');
     fileDropdown.classList.toggle('hidden');
+    searchBar.classList.toggle('hidden');
+    createFileBtn.classList.toggle('hidden');
   }
 
   function populateFilesDropdown(contents) {
@@ -115,6 +127,15 @@
   function changeTitleAndHide(title) {
     document.getElementById('fileTitle').textContent = title;
     toggleRepositoryContents();
+  }
+
+  function searchFilesAndFolders(query) {
+    const filteredContents = filesAndFolders.filter(content => content.path.includes(query));
+    populateFilesDropdown(filteredContents);
+  }
+
+  function createNewFile() {
+    // Add your logic to create a new file
   }
   
   window.onload = function() {
