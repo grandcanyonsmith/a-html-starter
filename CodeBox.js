@@ -115,7 +115,5 @@ function toggleGithubRepositories() {
     }
 }
 
-window.onload = function() {
-    feather.replace();
-    fetchRepositoryContents();
-};
+feather.replace();
+fetchRepositoryContents();
