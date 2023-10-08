@@ -1,3 +1,4 @@
+// repoFileSelect.js
 function fetchFiles() {
   const selectedRepoName = document.getElementById('repoName').textContent;
   console.log(selectedRepoName);
@@ -45,9 +46,10 @@ class RepoFileSelector {
     contents.forEach((content, index) => {
       const displayName = this.extractFileNameFromPath(content.path);
       if(content.type === "file") {
-        filesDropdown.innerHTML += this.createFileElement(displayName);
+        filesDropdown.innerHTML += this.createFileElement(displayName, content.path);
         if(index === 0) {
           document.getElementById('fileTitle').textContent = displayName;
+          document.getElementById('filePath').textContent = content.path;
         }
       }
       if(content.type === "dir") {
@@ -61,15 +63,15 @@ class RepoFileSelector {
     return path.split('/').pop();
   }
 
-  createFileElement(fileName) {
-    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="repoFileSelector.changeTitleAndHide('${fileName}')">${fileName}</a>`;
+  createFileElement(fileName, filePath) {
+    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="repoFileSelector.changeTitleAndHide('${fileName}', '${filePath}')">${fileName}</a>`;
   }
 
   createDirectoryElement(directory) {
     let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); this.changeTitleAndHide('${this.extractFileNameFromPath(directory.path)}')">${this.extractFileNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
     directory.contents.forEach(content => {
       if(content.type === "file") {
-        directoryElement += this.createFileElement(this.extractFileNameFromPath(content.path));
+        directoryElement += this.createFileElement(this.extractFileNameFromPath(content.path), content.path);
       }
       if(content.type === "dir") {
         directoryElement += this.createDirectoryElement(content);
@@ -79,8 +81,9 @@ class RepoFileSelector {
     return directoryElement;
   }
 
-  changeTitleAndHide(title) {
+  changeTitleAndHide(title, path) {
     document.getElementById('fileTitle').textContent = title;
+    document.getElementById('filePath').textContent = path;
     this.toggleRepositoryContents();
   }
 
