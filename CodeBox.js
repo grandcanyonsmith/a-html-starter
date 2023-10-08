@@ -1,8 +1,6 @@
 class RepositoryManager {
     constructor() {
         this.API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
-        this.selectedRepositoryName = '';
-        this.filePath = '';
     }
 
     getFileNameExtension(fileName) {
@@ -27,24 +25,24 @@ class RepositoryManager {
         codeElement.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
     }
 
-    async fetchFileContents() {
+    async fetchFileContents(filePath, selectedRepositoryName) {
         try {
             const response = await axios.post(this.API_ENDPOINT, {
                 request: 'get_file_contents',
-                file_path: this.filePath,
-                repo_name: this.selectedRepositoryName
+                file_path: filePath,
+                repo_name: selectedRepositoryName
             });
-            this.setPrismLanguage(this.filePath, response.data.file_content);
+            this.setPrismLanguage(filePath, response.data.file_content);
         } catch (error) {
             console.error(error);
         }
     }
 
-    async fetchRepositoryContents() {
+    async fetchRepositoryContents(selectedRepositoryName) {
         try {
             const response = await axios.post(this.API_ENDPOINT, {
                 request: 'get_all_contents',
-                repo_name: this.selectedRepositoryName
+                repo_name: selectedRepositoryName
             });
             const filesAndFolders = response.data;
             this.populateFilesDropdown(filesAndFolders);
@@ -72,8 +70,7 @@ class RepositoryManager {
                 filesDropdown.innerHTML += this.createFileElement(displayName);
                 if(index === 0) {
                     document.getElementById('fileTitle').textContent = displayName;
-                    this.filePath = content.path;
-                    this.fetchFileContents();
+                    this.fetchFileContents(content.path, document.getElementById('repoName').textContent);
                 }
             }
             if(content.type === "dir") {
@@ -105,8 +102,7 @@ class RepositoryManager {
     changeTitleAndHide(title) {
         document.getElementById('fileTitle').textContent = title;
         document.getElementById('fileDropdown').classList.add('hidden');
-        this.filePath = title;
-        this.fetchFileContents();
+        this.fetchFileContents(title, document.getElementById('repoName').textContent);
     }
 
     toggleGithubRepositories() {
@@ -120,7 +116,7 @@ class RepositoryManager {
 
     init() {
         feather.replace();
-        this.fetchRepositoryContents();
+        this.fetchRepositoryContents(document.getElementById('repoName').textContent);
     }
 }
 
