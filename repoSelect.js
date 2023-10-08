@@ -29,6 +29,7 @@ class GithubRepoManager {
   }
 
   toggleGithubRepositories() {
+  console.log('toggleGithubRepositories called');
     if (this.repoList.classList.contains('hidden')) {
       this.showRepos();
       this.searchDiv.style.display = "flex";
