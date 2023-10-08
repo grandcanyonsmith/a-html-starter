@@ -1,119 +1,128 @@
-const API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
-let selectedRepositoryName = '';
-let filePath = '';
-
-function getFileNameExtension(fileName) {
-    return fileName.split('.').pop();
-}
-
-function getPrismLanguage(extension) {
-    const languageMap = {
-        'py': 'python',
-        'js': 'javascript',
-        'css': 'css',
-        'html': 'markup'
-    };
-    return languageMap[extension] || '';
-}
-
-function setPrismLanguage(fileName, fileContents) {
-    const extension = getFileNameExtension(fileName);
-    const language = getPrismLanguage(extension);
-    const codeElement = document.getElementById('code');
-    codeElement.className = 'language-' + language;
-    codeElement.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
-}
-
-async function fetchFileContents() {
-    try {
-        const response = await axios.post(API_ENDPOINT, {
-            request: 'get_file_contents',
-            file_path: filePath,
-            repo_name: selectedRepositoryName
-        });
-        setPrismLanguage(filePath, response.data.file_content);
-    } catch (error) {
-        console.error(error);
+class RepositoryManager {
+    constructor() {
+        this.API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
+        this.selectedRepositoryName = '';
+        this.filePath = '';
     }
-}
 
-async function fetchRepositoryContents() {
-    try {
-        const response = await axios.post(API_ENDPOINT, {
-            request: 'get_all_contents',
-            repo_name: selectedRepositoryName
-        });
-        const filesAndFolders = response.data;
-        populateFilesDropdown(filesAndFolders);
-    } catch (error) {
-        console.error(error);
+    getFileNameExtension(fileName) {
+        return fileName.split('.').pop();
     }
-}
 
-function toggleRepositoryContents() {
-    const fileDropdown = document.getElementById('fileDropdown');
-    if (fileDropdown.classList.contains('hidden')) {
-        fileDropdown.classList.remove('hidden');
-    } else {
-        fileDropdown.classList.add('hidden');
+    getPrismLanguage(extension) {
+        const languageMap = {
+            'py': 'python',
+            'js': 'javascript',
+            'css': 'css',
+            'html': 'markup'
+        };
+        return languageMap[extension] || '';
     }
-}
 
-function populateFilesDropdown(contents) {
-    const filesDropdown = document.getElementById('fileDropdown');
-    filesDropdown.innerHTML = '';
+    setPrismLanguage(fileName, fileContents) {
+        const extension = this.getFileNameExtension(fileName);
+        const language = this.getPrismLanguage(extension);
+        const codeElement = document.getElementById('code');
+        codeElement.className = 'language-' + language;
+        codeElement.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+    }
 
-    contents.forEach((content, index) => {
-        const displayName = extractNameFromPath(content.path);
-        if(content.type === "file") {
-            filesDropdown.innerHTML += createFileElement(displayName);
-            if(index === 0) {
-                document.getElementById('fileTitle').textContent = displayName;
-                filePath = content.path;
-                fetchFileContents();
+    async fetchFileContents() {
+        try {
+            const response = await axios.post(this.API_ENDPOINT, {
+                request: 'get_file_contents',
+                file_path: this.filePath,
+                repo_name: this.selectedRepositoryName
+            });
+            this.setPrismLanguage(this.filePath, response.data.file_content);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async fetchRepositoryContents() {
+        try {
+            const response = await axios.post(this.API_ENDPOINT, {
+                request: 'get_all_contents',
+                repo_name: this.selectedRepositoryName
+            });
+            const filesAndFolders = response.data;
+            this.populateFilesDropdown(filesAndFolders);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    toggleRepositoryContents() {
+        const fileDropdown = document.getElementById('fileDropdown');
+        if (fileDropdown.classList.contains('hidden')) {
+            fileDropdown.classList.remove('hidden');
+        } else {
+            fileDropdown.classList.add('hidden');
+        }
+    }
+
+    populateFilesDropdown(contents) {
+        const filesDropdown = document.getElementById('fileDropdown');
+        filesDropdown.innerHTML = '';
+
+        contents.forEach((content, index) => {
+            const displayName = this.extractNameFromPath(content.path);
+            if(content.type === "file") {
+                filesDropdown.innerHTML += this.createFileElement(displayName);
+                if(index === 0) {
+                    document.getElementById('fileTitle').textContent = displayName;
+                    this.filePath = content.path;
+                    this.fetchFileContents();
+                }
             }
+            if(content.type === "dir") {
+                filesDropdown.innerHTML += this.createDirectoryElement(content);
+            }
+        });
+        feather.replace();
+    }
+
+    extractNameFromPath(path) {
+        return path.split('/').pop();
+    }
+
+    createFileElement(fileName) {
+        return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
+    }
+
+    createDirectoryElement(directory) {
+        let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${this.extractNameFromPath(directory.path)}')">${this.extractNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
+        directory.contents.forEach(content => {
+            if(content.type === "file") {
+                directoryElement += this.createFileElement(this.extractNameFromPath(content.path));
+            }
+        });
+        directoryElement += '</div></div>';
+        return directoryElement;
+    }
+
+    changeTitleAndHide(title) {
+        document.getElementById('fileTitle').textContent = title;
+        document.getElementById('fileDropdown').classList.add('hidden');
+        this.filePath = title;
+        this.fetchFileContents();
+    }
+
+    toggleGithubRepositories() {
+        const repoList = document.getElementById('repoList');
+        if (repoList.classList.contains('hidden')) {
+            repoList.classList.remove('hidden');
+        } else {
+            repoList.classList.add('hidden');
         }
-        if(content.type === "dir") {
-            filesDropdown.innerHTML += createDirectoryElement(content);
-        }
-    });
-    feather.replace();
-}
+    }
 
-function extractNameFromPath(path) {
-    return path.split('/').pop();
-}
-
-function createFileElement(fileName) {
-    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="changeTitleAndHide('${fileName}')">${fileName}</a>`;
-}
-
-function createDirectoryElement(directory) {
-    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); changeTitleAndHide('${extractNameFromPath(directory.path)}')">${extractNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
-    directory.contents.forEach(content => {
-        if(content.type === "file") {
-            directoryElement += createFileElement(extractNameFromPath(content.path));
-        }
-    });
-    directoryElement += '</div></div>';
-    return directoryElement;
-}
-
-function changeTitleAndHide(title) {
-    document.getElementById('fileTitle').textContent = title;
-    document.getElementById('fileDropdown').classList.add('hidden');
-    filePath = title;
-    fetchFileContents();
-}
-
-function toggleGithubRepositories() {
-    const repoList = document.getElementById('repoList');
-    if (repoList.classList.contains('hidden')) {
-        repoList.classList.remove('hidden');
-    } else {
-        repoList.classList.add('hidden');
+    init() {
+        feather.replace();
+        this.fetchRepositoryContents();
     }
 }
 
-feather.replace();
-fetchRepositoryContents();
+const repoManager = new RepositoryManager();
+repoManager.init();
