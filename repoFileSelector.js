@@ -1,5 +1,5 @@
 function fetchFiles() {
-  const selectedRepoName = document.getElementById('selectedRepoName').value;
+  const selectedRepoName = document.getElementById('repoName').value;
   repoFileSelector.fetchRepositoryContents(selectedRepoName);
 }
 
