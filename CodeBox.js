@@ -59,4 +59,3 @@ class RepositoryManager {
 }
 
 const repoManager = new RepositoryManager();
-repoManager.init();
