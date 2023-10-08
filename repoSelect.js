@@ -9,7 +9,7 @@ window.onload = async () => {
       this.searchDiv = document.getElementById('searchDiv');
       this.searchInput = document.getElementById('searchInput');
       this.repoName = document.getElementById('repoName');
-      this.fetchReposBtn = document.getElementById('fetchReposBtn');
+      this.fetchReposBtn = document.getElementById('dropdownIcon');
       this.setupEventListeners();
       this.fetchGithubRepositories();
     }
