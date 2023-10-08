@@ -1,8 +1,12 @@
+function fetchFiles() {
+  const selectedRepoName = document.getElementById('selectedRepoName').value;
+  repoFileSelector.fetchRepositoryContents(selectedRepoName);
+}
 class RepoFileSelector {
   constructor() {
     this.API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
     this.HIDDEN_CLASS = 'hidden';
-    this.selectedRepositoryName = 'a-canyon-yb-tests';
+    this.selectedRepositoryName = '';
     this.filesAndFolders = [];
     this.createNewFileModalWindow = document.getElementById('createNewFileModalWindow');
     this.newFileContentsInput = document.getElementById('newFileContentsInput');
@@ -10,18 +14,20 @@ class RepoFileSelector {
     this.changeTitleAndHide = this.changeTitleAndHide.bind(this);
   }
 
-  async fetchRepositoryContents() {
-    try {
-      const response = await axios.post(`${this.API_ENDPOINT}`, {
-        request: 'get_all_contents',
-        repo_name: this.selectedRepositoryName
-      });
-      this.filesAndFolders = response.data;
-      this.populateFilesDropdown(this.filesAndFolders);
-    } catch (error) {
-      console.error(`Error fetching repository contents: ${error}`);
-    }
+async fetchRepositoryContents(repoName) {
+  this.selectedRepositoryName = repoName;
+  try {
+    const response = await axios.post(`${this.API_ENDPOINT}`, {
+      request: 'get_all_contents',
+      repo_name: this.selectedRepositoryName
+    });
+    this.filesAndFolders = response.data;
+    this.populateFilesDropdown(this.filesAndFolders);
+    this.toggleRepositoryContents(); // Add this line
+  } catch (error) {
+    console.error(`Error fetching repository contents: ${error}`);
   }
+}
 
   toggleRepositoryContents() {
     const elementsToToggle = ['fileDropdown', 'searchBar', 'createFileBtn'];
@@ -88,7 +94,7 @@ class RepoFileSelector {
   closeCreateNewFileModal() {
     this.createNewFileModalWindow.classList.add(this.HIDDEN_CLASS);
 }
-
+ 
   async submitFile() {
     if (!this.newFileNameInput.value || !this.newFileContentsInput.value) {
       alert('Please fill out all fields.');
@@ -113,13 +119,18 @@ class RepoFileSelector {
 
 const repoFileSelector = new RepoFileSelector();
 
-// On load
 window.onload = () => {
-  const repoFileSelector = new RepoFileSelector();
+document.getElementById('fetchFilesBtn').addEventListener('click', fetchFiles);
+
   feather.replace();
-  repoFileSelector.fetchRepositoryContents();
 
   document.getElementById('createNewFileButton').addEventListener('click', () => repoFileSelector.openCreateNewFileModal());
   document.getElementById('submitCreateFileButton').addEventListener('click', () => repoFileSelector.submitFile());
   document.getElementById('cancelButton').addEventListener('click', () => repoFileSelector.closeCreateNewFileModal());
+
+  // Add event listener to the chevron icon
+  document.getElementById('chevronIcon').addEventListener('click', () => {
+    const selectedRepoName = document.getElementById('selectedRepoName').value;
+    repoFileSelector.fetchRepositoryContents(selectedRepoName);
+  });
 };
