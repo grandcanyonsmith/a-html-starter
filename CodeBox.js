@@ -25,8 +25,9 @@ class RepositoryManager {
         codeElement.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
     }
 
-    async fetchFileContents(filePath, selectedRepositoryName) {
+    async fetchFileContents(selectedRepositoryName) {
         try {
+            const filePath = document.getElementById('fileTitle').textContent;
             const response = await axios.post(this.API_ENDPOINT, {
                 request: 'get_file_contents',
                 file_path: filePath,
@@ -70,7 +71,7 @@ class RepositoryManager {
                 filesDropdown.innerHTML += this.createFileElement(displayName);
                 if(index === 0) {
                     document.getElementById('fileTitle').textContent = displayName;
-                    this.fetchFileContents(content.path, document.getElementById('repoName').textContent);
+                    this.fetchFileContents(document.getElementById('repoName').textContent);
                 }
             }
             if(content.type === "dir") {
@@ -102,7 +103,7 @@ class RepositoryManager {
     changeTitleAndHide(title) {
         document.getElementById('fileTitle').textContent = title;
         document.getElementById('fileDropdown').classList.add('hidden');
-        this.fetchFileContents(title, document.getElementById('repoName').textContent);
+        this.fetchFileContents(document.getElementById('repoName').textContent);
     }
 
     toggleGithubRepositories() {
