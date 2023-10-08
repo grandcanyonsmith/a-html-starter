@@ -101,9 +101,12 @@ class RepositoryManager {
     }
 
     changeTitleAndHide(title) {
-        document.getElementById('fileTitle').textContent = title;
-        document.getElementById('fileDropdown').classList.add('hidden');
-        this.fetchFileContents(document.getElementById('repoName').textContent);
+        const fileTitle = document.getElementById('fileTitle');
+        if (fileTitle.textContent !== title) {
+            fileTitle.textContent = title;
+            document.getElementById('fileDropdown').classList.add('hidden');
+            this.fetchFileContents(document.getElementById('repoName').textContent);
+        }
     }
 
     toggleGithubRepositories() {
