@@ -89,4 +89,9 @@ window.onload = () => {
   githubRepoManager = new GithubRepoManager(); // Assign the instance to the global variable
   githubRepoManager.setupEventListeners();
   githubRepoManager.fetchGithubRepositories();
+
+  // Add event listener to the dropdown icon
+  document.getElementById('dropdownIcon').addEventListener('click', () => {
+    githubRepoManager.fetchGithubRepositories();
+  });
 };
