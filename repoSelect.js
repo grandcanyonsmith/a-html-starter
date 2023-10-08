@@ -9,6 +9,9 @@ class GithubRepoManager {
     this.searchInput = document.getElementById('searchInput');
     this.repoName = document.getElementById('repoName');
     this.fetchReposBtn = document.getElementById('fetchReposBtn');
+  }
+
+  setupEventListeners() {
     this.fetchReposBtn.addEventListener('click', () => this.toggleGithubRepositories());
     this.searchInput.addEventListener('keyup', () => this.filterRepositories());
   }
@@ -83,5 +86,6 @@ let githubRepoManager; // Declare it globally
 
 window.onload = () => {
   githubRepoManager = new GithubRepoManager(); // Assign the instance to the global variable
+  githubRepoManager.setupEventListeners();
   githubRepoManager.fetchGithubRepositories();
 };
