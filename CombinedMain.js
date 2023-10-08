@@ -18,5 +18,10 @@ window.onload = () => {
     });
   }
 
+  document.getElementById('showFileContentsBtn').addEventListener('click', () => {
+    const selectedRepoName = document.getElementById('selectedRepoName').value;
+    repoManager.fetchFileContents(selectedRepoName);
+  });
+
   window.githubRepoManager = new GithubRepoManager();
 };
