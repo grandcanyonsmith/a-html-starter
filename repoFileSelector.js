@@ -1,4 +1,9 @@
-// repoFileSelect.js
+function fetchFiles() {
+  const selectedRepoName = document.getElementById('repoName').textContent;
+  console.log(selectedRepoName);
+  repoFileSelector.fetchRepositoryContents(selectedRepoName);
+}
+
 class RepoFileSelector {
   constructor() {
     this.API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
@@ -8,6 +13,7 @@ class RepoFileSelector {
     this.createNewFileModalWindow = document.getElementById('createNewFileModalWindow');
     this.newFileContentsInput = document.getElementById('newFileContentsInput');
     this.newFileNameInput = document.getElementById('newFileNameInput');
+    this.changeTitleAndHide = this.changeTitleAndHide.bind(this);
   }
 
   async fetchRepositoryContents(repoName) {
@@ -39,9 +45,9 @@ class RepoFileSelector {
     contents.forEach((content, index) => {
       const displayName = this.extractFileNameFromPath(content.path);
       if(content.type === "file") {
-        filesDropdown.innerHTML += this.createFileElement(displayName, content.path);
+        filesDropdown.innerHTML += this.createFileElement(displayName);
         if(index === 0) {
-          this.changeTitleAndHide(displayName, content.path);
+          document.getElementById('fileTitle').textContent = displayName;
         }
       }
       if(content.type === "dir") {
@@ -55,15 +61,15 @@ class RepoFileSelector {
     return path.split('/').pop();
   }
 
-  createFileElement(fileName, filePath) {
-    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="repoFileSelector.changeTitleAndHide('${fileName}', '${filePath}')">${fileName}</a>`;
+  createFileElement(fileName) {
+    return `<a href="#" class="block px-4 py-2 text-sm hover:bg-gray-200" onclick="repoFileSelector.changeTitleAndHide('${fileName}')">${fileName}</a>`;
   }
 
   createDirectoryElement(directory) {
-    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); repoFileSelector.changeTitleAndHide('${this.extractFileNameFromPath(directory.path)}')">${this.extractFileNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
+    let directoryElement = `<div class="mt-1"><span class="flex items-center px-4 py-2 text-sm cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.children[1].classList.toggle('rotate-180'); this.changeTitleAndHide('${this.extractFileNameFromPath(directory.path)}')">${this.extractFileNameFromPath(directory.path)} <i data-feather="chevron-down" class="ml-1 w-4 h-4 transform"></i></span><div class="border-l-2 border-gray-200 pl-2 hidden">`;
     directory.contents.forEach(content => {
       if(content.type === "file") {
-        directoryElement += this.createFileElement(this.extractFileNameFromPath(content.path), content.path);
+        directoryElement += this.createFileElement(this.extractFileNameFromPath(content.path));
       }
       if(content.type === "dir") {
         directoryElement += this.createDirectoryElement(content);
@@ -73,9 +79,8 @@ class RepoFileSelector {
     return directoryElement;
   }
 
-  changeTitleAndHide(title, path) {
+  changeTitleAndHide(title) {
     document.getElementById('fileTitle').textContent = title;
-    document.getElementById('filePath').textContent = path;
     this.toggleRepositoryContents();
   }
 
@@ -115,8 +120,3 @@ class RepoFileSelector {
 }
 
 const repoFileSelector = new RepoFileSelector();
-
-function fetchFiles() {
-  const selectedRepoName = document.getElementById('repoName').textContent;
-  repoFileSelector.fetchRepositoryContents(selectedRepoName);
-}
