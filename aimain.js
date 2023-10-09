@@ -147,17 +147,19 @@ const ELEMENT_IDS = [
     }
   
     static updateUIAfterExecution() {
-      elements.runBtn.textContent = "Run";
-      elements.loader.classList.add("hidden");
+        elements.runBtn.innerHTML = '<i data-feather="play"></i>';
+        elements.loader.classList.add("hidden");
+        feather.replace(); // This line is needed to render the new icon
     }
   
     static updateUIBeforeSubmission() {
       elements.submitBtn.textContent = "Loading...";
     }
   
-    static updateUIAfterSubmission() {
-      elements.submitBtn.textContent = "Submit";
-      elements.loader.classList.add("hidden");
+     static updateUIAfterSubmission() {
+        elements.submitBtn.innerHTML = '<i data-feather="send"></i>';
+        elements.loader.classList.add("hidden");
+        feather.replace(); // This line is needed to render the new icon
     }
   
     static updateUIAfterResponse(updatedTab) {
@@ -166,19 +168,27 @@ const ELEMENT_IDS = [
     }
   }
   
-  class CodeRunner {
-    static async executeCode() {
-      try {
-        UI.updateUIBeforeExecution();
-        const data = await CodeRunner.runCode();
-        console.log(data,'data')
-        UI.displayOutputData(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        UI.updateUIAfterExecution();
+class CodeRunner {
+  static async executeCode() {
+    try {
+      UI.updateUIBeforeExecution();
+      const data = await CodeRunner.runCode();
+      
+      let dataString = '';
+      if (data) {
+        const { output, error } = data;
+        dataString = `Output:\n${output}\n\nError:\n${error}`;
+        console.log(dataString,'dataString');
       }
+
+      UI.switchToOutputView();
+      UI.displayOutputData(dataString);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      UI.updateUIAfterExecution();
     }
+  }
   
     static async runCode() {
       let filePath = elements.fileDropdown.value; // Get the file path from the dropdown
@@ -193,12 +203,21 @@ const ELEMENT_IDS = [
       return response.data;
     }
   
-    static displayOutputData(data) {
-      console.log(data,'data')
-      elements.outputBox.textContent = data;
-      UI.toggleView("outputBtn");
-    }
+static displayOutputData(data) {
+    // Parse the data
+    const parsedData = JSON.parse(data);
+
+    // Format the output and error messages
+    const formattedOutput = parsedData.output ? parsedData.output.replace(/\\n/g, '\n') : 'No output';
+    const formattedError = parsedData.error ? parsedData.error.replace(/\\n/g, '\n') : 'No error';
+    console.log(formattedOutput,'formattedOutput')
+    console.log(formattedError,'formattedError')
+
+    // Display the formatted data
+    elements.outputBox.textContent = `Output: ${formattedOutput}\nError: ${formattedError}`;
 }
+}
+
   
   class CodeSubmitter {
     static async submitCodeRequest() {
@@ -240,8 +259,8 @@ const ELEMENT_IDS = [
         // Remove the following line
         // CodeSubmitter.getFileContent(elements.fileDropdown.value);
         elements.saveBtn.classList.remove("hidden");
-        UI.toggleView("outputBtn"); // Add this line
-      }
+        UI.switchToSourceView(); // Add this line
+    }
   
     static handleFile(file) {
       let tab = CodeSubmitter.findTab(file.fileName);
@@ -292,7 +311,7 @@ const ELEMENT_IDS = [
       return tab;
     }
   
-    static async getFileContent(fileUrl) {
+        static async getFileContent(fileUrl) {
         const response = await axios.get(fileUrl);
         const fileExtension = fileUrl.split(".").pop();
         let language;
@@ -317,7 +336,7 @@ const ELEMENT_IDS = [
         elements.codeBox.textContent = response.data;
         Prism.highlightAll();
         UI.displayOutput(fileUrl, response.data, elements.outputBox); // Add this line
-        UI.switchToOutputView();
+        UI.switchToSourceView(); // Switch to source view after displaying the file content
     }
   }
   
@@ -404,7 +423,7 @@ const ELEMENT_IDS = [
       tabs.innerHTML = "";
     }
   
-    static handleFileSelection() {
+        static handleFileSelection() {
         CodeSubmitter.getFileContent(elements.fileDropdown.value);
         elements.runBtn.classList.toggle(
           "hidden",
@@ -414,8 +433,8 @@ const ELEMENT_IDS = [
         while (tabs.firstChild) {
           tabs.removeChild(tabs.firstChild);
         }
-        UI.switchToOutputView();
-      }
+        UI.switchToSourceView(); // Switch to source view instead of output view
+    }
     
     static async populateFileDropdown() {
       const {
@@ -429,21 +448,6 @@ const ELEMENT_IDS = [
       DropdownManager.populateDropdownWithResponseData(data);
     }
   
-//     static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
-//       const indent = "\u00A0\u00A0".repeat(depth * 2);
-//       data.forEach((item) => {
-//         const itemPath = parentPath ? `${parentPath}/${item.name}` : item.name;
-//         if (item.type === "file") {
-//           elements.fileDropdown.append(
-//             new Option(`${indent}📄 ${itemPath}`, item.download_url)
-//           );
-//         } else if (item.type === "dir") {
-//           elements.fileDropdown.append(new Option(`${indent}📁 ${itemPath}`, ""));
-//           DropdownManager.populateDropdownWithResponseData(item.contents, itemPath, depth + 1);
-//         }
-//       });
-//     }
-// }
 static populateDropdownWithResponseData(data, parentPath = "", depth = 0) {
     const indent = "\u00A0\u00A0".repeat(depth * 2);
     data.forEach((item) => {
@@ -502,6 +506,3 @@ class Main {
   }
   
   window.onload = Main.init;
-
-
-  
