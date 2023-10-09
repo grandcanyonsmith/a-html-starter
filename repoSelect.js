@@ -54,15 +54,21 @@ class GithubRepoManager {
 
     populateRepositoriesDropdown() {
         this.repoList.innerHTML = '';
-        this.repositories.forEach(repository => {
+        this.repositories.forEach((repository, index) => {
             const repoElement = this.createRepoElement(repository.name);
             this.repoList.appendChild(repoElement);
+            if (index < this.repositories.length - 1) {
+                const divider = document.createElement('hr');
+                divider.style.borderTop = '1px solid gray';
+                this.repoList.appendChild(divider);
+            }
         });
     }
 
     createRepoElement(repositoryName) {
         const repoElement = document.createElement('li');
         repoElement.textContent = repositoryName;
+        repoElement.style.listStyleType = 'none';
         repoElement.addEventListener('click', () => this.setSelectedRepository(repositoryName));
         return repoElement;
     }
