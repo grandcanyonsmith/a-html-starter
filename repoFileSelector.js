@@ -1,11 +1,4 @@
 // repoFileSelect.js
-const repoFileSelector = new RepoFileSelector();
-
-function fetchFiles() {
-  const selectedRepoName = document.getElementById('repoName').textContent;
-  repoFileSelector.fetchRepositoryContents(selectedRepoName);
-}
-
 class RepoFileSelector {
   constructor() {
     this.API_ENDPOINT = 'https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/';
@@ -119,4 +112,11 @@ class RepoFileSelector {
       alert('An error occurred while submitting the file. Please try again.');
     }
   }
+}
+
+const repoFileSelector = new RepoFileSelector();
+
+function fetchFiles() {
+  const selectedRepoName = document.getElementById('repoName').textContent;
+  repoFileSelector.fetchRepositoryContents(selectedRepoName);
 }
