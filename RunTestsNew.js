@@ -186,9 +186,9 @@ class RepositoryManager {
   }
 
   init() {
-    document.getElementById(SELECTORS.createNewFileButton).addEventListener("click", this.openCreateNewFileModal.bind(this));
-    document.getElementById(SELECTORS.submitCreateFileButton).addEventListener("click", this.submitFile.bind(this));
-    document.getElementById(SELECTORS.cancelButton).addEventListener("click", this.closeCreateNewFileModal.bind(this));
+    // document.getElementById(SELECTORS.createNewFileButton).addEventListener("click", this.openCreateNewFileModal.bind(this));
+    // document.getElementById(SELECTORS.submitCreateFileButton).addEventListener("click", this.submitFile.bind(this));
+    // document.getElementById(SELECTORS.cancelButton).addEventListener("click", this.closeCreateNewFileModal.bind(this));
     this.fetchRepositoryContents();
   }
 }
@@ -225,6 +225,14 @@ async function submit() {
     feather.replace(); // Re-initialize Feather Icons
   }
 }
+function escapeHtml(unsafe) {
+  return unsafe
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 async function runTests() {
   const testResult = document.getElementById('testResult');
@@ -234,16 +242,16 @@ async function runTests() {
   const runTestsBtn = document.getElementById('runTestsBtn');
   runTestsBtn.innerHTML = 'Running...'; // Change button text to 'Running...'
 
-  testResult.innerHTML = `Running Tests in EC2 instance`;
+  testResult.innerHTML = `<pre>Running Tests in EC2 instance</pre>`;
 
   try {
     const response = await axios.post(URLS.runCode, {
       code: codeBox.textContent,
       filePath: filePath
     });
-    let output = response.data.output.replace(/\n/g, '<br/>');
-    let error = response.data.error.replace(/\n/g, '<br/>');
-    testResult.innerHTML = `<span class="text-green-500">Output:</span><br/> ${output} <br/> <span class="text-red-500">Error:</span><br/> ${error}`;
+    let output = escapeHtml(response.data.output);
+    let error = escapeHtml(response.data.error);
+    testResult.innerHTML = `<pre>Output:\n ${output} \n Error:\n ${error}</pre>`;
   } catch (error) {
     console.error('Error:', error);
   } finally {
