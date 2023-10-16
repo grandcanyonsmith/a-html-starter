@@ -30,7 +30,23 @@
   #requestInput {
     color: #000000; /* This will change the text color to black */
   }
-
+  #fileDropdown {
+    font-size: 0.75rem; /* This will make the text smaller */
+    white-space: nowrap; /* This will prevent the text from wrapping to the next line */
+    overflow: hidden; /* This will hide any text that doesn't fit */
+    text-overflow: ellipsis; /* This will add the '...' at the end if the text doesn't fit */
+  }
+#fileTitle {
+  font-size: 0.75rem; /* This will make the text smaller */
+  white-space: nowrap; /* This will prevent the text from wrapping to the next line */
+  overflow: hidden; /* This will hide any text that doesn't fit */
+  text-overflow: ellipsis; /* This will add the '...' at the end if the text doesn't fit */
+}
+  #testResult {
+  font-size: 0.75rem; /* This will make the text smaller */
+  overflow-wrap: break-word; /* This will break the text to the next line even within words */
+  word-break: break-all; /* This will break words that are too long to fit */
+}
   </style>
 </head>
 
@@ -62,9 +78,6 @@
           <!-- Populated by JavaScript -->
         </nav>
         <div class="flex items-center justify-between px-5 py-2 hidden" id="createFileBtn">
-          <button id="createNewFileButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Create New File</button>
-          <button id="submitCreateFileButton">Submit</button>
-          <button id="cancelButton">Cancel</button>
         </div>
       </div>
     </div>
@@ -91,7 +104,8 @@
 </div>
     <div id="testResult" class="p-4 bg-gray-800 text-white rounded shadow mb-5"></div>
   </main>
-  <script src="RunTestsNew.js"></script>
+    <script src="RunTestsNew.js"></script>
+
 
 </body>
 
