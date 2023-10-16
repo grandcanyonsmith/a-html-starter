@@ -127,9 +127,10 @@ class RepositoryManager {
     this.fetchRepositoryContents();
   }
 }
+// Define repoManager in the global scope
+let repoManager;
 
-// On load
 window.onload = () => {
-  const repoManager = new RepositoryManager();
+  repoManager = new RepositoryManager();
   repoManager.init();
 };
