@@ -327,6 +327,36 @@ let repoManager;
 window.onload = () => {
   repoManager = new RepositoryManager();
   repoManager.init();
+  const commitModalContainer = document.getElementById("commitModalContainer");
+  const branchName = document.getElementById("branch-name");
+  const commitMessage = document.getElementById("commit-message");
+
+  function toggleCommitModal(isVisible) {
+    commitModalContainer.style.display = isVisible ? "block" : "none";
+  }
+
+  function commitChanges() {
+    alert(
+      `Branch Name: ${branchName.value}\nCommit Message: ${commitMessage.value}`
+    );
+    branchName.value = "";
+    commitMessage.value = "";
+    toggleCommitModal(false);
+  }
+
+  document
+    .getElementById("closeCommitModalBtn")
+    .addEventListener("click", () => toggleCommitModal(false));
+  document
+    .getElementById("cancelCommitModalBtn")
+    .addEventListener("click", () => toggleCommitModal(false));
+  document
+    .getElementById("commitChangesBtn")
+    .addEventListener("click", commitChanges);
+  document
+    .getElementById("saveBtn")
+    .addEventListener("click", () => toggleCommitModal(true));
+  toggleCommitModal(false);
   document.getElementById("submitBtn").addEventListener("click", submit);
   document.getElementById("saveBtn").classList.remove("hidden");
   document.getElementById("saveBtn").addEventListener("click", saveCode);
