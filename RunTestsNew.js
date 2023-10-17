@@ -1,7 +1,5 @@
-const API_ENDPOINT =
-  "https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/";
-const SUBMIT_REQUEST_API_ENDPOINT =
-  "https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/";
+const API_ENDPOINT = "https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/";
+const SUBMIT_REQUEST_API_ENDPOINT = "https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/";
 const HIDDEN_CLASS = "hidden";
 
 const SELECTORS = {
@@ -19,8 +17,7 @@ const SELECTORS = {
 };
 
 const URLS = {
-  runCode:
-    "https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/"
+  runCode: "https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/"
 };
 
 class RepositoryManager {
@@ -228,9 +225,6 @@ class RepositoryManager {
   }
 
   init() {
-    // document.getElementById(SELECTORS.createNewFileButton).addEventListener("click", this.openCreateNewFileModal.bind(this));
-    // document.getElementById(SELECTORS.submitCreateFileButton).addEventListener("click", this.submitFile.bind(this));
-    // document.getElementById(SELECTORS.cancelButton).addEventListener("click", this.closeCreateNewFileModal.bind(this));
     this.fetchRepositoryContents();
   }
 }
@@ -251,7 +245,7 @@ async function submit() {
   };
 
   const submitBtn = document.getElementById("submitBtn");
-  submitBtn.innerHTML = "Loading..."; // Change button text to 'Loading...'
+  submitBtn.innerHTML = "Loading..."; 
 
   try {
     const response = await axios.post(SUBMIT_REQUEST_API_ENDPOINT, data);
@@ -263,10 +257,11 @@ async function submit() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    submitBtn.innerHTML = '<i data-feather="send"></i>'; // Change button text back to the send icon
-    feather.replace(); // Re-initialize Feather Icons
+    submitBtn.innerHTML = '<i data-feather="send"></i>'; 
+    feather.replace(); 
   }
 }
+
 function escapeHtml(unsafe) {
   return unsafe
     .replace(/&/g, "&amp;")
@@ -282,7 +277,7 @@ async function runTests() {
   const filePath = document.getElementById(SELECTORS.filePath).textContent;
 
   const runTestsBtn = document.getElementById("runTestsBtn");
-  runTestsBtn.innerHTML = "Running..."; // Change button text to 'Running...'
+  runTestsBtn.innerHTML = "Running..."; 
 
   testResult.innerHTML = `<pre>Running Tests in EC2 instance</pre>`;
 
@@ -297,16 +292,16 @@ async function runTests() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    runTestsBtn.innerHTML = '<i data-feather="play"></i>'; // Change button text back to the play icon
-    feather.replace(); // Re-initialize Feather Icons
+    runTestsBtn.innerHTML = '<i data-feather="play"></i>'; 
+    feather.replace(); 
   }
 }
 
 async function saveCode() {
-  const repoName = "a-canyon-yb-tests"; // replace with actual repo name
+  const repoName = "a-canyon-yb-tests"; 
   const fileName = document.getElementById(SELECTORS.filePath).textContent;
-  const fileContents = document.getElementById("codeBox").textContent; // replace with actual file contents
-  const branchName = "master"; // replace with actual branch name if needed
+  const fileContents = document.getElementById("codeBox").textContent; 
+  const branchName = "master"; 
 
   const data = {
     repo_name: repoName,
@@ -320,7 +315,6 @@ async function saveCode() {
     const response = await axios.post(API_ENDPOINT, data);
     console.log(response.data);
 
-    // Set the branchName and commitMessage in the commit modal
     document.getElementById("branch-name").value = response.data.branchName;
     document.getElementById("commit-message").value = response.data.commitMessage;
 
@@ -328,6 +322,7 @@ async function saveCode() {
     console.error(`Error saving file: ${error}`);
   }
 }
+
 let repoManager;
 window.onload = () => {
   repoManager = new RepositoryManager();
@@ -344,7 +339,6 @@ window.onload = () => {
     alert(
       `Branch Name: ${branchName.value}\nCommit Message: ${commitMessage.value}`
     );
-
   }
 
   document
@@ -368,9 +362,9 @@ window.onload = () => {
   const branchName = document.getElementById("branch-name").value;
   const commitMessage = document.getElementById("commit-message").value;
 
-  const repoName = "a-canyon-yb-tests"; // replace with actual repo name
+  const repoName = "a-canyon-yb-tests"; 
   const fileName = document.getElementById(SELECTORS.filePath).textContent;
-  const fileContents = document.getElementById("codeBox").textContent; // replace with actual file contents
+  const fileContents = document.getElementById("codeBox").textContent; 
 
   const data = {
     repo_name: repoName,
@@ -391,5 +385,5 @@ window.onload = () => {
     commitMessage.value = "";
     toggleCommitModal(false);
 });
-  feather.replace(); // Add this line
+  feather.replace(); 
 };
