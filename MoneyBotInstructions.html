@@ -14,7 +14,7 @@
     <title>React App</title>
     <style>
       /* Your CSS styles here */
-      #instructions {
+      .instructions {
         white-space: pre-wrap; /* CSS3 */
         white-space: -moz-pre-wrap; /* Firefox */
         white-space: -pre-wrap; /* Opera <7 */
@@ -25,7 +25,7 @@
         border-radius: 5px; /* Added border radius */
         margin-bottom: 20px; /* Added margin */
       }
-      #edit-buttons {
+      .edit-buttons {
         display: none;
       }
     </style>
@@ -33,21 +33,20 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
       const API_URL = 'https://dl24ca4gcukndmqcceos3ypxce0uybno.lambda-url.us-west-2.on.aws/';
-      const instructionsBox = document.getElementById('instructions');
 
-      async function fetchInstructions() {
-        const instructionsBox = document.getElementById('instructions');
+      async function fetchInstructions(id) {
+        const instructionsBox = document.getElementById(`instructions${id}`);
         const data = {
           operation: 'get_row',
           key: {
-            id: 1,
+            id: id,
             version: 1
           }
         };
         try {
           const response = await axios.post(API_URL, data);
           if (response.status === 200) {
-            instructionsBox.innerText = response.data.prompt; // Change this line
+            instructionsBox.innerText = response.data.prompt; 
           } else {
             console.error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -56,14 +55,14 @@
         }
       }
 
-      async function sendInstructions() {
-        const instructionsBox = document.getElementById('instructions');
+      async function sendInstructions(id) {
+        const instructionsBox = document.getElementById(`instructions${id}`);
         const data = {
           operation: 'add_row',
           data: {
-            id: 1,
+            id: id,
             version: 1,
-            prompt: instructionsBox.innerText, // Change this line
+            prompt: instructionsBox.innerText, 
             timestamp: '2022-01-01T00:00:00'
           }
         };
@@ -71,7 +70,7 @@
           const response = await axios.post(API_URL, data);
           if (response.status === 200) {
             alert('Data sent successfully');
-            toggleEditButtons();
+            toggleEditButtons(id);
           } else {
             console.error(`Error: ${response.status} ${response.statusText}`);
           }
@@ -80,9 +79,9 @@
         }
       }
 
-      function toggleEditButtons() {
-        const editButtons = document.getElementById('edit-buttons');
-        const editIcon = document.getElementById('edit-icon');
+      function toggleEditButtons(id) {
+        const editButtons = document.getElementById(`edit-buttons${id}`);
+        const editIcon = document.getElementById(`edit-icon${id}`);
         if (editButtons.style.display === 'none') {
           editButtons.style.display = 'block';
           editIcon.style.display = 'none';
@@ -92,13 +91,16 @@
         }
       }
 
-      function editInstructions() {
-        const instructionsBox = document.getElementById('instructions');
+      function editInstructions(id) {
+        const instructionsBox = document.getElementById(`instructions${id}`);
         instructionsBox.contentEditable = true;
-        toggleEditButtons();
+        toggleEditButtons(id);
       }
 
-      window.onload = fetchInstructions;
+      window.onload = function() {
+        fetchInstructions(1);
+        fetchInstructions(2);
+      };
     </script>
   </head>
   <body>
@@ -125,13 +127,21 @@
     <div id="root">
       <div class="instructions-container">
         <div style="display: flex; justify-content: flex-end;">
-          <i id="edit-icon" class="fas fa-edit edit-icon" onclick="editInstructions()"></i>
-          <div id="edit-buttons" class="edit-buttons">
-            <button onclick="toggleEditButtons()">Cancel</button>
-            <button onclick="sendInstructions()">Save</button>
+          <i id="edit-icon1" class="fas fa-edit edit-icon" onclick="editInstructions(1)"></i>
+          <div id="edit-buttons1" class="edit-buttons">
+            <button onclick="toggleEditButtons(1)">Cancel</button>
+            <button onclick="sendInstructions(1)">Save</button>
           </div>
         </div>
-        <pre id="instructions"></pre>
+        <pre id="instructions1" class="instructions"></pre>
+        <div style="display: flex; justify-content: flex-end;">
+          <i id="edit-icon2" class="fas fa-edit edit-icon" onclick="editInstructions(2)"></i>
+          <div id="edit-buttons2" class="edit-buttons">
+            <button onclick="toggleEditButtons(2)">Cancel</button>
+            <button onclick="sendInstructions(2)">Save</button>
+          </div>
+        </div>
+        <pre id="instructions2" class="instructions"></pre>
       </div>
     </div>
   </body>
