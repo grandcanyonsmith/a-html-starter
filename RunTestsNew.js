@@ -312,13 +312,18 @@ async function saveCode() {
     repo_name: repoName,
     file_contents: fileContents,
     file_name: fileName,
-    request: "update",
+    request: "generate_branch_and_commit_message",
     branch_name: branchName
   };
   console.log(data, "data");
   try {
     const response = await axios.post(API_ENDPOINT, data);
     console.log(response.data);
+
+    // Set the branchName and commitMessage in the commit modal
+    document.getElementById("branch-name").value = response.data.branchName;
+    document.getElementById("commit-message").value = response.data.commitMessage;
+
   } catch (error) {
     console.error(`Error saving file: ${error}`);
   }
@@ -339,9 +344,7 @@ window.onload = () => {
     alert(
       `Branch Name: ${branchName.value}\nCommit Message: ${commitMessage.value}`
     );
-    branchName.value = "";
-    commitMessage.value = "";
-    toggleCommitModal(false);
+
   }
 
   document
@@ -361,5 +364,32 @@ window.onload = () => {
   document.getElementById("saveBtn").classList.remove("hidden");
   document.getElementById("saveBtn").addEventListener("click", saveCode);
   document.getElementById("runTestsBtn").addEventListener("click", runTests);
+  document.getElementById("commitChangesBtn").addEventListener("click", async () => {
+  const branchName = document.getElementById("branch-name").value;
+  const commitMessage = document.getElementById("commit-message").value;
+
+  const repoName = "a-canyon-yb-tests"; // replace with actual repo name
+  const fileName = document.getElementById(SELECTORS.filePath).textContent;
+  const fileContents = document.getElementById("codeBox").textContent; // replace with actual file contents
+
+  const data = {
+    repo_name: repoName,
+    file_contents: fileContents,
+    file_name: fileName,
+    branchName: branchName,
+    commitMessage: commitMessage,
+    request: "update"
+  };
+  console.log(data,'data')
+  try {
+    const response = await axios.post(API_ENDPOINT, data);
+    console.log(response.data);
+  } catch (error) {
+    console.error(`Error committing changes: ${error}`);
+  }
+    branchName.value = "";
+    commitMessage.value = "";
+    toggleCommitModal(false);
+});
   feather.replace(); // Add this line
 };
