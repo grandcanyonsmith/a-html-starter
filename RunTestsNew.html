@@ -16,38 +16,56 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
-    <style>
+  <style>
     #runBtn {
-  background-color: #1a202c; /* This is the background color of the page */
-  color: #ffffff; /* This is the color of the icon */
-}
+      background-color: #1a202c;
+      /* This is the background color of the page */
+      color: #ffffff;
+      /* This is the color of the icon */
+    }
 
-#runBtn:hover {
-  background-color: #2d3748; /* This is the hover color */
-}
-      
+    #runBtn:hover {
+      background-color: #2d3748;
+      /* This is the hover color */
+    }
 
-  #requestInput {
-    color: #000000; /* This will change the text color to black */
-  }
-  #fileDropdown {
-    font-size: 0.75rem; /* This will make the text smaller */
-    white-space: nowrap; /* This will prevent the text from wrapping to the next line */
-    overflow: hidden; /* This will hide any text that doesn't fit */
-    text-overflow: ellipsis; /* This will add the '...' at the end if the text doesn't fit */
-  }
-#fileTitle {
-  font-size: 0.75rem; /* This will make the text smaller */
-  white-space: nowrap; /* This will prevent the text from wrapping to the next line */
-  overflow: hidden; /* This will hide any text that doesn't fit */
-  text-overflow: ellipsis; /* This will add the '...' at the end if the text doesn't fit */
-}
-  #testResult {
-  font-size: 0.75rem; /* This will make the text smaller */
-  overflow-wrap: break-word; /* This will break the text to the next line even within words */
-  word-break: break-all; /* This will break words that are too long to fit */
-}
+    #requestInput {
+      color: #000000;
+      /* This will change the text color to black */
+    }
+
+    #fileDropdown {
+      font-size: 0.75rem;
+      /* This will make the text smaller */
+      white-space: nowrap;
+      /* This will prevent the text from wrapping to the next line */
+      overflow: hidden;
+      /* This will hide any text that doesn't fit */
+      text-overflow: ellipsis;
+      /* This will add the '...' at the end if the text doesn't fit */
+    }
+
+    #fileTitle {
+      font-size: 0.75rem;
+      /* This will make the text smaller */
+      white-space: nowrap;
+      /* This will prevent the text from wrapping to the next line */
+      overflow: hidden;
+      /* This will hide any text that doesn't fit */
+      text-overflow: ellipsis;
+      /* This will add the '...' at the end if the text doesn't fit */
+    }
+
+    #testResult {
+      font-size: 0.75rem;
+      /* This will make the text smaller */
+      overflow-wrap: break-word;
+      /* This will break the text to the next line even within words */
+      word-break: break-all;
+      /* This will break words that are too long to fit */
+    }
   </style>
+
 </head>
 
 <body class="flex flex-col h-screen text-white bg-gray-900">
@@ -84,23 +102,63 @@
     <input type="hidden" id="repoName" value="a-html-starter">
     <pre><code id="codeBox" class="language-python w-full h-64 bg-gray-800"></code></pre>
     <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
-<div class="flex justify-between mt-4">
-  <input type="text" id="requestInput" placeholder="Enter request..." class="w-full mr-2 py-2 px-4 rounded shadow-lg">
-  <div class="flex">
-    <button id="submitBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded mr-2">
-      <i data-feather="send"></i>
-    </button>
-    <button id="saveBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
-    Save
-</button>
-    <button id="runTestsBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow text-sm">
-      <i data-feather="play"></i>
-    </button>
-  </div>
-  <div id="loader" class="hidden absolute h-5 w-5 border-t-2 border-white rounded-full animate-spin"></div>
-</div>
+    <div class="flex justify-between mt-4">
+      <input type="text" id="requestInput" placeholder="Enter request..." class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+      <div class="flex">
+        <button id="submitBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded mr-2">
+          <i data-feather="send"></i>
+        </button>
+        <button id="saveBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right">
+          Save
+        </button>
+        <button id="runTestsBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow text-sm">
+          <i data-feather="play"></i>
+        </button>
+      </div>
+      <div id="loader" class="hidden absolute h-5 w-5 border-t-2 border-white rounded-full animate-spin"></div>
+    </div>
     <div id="testResult" class="p-4 bg-gray-800 text-white rounded shadow mb-5"></div>
   </main>
-      <script src="RunTestsNew.js"></script>
+
+  <div class="relative z-10" id="commitModalContainer" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-0">
+          <div class="flex justify-between items-center px-4 pt-4">
+            <h2 class="text-lg font-bold leading-6 text-gray-900">Commit Changes</h2>
+            <button id="closeCommitModalBtn" type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+              <span class="sr-only">Close</span>
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <hr class="border-gray-300 my-2 w-full">
+          <div class="bg-white pt-5 sm:p-0 sm:pb-4">
+            <div class="sm:flex sm:items-start flex-col-reverse">
+              <div class="mt-3 text-center sm:mt-0 sm:text-left px-4">
+                <div class="relative w-full">
+                  <label for="branch-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Branch</label>
+                  <input id="branch-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+                </div>
+                <div class="relative w-full mt-3">
+                  <label for="commit-message" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
+                  <textarea id="commit-message" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" rows="4"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray-50 p-4 sm:flex sm:flex-row-reverse" style="margin: 0;">
+            <button id="commitChangesBtn" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto">Commit Changes</button>
+            <button id="cancelCommitModalBtn" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+        <script src="RunTestsNew.js"></script>
+
 </body>
+
 </html>
