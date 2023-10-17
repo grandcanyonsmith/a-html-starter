@@ -25,6 +25,9 @@
         border-radius: 5px; /* Added border radius */
         margin-bottom: 20px; /* Added margin */
       }
+      #edit-buttons {
+        display: none;
+      }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -33,62 +36,67 @@
       const instructionsBox = document.getElementById('instructions');
 
       async function fetchInstructions() {
-  const instructionsBox = document.getElementById('instructions');
-  const data = {
-    operation: 'get_row',
-    key: {
-      id: 1,
-      version: 1
-    }
-  };
-  try {
-    const response = await axios.post(API_URL, data);
-    if (response.status === 200) {
-      instructionsBox.innerText = response.data.prompt; // Change this line
-    } else {
-      console.error(`Error: ${response.status} ${response.statusText}`);
-    }
-  } catch (error) {
-    console.error(`Error: ${error}`);
-  }
-}
+        const instructionsBox = document.getElementById('instructions');
+        const data = {
+          operation: 'get_row',
+          key: {
+            id: 1,
+            version: 1
+          }
+        };
+        try {
+          const response = await axios.post(API_URL, data);
+          if (response.status === 200) {
+            instructionsBox.innerText = response.data.prompt; // Change this line
+          } else {
+            console.error(`Error: ${response.status} ${response.statusText}`);
+          }
+        } catch (error) {
+          console.error(`Error: ${error}`);
+        }
+      }
 
       async function sendInstructions() {
-  const instructionsBox = document.getElementById('instructions');
-  const data = {
-    operation: 'add_row',
-    data: {
-      id: 1,
-      version: 1,
-      prompt: instructionsBox.innerText, // Change this line
-      timestamp: '2022-01-01T00:00:00'
-    }
-  };
-  try {
-    const response = await axios.post(API_URL, data);
-    if (response.status === 200) {
-      alert('Data sent successfully');
-    } else {
-      console.error(`Error: ${response.status} ${response.statusText}`);
-    }
-  } catch (error) {
-    console.error(`Error: ${error}`);
-  }
-}
-      function toggleEditButtons() {
-  const editButtons = document.getElementById('edit-buttons');
-  if (editButtons.style.display === 'none') {
-    editButtons.style.display = 'block';
-  } else {
-    editButtons.style.display = 'none';
-  }
-}
+        const instructionsBox = document.getElementById('instructions');
+        const data = {
+          operation: 'add_row',
+          data: {
+            id: 1,
+            version: 1,
+            prompt: instructionsBox.innerText, // Change this line
+            timestamp: '2022-01-01T00:00:00'
+          }
+        };
+        try {
+          const response = await axios.post(API_URL, data);
+          if (response.status === 200) {
+            alert('Data sent successfully');
+            toggleEditButtons();
+          } else {
+            console.error(`Error: ${response.status} ${response.statusText}`);
+          }
+        } catch (error) {
+          console.error(`Error: ${error}`);
+        }
+      }
 
-function editInstructions() {
-  const instructionsBox = document.getElementById('instructions');
-  instructionsBox.contentEditable = true;
-  toggleEditButtons();
-}
+      function toggleEditButtons() {
+        const editButtons = document.getElementById('edit-buttons');
+        const editIcon = document.getElementById('edit-icon');
+        if (editButtons.style.display === 'none') {
+          editButtons.style.display = 'block';
+          editIcon.style.display = 'none';
+        } else {
+          editButtons.style.display = 'none';
+          editIcon.style.display = 'block';
+        }
+      }
+
+      function editInstructions() {
+        const instructionsBox = document.getElementById('instructions');
+        instructionsBox.contentEditable = true;
+        toggleEditButtons();
+      }
 
       window.onload = fetchInstructions;
     </script>
