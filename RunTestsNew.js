@@ -22,7 +22,8 @@ const URLS = {
 
 class RepositoryManager {
   constructor() {
-    this.selectedRepositoryName = "a-canyon-yb-tests";
+    // this.selectedRepositoryName = "a-canyon-yb-tests";
+    this.selectedRepositoryName = "yb-automation-tests";
     this.filesAndFolders = [];
   }
 
@@ -233,7 +234,8 @@ async function submit() {
   const codeBox = document.getElementById("codeBox");
   const requestInput = document.getElementById("requestInput");
   const fileName = document.getElementById(SELECTORS.filePath).textContent;
-  const repoName = "a-canyon-yb-tests";
+  // const repoName = "a-canyon-yb-tests";
+  const repoName = "yb-automation-tests";
   const code = codeBox.textContent;
   const request = requestInput.value;
 
@@ -298,7 +300,9 @@ async function runTests() {
 }
 
 async function saveCode() {
-  const repoName = "a-canyon-yb-tests"; 
+  // const repoName = "a-canyon-yb-tests"; 
+  const repoName = "yb-automation-tests"; 
+  
   const fileName = document.getElementById(SELECTORS.filePath).textContent;
   const fileContents = document.getElementById("codeBox").textContent; 
   const branchName = "master"; 
@@ -362,7 +366,8 @@ window.onload = () => {
   const branchName = document.getElementById("branch-name").value;
   const commitMessage = document.getElementById("commit-message").value;
 
-  const repoName = "a-canyon-yb-tests"; 
+  // const repoName = "a-canyon-yb-tests"; 
+  const repoName = "yb-automation-tests"; 
   const fileName = document.getElementById(SELECTORS.filePath).textContent;
   const fileContents = document.getElementById("codeBox").textContent; 
 
