@@ -2,13 +2,28 @@
 <html>
 <head>
     <title>Dolphins</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.2/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
             background: linear-gradient(to right, lightblue, blue);
         }
+        .error {
+            border: 1px solid red;
+        }
     </style>
     <script src="submitPhoneDetails.js"></script>
+    <script>
+        function validateForm(event) {
+            var phoneInput = document.forms["contactForm"]["phone"];
+            var phone = phoneInput.value;
+            var phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone)) {
+                phoneInput.classList.add("error");
+                event.preventDefault();
+            }
+        }
+    </script>
 </head>
 <body>
     <nav class="flex items-center justify-between p-6 bg-blue-500">
@@ -16,10 +31,8 @@
             <a href="#contact" class="px-4">Contact Us</a>
         </div>
     </nav>
-    <h1 id="about">About Dolphins</h1>
-    <p>Dolphins are highly intelligent marine mammals known for their playful and social behavior. They belong to the family Delphinidae and are found worldwide, mostly in shallow seas.</p>
     <div id="contact" class="w-full flex justify-center">
-        <form name="contactForm" onsubmit="validateForm(event)" class="w-1/2 mt-10">
+        <form name="contactForm" onsubmit="validateForm(event)" class="w-full md:w-1/2 mt-10">
             <input type="text" name="name" placeholder="Name" class="w-full p-2 mb-4" required>
             <input type="email" name="email" placeholder="Email" class="w-full p-2 mb-4" required>
             <input type="text" name="phone" placeholder="Phone Number" class="w-full p-2 mb-4" required>
