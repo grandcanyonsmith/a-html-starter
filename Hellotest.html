@@ -8,30 +8,18 @@
             background: linear-gradient(to right, lightblue, blue);
         }
     </style>
-    <script>
-        function validateForm() {
-            var x = document.forms["contactForm"]["phone"].value;
-            var regex = /^[0-9-+]+$/;
-            if (!x.match(regex)) {
-                alert("Phone number must be valid");
-                return false;
-            } else {
-                document.forms["contactForm"].reset();
-            }
-        }
-    </script>
+    <script src="submitPhoneDetails.js"></script>
 </head>
 <body>
     <nav class="flex items-center justify-between p-6 bg-blue-500">
         <div class="text-white text-lg">
-            <a href="#about" class="px-4">About Dolphins</a>
             <a href="#contact" class="px-4">Contact Us</a>
         </div>
     </nav>
     <h1 id="about">About Dolphins</h1>
     <p>Dolphins are highly intelligent marine mammals known for their playful and social behavior. They belong to the family Delphinidae and are found worldwide, mostly in shallow seas.</p>
     <div id="contact" class="w-full flex justify-center">
-        <form name="contactForm" onsubmit="return validateForm()" class="w-1/2 mt-10">
+        <form name="contactForm" onsubmit="validateForm(event)" class="w-1/2 mt-10">
             <input type="text" name="name" placeholder="Name" class="w-full p-2 mb-4" required>
             <input type="email" name="email" placeholder="Email" class="w-full p-2 mb-4" required>
             <input type="text" name="phone" placeholder="Phone Number" class="w-full p-2 mb-4" required>
