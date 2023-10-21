@@ -255,15 +255,18 @@ const ELEMENT_IDS = [
             var oldLog = console.log;
             console.log = function(message) {
               oldLog.apply(console, arguments);
-              window.parent.postMessage({type: 'log', message: message}, "*");
+              // Convert message to a string before passing it to postMessage
+              window.parent.postMessage({type: 'log', message: JSON.stringify(message)}, "*");
             };
 
             window.onerror = function(message, source, lineno, colno, error) {
-              window.parent.postMessage({type: 'error', message: message}, "*");
+              // Convert error to a string before passing it to postMessage
+              window.parent.postMessage({type: 'error', message: JSON.stringify(message)}, "*");
             };
 
             window.onunhandledrejection = function(event) {
-              window.parent.postMessage({type: 'error', message: event.reason}, "*");
+              // Convert event.reason to a string before passing it to postMessage
+              window.parent.postMessage({type: 'error', message: JSON.stringify(event.reason)}, "*");
             };
           })();
         </script>
