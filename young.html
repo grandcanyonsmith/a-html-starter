@@ -136,32 +136,27 @@
   });
 
   document.getElementById('outputBtn').addEventListener('click', function() {
-    var code = document.getElementById('codeBox').textContent;
-    var logAndDisplayFunction = `
-      (function() {
-        var oldLog = console.log;
-        console.log = function(message) {
-          oldLog.apply(console, arguments);
-          document.getElementById('consoleBox').textContent += message + '\\n';
-        };
-      })();
-    `;
-    code = logAndDisplayFunction + code;
-    document.getElementById('outputBox').innerHTML = code;
-    document.getElementById('consoleBox').classList.add('hidden');
-    document.getElementById('codeBox').classList.add('hidden');
-    document.getElementById('outputBox').classList.remove('hidden');
-  });
+  var code = document.getElementById('codeBox').textContent;
+  var iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  iframe.contentWindow.document.write('<script>console.log = function(message) { window.parent.document.getElementById("consoleBox").textContent += message + "\\n"; };<\/script>');
+  iframe.contentWindow.document.write(code.replace(/<\/script>/g, '<\\/script>'));
+  document.getElementById('outputBox').innerHTML = iframe.outerHTML;
+  document.getElementById('consoleBox').classList.add('hidden');
+  document.getElementById('codeBox').classList.add('hidden');
+  document.getElementById('outputBox').classList.remove('hidden');
+});
 
-  document.getElementById('sourceBtn').addEventListener('click', function() {
-    document.getElementById('consoleBox').classList.add('hidden');
-    document.getElementById('codeBox').classList.remove('hidden');
-    document.getElementById('outputBox').classList.add('hidden');
-  });
+document.getElementById('sourceBtn').addEventListener('click', function() {
+  document.getElementById('consoleBox').classList.add('hidden');
+  document.getElementById('codeBox').classList.remove('hidden');
+  document.getElementById('outputBox').classList.add('hidden');
+});
 
-  setInterval(function() {
-    // Check for new logs and update console box
-    // ...
-  }, 1000);  // Check every second
+setInterval(function() {
+  // Check for new logs and update console box
+  // ...
+}, 1000);  // Check every second
 </script>
 </body>
