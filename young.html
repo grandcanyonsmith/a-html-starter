@@ -19,6 +19,11 @@
     #codeBox {
       font-size: 0.8em;
     }
+        #consoleBox {
+      width: 100%;
+      overflow: auto;
+      white-space: pre-wrap; /* To preserve line breaks and spaces */
+    }
   </style>
 </head>
 
@@ -46,6 +51,7 @@
     <div id="tabs" class="flex overflow-x-auto mb-4"></div>
     <pre id="codeBox" class="w-full h-screen bg-white rounded shadow-lg p-4 language-html"></pre>
     <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
+    <div id="consoleBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
     <div class="flex justify-between mt-4">
       <textarea id="textBox" class="border-2 border-blue-500 p-2 inline-block mt-4 mr-2 w-full"></textarea>
       <div class="flex flex-col justify-between h-full">
@@ -126,14 +132,15 @@
     // Custom console.log function
     function customLog(message) {
       console.log(message);
-      document.getElementById('outputBox').innerHTML += message + '<br>';
+      document.getElementById('consoleBox').textContent += message + '\n';
     }
 
     // Attach customLog function to consoleBtn click event
     document.getElementById('consoleBtn').addEventListener('click', function() {
       customLog('Console logs');
+      document.getElementById('consoleBox').classList.remove('hidden');
+      document.getElementById('codeBox').classList.add('hidden');
+      document.getElementById('outputBox').classList.add('hidden');
     });
   </script>
 </body>
-
-</html>
