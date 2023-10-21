@@ -153,6 +153,20 @@
   });
 
   document.getElementById('outputBtn').addEventListener('click', function() {
+    var code = document.getElementById('codeBox').textContent;
+    var script = `
+        <script>
+            (function(){
+                var oldLog = console.log;
+                console.log = function () {
+                    var message = Array.prototype.join.call(arguments, " ");
+                    window.parent.postMessage(message, "*");
+                    oldLog.apply(console, arguments);
+                };
+            })();
+        <\/script>
+    `;
+    document.getElementById('outputBox').innerHTML = code + script;
     document.getElementById('consoleBox').classList.add('hidden');
     document.getElementById('codeBox').classList.add('hidden');
     document.getElementById('outputBox').classList.remove('hidden');
@@ -163,6 +177,10 @@
     document.getElementById('codeBox').classList.remove('hidden');
     document.getElementById('outputBox').classList.add('hidden');
   });
+
+  window.addEventListener('message', function(event) {
+    document.getElementById('consoleBox').textContent += event.data + '\n';
+  }, false);
 
   setInterval(function() {
     // Check for new logs and update console box
