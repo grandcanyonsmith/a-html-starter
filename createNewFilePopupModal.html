@@ -76,6 +76,8 @@
         var branchName = document.getElementById('branch-name').value;
         var commitMessage = document.getElementById('commit-message').value;
 
+        document.getElementById('createFileBtn').innerText = 'Creating File...';
+
         axios.post('https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/', {
             file_name: fileName,
             file_contents: fileContent,
@@ -86,9 +88,16 @@
         })
         .then(function (response) {
             console.log(response);
+            document.getElementById('file-name').value = '';
+            document.getElementById('file-content').value = '';
+            document.getElementById('branch-name').value = '';
+            document.getElementById('commit-message').value = '';
+            document.getElementById('createFileModalContainer').style.display = 'none';
+            document.getElementById('createFileBtn').innerText = 'Create File';
         })
         .catch(function (error) {
             console.log(error);
+            document.getElementById('createFileBtn').innerText = 'Create File';
         });
     });
 </script>
