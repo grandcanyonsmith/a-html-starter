@@ -121,26 +121,26 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
   <script>
-    function openModal() {
-      document.getElementById('myModal').style.display = 'block';
-    }
-
-    function closeModal() {
-      document.getElementById('myModal').style.display = 'none';
-    }
-
-    // Custom console.log function
-    function customLog(message) {
-      console.log(message);
+  (function(){
+    var oldLog = console.log;
+    console.log = function (message) {
       document.getElementById('consoleBox').textContent += message + '\n';
-    }
+      oldLog.apply(console, arguments);
+    };
+  })();
 
-    // Attach customLog function to consoleBtn click event
-    document.getElementById('consoleBtn').addEventListener('click', function() {
-      customLog('Console logs');
-      document.getElementById('consoleBox').classList.remove('hidden');
-      document.getElementById('codeBox').classList.add('hidden');
-      document.getElementById('outputBox').classList.add('hidden');
-    });
-  </script>
+  function openModal() {
+    document.getElementById('myModal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('myModal').style.display = 'none';
+  }
+
+  document.getElementById('consoleBtn').addEventListener('click', function() {
+    document.getElementById('consoleBox').classList.remove('hidden');
+    document.getElementById('codeBox').classList.add('hidden');
+    document.getElementById('outputBox').classList.add('hidden');
+  });
+</script>
 </body>
