@@ -161,6 +161,11 @@
       document.getElementById('codeBox').classList.add('hidden');
       document.getElementById('outputBox').classList.remove('hidden');
     });
+    document.getElementById('sourceBtn').addEventListener('click', function() {
+      document.getElementById('consoleBox').classList.add('hidden');
+      document.getElementById('codeBox').classList.remove('hidden');
+      document.getElementById('outputBox').classList.add('hidden');
+    });
     window.addEventListener('message', function(event) {
       if (event.data.type === 'log') {
         document.getElementById('consoleBox').textContent += 'LOG: ' + event.data.message + "\n";
@@ -173,3 +178,5 @@
   </script>
 
 </body>
+
+</html>
