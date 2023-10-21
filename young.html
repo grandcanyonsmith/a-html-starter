@@ -143,5 +143,17 @@
     document.getElementById('codeBox').classList.add('hidden');
     document.getElementById('outputBox').classList.add('hidden');
   });
+
+  document.getElementById('outputBtn').addEventListener('click', function() {
+    document.getElementById('consoleBox').classList.add('hidden');
+    document.getElementById('codeBox').classList.add('hidden');
+    document.getElementById('outputBox').classList.remove('hidden');
+  });
+
+  document.getElementById('sourceBtn').addEventListener('click', function() {
+    document.getElementById('consoleBox').classList.add('hidden');
+    document.getElementById('codeBox').classList.remove('hidden');
+    document.getElementById('outputBox').classList.add('hidden');
+  });
 </script>
 </body>
