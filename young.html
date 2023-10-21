@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Enhanced Code Editor</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script type="module" src="main.js"></script>
+  <style>
+    #outputBox {
+      width: 100%;
+      overflow: auto;
+    }
+    #codeBox {
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
+  <div class="container mx-auto p-4">
+    <div class="flex justify-start mb-4">
+      <button id="outputBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg border-r-0">
+        <i data-feather="eye"></i>
+      </button>
+      <button id="sourceBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg">
+        <i data-feather="code"></i>
+      </button>
+      <button id="consoleBtn" class="px-4 py-2 font-bold text-gray-600 bg-gray-200 hover:bg-gray-300 rounded-t-lg">
+        <i data-feather="terminal"></i>
+      </button>
+    </div>
+    <div class="flex justify-between mb-4">
+      <select id="repoDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+        <option>Select a repo</option>
+      </select>
+      <select id="fileDropdown" class="w-full mr-2 py-2 px-4 rounded shadow-lg">
+        <option>Select a file</option>
+      </select>
+    </div>
+    <div id="tabs" class="flex overflow-x-auto mb-4"></div>
+    <pre id="codeBox" class="w-full h-screen bg-white rounded shadow-lg p-4 language-html"></pre>
+    <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
+    <div class="flex justify-between mt-4">
+      <textarea id="textBox" class="border-2 border-blue-500 p-2 inline-block mt-4 mr-2 w-full"></textarea>
+      <div class="flex flex-col justify-between h-full">
+        <button onclick="openModal()" class="p-1">
+          <i data-feather="plus" class="h-4 w-4"></i>
+        </button>
+        <button id="submitBtn" class="p-1">
+          <i data-feather="send" class="h-4 w-4"></i>
+        </button>
+        <button id="saveBtn" class="p-1">
+          <i data-feather="save" class="h-4 w-4"></i>
+        </button>
+      </div>
+      <button id="runBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right hidden">
+        Run
+      </button>
+      <div id="loader" class="hidden absolute h-5 w-5 border-t-2 border-white rounded-full animate-spin"></div>
+    </div>
+  </div>
+
+  <!-- Modal Popup -->
+  <div id="myModal" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+      <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+      <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+              <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                Select a reference file
+              </h3>
+              <div class="mt-2">
+                <div>
+                  <label id="listbox-label" class="block text-sm font-medium leading-6 text-gray-900">Select a Repo</label>
+                  <div class="relative mt-2">
+                    <select id="repoOptions" class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      <option value="">Select...</option>
+                    </select>
+                  </div>
+                  <label id="listbox-label" class="block text-sm font-medium leading-6 text-gray-900">Select a File</label>
+                  <div class="relative mt-2">
+                    <select id="options" class="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6" onchange="newDropDownManager.handleFileSelection()">
+                      <option value="">Select...</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button type="button" onclick="closeModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+  <script>
+    function openModal() {
+      document.getElementById('myModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('myModal').style.display = 'none';
+    }
+
+    // Custom console.log function
+    function customLog(message) {
+      console.log(message);
+      document.getElementById('outputBox').innerHTML += message + '<br>';
+    }
+
+    // Attach customLog function to consoleBtn click event
+    document.getElementById('consoleBtn').addEventListener('click', function() {
+      customLog('Console logs');
+    });
+  </script>
+</body>
+
+</html>
