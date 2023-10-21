@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        #createFileModalContainer {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<button id="openModalBtn" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">+ Create New File</button>
+<div class="relative z-10" id="createFileModalContainer" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-0">
+                <div class="flex justify-between items-center px-4 pt-4">
+                    <h2 class="text-lg font-bold leading-6 text-gray-900">Create New File</h2>
+                    <button id="closeCreateFileModalBtn" type="button" class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        <span class="sr-only">Close</span>
+                        <svg class="icon h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                <hr class="border-gray-300 my-2 w-full">
+                <div class="bg-white pt-5 sm:p-0 sm:pb-4">
+                    <div class="sm:flex sm:items-start flex-col-reverse">
+                        <div class="mt-3 text-center sm:mt-0 sm:text-left px-4">
+                            <div class="relative w-full">
+                                <label for="file-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">File Name</label>
+                                <input id="file-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+                                <label for="file-content" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">File Content</label>
+                                <textarea id="file-content" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                                <label for="branch-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Branch Name</label>
+                                <input id="branch-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+                                <label for="commit-message" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
+                                <input id="commit-message" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-4 sm:flex sm:flex-row-reverse" style="margin: 0;">
+                    <button id="createFileBtn" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto">Create File</button>
+                    <button id="cancelCreateFileModalBtn" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('openModalBtn').addEventListener('click', function() {
+        document.getElementById('createFileModalContainer').style.display = 'block';
+    });
+
+    document.getElementById('closeCreateFileModalBtn').addEventListener('click', function() {
+        document.getElementById('createFileModalContainer').style.display = 'none';
+    });
+
+    document.getElementById('cancelCreateFileModalBtn').addEventListener('click', function() {
+        document.getElementById('createFileModalContainer').style.display = 'none';
+    });
+</script>
+</body>
+</html>
