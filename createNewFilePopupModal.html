@@ -7,6 +7,7 @@
             display: none;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
 <button id="openModalBtn" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">+ Create New File</button>
@@ -28,17 +29,23 @@
                 <div class="bg-white pt-5 sm:p-0 sm:pb-4">
                     <div class="sm:flex sm:items-start flex-col-reverse">
                         <div class="mt-3 text-center sm:mt-0 sm:text-left px-4">
-                            <div class="relative w-full">
-                                <label for="file-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">File Name</label>
-                                <input id="file-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
-                                <label for="file-content" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">File Content</label>
-                                <textarea id="file-content" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
-                                <label for="branch-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Branch Name</label>
-                                <input id="branch-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
-                                <label for="commit-message" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
-                                <input id="commit-message" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
-                            </div>
-                        </div>
+    <div class="relative w-full mb-4">
+        <label for="file-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">File Name</label>
+        <input id="file-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+    </div>
+    <div class="relative w-full mb-4">
+        <label for="file-content" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">File Content</label>
+        <textarea id="file-content" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+    </div>
+    <div class="relative w-full mb-4">
+        <label for="branch-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Branch Name</label>
+        <input id="branch-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+    </div>
+    <div class="relative w-full mb-4">
+        <label for="commit-message" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
+        <input id="commit-message" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+    </div>
+</div>
                     </div>
                 </div>
                 <div class="bg-gray-50 p-4 sm:flex sm:flex-row-reverse" style="margin: 0;">
@@ -61,6 +68,28 @@
 
     document.getElementById('cancelCreateFileModalBtn').addEventListener('click', function() {
         document.getElementById('createFileModalContainer').style.display = 'none';
+    });
+
+    document.getElementById('createFileBtn').addEventListener('click', function() {
+        var fileName = document.getElementById('file-name').value;
+        var fileContent = document.getElementById('file-content').value;
+        var branchName = document.getElementById('branch-name').value;
+        var commitMessage = document.getElementById('commit-message').value;
+
+        axios.post('https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/', {
+            file_name: fileName,
+            file_contents: fileContent,
+            repo_name: "yb-automation-tests",
+            branch_name: branchName,
+            commit_message: commitMessage,
+            key_request: "create_new_file"
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     });
 </script>
 </body>
