@@ -130,6 +130,14 @@
     };
   })();
 
+  window.onerror = function(message, source, lineno, colno, error) {
+    document.getElementById('consoleBox').textContent += `Error: ${message}\n`;
+  };
+
+  window.onunhandledrejection = function(event) {
+    document.getElementById('consoleBox').textContent += `Unhandled Promise Rejection: ${event.reason}\n`;
+  };
+
   function openModal() {
     document.getElementById('myModal').style.display = 'block';
   }
