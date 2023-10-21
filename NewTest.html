@@ -1,1 +1,16 @@
-yooo
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Area</title>
+    <script>
+        function logText() {
+            var text = document.getElementById('textArea').value;
+            console.log(text);
+        }
+    </script>
+</head>
+<body>
+    <textarea id="textArea"></textarea>
+    <button onclick="logText()">Submit</button>
+</body>
+</html>
