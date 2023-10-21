@@ -261,6 +261,10 @@ const ELEMENT_IDS = [
             window.onerror = function(message, source, lineno, colno, error) {
               window.parent.postMessage({type: 'error', message: message}, "*");
             };
+
+            window.onunhandledrejection = function(event) {
+              window.parent.postMessage({type: 'error', message: event.reason}, "*");
+            };
           })();
         </script>
     </body>
