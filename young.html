@@ -121,12 +121,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
   <script>
-  function logAndDisplay() {
-    var message = Array.prototype.join.call(arguments, " ");
-    console.log(message);
-    document.getElementById('consoleBox').textContent += message + '\n';
-  }
-
   function openModal() {
     document.getElementById('myModal').style.display = 'block';
   }
@@ -143,7 +137,16 @@
 
   document.getElementById('outputBtn').addEventListener('click', function() {
     var code = document.getElementById('codeBox').textContent;
-    code = code.replace(/console\.log/g, 'logAndDisplay');
+    var logAndDisplayFunction = `
+      (function() {
+        var oldLog = console.log;
+        console.log = function(message) {
+          oldLog.apply(console, arguments);
+          document.getElementById('consoleBox').textContent += message + '\\n';
+        };
+      })();
+    `;
+    code = logAndDisplayFunction + code;
     document.getElementById('outputBox').innerHTML = code;
     document.getElementById('consoleBox').classList.add('hidden');
     document.getElementById('codeBox').classList.add('hidden');
