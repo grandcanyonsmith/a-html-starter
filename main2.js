@@ -257,6 +257,10 @@ const ELEMENT_IDS = [
               oldLog.apply(console, arguments);
               window.parent.postMessage({type: 'log', message: message}, "*");
             };
+
+            window.onerror = function(message, source, lineno, colno, error) {
+              window.parent.postMessage({type: 'error', message: message}, "*");
+            };
           })();
         </script>
     </body>
@@ -613,12 +617,17 @@ const ELEMENT_IDS = [
       feather.replace();
     }
     static setupConsoleListener() {
-    // window.addEventListener('message', function(event) {
-    //   if (event.data.type === 'log') {
-    //     document.getElementById('consoleBox').textContent += 'LOG: ' + event.data.message + "\n";
-    //   }
-    // });
-  }
+  const eventHandler = function(event) {
+    if (event.data.type === 'log') {
+      document.getElementById('consoleBox').textContent += 'LOG: ' + event.data.message + "\n";
+    } else if (event.data.type === 'error') {
+      document.getElementById('consoleBox').textContent += 'ERROR: ' + event.data.message + "\n";
+    }
+  };
+
+  window.removeEventListener('message', eventHandler);
+  window.addEventListener('message', eventHandler);
+}
 
     
     static addClickListenersToButtons() {
