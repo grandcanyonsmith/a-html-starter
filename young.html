@@ -121,22 +121,11 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
   <script>
-  (function(){
-    var oldLog = console.log;
-    console.log = function () {
-      var message = Array.prototype.join.call(arguments, " ");
-      document.getElementById('consoleBox').textContent += message + '\n';
-      oldLog.apply(console, arguments);
-    };
-  })();
-
-  window.onerror = function(message, source, lineno, colno, error) {
-    document.getElementById('consoleBox').textContent += `Error: ${message}\n`;
-  };
-
-  window.onunhandledrejection = function(event) {
-    document.getElementById('consoleBox').textContent += `Unhandled Promise Rejection: ${event.reason}\n`;
-  };
+  function logAndDisplay() {
+    var message = Array.prototype.join.call(arguments, " ");
+    console.log(message);
+    document.getElementById('consoleBox').textContent += message + '\n';
+  }
 
   function openModal() {
     document.getElementById('myModal').style.display = 'block';
@@ -154,19 +143,8 @@
 
   document.getElementById('outputBtn').addEventListener('click', function() {
     var code = document.getElementById('codeBox').textContent;
-    var script = `
-        <script>
-            (function(){
-                var oldLog = console.log;
-                console.log = function () {
-                    var message = Array.prototype.join.call(arguments, " ");
-                    window.parent.postMessage(message, "*");
-                    oldLog.apply(console, arguments);
-                };
-            })();
-        <\/script>
-    `;
-    document.getElementById('outputBox').innerHTML = code + script;
+    code = code.replace(/console\.log/g, 'logAndDisplay');
+    document.getElementById('outputBox').innerHTML = code;
     document.getElementById('consoleBox').classList.add('hidden');
     document.getElementById('codeBox').classList.add('hidden');
     document.getElementById('outputBox').classList.remove('hidden');
@@ -177,10 +155,6 @@
     document.getElementById('codeBox').classList.remove('hidden');
     document.getElementById('outputBox').classList.add('hidden');
   });
-
-  window.addEventListener('message', function(event) {
-    document.getElementById('consoleBox').textContent += event.data + '\n';
-  }, false);
 
   setInterval(function() {
     // Check for new logs and update console box
