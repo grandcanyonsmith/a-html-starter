@@ -16,13 +16,16 @@
       width: 100%;
       overflow: auto;
     }
+
     #codeBox {
       font-size: 0.8em;
     }
-        #consoleBox {
+
+    #consoleBox {
       width: 100%;
       overflow: auto;
-      white-space: pre-wrap; /* To preserve line breaks and spaces */
+      white-space: pre-wrap;
+      /* To preserve line breaks and spaces */
     }
   </style>
 </head>
@@ -121,83 +124,52 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
   <script>
-  function openModal() {
-    document.getElementById('myModal').style.display = 'block';
-  }
+    function openModal() {
+      document.getElementById('myModal').style.display = 'block';
+    }
 
-  function closeModal() {
-    document.getElementById('myModal').style.display = 'none';
-  }
-
-  document.getElementById('consoleBtn').addEventListener('click', function() {
-    document.getElementById('consoleBox').classList.remove('hidden');
-    document.getElementById('codeBox').classList.add('hidden');
-    document.getElementById('outputBox').classList.add('hidden');
-  });
-
- document.getElementById('outputBtn').addEventListener('click', function() {
-  var code = document.getElementById('codeBox').textContent;
-  var iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.sandbox = 'allow-scripts allow-same-origin'; // Add this line
-  document.body.appendChild(iframe);
-  iframe.onload = function() {
-    var script = document.createElement('script');
-    script.textContent = `
-      console.log = function(message) {
+    function closeModal() {
+      document.getElementById('myModal').style.display = 'none';
+    }
+    document.getElementById('consoleBtn').addEventListener('click', function() {
+      document.getElementById('consoleBox').classList.remove('hidden');
+      document.getElementById('codeBox').classList.add('hidden');
+      document.getElementById('outputBox').classList.add('hidden');
+    });
+    document.getElementById('outputBtn').addEventListener('click', function() {
+      var code = document.getElementById('codeBox').textContent;
+      var iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.sandbox = 'allow-scripts allow-same-origin';
+      document.body.appendChild(iframe);
+      iframe.onload = function() {
+        var script = document.createElement('script');
+        script.textContent = `
+      var oldLog = console.log;
+      console.log = function() {
+        var message = Array.prototype.join.call(arguments, ' ');
         window.parent.postMessage({type: 'log', message: message}, "*");
-      };
-      console.error = function(message) {
-        window.parent.postMessage({type: 'error', message: message}, "*");
-      };
-      console.warn = function(message) {
-        window.parent.postMessage({type: 'warn', message: message}, "*");
+        oldLog.apply(console, arguments);
       };
       ${code}
+      console.log('whats up')
     `;
-    iframe.contentDocument.body.appendChild(script);
-  };
-  document.getElementById('outputBox').innerHTML = iframe.outerHTML;
-  document.getElementById('consoleBox').classList.add('hidden');
-  document.getElementById('codeBox').classList.add('hidden');
-  document.getElementById('outputBox').classList.remove('hidden');
-});
+        iframe.contentWindow.document.body.appendChild(script);
+      };
+      document.getElementById('outputBox').innerHTML = iframe.outerHTML;
+      document.getElementById('consoleBox').classList.add('hidden');
+      document.getElementById('codeBox').classList.add('hidden');
+      document.getElementById('outputBox').classList.remove('hidden');
+    });
+    window.addEventListener('message', function(event) {
+      if (event.data.type === 'log') {
+        document.getElementById('consoleBox').textContent += 'LOG: ' + event.data.message + "\n";
+      } else if (event.data.type === 'error') {
+        document.getElementById('consoleBox').textContent += 'ERROR: ' + event.data.message + "\n";
+      } else if (event.data.type === 'warn') {
+        document.getElementById('consoleBox').textContent += 'WARN: ' + event.data.message + "\n";
+      }
+    });
+  </script>
 
-window.addEventListener('message', function(event) {
-  if (event.data.type === 'log') {
-    document.getElementById('consoleBox').textContent += 'LOG: ' + event.data.message + "\n";
-  } else if (event.data.type === 'error') {
-    document.getElementById('consoleBox').textContent += 'ERROR: ' + event.data.message + "\n";
-  } else if (event.data.type === 'warn') {
-    document.getElementById('consoleBox').textContent += 'WARN: ' + event.data.message + "\n";
-  }
-});
-
-window.addEventListener('message', function(event) {
-  document.getElementById('consoleBox').textContent += event.data + "\n";
-});
-      // Create an array to store console logs
-  var consoleLogs = [];
-
-  // Override the console.log function to store logs
-  console.log = (function (oldFunc) {
-    return function () {
-      oldFunc.apply(console, arguments);
-      consoleLogs.push(Array.from(arguments).join(' '));
-    };
-  }(console.log));
-
-  // Function to show console logs
-  function showAlert() {
-    if (consoleLogs.length > 0) {
-      alert(consoleLogs.join("\n"));
-      consoleLogs = []; // Clear the logs after showing
-    }
-  }
-
-  // Call showAlert every 10 seconds
-  setInterval(showAlert, 10000);
-    
-</script>
-  
 </body>
