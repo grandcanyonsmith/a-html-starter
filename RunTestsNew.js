@@ -12,6 +12,7 @@ const SELECTORS = {
   newFileContentsInput: "newFileContentsInput",
   newFileNameInput: "newFileNameInput",
   createNewFileButton: "createNewFileButton",
+  createFileBtn: "createFileBtn",
   submitCreateFileButton: "submitCreateFileButton",
   cancelButton: "cancelButton",
   filePath: "filePath"
@@ -30,20 +31,21 @@ class RepositoryManager {
   }
 
   async fetchFileContents() {
-    let filePath = document.getElementById(SELECTORS.filePath).textContent;
-    filePath = filePath.startsWith("/") ? filePath : "/" + filePath;
+  let filePath = document.getElementById(SELECTORS.filePath).textContent;
+  filePath = filePath.startsWith("/") ? filePath : "/" + filePath;
 
-    try {
-      const response = await axios.post(API_ENDPOINT, {
-        request: "get_file_contents",
-        file_path: filePath,
-        repo_name: this.selectedRepositoryName
-      });
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching file contents:", error.message);
-    }
+  try {
+    const response = await axios.post(API_ENDPOINT, {
+    request: "get_file_contents",
+    file_path: filePath,
+    repo_name: this.selectedRepositoryName
+  });
+  console.log(response.data); // Add this line
+  return response.data;
+  } catch (error) {
+    console.error("Error fetching file contents:", error.message);
   }
+}
 
   async fetchRepositoryContents() {
     try {
@@ -165,21 +167,24 @@ class RepositoryManager {
     return spanElement;
   }
 
-  async changeTitleAndHide(title, filePath) {
-    document.getElementById(SELECTORS.fileTitle).textContent = title;
-    this.toggleElementsVisibility(
-      [SELECTORS.fileDropdown, SELECTORS.searchBar, SELECTORS.createFileBtn],
-      HIDDEN_CLASS
-    );
-    document.getElementById("filePath").textContent = filePath;
-
-    const fileContents = await this.fetchFileContents();
-    document.getElementById("codeBox").innerHTML = Prism.highlight(
-      fileContents.file_content,
-      Prism.languages.python,
-      "python"
-    );
-  }
+async changeTitleAndHide(title, filePath) {
+  console.log(title, filePath); // Add this line
+  document.getElementById(SELECTORS.fileTitle).textContent = title;
+  console.log(title,'title')
+  this.toggleElementsVisibility(
+    [SELECTORS.fileDropdown, SELECTORS.searchBar],
+    HIDDEN_CLASS
+  );
+  document.getElementById("filePath").textContent = filePath;
+  console.log(filePath)
+  const fileContents = await this.fetchFileContents();
+  console.log(fileContents,'filecontents')
+  document.getElementById("codeBox").innerHTML = Prism.highlight(
+    fileContents.file_content,
+    Prism.languages.python,
+    "python"
+  );
+}
 
   searchFilesAndFolders(query) {
     const filteredContents = this.filesAndFolders.filter((content) =>
