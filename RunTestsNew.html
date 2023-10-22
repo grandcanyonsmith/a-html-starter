@@ -17,17 +17,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
   <style>
-    #runBtn {
+    body {
       background-color: #1a202c;
       color: #ffffff;
     }
 
-    #runBtn:hover {
+    #runBtn {
       background-color: #2d3748;
+      color: #ffffff;
+    }
+
+    #runBtn:hover {
+      background-color: #4a5568;
     }
 
     #requestInput {
-      color: #000000;
+      color: #ffffff;
+      background-color: #2d3748;
     }
 
     #fileDropdown,
@@ -36,18 +42,22 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      background-color: #2d3748;
+      color: #ffffff;
     }
 
     #testResult {
       font-size: 0.75rem;
       overflow-wrap: break-word;
       word-break: break-all;
+      background-color: #2d3748;
+      color: #ffffff;
     }
 
     .icon {
       height: 1rem;
       width: 1rem;
-      background-color: transparent;
+      color: #ffffff;
     }
 
     #createFileModalContainer {
@@ -57,6 +67,29 @@
     #searchBar {
       flex-direction: column;
       align-items: flex-start;
+      background-color: #2d3748;
+      color: #ffffff;
+    }
+
+    #openNewFileModalBtn {
+      background-color: #2d3748;
+      color: #ffffff;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    #openNewFileModalBtn:hover {
+      background-color: #4a5568;
+    }
+
+    #fileDropdown {
+      background-color: #2d3748;
+      color: #ffffff;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 1rem;
     }
   </style>
 
@@ -72,24 +105,24 @@
     </header>
 
     <div class="relative inline-flex ">
-      <div id="tree" class="w-full max-w-xs bg-white border-r border-gray-400">
+      <div id="tree" class="w-full max-w-xs bg-gray-900 border-r border-gray-400">
         <div class="flex items-center justify-between px-5 py-2">
-          <h3 id="fileTitle" class="text-lg font-semibold text-gray-600">Files</h3>
+          <h3 id="fileTitle" class="text-lg font-semibold text-gray-900">Files</h3>
           <input type="hidden" id="filePath" value="null">
           <button id="fetchFilesBtn" onclick="repoManager.toggleElementsVisibility([SELECTORS.fileDropdown, SELECTORS.searchBar], HIDDEN_CLASS);">
-            <svg class="icon -mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <svg class="icon -mr-1 h-5 w-5 text-gray-900" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
             </svg>
           </button>
         </div>
-        <div class="flex items-center justify-between px-5 py-2 hidden" id="searchBar">
-          <i data-feather="search" class="icon"></i>
-          <input type="text" id="searchInput" placeholder="Search..." onkeyup="repoManager.searchFilesAndFolders(this.value)">
-          <button id="openNewFileModalBtn" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">+ Create New File</button>
-        </div>
+        <div class="flex items-center justify-between px-5 py-2 hidden bg-gray-900" id="searchBar">
+  <i data-feather="search" class="icon"></i>
+  <input type="text" id="searchInput" placeholder="Search..." onkeyup="repoManager.searchFilesAndFolders(this.value)">
+  <button id="openNewFileModalBtn" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">+ Create New File</button>
+</div>
         <nav id="fileDropdown" class="px-2 text-gray-700 hidden dropdown-content">
           <!-- Populated by JavaScript -->
-
+          
         </nav>
         <div class="flex items-center justify-between px-5 py-2" id="createNewFileBtn">
         </div>
@@ -101,13 +134,13 @@
     <div class="flex justify-between mt-4">
       <input type="text" id="requestInput" placeholder="Enter request..." class="w-full mr-2 py-2 px-4 rounded shadow-lg">
       <div class="flex">
-        <button id="submitBtn" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-4 rounded mr-2">
+        <button id="submitBtn" class="bg-gray-900 hover:bg-gray-700 text-gray-600 font-bold py-2 px-4 rounded mr-2">
           <i data-feather="send" class="icon"></i>
         </button>
-        <button id="saveBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded float-right">
+        <button id="saveBtn" class="bg-gray-900 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded float-right">
           <i data-feather="save" class="icon"></i>
         </button>
-        <button id="runTestsBtn" class="px-4 py-2 bg-green-500 text-white rounded shadow text-sm">
+        <button id="runTestsBtn" class="px-4 py-2 bg-gray-900 hover:bg-gray-700 text-white rounded shadow text-sm">
           <i data-feather="play" class="icon"></i>
         </button>
       </div>
@@ -135,13 +168,13 @@
             <div class="sm:flex sm:items-start flex-col-reverse">
               <div class="mt-3 text-center sm:mt-0 sm:text-left px-4">
                 <div class="relative w-full mb-4">
-                  <label for="newFileBranchName" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Branch Name</label>
-                  <input id="newFileBranchName" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
-                </div>
-                <div class="relative w-full mb-4">
-                  <label for="newFileCommitMessage" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
-                  <input id="newFileCommitMessage" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
-                </div>
+  <label for="newFileBranchName" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Branch Name</label>
+  <input id="newFileBranchName" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+</div>
+<div class="relative w-full mb-4">
+  <label for="newFileCommitMessage" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
+  <input id="newFileCommitMessage" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+</div>
               </div>
             </div>
           </div>
@@ -207,3 +240,4 @@
 </body>
 
 </html>
+
