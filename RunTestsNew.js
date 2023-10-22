@@ -1,11 +1,12 @@
-const API_ENDPOINT = "https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/";
-const SUBMIT_REQUEST_API_ENDPOINT = "https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/";
+const API_ENDPOINT =
+  "https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/";
+const SUBMIT_REQUEST_API_ENDPOINT =
+  "https://uslbd6l6ssolgomdrcdhnqa5me0rnsee.lambda-url.us-west-2.on.aws/";
 const HIDDEN_CLASS = "hidden";
 
 const SELECTORS = {
   fileDropdown: "fileDropdown",
   searchBar: "searchBar",
-  createFileBtn: "createFileBtn",
   fileTitle: "fileTitle",
   createNewFileModalWindow: "createNewFileModalWindow",
   newFileContentsInput: "newFileContentsInput",
@@ -17,7 +18,8 @@ const SELECTORS = {
 };
 
 const URLS = {
-  runCode: "https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/"
+  runCode:
+    "https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/"
 };
 
 class RepositoryManager {
@@ -247,7 +249,7 @@ async function submit() {
   };
 
   const submitBtn = document.getElementById("submitBtn");
-  submitBtn.innerHTML = "Loading..."; 
+  submitBtn.innerHTML = "Loading...";
 
   try {
     const response = await axios.post(SUBMIT_REQUEST_API_ENDPOINT, data);
@@ -259,8 +261,8 @@ async function submit() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    submitBtn.innerHTML = '<i data-feather="send"></i>'; 
-    feather.replace(); 
+    submitBtn.innerHTML = '<i data-feather="send"></i>';
+    feather.replace();
   }
 }
 
@@ -279,7 +281,7 @@ async function runTests() {
   const filePath = document.getElementById(SELECTORS.filePath).textContent;
 
   const runTestsBtn = document.getElementById("runTestsBtn");
-  runTestsBtn.innerHTML = "Running..."; 
+  runTestsBtn.innerHTML = "Running...";
 
   testResult.innerHTML = `<pre>Running Tests in EC2 instance</pre>`;
 
@@ -294,18 +296,18 @@ async function runTests() {
   } catch (error) {
     console.error("Error:", error);
   } finally {
-    runTestsBtn.innerHTML = '<i data-feather="play"></i>'; 
-    feather.replace(); 
+    runTestsBtn.innerHTML = '<i data-feather="play"></i>';
+    feather.replace();
   }
 }
 
 async function saveCode() {
-  // const repoName = "a-canyon-yb-tests"; 
-  const repoName = "yb-automation-tests"; 
-  
+  // const repoName = "a-canyon-yb-tests";
+  const repoName = "yb-automation-tests";
+
   const fileName = document.getElementById(SELECTORS.filePath).textContent;
-  const fileContents = document.getElementById("codeBox").textContent; 
-  const branchName = "master"; 
+  const fileContents = document.getElementById("codeBox").textContent;
+  const branchName = "master";
 
   const data = {
     repo_name: repoName,
@@ -320,8 +322,8 @@ async function saveCode() {
     console.log(response.data);
 
     document.getElementById("branch-name").value = response.data.branchName;
-    document.getElementById("commit-message").value = response.data.commitMessage;
-
+    document.getElementById("commit-message").value =
+      response.data.commitMessage;
   } catch (error) {
     console.error(`Error saving file: ${error}`);
   }
@@ -358,37 +360,94 @@ window.onload = () => {
     .getElementById("saveBtn")
     .addEventListener("click", () => toggleCommitModal(true));
   toggleCommitModal(false);
+
+  document
+    .getElementById("openNewFileModalBtn")
+    .addEventListener("click", function () {
+      document.getElementById("createFileModalContainer").style.display =
+        "block";
+    });
+  document
+    .getElementById("closeCreateFileModalBtn")
+    .addEventListener("click", function () {
+      document.getElementById("createFileModalContainer").style.display =
+        "none";
+    });
+  document
+    .getElementById("cancelCreateFileModalBtn")
+    .addEventListener("click", function () {
+      document.getElementById("createFileModalContainer").style.display =
+        "none";
+    });
+  document
+    .getElementById("submitCreateFileButton")
+    .addEventListener("click", function () {
+      var newFileName = document.getElementById("newFileName").value;
+      var newFileContent = document.getElementById("newFileContent").value;
+      var newBranchName = document.getElementById("newBranchName").value;
+      var newCommitMessage = document.getElementById("newCommitMessage").value;
+
+      console.log(newFileName, newFileContent, newBranchName, newCommitMessage); // Log the values
+
+      axios
+        .post(
+          "https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/",
+          {
+            file_name: newFileName,
+            file_contents: newFileContent,
+            repo_name: "yb-automation-tests",
+            branch_name: newBranchName,
+            commit_message: newCommitMessage,
+            request: "create_new_file"
+          }
+        )
+        .then(function (response) {
+          console.log(response);
+          document.getElementById("newFileName").value = "";
+          document.getElementById("newFileContent").value = "";
+          document.getElementById("newBranchName").value = "";
+          document.getElementById("newCommitMessage").value = "";
+          document.getElementById("createFileModalContainer").style.display =
+            "none";
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    });
+
   document.getElementById("submitBtn").addEventListener("click", submit);
   document.getElementById("saveBtn").classList.remove("hidden");
   document.getElementById("saveBtn").addEventListener("click", saveCode);
   document.getElementById("runTestsBtn").addEventListener("click", runTests);
-  document.getElementById("commitChangesBtn").addEventListener("click", async () => {
-  const branchName = document.getElementById("branch-name").value;
-  const commitMessage = document.getElementById("commit-message").value;
+  document
+    .getElementById("commitChangesBtn")
+    .addEventListener("click", async () => {
+      const branchName = document.getElementById("branch-name").value;
+      const commitMessage = document.getElementById("commit-message").value;
 
-  // const repoName = "a-canyon-yb-tests"; 
-  const repoName = "yb-automation-tests"; 
-  const fileName = document.getElementById(SELECTORS.filePath).textContent;
-  const fileContents = document.getElementById("codeBox").textContent; 
+      // const repoName = "a-canyon-yb-tests";
+      const repoName = "yb-automation-tests";
+      const fileName = document.getElementById(SELECTORS.filePath).textContent;
+      const fileContents = document.getElementById("codeBox").textContent;
 
-  const data = {
-    repo_name: repoName,
-    file_contents: fileContents,
-    file_name: fileName,
-    branchName: branchName,
-    commitMessage: commitMessage,
-    request: "update"
-  };
-  console.log(data,'data')
-  try {
-    const response = await axios.post(API_ENDPOINT, data);
-    console.log(response.data);
-  } catch (error) {
-    console.error(`Error committing changes: ${error}`);
-  }
-    branchName.value = "";
-    commitMessage.value = "";
-    toggleCommitModal(false);
-});
-  feather.replace(); 
+      const data = {
+        repo_name: repoName,
+        file_contents: fileContents,
+        file_name: fileName,
+        branchName: branchName,
+        commitMessage: commitMessage,
+        request: "update"
+      };
+      console.log(data, "data");
+      try {
+        const response = await axios.post(API_ENDPOINT, data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(`Error committing changes: ${error}`);
+      }
+      branchName.value = "";
+      commitMessage.value = "";
+      toggleCommitModal(false);
+    });
+  feather.replace();
 };
