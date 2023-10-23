@@ -13,7 +13,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://unpkg.com/feather-icons"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-python.min.js"></script>
   <style>
@@ -116,13 +116,13 @@
           </button>
         </div>
         <div class="flex items-center justify-between px-5 py-2 hidden bg-gray-900" id="searchBar">
-  <i data-feather="search" class="icon"></i>
-  <input type="text" id="searchInput" placeholder="Search..." onkeyup="repoManager.searchFilesAndFolders(this.value)">
-  <button id="openNewFileModalBtn" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">+ Create New File</button>
-</div>
+          <i data-feather="search" class="icon"></i>
+          <input type="text" id="searchInput" placeholder="Search..." onkeyup="repoManager.searchFilesAndFolders(this.value)">
+          <button id="openNewFileModalBtn" class="inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">+ Create New File</button>
+        </div>
         <nav id="fileDropdown" class="px-2 text-gray-700 hidden dropdown-content">
           <!-- Populated by JavaScript -->
-          
+
         </nav>
         <div class="flex items-center justify-between px-5 py-2" id="createNewFileBtn">
         </div>
@@ -130,7 +130,6 @@
     </div>
     <input type="hidden" id="repoName" value="a-html-starter">
     <pre><code id="codeBox" class="language-python w-full h-64 bg-gray-800"></code></pre>
-    <div id="outputBox" class="w-full h-screen bg-white rounded shadow-lg p-4 hidden"></div>
     <div class="flex justify-between mt-4">
       <input type="text" id="requestInput" placeholder="Enter request..." class="w-full mr-2 py-2 px-4 rounded shadow-lg">
       <div class="flex">
@@ -168,13 +167,13 @@
             <div class="sm:flex sm:items-start flex-col-reverse">
               <div class="mt-3 text-center sm:mt-0 sm:text-left px-4">
                 <div class="relative w-full mb-4">
-  <label for="branch-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Branch Name</label>
-  <input id="branch-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
-</div>
-<div class="relative w-full mb-4">
-  <label for="commit-message" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
-  <input id="commit-message" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
-</div>
+                  <label for="branch-name" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Branch Name</label>
+                  <input id="branch-name" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+                </div>
+                <div class="relative w-full mb-4">
+                  <label for="commit-message" class="absolute -top-2 left-2 inline-block bg-white px-1 text-xs font-medium text-gray-900">Commit Message</label>
+                  <input id="commit-message" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" type="text">
+                </div>
               </div>
             </div>
           </div>
@@ -232,12 +231,7 @@
       </div>
     </div>
   </div>
-
   <script src="RunTestsNew.js"></script>
-  <script>
-
-  </script>
 </body>
 
 </html>
-
