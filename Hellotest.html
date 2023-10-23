@@ -12,6 +12,9 @@
         #contactModalContainer {
             display: none;
         }
+        #textareaContainer, #githubContainer {
+            display: none;
+        }
     </style>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
@@ -35,8 +38,17 @@
                     <div class="bg-white pt-5 sm:p-0 sm:pb-4">
                         <div class="sm:flex sm:items-start flex-col-reverse">
                             <div class="mt-3 text-center sm:mt-0 sm:text-left px-4">
-                                <div class="relative w-full mb-4">
+                                <div class="relative w-full mb-4" id="iconContainer">
+                                    <img src="https://1000logos.net/wp-content/uploads/2021/05/GitHub-logo.png" id="githubIcon" class="w-16 h-16 cursor-pointer">
+                                    <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1662124195933/FMV0lPwhb.png" id="awsIcon" class="w-16 h-16 cursor-pointer">
+                                </div>
+                                <div class="relative w-full mb-4" id="textareaContainer">
                                     <textarea id="textarea" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                                </div>
+                                <div class="relative w-full mb-4" id="githubContainer">
+                                    <select id="githubRepo" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                        <option>Select your GitHub repo</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -55,12 +67,24 @@
         const modalContainer = document.getElementById('contactModalContainer');
         const textArea = document.getElementById('textarea');
         const submitBtn = document.getElementById('submitBtn');
+        const githubIcon = document.getElementById('githubIcon');
+        const awsIcon = document.getElementById('awsIcon');
+        const textareaContainer = document.getElementById('textareaContainer');
+        const githubContainer = document.getElementById('githubContainer');
         function toggleModal() {
             modalContainer.style.display = modalContainer.style.display === 'none' ? 'block' : 'none';
         }
         document.getElementById('openModalBtn').addEventListener('click', toggleModal);
         document.getElementById('closeModalBtn').addEventListener('click', toggleModal);
         document.getElementById('cancelModalBtn').addEventListener('click', toggleModal);
+        githubIcon.addEventListener('click', function() {
+            githubContainer.style.display = 'block';
+            textareaContainer.style.display = 'none';
+        });
+        awsIcon.addEventListener('click', function() {
+            textareaContainer.style.display = 'block';
+            githubContainer.style.display = 'none';
+        });
         submitBtn.addEventListener('click', function() {
             submitBtn.innerText = 'Loading...';
             axios.post('https://swkbrgxeucjhdowr2khzpmxrye0xngov.lambda-url.us-west-2.on.aws/', {
