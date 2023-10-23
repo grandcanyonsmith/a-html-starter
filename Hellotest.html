@@ -12,9 +12,6 @@
         #contactModalContainer {
             display: none;
         }
-        #textareaContainer, #githubContainer {
-            display: none;
-        }
     </style>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
@@ -42,10 +39,10 @@
                                     <img src="https://1000logos.net/wp-content/uploads/2021/05/GitHub-logo.png" id="githubIcon" class="w-16 h-16 cursor-pointer">
                                     <img src="https://cdn.hashnode.com/res/hashnode/image/upload/v1662124195933/FMV0lPwhb.png" id="awsIcon" class="w-16 h-16 cursor-pointer">
                                 </div>
-                                <div class="relative w-full mb-4" id="textareaContainer">
+                                <div class="relative w-full mb-4" id="textareaContainer" style="display: none;">
                                     <textarea id="textarea" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                                 </div>
-                                <div class="relative w-full mb-4" id="githubContainer">
+                                <div class="relative w-full mb-4" id="githubContainer" style="display: none;">
                                     <select id="githubRepo" class="block w-full rounded-md border-gray-300 py-3 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         <option>Select your GitHub repo</option>
                                     </select>
@@ -71,6 +68,7 @@
         const awsIcon = document.getElementById('awsIcon');
         const textareaContainer = document.getElementById('textareaContainer');
         const githubContainer = document.getElementById('githubContainer');
+        const iconContainer = document.getElementById('iconContainer');
         function toggleModal() {
             modalContainer.style.display = modalContainer.style.display === 'none' ? 'block' : 'none';
         }
@@ -80,10 +78,12 @@
         githubIcon.addEventListener('click', function() {
             githubContainer.style.display = 'block';
             textareaContainer.style.display = 'none';
+            iconContainer.style.display = 'none';
         });
         awsIcon.addEventListener('click', function() {
             textareaContainer.style.display = 'block';
             githubContainer.style.display = 'none';
+            iconContainer.style.display = 'none';
         });
         submitBtn.addEventListener('click', function() {
             submitBtn.innerText = 'Loading...';
@@ -94,6 +94,10 @@
                 document.getElementById('response').innerText = JSON.stringify(response.data).replace(/\"/g, "");
                 submitBtn.innerText = 'Submit';
                 toggleModal();
+                textArea.value = '';
+                githubContainer.style.display = 'none';
+                textareaContainer.style.display = 'none';
+                iconContainer.style.display = 'block';
             })
             .catch(function (error) {
                 console.log(error);
