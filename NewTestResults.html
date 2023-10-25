@@ -46,6 +46,7 @@
         </div>
     </div>
     <script>
+        let hiddenStatuses = [];
         axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/')
         .then(function (response) {
             const test_results = response.data;
@@ -56,7 +57,7 @@
             document.getElementById('untested').innerText = test_results.untested.total;
 
             const ctx = document.getElementById('chart').getContext('2d');
-            new Chart(ctx, {
+            const chart = new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: ['Passed', 'Failed', 'Untested'],
@@ -67,24 +68,43 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    onClick: function(evt, item) {
+                        if(item.length > 0) {
+                            const index = item[0]._index;
+                            const label = this.data.labels[index];
+                            const lowerCaseLabel = label.toLowerCase();
+                            if(hiddenStatuses.includes(lowerCaseLabel)) {
+                                hiddenStatuses = hiddenStatuses.filter(status => status !== lowerCaseLabel);
+                            } else {
+                                hiddenStatuses.push(lowerCaseLabel);
+                            }
+                            updateTable();
+                        }
+                    }
                 }
             });
 
             const tableBody = document.getElementById('tableBody');
-            ['passed', 'failed', 'untested'].forEach(status => {
-                test_results[status].test_names.forEach((test_name, index) => {
-                    const row = document.createElement('tr');
-                    row.className = index % 2 === 0 ? 'bg-gray-700' : 'bg-gray-600';
-                    const testNameCell = document.createElement('td');
-                    testNameCell.innerHTML = `<a href="#" class="text-blue-500 hover:underline">${test_name}</a>`;
-                    row.appendChild(testNameCell);
-                    const statusCell = document.createElement('td');
-                    statusCell.innerHTML = status === 'passed' ? '<i class="fas fa-check text-green-500"></i>' : status === 'failed' ? '<i class="fas fa-times text-red-500"></i>' : 'Untested';
-                    row.appendChild(statusCell);
-                    tableBody.appendChild(row);
+            function updateTable() {
+                tableBody.innerHTML = '';
+                ['passed', 'failed', 'untested'].forEach(status => {
+                    if(!hiddenStatuses.includes(status)) {
+                        test_results[status].test_names.forEach((test_name, index) => {
+                            const row = document.createElement('tr');
+                            row.className = index % 2 === 0 ? 'bg-gray-700' : 'bg-gray-600';
+                            const testNameCell = document.createElement('td');
+                            testNameCell.innerHTML = `<a href="#" class="text-blue-500 hover:underline">${test_name}</a>`;
+                            row.appendChild(testNameCell);
+                            const statusCell = document.createElement('td');
+                            statusCell.innerHTML = status === 'passed' ? '<i class="fas fa-check text-green-500"></i>' : status === 'failed' ? '<i class="fas fa-times text-red-500"></i>' : 'Untested';
+                            row.appendChild(statusCell);
+                            tableBody.appendChild(row);
+                        });
+                    }
                 });
-            });
+            }
+            updateTable();
         })
         .catch(function (error) {
             console.log(error);
