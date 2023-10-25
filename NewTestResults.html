@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-800 text-white">
+    <div class="container mx-auto p-10">
+        <div class="grid grid-cols-4 gap-4">
+            <div class="bg-gray-700 p-4 rounded">
+                <h2 class="text-xl">Total:</h2>
+                <p id="total"></p>
+            </div>
+            <div class="bg-green-700 p-4 rounded">
+                <h2 class="text-xl">Passed:</h2>
+                <p id="passed"></p>
+            </div>
+            <div class="bg-red-700 p-4 rounded">
+                <h2 class="text-xl">Failed:</h2>
+                <p id="failed"></p>
+            </div>
+            <div class="bg-yellow-700 p-4 rounded">
+                <h2 class="text-xl">Untested:</h2>
+                <p id="untested"></p>
+            </div>
+        </div>
+        <div class="mt-10">
+            <canvas id="chart"></canvas>
+        </div>
+        <div class="mt-10">
+            <table class="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">Test Name</th>
+                        <th class="px-4 py-2">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/')
+        .then(function (response) {
+            const test_results = response.data;
+
+            document.getElementById('total').innerText = test_results.passed.total + test_results.failed.total + test_results.untested.total;
+            document.getElementById('passed').innerText = test_results.passed.total;
+            document.getElementById('failed').innerText = test_results.failed.total;
+            document.getElementById('untested').innerText = test_results.untested.total;
+
+            const ctx = document.getElementById('chart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Passed', 'Failed', 'Untested'],
+                    datasets: [{
+                        data: [test_results.passed.total, test_results.failed.total, test_results.untested.total],
+                        backgroundColor: ['green', 'red', 'yellow']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            const tableBody = document.getElementById('tableBody');
+            ['passed', 'failed', 'untested'].forEach(status => {
+                test_results[status].test_names.forEach((test_name, index) => {
+                    const row = document.createElement('tr');
+                    row.className = index % 2 === 0 ? 'bg-gray-700' : 'bg-gray-600';
+                    const testNameCell = document.createElement('td');
+                    testNameCell.innerText = test_name;
+                    row.appendChild(testNameCell);
+                    const statusCell = document.createElement('td');
+                    statusCell.innerText = status;
+                    row.appendChild(statusCell);
+                    tableBody.appendChild(row);
+                });
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    </script>
+</body>
+</html>
