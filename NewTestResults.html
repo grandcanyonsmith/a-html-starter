@@ -38,6 +38,8 @@
                     <tr>
                         <th class="px-4 py-2">Test Name</th>
                         <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">Duration</th>
+                        <th class="px-4 py-2">Timestamp</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -90,15 +92,21 @@
                 tableBody.innerHTML = '';
                 ['passed', 'failed', 'untested'].forEach(status => {
                     if(!hiddenStatuses.includes(status)) {
-                        test_results[status].test_names.forEach((test_name, index) => {
+                        test_results[status].tests.forEach((test, index) => {
                             const row = document.createElement('tr');
                             row.className = index % 2 === 0 ? 'bg-gray-700' : 'bg-gray-600';
                             const testNameCell = document.createElement('td');
-                            testNameCell.innerHTML = `<a href="#" class="text-blue-500 hover:underline">${test_name}</a>`;
+                            testNameCell.innerHTML = `<a href="#" class="text-blue-500 hover:underline">${test.name}</a>`;
                             row.appendChild(testNameCell);
                             const statusCell = document.createElement('td');
                             statusCell.innerHTML = status === 'passed' ? '<i class="fas fa-check text-green-500"></i>' : status === 'failed' ? '<i class="fas fa-times text-red-500"></i>' : 'Untested';
                             row.appendChild(statusCell);
+                            const durationCell = document.createElement('td');
+                            durationCell.innerText = test.duration;
+                            row.appendChild(durationCell);
+                            const timestampCell = document.createElement('td');
+                            timestampCell.innerText = test.timestamp;
+                            row.appendChild(timestampCell);
                             tableBody.appendChild(row);
                         });
                     }
