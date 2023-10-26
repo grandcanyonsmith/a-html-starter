@@ -32,13 +32,20 @@
         <div class="mt-10">
             <canvas id="chart"></canvas>
         </div>
+        <div class="mt-10">
+            <select id="timeframe" class="bg-gray-700 text-white rounded p-2">
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="2daysago">2 Days Ago</option>
+                <option value="3daysago">3 Days Ago</option>
+            </select>
+        </div>
         <div class="mt-10 overflow-x-auto">
             <table class="table-auto w-full">
                 <thead>
                     <tr>
                         <th class="px-4 py-2">Test Name</th>
                         <th class="px-4 py-2">Status</th>
-                        <th class="px-4 py-2">Duration</th>
                         <th class="px-4 py-2">Timestamp</th>
                     </tr>
                 </thead>
@@ -49,74 +56,87 @@
     </div>
     <script>
         let hiddenStatuses = [];
-        axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/')
-        .then(function (response) {
-            const test_results = response.data;
+        let chart;
+        const ctx = document.getElementById('chart').getContext('2d');
+        const tableBody = document.getElementById('tableBody');
+        const timeframeSelect = document.getElementById('timeframe');
 
-            document.getElementById('total').innerText = test_results.passed.total + test_results.failed.total + test_results.untested.total;
-            document.getElementById('passed').innerText = test_results.passed.total;
-            document.getElementById('failed').innerText = test_results.failed.total;
-            document.getElementById('untested').innerText = test_results.untested.total;
+        function fetchData(timeframe) {
+            axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', { timeframe })
+            .then(function (response) {
+                const test_results = response.data;
 
-            const ctx = document.getElementById('chart').getContext('2d');
-            const chart = new Chart(ctx, {
-                type: 'pie',
-                data: {
-                    labels: ['Passed', 'Failed', 'Untested'],
-                    datasets: [{
-                        data: [test_results.passed.total, test_results.failed.total, test_results.untested.total],
-                        backgroundColor: ['green', 'red', 'yellow']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    onClick: function(evt, item) {
-                        if(item.length > 0) {
-                            const index = item[0]._index;
-                            const label = this.data.labels[index];
-                            const lowerCaseLabel = label.toLowerCase();
-                            if(hiddenStatuses.includes(lowerCaseLabel)) {
-                                hiddenStatuses = hiddenStatuses.filter(status => status !== lowerCaseLabel);
-                            } else {
-                                hiddenStatuses.push(lowerCaseLabel);
+                document.getElementById('total').innerText = test_results.passed.total + test_results.failed.total + test_results.untested.total;
+                document.getElementById('passed').innerText = test_results.passed.total;
+                document.getElementById('failed').innerText = test_results.failed.total;
+                document.getElementById('untested').innerText = test_results.untested.total;
+
+                if(chart) {
+                    chart.destroy();
+                }
+
+                chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Passed', 'Failed', 'Untested'],
+                        datasets: [{
+                            data: [test_results.passed.total, test_results.failed.total, test_results.untested.total],
+                            backgroundColor: ['green', 'red', 'yellow']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        onClick: function(evt, item) {
+                            if(item.length > 0) {
+                                const index = item[0]._index;
+                                const label = this.data.labels[index];
+                                const lowerCaseLabel = label.toLowerCase();
+                                if(hiddenStatuses.includes(lowerCaseLabel)) {
+                                    hiddenStatuses = hiddenStatuses.filter(status => status !== lowerCaseLabel);
+                                } else {
+                                    hiddenStatuses.push(lowerCaseLabel);
+                                }
+                                updateTable(test_results);
                             }
-                            updateTable();
                         }
                     }
+                });
+
+                updateTable(test_results);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        }
+
+        function updateTable(test_results) {
+            tableBody.innerHTML = '';
+            ['passed', 'failed', 'untested'].forEach(status => {
+                if(!hiddenStatuses.includes(status)) {
+                    test_results[status].tests.forEach((test, index) => {
+                        const row = document.createElement('tr');
+                        row.className = index % 2 === 0 ? 'bg-gray-700' : 'bg-gray-600';
+                        const testNameCell = document.createElement('td');
+                        testNameCell.innerHTML = `<a href="#" class="text-blue-500 hover:underline">${test.name}</a>`;
+                        row.appendChild(testNameCell);
+                        const statusCell = document.createElement('td');
+                        statusCell.innerHTML = status === 'passed' ? '<i class="fas fa-check text-green-500"></i>' : status === 'failed' ? '<i class="fas fa-times text-red-500"></i>' : 'Untested';
+                        row.appendChild(statusCell);
+                        const timestampCell = document.createElement('td');
+                        timestampCell.innerText = test.timestamp;
+                        row.appendChild(timestampCell);
+                        tableBody.appendChild(row);
+                    });
                 }
             });
+        }
 
-            const tableBody = document.getElementById('tableBody');
-            function updateTable() {
-                tableBody.innerHTML = '';
-                ['passed', 'failed', 'untested'].forEach(status => {
-                    if(!hiddenStatuses.includes(status)) {
-                        test_results[status].tests.forEach((test, index) => {
-                            const row = document.createElement('tr');
-                            row.className = index % 2 === 0 ? 'bg-gray-700' : 'bg-gray-600';
-                            const testNameCell = document.createElement('td');
-                            testNameCell.innerHTML = `<a href="#" class="text-blue-500 hover:underline">${test.name}</a>`;
-                            row.appendChild(testNameCell);
-                            const statusCell = document.createElement('td');
-                            statusCell.innerHTML = status === 'passed' ? '<i class="fas fa-check text-green-500"></i>' : status === 'failed' ? '<i class="fas fa-times text-red-500"></i>' : 'Untested';
-                            row.appendChild(statusCell);
-                            const durationCell = document.createElement('td');
-                            durationCell.innerText = test.duration;
-                            row.appendChild(durationCell);
-                            const timestampCell = document.createElement('td');
-                            timestampCell.innerText = test.timestamp;
-                            row.appendChild(timestampCell);
-                            tableBody.appendChild(row);
-                        });
-                    }
-                });
-            }
-            updateTable();
-        })
-        .catch(function (error) {
-            console.log(error);
+        timeframeSelect.addEventListener('change', function() {
+            fetchData(this.value);
         });
+
+        fetchData(timeframeSelect.value);
     </script>
 </body>
 </html>
