@@ -7,6 +7,8 @@
     <style>
         body {
             padding: 20px;
+            background-color: #1a202c;
+            color: #a0aec0;
         }
         h1 {
             margin-bottom: 50px;
@@ -17,6 +19,9 @@
         }
         table {
             margin-top: 20px;
+        }
+        .small-font {
+            font-size: 0.8em;
         }
     </style>
 </head>
@@ -43,8 +48,9 @@
                             <tr>
                                 <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Test Name</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Team</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Passed</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Type</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Test Type</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Last Run</th>
                                 <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
                                     <span class="sr-only">View Details</span>
                                 </th>
@@ -59,7 +65,7 @@
                                         </div>
                                         <div class="ml-4">
                                             <div class="font-medium text-gray-900">Test Manager Writes a Comment</div>
-                                            <div class="mt-1 text-gray-500">legacy/ui_test/test_manager_writes_a_comment.py</div>
+                                            <div class="mt-1 text-gray-500 small-font">legacy/ui_test/test_manager_writes_a_comment.py</div>
                                         </div>
                                     </div>
                                 </td>
@@ -70,6 +76,7 @@
                                     <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Passed</span>
                                 </td>
                                 <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">UI Test</td>
+                                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">48 min ago</td>
                                 <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                                     <a href="#" class="text-indigo-600 hover:text-indigo-900">View Details<span class="sr-only">, Test Manager Writes a Comment</span></a>
                                 </td>
