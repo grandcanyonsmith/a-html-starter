@@ -3,113 +3,83 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Enhanced Code Editor</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script src="https://unpkg.com/feather-icons"></script>
-  <style>
-    .dropdown-content a {
-      color: black;
-      padding: 12px 16px;
-      text-decoration: none;
-      display: block;
-      border-bottom: 1px solid #f1f1f1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .dropdown-content a:hover {
-      background-color: #ddd;
-    }
-    #fileTitle {
-      font-size: 0.6em;
-      border-bottom: 1px solid gray;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    body {
-      overflow-x: hidden;
-    }
-    #tree {
-      border: 1px solid gray;
-    }
-    #searchBar {
-      display: none;
-      align-items: center;
-    }
-    #searchBar i {
-      margin-right: 10px;
-      color: gray;
-      width: 15px;
-      height: 15px;
-    }
-    #createNewFileModalWindow {
-      background: rgba(0, 0, 0, 0.5);
-    }
-    #createNewFileModalWindow .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 5px;
-      max-width: 500px;
-      width: 90%;
-    }
-  </style>
+  <title>Blank Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
-
-
-<div class="flex items-center justify-between px-5 py-2">
-  <input type="text" id="selectedRepoName" placeholder="Enter repository name">
-</div>
-
-
-
-  <div class="container mx-auto p-4">
-    <div class="flex justify-between mb-4">
-      <div class="relative inline-flex">
-        <div id="tree" class="w-full max-w-xs bg-white border-r border-gray-400">
-          <div class="flex items-center justify-between px-5 py-2">
-            <h3 id="fileTitle" class="text-lg font-semibold text-gray-600">Files</h3>
-
-<button id="fetchFilesBtn">
-  <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-  </svg>
-</button>
+<body>
+  <div class="bg-white">
+    <div class="relative z-40 sm:hidden" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 bg-black bg-opacity-25"></div>
+      <div class="fixed inset-0 z-40 flex">
+        <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
+          <div class="flex items-center justify-between px-4">
+            <h2 class="text-lg font-medium text-gray-900">Filters</h2>
+            <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400">
+              <span class="sr-only">Close menu</span>
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <div class="flex items-center justify-between px-5 py-2 hidden" id="searchBar">
-            <i data-feather="search"></i>
-            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchFilesAndFolders(this.value)">
-          </div>
-          <nav id="fileDropdown" class="px-2 text-gray-700 hidden dropdown-content">
-            <!-- Populated by JavaScript -->
-          </nav>
-          <div class="flex items-center justify-between px-5 py-2 hidden" id="createFileBtn">
-            <button id="createNewFileButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Create New File</button>
-          </div>
+          <form class="mt-4">
+            <div class="border-t border-gray-200 px-4 py-6">
+              <h3 class="-mx-2 -my-3 flow-root">
+                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-0" aria-expanded="false">
+                  <span class="font-medium text-gray-900">Team</span>
+                  <span class="ml-6 flex items-center">
+                    <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </button>
+              </h3>
+              <div class="pt-6" id="filter-section-0">
+                <div class="space-y-6">
+                  <div class="flex items-center">
+                    <input id="filter-mobile-category-0" name="category[]" value="legacy" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-category-0" class="ml-3 text-sm text-gray-500">Legacy</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-mobile-category-1" name="category[]" value="publishing" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-category-1" class="ml-3 text-sm text-gray-500">Publishing</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-mobile-category-2" name="category[]" value="celebrations" type="checkbox" checked class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-category-2" class="ml-3 text-sm text-gray-500">Celebrations</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="border-t border-gray-200 px-4 py-6">
+              <h3 class="-mx-2 -my-3 flow-root">
+                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-1" aria-expanded="false">
+                  <span class="font-medium text-gray-900">Test Type</span>
+                  <span class="ml-6 flex items-center">
+                    <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                  </span>
+                </button>
+              </h3>
+              <div class="pt-6" id="filter-section-1">
+                <div class="space-y-6">
+                  <div class="flex items-center">
+                    <input id="filter-mobile-color-0" name="color[]" value="ui-tests" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-color-0" class="ml-3 text-sm text-gray-500">UI Tests</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-mobile-color-1" name="color[]" value="api-tests" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-mobile-color-1" class="ml-3 text-sm text-gray-500">API Tests</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </div>
-
-  <div id="createNewFileModalWindow" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-5 rounded shadow-lg text-center">
-      <input type="text" id="newFileNameInput" class="w-full p-2 mb-4 border rounded" placeholder="Enter file name" required>
-      <textarea id="newFileContentsInput" class="w-full h-64 p-2 mb-4 border rounded" placeholder="Enter file contents" required></textarea>
-      <button id="submitCreateFileButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-      <button id="cancelButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4">Cancel</button>
-    </div>
-  </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
-  <script src="repoFileSelector.js"></script>  
-
-  
 </body>
-  
+
 </html>
