@@ -34,7 +34,14 @@
                 Object.keys(test_data).forEach(status => {
                     test_data[status].tests.forEach(data => {
                         const tr = document.createElement('tr');
-                        let statusClass = status === 'Passed' ? 'bg-green-50 text-green-700 ring-green-600' : 'bg-red-50 text-red-700 ring-red-600';
+                        let statusClass = '';
+                        if (status === 'Passed') {
+                            statusClass = 'bg-green-50 text-green-700 ring-green-600';
+                        } else if (status === 'Failed') {
+                            statusClass = 'bg-red-50 text-red-700 ring-red-600';
+                        } else if (status === 'Untested') {
+                            statusClass = 'bg-yellow-50 text-yellow-700 ring-yellow-600';
+                        }
                         tr.innerHTML = `
                             <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-white sm:pl-0">
                                 <div class="flex items-center">
