@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-900">
+    <div class="container">
+        <div id="brd">
+            <!-- The content will be inserted here -->
+        </div>
+    </div>
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h1 class="text-base font-semibold leading-6 text-white"></h1>
+                <p class="mt-2 text-sm text-gray-300"></p>
+            </div>
+            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+            </div>
+        </div>
+        <div class="mt-8 flow-root">
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4" id="test-data">
+                        <!-- Test data will be inserted here -->
+                    </div>
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">Test Name</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Team</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Test Type</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Last Run</th>
+                                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                                    <span class="sr-only">View Details</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-800 bg-gray-900">
+                            <!-- Data will be inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        window.onload = function() {
+            axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: 'today'})
+            .then(function (response) {
+                const test_data = response.data;
+                const tbody = document.querySelector('tbody');
+                const container = document.getElementById('test-data');
+                let total = 0;
+                for (const [key, value] of Object.entries(test_data)) {
+                    const div = document.createElement('div');
+                    div.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
+
+                    const p1 = document.createElement('p');
+                    p1.className = 'text-sm font-medium leading-6 text-gray-400';
+                    p1.textContent = key;
+
+                    const p2 = document.createElement('p');
+                    p2.className = 'mt-2 flex items-baseline gap-x-2';
+
+                    const span = document.createElement('span');
+                    span.className = 'text-4xl font-semibold tracking-tight text-white';
+                    span.textContent = value.total;
+
+                    p2.appendChild(span);
+                    div.appendChild(p1);
+                    div.appendChild(p2);
+                    container.appendChild(div);
+
+                    total += value.total;
+                }
+
+                const totalDiv = document.createElement('div');
+                totalDiv.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
+
+                const totalP1 = document.createElement('p');
+                totalP1.className = 'text-sm font-medium leading-6 text-gray-400';
+                totalP1.textContent = 'Total';
+
+                const totalP2 = document.createElement('p');
+                totalP2.className = 'mt-2 flex items-baseline gap-x-2';
+
+                const totalSpan = document.createElement('span');
+                totalSpan.className = 'text-4xl font-semibold tracking-tight text-white';
+                totalSpan.textContent = total;
+
+                totalP2.appendChild(totalSpan);
+                totalDiv.appendChild(totalP1);
+                totalDiv.appendChild(totalP2);
+                container.appendChild(totalDiv);
+
+                Object.keys(test_data).forEach(status => {
+                    test_data[status].tests.forEach(data => {
+                        const tr = document.createElement('tr');
+                        let statusClass = '';
+                        if (status === 'Passed') {
+                            statusClass = 'bg-green-50 text-green-700 ring-green-600';
+                        } else if (status === 'Failed') {
+                            statusClass = 'bg-red-50 text-red-700 ring-red-600';
+                        } else if (status === 'Untested') {
+                            statusClass = 'bg-yellow-50 text-yellow-700 ring-yellow-600';
+                        }
+                        tr.innerHTML = `
+                            <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-white sm:pl-0">
+                                <div class="flex items-center">
+                                    <div class="h-11 w-11 flex-shrink-0">
+                                        <img class="h-11 w-11 rounded-full" src="https://cdn-icons-png.flaticon.com/512/64/64139.png" alt="">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="font-medium text-white">${data.formatted_test_name}</div>
+                                        <div class="mt-1 text-gray-300 small-font">${data.file_path}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                                <div class="text-white">${data.team}</div>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                                <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${statusClass}/20">${status}</span>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.test_type}</td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.timestamp}</td>
+                            <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
+                                <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${data.formatted_test_name}</span></a>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        };
+    </script>
+</body>
+</html>
