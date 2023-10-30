@@ -42,9 +42,9 @@
                 <thead>
                     <tr>
                         <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
-                            <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            <input type="checkbox" id="select-all" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                         </th>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">Test Name</th>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0" id="test-name-header">Test Name</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Team</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Test Type</th>
@@ -54,7 +54,7 @@
                         </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-800 bg-gray-900">
+                <tbody class="divide-y divide-gray-800 bg-gray-900" id="table-body">
                     <!-- Data will be inserted here -->
                 </tbody>
             </table>
@@ -69,7 +69,27 @@
             });
             // Trigger change event on page load to load initial data
             fetchData('today');
+
+            const selectAllCheckbox = document.getElementById('select-all');
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.row-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+                toggleBulkActions(this.checked);
+            });
         };
+
+        function toggleBulkActions(isChecked) {
+            const testNameHeader = document.getElementById('test-name-header');
+            if (isChecked) {
+                testNameHeader.innerHTML = `
+                    <button type="button" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
+                `;
+            } else {
+                testNameHeader.textContent = 'Test Name';
+            }
+        }
 
         function fetchData(timeframe) {
             axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe})
@@ -136,7 +156,7 @@
                         }
                         tr.innerHTML = `
                             <td class="relative px-7 sm:w-12 sm:px-6">
-                                <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                             </td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
                                 <div class="ml-4">
@@ -152,7 +172,7 @@
                             </td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.test_type}</td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.timestamp}</td>
-                            <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
+                                                        <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
                                 <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${data.formatted_test_name}</span></a>
                             </td>
                         `;
