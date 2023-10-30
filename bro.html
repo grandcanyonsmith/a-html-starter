@@ -24,6 +24,53 @@
             font-size: 0.8em;
         }
     </style>
+    <script>
+        const test_data = [
+            {
+                'file_path': '/home/ssm-user/yb-automation-tests/tests/legacy/ui_tests/test_manager_writes_a_comment.py', 
+                'test_name': 'tests/legacy/ui_tests/test_manager_writes_a_comment.py::test_manager_invites_others_to_write', 
+                'formatted_test_name': 'Test Manager Invites Others To Write', 
+                'team': 'Legacy', 
+                'test_type': 'Ui Tests', 
+                'status': 'passed', 
+                'duration': 7132, 
+                'logs':[], 
+                'timestamp': '2023-10-30T00:44:25.253869'
+            }
+        ];
+
+        window.onload = function() {
+            const tbody = document.querySelector('tbody');
+            test_data.forEach(data => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-white sm:pl-0">
+                        <div class="flex items-center">
+                            <div class="h-11 w-11 flex-shrink-0">
+                                <img class="h-11 w-11 rounded-full" src="https://cdn-icons-png.flaticon.com/512/64/64139.png" alt="">
+                            </div>
+                            <div class="ml-4">
+                                <div class="font-medium text-white">${data.formatted_test_name}</div>
+                                <div class="mt-1 text-gray-300 small-font">${data.file_path}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                        <div class="text-white">${data.team}</div>
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                        <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">${data.status}</span>
+                    </td>
+                    <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.test_type}</td>
+                    <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.timestamp}</td>
+                    <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
+                        <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${data.formatted_test_name}</span></a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+    </script>
 </head>
 <body class="bg-gray-900">
     <div class="container">
@@ -57,31 +104,7 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-800 bg-gray-900">
-                            <tr>
-                                <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-white sm:pl-0">
-                                    <div class="flex items-center">
-                                        <div class="h-11 w-11 flex-shrink-0">
-                                            <img class="h-11 w-11 rounded-full" src="https://cdn-icons-png.flaticon.com/512/64/64139.png" alt="">
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="font-medium text-white">Test Manager Writes a Comment</div>
-                                            <div class="mt-1 text-gray-300 small-font">legacy/ui_test/test_manager_writes_a_comment.py</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
-                                    <div class="text-white">Legacy</div>
-                                </td>
-                                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
-                                    <span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Passed</span>
-                                </td>
-                                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">UI Test</td>
-                                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">48 min ago</td>
-                                <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
-                                    <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, Test Manager Writes a Comment</span></a>
-                                </td>
-                            </tr>
-                            <!-- More people... -->
+                            <!-- Data will be inserted here -->
                         </tbody>
                     </table>
                 </div>
