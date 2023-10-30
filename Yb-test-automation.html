@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         #table-container {
-            height: 90vh; /* Adjust this value as needed */
+            height: 70vh; /* Adjust this value as needed */
             overflow-y: auto;
         }
     </style>
@@ -26,6 +26,12 @@
                 <p class="mt-2 text-sm text-gray-300"></p>
             </div>
             <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                <select id="timeframe" class="rounded-md bg-gray-800 text-white">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="2 days ago">2 Days Ago</option>
+                    <option value="3 days ago">3 Days Ago</option>
+                </select>
             </div>
         </div>
         <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4" id="test-data">
@@ -53,12 +59,25 @@
     </div>
     <script>
         window.onload = function() {
-            axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: 'today'})
+            const timeframeDropdown = document.getElementById('timeframe');
+            timeframeDropdown.addEventListener('change', function() {
+                const timeframe = this.value;
+                fetchData(timeframe);
+            });
+            // Trigger change event on page load to load initial data
+            fetchData('today');
+        };
+
+        function fetchData(timeframe) {
+            axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe})
             .then(function (response) {
                 const test_data = response.data;
                 const tbody = document.querySelector('tbody');
                 const container = document.getElementById('test-data');
                 let total = 0;
+                // Clear previous data
+                tbody.innerHTML = '';
+                container.innerHTML = '';
                 for (const [key, value] of Object.entries(test_data)) {
                     const div = document.createElement('div');
                     div.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
@@ -120,7 +139,7 @@
                                     </div>
                                     <div class="ml-4">
                                         <div class="font-medium text-white">${data.formatted_test_name}</div>
-<div class="mt-1 text-gray-300" style="font-size: 0.668rem;">${data.file_path}</div>
+                                        <div class="mt-1 text-gray-300" style="font-size: 0.668rem;">${data.file_path}</div>
                                     </div>
                                 </div>
                             </td>
@@ -143,7 +162,7 @@
             .catch(function (error) {
                 console.log(error);
             });
-        };
+        }
     </script>
 </body>
 </html>
