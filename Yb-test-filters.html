@@ -36,7 +36,7 @@
                   </span>
                 </button>
               </h3>
-              <div class="pt-6" id="filter-section-0">
+              <div class="pt-6 hidden" id="filter-section-0">
                 <div class="space-y-6">
                   <div class="flex items-center">
                     <input id="filter-mobile-category-0" name="category[]" value="legacy" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -64,7 +64,7 @@
                   </span>
                 </button>
               </h3>
-              <div class="pt-6" id="filter-section-1">
+<div class="pt-6 hidden" id="filter-section-1">
                 <div class="space-y-6">
                   <div class="flex items-center">
                     <input id="filter-mobile-color-0" name="color[]" value="ui-tests" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -75,8 +75,37 @@
                     <label for="filter-mobile-color-1" class="ml-3 text-sm text-gray-500">API Tests</label>
                   </div>
                 </div>
+
               </div>
+
             </div>
+      <div class="border-t border-gray-200 px-4 py-6">
+        <h3 class="-mx-2 -my-3 flow-root">
+          <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-2" aria-expanded="false">
+            <span class="font-medium text-gray-900">Status</span>
+            <span class="ml-6 flex items-center">
+              <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          </button>
+        </h3>
+<div class="pt-6 hidden" id="filter-section-2">
+          <div class="space-y-6">
+            <div class="flex items-center">
+              <input id="filter-mobile-status-0" name="status[]" value="passed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+              <label for="filter-mobile-status-0" class="ml-3 text-sm text-gray-500">Passed</label>
+            </div>
+            <div class="flex items-center">
+              <input id="filter-mobile-status-1" name="status[]" value="failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+              <label for="filter-mobile-status-1" class="ml-3 text-sm text-gray-500">Failed</label>
+            </div>
+            <div class="flex items-center">
+              <input id="filter-mobile-status-2" name="status[]" value="untested" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+              <label for="filter-mobile-status-2" class="ml-3 text-sm text-gray-500">Untested</label>
+            </div>
+          </div>
+        </div>
           </form>
         </div>
       </div>
@@ -119,7 +148,8 @@
                     </svg>
                   </button>
 
-                  <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+<div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden">
+
                     <form class="space-y-4">
                       <div class="flex items-center">
                         <input id="filter-team-0" name="team[]" value="legacy" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -144,7 +174,8 @@
                     </svg>
                   </button>
 
-                  <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+<div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden">
+
                     <form class="space-y-4">
                       <div class="flex items-center">
                         <input id="filter-test-type-0" name="test-type[]" value="ui-tests" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -156,14 +187,67 @@
                       </div>
                     </form>
                   </div>
-                </div>
-              </div>
+            <div class="relative inline-block px-4 text-left">
+        <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" aria-expanded="false">
+          <span>Status</span>
+          <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+<div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden">
+
+          <form class="space-y-4">
+            <div class="flex items-center">
+              <input id="filter-status-0" name="status[]" value="passed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+              <label for="filter-status-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">Passed</label>
             </div>
-          </div>
+            <div class="flex items-center">
+              <input id="filter-status-1" name="status[]" value="failed" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+              <label for="filter-status-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">Failed</label>
+            </div>
+            <div class="flex items-center">
+              <input id="filter-status-2" name="status[]" value="untested" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+              <label for="filter-status-2" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">Untested</label>
+            </div>
+          </form>
         </div>
       </div>
     </section>
   </div>
+
+<script>
+  // Get all mobile filter buttons
+  const mobileFilterButtons = document.querySelectorAll('.flex.w-full.items-center.justify-between.bg-white.px-2.py-3.text-sm.text-gray-400');
+
+  // Get all desktop filter buttons
+  const desktopFilterButtons = document.querySelectorAll('[type="button"].group');
+
+  // Add event listener to each mobile filter button
+  mobileFilterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const filterSection = this.parentNode.nextElementSibling;
+      filterSection.classList.toggle('hidden');
+    });
+  });
+
+  // Add event listener to each desktop filter button
+  desktopFilterButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const filterSection = this.nextElementSibling;
+      filterSection.classList.toggle('hidden');
+    });
+  });
+
+  // Get the close button
+  const closeButton = document.querySelector('.-mr-2.flex.h-10.w-10.items-center.justify-center.rounded-md.bg-white.p-2.text-gray-400');
+
+  // Add event listener to the close button
+  closeButton.addEventListener('click', function() {
+    const filterPopup = document.querySelector('.relative.ml-auto.flex.h-full.w-full.max-w-xs.flex-col.overflow-y-auto.bg-white.py-4.pb-12.shadow-xl');
+    filterPopup.classList.add('hidden');
+  });
+</script>
 </body>
 
 </html>
