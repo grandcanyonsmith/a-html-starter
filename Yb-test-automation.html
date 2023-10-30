@@ -41,6 +41,9 @@
             <table class="min-w-full divide-y divide-gray-700">
                 <thead>
                     <tr>
+                        <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
+                            <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                        </th>
                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">Test Name</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Team</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
@@ -132,15 +135,13 @@
                             statusClass = 'bg-yellow-50 text-yellow-700 ring-yellow-600';
                         }
                         tr.innerHTML = `
-                            <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm text-white sm:pl-0">
-                                <div class="flex items-center">
-                                    <div class="h-11 w-11 flex-shrink-0">
-                                        <img class="h-11 w-11 rounded-full" src="https://cdn-icons-png.flaticon.com/512/64/64139.png" alt="">
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="font-medium text-white">${data.formatted_test_name}</div>
-                                        <div class="mt-1 text-gray-300" style="font-size: 0.668rem;">${data.file_path}</div>
-                                    </div>
+                            <td class="relative px-7 sm:w-12 sm:px-6">
+                                <input type="checkbox" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                                <div class="ml-4">
+                                    <div class="font-medium text-white">${data.formatted_test_name}</div>
+                                    <div class="mt-1 text-gray-300" style="font-size: 0.668rem;">${data.file_path}</div>
                                 </div>
                             </td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
