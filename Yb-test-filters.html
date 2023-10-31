@@ -1,214 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-        #table-container {
-            height: 90vh; /* Adjust this value as needed */
-            overflow-y: auto;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Filter</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-900">
-    <div class="container">
-        <div id="brd">
-            <!-- The content will be inserted here -->
+
+<body class="bg-gray-800 text-white">
+  <div class="bg-gray-900">
+    <!-- Mobile Filters -->
+    <div class="relative z-40 sm:hidden" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 bg-black bg-opacity-25"></div>
+      <div class="fixed inset-0 z-40 flex">
+        <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-gray-800 py-4 pb-12 shadow-xl">
+          <div class="flex items-center justify-between px-4">
+            <h2 class="text-lg font-medium text-white">Filters</h2>
+            <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400">
+              <span class="sr-only">Close menu</span>
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <!-- Rest of the code -->
         </div>
+      </div>
     </div>
-    <div class="px-4 sm:px-6 lg:px-8">
-        <div class="sm:flex sm:items-center">
-            <div class="sm:flex-auto">
-                <h1 class="text-base font-semibold leading-6 text-white"></h1>
-                <p class="mt-2 text-sm text-gray-300"></p>
-            </div>
-            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
-                <select id="timeframe" class="rounded-md bg-gray-800 text-white">
-                    <option value="today">Today</option>
-                    <option value="yesterday">Yesterday</option>
-                    <option value="2 days ago">2 Days Ago</option>
-                    <option value="3 days ago">3 Days Ago</option>
-                </select>
-            </div>
-        </div>
-        <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4" id="test-data">
-            <!-- Test data will be inserted here -->
-        </div>
-        <div id="table-container">
-            <table class="min-w-full divide-y divide-gray-700">
-                <thead>
-                    <tr>
-                        <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
-                            <input type="checkbox" id="select-all" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-                        </th>
-                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0" id="test-name-header">Test Name</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Team</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Test Type</th>
-                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Last Run</th>
-                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                            <span class="sr-only">View Details</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-800 bg-gray-900" id="table-body">
-                    <!-- Data will be inserted here -->
-                </tbody>
-            </table>
-        </div>
     </div>
-    <script>
-        window.onload = function() {
-            const timeframeDropdown = document.getElementById('timeframe');
-            timeframeDropdown.addEventListener('change', function() {
-                const timeframe = this.value;
-                fetchData(timeframe);
-            });
-            // Trigger change event on page load to load initial data
-            fetchData('today');
 
-            const selectAllCheckbox = document.getElementById('select-all');
-            selectAllCheckbox.addEventListener('change', function() {
-                const checkboxes = document.querySelectorAll('.row-checkbox');
-                checkboxes.forEach(checkbox => {
-                    checkbox.checked = this.checked;
-                });
-                toggleBulkActions(this.checked);
-            });
+    <!-- Desktop Filters -->
+    <section aria-labelledby="filter-heading" class="hidden sm:block">
+      <h2 id="filter-heading" class="sr-only">Filters</h2>
 
-            document.addEventListener('change', function(e) {
-                if (e.target.classList.contains('row-checkbox')) {
-                    const checkboxes = document.querySelectorAll('.row-checkbox');
-                    const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-                    toggleBulkActions(isChecked);
-                }
-            });
-        };
+      <div class="border-b border-gray-700 bg-gray-900 pb-4">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <div class="relative inline-block text-left">
+            <div>
+              <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" id="menu-button" aria-expanded="false" aria-haspopup="true">
+                Sort
+                <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
 
-        function toggleBulkActions(isChecked) {
-    const testNameHeader = document.getElementById('test-name-header');
-    if (isChecked) {
-        testNameHeader.innerHTML = `
-            <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
-        `;
-        const runTestsBtn = document.getElementById('run-tests-btn');
-runTestsBtn.addEventListener('click', function() {
-    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
-    const filePaths = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-file-path'));
-    console.log(filePaths,'filepaths')
-    filePaths.forEach(filePath => {
-        axios.post('https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/', { filePath: filePath })
-        .then(function (response) {
-            alert(JSON.stringify(response.data));
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    });
-});
-    } else {
-        testNameHeader.textContent = 'Test Name';
-    }
-}
+            <div class="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+              <div class="py-1" role="none">
+                <a href="#" class="font-medium text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
+                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Best Rating</a>
+                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
+              </div>
+            </div>
+          </div>
 
-        function fetchData(timeframe) {
-            axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe})
-            .then(function (response) {
-                const test_data = response.data;
-                const tbody = document.querySelector('tbody');
-                const container = document.getElementById('test-data');
-                let total = 0;
-                // Clear previous data
-                tbody.innerHTML = '';
-                container.innerHTML = '';
-                for (const [key, value] of Object.entries(test_data)) {
-                    const div = document.createElement('div');
-                    div.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
+          <div class="hidden sm:block">
+            <div class="flow-root">
+              <div class="-mx-4 flex items-center divide-x divide-gray-600">
+                <div class="relative inline-block px-4 text-left">
+                  <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-expanded="false">
+                    <span>Team</span>
+                    <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
 
-                    const p1 = document.createElement('p');
-                    p1.className = 'text-sm font-medium leading-6 text-gray-400';
-                    p1.textContent = key;
+                  <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-gray-800 p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <form class="space-y-4">
+                      <div class="flex items-center">
+                        <input id="filter-team-0" name="team[]" value="legacy" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-team-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Legacy</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-team-1" name="team[]" value="publishing" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-team-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Publishing</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-team-2" name="team[]" value="celebrations" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-team-2" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Celebrations</label>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="relative inline-block px-4 text-left">
+                  <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-expanded="false">
+                    <span>Test Type</span>
+                    <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
 
-                    const p2 = document.createElement('p');
-                    p2.className = 'mt-2 flex items-baseline gap-x-2';
-
-                    const span = document.createElement('span');
-                    span.className = 'text-4xl font-semibold tracking-tight text-white';
-                    span.textContent = value.total;
-
-                    p2.appendChild(span);
-                    div.appendChild(p1);
-                    div.appendChild(p2);
-                    container.appendChild(div);
-
-                    total += value.total;
-                }
-
-                const totalDiv = document.createElement('div');
-                totalDiv.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
-
-                const totalP1 = document.createElement('p');
-                totalP1.className = 'text-sm font-medium leading-6 text-gray-400';
-                totalP1.textContent = 'Total';
-
-                const totalP2 = document.createElement('p');
-                totalP2.className = 'mt-2 flex items-baseline gap-x-2';
-
-                const totalSpan = document.createElement('span');
-                totalSpan.className = 'text-4xl font-semibold tracking-tight text-white';
-                totalSpan.textContent = total;
-
-                totalP2.appendChild(totalSpan);
-                totalDiv.appendChild(totalP1);
-                totalDiv.appendChild(totalP2);
-                container.appendChild(totalDiv);
-
-                Object.keys(test_data).forEach(status => {
-                    test_data[status].tests.forEach(data => {
-                        const tr = document.createElement('tr');
-                        let statusClass = '';
-                        if (status === 'Passed') {
-                            statusClass = 'bg-green-50 text-green-700 ring-green-600';
-                        } else if (status === 'Failed') {
-                            statusClass = 'bg-red-50 text-red-700 ring-red-600';
-                        } else if (status === 'Untested') {
-                            statusClass = 'bg-yellow-50 text-yellow-700 ring-yellow-600';
-                        }
-                        tr.innerHTML = `
-    <td class="relative px-7 sm:w-12 sm:px-6">
-        <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${data.file_path}">
-    </td>
-
-                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
-                                <div class="ml-4">
-                                    <div class="font-medium text-white">${data.formatted_test_name}</div>
-                                    <div class="mt-1 text-gray-300" style="font-size: 0.668rem;">${data.file_path}</div>
-                                </div>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
-                                <div class="text-white">${data.team}</div>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
-                                <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${statusClass}/20">${status}</span>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.test_type}</td>
-                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.timestamp}</td>
-                                                        <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
-                                <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${data.formatted_test_name}</span></a>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                });
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-
-        }
-    </script>
+                  <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-gray-800 p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <form class="space-y-4">
+                      <div class="flex items-center">
+                        <input id="filter-test-type-0" name="test-type[]" value="ui-tests" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-test-type-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">UI Tests</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-test-type-1" name="test-type[]" value="api-tests" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                                                <label for="filter-test-type-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">API Tests</label>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </body>
+
 </html>
