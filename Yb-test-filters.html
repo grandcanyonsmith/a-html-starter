@@ -97,8 +97,16 @@
         const runTestsBtn = document.getElementById('run-tests-btn');
 runTestsBtn.addEventListener('click', function() {
     const checkboxes = document.querySelectorAll('.row-checkbox:checked');
-    checkboxes.forEach(checkbox => {
-        console.log(checkbox.getAttribute('data-file-path'));
+    const filePaths = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-file-path'));
+    console.log(filePaths,'filepaths')
+    filePaths.forEach(filePath => {
+        axios.post('https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/', { filePath: filePath })
+        .then(function (response) {
+            alert(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     });
 });
     } else {
@@ -199,6 +207,7 @@ runTestsBtn.addEventListener('click', function() {
             .catch(function (error) {
                 console.log(error);
             });
+
         }
     </script>
 </body>
