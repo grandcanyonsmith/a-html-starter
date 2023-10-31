@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Case Generator</title>
+    <link rel="stylesheet" href="testcasegen.css">
+    <link rel="icon" type="image/x-icon" href="code-fork-solid.svg">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Test Case Generator</h1>
+
+        <div class="content-section">
+            <div class="box-left">
+                <label for="requirement-docs">Requirement Documents:</label>
+                <input type="file" id="requirements-file-input" accept=".txt,.pdf,.doc,.docx" multiple>
+            </div>
+
+            <!-- <div class="box-right">
+                <label for="misc-docs">Miscellaneous Documents:</label>
+                <input type="file" id="miscellaneous-file-input" name="misc-docs" accept=".doc, .docx, .pdf, .txt, .xls, .xlsx, .csv" multiple>
+            </div> -->
+        </div>
+
+        <div class="test-case-section">
+            <div class="test-case-group">
+                <div class="response-section">
+                    <label for="security-test-cases">Security Test Cases:</label>
+                    <textarea id="security-test-cases"></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="create-test-case-button">Create Test Cases</button>
+                    <button class="create-tests-button">Create Tests</button>
+                </div>
+            </div>
+            <div class="test-case-group">
+                <div class="response-section">
+                    <label for="performance-test-cases">Performance Test Cases:</label>
+                    <textarea id="performance-test-cases"></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="create-test-case-button">Create Test Cases</button>
+                    <button class="create-tests-button">Create Tests</button>
+                </div>
+            </div>
+            <div class="test-case-group">
+                <div class="response-section">
+                    <label for="functional-test-cases">Functional Test Cases:</label>
+                    <textarea id="functional-test-cases"></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="create-test-case-button">Create Test Cases</button>
+                    <button class="create-tests-button">Create Tests</button>
+                </div>
+            </div>
+            <div class="test-case-group">
+                <div class="response-section">
+                    <label for="regression-test-cases">Regression Test Cases:</label>
+                    <textarea id="regression-test-cases"></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="create-test-case-button">Create Test Cases</button>
+                    <button class="create-tests-button">Create Tests</button>
+                </div>
+            </div>
+            <div class="test-case-group">
+                <div class="response-section">
+                    <label for="design-test-cases">Design Test Cases:</label>
+                    <textarea id="design-test-cases"></textarea>
+                </div>
+                <div class="button-group">
+                    <button class="create-test-case-button">Create Test Cases</button>
+                    <button class="create-tests-button">Create Tests</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+<script src="testcasegen.js"></script>
+</body>
+
+</html>
