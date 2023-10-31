@@ -84,8 +84,14 @@
             const testNameHeader = document.getElementById('test-name-header');
             if (isChecked) {
                 testNameHeader.innerHTML = `
-                    <button type="button" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
+                    <button type="button" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="run-tests">Run Tests</button>
                 `;
+                document.getElementById('run-tests').addEventListener('click', function() {
+                    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+                    checkboxes.forEach(checkbox => {
+                        console.log(checkbox.dataset.filePath);
+                    });
+                });
             } else {
                 testNameHeader.textContent = 'Test Name';
             }
@@ -156,7 +162,7 @@
                         }
                         tr.innerHTML = `
                             <td class="relative px-7 sm:w-12 sm:px-6">
-                                <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${data.file_path}">
                             </td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
                                 <div class="ml-4">
