@@ -78,24 +78,41 @@
                 });
                 toggleBulkActions(this.checked);
             });
+
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('row-checkbox')) {
+                    const checkboxes = document.querySelectorAll('.row-checkbox');
+                    const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+                    toggleBulkActions(isChecked);
+                }
+            });
         };
 
         function toggleBulkActions(isChecked) {
-            const testNameHeader = document.getElementById('test-name-header');
-            if (isChecked) {
-                testNameHeader.innerHTML = `
-                    <button type="button" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="run-tests">Run Tests</button>
-                `;
-                document.getElementById('run-tests').addEventListener('click', function() {
-                    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
-                    checkboxes.forEach(checkbox => {
-                        console.log(checkbox.dataset.filePath);
-                    });
-                });
-            } else {
-                testNameHeader.textContent = 'Test Name';
-            }
-        }
+    const testNameHeader = document.getElementById('test-name-header');
+    if (isChecked) {
+        testNameHeader.innerHTML = `
+            <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
+        `;
+        const runTestsBtn = document.getElementById('run-tests-btn');
+runTestsBtn.addEventListener('click', function() {
+    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+    const filePaths = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-file-path'));
+    console.log(filePaths,'filepaths')
+    filePaths.forEach(filePath => {
+        axios.post('https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/', { filePath: filePath })
+        .then(function (response) {
+            alert(JSON.stringify(response.data));
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    });
+});
+    } else {
+        testNameHeader.textContent = 'Test Name';
+    }
+}
 
         function fetchData(timeframe) {
             axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe})
@@ -161,9 +178,10 @@
                             statusClass = 'bg-yellow-50 text-yellow-700 ring-yellow-600';
                         }
                         tr.innerHTML = `
-                            <td class="relative px-7 sm:w-12 sm:px-6">
-                                <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${data.file_path}">
-                            </td>
+    <td class="relative px-7 sm:w-12 sm:px-6">
+        <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${data.file_path}">
+    </td>
+
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
                                 <div class="ml-4">
                                     <div class="font-medium text-white">${data.formatted_test_name}</div>
@@ -189,6 +207,7 @@
             .catch(function (error) {
                 console.log(error);
             });
+
         }
     </script>
 </body>
