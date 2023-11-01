@@ -75,9 +75,6 @@
                         <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0" id="test-name-header">Test Name</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
                         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Last Run</th>
-                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                            <span class="sr-only">View Details</span>
-                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-800 bg-gray-900" id="table-body">
@@ -231,9 +228,6 @@
                                 <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${statusClass}/20">${status}</span>
                             </td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.timestamp}</td>
-                            <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
-                                <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${data.formatted_test_name}</span></a>
-                            </td>
                         `;
                         tbody.appendChild(tr);
                     });
