@@ -6,40 +6,35 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-        #table-container {
-            height: 90vh; /* Adjust this value as needed */
-            overflow-y: auto;
-        }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-        }
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 120px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px 0;
-            position: absolute;
-            z-index: 1;
-            top: 100%;
-            left: 50%;
-            margin-left: -60px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.6rem;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+<style>
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        word-wrap: break-word; /* Add this line */
+        overflow-wrap: break-word; /* Add this line */
+    }
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        /* Removed width: 120px */
+        background-color: #555;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px 0;
+        position: absolute;
+        z-index: 1;
+        top: 100%;
+        left: 0; /* Changed from 50% to 0 */
+        /* Removed margin-left: -60px */
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-size: 0.6rem;
+    }
         .tooltip:hover .tooltiptext {
             visibility: visible;
             opacity: 1;
         }
-    </style>
+</style>
 </head>
 <body class="bg-gray-900">
     <div class="container">
