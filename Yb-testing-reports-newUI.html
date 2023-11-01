@@ -11,6 +11,34 @@
             height: 90vh; /* Adjust this value as needed */
             overflow-y: auto;
         }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.6rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="bg-gray-900">
@@ -59,166 +87,163 @@
         </div>
     </div>
     <script>
-(function() {
-    const fetchData = async (timeframe) => {
-        try {
-            const response = await axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe});
-            return response.data;
-        } catch (error) {
-            console.error(error);
-            alert('An error occurred while fetching data');
-        }
-    };
+        window.onload = function() {
+            const timeframeDropdown = document.getElementById('timeframe');
+            timeframeDropdown.addEventListener('change', function() {
+                const timeframe = this.value;
+                fetchData(timeframe);
+            });
+            // Trigger change event on page load to load initial data
+            fetchData('today');
 
-const updateUI = (test_data) => {
-    const tbody = document.querySelector('tbody');
-    const container = document.getElementById('test-data');
-    let total = 0;
+            const selectAllCheckbox = document.getElementById('select-all');
+            selectAllCheckbox.addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.row-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+                toggleBulkActions(this.checked);
+            });
 
-    // Clear previous data
-    tbody.innerHTML = '';
-    container.innerHTML = '';
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('row-checkbox')) {
+                    const checkboxes = document.querySelectorAll('.row-checkbox');
+                    const isChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+                    toggleBulkActions(isChecked);
+                }
+            });
+        };
 
-    // Populate the UI with new data
-    for (const [key, value] of Object.entries(test_data)) {
-        const div = document.createElement('div');
-        div.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
-
-        const p1 = document.createElement('p');
-        p1.className = 'text-sm font-medium leading-6 text-gray-400';
-        p1.textContent = key;
-
-        const p2 = document.createElement('p');
-        p2.className = 'mt-2 flex items-baseline gap-x-2';
-
-        const span = document.createElement('span');
-        span.className = 'text-4xl font-semibold tracking-tight text-white';
-        span.textContent = value.total;
-
-        p2.appendChild(span);
-        div.appendChild(p1);
-        div.appendChild(p2);
-        container.appendChild(div);
-
-        // Populate table rows
-                value.tests.forEach(test => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="relative px-7 sm:w-12 sm:px-6">
-                    <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${test.file_path}">
-                </td>
-                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
-                    <div class="ml-4">
-                        <div class="font-medium text-white">${test.formatted_test_name}</div>
-                        <div class="flex space-x-2 mt-1">
-                            <div class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600">${test.team}</div>
-                            <div class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600">${test.test_type}</div>
-                        </div>
-                    </div>
-                </td>
-                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
-                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${key === 'Passed' ? 'bg-green-50 text-green-700 ring-green-600' : 'bg-red-50 text-red-700 ring-red-600'}">${key}</span>
-                </td>
-                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${test.timestamp}</td>
-                <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
-                    <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${test.formatted_test_name}</span></a>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-
-        total += value.total;
-
-        
-    }
-
-    const totalDiv = document.createElement('div');
-    totalDiv.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
-
-    const totalP1 = document.createElement('p');
-    totalP1.className = 'text-sm font-medium leading-6 text-gray-400';
-    totalP1.textContent = 'Total';
-
-    const totalP2 = document.createElement('p');
-    totalP2.className = 'mt-2 flex items-baseline gap-x-2';
-
-    const totalSpan = document.createElement('span');
-    totalSpan.className = 'text-4xl font-semibold tracking-tight text-white';
-    totalSpan.textContent = total;
-
-    totalP2.appendChild(totalSpan);
-    totalDiv.appendChild(totalP1);
-    totalDiv.appendChild(totalP2);
-    container.appendChild(totalDiv);
-};
-
-    const toggleBulkActions = (isChecked) => {
-        const testNameHeader = document.getElementById('test-name-header');
-        testNameHeader.innerHTML = isChecked ? getBulkActionsButton() : 'Test Name';
-    };
-
-    const getBulkActionsButton = () => {
-        return `
-            <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
-        `;
-    };
-
-    const runTests = async (filePaths) => {
-        try {
-            const runTestsBtn = document.getElementById('run-tests-btn');
-            runTestsBtn.textContent = 'Running...';
-            const responses = await Promise.all(filePaths.map(filePath => axios.post('https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/', { filePath: filePath })));
-            alert(JSON.stringify(responses.map(response => response.data)));
-            runTestsBtn.textContent = 'Run Tests';
-        } catch (error) {
-            console.error(error);
-            alert('An error occurred while running tests');
-        }
-    };
-
-    const handleCheckboxChange = (event) => {
-        const isChecked = Array.from(document.querySelectorAll('.row-checkbox')).some(checkbox => checkbox.checked);
-        toggleBulkActions(isChecked);
-    };
-
-    const handleSelectAllChange = (event) => {
-        const checkboxes = document.querySelectorAll('.row-checkbox');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = event.target.checked;
-        });
-        toggleBulkActions(event.target.checked);
-    };
-
-    const handleTimeframeChange = async (event) => {
-        const timeframe = event.target.value;
-        const data = await fetchData(timeframe);
-        updateUI(data);
-    };
-
-    const handleRunTestsClick = () => {
-        const checkboxes = Array.from(document.querySelectorAll('.row-checkbox:checked'));
-        const filePaths = Array.from(new Set(checkboxes.map(checkbox => checkbox.getAttribute('data-file-path'))));
-        runTests(filePaths);
-    };
-
-    window.onload = () => {
-        const timeframeDropdown = document.getElementById('timeframe');
-        timeframeDropdown.addEventListener('change', handleTimeframeChange);
-
-        const selectAllCheckbox = document.getElementById('select-all');
-        selectAllCheckbox.addEventListener('change', handleSelectAllChange);
-
-        document.addEventListener('change', handleCheckboxChange);
-
-        document.addEventListener('click', (event) => {
-            if (event.target.id === 'run-tests-btn') {
-                handleRunTestsClick();
+        function toggleBulkActions(isChecked) {
+            const testNameHeader = document.getElementById('test-name-header');
+            if (isChecked) {
+                testNameHeader.innerHTML = `
+                    <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
+                `;
+                const runTestsBtn = document.getElementById('run-tests-btn');
+                runTestsBtn.addEventListener('click', function() {
+                    const checkboxes = Array.from(document.querySelectorAll('.row-checkbox:checked'));
+                    const filePaths = Array.from(new Set(checkboxes.map(checkbox => checkbox.getAttribute('data-file-path'))));
+                    runTestsBtn.textContent = 'Running...';
+                    filePaths.forEach(filePath => {
+                        axios.post('https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/', { filePath: filePath })
+                        .then(function (response) {
+                            alert(JSON.stringify(response.data));
+                            runTestsBtn.textContent = 'Run Tests';
+                            checkboxes.forEach(checkbox => {
+                                checkbox.checked = false;
+                            });
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                    });
+                });
+            } else {
+                testNameHeader.textContent = 'Test Name';
             }
-        });
+        }
 
-        fetchData('today').then(data => updateUI(data));
-    };
-})();
+        function fetchData(timeframe) {
+            axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe})
+            .then(function (response) {
+                const test_data = response.data;
+                const tbody = document.querySelector('tbody');
+                const container = document.getElementById('test-data');
+                let total = 0;
+                // Clear previous data
+                tbody.innerHTML = '';
+                container.innerHTML = '';
+                for (const [key, value] of Object.entries(test_data)) {
+                    const div = document.createElement('div');
+                    div.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
+
+                    const p1 = document.createElement('p');
+                    p1.className = 'text-sm font-medium leading-6 text-gray-400';
+                    p1.textContent = key;
+
+                    const p2 = document.createElement('p');
+                    p2.className = 'mt-2 flex items-baseline gap-x-2';
+
+                    const span = document.createElement('span');
+                    span.className = 'text-4xl font-semibold tracking-tight text-white';
+                    span.textContent = value.total;
+
+                    p2.appendChild(span);
+                    div.appendChild(p1);
+                    div.appendChild(p2);
+                    container.appendChild(div);
+
+                    total += value.total;
+                }
+
+                const totalDiv = document.createElement('div');
+                totalDiv.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
+
+                const totalP1 = document.createElement('p');
+                totalP1.className = 'text-sm font-medium leading-6 text-gray-400';
+                totalP1.textContent = 'Total';
+
+                const totalP2 = document.createElement('p');
+                totalP2.className = 'mt-2 flex items-baseline gap-x-2';
+
+                const totalSpan = document.createElement('span');
+                totalSpan.className = 'text-4xl font-semibold tracking-tight text-white';
+                totalSpan.textContent = total;
+
+                totalP2.appendChild(totalSpan);
+                totalDiv.appendChild(totalP1);
+                totalDiv.appendChild(totalP2);
+                container.appendChild(totalDiv);
+
+                Object.keys(test_data).sort((a, b) => {
+                    if (a === 'Passed') return -1;
+                    if (b === 'Passed') return 1;
+                    if (a === 'Failed') return -1;
+                    if (b === 'Failed') return 1;
+                    return 0;
+                }).forEach(status => {
+                    test_data[status].tests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(data => {
+                        const tr = document.createElement('tr');
+                        let statusClass = '';
+                        if (status === 'Passed') {
+                            statusClass = 'bg-green-50 text-green-700 ring-green-600';
+                        } else if (status === 'Failed') {
+                            statusClass = 'bg-red-50 text-red-700 ring-red-600';
+                        } else if (status === 'Untested') {
+                            statusClass = 'bg-yellow-50 text-yellow-700 ring-yellow-600';
+                        }
+                        tr.innerHTML = `
+                            <td class="relative px-7 sm:w-12 sm:px-6">
+                                <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${data.file_path}">
+                            </td>
+
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                                <div class="ml-4">
+                                    <div class="tooltip font-medium text-white">${data.formatted_test_name}<span class="tooltiptext">${data.file_path}</span></div>
+                                    <div class="flex space-x-2 mt-1">
+                                        <div class="inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600">${data.team}</div>
+                                        <div class="inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600">${data.test_type}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                                <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${statusClass}/20">${status}</span>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${data.timestamp}</td>
+                            <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
+                                <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${data.formatted_test_name}</span></a>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+        }
     </script>
 </body>
 </html>
