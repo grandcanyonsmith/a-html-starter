@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        #table-container {
+            height: 90vh; /* Adjust this value as needed */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <div class="container">
+        <div id="brd">
+            <!-- The content will be inserted here -->
+        </div>
+    </div>
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h1 class="text-base font-semibold leading-6 text-white"></h1>
+                <p class="mt-2 text-sm text-gray-300"></p>
+            </div>
+            <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                <select id="timeframe" class="rounded-md bg-gray-800 text-white">
+                    <option value="today">Today</option>
+                    <option value="yesterday">Yesterday</option>
+                    <option value="2 days ago">2 Days Ago</option>
+                    <option value="3 days ago">3 Days Ago</option>
+                </select>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 gap-px bg-white/5 sm:grid-cols-2 lg:grid-cols-4" id="test-data">
+            <!-- Test data will be inserted here -->
+        </div>
+        <div id="table-container">
+            <table class="min-w-full divide-y divide-gray-700">
+                <thead>
+                    <tr>
+                        <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
+                            <input type="checkbox" id="select-all" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                        </th>
+                        <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0" id="test-name-header">Test Name</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
+                        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Last Run</th>
+                        <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                            <span class="sr-only">View Details</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-800 bg-gray-900" id="table-body">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+(function() {
+    const fetchData = async (timeframe) => {
+        try {
+            const response = await axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe});
+            return response.data;
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while fetching data');
+        }
+    };
+
+const updateUI = (test_data) => {
+    const tbody = document.querySelector('tbody');
+    const container = document.getElementById('test-data');
+    let total = 0;
+
+    // Clear previous data
+    tbody.innerHTML = '';
+    container.innerHTML = '';
+
+    // Populate the UI with new data
+    for (const [key, value] of Object.entries(test_data)) {
+        const div = document.createElement('div');
+        div.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
+
+        const p1 = document.createElement('p');
+        p1.className = 'text-sm font-medium leading-6 text-gray-400';
+        p1.textContent = key;
+
+        const p2 = document.createElement('p');
+        p2.className = 'mt-2 flex items-baseline gap-x-2';
+
+        const span = document.createElement('span');
+        span.className = 'text-4xl font-semibold tracking-tight text-white';
+        span.textContent = value.total;
+
+        p2.appendChild(span);
+        div.appendChild(p1);
+        div.appendChild(p2);
+        container.appendChild(div);
+
+        // Populate table rows
+                value.tests.forEach(test => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="relative px-7 sm:w-12 sm:px-6">
+                    <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${test.file_path}">
+                </td>
+                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                    <div class="ml-4">
+                        <div class="font-medium text-white">${test.formatted_test_name}</div>
+                        <div class="flex space-x-2 mt-1">
+                            <div class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600">${test.team}</div>
+                            <div class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600">${test.test_type}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
+                    <span class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${key === 'Passed' ? 'bg-green-50 text-green-700 ring-green-600' : 'bg-red-50 text-red-700 ring-red-600'}">${key}</span>
+                </td>
+                <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">${test.timestamp}</td>
+                <td class="relative whitespace-nowrap py-5 pl-3 pr-4 text-right text-sm font-medium text-indigo-400 sm:pr-0">
+                    <a href="#" class="text-indigo-400 hover:text-indigo-300">View Details<span class="sr-only">, ${test.formatted_test_name}</span></a>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        total += value.total;
+
+        
+    }
+
+    const totalDiv = document.createElement('div');
+    totalDiv.className = 'bg-gray-900 px-4 py-6 sm:px-6 lg:px-8';
+
+    const totalP1 = document.createElement('p');
+    totalP1.className = 'text-sm font-medium leading-6 text-gray-400';
+    totalP1.textContent = 'Total';
+
+    const totalP2 = document.createElement('p');
+    totalP2.className = 'mt-2 flex items-baseline gap-x-2';
+
+    const totalSpan = document.createElement('span');
+    totalSpan.className = 'text-4xl font-semibold tracking-tight text-white';
+    totalSpan.textContent = total;
+
+    totalP2.appendChild(totalSpan);
+    totalDiv.appendChild(totalP1);
+    totalDiv.appendChild(totalP2);
+    container.appendChild(totalDiv);
+};
+
+    const toggleBulkActions = (isChecked) => {
+        const testNameHeader = document.getElementById('test-name-header');
+        testNameHeader.innerHTML = isChecked ? getBulkActionsButton() : 'Test Name';
+    };
+
+    const getBulkActionsButton = () => {
+        return `
+            <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
+        `;
+    };
+
+    const runTests = async (filePaths) => {
+        try {
+            const runTestsBtn = document.getElementById('run-tests-btn');
+            runTestsBtn.textContent = 'Running...';
+            const responses = await Promise.all(filePaths.map(filePath => axios.post('https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/', { filePath: filePath })));
+            alert(JSON.stringify(responses.map(response => response.data)));
+            runTestsBtn.textContent = 'Run Tests';
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while running tests');
+        }
+    };
+
+    const handleCheckboxChange = (event) => {
+        const isChecked = Array.from(document.querySelectorAll('.row-checkbox')).some(checkbox => checkbox.checked);
+        toggleBulkActions(isChecked);
+    };
+
+    const handleSelectAllChange = (event) => {
+        const checkboxes = document.querySelectorAll('.row-checkbox');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = event.target.checked;
+        });
+        toggleBulkActions(event.target.checked);
+    };
+
+    const handleTimeframeChange = async (event) => {
+        const timeframe = event.target.value;
+        const data = await fetchData(timeframe);
+        updateUI(data);
+    };
+
+    const handleRunTestsClick = () => {
+        const checkboxes = Array.from(document.querySelectorAll('.row-checkbox:checked'));
+        const filePaths = Array.from(new Set(checkboxes.map(checkbox => checkbox.getAttribute('data-file-path'))));
+        runTests(filePaths);
+    };
+
+    window.onload = () => {
+        const timeframeDropdown = document.getElementById('timeframe');
+        timeframeDropdown.addEventListener('change', handleTimeframeChange);
+
+        const selectAllCheckbox = document.getElementById('select-all');
+        selectAllCheckbox.addEventListener('change', handleSelectAllChange);
+
+        document.addEventListener('change', handleCheckboxChange);
+
+        document.addEventListener('click', (event) => {
+            if (event.target.id === 'run-tests-btn') {
+                handleRunTestsClick();
+            }
+        });
+
+        fetchData('today').then(data => updateUI(data));
+    };
+})();
+    </script>
+</body>
+</html>
