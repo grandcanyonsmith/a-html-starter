@@ -10,8 +10,12 @@
 
 <body class="bg-gray-800 text-white">
   <div class="bg-gray-900">
+<button class="sm:hidden bg-indigo-600 text-white px-4 py-2 rounded mt-4" id="mobile-filter-button">Filters</button>
+
+
 <!-- Mobile Filters -->
-<div class="relative z-40 sm:hidden" role="dialog" aria-modal="true">
+<div id="mobile-filters" class="relative z-40 sm:hidden" role="dialog" aria-modal="true">
+
   <div class="fixed inset-0 bg-black bg-opacity-25"></div>
   <div class="fixed inset-0 z-40 flex">
     <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-gray-800 py-4 pb-12 shadow-xl">
@@ -209,16 +213,32 @@
   $(document).ready(function() {
     // Hide all dropdown menus by default
     $('.absolute').hide();
+    $('#mobile-filters').hide();
+
+    // Show filters when the "Filters" button is clicked
+    $('#mobile-filter-button').click(function() {
+      $('#mobile-filters').show();
+    });
 
     // Toggle filters
     $('button[type="button"]').click(function(e) {
-      e.stopPropagation();
+      if (!$(e.target).is('input[type="checkbox"]')) {
+        e.stopPropagation();
+      }
+      // Hide all other dropdowns
+      $('.absolute').hide();
+      // Show the clicked dropdown
       $(this).siblings('.absolute').toggle();
     });
 
     // Toggle menu-button
     $('#menu-button').click(function(e) {
-      e.stopPropagation();
+      if (!$(e.target).is('input[type="checkbox"]')) {
+        e.stopPropagation();
+      }
+      // Hide all other dropdowns
+      $('.absolute').hide();
+      // Show the clicked dropdown
       $(this).siblings('.absolute').toggle();
     });
 
@@ -228,8 +248,10 @@
     });
 
     // Clicking anywhere else on the page will hide the dropdown
-    $(document).click(function() {
-      $('.absolute').hide();
+    $(document).click(function(e) {
+      if (!$(e.target).is('input[type="checkbox"]')) {
+        $('.absolute').hide();
+      }
     });
   });
 </script>
