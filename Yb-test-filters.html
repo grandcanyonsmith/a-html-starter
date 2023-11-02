@@ -7,7 +7,11 @@
   <title>Filter</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-
+<style>
+  #filter-section-0, #filter-section-1, #filter-section-2 {
+    display: none;
+  }
+</style>
 <body class="bg-gray-800 text-white">
   <div class="bg-gray-900">
 <button class="sm:hidden bg-indigo-600 text-white px-4 py-2 rounded mt-4" id="mobile-filter-button">Filters</button>
@@ -219,6 +223,24 @@
     $('#mobile-filter-button').click(function() {
       $('#mobile-filters').show();
     });
+
+// mobile show hide 
+$('button[type="button"]').click(function(e) {
+  if (!$(e.target).is('input[type="checkbox"]')) {
+    e.stopPropagation();
+  }
+  // Get the dropdown associated with the clicked button
+  var dropdown = $(this).parent().next('.pt-6');
+  // If the dropdown is currently visible, hide it
+  if (dropdown.is(':visible')) {
+    dropdown.hide();
+  } 
+  // Otherwise, hide all other dropdowns and show this one
+  else {
+    $('.pt-6').hide();
+    dropdown.show();
+  }
+});
 
     // Toggle filters
     $('button[type="button"]').click(function(e) {
