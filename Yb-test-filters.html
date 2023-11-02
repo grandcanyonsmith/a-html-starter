@@ -217,62 +217,56 @@
   $(document).ready(function() {
     // Hide all dropdown menus by default
     $('.absolute').hide();
-    $('#mobile-filters').hide();
+    $('.pt-6').hide();
 
     // Show filters when the "Filters" button is clicked
     $('#mobile-filter-button').click(function() {
       $('#mobile-filters').show();
     });
 
-// mobile show hide 
-$('button[type="button"]').click(function(e) {
-  if (!$(e.target).is('input[type="checkbox"]')) {
-    e.stopPropagation();
-  }
-  // Get the dropdown associated with the clicked button
-  var dropdown = $(this).parent().next('.pt-6');
-  // If the dropdown is currently visible, hide it
-  if (dropdown.is(':visible')) {
-    dropdown.hide();
-  } 
-  // Otherwise, hide all other dropdowns and show this one
-  else {
-    $('.pt-6').hide();
-    dropdown.show();
-  }
-});
-
     // Toggle filters
     $('button[type="button"]').click(function(e) {
       if (!$(e.target).is('input[type="checkbox"]')) {
         e.stopPropagation();
       }
-      // Hide all other dropdowns
-      $('.absolute').hide();
-      // Show the clicked dropdown
-      $(this).siblings('.absolute').toggle();
-    });
-
-    // Toggle menu-button
-    $('#menu-button').click(function(e) {
-      if (!$(e.target).is('input[type="checkbox"]')) {
-        e.stopPropagation();
+      // Get the dropdown associated with the clicked button
+      var dropdown = $(this).parent().next('.pt-6');
+      // If the dropdown is currently visible, hide it
+      if (dropdown.is(':visible')) {
+        dropdown.hide();
+      } 
+      // Otherwise, hide all other dropdowns and show this one
+      else {
+        $('.pt-6').hide();
+        dropdown.show();
       }
-      // Hide all other dropdowns
-      $('.absolute').hide();
-      // Show the clicked dropdown
-      $(this).siblings('.absolute').toggle();
     });
 
     // Close menu pop out on mobile
     $('.-mr-2').click(function() {
-      $('.relative.ml-auto').hide();
+      $('#mobile-filters').hide();
     });
 
     // Clicking anywhere else on the page will hide the dropdown
     $(document).click(function(e) {
       if (!$(e.target).is('input[type="checkbox"]')) {
         $('.absolute').hide();
+      }
+    });
+
+    // Sync options between mobile and desktop
+    $('input[type="checkbox"]').change(function() {
+      var id = $(this).attr('id');
+      var desktopId = id.replace('mobile-', '');
+      var mobileId = 'mobile-' + id;
+      $('#' + desktopId).prop('checked', $(this).prop('checked'));
+      $('#' + mobileId).prop('checked', $(this).prop('checked'));
+    });
+
+    // Close mobile filters when window is resized to desktop view
+    $(window).resize(function() {
+      if ($(window).width() >= 640) {
+        $('#mobile-filters').hide();
       }
     });
   });
