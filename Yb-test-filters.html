@@ -28,7 +28,6 @@
         </div>
       </div>
     </div>
-    </div>
 
     <!-- Desktop Filters -->
     <section aria-labelledby="filter-heading" class="hidden sm:block">
@@ -39,6 +38,7 @@
           <div class="relative inline-block text-left">
             <div>
               <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" id="menu-button" aria-expanded="false" aria-haspopup="true">
+
                 Sort
                 <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
@@ -47,10 +47,10 @@
             </div>
 
             <div class="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+
               <div class="py-1" role="none">
-                <a href="#" class="font-medium text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">Most Popular</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-1">Best Rating</a>
-                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-2">Newest</a>
+                <a href="#" class="font-medium text-white block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-3">Most Recent</a>
+                <a href="#" class="text-gray-500 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-4">Status</a>
               </div>
             </div>
           </div>
@@ -99,7 +99,32 @@
                       </div>
                       <div class="flex items-center">
                         <input id="filter-test-type-1" name="test-type[]" value="api-tests" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                                                <label for="filter-test-type-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">API Tests</label>
+                        <label for="filter-test-type-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">API Tests</label>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="relative inline-block px-4 text-left">
+                  <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-expanded="false">
+                    <span>Status</span>
+                    <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                      <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                  </button>
+
+                  <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-gray-800 p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <form class="space-y-4">
+                      <div class="flex items-center">
+                        <input id="filter-status-0" name="status[]" value="passed" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-status-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Passed</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-status-1" name="status[]" value="failed" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-status-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Failed</label>
+                      </div>
+                      <div class="flex items-center">
+                        <input id="filter-status-2" name="status[]" value="untested" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                        <label for="filter-status-2" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Untested</label>
                       </div>
                     </form>
                   </div>
@@ -109,8 +134,38 @@
           </div>
         </div>
       </div>
+
     </section>
   </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Hide all dropdown menus by default
+    $('.absolute').hide();
+
+    // Toggle filters
+    $('button[type="button"]').click(function(e) {
+      e.stopPropagation();
+      $(this).siblings('.absolute').toggle();
+    });
+
+    // Toggle menu-button
+    $('#menu-button').click(function(e) {
+      e.stopPropagation();
+      $(this).siblings('.absolute').toggle();
+    });
+
+    // Close menu pop out on mobile
+    $('.-mr-2').click(function() {
+      $('.relative.ml-auto').hide();
+    });
+
+    // Clicking anywhere else on the page will hide the dropdown
+    $(document).click(function() {
+      $('.absolute').hide();
+    });
+  });
+</script>
 </body>
 
 </html>
