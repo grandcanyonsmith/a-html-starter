@@ -45,7 +45,10 @@
     const projectNameInput = document.getElementById('project-name');
     const descriptionInput = document.getElementById('description');
     const API_URL = 'http://localhost:5000';
-    const userId = 'yourUserId';
+
+    // Get the userId from the URL slug
+    const pathParts = window.location.pathname.split('/');
+    const userId = pathParts[pathParts.length - 1]; // Assuming the userId is the last part of the URL
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -65,23 +68,26 @@
             repoAccessLevel,
             description
         };
-
-        if (isRepoNameValid && isProjectNameValid) {
-            try {
+        console.log(data,'data')
+        try {
+            if (isRepoNameValid && isProjectNameValid) {
                 const response = await axios.post(`${API_URL}/createProject`, data);
                 alert('Project created successfully');
-            } catch (error) {
-                console.error(error);
-                alert('An error occurred while creating the project. Please try again.');
+            } else {
+                if (!isRepoNameValid) {
+                    repoNameInput.classList.add('border-red-500');
+                    repoNameError.classList.remove('hidden');
+                }
+                if (!isProjectNameValid) {
+                    projectNameInput.classList.add('border-red-500');
+                    alert('Project name is required');
+                }
             }
-        } else {
-            if (!isRepoNameValid) {
-                repoNameInput.classList.add('border-red-500');
-                repoNameError.classList.remove('hidden');
-            }
-            if (!isProjectNameValid) {
-                projectNameInput.classList.add('border-red-500');
-                alert('Project name is required');
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (!isRepoNameValid || !isProjectNameValid) {
+                alert('An error occurred while creating the project. Please check your inputs and try again.');
             }
         }
     });
