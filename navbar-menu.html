@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <style>
+        .blur-bg {
+            backdrop-filter: blur(5px);
+        }
+    </style>
+</head>
+<body>
+<nav class="flex items-center justify-between p-6 bg-white">
+        <div class="flex items-center">
+            <button id="menu-btn" class="mr-6">
+                <i class="fas fa-bars"></i>
+            </button>
+            <img src="/path/to/company-logo.png" alt="Company Logo" class="w-12 h-12">
+        </div>
+        <div class="flex items-center">
+            <button class="mr-6" onclick="window.location.href='create-new-project.html'">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="relative">
+                <button id="notification-btn" class="mr-6">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10">
+                    <div class="flex justify-between items-center px-4 py-2 text-sm">
+                        <div>
+                            <strong>a-html-repo</strong><br>
+                            <small>about.html</small>
+                        </div>
+                        <small>3 min ago</small>
+                    </div>
+                    <div class="flex justify-between items-center px-4 py-2 text-sm">
+                        <div>
+                            <strong>a-html-repo</strong><br>
+                            <small>about.html</small>
+                        </div>
+                        <small>3 min ago</small>
+                    </div>
+                    <!-- Repeat the above div for each notification -->
+                </div>
+            </div>
+            <div class="relative">
+                <button id="profile-btn" class="focus:outline-none">
+                    <img src="/path/to/user-profile.jpg" alt="User Profile" class="w-6 h-6">
+                </button>
+                <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account</a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div id="sidebar" class="hidden fixed top-0 left-0 h-full w-64 bg-gray-200 p-6 z-20">
+        <button id="close-btn" class="absolute top-0 right-0 mt-2 mr-2">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="bg-blue-500 w-full py-2 text-white rounded mb-4" onclick="window.location.href='create-new-project.html'">+ Create New Project</button>
+        <div class="flex items-center mb-2">
+            <i class="fas fa-home mr-2"></i>
+            <span>Home</span>
+        </div>
+        <div class="flex items-center">
+            <i class="fas fa-file-alt mr-2"></i>
+            <span>Templates</span>
+        </div>
+    </div>
+
+    <div id="overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black opacity-50 blur-bg z-10"></div>
+
+    <script>
+        const menuBtn = document.getElementById('menu-btn');
+        const closeBtn = document.getElementById('close-btn');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const profileBtn = document.getElementById('profile-btn');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const notificationBtn = document.getElementById('notification-btn');
+        const notificationDropdown = document.getElementById('notification-dropdown');
+
+        menuBtn.addEventListener('click', function() {
+            sidebar.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+        });
+
+        closeBtn.addEventListener('click', function() {
+            sidebar.classList.add('hidden');
+            overlay.classList.add('hidden');
+        });
+
+        profileBtn.addEventListener('click', function() {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        notificationBtn.addEventListener('click', function() {
+            notificationDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+            if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+                notificationDropdown.classList.add('hidden');
+            }
+            if (!menuBtn.contains(e.target) && !sidebar.contains(e.target) && !closeBtn.contains(e.target)) {
+                sidebar.classList.add('hidden');
+                overlay.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
