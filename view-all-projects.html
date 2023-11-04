@@ -56,7 +56,8 @@ window.onload = () => {
         const filteredProjects = projectList.filter(project => project.projectName.toLowerCase().includes(e.target.value.toLowerCase()));
         displayProjects(filteredProjects);
     });
-};
+    window.history.pushState({}, document.title, window.location.href + '?userId=1');
+}
 </script>
 </body>
 </html>
