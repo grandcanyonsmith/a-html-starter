@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +13,16 @@
             border-radius: 50%;
             display: inline-block;
         }
+    .bell-dot {
+        height: 4px;
+        width: 4px;
+        background-color: #3490dc;
+        border-radius: 50%;
+        display: inline-block;
+        position: absolute;
+        top: -2px;
+        right: -2px;
+    }
     </style>
 </head>
 <body>
@@ -50,53 +59,66 @@
         </div>
     </nav>
 
-    <script>
-        const profileBtn = document.getElementById('profile-btn');
-        const profileDropdown = document.getElementById('profile-dropdown');
-        const notificationBtn = document.getElementById('notification-btn');
-        const notificationDropdown = document.getElementById('notification-dropdown');
+<script>
+    const profileBtn = document.getElementById('profile-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const notificationBtn = document.getElementById('notification-btn');
+    const notificationDropdown = document.getElementById('notification-dropdown');
 
-        const allNotifications = [
-            {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: false},
-            {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: true},
-            // Add more notifications as needed
-        ];
+    const allNotifications = [
+        {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: false},
+        {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: true},
+        // Add more notifications as needed
+    ];
 
-        allNotifications.forEach(notification => {
-            const notificationElement = document.createElement('div');
-            notificationElement.classList.add('flex', 'justify-between', 'items-start', 'px-4', 'py-2', 'text-sm');
-            notificationElement.innerHTML = `
-                <div>
-                    <strong>${notification.repoName}</strong><br>
-                    <small>${notification.fileName}</small>
-                </div>
-                <div class="flex flex-col items-end">
-                    ${notification.viewedNotification ? '' : '<span class="blue-dot mb-1"></span>'}
-                    <small>${notification.updatedTime}</small>
-                </div>
-            `;
-            notificationDropdown.appendChild(notificationElement);
-        });
+    let hasUnreadNotifications = false;
 
-        profileBtn.addEventListener('click', () => toggleDropdown(profileDropdown));
-        notificationBtn.addEventListener('click', () => toggleDropdown(notificationDropdown));
+    allNotifications.forEach(notification => {
+        const notificationElement = document.createElement('div');
+        notificationElement.classList.add('flex', 'justify-between', 'items-start', 'px-4', 'py-2', 'text-sm');
+        notificationElement.innerHTML = `
+            <div>
+                <strong>${notification.repoName}</strong><br>
+                <small>${notification.fileName}</small>
+            </div>
+            <div class="flex flex-col items-end">
+                ${notification.viewedNotification ? '' : '<span class="blue-dot mb-1"></span>'}
+                <small>${notification.updatedTime}</small>
+            </div>
+        `;
+        notificationDropdown.appendChild(notificationElement);
 
-        window.addEventListener('click', (e) => {
-            if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
-                profileDropdown.classList.add('hidden');
-            }
-            if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
-                notificationDropdown.classList.add('hidden');
-            }
-        });
-
-        function toggleDropdown(dropdown) {
-            dropdown.classList.toggle('hidden');
+        if (!notification.viewedNotification) {
+            hasUnreadNotifications = true;
         }
+    });
 
-        function navigateTo(url) {
-            window.location.assign(url);
+    if (hasUnreadNotifications) {
+        const bellDot = document.createElement('span');
+        bellDot.classList.add('bell-dot');
+        notificationBtn.style.position = 'relative';
+        notificationBtn.appendChild(bellDot);
+    }
+
+    profileBtn.addEventListener('click', () => toggleDropdown(profileDropdown));
+    notificationBtn.addEventListener('click', () => toggleDropdown(notificationDropdown));
+
+    window.addEventListener('click', (e) => {
+        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
         }
-    </script>
+        if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    function toggleDropdown(dropdown) {
+        dropdown.classList.toggle('hidden');
+    }
+
+    function navigateTo(url) {
+        window.location.assign(url);
+    }
+</script>
 </body>
 </html>
