@@ -7,47 +7,38 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
     <style>
-        .blur-bg {
-            backdrop-filter: blur(5px);
+        .blue-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #3490dc;
+            border-radius: 50%;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
 <nav class="flex items-center justify-between p-6 bg-white">
         <div class="flex items-center">
-            <button id="menu-btn" class="mr-6">
-                <i class="fas fa-bars"></i>
-            </button>
             <img src="/path/to/company-logo.png" alt="Company Logo" class="w-12 h-12">
         </div>
         <div class="flex items-center">
-            <button class="mr-6" onclick="window.location.href='create-new-project.html'">
+            <button class="mr-6" onclick="navigateTo('create-new-project.html')">
                 <i class="fas fa-plus"></i>
             </button>
             <div class="relative">
-                <button id="notification-btn" class="mr-6">
+                <button id="notification-btn" class="mr-6" aria-label="Notifications">
                     <i class="fas fa-bell"></i>
                 </button>
                 <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10">
                     <div class="flex justify-between items-center px-4 py-2 text-sm">
-                        <div>
-                            <strong>a-html-repo</strong><br>
-                            <small>about.html</small>
-                        </div>
-                        <small>3 min ago</small>
+                        <strong>Notifications</strong>
+                        <button onclick="navigateTo('viewAllNotifications.html')">View all</button>
                     </div>
-                    <div class="flex justify-between items-center px-4 py-2 text-sm">
-                        <div>
-                            <strong>a-html-repo</strong><br>
-                            <small>about.html</small>
-                        </div>
-                        <small>3 min ago</small>
-                    </div>
-                    <!-- Repeat the above div for each notification -->
+                    <!-- Notifications will be appended here by JavaScript -->
                 </div>
             </div>
             <div class="relative">
-                <button id="profile-btn" class="focus:outline-none">
+                <button id="profile-btn" class="focus:outline-none" aria-label="Profile">
                     <img src="/path/to/user-profile.jpg" alt="User Profile" class="w-6 h-6">
                 </button>
                 <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
@@ -59,50 +50,36 @@
         </div>
     </nav>
 
-    <div id="sidebar" class="hidden fixed top-0 left-0 h-full w-64 bg-gray-200 p-6 z-20">
-        <button id="close-btn" class="absolute top-0 right-0 mt-2 mr-2">
-            <i class="fas fa-times"></i>
-        </button>
-        <button class="bg-blue-500 w-full py-2 text-white rounded mb-4" onclick="window.location.href='create-new-project.html'">+ Create New Project</button>
-        <div class="flex items-center mb-2">
-            <i class="fas fa-home mr-2"></i>
-            <span>Home</span>
-        </div>
-        <div class="flex items-center">
-            <i class="fas fa-file-alt mr-2"></i>
-            <span>Templates</span>
-        </div>
-    </div>
-
-    <div id="overlay" class="hidden fixed top-0 left-0 w-full h-full bg-black opacity-50 blur-bg z-10"></div>
-
     <script>
-        const menuBtn = document.getElementById('menu-btn');
-        const closeBtn = document.getElementById('close-btn');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
         const profileBtn = document.getElementById('profile-btn');
         const profileDropdown = document.getElementById('profile-dropdown');
         const notificationBtn = document.getElementById('notification-btn');
         const notificationDropdown = document.getElementById('notification-dropdown');
 
-        menuBtn.addEventListener('click', function() {
-            sidebar.classList.remove('hidden');
-            overlay.classList.remove('hidden');
+        const allNotifications = [
+            {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: false},
+            {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: true},
+            // Add more notifications as needed
+        ];
+
+        allNotifications.forEach(notification => {
+            const notificationElement = document.createElement('div');
+            notificationElement.classList.add('flex', 'justify-between', 'items-start', 'px-4', 'py-2', 'text-sm');
+            notificationElement.innerHTML = `
+                <div>
+                    <strong>${notification.repoName}</strong><br>
+                    <small>${notification.fileName}</small>
+                </div>
+                <div class="flex flex-col items-end">
+                    ${notification.viewedNotification ? '' : '<span class="blue-dot mb-1"></span>'}
+                    <small>${notification.updatedTime}</small>
+                </div>
+            `;
+            notificationDropdown.appendChild(notificationElement);
         });
 
-        closeBtn.addEventListener('click', function() {
-            sidebar.classList.add('hidden');
-            overlay.classList.add('hidden');
-        });
-
-        profileBtn.addEventListener('click', function() {
-            profileDropdown.classList.toggle('hidden');
-        });
-
-        notificationBtn.addEventListener('click', function() {
-            notificationDropdown.classList.toggle('hidden');
-        });
+        profileBtn.addEventListener('click', toggleDropdown.bind(null, profileDropdown));
+        notificationBtn.addEventListener('click', toggleDropdown.bind(null, notificationDropdown));
 
         window.addEventListener('click', function(e) {
             if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
@@ -111,11 +88,15 @@
             if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
                 notificationDropdown.classList.add('hidden');
             }
-            if (!menuBtn.contains(e.target) && !sidebar.contains(e.target) && !closeBtn.contains(e.target)) {
-                sidebar.classList.add('hidden');
-                overlay.classList.add('hidden');
-            }
         });
+
+        function toggleDropdown(dropdown) {
+            dropdown.classList.toggle('hidden');
+        }
+
+        function navigateTo(url) {
+            window.location.assign(url);
+        }
     </script>
 </body>
 </html>
