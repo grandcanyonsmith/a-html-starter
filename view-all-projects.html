@@ -11,7 +11,8 @@
         <div class="relative">
 <button class="border p-2 rounded" id="addButton" onClick="toggleDropdown()" aria-haspopup="true" aria-expanded="false">Add New +</button>
 <div class="dropdown-content hidden absolute left-0 mt-2 w-40 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" id="dropdownMenu">
-<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="create-new-project.html" id="createProjectLink" onClick="redirectWithUserId('create-new-project.html')">Project</a>
+<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#" id="createProjectLink" onClick="event.preventDefault(); redirectWithUserId('create-new-project.html')">Project</a>
+
         </div>
     </div>
     </div>
@@ -55,12 +56,12 @@ const redirectWithUserId = (url) => {
 }
 
 window.onload = () => {
+ window.history.pushState({}, document.title, window.location.href + '?userId=1');
  displayProjects(projectList);
  document.getElementById('searchInput').addEventListener('input', (e) => {
   const filteredProjects = projectList.filter(project => project.projectName.toLowerCase().includes(e.target.value.toLowerCase()));
   displayProjects(filteredProjects);
  });
- window.history.pushState({}, document.title, window.location.href + '?userId=1');
 }
 </script>
 </body>
