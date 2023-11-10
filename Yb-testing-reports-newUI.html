@@ -141,9 +141,10 @@
         }
 
         function fetchData(timeframe) {
-            axios.post('https://ikl44fvfsuqv2rmy7el3lwxq5a0eihwc.lambda-url.us-west-2.on.aws/', {timeframe: timeframe})
+            axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', {timestamp: timeframe})
             .then(function (response) {
                 const test_data = response.data;
+console.log(test_data,'test_data');
                 const tbody = document.querySelector('tbody');
                 const container = document.getElementById('test-data');
                 let total = 0;
@@ -160,16 +161,17 @@
                     const p2 = document.createElement('p');
                     p2.className = 'mt-2 flex items-baseline gap-x-2';
 
-                    const span = document.createElement('span');
-                    span.className = 'text-4xl font-semibold tracking-tight text-white';
-                    span.textContent = value.total;
+    const span = document.createElement('span');
+    span.className = 'text-4xl font-semibold tracking-tight text-white';
+    span.textContent = value.length; // Get the length of the array
 
                     p2.appendChild(span);
                     div.appendChild(p1);
                     div.appendChild(p2);
                     container.appendChild(div);
 
-                    total += value.total;
+    total += value.length; // Add the length of the array to the total
+
                 }
 
                 const totalDiv = document.createElement('div');
@@ -191,14 +193,14 @@
                 totalDiv.appendChild(totalP2);
                 container.appendChild(totalDiv);
 
-                Object.keys(test_data).sort((a, b) => {
-                    if (a === 'Passed') return -1;
-                    if (b === 'Passed') return 1;
-                    if (a === 'Failed') return -1;
-                    if (b === 'Failed') return 1;
-                    return 0;
-                }).forEach(status => {
-                    test_data[status].tests.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(data => {
+Object.keys(test_data).sort((a, b) => {
+    if (a === 'Passed') return -1;
+    if (b === 'Passed') return 1;
+    if (a === 'Failed') return -1;
+    if (b === 'Failed') return 1;
+    return 0;
+}).forEach(status => {
+    test_data[status].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).forEach(data => {
     const tr = document.createElement('tr');
     let statusClass = '';
     if (status === 'Passed') {
@@ -229,7 +231,7 @@
                             </td>
                             <td class="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">
                                 <div class="flex items-center justify-end gap-x-2 sm:justify-start">
-                                    <time class="text-gray-400 sm:hidden" datetime="${data.timestamp}">${data.timestamp}</time>
+                                    <time class="text-gray-400 sm:hidden" datetime="${data.timeframe}">${data.timeframe}</time>
                                     <div class="flex-none rounded-full p-1 ${statusClass}">
                                         <div class="h-2.5 w-2.5 rounded-full bg-${status === 'Passed' ? 'green' : status === 'Failed' ? 'red' : 'yellow'}-600" style="border: 2px solid rgba(152, 251, 152, 0.1);"></div>
                                     </div>
@@ -237,7 +239,7 @@
                                 </div>
                             </td>
                             <td class="hidden py-4 pl-0 pr-4 text-right text-sm leading-6 text-gray-400 sm:table-cell sm:pr-6 lg:pr-8">
-                                <time datetime="${data.timestamp}">${data.timestamp}</time>
+                                <time datetime="${data.timeframe}">${data.timeframe}</time>
                             </td>
                         `;
                         tbody.appendChild(tr);
