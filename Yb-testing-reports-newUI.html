@@ -120,9 +120,10 @@
                 runTestsBtn.addEventListener('click', function() {
                     const checkboxes = Array.from(document.querySelectorAll('.row-checkbox:checked'));
                     const filePaths = Array.from(new Set(checkboxes.map(checkbox => checkbox.getAttribute('data-file-path'))));
+                    console.log(filePaths,'filePaths')
                     runTestsBtn.textContent = 'Running...';
                     filePaths.forEach(filePath => {
-                        axios.post('https://xhy5at2dbpxeys62rsx4f6lfay0yigqt.lambda-url.us-west-2.on.aws/', { filePath: filePath })
+                        axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', { filePath: filePath })
                         .then(function (response) {
                             alert(JSON.stringify(response.data));
                             runTestsBtn.textContent = 'Run Tests';
