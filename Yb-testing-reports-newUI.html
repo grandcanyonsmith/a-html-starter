@@ -212,20 +212,20 @@ Object.keys(test_data).sort((a, b) => {
     }
 
     // Truncate the formatted_test_name after 30 characters
-    let formatted_test_name = data.formatted_test_name;
+    let formatted_test_name = data.formattedTestName;
     if (formatted_test_name.length > 30) {
         formatted_test_name = formatted_test_name.substring(0, 30) + '...';
     }
                         tr.innerHTML = `
                             <td class="relative px-4 sm:w-12 sm:px-6">
-                                <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${data.file_path}">
+                                <input type="checkbox" class="row-checkbox absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" data-file-path="${data.filePath}">
                             </td>
                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-300">
                                 <div class="ml-4">
-        <div class="tooltip font-small text-white">${formatted_test_name}<span class="tooltiptext">${data.file_path}</span></div>
+        <div class="tooltip font-small text-white">${formatted_test_name}<span class="tooltiptext">${data.filePath}</span></div>
                                     <div class="flex space-x-2 mt-1">
                                         <div class="inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600">${data.team}</div>
-                                        <div class="inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600">${data.test_type}</div>
+                                        <div class="inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600">${data.testType}</div>
                                     </div>
                                 </div>
                             </td>
