@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.6rem;
+            white-space: nowrap;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 class="text-xl font-semibold leading-6 text-white mt-6">Test Dashboard</h1>
+        <div class="mt-4">
+            <label for="timeframe" class="block text-sm font-medium text-gray-300">Select Timeframe:</label>
+            <select id="timeframe" class="mt-1 block w-full rounded-md bg-gray-800 text-white">
+                <option value="today">Today</option>
+                <option value="yesterday">Yesterday</option>
+                <option value="2 days ago">2 Days Ago</option>
+                <option value="3 days ago">3 Days Ago</option>
+            </select>
+        </div>
+        <div class="grid grid-cols-1 gap-4 mt-6 bg-white/5 sm:grid-cols-2 lg:grid-cols-4" id="test-data">
+            <!-- Test data will be inserted here -->
+        </div>
+        <div id="table-container" class="mt-6">
+            <table class="w-full text-left">
+<thead class="border-b border-gray-800 text-sm text-white">
+    <tr>
+        <th scope="col" class="px-6 py-3">
+            <input type="checkbox" id="select-all" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+        </th>
+        <th scope="col" class="px-6 py-3 text-sm font-semibold">Test Name</th>
+        <th scope="col" class="px-6 py-3 text-sm font-semibold">Status</th>
+        <th scope="col" class="px-6 py-3 text-sm font-semibold" id="test-name-header">Last Run</th>
+    </tr>
+</thead>
+                <tbody class="divide-y divide-gray-800 bg-gray-900" id="table-body">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        // Utility function to create DOM elements
+        function createElement(tag, className, content) {
+            const element = document.createElement(tag);
+            if (className) element.className = className;
+            if (content) element.textContent = content;
+            return element;
+        }
+
+        // Helper function to get status color
+        function getStatusColor(status) {
+            const statusColors = {
+                'Passed': 'bg-green-600',
+                'Failed': 'bg-red-600',
+                'Untested': 'bg-yellow-600'
+            };
+            return statusColors[status] || 'bg-gray-600';
+        }
+
+// Function to render test data table
+function renderTestDataTable(testData) {
+    const tbody = document.getElementById('table-body');
+    tbody.innerHTML = ''; // Clear existing content
+
+    Object.values(testData).flat().forEach(data => {
+        const tr = createElement('tr');
+        const checkboxCell = createElement('td', 'px-6 py-4');
+        const checkbox = createElement('input', 'row-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-600');
+        checkbox.type = 'checkbox';
+        checkbox.setAttribute('data-file-path', data.filePath);
+        checkboxCell.appendChild(checkbox);
+
+        const testNameCell = createElement('td', 'px-6 py-4 text-sm text-gray-300');
+        const testNameDiv = createElement('div', 'tooltip', data.formattedTestName);
+        const tooltipText = createElement('span', 'tooltiptext', data.filePath);
+        testNameDiv.appendChild(tooltipText);
+        testNameCell.appendChild(testNameDiv);
+
+        // Team and test type labels with additional spacing
+        const labelsDiv = createElement('div', 'mt-2');
+        const teamLabel = createElement('div', 'inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600 mr-2', data.team);
+        const testTypeLabel = createElement('div', 'inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600', data.testType);
+        labelsDiv.appendChild(teamLabel);
+        labelsDiv.appendChild(testTypeLabel);
+        testNameCell.appendChild(labelsDiv);
+
+        const statusCell = createElement('td', 'px-6 py-4 text-sm');
+        const statusDiv = createElement('div', 'flex items-center');
+        const statusIndicator = createElement('div', `h-2.5 w-2.5 rounded-full ${getStatusColor(data.status)}`);
+        statusDiv.appendChild(statusIndicator);
+        const statusText = createElement('span', 'ml-2 text-white', data.status);
+        statusDiv.appendChild(statusText);
+        statusCell.appendChild(statusDiv);
+
+        // Move the last run cell to the end
+        const lastRunCell = createElement('td', 'px-6 py-4 text-sm text-gray-400');
+        const lastRunTime = createElement('time', '', data.timeframe);
+        lastRunTime.setAttribute('datetime', data.timeframe);
+        lastRunCell.appendChild(lastRunTime);
+
+        tr.appendChild(checkboxCell);
+        tr.appendChild(testNameCell);
+        tr.appendChild(statusCell);
+        tr.appendChild(lastRunCell); // Append last run cell last
+
+        tbody.appendChild(tr);
+    });
+}
+
+        // Fetch and render test data
+        function fetchData(timeframe) {
+            axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', { timestamp: timeframe })
+                .then(response => {
+                    renderTestDataCards(response.data);
+                    renderTestDataTable(response.data);
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Function to toggle the Run Tests button
+        function toggleRunTestsButton(show) {
+            const testNameHeader = document.getElementById('test-name-header');
+            if (show) {
+                testNameHeader.innerHTML = `
+                    <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
+                `;
+                document.getElementById('run-tests-btn').addEventListener('click', runSelectedTests);
+            } else {
+                testNameHeader.innerHTML = 'Test Name';
+            }
+        }
+
+// Function to run selected tests
+function runSelectedTests() {
+    const checkboxes = document.querySelectorAll('.row-checkbox:checked');
+    const filePaths = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-file-path'));
+    console.log(filePaths, 'filePaths');
+    const runTestsBtn = document.getElementById('run-tests-btn');
+    runTestsBtn.textContent = 'Running...';
+
+    // Create a promise for each filePath to send a POST request
+    const testPromises = filePaths.map(filePath => {
+        return axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', { filePath: filePath });
+    });
+
+    // Execute all promises and wait for them to complete
+    Promise.all(testPromises)
+        .then(responses => {
+            // Handle responses here if needed
+            alert('All tests run successfully.');
+            runTestsBtn.textContent = 'Run Tests';
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            toggleRunTestsButton(false);
+            const selectAllCheckbox = document.getElementById('select-all');
+            selectAllCheckbox.checked = false;
+        })
+        .catch(error => {
+            console.error(error);
+            runTestsBtn.textContent = 'Run Tests';
+            alert('An error occurred while running the tests.');
+        });
+}
+
+    // Event listeners setup
+    function setupEventListeners() {
+        const timeframeDropdown = document.getElementById('timeframe');
+        timeframeDropdown.addEventListener('change', event => fetchData(event.target.value));
+
+        const selectAllCheckbox = document.getElementById('select-all');
+        selectAllCheckbox.addEventListener('change', event => {
+            const checkboxes = document.querySelectorAll('.row-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = event.target.checked;
+            });
+            toggleRunTestsButton(event.target.checked);
+        });
+
+        document.addEventListener('change', event => {
+            if (event.target.classList.contains('row-checkbox')) {
+                const checkboxes = document.querySelectorAll('.row-checkbox');
+                const anyChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+                toggleRunTestsButton(anyChecked);
+                const selectAllCheckbox = document.getElementById('select-all');
+                selectAllCheckbox.checked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+            }
+        });
+    }
+
+    // Initialize the app
+    function init() {
+        setupEventListeners();
+        fetchData('today');
+    }
+
+    window.onload = init;
+</script>
