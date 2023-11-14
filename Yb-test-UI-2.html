@@ -51,16 +51,16 @@
         </div>
         <div id="table-container" class="mt-6">
             <table class="w-full text-left">
-<thead class="border-b border-gray-800 text-sm text-white">
-    <tr>
-        <th scope="col" class="px-6 py-3">
-            <input type="checkbox" id="select-all" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
-        </th>
-        <th scope="col" class="px-6 py-3 text-sm font-semibold">Test Name</th>
-        <th scope="col" class="px-6 py-3 text-sm font-semibold">Status</th>
-        <th scope="col" class="px-6 py-3 text-sm font-semibold" id="test-name-header">Last Run</th>
-    </tr>
-</thead>
+                <thead class="border-b border-gray-800 text-sm text-white">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">
+                            <input type="checkbox" id="select-all" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-sm font-semibold" id="test-name-header">Test Name</th>
+                        <th scope="col" class="px-6 py-3 text-sm font-semibold">Status</th>
+                        <th scope="col" class="px-6 py-3 text-sm font-semibold">Last Run</th>
+                    </tr>
+                </thead>
                 <tbody class="divide-y divide-gray-800 bg-gray-900" id="table-body">
                     <!-- Data will be inserted here -->
                 </tbody>
@@ -86,55 +86,82 @@
             return statusColors[status] || 'bg-gray-600';
         }
 
-// Function to render test data table
-function renderTestDataTable(testData) {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = ''; // Clear existing content
+        // Function to render test data cards
+        function renderTestDataCards(testData) {
+            const container = document.getElementById('test-data');
+            container.innerHTML = ''; // Clear existing content
 
-    Object.values(testData).flat().forEach(data => {
-        const tr = createElement('tr');
-        const checkboxCell = createElement('td', 'px-6 py-4');
-        const checkbox = createElement('input', 'row-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-600');
-        checkbox.type = 'checkbox';
-        checkbox.setAttribute('data-file-path', data.filePath);
-        checkboxCell.appendChild(checkbox);
+            let total = 0;
+            Object.entries(testData).forEach(([status, tests]) => {
+                const card = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
+                const title = createElement('p', 'text-sm font-medium text-gray-400', status);
+                const count = createElement('p', 'mt-2 text-4xl font-semibold text-white', tests.length.toString());
 
-        const testNameCell = createElement('td', 'px-6 py-4 text-sm text-gray-300');
-        const testNameDiv = createElement('div', 'tooltip', data.formattedTestName);
-        const tooltipText = createElement('span', 'tooltiptext', data.filePath);
-        testNameDiv.appendChild(tooltipText);
-        testNameCell.appendChild(testNameDiv);
+                card.appendChild(title);
+                card.appendChild(count);
+                container.appendChild(card);
 
-        // Team and test type labels with additional spacing
-        const labelsDiv = createElement('div', 'mt-2');
-        const teamLabel = createElement('div', 'inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600 mr-2', data.team);
-        const testTypeLabel = createElement('div', 'inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600', data.testType);
-        labelsDiv.appendChild(teamLabel);
-        labelsDiv.appendChild(testTypeLabel);
-        testNameCell.appendChild(labelsDiv);
+                total += tests.length;
+            });
 
-        const statusCell = createElement('td', 'px-6 py-4 text-sm');
-        const statusDiv = createElement('div', 'flex items-center');
-        const statusIndicator = createElement('div', `h-2.5 w-2.5 rounded-full ${getStatusColor(data.status)}`);
-        statusDiv.appendChild(statusIndicator);
-        const statusText = createElement('span', 'ml-2 text-white', data.status);
-        statusDiv.appendChild(statusText);
-        statusCell.appendChild(statusDiv);
+            // Add total card
+            const totalCard = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
+            const totalTitle = createElement('p', 'text-sm font-medium text-gray-400', 'Total');
+            const totalCount = createElement('p', 'mt-2 text-4xl font-semibold text-white', total.toString());
 
-        // Move the last run cell to the end
-        const lastRunCell = createElement('td', 'px-6 py-4 text-sm text-gray-400');
-        const lastRunTime = createElement('time', '', data.timeframe);
-        lastRunTime.setAttribute('datetime', data.timeframe);
-        lastRunCell.appendChild(lastRunTime);
+            totalCard.appendChild(totalTitle);
+            totalCard.appendChild(totalCount);
+            container.appendChild(totalCard);
+        }
 
-        tr.appendChild(checkboxCell);
-        tr.appendChild(testNameCell);
-        tr.appendChild(statusCell);
-        tr.appendChild(lastRunCell); // Append last run cell last
+        // Function to render test data table
+        function renderTestDataTable(testData) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = ''; // Clear existing content
 
-        tbody.appendChild(tr);
-    });
-}
+            Object.values(testData).flat().forEach(data => {
+                const tr = createElement('tr');
+                const checkboxCell = createElement('td', 'px-6 py-4');
+                const checkbox = createElement('input', 'row-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-600');
+                checkbox.type = 'checkbox';
+                checkbox.setAttribute('data-file-path', data.filePath);
+                checkboxCell.appendChild(checkbox);
+
+                const testNameCell = createElement('td', 'px-6 py-4 text-sm text-gray-300');
+                const testNameDiv = createElement('div', 'tooltip', data.formattedTestName);
+                const tooltipText = createElement('span', 'tooltiptext', data.filePath);
+                testNameDiv.appendChild(tooltipText);
+                testNameCell.appendChild(testNameDiv);
+
+                // Team and test type labels with additional spacing
+                const labelsDiv = createElement('div', 'mt-2');
+                const teamLabel = createElement('div', 'inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-blue-50 text-blue-700 ring-blue-600 mr-2', data.team);
+                const testTypeLabel = createElement('div', 'inline-flex items-center rounded-md px-1 py-0.5 text-xs font-medium ring-1 ring-inset bg-purple-50 text-purple-700 ring-purple-600', data.testType);
+                labelsDiv.appendChild(teamLabel);
+                labelsDiv.appendChild(testTypeLabel);
+                testNameCell.appendChild(labelsDiv);
+
+                const statusCell = createElement('td', 'px-6 py-4 text-sm');
+                const statusDiv = createElement('div', 'flex items-center');
+                const statusIndicator = createElement('div', `h-2.5 w-2.5 rounded-full ${getStatusColor(data.status)}`);
+                statusDiv.appendChild(statusIndicator);
+                const statusText = createElement('span', 'ml-2 text-white', data.status);
+                statusDiv.appendChild(statusText);
+                statusCell.appendChild(statusDiv);
+
+                const lastRunCell = createElement('td', 'px-6 py-4 text-sm text-gray-400');
+                const lastRunTime = createElement('time', '', data.timeframe);
+                lastRunTime.setAttribute('datetime', data.timeframe);
+                lastRunCell.appendChild(lastRunTime);
+
+                tr.appendChild(checkboxCell);
+                tr.appendChild(testNameCell);
+                tr.appendChild(statusCell);
+                tr.appendChild(lastRunCell);
+
+                tbody.appendChild(tr);
+            });
+        }
 
         // Fetch and render test data
         function fetchData(timeframe) {
