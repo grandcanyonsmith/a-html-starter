@@ -40,8 +40,8 @@ window.onload = function() {
         .then(function(response) {
             console.log(response)
             console.log(response.data,'data')
-            if (response.data && response.data.body) {
-                const requestDetails = JSON.parse(response.data.body);
+            if (response.data) {
+                const requestDetails = response.data;
                 console.log(requestDetails,'requestDetails');
                 requestDetailsContainer.innerHTML = `
                     <p><strong>Request ID:</strong> ${requestDetails.requestId}</p>
@@ -65,3 +65,5 @@ window.onload = function() {
 </script>
 </body>
 </html>
+
+
