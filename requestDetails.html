@@ -32,11 +32,10 @@ window.onload = function() {
     const queryParams = getQueryParams();
     const requestId = queryParams.requestId;
     const requestDetailsContainer = document.getElementById('requestDetails');
-
     if (requestId) {
         axios.post('https://vlrpuqw4pjg7h2vqbog6saqsxy0ykmrd.lambda-url.us-west-2.on.aws/', {
             requestType: 'fetch_requestId_details',
-            requestId: requestId
+            requestId: requestId.toString()
         })
         .then(function(response) {
             if (response.data && response.data.body) {
