@@ -68,7 +68,7 @@ window.onload = function() {
             userRequestCell.textContent = request.userRequest;
             userRequestCell.style.cursor = 'pointer';
             userRequestCell.addEventListener('click', () => {
-                window.location.href = `requestDetails.html?requestId=${request.id}`;
+                window.location.href = `requestDetails.html?requestId=${request.requestId}`; // use request.requestId here
             });
             row.appendChild(userRequestCell);
 
