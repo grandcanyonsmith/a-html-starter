@@ -38,6 +38,8 @@ window.onload = function() {
             requestId: requestId.toString()
         })
         .then(function(response) {
+            console.log(response)
+            console.log(response.data,'data')
             if (response.data && response.data.body) {
                 const requestDetails = JSON.parse(response.data.body);
                 console.log(requestDetails,'requestDetails');
