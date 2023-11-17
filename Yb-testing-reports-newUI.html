@@ -50,14 +50,115 @@
 </head>
 <body class="bg-gray-900">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-xl font-semibold leading-6 text-white mt-6">Test Dashboard</h1>
+        <!-- Desktop Filters - Refactored and repositioned -->
+        <section aria-labelledby="filter-heading" class="block desktop-filters">
+            <h2 id="filter-heading" class="sr-only">Filters</h2>
+            <div class="border-b border-gray-700 bg-gray-900 pb-4">
+                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                    <div class="flex justify-between space-x-4">
+                        <!-- Timeframe Dropdown - Positioned on the left -->
+<div class="relative inline-block text-left">
+    <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-timeframe" aria-expanded="false">
+        Timeframe
+        <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+        </svg>
+    </button>
+    <div id="desktop-filter-timeframe" class="hidden absolute z-10 mt-2 w-40 origin-top-left rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <!-- Timeframe Options -->
+        <a href="#" class="block px-4 py-2 text-sm text-white" id="timeframe" data-timeframe="today" value="today">Today</a>
+        <a href="#" class="block px-4 py-2 text-sm text-white" data-timeframe="yesterday">Yesterday</a>
+        <a href="#" class="block px-4 py-2 text-sm text-white" data-timeframe="2 days ago">2 Days Ago</a>
+        <a href="#" class="block px-4 py-2 text-sm text-white" data-timeframe="3 days ago">3 Days Ago</a>
+    </div>
+</div>
+
+                        <!-- Other Filters - Grouped on the right -->
+                        <div class="flex space-x-4">
+                            <!-- Team Dropdown -->
+<div class="relative inline-block text-left">
+              <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-team" aria-expanded="false">
+                Team
+                <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              <div id="desktop-filter-team" class="hidden absolute z-10 mt-2 origin-top-right rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <!-- Team Filter Options -->
+                <form class="space-y-4">
+                  <div class="flex items-center">
+                    <input id="filter-team-0" name="team[]" value="Legacy" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-team-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Legacy</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-team-1" name="team[]" value="Publishing" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-team-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Publishing</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-team-2" name="team[]" value="Celebrations" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-team-2" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Celebrations</label>
+                  </div>
+                </form>
+              </div>
+            </div>
+                            <!-- Test Type Dropdown -->
+            <div class="relative inline-block text-left">
+              <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-test-type" aria-expanded="false">
+                Test Type
+                <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              <div id="desktop-filter-test-type" class="hidden absolute z-10 mt-2 origin-top-right rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <!-- Test Type Filter Options -->
+                <form class="space-y-4">
+                  <div class="flex items-center">
+                    <input id="filter-test-type-0" name="test-type[]" value="Ui Tests" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-test-type-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">UI Tests</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-test-type-1" name="test-type[]" value="Api tests" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-test-type-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">API Tests</label>
+                  </div>
+                </form>
+              </div>
+            </div>
 
 
-
-    <!-- Mobile Filter Button -->
-
+                            <!-- Status Dropdown -->
+<div class="relative inline-block text-left">
+              <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-status" aria-expanded="false">
+                Status
+                <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                </svg>
+              </button>
+              <div id="desktop-filter-status" class="hidden absolute z-10 mt-2 origin-top-right rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <!-- Status Filter Options -->
+                <form class="space-y-4">
+                  <div class="flex items-center">
+                    <input id="filter-status-0" name="status[]" value="Passed" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-status-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Passed</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-status-1" name="status[]" value="Failed" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-status-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Failed</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input id="filter-status-2" name="status[]" value="untested" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+                    <label for="filter-status-2" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Untested</label>
+                  </div>
+                </form>
+              </div>
+            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     <!-- Mobile Filters -->
-    <div id="mobile-filters" class="hidden relative z-40 sm:hidden" role="dialog" aria-modal="true">
+<div id="mobile-filters" class="hidden relative z-40 sm:hidden" role="dialog" aria-modal="true">
+
       <div class="fixed inset-0 bg-black bg-opacity-25"></div>
       <div class="fixed inset-0 z-40 flex">
         <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-gray-800 py-4 pb-12 shadow-xl">
@@ -144,116 +245,16 @@
       </div>
     </div>
 
-    <!-- Desktop Filters -->
-<section aria-labelledby="filter-heading" class="block desktop-filters">
-      <h2 id="filter-heading" class="sr-only">Filters</h2>
-      <div class="border-b border-gray-700 bg-gray-900 pb-4">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between space-x-4">
-            <!-- Sort Dropdown -->
-<div class="relative inline-block text-left">
-    <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-timeframe" aria-expanded="false">
-        Timeframe
-        <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-        </svg>
-    </button>
-    <div id="desktop-filter-timeframe" class="hidden absolute z-10 mt-2 w-40 origin-top-left rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-        <!-- Timeframe Options -->
-        <a href="#" class="block px-4 py-2 text-sm text-white" data-timeframe="today">Today</a>
-        <a href="#" class="block px-4 py-2 text-sm text-white" data-timeframe="yesterday">Yesterday</a>
-        <a href="#" class="block px-4 py-2 text-sm text-white" data-timeframe="2 days ago">2 Days Ago</a>
-        <a href="#" class="block px-4 py-2 text-sm text-white" data-timeframe="3 days ago">3 Days Ago</a>
-    </div>
-</div>
+        <!-- Test Dashboard Title -->
+        <h1 class="text-xl font-semibold leading-6 text-white mt-6">Test Dashboard</h1>
 
-            <!-- Team Dropdown -->
-            <div class="relative inline-block text-left">
-              <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-team" aria-expanded="false">
-                Team
-                <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                </svg>
-              </button>
-              <div id="desktop-filter-team" class="hidden absolute z-10 mt-2 origin-top-right rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <!-- Team Filter Options -->
-                <form class="space-y-4">
-                  <div class="flex items-center">
-                    <input id="filter-team-0" name="team[]" value="Legacy" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-team-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Legacy</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-team-1" name="team[]" value="Publishing" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-team-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Publishing</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-team-2" name="team[]" value="Celebrations" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-team-2" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Celebrations</label>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- Test Type Dropdown -->
-            <div class="relative inline-block text-left">
-              <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-test-type" aria-expanded="false">
-                Test Type
-                <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                </svg>
-              </button>
-              <div id="desktop-filter-test-type" class="hidden absolute z-10 mt-2 origin-top-right rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <!-- Test Type Filter Options -->
-                <form class="space-y-4">
-                  <div class="flex items-center">
-                    <input id="filter-test-type-0" name="test-type[]" value="Ui Tests" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-test-type-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">UI Tests</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-test-type-1" name="test-type[]" value="Api tests" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-test-type-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">API Tests</label>
-                  </div>
-                </form>
-              </div>
-            </div>
-
-            <!-- Status Dropdown -->
-            <div class="relative inline-block text-left">
-              <button type="button" class="desktop-filter-toggle-button group inline-flex justify-center text-sm font-medium text-gray-300 hover:text-white" aria-controls="desktop-filter-status" aria-expanded="false">
-                Status
-                <svg class="ml-2 h-5 w-5 text-gray-500 group-hover:text-white" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                </svg>
-              </button>
-              <div id="desktop-filter-status" class="hidden absolute z-10 mt-2 origin-top-right rounded-md bg-gray-800 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <!-- Status Filter Options -->
-                <form class="space-y-4">
-                  <div class="flex items-center">
-                    <input id="filter-status-0" name="status[]" value="Passed" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-status-0" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Passed</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-status-1" name="status[]" value="Failed" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-status-1" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Failed</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input id="filter-status-2" name="status[]" value="untested" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
-                    <label for="filter-status-2" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-white">Untested</label>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-
+        <!-- Test Data Cards -->
         <div class="grid grid-cols-1 gap-4 mt-6 bg-white/5 sm:grid-cols-2 lg:grid-cols-4" id="test-data">
             <!-- Test data will be inserted here -->
         </div>
         <div id="table-container" class="mt-6">
-    <button class="sm:hidden bg-indigo-600 text-white px-4 py-2 rounded mt-4" id="mobile-filter-button">Filters</button>
+<button class="sm:hidden bg-indigo-600 text-white px-4 py-2 rounded mt-4" id="mobile-filter-button">Filters</button>
+
 
             <table class="w-full text-left">
                 <thead class="border-b border-gray-800 text-sm text-white">
@@ -426,12 +427,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to apply filters to the test data
 function applyFilters(testData) {
+
     const allTests = Object.values(testData).flat();
     console.log(allTests,'allTests');
     const selectedTeams = Array.from(document.querySelectorAll('input[name="team[]"]:checked')).map(input => input.value);
     const selectedTestTypes = Array.from(document.querySelectorAll('input[name="test-type[]"]:checked')).map(input => input.value);
     const selectedStatuses = Array.from(document.querySelectorAll('input[name="status[]"]:checked')).map(input => input.value);
     console.log(selectedStatuses,'selectedStatuses');
+        // Use 'today' as the default timeframe if the 'timeframe' element is not found
+        const timeframeElement = document.getElementById('timeframe');
+        const timeframe = timeframeElement ? timeframeElement.value : 'today';
+
     const filteredData = allTests.filter(data => {
         const teamMatch = selectedTeams.length === 0 || selectedTeams.includes(data.team);
         const testTypeMatch = selectedTestTypes.length === 0 || selectedTestTypes.includes(data.testType);
@@ -444,6 +450,8 @@ function applyFilters(testData) {
     renderTestDataCards(groupByStatus(filteredData));
     renderTestDataTable(filteredData);
 }
+    // Fetch and render test data with the default timeframe
+    fetchData('today', applyFilters);
 
     // Helper function to group tests by status
     function groupByStatus(tests) {
@@ -585,9 +593,13 @@ document.addEventListener('click', function(event) {
     const mobileFilters = document.getElementById('mobile-filters');
     const mobileFiltersCloseButton = document.getElementById('mobile-filters-close');
 
-    mobileFilterButton.addEventListener('click', function() {
-        mobileFilters.classList.toggle('hidden');
-    });
+    if (mobileFilterButton && mobileFilters) {
+        mobileFilterButton.addEventListener('click', function() {
+            mobileFilters.classList.toggle('hidden');
+        });
+    } else {
+        console.error('Mobile filters button or mobile filters div not found');
+    }
 
     mobileFiltersCloseButton.addEventListener('click', function() {
         mobileFilters.classList.add('hidden');
