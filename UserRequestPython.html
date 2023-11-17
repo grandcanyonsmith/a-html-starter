@@ -66,6 +66,10 @@ window.onload = function() {
 
             const userRequestCell = document.createElement('td');
             userRequestCell.textContent = request.userRequest;
+            userRequestCell.style.cursor = 'pointer';
+            userRequestCell.addEventListener('click', () => {
+                window.location.href = `requestDetails.html?requestId=${request.id}`;
+            });
             row.appendChild(userRequestCell);
 
             const timeRequestCell = document.createElement('td');
