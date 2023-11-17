@@ -39,16 +39,20 @@ window.onload = function() {
             requestId: requestId
         })
         .then(function(response) {
-            const requestDetails = JSON.parse(response.data.body);
-            console.log(requestDetails,'requestdetails');
-            requestDetailsContainer.innerHTML = `
-                <p><strong>Request ID:</strong> ${requestDetails.requestId}</p>
-                <p><strong>Status:</strong> ${requestDetails.status}</p>
-                <p><strong>Timestamp:</strong> ${requestDetails.timestamp}</p>
-                <p><strong>User Request:</strong> ${requestDetails.userRequest}</p>
-                <pre><code class="language-python">${requestDetails.finalCode}</code></pre>
-            `;
-            Prism.highlightAll();
+            if (response.data && response.data.body) {
+                const requestDetails = JSON.parse(response.data.body);
+                requestDetailsContainer.innerHTML = `
+                    <p><strong>Request ID:</strong> ${requestDetails.requestId}</p>
+                    <p><strong>Status:</strong> ${requestDetails.status}</p>
+                    <p><strong>Time Request:</strong> ${requestDetails.timeRequest}</p>
+                    <p><strong>Timestamp:</strong> ${requestDetails.timestamp}</p>
+                    <p><strong>User Request:</strong> ${requestDetails.userRequest}</p>
+                    <pre><code class="language-python">${requestDetails.finalCode}</code></pre>
+                `;
+                Prism.highlightAll();
+            } else {
+                requestDetailsContainer.innerHTML = '<p>Unexpected response format from server.</p>';
+            }
         })
         .catch(function(error) {
             console.error('Error fetching request details:', error);
