@@ -1,0 +1,121 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Table</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container mx-auto px-4">
+        <button id="addRequestBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+            + Add Request
+        </button>
+        <table class="table-auto w-full mt-10">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">User Request</th>
+                    <th class="px-4 py-2">Time Request</th>
+                    <th class="px-4 py-2">Status</th>
+                </tr>
+            </thead>
+            <tbody id="requestTable">
+            </tbody>
+        </table>    
+    </div>
+
+    <div id="modal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                Enter User Request
+                            </h3>
+                            <div class="mt-2">
+                                <input id="userRequestInput" type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="User Request">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button id="submitBtn" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Submit
+                    </button>
+                    <button id="closeBtn" type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+window.onload = function() {
+    axios.post('https://vlrpuqw4pjg7h2vqbog6saqsxy0ykmrd.lambda-url.us-west-2.on.aws/', {
+        requestType: 'fetch'
+    })
+    .then(function (response) {
+        const allRequests = response.data;
+        const tableBody = document.getElementById('requestTable');
+
+        allRequests.forEach(request => {
+            const row = document.createElement('tr');
+
+            const userRequestCell = document.createElement('td');
+            userRequestCell.textContent = request.userRequest;
+            row.appendChild(userRequestCell);
+
+            const timeRequestCell = document.createElement('td');
+            timeRequestCell.textContent = request.timestamp;
+            row.appendChild(timeRequestCell);
+
+            const statusCell = document.createElement('td');
+            statusCell.textContent = request.status;
+            row.appendChild(statusCell);
+
+            tableBody.appendChild(row);
+        });
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+
+    const addRequestBtn = document.getElementById('addRequestBtn');
+    const modal = document.getElementById('modal');
+    const closeBtn = document.getElementById('closeBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const userRequestInput = document.getElementById('userRequestInput');
+
+    addRequestBtn.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    submitBtn.addEventListener('click', () => {
+        if (userRequestInput.value) {
+            axios.post('https://lg4vqqnb5zrkwy33dwy3e2qnka0ixrqn.lambda-url.us-west-2.on.aws/', {
+                userRequest: userRequestInput.value
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
+            userRequestInput.value = '';
+            modal.classList.add('hidden');
+        } else {
+            alert('Please enter a user request');
+        }
+    });
+}
+</script>
+</body>
+</html>
