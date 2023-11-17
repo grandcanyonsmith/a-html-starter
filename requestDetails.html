@@ -40,6 +40,7 @@ window.onload = function() {
         })
         .then(function(response) {
             const requestDetails = JSON.parse(response.data.body);
+            console.log(requestDetails,'requestdetails');
             requestDetailsContainer.innerHTML = `
                 <p><strong>Request ID:</strong> ${requestDetails.requestId}</p>
                 <p><strong>Status:</strong> ${requestDetails.status}</p>
