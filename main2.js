@@ -381,15 +381,19 @@ const ELEMENT_IDS = [
     //   }
       static handleResponse(response) {
           console.log(response, 'response');
-          if (Array.isArray(response)) {
-              const updatedTabs = response.map(CodeSubmitter.handleFile);
-              const updatedTab = updatedTabs[updatedTabs.length - 1];
+          if (typeof response === 'object' && response !== null) {
+              // Assuming that 'response' or 'newCode' holds the data you want to handle
+              const fileData = {
+                  fileName: 'yourFileNameHere', // You need to provide the actual file name
+                  fileContents: response.newCode || response.response // Use the appropriate property
+              };
+              const updatedTab = CodeSubmitter.handleFile(fileData);
               UI.updateUIAfterResponse(updatedTab);
               elements.saveBtn.classList.remove("hidden");
               UI.toggleView("outputBtn");
           } else {
-              // Handle the case where response is not an array
-              console.error('Expected an array for response, but received:', response);
+              // Handle the case where response is not an object
+              console.error('Expected an object for response, but received:', response);
               // You may want to display an error message to the user or perform some other action
           }
       }
