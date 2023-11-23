@@ -384,7 +384,7 @@ const ELEMENT_IDS = [
           if (typeof response === 'object' && response !== null) {
               // Assuming that 'response' or 'newCode' holds the data you want to handle
               const fileData = {
-                  fileName: 'yourFileNameHere', // You need to provide the actual file name
+                  fileName: response.fileName || response.response,
                   fileContents: response.newCode || response.response // Use the appropriate property
               };
               const updatedTab = CodeSubmitter.handleFile(fileData);
