@@ -5,23 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thanksgiving Turkey Wars</title>
+    <!-- Adding Star Jedi font from dafontfree.net -->
+    <link rel="stylesheet" href="https://freescriptfonts.com/download/3252" type="text/css">
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            background-color: #3e3023; /* Deep brown background for Thanksgiving theme */
-            color: #f7f4e9; /* Off white text color for contrast */
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
+        /* Adding Star Wars font to the entire document */
+        @font-face {
+            font-family: "Star Jedi";
+            src: url("https://freescriptfonts.com/data/3252/starjedi.ttf") format("truetype");
         }
 
-        .turkeywars-demo {
-            position: relative;
-            height: 100vh; /* Viewport height to fill screen */
-            perspective: 400px; /* Gives a 3D perspective */
-            font-size: 350%;
-            font-weight: bold;
-            color: #c49102; /* Golden color text resembling Thanksgiving decor */
+        body {
+            font-family: "Star Jedi", sans-serif;
         }
 
         @keyframes crawl {
@@ -30,58 +24,54 @@
                 transform: rotateX(20deg) translateZ(0);
             }
             100% {
-                top: -6000px; /* Moved the end position higher to accommodate longer text */
-                transform: rotateX(25deg) translateZ(-3500px); /* The text moves away and rotates */
+                top: -6000px;
+                transform: rotateX(25deg) translateZ(-3500px);
             }
+        }
+
+        .turkeywars-demo {
+            perspective: 400px;
         }
 
         .crawl {
             position: absolute;
             width: 100%;
             transform-origin: 50% 100%;
-            top: 100vh; /* initially placed at the bottom of the viewport */
-            animation: crawl 120s linear 0s forwards; /* Adjusted scrolling time for longer content */
+            top: 100vh;
+            animation: crawl 120s linear 0s forwards;
         }
 
-        .title {
-            text-align: center;
-            font-size: 90%;
+        /* Dark mode styles */
+        body {
+            background-color: #111; /* Darker background for dark mode */
+            color: #ddd; /* Lighter text color for dark mode */
         }
 
-        .title h1 {
-            margin: 0;
-            text-transform: uppercase;
+        h1 {
+            color: #ff8c00; /* A different shade of color for the title text */
         }
 
-        .container {
-            max-width: 1200px;
-            padding: 20px;
-            margin: 0 auto;
-        }
-
-        p {
-            margin: 30px 0; /* Added margin to separate paragraphs more distinctly */
-            color: #f5dcb4; /* Lighter brown text color to complement the theme */
-            line-height: 1.6;
+        .title p {
+            color: #bbb; /* Lighter color for the paragraph text */
         }
     </style>
 </head>
 
-<body>
-    <div class="container">
-        <div class="turkeywars-demo">
+<body class="h-screen m-0 overflow-hidden">
+    <div class="container mx-auto px-5">
+        <div class="turkeywars-demo h-full">
             <div class="crawl">
-                <div class="title">
-                    <h1>The Thanksgiving Turkey Wars</h1>
-                    <p>Thanksgiving, a time of harvest and gratitude, became the background of the most unusual phenomenon known as the Turkey Wars. It is said that each year, as families gather to celebrate and give thanks, a peculiar event transpires in the realm of the turkeys.</p>
+                <div class="title text-center text-[90%]">
+                    <h1 class="m-0 uppercase text-4xl font-bold">The Thanksgiving Turkey Wars</h1>
+                    <p class="my-8 leading-8">Thanksgiving, a time of harvest and gratitude, became the background of the most unusual phenomenon known as the Turkey Wars. It is said that each year, as families gather to celebrate and give thanks, a peculiar event transpires in the realm of the turkeys.</p>
 
-                    <p>It began with the Turkeys' proclamation of sovereignty, tired of being the centerpiece of the holiday feasts. Led by the valiant Turkey Commander Gobblox, the turkeys started a rebellion, vowing to escape their fates each Thanksgiving eve.</p>
+                    <p class="my-8 leading-8">It began with the Turkeys' proclamation of sovereignty, tired of being the centerpiece of the holiday feasts. Led by the valiant Turkey Commander Gobblox, the turkeys started a rebellion, vowing to escape their fates each Thanksgiving eve.</p>
 
-                    <p>Humans, caught by surprise, found themselves in a tussle to maintain the tradition. Unbeknownst to many, the Turkey Wars were not fought with swords or guns but with wits, strategy, and an occasional corn maze deception.</p>
+                    <p class="my-8 leading-8">Humans, caught by surprise, found themselves in a tussle to maintain the tradition. Unbeknownst to many, the Turkey Wars were not fought with swords or guns but with wits, strategy, and an occasional corn maze deception.</p>
 
-                    <p>As the years went by, the Thanksgiving tables saw changes. Some families joined forces with the turkeys, creating vegetarian feasts, while others honed their persuasive talents, participating in the Treaty of Tofurky to ensure peace and plenty during the holiday season.</p>
+                    <p class="my-8 leading-8">As the years went by, the Thanksgiving tables saw changes. Some families joined forces with the turkeys, creating vegetarian feasts, while others honed their persuasive talents, participating in the Treaty of Tofurky to ensure peace and plenty during the holiday season.</p>
 
-                    <p>Tales of the Turkey Wars echo through the leaf-bare trees of November. If you listen closely, you might hear the distant gobbles and the rustling of feathers in the crisp autumn air, reminding us of the ongoing saga between man and bird each Thanksgiving.</p>
+                    <p class="my-8 leading-8">Tales of the Turkey Wars echo through the leaf-bare trees of November. If you listen closely, you might hear the distant gobbles and the rustling of feathers in the crisp autumn air, reminding us of the ongoing saga between man and bird each Thanksgiving.</p>
                 </div>
             </div>
         </div>
