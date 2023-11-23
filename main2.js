@@ -369,15 +369,29 @@ const ELEMENT_IDS = [
       return response.data;
     }
   
-    static handleResponse(response) {
-        console.log(response,'response');
-        const updatedTabs = response.map(CodeSubmitter.handleFile);
-        const updatedTab = updatedTabs[updatedTabs.length - 1];
-        UI.updateUIAfterResponse(updatedTab);
-        // Remove the following line
-        // CodeSubmitter.getFileContent(elements.fileDropdown.value);
-        elements.saveBtn.classList.remove("hidden");
-        UI.toggleView("outputBtn"); // Add this line
+    // static handleResponse(response) {
+    //     console.log(response,'response');
+    //     const updatedTabs = response.map(CodeSubmitter.handleFile);
+    //     const updatedTab = updatedTabs[updatedTabs.length - 1];
+    //     UI.updateUIAfterResponse(updatedTab);
+    //     // Remove the following line
+    //     // CodeSubmitter.getFileContent(elements.fileDropdown.value);
+    //     elements.saveBtn.classList.remove("hidden");
+    //     UI.toggleView("outputBtn"); // Add this line
+    //   }
+      static handleResponse(response) {
+          console.log(response, 'response');
+          if (Array.isArray(response)) {
+              const updatedTabs = response.map(CodeSubmitter.handleFile);
+              const updatedTab = updatedTabs[updatedTabs.length - 1];
+              UI.updateUIAfterResponse(updatedTab);
+              elements.saveBtn.classList.remove("hidden");
+              UI.toggleView("outputBtn");
+          } else {
+              // Handle the case where response is not an array
+              console.error('Expected an array for response, but received:', response);
+              // You may want to display an error message to the user or perform some other action
+          }
       }
   
     static handleFile(file) {
@@ -670,3 +684,5 @@ const ELEMENT_IDS = [
 }
 
 window.onload = Main.init;
+
+
