@@ -381,6 +381,7 @@ const ELEMENT_IDS = [
       }
   
     static handleFile(file) {
+      console.log(file,'file');
       let tab = CodeSubmitter.findTab(file.fileName);
       if (!tab) {
         tab = CodeSubmitter.createTab(file);
