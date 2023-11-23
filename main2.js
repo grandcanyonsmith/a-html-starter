@@ -370,6 +370,7 @@ const ELEMENT_IDS = [
     }
   
     static handleResponse(response) {
+        console.log(response,'response');
         const updatedTabs = response.map(CodeSubmitter.handleFile);
         const updatedTab = updatedTabs[updatedTabs.length - 1];
         UI.updateUIAfterResponse(updatedTab);
