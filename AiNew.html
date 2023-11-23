@@ -4,63 +4,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Space</title>
+    <title>Thanksgiving Turkey Wars</title>
     <style>
-        @keyframes crawl {
-            0% {
-                top: 100vh;
-                transform: rotateX(20deg)  translateZ(0);
-            }
-            100% {
-                top: -250vh;
-                transform: rotateX(20deg) translateZ(-1500px);
-            }
-        }
-
         body, html {
             height: 100%;
             margin: 0;
-            overflow: hidden;
+            background-color: #3e3023; /* Deep brown background for Thanksgiving theme */
+            color: #f7f4e9; /* Off white text color for contrast */
             font-family: 'Arial', sans-serif;
-            background-color: black;
-            color: #d6d6d6;
+            overflow: hidden;
         }
 
-        .starwars-demo {
+        .turkeywars-demo {
+            position: relative;
+            height: 100vh; /* Viewport height to fill screen */
+            perspective: 400px; /* Gives a 3D perspective */
             font-size: 350%;
             font-weight: bold;
-            color: #feda4a;
-            position: relative;
-            height: 800px;
-            perspective: 400px;
-            overflow: hidden;
+            color: #c49102; /* Golden color text resembling Thanksgiving decor */
+        }
+
+        @keyframes crawl {
+            0% {
+                top: 100vh;
+                transform: rotateX(20deg) translateZ(0);
+            }
+            100% {
+                top: -6000px; /* Moved the end position higher to accommodate longer text */
+                transform: rotateX(25deg) translateZ(-3500px); /* The text moves away and rotates */
+            }
         }
 
         .crawl {
-            position: relative;
-            top: 99999px;
+            position: absolute;
+            width: 100%;
             transform-origin: 50% 100%;
-            animation: crawl 60s linear;
+            top: 100vh; /* initially placed at the bottom of the viewport */
+            animation: crawl 120s linear 0s forwards; /* Adjusted scrolling time for longer content */
         }
 
-        .crawl > .title {
-            font-size: 90%;
+        .title {
             text-align: center;
+            font-size: 90%;
         }
 
-        .crawl > .title h1 {
-            margin: 0 0 100px;
+        .title h1 {
+            margin: 0;
             text-transform: uppercase;
         }
 
         .container {
             max-width: 1200px;
-            margin: 0 auto;
             padding: 20px;
+            margin: 0 auto;
         }
 
         p {
-            color: #AAAAAA;
+            margin: 30px 0; /* Added margin to separate paragraphs more distinctly */
+            color: #f5dcb4; /* Lighter brown text color to complement the theme */
             line-height: 1.6;
         }
     </style>
@@ -68,19 +69,19 @@
 
 <body>
     <div class="container">
-        <div class="starwars-demo">
+        <div class="turkeywars-demo">
             <div class="crawl">
                 <div class="title">
-                    <h1>The Wonders of Space</h1>
-                    <p>Space, the final frontier, is a vast and fascinating world that exists beyond the Earth's atmosphere. It encompasses all that is beyond our planet including stars, planets, comets, asteroids, galaxies, and the cosmic microwave background radiation.</p>
+                    <h1>The Thanksgiving Turkey Wars</h1>
+                    <p>Thanksgiving, a time of harvest and gratitude, became the background of the most unusual phenomenon known as the Turkey Wars. It is said that each year, as families gather to celebrate and give thanks, a peculiar event transpires in the realm of the turkeys.</p>
 
-                    <p>One of the most intriguing aspects of space is its enormity. The observable universe spans approximately 93 billion light-years in diameter, filled with at least 100 billion galaxies, each containing hundreds of billions of stars.</p>
+                    <p>It began with the Turkeys' proclamation of sovereignty, tired of being the centerpiece of the holiday feasts. Led by the valiant Turkey Commander Gobblox, the turkeys started a rebellion, vowing to escape their fates each Thanksgiving eve.</p>
 
-                    <p>Exploration of space began in earnest in the mid-20th century with the launch of the first artificial satellite, Sputnik, by the Soviet Union. This was soon followed by manned missions, and eventually by longer expeditions to the Moon and unmanned probes to other planets and beyond.</p>
+                    <p>Humans, caught by surprise, found themselves in a tussle to maintain the tradition. Unbeknownst to many, the Turkey Wars were not fought with swords or guns but with wits, strategy, and an occasional corn maze deception.</p>
 
-                    <p>Today, space exploration continues to captivate our imagination and drive scientific research. From the International Space Station to future missions destined for Mars and beyond, humans are reaching further into space, seeking to understand the mysteries of the cosmos and our place within it.</p>
+                    <p>As the years went by, the Thanksgiving tables saw changes. Some families joined forces with the turkeys, creating vegetarian feasts, while others honed their persuasive talents, participating in the Treaty of Tofurky to ensure peace and plenty during the holiday season.</p>
 
-                    <p>Whether we are marveling at the incredible images sent back by the Hubble Space Telescope or dreaming about the potential of interstellar travel, space remains a source of endless curiosity and wonder for humanity.</p>
+                    <p>Tales of the Turkey Wars echo through the leaf-bare trees of November. If you listen closely, you might hear the distant gobbles and the rustling of feathers in the crisp autumn air, reminding us of the ongoing saga between man and bird each Thanksgiving.</p>
                 </div>
             </div>
         </div>
