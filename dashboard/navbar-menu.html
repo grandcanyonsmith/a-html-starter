@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <style>
+        .blue-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #3490dc;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    .bell-dot {
+        height: 4px;
+        width: 4px;
+        background-color: #3490dc;
+        border-radius: 50%;
+        display: inline-block;
+        position: absolute;
+        top: -2px;
+        right: -2px;
+    }
+    </style>
+</head>
+<body>
+<nav class="flex items-center justify-between p-6 bg-white">
+        <div class="flex items-center">
+            <img src="/path/to/company-logo.png" alt="Company Logo" class="w-12 h-12">
+        </div>
+        <div class="flex items-center">
+            <button class="mr-6" onclick="navigateTo('create-new-project.html')">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="relative">
+                <button id="notification-btn" class="mr-6" aria-label="Notifications">
+                    <i class="fas fa-bell"></i>
+                </button>
+                <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10">
+                    <div class="flex justify-between items-center px-4 py-2 text-sm">
+                        <strong>Notifications</strong>
+                        <button onclick="navigateTo('viewAllNotifications.html')">View all</button>
+                    </div>
+                    <!-- Notifications will be appended here by JavaScript -->
+                </div>
+            </div>
+            <div class="relative">
+                <button id="profile-btn" class="focus:outline-none" aria-label="Profile">
+                    <img src="/path/to/user-profile.jpg" alt="User Profile" class="w-6 h-6">
+                </button>
+                <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+<div class="block px-4 py-2 text-sm text-gray-400 mb-2">canyonfsmith@gmail.com</div>
+<a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+<a href="account.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account</a>
+<a href="logout.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+<script>
+    const profileBtn = document.getElementById('profile-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const notificationBtn = document.getElementById('notification-btn');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+
+    const allNotifications = [
+        {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: false},
+        {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: true},
+        // Add more notifications as needed
+    ];
+
+    let hasUnreadNotifications = false;
+
+    allNotifications.forEach(notification => {
+        const notificationElement = document.createElement('div');
+        notificationElement.classList.add('flex', 'justify-between', 'items-start', 'px-4', 'py-2', 'text-sm');
+        notificationElement.innerHTML = `
+            <div>
+                <strong>${notification.repoName}</strong><br>
+                <small>${notification.fileName}</small>
+            </div>
+            <div class="flex flex-col items-end">
+                ${notification.viewedNotification ? '' : '<span class="blue-dot mb-1"></span>'}
+                <small>${notification.updatedTime}</small>
+            </div>
+        `;
+        notificationDropdown.appendChild(notificationElement);
+
+        if (!notification.viewedNotification) {
+            hasUnreadNotifications = true;
+        }
+    });
+
+    if (hasUnreadNotifications) {
+        const bellDot = document.createElement('span');
+        bellDot.classList.add('bell-dot');
+        notificationBtn.style.position = 'relative';
+        notificationBtn.appendChild(bellDot);
+    }
+
+    profileBtn.addEventListener('click', () => toggleDropdown(profileDropdown));
+    notificationBtn.addEventListener('click', () => toggleDropdown(notificationDropdown));
+
+    window.addEventListener('click', (e) => {
+        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    function toggleDropdown(dropdown) {
+        dropdown.classList.toggle('hidden');
+    }
+
+    function navigateTo(url) {
+        window.location.assign(url);
+    }
+</script>
+</body>
+</html>
