@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="p-10">
+    <h1 class="text-2xl font-bold mb-4">Create a project</h1>
+    <p class="mb-8">A project will be created in your GitHub account as a repository. After you click submit the repository will be created.</p>
+
+    <form id="project-form">
+        <label class="block mb-2" for="project-name">Project Name</label>
+        <input class="border p-2 mb-4 w-full" type="text" id="project-name" required aria-required="true">
+
+        <label class="block mb-2" for="repository-name">Repository name</label>
+        <input class="border p-2 mb-2 w-full" type="text" id="repository-name" required aria-required="true">
+        <p class="text-sm mb-4 text-red-500 hidden" id="repo-name-error">The repository name can only contain ASCII letters, digits, and the characters ., -, and _.</p>
+
+        <label class="block mb-2" for="description">Description (optional)</label>
+        <input class="border p-2 mb-4 w-full" type="text" id="description">
+
+        <div class="mb-4">
+            <label>
+                <input type="radio" name="visibility" value="public" checked>
+                <span class="ml-2">Public</span>
+                <p class="text-sm">Anyone on the internet can see this repository. You choose who can commit.</p>
+            </label>
+            <label class="mt-2">
+                <input type="radio" name="visibility" value="private">
+                <span class="ml-2">Private</span>
+                <p class="text-sm">You choose who can see and commit to this repository.</p>
+            </label>
+        </div>
+
+        <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">Create Project</button>
+    </form>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    const form = document.getElementById('project-form');
+    const repoNameInput = document.getElementById('repository-name');
+    const repoNameError = document.getElementById('repo-name-error');
+    const projectNameInput = document.getElementById('project-name');
+    const descriptionInput = document.getElementById('description');
+    const API_URL = 'http://localhost:5000';
+
+    // Get the userId from the URL slug
+    const pathParts = window.location.pathname.split('/');
+    const userId = pathParts[pathParts.length - 1]; // Assuming the userId is the last part of the URL
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const repoName = repoNameInput.value;
+        const projectName = projectNameInput.value;
+        const description = descriptionInput.value;
+        const repoAccessLevel = document.querySelector('input[name="visibility"]:checked').value;
+
+        const isRepoNameValid = /^[a-zA-Z0-9\.\-_]+$/.test(repoName);
+        const isProjectNameValid = projectName.trim() !== '';
+
+        const data = {
+            repoName,
+            projectName,
+            userId,
+            repoAccessLevel,
+            description
+        };
+        console.log(data,'data')
+        try {
+            if (isRepoNameValid && isProjectNameValid) {
+                const response = await axios.post(`${API_URL}/createProject`, data);
+                alert('Project created successfully');
+            } else {
+                if (!isRepoNameValid) {
+                    repoNameInput.classList.add('border-red-500');
+                    repoNameError.classList.remove('hidden');
+                }
+                if (!isProjectNameValid) {
+                    projectNameInput.classList.add('border-red-500');
+                    alert('Project name is required');
+                }
+            }
+        } catch (error) {
+            console.error(error);
+        } finally {
+            if (!isRepoNameValid || !isProjectNameValid) {
+                alert('An error occurred while creating the project. Please check your inputs and try again.');
+            }
+        }
+    });
+
+    repoNameInput.addEventListener('input', () => {
+        const repoName = repoNameInput.value;
+        const isRepoNameValid = /^[a-zA-Z0-9\.\-_]+$/.test(repoName);
+
+        if (isRepoNameValid) {
+            repoNameInput.classList.remove('border-red-500');
+            repoNameError.classList.add('hidden');
+        } else {
+            repoNameInput.classList.add('border-red-500');
+            repoNameError.classList.remove('hidden');
+        }
+    });
+</script>
+</body>
+</html>
