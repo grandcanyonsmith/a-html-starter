@@ -43,7 +43,8 @@
                 if (response.data.statusCode === 400) {
                     errorParagraph.textContent = response.data.body;
                 } else if (response.data.statusCode === 200) {
-                    window.location.href = `view-all-projects.html?uId=${response.data.body.uId}`;
+                    const body = JSON.parse(response.data.body);
+                    window.location.href = `view-all-projects.html?uId=${body.uId}`;
                 }
             } catch (error) {
                 errorParagraph.textContent = 'An error occurred!';
