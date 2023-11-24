@@ -38,12 +38,15 @@
                     requestType: 'LOGIN'
                 });
 
-                alert(JSON.stringify(response.data));
+
 
                 if (response.data.statusCode === 400) {
+                    alert(JSON.stringify(response.data));
                     errorParagraph.textContent = response.data.body;
-                } else if (response.data.statusCode === 200) {
-                    
+                } else {
+                    alert(JSON.stringify(response.data));
+                    console.log(response.data,'response data');
+                    console.log(response.data.uId,'uId');
                     window.location.href = `view-all-projects.html?uId=${response.data.uId}`;
                 }
             } catch (error) {
