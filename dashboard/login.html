@@ -13,6 +13,7 @@
             <input id="password" type="password" placeholder="Password" class="mb-4 w-full px-3 py-2 border border-gray-300 rounded-md">
             <button id="submit" class="w-full px-3 py-2 bg-blue-600 text-white rounded-md" disabled>Submit</button>
             <p id="error" class="mt-3 text-red-600"></p>
+            <p class="mt-3 text-blue-600 cursor-pointer" onclick="window.location.href='signup.html'">Not a member? Click here to sign up</p>
         </div>
     </div>
 
@@ -42,7 +43,7 @@
                 if (response.data.statusCode === 400) {
                     errorParagraph.textContent = response.data.body;
                 } else if (response.data.statusCode === 200) {
-                    window.location.href = `home.html?uId=${response.data.body.uId}`;
+                    window.location.href = `view-all-projects.html?uId=${response.data.body.uId}`;
                 }
             } catch (error) {
                 errorParagraph.textContent = 'An error occurred!';
