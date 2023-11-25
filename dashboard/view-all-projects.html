@@ -3,6 +3,7 @@
 <head>
     <title>Projects Page</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body class="p-10">
     <h1 class="text-3xl mb-2">Projects</h1>
@@ -13,13 +14,6 @@
     <div class="grid grid-cols-3 gap-4" id="projectsContainer">
     </div>
     <script>
-        const projectList = [
-            { projectName: 'Project 1', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'a-html-started', githubUsername: 'grandcanyonsmith', projectId: 1 },
-            { projectName: 'Project 2', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'b-html-started', githubUsername: 'grandcanyonsmith', projectId: 2 },
-            { projectName: 'Project 3', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'c-html-started', githubUsername: 'grandcanyonsmith', projectId: 3 },
-            { projectName: 'Project 4', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'd-html-started', githubUsername: 'grandcanyonsmith', projectId: 4 },
-        ];
-
         const addNewProject = () => {
             const uId = new URLSearchParams(window.location.search).get('uId') || '1'; // Set to '1' as default if uId is not present in the URL
             window.location.href = `create-new-project.html?uId=${uId}`;
@@ -33,7 +27,7 @@
                     <a class="project-link" href="viewProject.html?projectId=${project.projectId}">
                         <div class="border p-4 rounded">
                             <div class="flex items-center">
-                                <img class="project-icon" src="${project.projectIcon}" alt="icon" class="w-6 h-6">
+                                <img class="project-icon" src="${project.projectIcon || 'icon.png'}" alt="icon" class="w-6 h-6">
                                 <h2 class="ml-4">${project.projectName}</h2>
                             </div>
                             <p class="text-left text-sm">${project.lastUpdated}</p>
@@ -49,7 +43,23 @@
             uId = uId.split('?')[0];
             console.log(uId); // Console log the uId
 
-            displayProjects(projectList);
+            axios.post('https://tvbuvokazmaktj5vxl3czencoy0twlmp.lambda-url.us-west-2.on.aws/', {
+                uId: uId,
+                requestType: 'FETCH_ALL_PROJECTS'
+            })
+            .then(function (response) {
+                console.log(response);
+                const projectList = response.data.map(project => ({
+                    ...project,
+                    lastUpdated: new Date(project.lastUpdated * 1000).toLocaleString(), // Convert Unix timestamp to readable date-time
+                    githubUsername: project.githubUserName
+                }));
+                displayProjects(projectList);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
             document.getElementById('searchInput').addEventListener('input', (e) => {
                 const filteredProjects = projectList.filter(project => 
                     project.projectName.toLowerCase().includes(e.target.value.toLowerCase())
