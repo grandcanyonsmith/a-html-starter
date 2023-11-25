@@ -2,93 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Enhanced Code Editor</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://unpkg.com/feather-icons"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jane's Career Journey</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: white;
+            font-family: 'Arial', sans-serif;
+            background-color: #121212; /* Dark background color for dark mode */
+            color: #fff; /* White text color for better readability in dark mode */
         }
-        #fileContentsContainer {
-            background-color: gray;
-            overflow-x: hidden;
+
+        .career-stage {
+            margin: 2rem;
+            padding: 1rem;
+            border: 2px solid #646464; /* Border color adjusted for dark mode */
+            background-color: rgba(23, 23, 23, 0.8); /* Slightly transparent black for each stage */
+            text-align: center;
         }
-        #code {
-            font-family: 'Courier New', Courier, monospace;
+
+        .career-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #eee; /* Lighter color for titles in dark mode */
+        }
+
+        .stage-animation {
+            width: 100%;
+            height: auto;
+            margin-bottom: 1rem;
+        }
+
+        /* Define dark mode styles for header and footer text */
+        header, footer {
+            color: #ccc; /* Light gray color for text to stand out against the dark background */
         }
     </style>
 </head>
-<body class="bg-gray-200 font-mono text-base text-gray-800 leading-7">
-    <div class="container mx-auto p-4">
-        <div class="flex justify-between mb-4">
-            <div class="relative inline-flex w-full">
-                <div id="repoDropdown" class="w-full max-w-xs bg-white border-r border-gray-400">
-                    <div class="flex items-center justify-between px-5 py-2">
-                        <h3 id="repoName" class="text-sm font-semibold text-gray-600">Repositories</h3>
-                        <button id="dropdownIcon">
-                            <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="flex items-center px-5 py-2 border-t border-gray-200" id="searchDivRepo" style="display: none;">
-                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                        <input type="text" id="searchInputRepo" placeholder="Search.." title="Type in a name" class="ml-2 w-full">
-                    </div>
-                    <nav id="repoList" class="px-2 text-gray-700 hidden">
-                        <!-- Populated by JavaScript -->
-                    </nav>
-                </div>
-            </div>
+<body class="bg-gray-900"> <!-- Tailwind class to set the background color to a darker shade -->
+
+    <header class="text-center p-10">
+        <h1 class="text-4xl font-bold my-4">Jane's Career Journey</h1>
+        <p class="text-lg">Experience the various chapters of Jane's professional life in animation!</p>
+    </header>
+
+    <section style="text-align:center;">
+        <!-- Cashier at In-N-Out -->
+        <div class="career-stage">
+            <h2 class="career-title">Cashier at In-N-Out</h2>
+            <img class="stage-animation" src="cashier-animation.gif" alt="Jane as a cashier" />
+            <p>Jane's first job was taking orders with a smile at In-N-Out. She learned the value of quick service and friendly customer interactions.</p>
         </div>
-        <div class="flex justify-between mb-4">
-            <div class="relative inline-flex">
-                <div id="tree" class="w-full max-w-xs bg-white border-r border-gray-400">
-                    <div class="flex items-center justify-between px-5 py-2">
-                        <h3 id="fileTitle" class="text-lg font-semibold text-gray-600">Files</h3>
-                        <button id="fetchFilesBtn">
-                            <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="flex items-center justify-between px-5 py-2 hidden" id="searchBar">
-                        <i data-feather="search"></i>
-                        <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchFilesAndFolders(this.value)">
-                    </div>
-                    <nav id="fileDropdown" class="px-2 text-gray-700 hidden dropdown-content">
-                        <!-- Populated by JavaScript -->
-                    </nav>
-                    <div class="flex items-center justify-between px-5 py-2 hidden" id="createFileBtn">
-                        <button id="createNewFileButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">+ Create New File</button>
-                    </div>
-                </div>
-            </div>
+
+        <!-- Semi Truck Driver -->
+        <div class="career-stage">
+            <h2 class="career-title">Semi Truck Driver</h2>
+            <img class="stage-animation" src="truck-driver-animation.gif" alt="Jane driving a semi truck" />
+            <p>Embracing the call of the open road, Jane spent some time as a semi truck driver, mastering the art of long-haul logistics.</p>
         </div>
-    </div>
-    <div class="w-full h-screen" id="fileContentsContainer">
-        <pre><code id="code"></code></pre>
-    </div>
-    <button id="showFileContentsBtn">Show Code</button>
-    <div id="createNewFileModalWindow" class="fixed inset-0 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-5 rounded shadow-lg text-center">
-            <input type="text" id="newFileNameInput" class="w-full p-2 mb-4 border rounded" placeholder="Enter file name" required>
-            <textarea id="newFileContentsInput" class="w-full h-64 p-2 mb-4 border rounded" placeholder="Enter file contents" required></textarea>
-            <button id="submitCreateFileButton" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
-            <button id="cancelButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4">Cancel</button>
+
+        <!-- Delivery Guy for UPS -->
+        <div class="career-stage">
+            <h2 class="career-title">Delivery Person for UPS</h2>
+            <img class="stage-animation" src="delivery-guy-animation.gif" alt="Jane delivering packages" />
+            <p>Currently, Jane brings joy one package at a time as a delivery person for UPS, ensuring every parcel reaches its destination.</p>
         </div>
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
-    <script src="CodeBox.js"></script>
-    <script src="repoSelect.js"></script>
-    <script src="repoFileSelector.js"></script>
-    <script src="CombinedMain.js"></script>
+    </section>
+
+    <footer class="text-center p-4">
+        <p>&copy; 2023 Jane Doe. All rights reserved.</p>
+    </footer>
+
 </body>
 </html>
