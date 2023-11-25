@@ -46,6 +46,7 @@
 
         window.onload = () => {
             let uId = new URLSearchParams(window.location.search).get('uId');
+            uId = uId.split('?')[0];
             console.log(uId); // Console log the uId
 
             displayProjects(projectList);
