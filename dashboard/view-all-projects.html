@@ -7,61 +7,54 @@
 <body class="p-10">
 <h1 class="text-3xl mb-2">Projects</h1>
 <div class="flex items-center mb-10">
-        <input class="border p-2 rounded mr-4 flex-grow" type="text" placeholder="Search..." id="searchInput">
-        <div class="relative">
-<button class="border p-2 rounded" id="addButton" onClick="toggleDropdown()" aria-haspopup="true" aria-expanded="false">Add New +</button>
-<div class="dropdown-content hidden absolute left-0 mt-2 w-40 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5" id="dropdownMenu">
-<a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" href="#" id="createProjectLink" onClick="event.preventDefault(); redirectWithUserId('create-new-project.html')">Project</a>
-
-        </div>
-    </div>
-    </div>
-    <div class="grid grid-cols-3 gap-4" id="projectsContainer">
-    </div>
+    <input class="border p-2 rounded mr-4 flex-grow" type="text" placeholder="Search..." id="searchInput">
+    <button class="border p-2 rounded" id="addButton" onClick="addNewProject()">Add New +</button>
+</div>
+<div class="grid grid-cols-3 gap-4" id="projectsContainer">
+</div>
 <script>
 const projectList = [
-{projectName: 'Project 1', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'a-html-started', githubUsername: 'grandcanyonsmith', id: 1},
-{projectName: 'Project 2', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'b-html-started', githubUsername: 'grandcanyonsmith', id: 2},
-{projectName: 'Project 3', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'c-html-started', githubUsername: 'grandcanyonsmith', id: 3},
-{projectName: 'Project 4', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'd-html-started', githubUsername: 'grandcanyonsmith', id: 4},
+    {projectName: 'Project 1', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'a-html-started', githubUsername: 'grandcanyonsmith', id: 1},
+    {projectName: 'Project 2', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'b-html-started', githubUsername: 'grandcanyonsmith', id: 2},
+    {projectName: 'Project 3', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'c-html-started', githubUsername: 'grandcanyonsmith', id: 3},
+    {projectName: 'Project 4', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'd-html-started', githubUsername: 'grandcanyonsmith', id: 4},
 ];
 
-const toggleDropdown = () => {
- const dropdownElement = document.getElementById("dropdownMenu");
- dropdownElement.classList.toggle("hidden");
-}
-// display projects on the page
-const displayProjects = (projects) => {
- const projectsContainer = document.getElementById('projectsContainer');
- projectsContainer.innerHTML = '';
- projects.forEach(project => {
-  projectsContainer.innerHTML += `
-  <a class="project-link" href="viewProject.html?id=${project.id}">
-     <div class="border p-4 rounded">
-         <div class="flex items-center">
-             <img class="project-icon" src="${project.projectIcon}" alt="icon" class="w-6 h-6">
-             <h2 class="ml-4">${project.projectName}</h2>
-         </div>
-         <p class="text-left text-sm">${project.lastUpdated}</p>
-     </div>
-  </a>
-  `;
- });
+// Function to add a new project, with the userId appended in the URL
+const addNewProject = () => {
+    const uId = new URLSearchParams(window.location.search).get('userId');
+    window.location.href = `create-new-project.html?userId=${uId}`;
 }
 
-// add functionality to add userId to redirected url
-const redirectWithUserId = (url) => {
- const userId = new URLSearchParams(window.location.search).get('userId');
- window.location.href = `${url}?userId=${userId}`;
+// display projects on the page
+const displayProjects = (projects) => {
+    const projectsContainer = document.getElementById('projectsContainer');
+    projectsContainer.innerHTML = '';
+    projects.forEach(project => {
+        projectsContainer.innerHTML += `
+        <a class="project-link" href="viewProject.html?id=${project.id}">
+            <div class="border p-4 rounded">
+                <div class="flex items-center">
+                    <img class="project-icon" src="${project.projectIcon}" alt="icon" class="w-6 h-6">
+                    <h2 class="ml-4">${project.projectName}</h2>
+                </div>
+                <p class="text-left text-sm">${project.lastUpdated}</p>
+            </div>
+        </a>
+        `;
+    });
 }
 
 window.onload = () => {
- window.history.pushState({}, document.title, window.location.href + '?userId=1');
- displayProjects(projectList);
- document.getElementById('searchInput').addEventListener('input', (e) => {
-  const filteredProjects = projectList.filter(project => project.projectName.toLowerCase().includes(e.target.value.toLowerCase()));
-  displayProjects(filteredProjects);
- });
+    const userId = new URLSearchParams(window.location.search).get('userId');
+    if (!userId) {
+        window.history.replaceState({}, document.title, window.location.href + '?userId=1');
+    }
+    displayProjects(projectList);
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const filteredProjects = projectList.filter(project => project.projectName.toLowerCase().includes(e.target.value.toLowerCase()));
+        displayProjects(filteredProjects);
+    });
 }
 </script>
 </body>
