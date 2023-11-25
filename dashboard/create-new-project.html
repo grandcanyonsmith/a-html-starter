@@ -57,48 +57,52 @@
 
     console.log(`User ID: ${uId}`); // Log the userId
 
-    form.addEventListener('submit', async (event) => {
-        event.preventDefault();
+form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-        const repoName = repoNameInput.value;
-        const projectName = projectNameInput.value;
-        const description = descriptionInput.value;
-        const repoAccessLevel = document.querySelector('input[name="visibility"]:checked').value;
+    const repoName = repoNameInput.value;
+    const projectName = projectNameInput.value;
+    const description = descriptionInput.value;
+    const repoAccessLevel = document.querySelector('input[name="visibility"]:checked').value;
 
-        const isRepoNameValid = /^[a-zA-Z0-9\.\-_]+$/.test(repoName);
-        const isProjectNameValid = projectName.trim() !== '';
-        const requestType = 'CREATE_PROJECT';
-        const data = {
-            repoName,
-            projectName,
-            uId,
-            repoAccessLevel,
-            description,
-            requestType
-        };
-        console.log(data,'data')
-        try {
-            if (isRepoNameValid && isProjectNameValid) {
-                const response = await axios.post(`${API_URL}`, data);
-                alert('Project created successfully');
-            } else {
-                if (!isRepoNameValid) {
-                    repoNameInput.classList.add('border-red-500');
-                    repoNameError.classList.remove('hidden');
-                }
-                if (!isProjectNameValid) {
-                    projectNameInput.classList.add('border-red-500');
-                    alert('Project name is required');
-                }
+    const isRepoNameValid = /^[a-zA-Z0-9\.\-_]+$/.test(repoName);
+    const isProjectNameValid = projectName.trim() !== '';
+    const requestType = 'CREATE_PROJECT';
+    const data = {
+        repoName,
+        projectName,
+        uId,
+        repoAccessLevel,
+        description,
+        requestType
+    };
+
+    try {
+        if (isRepoNameValid && isProjectNameValid) {
+            const response = await axios.post(`${API_URL}`, data);
+            alert('Project created successfully');
+            // Assuming the response data has a property projectId
+            const projectId = response.data.projectId;
+            // Redirect to viewProject.html with projectId as a query parameter
+            window.location.href = `viewProject.html?projectId=${projectId}`;
+        } else {
+            if (!isRepoNameValid) {
+                repoNameInput.classList.add('border-red-500');
+                repoNameError.classList.remove('hidden');
             }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            if (!isRepoNameValid || !isProjectNameValid) {
-                alert('An error occurred while creating the project. Please check your inputs and try again.');
+            if (!isProjectNameValid) {
+                projectNameInput.classList.add('border-red-500');
+                alert('Project name is required');
             }
         }
-    });
+    } catch (error) {
+        console.error(error);
+    } finally {
+        if (!isRepoNameValid || !isProjectNameValid) {
+            alert('An error occurred while creating the project. Please check your inputs and try again.');
+        }
+    }
+});
 
     repoNameInput.addEventListener('input', () => {
         const repoName = repoNameInput.value;
