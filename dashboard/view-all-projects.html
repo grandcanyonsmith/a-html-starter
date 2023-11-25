@@ -14,10 +14,10 @@
     </div>
     <script>
         const projectList = [
-            { projectName: 'Project 1', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'a-html-started', githubUsername: 'grandcanyonsmith', id: 1 },
-            { projectName: 'Project 2', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'b-html-started', githubUsername: 'grandcanyonsmith', id: 2 },
-            { projectName: 'Project 3', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'c-html-started', githubUsername: 'grandcanyonsmith', id: 3 },
-            { projectName: 'Project 4', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'd-html-started', githubUsername: 'grandcanyonsmith', id: 4 },
+            { projectName: 'Project 1', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'a-html-started', githubUsername: 'grandcanyonsmith', projectId: 1 },
+            { projectName: 'Project 2', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'b-html-started', githubUsername: 'grandcanyonsmith', projectId: 2 },
+            { projectName: 'Project 3', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'c-html-started', githubUsername: 'grandcanyonsmith', projectId: 3 },
+            { projectName: 'Project 4', lastUpdated: '1 hour ago', projectIcon: 'icon.png', repoName: 'd-html-started', githubUsername: 'grandcanyonsmith', projectId: 4 },
         ];
 
         const addNewProject = () => {
@@ -30,7 +30,7 @@
             projectsContainer.innerHTML = '';
             projects.forEach(project => {
                 const projectHTML = `
-                    <a class="project-link" href="viewProject.html?uId=${project.id}">
+                    <a class="project-link" href="viewProject.html?projectId=${project.projectId}">
                         <div class="border p-4 rounded">
                             <div class="flex items-center">
                                 <img class="project-icon" src="${project.projectIcon}" alt="icon" class="w-6 h-6">
