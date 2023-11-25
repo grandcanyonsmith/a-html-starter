@@ -48,14 +48,14 @@
 
     // Get the userId from the URL query parameters
     const urlParams = new URLSearchParams(window.location.search);
-    let userId = urlParams.get('uId');
+    let uId = urlParams.get('uId');
 
     // If userId contains another query parameter, split it
-    if (userId.includes('?')) {
-        userId = userId.split('?')[0];
+    if (uId.includes('?')) {
+        uId = uId.split('?')[0];
     }
 
-    console.log(`User ID: ${userId}`); // Log the userId
+    console.log(`User ID: ${uId}`); // Log the userId
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -67,13 +67,14 @@
 
         const isRepoNameValid = /^[a-zA-Z0-9\.\-_]+$/.test(repoName);
         const isProjectNameValid = projectName.trim() !== '';
-
+        const requestType = 'CREATE_PROJECT';
         const data = {
             repoName,
             projectName,
-            userId,
+            uId,
             repoAccessLevel,
-            description
+            description,
+            requestType
         };
         console.log(data,'data')
         try {
