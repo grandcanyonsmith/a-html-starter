@@ -48,7 +48,12 @@
 
     // Get the userId from the URL query parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('uId');
+    let userId = urlParams.get('uId');
+
+    // If userId contains another query parameter, split it
+    if (userId.includes('?')) {
+        userId = userId.split('?')[0];
+    }
 
     console.log(`User ID: ${userId}`); // Log the userId
 
