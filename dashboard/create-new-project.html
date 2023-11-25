@@ -84,7 +84,7 @@ form.addEventListener('submit', async (event) => {
             // Assuming the response data has a property projectId
             const projectId = response.data.projectId;
             // Redirect to viewProject.html with projectId as a query parameter
-            window.location.href = `viewProject.html?projectId=${projectId}`;
+            window.location.href = `viewProject.html?projectId=${projectId}&uId=${uId}`;
         } else {
             if (!isRepoNameValid) {
                 repoNameInput.classList.add('border-red-500');
