@@ -44,7 +44,7 @@
     const repoNameError = document.getElementById('repo-name-error');
     const projectNameInput = document.getElementById('project-name');
     const descriptionInput = document.getElementById('description');
-    const API_URL = 'http://localhost:5000';
+    const API_URL = 'https://tvbuvokazmaktj5vxl3czencoy0twlmp.lambda-url.us-west-2.on.aws/';
 
     // Get the userId from the URL query parameters
     const urlParams = new URLSearchParams(window.location.search);
@@ -78,7 +78,7 @@
         console.log(data,'data')
         try {
             if (isRepoNameValid && isProjectNameValid) {
-                const response = await axios.post(`${API_URL}/createProject`, data);
+                const response = await axios.post(`${API_URL}`, data);
                 alert('Project created successfully');
             } else {
                 if (!isRepoNameValid) {
