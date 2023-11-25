@@ -50,6 +50,8 @@
     const pathParts = window.location.pathname.split('/');
     const userId = pathParts[pathParts.length - 1]; // Assuming the userId is the last part of the URL
 
+    console.log(`User ID: ${userId}`); // Log the userId
+
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
