@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Contents</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
+<style>
+    .tabsContainer, .codeBoxOptionsContainer {
+        display: flex;
+        align-items: center;
+    }
+    .tab {
+        display: inline-block;
+        padding: 10px;
+        padding-right: 20px; /* Add some padding to the right */
+        border: 1px solid #ccc;
+        margin-right: 5px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 250px;
+        position: relative;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    .close {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: lightgray;
+        cursor: pointer;
+    }
+    .add {
+        display: inline-block;
+        padding: 10px;
+        border: 1px solid #ccc;
+        margin-left: 5px;
+        cursor: pointer;
+    }
+    .code-container {
+        margin-top: 20px;
+    }
+    .codeBoxOptionsContainer button {
+        margin-right: 10px;
+    }
+</style>
+
+</head>
+<body>
+    <div class="codeBoxOptionsContainer">
+        <button id="viewCodeButton">View Code</button>
+        <button id="previewCodeButton">Preview Code</button>
+        <button id="viewLogsButton">View Logs</button>
+    </div>
+    <div class="tabsContainer">
+        <div id="allTabs"></div>
+        <div class="add" id="addTab">+</div>
+    </div>
+<button id="editCodeButton" style="position: absolute; right: 0;">Edit Code</button>
+<button id="saveCodeEditsButton" style="position: absolute; right: 0; display: none;">Save</button>
+<button id="cancelCodeEditsButton" style="position: absolute; right: 50px; display: none;">Cancel</button>
+<div class="code-container" id="viewCodeBox">
+    <pre><code id="codeBox"></code></pre>
+</div>
+<div class="code-container" style="display: none;" id="editCodeBox">
+    <textarea id="editCodeTextArea" style="width: 100%; height: 100%;"></textarea>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-markup.min.js"></script>
+<script>
+// Constants
+const LANGUAGE_MAP = {
+    'py': 'python',
+    'js': 'javascript',
+    'css': 'css',
+    'html': 'markup'
+};
+
+// File data
+let fileDataArray = [
+    { fileName: 'index.html', fileContents: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n</html>' },
+    { fileName: 'styles.css', fileContents: 'body {\n    background-color: #f0f0f0;\n}' },
+    { fileName: 'script.js', fileContents: 'console.log("Hello, World!");\nlet x = 10;\nconsole.log(x);' },
+    { fileName: 'main.py', fileContents: 'print("Hello, World!")\nnum = 10\nprint(num)' }
+];
+
+let currentSelectedTab = 0;
+
+// DOM Elements
+const allTabs = document.getElementById('allTabs');
+const addTab = document.getElementById('addTab');
+const codeBox = document.getElementById('codeBox');
+const codeContainer = document.querySelector('.code-container');
+const viewCodeButton = document.getElementById('viewCodeButton');
+const previewCodeButton = document.getElementById('previewCodeButton');
+const viewLogsButton = document.getElementById('viewLogsButton');
+const editCodeButton = document.getElementById('editCodeButton');
+const saveCodeEditsButton = document.getElementById('saveCodeEditsButton');
+const cancelCodeEditsButton = document.getElementById('cancelCodeEditsButton');
+const viewCodeBox = document.getElementById('viewCodeBox');
+const editCodeBox = document.getElementById('editCodeBox');
+const editCodeTextArea = document.getElementById('editCodeTextArea');
+
+// Helper functions
+const extractFileExtension = fileName => fileName.split('.').pop();
+const mapFileExtensionToPrismLanguage = extension => LANGUAGE_MAP[extension] || '';
+const highlightCodeWithPrism = (fileName, fileContents) => {
+    const extension = extractFileExtension(fileName);
+    const language = mapFileExtensionToPrismLanguage(extension);
+    codeBox.className = `language-${language}`;
+    codeBox.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+}
+
+// Event handlers
+const handleTabClick = (event) => {
+    const index = event.target.getAttribute('data-index');
+    displayFileContentInTab(index);
+    viewCodeButton.click();
+};
+
+const handleCloseClick = (event) => {
+    event.stopPropagation();
+    const index = event.target.getAttribute('data-index');
+    removeTabAndFileData(index);
+};
+
+const handleAddClick = () => {
+    const fileName = prompt("Enter file name:");
+    const fileContents = prompt("Enter file contents:");
+    if (fileName && fileContents) {
+        const newFile = { fileName, fileContents };
+        fileDataArray.push(newFile);
+        generateAllFileTabElements();
+        displayFileContentInTab(fileDataArray.length - 1);
+    }
+};
+
+// Main functions
+const generateFileTabElement = (fileName, index) => {
+    const tab = document.createElement('div');
+    tab.className = 'tab';
+    tab.textContent = fileName;
+    tab.setAttribute('data-index', index);
+    tab.addEventListener('click', handleTabClick);
+
+    const close = document.createElement('span');
+    close.className = 'close';
+    close.textContent = 'x';
+    close.setAttribute('data-index', index);
+    close.addEventListener('click', handleCloseClick);
+
+    tab.appendChild(close);
+    allTabs.appendChild(tab);
+};
+
+const generateAllFileTabElements = () => {
+    allTabs.innerHTML = '';
+    fileDataArray.forEach(({fileName}, index) => {
+        generateFileTabElement(fileName, index);
+    });
+};
+
+const displayFileContentInTab = index => {
+    currentSelectedTab = index;
+    const {fileName, fileContents} = fileDataArray[index];
+    highlightCodeWithPrism(fileName, fileContents);
+    toggleViewButtonsBasedOnFileType(fileName);
+    viewCodeButton.click();
+    highlightSelectedTab(index);
+    resetEditCodeBox();
+};
+
+const removeTabAndFileData = index => {
+    fileDataArray.splice(index, 1);
+    generateAllFileTabElements();
+    if (fileDataArray.length > 0) {
+        displayFileContentInTab(0);
+    }
+};
+
+const toggleViewButtonsBasedOnFileType = (fileName) => {
+    const extension = extractFileExtension(fileName);
+    if (extension === 'html') {
+        previewCodeButton.style.display = 'inline-block';
+        viewLogsButton.style.display = 'inline-block';
+    } else if (extension === 'py') {
+        previewCodeButton.style.display = 'none';
+        viewLogsButton.style.display = 'inline-block';
+    } else {
+        previewCodeButton.style.display = 'none';
+        viewLogsButton.style.display = 'none';
+    }
+}
+
+const highlightSelectedTab = (index) => {
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(t => t.style.fontWeight = 'normal');
+    tabs[index].style.fontWeight = 'bold';
+}
+
+const highlightSelectedButton = (selectedButtonId) => {
+    const buttons = document.querySelectorAll('.codeBoxOptionsContainer button');
+    buttons.forEach(button => {
+        if (button.id === selectedButtonId) {
+            button.style.fontWeight = 'bold';
+        } else {
+            button.style.fontWeight = 'normal';
+        }
+    });
+}
+
+const showOrHideCodeBox = (selectedButtonId) => {
+    if (selectedButtonId === 'viewCodeButton') {
+        codeContainer.style.display = 'block';
+    } else {
+        codeContainer.style.display = 'none';
+    }
+}
+
+const resetEditCodeBox = () => {
+    editCodeButton.style.display = 'inline-block';
+    saveCodeEditsButton.style.display = 'none';
+    cancelCodeEditsButton.style.display = 'none';
+    viewCodeBox.style.display = 'block';
+    editCodeBox.style.display = 'none';
+}
+
+// Event listeners
+addTab.addEventListener('click', handleAddClick);
+viewCodeButton.addEventListener('click', () => {
+    highlightSelectedButton('viewCodeButton');
+    showOrHideCodeBox('viewCodeButton');
+});
+previewCodeButton.addEventListener('click', () => {
+    highlightSelectedButton('previewCodeButton');
+    showOrHideCodeBox('previewCodeButton');
+});
+viewLogsButton.addEventListener('click', () => {
+    highlightSelectedButton('viewLogsButton');
+    showOrHideCodeBox('viewLogsButton');
+});
+editCodeButton.addEventListener('click', () => {
+    editCodeButton.style.display = 'none';
+    saveCodeEditsButton.style.display = 'inline-block';
+    cancelCodeEditsButton.style.display = 'inline-block';
+    viewCodeBox.style.display = 'none';
+    editCodeBox.style.display = 'block';
+    editCodeTextArea.value = fileDataArray[currentSelectedTab].fileContents;
+});
+saveCodeEditsButton.addEventListener('click', () => {
+    fileDataArray[currentSelectedTab].fileContents = editCodeTextArea.value;
+    resetEditCodeBox();
+    displayFileContentInTab(currentSelectedTab);
+});
+cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
+
+// Initialize
+generateAllFileTabElements();
+displayFileContentInTab(0);
+</script>
+</body>
+</html>
