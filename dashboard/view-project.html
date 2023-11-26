@@ -4,6 +4,7 @@
     <title>File Contents</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
 <style>
+
     .tabsContainer, .codeBoxOptionsContainer {
         display: flex;
         align-items: center;
@@ -37,11 +38,34 @@
         margin-left: 5px;
         cursor: pointer;
     }
+    #editCodeButton {
+        position: absolute;
+        right: 0;
+        top: 60px; /* Change this line */
+    }
+
     .code-container {
-        margin-top: 20px;
+        position: relative; /* Change this line */
+        top: 20px; /* Change this line */
+        width: 100%;
+        height: calc(100% - 100px); /* Change this line */
+        overflow: auto;
     }
     .codeBoxOptionsContainer button {
         margin-right: 10px;
+    }
+    #previewRenderCodeBox {
+        width: 100%; /* Add this line */
+        height: 100%; /* Add this line */
+    }
+
+    #previewCodeIframe {
+        width: 100%; /* Add this line */
+        height: 100%; /* Add this line */
+        border: none; /* Add this line to remove the border */
+    }
+    #editCodeBox {
+        height: 500px; /* Add this line */
     }
 </style>
 
@@ -56,21 +80,25 @@
         <div id="allTabs"></div>
         <div class="add" id="addTab">+</div>
     </div>
-<button id="editCodeButton" style="position: absolute; right: 0;">Edit Code</button>
-<button id="saveCodeEditsButton" style="position: absolute; right: 0; display: none;">Save</button>
-<button id="cancelCodeEditsButton" style="position: absolute; right: 50px; display: none;">Cancel</button>
-<div class="code-container" id="viewCodeBox">
-    <pre><code id="codeBox"></code></pre>
-</div>
-<div class="code-container" style="display: none;" id="editCodeBox">
-    <textarea id="editCodeTextArea" style="width: 100%; height: 100%;"></textarea>
-</div>
+    <button id="editCodeButton" style="position: absolute; right: 0;">Edit Code</button>
+    <button id="saveCodeEditsButton" style="position: absolute; right: 0; display: none;">Save</button>
+    <button id="cancelCodeEditsButton" style="position: absolute; right: 50px; display: none;">Cancel</button>
+    <div class="code-container" id="viewCodeBox">
+        <pre><code id="codeBox"></code></pre>
+    </div>
+    <div class="code-container" style="display: none;" id="editCodeBox">
+        <textarea id="editCodeTextArea" style="width: 100%; height: 100%;"></textarea>
+    </div>
+    <div class="code-container" style="display: none;" id="previewRenderCodeBox">
+        <iframe id="previewCodeIframe"></iframe>
+    </div>
+    <!-- Scripts here -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-markup.min.js"></script>
-<script>
+    <script>
 // Constants
 const LANGUAGE_MAP = {
     'py': 'python',
@@ -103,6 +131,8 @@ const cancelCodeEditsButton = document.getElementById('cancelCodeEditsButton');
 const viewCodeBox = document.getElementById('viewCodeBox');
 const editCodeBox = document.getElementById('editCodeBox');
 const editCodeTextArea = document.getElementById('editCodeTextArea');
+const previewRenderCodeBox = document.getElementById('previewRenderCodeBox');
+const previewCodeIframe = document.getElementById('previewCodeIframe');
 
 // Helper functions
 const extractFileExtension = fileName => fileName.split('.').pop();
@@ -115,11 +145,12 @@ const highlightCodeWithPrism = (fileName, fileContents) => {
 }
 
 // Event handlers
-const handleTabClick = (event) => {
-    const index = event.target.getAttribute('data-index');
-    displayFileContentInTab(index);
-    viewCodeButton.click();
-};
+    const handleTabClick = (event) => {
+        const index = event.target.getAttribute('data-index');
+        displayFileContentInTab(index);
+        viewCodeButton.click();
+        editCodeButton.style.display = 'inline-block'; // Add this line
+    };
 
 const handleCloseClick = (event) => {
     event.stopPropagation();
@@ -137,6 +168,13 @@ const handleAddClick = () => {
         displayFileContentInTab(fileDataArray.length - 1);
     }
 };
+
+    const handlePreviewClick = () => {
+        const {fileContents} = fileDataArray[currentSelectedTab];
+        previewCodeIframe.srcdoc = fileContents;
+        previewRenderCodeBox.style.display = 'block';
+        highlightSelectedButton('previewCodeButton');
+    };
 
 // Main functions
 const generateFileTabElement = (fileName, index) => {
@@ -171,6 +209,8 @@ const displayFileContentInTab = index => {
     viewCodeButton.click();
     highlightSelectedTab(index);
     resetEditCodeBox();
+   previewRenderCodeBox.style.display = 'none';
+
 };
 
 const removeTabAndFileData = index => {
@@ -229,19 +269,33 @@ const resetEditCodeBox = () => {
 }
 
 // Event listeners
-addTab.addEventListener('click', handleAddClick);
-viewCodeButton.addEventListener('click', () => {
-    highlightSelectedButton('viewCodeButton');
-    showOrHideCodeBox('viewCodeButton');
-});
-previewCodeButton.addEventListener('click', () => {
-    highlightSelectedButton('previewCodeButton');
-    showOrHideCodeBox('previewCodeButton');
-});
-viewLogsButton.addEventListener('click', () => {
-    highlightSelectedButton('viewLogsButton');
-    showOrHideCodeBox('viewLogsButton');
-});
+    addTab.addEventListener('click', handleAddClick);
+    viewCodeButton.addEventListener('click', () => {
+        highlightSelectedButton('viewCodeButton');
+        showOrHideCodeBox('viewCodeButton');
+        previewRenderCodeBox.style.display = 'none'; 
+        editCodeButton.style.display = 'inline-block'; // Add this line
+    });
+    viewLogsButton.addEventListener('click', () => {
+        highlightSelectedButton('viewLogsButton');
+        showOrHideCodeBox('viewLogsButton');
+        previewRenderCodeBox.style.display = 'none'; 
+        editCodeButton.style.display = 'inline-block';
+        saveCodeEditsButton.style.display = 'none';
+        cancelCodeEditsButton.style.display = 'none';
+        editCodeBox.style.display = 'none'; // Add this line
+    });
+
+    previewCodeButton.addEventListener('click', () => {
+        highlightSelectedButton('previewCodeButton');
+        showOrHideCodeBox('previewCodeButton');
+        editCodeButton.style.display = 'inline-block';
+        saveCodeEditsButton.style.display = 'none';
+        cancelCodeEditsButton.style.display = 'none';
+        editCodeBox.style.display = 'none'; // Add this line
+        handlePreviewClick();
+    });
+
 editCodeButton.addEventListener('click', () => {
     editCodeButton.style.display = 'none';
     saveCodeEditsButton.style.display = 'inline-block';
@@ -256,6 +310,8 @@ saveCodeEditsButton.addEventListener('click', () => {
     displayFileContentInTab(currentSelectedTab);
 });
 cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
+previewCodeButton.addEventListener('click', handlePreviewClick);
+
 
 // Initialize
 generateAllFileTabElements();
