@@ -161,7 +161,6 @@ const executeCodeButton = document.getElementById('executeCodeButton');
 
 
 // Helper functions
-const extractFileExtension = fileName => fileName.split('.').pop();
 const mapFileExtensionToPrismLanguage = extension => LANGUAGE_MAP[extension] || '';
 const highlightCodeWithPrism = (fileName, fileContents) => {
     const extension = extractFileExtension(fileName);
@@ -179,9 +178,10 @@ const handleTabClick = (event) => {
     editCodeButton.style.display = 'inline-block';
     const fileName = fileDataArray[index].fileName;
     const extension = extractFileExtension(fileName);
-    if (extension === 'py') {
-        executeCodeButton.style.display = 'inline-block';
-    }
+if (extension === 'py') {
+    console.log('Python file detected'); // Add this line
+    executeCodeButton.style.display = 'inline-block';
+}
 };
 
 const handleCloseClick = (event) => {
@@ -321,6 +321,12 @@ function extractprojectIdFromUrl() {
     console.log('projectId:', projectId);
     return projectId;
 }
+
+const extractFileExtension = fileName => {
+    const extension = fileName.split('.').pop();
+    console.log('File extension:', extension); // Add this line
+    return extension;
+};
 
 // Event listeners
 addTab.addEventListener('click', handleAddClick);
