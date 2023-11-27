@@ -19,54 +19,53 @@
             window.location.href = `create-new-project.html?uId=${uId}`;
         }
 
-        const displayProjects = (projects) => {
-            const projectsContainer = document.getElementById('projectsContainer');
-            projectsContainer.innerHTML = '';
-            projects.forEach(project => {
-                const projectHTML = `
-                        <a class="project-link" href="view-project.html?projectId=${project.projectId}&uId=${uId}">
-                        <div class="border p-4 rounded">
-                            <div class="flex items-center">
-                                <img class="project-icon" src="${project.projectIcon || 'icon.png'}" alt="icon" class="w-6 h-6">
-                                <h2 class="ml-4">${project.projectName}</h2>
-                            </div>
-                            <p class="text-left text-sm">${project.lastUpdated}</p>
-                        </div>
-                    </a>
-                `;
-                projectsContainer.innerHTML += projectHTML;
-            });
-        }
+const displayProjects = (projects, uId) => {
+    const projectsContainer = document.getElementById('projectsContainer');
+    projectsContainer.innerHTML = '';
+    projects.forEach(project => {
+        const projectHTML = `
+            <a class="project-link" href="view-project.html?projectId=${project.projectId}&uId=${uId}">
+                <div class="border p-4 rounded">
+                    <div class="flex items-center">
+                        <img class="project-icon" src="${project.projectIcon || 'icon.png'}" alt="icon" class="w-6 h-6">
+                        <h2 class="ml-4">${project.projectName}</h2>
+                    </div>
+                    <p class="text-left text-sm">${project.lastUpdated}</p>
+                </div>
+            </a>
+        `;
+        projectsContainer.innerHTML += projectHTML;
+    });
+}
 
-        window.onload = () => {
-            let uId = new URLSearchParams(window.location.search).get('uId');
-            uId = uId.split('?')[0];
-            console.log(uId); // Console log the uId
+window.onload = () => {
+    let uId = new URLSearchParams(window.location.search).get('uId');
+    uId = uId.split('?')[0];
+    console.log(uId); // Console log the uId
 
-            axios.post('https://tvbuvokazmaktj5vxl3czencoy0twlmp.lambda-url.us-west-2.on.aws/', {
-                uId: uId,
-                requestType: 'FETCH_ALL_PROJECTS'
-            })
-            .then(function (response) {
-                console.log(response);
-                const projectList = response.data.map(project => ({
-                    ...project,
-                    lastUpdated: new Date(project.lastUpdated * 1000).toLocaleString(), // Convert Unix timestamp to readable date-time
-                    githubUsername: project.githubUserName
-                }));
-                displayProjects(projectList);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+    axios.post('https://tvbuvokazmaktj5vxl3czencoy0twlmp.lambda-url.us-west-2.on.aws/', {
+        uId: uId,
+        requestType: 'FETCH_ALL_PROJECTS'
+    })
+    .then(function (response) {
+        console.log(response);
+        const projectList = response.data.map(project => ({
+            ...project,
+            lastUpdated: new Date(project.lastUpdated * 1000).toLocaleString(), // Convert Unix timestamp to readable date-time
+            githubUsername: project.githubUserName
+        }));
+        displayProjects(projectList, uId);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
 
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                const filteredProjects = projectList.filter(project => 
-                    project.projectName.toLowerCase().includes(e.target.value.toLowerCase())
-                );
-                displayProjects(filteredProjects);
-            });
-        }
-    </script>
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const filteredProjects = projectList.filter(project => 
+            project.projectName.toLowerCase().includes(e.target.value.toLowerCase())
+        );
+        displayProjects(filteredProjects, uId);
+    });
+}    </script>
 </body>
 </html>
