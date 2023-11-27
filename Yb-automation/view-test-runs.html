@@ -352,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const testNameCell = createElement('td', 'px-6 py-4 text-sm text-gray-300');
         const testNameLink = createElement('a', 'tooltip', data.formattedTestName);
-        testNameLink.href = `run-details.html?testName=${encodeURIComponent(data.testName)}&id=${encodeURIComponent(data.runId || null)}`;
+        testNameLink.href = `run-details.html?testName=${encodeURI(data.testName)}&id=${encodeURIComponent(data.runId || null)}`;
         testNameLink.setAttribute('target', '_blank'); // Open in new tab
         testNameLink.setAttribute('rel', 'noopener noreferrer'); // Mitigate potential security risks
         const tooltipText = createElement('span', 'tooltiptext', data.testName);
