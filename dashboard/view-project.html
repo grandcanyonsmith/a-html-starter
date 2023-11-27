@@ -3,6 +3,7 @@
 <head>
     <title>File Contents</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <style>
 
     .tabsContainer, .codeBoxOptionsContainer {
@@ -68,9 +69,11 @@
         height: 500px; /* Add this line */
     }
 </style>
-
 </head>
 <body>
+    <select id="fileSelect" onchange="fetchFileContents(this.value)">
+        <option>Select File</option>
+    </select>
     <div class="codeBoxOptionsContainer">
         <button id="viewCodeButton">View Code</button>
         <button id="previewCodeButton">Preview Code</button>
@@ -79,6 +82,10 @@
     <div class="tabsContainer">
         <div id="allTabs"></div>
         <div class="add" id="addTab">+</div>
+    </div>
+    <div style="position: absolute; left: 0;">
+        <button id="saveSelectedFileButton">Save File</button>
+        <button id="saveAllFilesButton">Save All Files</button>
     </div>
     <button id="editCodeButton" style="position: absolute; right: 0;">Edit Code</button>
     <button id="saveCodeEditsButton" style="position: absolute; right: 0; display: none;">Save</button>
@@ -92,13 +99,18 @@
     <div class="code-container" style="display: none;" id="previewRenderCodeBox">
         <iframe id="previewCodeIframe"></iframe>
     </div>
-    <!-- Scripts here -->
+    <div class="code-container" id="userRequestContainer">
+        <input type="text" id="userRequestInputBox" placeholder="Enter your request here">
+        <button id="submitUserRequestButton">Submit</button>
+        <button id="addReferenceButton">Add Reference File</button>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-markup.min.js"></script>
-    <script>
+<script>
 // Constants
 const LANGUAGE_MAP = {
     'py': 'python',
@@ -133,6 +145,9 @@ const editCodeBox = document.getElementById('editCodeBox');
 const editCodeTextArea = document.getElementById('editCodeTextArea');
 const previewRenderCodeBox = document.getElementById('previewRenderCodeBox');
 const previewCodeIframe = document.getElementById('previewCodeIframe');
+const submitUserRequestButton = document.getElementById('submitUserRequestButton');
+const userRequestInputBox = document.getElementById('userRequestInputBox');
+const fileSelect = document.getElementById('fileSelect');
 
 // Helper functions
 const extractFileExtension = fileName => fileName.split('.').pop();
@@ -145,12 +160,12 @@ const highlightCodeWithPrism = (fileName, fileContents) => {
 }
 
 // Event handlers
-    const handleTabClick = (event) => {
-        const index = event.target.getAttribute('data-index');
-        displayFileContentInTab(index);
-        viewCodeButton.click();
-        editCodeButton.style.display = 'inline-block'; // Add this line
-    };
+const handleTabClick = (event) => {
+    const index = event.target.getAttribute('data-index');
+    displayFileContentInTab(index);
+    viewCodeButton.click();
+    editCodeButton.style.display = 'inline-block'; // Add this line
+};
 
 const handleCloseClick = (event) => {
     event.stopPropagation();
@@ -160,21 +175,23 @@ const handleCloseClick = (event) => {
 
 const handleAddClick = () => {
     const fileName = prompt("Enter file name:");
-    const fileContents = prompt("Enter file contents:");
-    if (fileName && fileContents) {
-        const newFile = { fileName, fileContents };
+    const fileExists = fileDataArray.some(file => file.fileName === fileName);
+    if (fileExists) {
+        alert('File name already exists. Please choose another file name');
+    } else if (fileName) {
+        const newFile = { fileName, fileContents: '' };
         fileDataArray.push(newFile);
         generateAllFileTabElements();
         displayFileContentInTab(fileDataArray.length - 1);
     }
 };
 
-    const handlePreviewClick = () => {
-        const {fileContents} = fileDataArray[currentSelectedTab];
-        previewCodeIframe.srcdoc = fileContents;
-        previewRenderCodeBox.style.display = 'block';
-        highlightSelectedButton('previewCodeButton');
-    };
+const handlePreviewClick = () => {
+    const {fileContents} = fileDataArray[currentSelectedTab];
+    previewCodeIframe.srcdoc = fileContents;
+    previewRenderCodeBox.style.display = 'block';
+    highlightSelectedButton('previewCodeButton');
+};
 
 // Main functions
 const generateFileTabElement = (fileName, index) => {
@@ -209,8 +226,7 @@ const displayFileContentInTab = index => {
     viewCodeButton.click();
     highlightSelectedTab(index);
     resetEditCodeBox();
-   previewRenderCodeBox.style.display = 'none';
-
+    previewRenderCodeBox.style.display = 'none';
 };
 
 const removeTabAndFileData = index => {
@@ -269,32 +285,32 @@ const resetEditCodeBox = () => {
 }
 
 // Event listeners
-    addTab.addEventListener('click', handleAddClick);
-    viewCodeButton.addEventListener('click', () => {
-        highlightSelectedButton('viewCodeButton');
-        showOrHideCodeBox('viewCodeButton');
-        previewRenderCodeBox.style.display = 'none'; 
-        editCodeButton.style.display = 'inline-block'; // Add this line
-    });
-    viewLogsButton.addEventListener('click', () => {
-        highlightSelectedButton('viewLogsButton');
-        showOrHideCodeBox('viewLogsButton');
-        previewRenderCodeBox.style.display = 'none'; 
-        editCodeButton.style.display = 'inline-block';
-        saveCodeEditsButton.style.display = 'none';
-        cancelCodeEditsButton.style.display = 'none';
-        editCodeBox.style.display = 'none'; // Add this line
-    });
+addTab.addEventListener('click', handleAddClick);
+viewCodeButton.addEventListener('click', () => {
+    highlightSelectedButton('viewCodeButton');
+    showOrHideCodeBox('viewCodeButton');
+    previewRenderCodeBox.style.display = 'none'; 
+    editCodeButton.style.display = 'inline-block'; // Add this line
+});
+viewLogsButton.addEventListener('click', () => {
+    highlightSelectedButton('viewLogsButton');
+    showOrHideCodeBox('viewLogsButton');
+    previewRenderCodeBox.style.display = 'none'; 
+    editCodeButton.style.display = 'inline-block';
+    saveCodeEditsButton.style.display = 'none';
+    cancelCodeEditsButton.style.display = 'none';
+    editCodeBox.style.display = 'none'; // Add this line
+});
 
-    previewCodeButton.addEventListener('click', () => {
-        highlightSelectedButton('previewCodeButton');
-        showOrHideCodeBox('previewCodeButton');
-        editCodeButton.style.display = 'inline-block';
-        saveCodeEditsButton.style.display = 'none';
-        cancelCodeEditsButton.style.display = 'none';
-        editCodeBox.style.display = 'none'; // Add this line
-        handlePreviewClick();
-    });
+previewCodeButton.addEventListener('click', () => {
+    highlightSelectedButton('previewCodeButton');
+    showOrHideCodeBox('previewCodeButton');
+    editCodeButton.style.display = 'inline-block';
+    saveCodeEditsButton.style.display = 'none';
+    cancelCodeEditsButton.style.display = 'none';
+    editCodeBox.style.display = 'none'; // Add this line
+    handlePreviewClick();
+});
 
 editCodeButton.addEventListener('click', () => {
     editCodeButton.style.display = 'none';
@@ -312,6 +328,80 @@ saveCodeEditsButton.addEventListener('click', () => {
 cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
 previewCodeButton.addEventListener('click', handlePreviewClick);
 
+submitUserRequestButton.addEventListener('click', () => {
+    const currentFile = fileDataArray[currentSelectedTab];
+    const userRequest = userRequestInputBox.value;
+    
+    axios.post('https://kvqpfgxn2jz5pyh4wz7thbmhay0hqcvh.lambda-url.us-west-2.on.aws/', {
+        fileName: currentFile.fileName,
+        request: userRequest,
+        code: currentFile.fileContents
+    })
+    .then(function (response) {
+        alert(response);
+        const newCode = response.data.newCode;
+        const fileName = response.data.fileName;
+        
+        const fileToUpdate = fileDataArray.find(file => file.fileName === fileName);
+        if (fileToUpdate) {
+            fileToUpdate.fileContents = newCode;
+            const updatedFileIndex = fileDataArray.indexOf(fileToUpdate);
+            displayFileContentInTab(updatedFileIndex);
+            viewCodeButton.click();
+        }
+    })
+    .catch(function (error) {
+               console.log(error);
+    });
+
+    userRequestInputBox.value = '';
+});
+
+window.onload = function() {
+    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
+        'uId': '11',
+        'projectId': '5',
+        'requestType': 'fetchAllProjectFiles'
+    })
+    .then(function (response) {
+        if(response.status === 200) {
+            const projectFilesArray = response.data;
+            const select = document.getElementById('fileSelect');
+            projectFilesArray.forEach((filePath, index) => {
+                const option = document.createElement('option');
+                option.value = filePath;
+                option.text = filePath;
+                select.appendChild(option);
+            });
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+};
+
+function fetchFileContents(fileName) {
+    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
+        'uId': '11',
+        'projectId': '5',
+        'requestType': 'fetchFileContents',
+        'filePath': fileName
+    })
+    .then(function (response) {
+        if(response.status === 200) {
+            const fileData = {
+                'fileName': response.data.fileName,
+                'fileContents': response.data.fileContents
+            };
+            fileDataArray.push(fileData);
+            generateAllFileTabElements();
+            displayFileContentInTab(fileDataArray.length - 1);
+        }
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+}
 
 // Initialize
 generateAllFileTabElements();
