@@ -3,7 +3,7 @@
 <head>
     <title>File Contents</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <style>
 
     .tabsContainer, .codeBoxOptionsContainer {
@@ -57,7 +57,7 @@
     }
     #previewRenderCodeBox {
         width: 100%; /* Add this line */
-        height: 500px; /* Add this line */
+        height: 100%; /* Add this line */
     }
 
     #previewCodeIframe {
@@ -69,11 +69,9 @@
         height: 500px; /* Add this line */
     }
 </style>
+
 </head>
 <body>
-    <select id="fileSelect" onchange="fetchFileContents(this.value)">
-        <option>Select File</option>
-    </select>
     <div class="codeBoxOptionsContainer">
         <button id="viewCodeButton">View Code</button>
         <button id="previewCodeButton">Preview Code</button>
@@ -104,15 +102,13 @@
         <button id="submitUserRequestButton">Submit</button>
         <button id="addReferenceButton">Add Reference File</button>
     </div>
-<button id="executeCodeButton" style="position: absolute; right: 0; display: none;">Run Code</button>
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-markup.min.js"></script>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
 // Constants
 const LANGUAGE_MAP = {
     'py': 'python',
@@ -123,16 +119,11 @@ const LANGUAGE_MAP = {
 
 // File data
 let fileDataArray = [
-        { fileName: 'index.html', fileContents: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n</html>' }
+    { fileName: 'index.html', fileContents: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n</html>' },
+    { fileName: 'styles.css', fileContents: 'body {\n    background-color: #f0f0f0;\n}' },
+    { fileName: 'script.js', fileContents: 'console.log("Hello, World!");\nlet x = 10;\nconsole.log(x);' },
+    { fileName: 'main.py', fileContents: 'print("Hello, World!")\nnum = 10\nprint(num)' }
 ];
-
-
-// let fileDataArray = [
-//     { fileName: 'index.html', fileContents: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n</html>' },
-//     { fileName: 'styles.css', fileContents: 'body {\n    background-color: #f0f0f0;\n}' },
-//     { fileName: 'script.js', fileContents: 'console.log("Hello, World!");\nlet x = 10;\nconsole.log(x);' },
-//     { fileName: 'main.py', fileContents: 'print("Hello, World!")\nnum = 10\nprint(num)' }
-// ];
 
 let currentSelectedTab = 0;
 
@@ -154,9 +145,7 @@ const previewRenderCodeBox = document.getElementById('previewRenderCodeBox');
 const previewCodeIframe = document.getElementById('previewCodeIframe');
 const submitUserRequestButton = document.getElementById('submitUserRequestButton');
 const userRequestInputBox = document.getElementById('userRequestInputBox');
-const fileSelect = document.getElementById('fileSelect');
-const saveSelectedFileButton = document.getElementById('saveSelectedFileButton');
-const executeCodeButton = document.getElementById('executeCodeButton');
+
 
 
 // Helper functions
@@ -170,17 +159,12 @@ const highlightCodeWithPrism = (fileName, fileContents) => {
 }
 
 // Event handlers
-const handleTabClick = (event) => {
-    const index = event.target.getAttribute('data-index');
-    displayFileContentInTab(index);
-    viewCodeButton.click();
-    editCodeButton.style.display = 'inline-block'; // Add this line
-    const fileName = fileDataArray[index].fileName;
-    const extension = extractFileExtension(fileName);
-    if (extension === 'py') {
-        executeCodeButton.style.display = 'inline-block'; // Show execute button
-    }
-};
+    const handleTabClick = (event) => {
+        const index = event.target.getAttribute('data-index');
+        displayFileContentInTab(index);
+        viewCodeButton.click();
+        editCodeButton.style.display = 'inline-block'; // Add this line
+    };
 
 const handleCloseClick = (event) => {
     event.stopPropagation();
@@ -201,12 +185,13 @@ const handleAddClick = () => {
     }
 };
 
-const handlePreviewClick = () => {
-    const {fileContents} = fileDataArray[currentSelectedTab];
-    previewCodeIframe.srcdoc = fileContents;
-    previewRenderCodeBox.style.display = 'block';
-    highlightSelectedButton('previewCodeButton');
-};
+
+    const handlePreviewClick = () => {
+        const {fileContents} = fileDataArray[currentSelectedTab];
+        previewCodeIframe.srcdoc = fileContents;
+        previewRenderCodeBox.style.display = 'block';
+        highlightSelectedButton('previewCodeButton');
+    };
 
 // Main functions
 const generateFileTabElement = (fileName, index) => {
@@ -241,7 +226,8 @@ const displayFileContentInTab = index => {
     viewCodeButton.click();
     highlightSelectedTab(index);
     resetEditCodeBox();
-    previewRenderCodeBox.style.display = 'none';
+   previewRenderCodeBox.style.display = 'none';
+
 };
 
 const removeTabAndFileData = index => {
@@ -254,19 +240,15 @@ const removeTabAndFileData = index => {
 
 const toggleViewButtonsBasedOnFileType = (fileName) => {
     const extension = extractFileExtension(fileName);
-console.log(extension,'extension');
     if (extension === 'html') {
         previewCodeButton.style.display = 'inline-block';
         viewLogsButton.style.display = 'inline-block';
-        executeCodeButton.style.display = 'none'; // Hide execute button
     } else if (extension === 'py') {
         previewCodeButton.style.display = 'none';
         viewLogsButton.style.display = 'inline-block';
-        executeCodeButton.style.display = 'inline-block'; // Show execute button
     } else {
         previewCodeButton.style.display = 'none';
         viewLogsButton.style.display = 'none';
-        executeCodeButton.style.display = 'none'; // Hide execute button
     }
 }
 
@@ -299,55 +281,37 @@ const resetEditCodeBox = () => {
     editCodeButton.style.display = 'inline-block';
     saveCodeEditsButton.style.display = 'none';
     cancelCodeEditsButton.style.display = 'none';
-    executeCodeButton.style.display = 'none'; // Hide execute button
     viewCodeBox.style.display = 'block';
     editCodeBox.style.display = 'none';
 }
 
-let uId;
-let projectId;
-
-function extractuIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    uId = urlParams.get('uId');
-    console.log('uId:', uId);
-    return uId;
-}
-
-function extractprojectIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    projectId = urlParams.get('projectId');
-    console.log('projectId:', projectId);
-    return projectId;
-}
-
 // Event listeners
-addTab.addEventListener('click', handleAddClick);
-viewCodeButton.addEventListener('click', () => {
-    highlightSelectedButton('viewCodeButton');
-    showOrHideCodeBox('viewCodeButton');
-    previewRenderCodeBox.style.display = 'none'; 
-    editCodeButton.style.display = 'inline-block'; // Add this line
-});
-viewLogsButton.addEventListener('click', () => {
-    highlightSelectedButton('viewLogsButton');
-    showOrHideCodeBox('viewLogsButton');
-    previewRenderCodeBox.style.display = 'none'; 
-    editCodeButton.style.display = 'inline-block';
-    saveCodeEditsButton.style.display = 'none';
-    cancelCodeEditsButton.style.display = 'none';
-    editCodeBox.style.display = 'none'; // Add this line
-});
+    addTab.addEventListener('click', handleAddClick);
+    viewCodeButton.addEventListener('click', () => {
+        highlightSelectedButton('viewCodeButton');
+        showOrHideCodeBox('viewCodeButton');
+        previewRenderCodeBox.style.display = 'none'; 
+        editCodeButton.style.display = 'inline-block'; // Add this line
+    });
+    viewLogsButton.addEventListener('click', () => {
+        highlightSelectedButton('viewLogsButton');
+        showOrHideCodeBox('viewLogsButton');
+        previewRenderCodeBox.style.display = 'none'; 
+        editCodeButton.style.display = 'inline-block';
+        saveCodeEditsButton.style.display = 'none';
+        cancelCodeEditsButton.style.display = 'none';
+        editCodeBox.style.display = 'none'; // Add this line
+    });
 
-previewCodeButton.addEventListener('click', () => {
-    highlightSelectedButton('previewCodeButton');
-    showOrHideCodeBox('previewCodeButton');
-    editCodeButton.style.display = 'inline-block';
-    saveCodeEditsButton.style.display = 'none';
-    cancelCodeEditsButton.style.display = 'none';
-    editCodeBox.style.display = 'none'; // Add this line
-    handlePreviewClick();
-});
+    previewCodeButton.addEventListener('click', () => {
+        highlightSelectedButton('previewCodeButton');
+        showOrHideCodeBox('previewCodeButton');
+        editCodeButton.style.display = 'inline-block';
+        saveCodeEditsButton.style.display = 'none';
+        cancelCodeEditsButton.style.display = 'none';
+        editCodeBox.style.display = 'none'; // Add this line
+        handlePreviewClick();
+    });
 
 editCodeButton.addEventListener('click', () => {
     editCodeButton.style.display = 'none';
@@ -364,26 +328,6 @@ saveCodeEditsButton.addEventListener('click', () => {
 });
 cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
 previewCodeButton.addEventListener('click', handlePreviewClick);
-
-saveSelectedFileButton.addEventListener('click', () => {
-    const currentFile = fileDataArray[currentSelectedTab];
-    console.log(uId,'uId')
-    console.log(projectId,'projectId')
-    console.log(currentFile,'currentFile')
-    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-        'requestType': 'COMMIT_FILE',
-        'fileContents': currentFile.fileContents,
-        'fileName': currentFile.fileName,
-        'uId': uId,
-        'projectId': projectId
-    })
-    .then(function (response) {
-        console.log(response);
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-});
 
 submitUserRequestButton.addEventListener('click', () => {
     const currentFile = fileDataArray[currentSelectedTab];
@@ -408,64 +352,11 @@ submitUserRequestButton.addEventListener('click', () => {
         }
     })
     .catch(function (error) {
-               console.log(error);
+        console.log(error);
     });
 
     userRequestInputBox.value = '';
 });
-
-executeCodeButton.addEventListener('click', () => {
-    // Add your code execution logic here
-});
-
-window.onload = function() {
-    extractuIdFromUrl();
-    extractprojectIdFromUrl();
-
-    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-        'uId': uId,
-        'projectId': projectId,
-        'requestType': 'fetchAllProjectFiles'
-    })
-    .then(function (response) {
-        if(response.status === 200) {
-            const projectFilesArray = response.data;
-            const select = document.getElementById('fileSelect');
-            projectFilesArray.forEach((filePath, index) => {
-                const option = document.createElement('option');
-                option.value = filePath;
-                option.text = filePath;
-                select.appendChild(option);
-            });
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-};
-
-function fetchFileContents(fileName) {
-    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-        'uId': uId,
-        'projectId': projectId,
-        'requestType': 'fetchFileContents',
-        'filePath': fileName
-    })
-    .then(function (response) {
-        if(response.status === 200) {
-            const fileData = {
-                'fileName': response.data.fileName,
-                'fileContents': response.data.fileContents
-            };
-            fileDataArray.push(fileData);
-            generateAllFileTabElements();
-            displayFileContentInTab(fileDataArray.length - 1);
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-}
 
 // Initialize
 generateAllFileTabElements();
