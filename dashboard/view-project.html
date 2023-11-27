@@ -349,6 +349,9 @@ previewCodeButton.addEventListener('click', handlePreviewClick);
 
 saveSelectedFileButton.addEventListener('click', () => {
     const currentFile = fileDataArray[currentSelectedTab];
+    console.log(uId,'uId')
+    console.log(projectId,'projectId')
+    console.log(currentFile,'currentFile')
     axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
         'requestType': 'COMMIT_FILE',
         'fileContents': currentFile.fileContents,
