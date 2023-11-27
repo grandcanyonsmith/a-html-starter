@@ -172,14 +172,15 @@ const highlightCodeWithPrism = (fileName, fileContents) => {
 
 // Event handlers
 const handleTabClick = (event) => {
+    console.log('Tab clicked'); // Add this line
     const index = event.target.getAttribute('data-index');
     displayFileContentInTab(index);
     viewCodeButton.click();
-    editCodeButton.style.display = 'inline-block'; // Add this line
+    editCodeButton.style.display = 'inline-block';
     const fileName = fileDataArray[index].fileName;
     const extension = extractFileExtension(fileName);
     if (extension === 'py') {
-        executeCodeButton.style.display = 'inline-block'; // Show execute button
+        executeCodeButton.style.display = 'inline-block';
     }
 };
 
