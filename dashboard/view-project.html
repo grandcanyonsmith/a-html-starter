@@ -178,10 +178,12 @@ const handleTabClick = (event) => {
     editCodeButton.style.display = 'inline-block';
     const fileName = fileDataArray[index].fileName;
     const extension = extractFileExtension(fileName);
-if (extension === 'py') {
-    console.log('Python file detected'); // Add this line
-    executeCodeButton.style.display = 'inline-block';
-}
+    console.log(fileName,'fileName');
+    console.log(extension,'extension);
+    if (extension === 'py') {
+        console.log('Python file detected'); // Add this line
+        executeCodeButton.style.display = 'inline-block';
+    }
 };
 
 const handleCloseClick = (event) => {
