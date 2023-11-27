@@ -104,6 +104,8 @@
         <button id="submitUserRequestButton">Submit</button>
         <button id="addReferenceButton">Add Reference File</button>
     </div>
+<button id="executeCodeButton" style="position: absolute; right: 0; display: none;">Run Code</button>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
@@ -154,6 +156,7 @@ const submitUserRequestButton = document.getElementById('submitUserRequestButton
 const userRequestInputBox = document.getElementById('userRequestInputBox');
 const fileSelect = document.getElementById('fileSelect');
 const saveSelectedFileButton = document.getElementById('saveSelectedFileButton');
+const executeCodeButton = document.getElementById('executeCodeButton');
 
 
 // Helper functions
@@ -172,6 +175,11 @@ const handleTabClick = (event) => {
     displayFileContentInTab(index);
     viewCodeButton.click();
     editCodeButton.style.display = 'inline-block'; // Add this line
+    const fileName = fileDataArray[index].fileName;
+    const extension = extractFileExtension(fileName);
+    if (extension === 'py') {
+        executeCodeButton.style.display = 'inline-block'; // Show execute button
+    }
 };
 
 const handleCloseClick = (event) => {
@@ -249,12 +257,15 @@ const toggleViewButtonsBasedOnFileType = (fileName) => {
     if (extension === 'html') {
         previewCodeButton.style.display = 'inline-block';
         viewLogsButton.style.display = 'inline-block';
+        executeCodeButton.style.display = 'none'; // Hide execute button
     } else if (extension === 'py') {
         previewCodeButton.style.display = 'none';
         viewLogsButton.style.display = 'inline-block';
+        executeCodeButton.style.display = 'inline-block'; // Show execute button
     } else {
         previewCodeButton.style.display = 'none';
         viewLogsButton.style.display = 'none';
+        executeCodeButton.style.display = 'none'; // Hide execute button
     }
 }
 
@@ -287,6 +298,7 @@ const resetEditCodeBox = () => {
     editCodeButton.style.display = 'inline-block';
     saveCodeEditsButton.style.display = 'none';
     cancelCodeEditsButton.style.display = 'none';
+    executeCodeButton.style.display = 'none'; // Hide execute button
     viewCodeBox.style.display = 'block';
     editCodeBox.style.display = 'none';
 }
@@ -399,6 +411,10 @@ submitUserRequestButton.addEventListener('click', () => {
     });
 
     userRequestInputBox.value = '';
+});
+
+executeCodeButton.addEventListener('click', () => {
+    // Add your code execution logic here
 });
 
 window.onload = function() {
