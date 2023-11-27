@@ -148,6 +148,8 @@ const previewCodeIframe = document.getElementById('previewCodeIframe');
 const submitUserRequestButton = document.getElementById('submitUserRequestButton');
 const userRequestInputBox = document.getElementById('userRequestInputBox');
 const fileSelect = document.getElementById('fileSelect');
+const saveSelectedFileButton = document.getElementById('saveSelectedFileButton');
+
 
 // Helper functions
 const extractFileExtension = fileName => fileName.split('.').pop();
@@ -344,6 +346,21 @@ saveCodeEditsButton.addEventListener('click', () => {
 });
 cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
 previewCodeButton.addEventListener('click', handlePreviewClick);
+
+saveSelectedFileButton.addEventListener('click', () => {
+    const currentFile = fileDataArray[currentSelectedTab];
+    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
+        'requestType': 'COMMIT_FILE',
+        'fileContents': currentFile.fileContents,
+        'fileName': currentFile.fileName
+    })
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+});
 
 submitUserRequestButton.addEventListener('click', () => {
     const currentFile = fileDataArray[currentSelectedTab];
