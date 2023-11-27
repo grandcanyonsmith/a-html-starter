@@ -24,7 +24,7 @@
             projectsContainer.innerHTML = '';
             projects.forEach(project => {
                 const projectHTML = `
-                    <a class="project-link" href="view-project.html?projectId=${project.projectId}">
+                    <a class="project-link" href="view-project.html?projectId=${project.projectId}?uId=${uId}">
                         <div class="border p-4 rounded">
                             <div class="flex items-center">
                                 <img class="project-icon" src="${project.projectIcon || 'icon.png'}" alt="icon" class="w-6 h-6">
