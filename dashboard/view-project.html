@@ -284,16 +284,19 @@ const resetEditCodeBox = () => {
     editCodeBox.style.display = 'none';
 }
 
+let uId;
+let projectId;
+
 function extractuIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    const uId = urlParams.get('uId');
+    uId = urlParams.get('uId');
     console.log('uId:', uId);
     return uId;
 }
 
 function extractprojectIdFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    const projectId = urlParams.get('projectId');
+    projectId = urlParams.get('projectId');
     console.log('projectId:', projectId);
     return projectId;
 }
@@ -372,8 +375,8 @@ submitUserRequestButton.addEventListener('click', () => {
 });
 
 window.onload = function() {
-    const uId = extractuIdFromUrl();
-    const projectId = extractprojectIdFromUrl();
+    extractuIdFromUrl();
+    extractprojectIdFromUrl();
 
     axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
         'uId': uId,
@@ -399,8 +402,8 @@ window.onload = function() {
 
 function fetchFileContents(fileName) {
     axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-        'uId': '11',
-        'projectId': '5',
+        'uId': uId,
+        'projectId': projectId,
         'requestType': 'fetchFileContents',
         'filePath': fileName
     })
