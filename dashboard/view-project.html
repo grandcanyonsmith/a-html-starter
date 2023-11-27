@@ -352,7 +352,9 @@ saveSelectedFileButton.addEventListener('click', () => {
     axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
         'requestType': 'COMMIT_FILE',
         'fileContents': currentFile.fileContents,
-        'fileName': currentFile.fileName
+        'fileName': currentFile.fileName,
+        'uId': uId,
+        'projectId': projectId
     })
     .then(function (response) {
         console.log(response);
