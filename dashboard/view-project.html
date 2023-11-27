@@ -57,7 +57,7 @@
     }
     #previewRenderCodeBox {
         width: 100%; /* Add this line */
-        height: 100%; /* Add this line */
+        height: 500px; /* Add this line */
     }
 
     #previewCodeIframe {
@@ -121,11 +121,15 @@ const LANGUAGE_MAP = {
 
 // File data
 let fileDataArray = [
-    { fileName: 'index.html', fileContents: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n</html>' },
-    { fileName: 'styles.css', fileContents: 'body {\n    background-color: #f0f0f0;\n}' },
-    { fileName: 'script.js', fileContents: 'console.log("Hello, World!");\nlet x = 10;\nconsole.log(x);' },
-    { fileName: 'main.py', fileContents: 'print("Hello, World!")\nnum = 10\nprint(num)' }
 ];
+
+
+// let fileDataArray = [
+//     { fileName: 'index.html', fileContents: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n</html>' },
+//     { fileName: 'styles.css', fileContents: 'body {\n    background-color: #f0f0f0;\n}' },
+//     { fileName: 'script.js', fileContents: 'console.log("Hello, World!");\nlet x = 10;\nconsole.log(x);' },
+//     { fileName: 'main.py', fileContents: 'print("Hello, World!")\nnum = 10\nprint(num)' }
+// ];
 
 let currentSelectedTab = 0;
 
