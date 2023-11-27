@@ -292,7 +292,7 @@ function extractuIdFromUrl() {
 }
 
 function extractprojectIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search
+    const urlParams = new URLSearchParams(window.location.search);
     const projectId = urlParams.get('projectId');
     console.log('projectId:', projectId);
     return projectId;
