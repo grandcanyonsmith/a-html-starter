@@ -171,19 +171,12 @@ const highlightCodeWithPrism = (fileName, fileContents) => {
 
 // Event handlers
 const handleTabClick = (event) => {
-    console.log('Tab clicked'); // Add this line
     const index = event.target.getAttribute('data-index');
     displayFileContentInTab(index);
     viewCodeButton.click();
     editCodeButton.style.display = 'inline-block';
     const fileName = fileDataArray[index].fileName;
-    const extension = extractFileExtension(fileName);
-    console.log(fileName,'fileName');
-    console.log(extension,'extension');
-    if (extension === 'py') {
-        console.log('Python file detected'); // Add this line
-        executeCodeButton.style.display = 'inline-block';
-    }
+    showExecuteCodeButton(fileName);
 };
 
 const handleCloseClick = (event) => {
@@ -202,6 +195,7 @@ const handleAddClick = () => {
         fileDataArray.push(newFile);
         generateAllFileTabElements();
         displayFileContentInTab(fileDataArray.length - 1);
+        showExecuteCodeButton(fileName);
     }
 };
 
@@ -329,6 +323,15 @@ const extractFileExtension = fileName => {
     const extension = fileName.split('.').pop();
     console.log('File extension:', extension); // Add this line
     return extension;
+};
+
+const showExecuteCodeButton = (fileName) => {
+    const extension = extractFileExtension(fileName);
+    if (extension === 'py') {
+        executeCodeButton.style.display = 'inline-block'; // Show execute button
+    } else {
+        executeCodeButton.style.display = 'none'; // Hide execute button
+    }
 };
 
 // Event listeners
@@ -470,6 +473,7 @@ function fetchFileContents(fileName) {
             fileDataArray.push(fileData);
             generateAllFileTabElements();
             displayFileContentInTab(fileDataArray.length - 1);
+            showExecuteCodeButton(fileName);
         }
     })
     .catch(function (error) {
