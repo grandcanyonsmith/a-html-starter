@@ -254,6 +254,7 @@ const removeTabAndFileData = index => {
 
 const toggleViewButtonsBasedOnFileType = (fileName) => {
     const extension = extractFileExtension(fileName);
+console.log(extension,'extension');
     if (extension === 'html') {
         previewCodeButton.style.display = 'inline-block';
         viewLogsButton.style.display = 'inline-block';
