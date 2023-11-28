@@ -1,121 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Display</title>
-    <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Display</title>
+  <link href="https://cdn.tailwindcss.com/2.2.19/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body class="bg-gray-100">
-
 <div id="testRunDetailsHeader" class="w-full p-4 bg-blue-500 text-white">
-    <!-- Test Details will be appended here -->
+  <!-- Test Details will be appended here -->
 </div>
-
 <div id="videoContainer" class="w-full h-1/2 flex items-center justify-center bg-gray-800 relative">
-    <video src="video.mp4" controls class="w-full h-full"></video>
-    <div class="absolute bottom-0 left-0 right-0 p-4 flex justify-between">
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            View Video Link
-        </button>
-        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Download Video
-        </button>
-    </div>
+  <video src="video.mp4" controls class="w-full h-full"></video>
+  <div class="absolute bottom-0 left-0 right-0 p-4 flex justify-between">
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      View Video Link
+    </button>
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+      Download Video
+    </button>
+  </div>
 </div>
-
 <h2 class="text-2xl font-bold mt-4 mb-2">Logs</h2>
-
 <div id="logsContainer" class="w-full p-4 bg-white">
-    <!-- Logs will be appended here -->
+  <!-- Logs will be appended here -->
 </div>
-
 <h2 class="text-2xl font-bold mt-4 mb-2">Test Runs Report</h2>
-
 <table class="table-auto w-full mb-8">
-    <thead>
-        <tr>
-            <th class="px-4 py-2 border">Run ID</th>
-            <th class="px-4 py-2 border">Status</th>
-            <th class="px-4 py-2 border">Last Run</th>
-        </tr>
-    </thead>
-    <tbody id="test-runs-body">
-    </tbody>
+  <thead>
+  <tr>
+    <th class="px-4 py-2 border">Run ID</th>
+    <th class="px-4 py-2 border">Status</th>
+    <th class="px-4 py-2 border">Last Run</th>
+  </tr>
+  </thead>
+  <tbody id="test-runs-body">
+  </tbody>
 </table>
-
 <script>
-    const testRunDetails = [
-      {
-        id: 1,
-        timestamp: 1699552876,
-        duration: 2616,
-        filePath: 'tests/legacy/ui_tests/test_manager_writes_a_comment.py',
-        formattedTestName: 'Test Manager Invites Others To Write',
-        logs: ['these are the logs'],
-        status: 'Passed',
-        team: 'Legacy',
-        testName: 'tests/legacy/ui_tests/test_manager_writes_a_comment.py::test_manager_invites_others_to_write',
-        testType: 'UI',
-        videoUrl: 'https://localhost:5000/',
-        logsShortSummary: 'Could not find selector'
-      }
-    ];
+    let previousRunsData = []; // Store the fetched data here
 
-    const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
-    const logsContainer = document.getElementById('logsContainer');
-    const testRunsBody = document.getElementById('test-runs-body');
+    function getParamsFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const testName = urlParams.get('testName');
+        return { id, testName };
+    }
 
-    testRunDetails.forEach(detail => {
-        const h1 = document.createElement('h1');
-        h1.textContent = `${detail.team} - ${detail.formattedTestName} - ${detail.status}`;
-        h1.className = 'text-2xl font-bold';
-        testRunDetailsHeader.appendChild(h1);
+    function runDetails(runId) {
+        const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
+        const logsContainer = document.getElementById('logsContainer');
 
-        const h3 = document.createElement('h3');
-        h3.textContent = detail.logsShortSummary;
-        h3.className = 'text-center text-lg mt-2';
-        testRunDetailsHeader.appendChild(h3);
+        // Clear previous details
+        testRunDetailsHeader.innerHTML = '';
+        logsContainer.innerHTML = '';
 
-        const viewCodeButton = document.createElement('button');
-        viewCodeButton.textContent = 'View Code';
-        viewCodeButton.className = 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute right-0 top-0 mt-4 mr-4';
-        viewCodeButton.onclick = function() {
-            window.location.href = `viewCode.html?filePath=${encodeURIComponent(detail.filePath)}`;
+        // Use the stored previousRunsData to find the details of the specific run
+        const testRun = previousRunsData.find(run => run.id === runId);
+        if (testRun) {
+            const h1 = document.createElement('h1');
+            h1.textContent = `${testRun.team} - ${testRun.formattedTestName} - ${testRun.status} - ${testRun.id}`; // Added ID here
+            h1.className = 'text-2xl font-bold';
+            testRunDetailsHeader.appendChild(h1);
+            const h3 = document.createElement('h3');
+            h3.textContent = testRun.logsShortSummary;
+            h3.className = 'text-center text-lg mt-2';
+            testRunDetailsHeader.appendChild(h3);
+            const viewCodeButton = document.createElement('button');
+            viewCodeButton.textContent = 'View Code';
+            viewCodeButton.className = 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute right-0 top-0 mt-4 mr-4';
+            viewCodeButton.onclick = function() {
+                window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
+            };
+            testRunDetailsHeader.appendChild(viewCodeButton);
+            const p = document.createElement('p');
+            p.textContent = testRun.logs.join('\n');
+            p.className = 'text-base mt-4';
+            logsContainer.appendChild(p);
+        }
+    }
+
+    function fetchPreviousRuns() {
+        const { id, testName } = getParamsFromUrl();
+
+        if (previousRunsData.length > 0) {
+            // Data has already been fetched, so just return the stored data
+            return Promise.resolve(previousRunsData);
+        }
+
+        const url = "https://m3safcz3boalyw7x7dl4qig3wq0tucft.lambda-url.us-west-2.on.aws/";
+        const data = {
+            "testName": testName
         };
-        testRunDetailsHeader.appendChild(viewCodeButton);
+        const headers = {'Content-type': 'application/json'};
+        const testRunsBody = document.getElementById('test-runs-body');
 
-        const p = document.createElement('p');
-        p.textContent = detail.logs.join('\n');
-        p.className = 'text-base mt-4';
-        logsContainer.appendChild(p);
-    });
+        // Clear the table body before appending new data
+        testRunsBody.innerHTML = '';
 
-    const url = "https://m3safcz3boalyw7x7dl4qig3wq0tucft.lambda-url.us-west-2.on.aws/";
-    const data = {
-        "testName": "tests/legacy/ui_tests/test_manager_writes_a_comment.py::test_manager_invites_others_to_write"
-    };
-    const headers = {'Content-type': 'application/json'};
-
-    axios.post(url, data, {headers: headers})
-        .then(response => {
-            let parsedData = response.data;
-
-            parsedData.forEach(testRun => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="border px-4 py-2">${testRun.id}</td>
-                    <td class="border px-4 py-2">${testRun.status}</td>
-                    <td class="border px-4 py-2">${testRun.timestamp}</td>
-                `;
-                testRunsBody.appendChild(row);
+        return axios.post(url, data, {headers: headers})
+            .then(response => {
+                console.log('Previous Runs Response:', response.data);
+                previousRunsData = response.data; // Store the fetched data
+                previousRunsData.forEach(testRun => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="border px-4 py-2" id="${testRun.id}" onclick="runDetails(${testRun.id})">${testRun.id}</td>
+                        <td class="border px-4 py-2">${testRun.status}</td>
+                        <td class="border px-4 py-2">${testRun.timestamp}</td>
+                    `;
+                    testRunsBody.appendChild(row);
+                });
+                return previousRunsData;
+            })
+            .catch(error => {
+                console.error('Error:', error);
             });
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-</script>
+    }
 
+    fetchPreviousRuns(); // Fetch the data when the script loads
+</script>
 </body>
 </html>
