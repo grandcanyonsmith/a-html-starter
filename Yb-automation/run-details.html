@@ -39,87 +39,89 @@
   </tbody>
 </table>
 <script>
-    let previousRunsData = []; // Store the fetched data here
+// Utility functions
+const createElement = (type, text, classes) => {
+    const element = document.createElement(type);
+    element.textContent = text;
+    element.className = classes;
+    return element;
+};
 
-    function getParamsFromUrl() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const id = urlParams.get('id');
-        const testName = urlParams.get('testName');
-        return { id, testName };
+const createButton = (text, classes, onClick) => {
+    const button = createElement('button', text, classes);
+    button.onclick = onClick;
+    return button;
+};
+
+// Fetching and displaying data
+const fetchPreviousRuns = async () => {
+    const { id, testName } = getParamsFromUrl();
+    const url = "https://m3safcz3boalyw7x7dl4qig3wq0tucft.lambda-url.us-west-2.on.aws/";
+    const data = { "testName": testName };
+    const headers = { 'Content-type': 'application/json' };
+
+    try {
+        const response = await axios.post(url, data, { headers: headers });
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+        alert('There was an error fetching the data. Please try again later.');
     }
+};
 
-    function runDetails(runId) {
-        const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
-        const logsContainer = document.getElementById('logsContainer');
+const displayPreviousRuns = async () => {
+    const previousRunsData = await fetchPreviousRuns();
+    const testRunsBody = document.getElementById('test-runs-body');
+    testRunsBody.innerHTML = '';
 
-        // Clear previous details
+    previousRunsData.forEach(testRun => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td class="border px-4 py-2" id="${testRun.id}" onclick="displayRunDetails('${testRun.id}')">${testRun.id}</td>
+            <td class="border px-4 py-2">${testRun.status}</td>
+            <td class="border px-4 py-2">${testRun.timestamp}</td>
+        `;
+        testRunsBody.appendChild(row);
+    });
+};
+
+// Displaying run details
+const displayRunDetails = (runId) => {
+    const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
+    const logsContainer = document.getElementById('logsContainer');
+    const testRun = previousRunsData.find(run => run.id === runId);
+
+    if (testRun) {
         testRunDetailsHeader.innerHTML = '';
         logsContainer.innerHTML = '';
 
-        // Use the stored previousRunsData to find the details of the specific run
-        const testRun = previousRunsData.find(run => run.id === runId);
-        if (testRun) {
-            const h1 = document.createElement('h1');
-            h1.textContent = `${testRun.team} - ${testRun.formattedTestName} - ${testRun.status} - ${testRun.id}`; // Added ID here
-            h1.className = 'text-2xl font-bold';
-            testRunDetailsHeader.appendChild(h1);
-            const h3 = document.createElement('h3');
-            h3.textContent = testRun.logsShortSummary;
-            h3.className = 'text-center text-lg mt-2';
-            testRunDetailsHeader.appendChild(h3);
-            const viewCodeButton = document.createElement('button');
-            viewCodeButton.textContent = 'View Code';
-            viewCodeButton.className = 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute right-0 top-0 mt-4 mr-4';
-            viewCodeButton.onclick = function() {
-                window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
-            };
-            testRunDetailsHeader.appendChild(viewCodeButton);
-            const p = document.createElement('p');
-            p.textContent = testRun.logs.join('\n');
-            p.className = 'text-base mt-4';
-            logsContainer.appendChild(p);
-        }
+        const headerText = `${testRun.team} - ${testRun.formattedTestName} - ${testRun.status} - ${testRun.id}`;
+        const header = createElement('h1', headerText, 'text-2xl font-bold');
+        testRunDetailsHeader.appendChild(header);
+
+        const summary = createElement('h3', testRun.logsShortSummary, 'text-center text-lg mt-2');
+        testRunDetailsHeader.appendChild(summary);
+
+        const viewCodeButton = createButton('View Code', 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute right-0 top-0 mt-4 mr-4', () => {
+            window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
+        });
+        testRunDetailsHeader.appendChild(viewCodeButton);
+
+        const logs = createElement('p', testRun.logs.join('\n'), 'text-base mt-4');
+        logsContainer.appendChild(logs);
     }
+};
 
-    function fetchPreviousRuns() {
-        const { id, testName } = getParamsFromUrl();
+// Getting URL parameters
+const getParamsFromUrl = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    const testName = urlParams.get('testName');
+    return { id, testName };
+};
 
-        if (previousRunsData.length > 0) {
-            // Data has already been fetched, so just return the stored data
-            return Promise.resolve(previousRunsData);
-        }
-
-        const url = "https://m3safcz3boalyw7x7dl4qig3wq0tucft.lambda-url.us-west-2.on.aws/";
-        const data = {
-            "testName": testName
-        };
-        const headers = {'Content-type': 'application/json'};
-        const testRunsBody = document.getElementById('test-runs-body');
-
-        // Clear the table body before appending new data
-        testRunsBody.innerHTML = '';
-
-        return axios.post(url, data, {headers: headers})
-            .then(response => {
-                console.log('Previous Runs Response:', response.data);
-                previousRunsData = response.data; // Store the fetched data
-                previousRunsData.forEach(testRun => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td class="border px-4 py-2" id="${testRun.id}" onclick="runDetails(${testRun.id})">${testRun.id}</td>
-                        <td class="border px-4 py-2">${testRun.status}</td>
-                        <td class="border px-4 py-2">${testRun.timestamp}</td>
-                    `;
-                    testRunsBody.appendChild(row);
-                });
-                return previousRunsData;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-    }
-
-    fetchPreviousRuns(); // Fetch the data when the script loads
+// Initial data fetch
+displayPreviousRuns();
 </script>
 </body>
 </html>
