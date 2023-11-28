@@ -111,7 +111,7 @@ const displayRunDetails = (runId, previousRunsData) => {
         const titleDiv = document.createElement('div');
         titleDiv.className = "ml-4 mt-2";
         const headerText = `${testRun.team} - ${testRun.formattedTestName} - ${testRun.status} - ${testRun.id}`;
-        const header = createElement('h3', headerText, 'text-base font-semibold leading-6 text-gray-900');
+        const header = createElement('h3', headerText, 'text-base font-semibold leading-6 text-white');
         titleDiv.appendChild(header);
 
         const buttonDiv = document.createElement('div');
@@ -125,7 +125,7 @@ const displayRunDetails = (runId, previousRunsData) => {
         headerDiv.appendChild(buttonDiv);
         testRunDetailsHeader.appendChild(headerDiv);
 
-        const summary = createElement('h3', testRun.logsShortSummary, 'text-center text-lg mt-2');
+        const summary = createElement('h3', testRun.logsShortSummary, 'text-center text-lg mt-2 text-white');
         testRunDetailsHeader.appendChild(summary);
     }
 };
