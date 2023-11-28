@@ -99,38 +99,50 @@ const displayPreviousRuns = async () => {
 // Displaying run details
 const displayRunDetails = (runId, previousRunsData) => {
     const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
-    const logsContainer = document.getElementById('logsContainer');
     const testRun = previousRunsData.find(run => run.id === runId);
 
     if (testRun) {
         testRunDetailsHeader.innerHTML = '';
 
-        const headerDiv = document.createElement('div');
-        headerDiv.className = "-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap";
+        // Header container
+        const headerDiv = createElement('div', '', 'lg:flex lg:items-center lg:justify-between');
 
-        const titleDiv = document.createElement('div');
-        titleDiv.className = "ml-4 mt-4";
-        const headerText = `${testRun.formattedTestName}`;
-        const header = createElement('h3', headerText, 'text-base font-semibold leading-6 text-white');
-        titleDiv.appendChild(header);
+        // Left side container
+        const leftDiv = createElement('div', '', 'min-w-0 flex-1');
+        headerDiv.appendChild(leftDiv);
 
-        const detailsText = `${testRun.team} - ${testRun.status} - ${testRun.id}`;
-        const details = createElement('p', detailsText, 'mt-1 text-sm text-gray-500');
-        titleDiv.appendChild(details);
+        // Title
+        const title = createElement('h2', testRun.formattedTestName, 'text-2xl font-bold leading-7 text-white sm:truncate sm:text-3xl sm:tracking-tight');
+        leftDiv.appendChild(title);
 
-        const buttonDiv = document.createElement('div');
-        buttonDiv.className = "ml-4 mt-4 flex-shrink-0";
-        const viewCodeButton = createButton('View Code', 'relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600', () => {
+        // Meta container
+        const metaDiv = createElement('div', '', 'mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6');
+        leftDiv.appendChild(metaDiv);
+
+        // Team
+        const teamDiv = createElement('div', `Team: ${testRun.team}`, 'mt-2 flex items-center text-sm text-gray-300');
+        metaDiv.appendChild(teamDiv);
+
+        // Status
+        const statusDiv = createElement('div', `Status: ${testRun.status}`, 'mt-2 flex items-center text-sm text-gray-300');
+        metaDiv.appendChild(statusDiv);
+
+        // ID
+        const idDiv = createElement('div', `ID: ${testRun.id}`, 'mt-2 flex items-center text-sm text-gray-300');
+        metaDiv.appendChild(idDiv);
+
+        // Right side container
+        const rightDiv = createElement('div', '', 'mt-5 flex lg:ml-4 lg:mt-0');
+        headerDiv.appendChild(rightDiv);
+
+        // View Code button
+        const viewCodeButton = createButton('View Code', 'inline-flex items-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500', () => {
             window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
         });
-        buttonDiv.appendChild(viewCodeButton);
+        rightDiv.appendChild(viewCodeButton);
 
-        headerDiv.appendChild(titleDiv);
-        headerDiv.appendChild(buttonDiv);
+        // Append the header to the page
         testRunDetailsHeader.appendChild(headerDiv);
-
-        const summary = createElement('h3', testRun.logsShortSummary, 'text-center text-lg mt-2 text-white');
-        testRunDetailsHeader.appendChild(summary);
     }
 };
 
