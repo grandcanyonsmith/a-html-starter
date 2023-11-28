@@ -112,10 +112,9 @@ const displayRunDetails = (runId, previousRunsData) => {
 
         const summary = createElement('h3', testRun.logsShortSummary, 'text-center text-lg mt-2');
         testRunDetailsHeader.appendChild(summary);
-
-        const viewCodeButton = createButton('View Code', 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded', () => {
-            window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
-        });
+const viewCodeButton = createButton('View Code', 'rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600', () => {
+    window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
+});
         testRunDetailsHeader.appendChild(viewCodeButton);
 
         const logs = createElement('p', testRun.logs.join('\n'), 'text-base mt-4');
