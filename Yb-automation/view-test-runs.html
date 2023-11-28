@@ -310,33 +310,46 @@ document.addEventListener('DOMContentLoaded', function() {
         return statusColors[status] || 'bg-gray-600';
     }
 
-    // Function to render test data cards
-    function renderTestDataCards(testData) {
-        const container = document.getElementById('test-data');
-        container.innerHTML = ''; // Clear existing content
+// Function to render test data cards
+function renderTestDataCards(testData) {
+    const container = document.getElementById('test-data');
+    container.innerHTML = ''; // Clear existing content
 
-        let total = 0;
-        Object.entries(testData).forEach(([status, tests]) => {
-            const card = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
-            const title = createElement('p', 'text-sm font-medium text-gray-400', status);
-            const count = createElement('p', 'mt-2 text-4xl font-semibold text-white', tests.length.toString());
+    // Define all possible statuses
+    const allStatuses = ['Passed', 'Failed', 'Untested'];
 
-            card.appendChild(title);
-            card.appendChild(count);
-            container.appendChild(card);
+    // Initialize a count object with all statuses set to zero
+    const statusCounts = allStatuses.reduce((acc, status) => {
+        acc[status] = 0;
+        return acc;
+    }, {});
 
-            total += tests.length;
-        });
+    // Count the number of tests for each status
+    Object.entries(testData).forEach(([status, tests]) => {
+        statusCounts[status] = tests.length;
+    });
 
-        // Add total card
-        const totalCard = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
-        const totalTitle = createElement('p', 'text-sm font-medium text-gray-400', 'Total');
-        const totalCount = createElement('p', 'mt-2 text-4xl font-semibold text-white', total.toString());
+    // Render a card for each status
+    allStatuses.forEach(status => {
+        const card = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
+        const title = createElement('p', 'text-sm font-medium text-gray-400', status);
+        const count = createElement('p', 'mt-2 text-4xl font-semibold text-white', statusCounts[status].toString());
 
-        totalCard.appendChild(totalTitle);
-        totalCard.appendChild(totalCount);
-        container.appendChild(totalCard);
-    }
+        card.appendChild(title);
+        card.appendChild(count);
+        container.appendChild(card);
+    });
+
+    // Calculate and add total card
+    const total = Object.values(statusCounts).reduce((sum, count) => sum + count, 0);
+    const totalCard = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
+    const totalTitle = createElement('p', 'text-sm font-medium text-gray-400', 'Total');
+    const totalCount = createElement('p', 'mt-2 text-4xl font-semibold text-white', total.toString());
+
+    totalCard.appendChild(totalTitle);
+    totalCard.appendChild(totalCount);
+    container.appendChild(totalCard);
+}
 
    function renderTestDataTable(testData) {
             const tbody = document.getElementById('table-body');
