@@ -27,17 +27,23 @@
   <!-- Logs will be appended here -->
 </div>
 <h2 class="text-2xl font-bold mt-4 mb-2">Test Runs Report</h2>
-<table class="table-auto w-full mb-8">
-  <thead>
-  <tr>
-    <th class="px-4 py-2 border">Run ID</th>
-    <th class="px-4 py-2 border">Status</th>
-    <th class="px-4 py-2 border">Last Run</th>
-  </tr>
-  </thead>
-  <tbody id="test-runs-body">
-  </tbody>
-</table>
+<div class="mt-8 flow-root">
+  <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <table class="min-w-full divide-y divide-gray-700">
+        <thead>
+          <tr>
+            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">Run ID</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Last Run</th>
+          </tr>
+        </thead>
+        <tbody id="test-runs-body" class="divide-y divide-gray-800">
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 <script>// Utility functions
 const createElement = (type, text, classes) => {
     const element = document.createElement(type);
@@ -137,4 +143,3 @@ displayPreviousRuns();
 </script>
 </body>
 </html>
-
