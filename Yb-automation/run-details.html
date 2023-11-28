@@ -48,8 +48,8 @@
 // Utility functions
 const createElement = (type, text, classes) => {
     const element = document.createElement(type);
-    element.textContent = text;
-    element.className = classes;
+    if (text) element.textContent = text;
+    if (classes) element.className = classes;
     return element;
 };
 
@@ -57,6 +57,18 @@ const createButton = (text, classes, onClick) => {
     const button = createElement('button', text, classes);
     button.addEventListener('click', onClick);
     return button;
+};
+
+// Helper function to get status color
+const getStatusColor = (status) => {
+    const statusColors = {
+        'Passed': 'bg-green-500',
+        'Failed': 'bg-red-500',
+        'Running': 'bg-blue-500',
+        'Untested': 'bg-gray-500',
+        // Add more statuses and colors as needed
+    };
+    return statusColors[status] || 'bg-gray-500';
 };
 
 // Fetching and displaying data
@@ -82,10 +94,10 @@ const displayPreviousRuns = async () => {
         testRunsBody.innerHTML = '';
 
         previousRunsData.forEach(testRun => {
-            const row = createElement('tr', '', 'border px-4 py-2');
-            row.appendChild(createElement('td', testRun.id, 'border px-4 py-2'));
-            row.appendChild(createElement('td', testRun.status, 'border px-4 py-2'));
-            row.appendChild(createElement('td', testRun.timestamp, 'border px-4 py-2'));
+            const row = createElement('tr', '', '');
+            row.appendChild(createElement('td', testRun.id, 'px-4 py-2'));
+            row.appendChild(renderStatusCell(testRun.status));
+            row.appendChild(createElement('td', testRun.timestamp, 'px-4 py-2'));
             row.addEventListener('click', () => displayRunDetails(testRun.id, previousRunsData));
             testRunsBody.appendChild(row);
         });
@@ -93,6 +105,15 @@ const displayPreviousRuns = async () => {
         console.error('Error:', error);
         displayError('There was an error displaying the data. Please try again later.');
     }
+};
+
+// Function to render the status cell with a colored dot
+const renderStatusCell = (status) => {
+    const statusCell = createElement('td', '', 'px-4 py-2 flex items-center');
+    const statusDot = createElement('span', '', `inline-block h-2 w-2 rounded-full mr-2 ${getStatusColor(status)}`);
+    statusCell.appendChild(statusDot);
+    statusCell.appendChild(createElement('span', status, ''));
+    return statusCell;
 };
 
 // Displaying run details
