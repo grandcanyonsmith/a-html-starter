@@ -278,6 +278,8 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
+
+
 document.addEventListener('DOMContentLoaded', function() {
     var filterToggles = document.querySelectorAll('.filter-toggle-button');
 
@@ -402,15 +404,38 @@ function renderTestDataCards(testData) {
             });
         }
 
-        // Fetch and render test data
-        function fetchData(timeframe) {
-            axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', { timestamp: timeframe })
-                .then(response => {
-                    renderTestDataCards(response.data);
-                    renderTestDataTable(response.data);
-                })
-                .catch(error => console.error(error));
-        }
+// Fetch and render test data
+function fetchData(timeframe, callback) {
+    axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', { timestamp: timeframe })
+        .then(response => {
+            const testData = response.data;
+            if (callback) {
+                callback(testData);
+            } else {
+                const allTests = Object.values(testData).flat();
+                renderTestDataCards(groupByStatus(allTests));
+                renderTestDataTable(allTests);
+            }
+            // Check all checkboxes after rendering the test data
+            checkAllCheckboxes();
+        })
+        .catch(error => console.error(error));
+}
+
+// Function to check all checkboxes
+function checkAllCheckboxes() {
+    const checkboxes = document.querySelectorAll('.row-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+    // Update the state of the "Select All" checkbox
+    const selectAllCheckbox = document.getElementById('select-all');
+    if (selectAllCheckbox) {
+        selectAllCheckbox.checked = true;
+    }
+    // Optionally, trigger any other actions that depend on checkboxes being checked
+    toggleRunTestsButton(true);
+}
 
         // Function to toggle the Run Tests button
         function toggleRunTestsButton(show) {
@@ -647,13 +672,14 @@ document.addEventListener('click', function(event) {
         });
     }
 
-    // Initialize the app with filters and dropdowns
-    function init() {
-        setupEventListeners();
-        fetchData('today', applyFilters);
-        setupFilterDropdowns();
-        setupCloseFiltersOnClickOutside();
-    }
+// Initialize the app with filters and dropdowns
+function init() {
+    setupEventListeners();
+    fetchData('today', applyFilters); // This will now check all checkboxes after fetching data
+    setupFilterDropdowns();
+    setupCloseFiltersOnClickOutside();
+
+}
 
 
     init();
