@@ -38,8 +38,7 @@
   <tbody id="test-runs-body">
   </tbody>
 </table>
-<script>
-// Utility functions
+<script>// Utility functions
 const createElement = (type, text, classes) => {
     const element = document.createElement(type);
     element.textContent = text;
@@ -49,7 +48,7 @@ const createElement = (type, text, classes) => {
 
 const createButton = (text, classes, onClick) => {
     const button = createElement('button', text, classes);
-    button.onclick = onClick;
+    button.addEventListener('click', onClick);
     return button;
 };
 
@@ -65,28 +64,34 @@ const fetchPreviousRuns = async () => {
         return response.data;
     } catch (error) {
         console.error('Error:', error);
-        alert('There was an error fetching the data. Please try again later.');
+        displayError('There was an error fetching the data. Please try again later.');
     }
 };
 
 const displayPreviousRuns = async () => {
-    const previousRunsData = await fetchPreviousRuns();
-    const testRunsBody = document.getElementById('test-runs-body');
-    testRunsBody.innerHTML = '';
+    try {
+        const previousRunsData = await fetchPreviousRuns();
+        const testRunsBody = document.getElementById('test-runs-body');
+        testRunsBody.innerHTML = '';
 
-    previousRunsData.forEach(testRun => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="border px-4 py-2" id="${testRun.id}" onclick="displayRunDetails('${testRun.id}')">${testRun.id}</td>
-            <td class="border px-4 py-2">${testRun.status}</td>
-            <td class="border px-4 py-2">${testRun.timestamp}</td>
-        `;
-        testRunsBody.appendChild(row);
-    });
+        previousRunsData.forEach(testRun => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="border px-4 py-2">${testRun.id}</td>
+                <td class="border px-4 py-2">${testRun.status}</td>
+                <td class="border px-4 py-2">${testRun.timestamp}</td>
+            `;
+            row.addEventListener('click', () => displayRunDetails(testRun.id, previousRunsData));
+            testRunsBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        displayError('There was an error displaying the data. Please try again later.');
+    }
 };
 
 // Displaying run details
-const displayRunDetails = (runId) => {
+const displayRunDetails = (runId, previousRunsData) => {
     const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
     const logsContainer = document.getElementById('logsContainer');
     const testRun = previousRunsData.find(run => run.id === runId);
@@ -102,7 +107,7 @@ const displayRunDetails = (runId) => {
         const summary = createElement('h3', testRun.logsShortSummary, 'text-center text-lg mt-2');
         testRunDetailsHeader.appendChild(summary);
 
-        const viewCodeButton = createButton('View Code', 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute right-0 top-0 mt-4 mr-4', () => {
+        const viewCodeButton = createButton('View Code', 'bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded', () => {
             window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
         });
         testRunDetailsHeader.appendChild(viewCodeButton);
@@ -120,8 +125,16 @@ const getParamsFromUrl = () => {
     return { id, testName };
 };
 
+// Display error
+const displayError = (message) => {
+    const errorContainer = document.getElementById('errorContainer');
+    errorContainer.textContent = message;
+    errorContainer.style.display = 'block';
+};
+
 // Initial data fetch
 displayPreviousRuns();
 </script>
 </body>
 </html>
+
