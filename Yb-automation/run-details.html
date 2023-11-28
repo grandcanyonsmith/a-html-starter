@@ -45,6 +45,7 @@
   </div>
 </div>
 <script>// Utility functions
+// Utility functions
 const createElement = (type, text, classes) => {
     const element = document.createElement(type);
     element.textContent = text;
@@ -81,12 +82,10 @@ const displayPreviousRuns = async () => {
         testRunsBody.innerHTML = '';
 
         previousRunsData.forEach(testRun => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="border px-4 py-2">${testRun.id}</td>
-                <td class="border px-4 py-2">${testRun.status}</td>
-                <td class="border px-4 py-2">${testRun.timestamp}</td>
-            `;
+            const row = createElement('tr', '', 'border px-4 py-2');
+            row.appendChild(createElement('td', testRun.id, 'border px-4 py-2'));
+            row.appendChild(createElement('td', testRun.status, 'border px-4 py-2'));
+            row.appendChild(createElement('td', testRun.timestamp, 'border px-4 py-2'));
             row.addEventListener('click', () => displayRunDetails(testRun.id, previousRunsData));
             testRunsBody.appendChild(row);
         });
@@ -146,10 +145,6 @@ const displayRunDetails = (runId, previousRunsData) => {
     }
 };
 
-const viewCodeButton = createButton('View Code', 'rounded-full bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600', () => {
-    window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
-});
-
 // Getting URL parameters
 const getParamsFromUrl = () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -161,6 +156,10 @@ const getParamsFromUrl = () => {
 // Display error
 const displayError = (message) => {
     const errorContainer = document.getElementById('errorContainer');
+    if (!errorContainer) {
+        console.error('Error container not found in the DOM');
+        return;
+    }
     errorContainer.textContent = message;
     errorContainer.style.display = 'block';
 };
