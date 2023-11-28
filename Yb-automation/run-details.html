@@ -106,16 +106,20 @@ const displayRunDetails = (runId, previousRunsData) => {
         testRunDetailsHeader.innerHTML = '';
 
         const headerDiv = document.createElement('div');
-        headerDiv.className = "-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap";
+        headerDiv.className = "-ml-4 -mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap";
 
         const titleDiv = document.createElement('div');
-        titleDiv.className = "ml-4 mt-2";
-        const headerText = `${testRun.team} - ${testRun.formattedTestName} - ${testRun.status} - ${testRun.id}`;
+        titleDiv.className = "ml-4 mt-4";
+        const headerText = `${testRun.formattedTestName}`;
         const header = createElement('h3', headerText, 'text-base font-semibold leading-6 text-white');
         titleDiv.appendChild(header);
 
+        const detailsText = `${testRun.team} - ${testRun.status} - ${testRun.id}`;
+        const details = createElement('p', detailsText, 'mt-1 text-sm text-gray-500');
+        titleDiv.appendChild(details);
+
         const buttonDiv = document.createElement('div');
-        buttonDiv.className = "ml-4 mt-2 flex-shrink-0";
+        buttonDiv.className = "ml-4 mt-4 flex-shrink-0";
         const viewCodeButton = createButton('View Code', 'relative inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600', () => {
             window.location.href = `viewCode.html?filePath=${encodeURIComponent(testRun.filePath)}`;
         });
