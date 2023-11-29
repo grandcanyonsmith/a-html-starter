@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<h3>Welcome to the real-time HTML editor!</h3>
+<p>Type HTML in the textarea above, and it will magically appear in the frame below.</p><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -273,6 +274,9 @@
             <!-- Test data will be inserted here -->
         </div>
         <div id="table-container" class="mt-6">
+    <div id="run-tests-container" class="flex justify-end mb-2 hidden">
+        <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
+    </div>
 <button class="sm:hidden bg-indigo-600 text-white px-4 py-2 rounded mt-4" id="mobile-filter-button">Filters</button>
 
 
@@ -472,18 +476,15 @@ function checkAllCheckboxes() {
     toggleRunTestsButton(true);
 }
 
-        // Function to toggle the Run Tests button
-        function toggleRunTestsButton(show) {
-            const testNameHeader = document.getElementById('test-name-header');
-            if (show) {
-                testNameHeader.innerHTML = `
-                    <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
-                `;
-                document.getElementById('run-tests-btn').addEventListener('click', runSelectedTests);
-            } else {
-                testNameHeader.innerHTML = 'Test Name';
-            }
-        }
+function toggleRunTestsButton(show) {
+    const runTestsContainer = document.getElementById('run-tests-container');
+    if (show) {
+        runTestsContainer.classList.remove('hidden');
+        document.getElementById('run-tests-btn').addEventListener('click', runSelectedTests);
+    } else {
+        runTestsContainer.classList.add('hidden');
+    }
+}
 
     // Fetch and render test data
 // Fetch and render test data
@@ -556,6 +557,7 @@ function applyFilters() {
     // Now call the functions to update the UI with the filtered data
     renderTestDataCards(groupedData); // Pass the grouped data here
     renderTestDataTable(filteredData);
+    checkAllCheckboxes();
 }
 
 
@@ -564,23 +566,27 @@ document.querySelectorAll('input[name="team[]"], input[name="test-type[]"], inpu
     input.addEventListener('change', applyFilters); // Apply filters to the stored data
 });
     // Function to toggle the Run Tests button
-    function toggleRunTestsButton(show) {
-        const testNameHeader = document.getElementById('test-name-header');
-        if (show) {
-            testNameHeader.innerHTML = `
-                <button type="button" id="run-tests-btn" class="inline-flex items-center rounded bg-white px-2 py-1 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Run Tests</button>
-            `;
-            document.getElementById('run-tests-btn').addEventListener('click', runSelectedTests);
-        } else {
-            testNameHeader.innerHTML = 'Test Name';
-        }
+// Function to toggle the Run Tests button
+function toggleRunTestsButton(show) {
+    const runTestsContainer = document.getElementById('run-tests-container');
+    if (show) {
+        runTestsContainer.classList.remove('hidden');
+        document.getElementById('run-tests-btn').addEventListener('click', runSelectedTests);
+    } else {
+        runTestsContainer.classList.add('hidden');
     }
+}
 
     // Function to run selected tests
     function runSelectedTests() {
         const checkboxes = document.querySelectorAll('.row-checkbox:checked');
         const filePaths = Array.from(checkboxes).map(checkbox => checkbox.getAttribute('data-file-path'));
-        const runTestsBtn = document.getElementById('run-tests-btn');
+    // Add event listener for the Run Tests button
+    const runTestsBtn = document.getElementById('run-tests-btn');
+    if (runTestsBtn) {
+        runTestsBtn.addEventListener('click', runSelectedTests);
+    }
+
         runTestsBtn.textContent = 'Running...';
 
         const testPromises = filePaths.map(filePath => {
@@ -747,5 +753,3 @@ function init() {
 </script>
 </body>
 </html>
-
-
