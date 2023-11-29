@@ -14,8 +14,8 @@
         border-top: 4px solid #fff;
         width: 36px;
         height: 36px;
-        -webkit-animation: spin 1s linear infinite; /* Safari */
-        animation: spin 1s linear infinite;
+        -webkit-animation: spin 1.5s linear infinite; /* Safari */
+        animation: spin 1.5s linear infinite;
     }
 
     /* Safari */
@@ -339,6 +339,7 @@ renderTestDataCards({}, true);
 // Function to render test data cards
 // Function to render test data cards
 // Function to render test data cards
+// Function to render test data cards
 function renderTestDataCards(groupedTests, isLoading) {
     const container = document.getElementById('test-data');
     container.innerHTML = ''; // Clear existing content
@@ -348,17 +349,18 @@ function renderTestDataCards(groupedTests, isLoading) {
 
     // Render a card for each status
     allStatuses.forEach(status => {
-        const card = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg flex flex-col items-center justify-center');
+        const card = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
         const title = createElement('p', 'text-sm font-medium text-gray-400', status);
-
         card.appendChild(title);
 
         if (isLoading) {
-            // Add spinner
-            const spinner = createElement('div', 'spinner');
-            card.appendChild(spinner);
+            // Add spinner, aligned to the left
+            const spinnerWrapper = createElement('div', 'flex items-center');
+            const spinner = createElement('div', 'spinner mr-2');
+            spinnerWrapper.appendChild(spinner);
+            card.appendChild(spinnerWrapper);
         } else {
-            // Show actual count or 0 if undefined or empty
+            // Show actual count or 0 if undefined or empty, aligned to the left
             const countValue = (groupedTests[status] && groupedTests[status].length) ? groupedTests[status].length : 0;
             const count = createElement('p', 'mt-2 text-4xl font-semibold text-white', countValue.toString());
             card.appendChild(count);
@@ -368,17 +370,18 @@ function renderTestDataCards(groupedTests, isLoading) {
     });
 
     // Calculate and add total card
-    const totalCard = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg flex flex-col items-center justify-center');
+    const totalCard = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
     const totalTitle = createElement('p', 'text-sm font-medium text-gray-400', 'Total');
-
     totalCard.appendChild(totalTitle);
 
     if (isLoading) {
-        // Add spinner to total card
-        const spinner = createElement('div', 'spinner');
-        totalCard.appendChild(spinner);
+        // Add spinner to total card, aligned to the left
+        const spinnerWrapper = createElement('div', 'flex items-center');
+        const spinner = createElement('div', 'spinner mr-2');
+        spinnerWrapper.appendChild(spinner);
+        totalCard.appendChild(spinnerWrapper);
     } else {
-        // Show total count or 0 if no data
+        // Show total count or 0 if no data, aligned to the left
         const total = allStatuses.reduce((sum, status) => {
             return sum + (groupedTests[status] ? groupedTests[status].length : 0);
         }, 0);
