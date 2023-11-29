@@ -276,8 +276,10 @@
 
     <!-- Include the JavaScript for filters here -->
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
 
+let allTestData = []; // This will store all the test data after the initial fetch
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -313,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 // Function to render test data cards
-function renderTestDataCards(testData) {
+function renderTestDataCards(groupedTests) {
     const container = document.getElementById('test-data');
     container.innerHTML = ''; // Clear existing content
 
@@ -327,7 +329,7 @@ function renderTestDataCards(testData) {
     }, {});
 
     // Count the number of tests for each status
-    Object.entries(testData).forEach(([status, tests]) => {
+    Object.entries(groupedTests).forEach(([status, tests]) => {
         statusCounts[status] = tests.length;
     });
 
@@ -353,11 +355,11 @@ function renderTestDataCards(testData) {
     container.appendChild(totalCard);
 }
 
-   function renderTestDataTable(testData) {
+function renderTestDataTable(filteredData) {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = ''; // Clear existing content
 
-            Object.values(testData).flat().forEach(data => {
+            Object.values(filteredData).flat().forEach(data => {
                 const tr = createElement('tr');
                 const checkboxCell = createElement('td', 'px-6 py-4');
                 const checkbox = createElement('input', 'row-checkbox rounded border-gray-300 text-indigo-600 focus:ring-indigo-600');
@@ -404,23 +406,7 @@ function renderTestDataCards(testData) {
             });
         }
 
-// Fetch and render test data
-function fetchData(timeframe, callback) {
-    axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', { timestamp: timeframe })
-        .then(response => {
-            const testData = response.data;
-            if (callback) {
-                callback(testData);
-            } else {
-                const allTests = Object.values(testData).flat();
-                renderTestDataCards(groupByStatus(allTests));
-                renderTestDataTable(allTests);
-            }
-            // Check all checkboxes after rendering the test data
-            checkAllCheckboxes();
-        })
-        .catch(error => console.error(error));
-}
+
 
 // Function to check all checkboxes
 function checkAllCheckboxes() {
@@ -451,61 +437,66 @@ function checkAllCheckboxes() {
         }
 
     // Fetch and render test data
-    function fetchData(timeframe, callback) {
-        axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', { timestamp: timeframe })
-            .then(response => {
-                const testData = response.data;
-                if (callback) {
-                    callback(testData);
-                } else {
-                    const allTests = Object.values(testData).flat();
-                    renderTestDataCards(groupByStatus(allTests));
-                    renderTestDataTable(allTests);
-                }
-            })
-            .catch(error => console.error(error));
-    }
+// Fetch and render test data
+function fetchData(timeframe, callback) {
+    axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', { timestamp: timeframe })
+        .then(response => {
+            const testData = response.data;
+console.log(testData,'test data');
+            if (callback) {
+                callback(testData);
+            } else {
+                const allTests = Object.values(testData).flat();
+                renderTestDataCards(groupByStatus(allTests));
+                renderTestDataTable(allTests);
+            }
+            // Check all checkboxes after rendering the test data
+            checkAllCheckboxes();
+        })
+        .catch(error => console.error(error));
+}
+
+// Group the test data by status
+function groupByStatus(tests) {
+console.log(tests,'tests');
+    return tests.reduce((acc, test) => {
+        const { status } = test;
+        if (!acc[status]) {
+            acc[status] = [];
+        }
+        acc[status].push(test);
+        return acc;
+    }, {});
+}
+
+
 
 // Function to apply filters to the test data
-function applyFilters(testData) {
-
-    const allTests = Object.values(testData).flat();
-    console.log(allTests,'allTests');
+function applyFilters() {
     const selectedTeams = Array.from(document.querySelectorAll('input[name="team[]"]:checked')).map(input => input.value);
     const selectedTestTypes = Array.from(document.querySelectorAll('input[name="test-type[]"]:checked')).map(input => input.value);
     const selectedStatuses = Array.from(document.querySelectorAll('input[name="status[]"]:checked')).map(input => input.value);
-    console.log(selectedStatuses,'selectedStatuses');
-        // Use 'today' as the default timeframe if the 'timeframe' element is not found
-        const timeframeElement = document.getElementById('timeframe');
-        const timeframe = timeframeElement ? timeframeElement.value : 'today';
 
-    const filteredData = allTests.filter(data => {
+    const filteredData = allTestData.filter(data => {
         const teamMatch = selectedTeams.length === 0 || selectedTeams.includes(data.team);
         const testTypeMatch = selectedTestTypes.length === 0 || selectedTestTypes.includes(data.testType);
         const statusMatch = selectedStatuses.length === 0 || selectedStatuses.includes(data.status);
         return teamMatch && testTypeMatch && statusMatch;
     });
 
-    console.log('Filtered Data:', filteredData); // Log filtered data for debugging
+    // Group the filtered data by status
+    const groupedData = groupByStatus(filteredData);
 
-    renderTestDataCards(groupByStatus(filteredData));
+    // Now call the functions to update the UI with the filtered data
+    renderTestDataCards(groupedData); // Pass the grouped data here
     renderTestDataTable(filteredData);
 }
-    // Fetch and render test data with the default timeframe
-    fetchData('today', applyFilters);
 
-    // Helper function to group tests by status
-    function groupByStatus(tests) {
-        return tests.reduce((acc, test) => {
-            const { status } = test;
-            if (!acc[status]) {
-                acc[status] = [];
-            }
-            acc[status].push(test);
-            return acc;
-        }, {});
-    }
 
+// Event listener for filter changes
+document.querySelectorAll('input[name="team[]"], input[name="test-type[]"], input[name="status[]"]').forEach(input => {
+    input.addEventListener('change', applyFilters); // Apply filters to the stored data
+});
     // Function to toggle the Run Tests button
     function toggleRunTestsButton(show) {
         const testNameHeader = document.getElementById('test-name-header');
@@ -570,12 +561,11 @@ function applyFilters(testData) {
             }
         });
 
-        document.querySelectorAll('input[name="team[]"], input[name="test-type[]"], input[name="status[]"]').forEach(input => {
-            input.addEventListener('change', () => {
-                const timeframe = document.getElementById('timeframe').value;
-                fetchData(timeframe, applyFilters);
-            });
-        });
+document.querySelectorAll('input[name="team[]"], input[name="test-type[]"], input[name="status[]"]').forEach(input => {
+    input.addEventListener('change', () => {
+        applyFilters(allTestData); // Apply filters to the stored data
+    });
+});
     }
 
 function setupFilterDropdowns() {
@@ -604,8 +594,6 @@ function setupFilterDropdowns() {
 }
 
 
-// Update the fetchData function call to use the default timeframe
-fetchData('today', applyFilters);
 
 // Add event listeners for the new Timeframe dropdown links
 document.querySelectorAll('#desktop-filter-timeframe a').forEach(link => {
@@ -673,12 +661,12 @@ document.addEventListener('click', function(event) {
     }
 
 // Initialize the app with filters and dropdowns
+// Initialize the app with filters and dropdowns
 function init() {
     setupEventListeners();
-    fetchData('today', applyFilters); // This will now check all checkboxes after fetching data
+    fetchData('today'); // Fetch data and render UI
     setupFilterDropdowns();
     setupCloseFiltersOnClickOutside();
-
 }
 
 
@@ -688,3 +676,5 @@ function init() {
 </script>
 </body>
 </html>
+
+
