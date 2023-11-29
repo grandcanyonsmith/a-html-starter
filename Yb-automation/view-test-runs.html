@@ -8,6 +8,26 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Include the styles for filters here -->
     <style>
+    .spinner {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top: 4px solid #fff;
+        width: 36px;
+        height: 36px;
+        -webkit-animation: spin 1s linear infinite; /* Safari */
+        animation: spin 1s linear infinite;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
         /* Existing styles for reports */
         .tooltip {
             position: relative;
@@ -281,7 +301,10 @@ let allTestData = []; // This will store all the test data after the initial fet
 
 document.addEventListener('DOMContentLoaded', function() {
     // Fetch the test data when the DOM content is loaded
+renderTestDataCards({}, true);
     fetchData('today');
+// Call this function when the page is initially loaded to show the spinner
+
 
     // Set up filter toggle event listeners
     var filterToggles = document.querySelectorAll('.filter-toggle-button');
@@ -313,45 +336,61 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 // Function to render test data cards
-function renderTestDataCards(groupedTests) {
+// Function to render test data cards
+// Function to render test data cards
+// Function to render test data cards
+function renderTestDataCards(groupedTests, isLoading) {
     const container = document.getElementById('test-data');
     container.innerHTML = ''; // Clear existing content
 
     // Define all possible statuses
     const allStatuses = ['Passed', 'Failed', 'Untested'];
 
-    // Initialize a count object with all statuses set to zero
-    const statusCounts = allStatuses.reduce((acc, status) => {
-        acc[status] = 0;
-        return acc;
-    }, {});
-
-    // Count the number of tests for each status
-    Object.entries(groupedTests).forEach(([status, tests]) => {
-        statusCounts[status] = tests.length;
-    });
-
     // Render a card for each status
     allStatuses.forEach(status => {
-        const card = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
+        const card = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg flex flex-col items-center justify-center');
         const title = createElement('p', 'text-sm font-medium text-gray-400', status);
-        const count = createElement('p', 'mt-2 text-4xl font-semibold text-white', statusCounts[status].toString());
 
         card.appendChild(title);
-        card.appendChild(count);
+
+        if (isLoading) {
+            // Add spinner
+            const spinner = createElement('div', 'spinner');
+            card.appendChild(spinner);
+        } else {
+            // Show actual count or 0 if undefined or empty
+            const countValue = (groupedTests[status] && groupedTests[status].length) ? groupedTests[status].length : 0;
+            const count = createElement('p', 'mt-2 text-4xl font-semibold text-white', countValue.toString());
+            card.appendChild(count);
+        }
+
         container.appendChild(card);
     });
 
     // Calculate and add total card
-    const total = Object.values(statusCounts).reduce((sum, count) => sum + count, 0);
-    const totalCard = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg');
+    const totalCard = createElement('div', 'bg-gray-900 p-4 rounded-lg shadow-lg flex flex-col items-center justify-center');
     const totalTitle = createElement('p', 'text-sm font-medium text-gray-400', 'Total');
-    const totalCount = createElement('p', 'mt-2 text-4xl font-semibold text-white', total.toString());
 
     totalCard.appendChild(totalTitle);
-    totalCard.appendChild(totalCount);
+
+    if (isLoading) {
+        // Add spinner to total card
+        const spinner = createElement('div', 'spinner');
+        totalCard.appendChild(spinner);
+    } else {
+        // Show total count or 0 if no data
+        const total = allStatuses.reduce((sum, status) => {
+            return sum + (groupedTests[status] ? groupedTests[status].length : 0);
+        }, 0);
+        const totalCount = createElement('p', 'mt-2 text-4xl font-semibold text-white', total.toString());
+        totalCard.appendChild(totalCount);
+    }
+
     container.appendChild(totalCard);
 }
+
+
+
 
 function renderTestDataTable(filteredData) {
             const tbody = document.getElementById('table-body');
