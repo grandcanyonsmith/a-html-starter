@@ -85,6 +85,7 @@ const displayPreviousRuns = async () => {
             row.appendChild(createElement('td', testRun.id, 'px-4 py-2'));
             row.appendChild(renderStatusCell(testRun.status));
             row.appendChild(createElement('td', testRun.timestamp, 'px-4 py-2'));
+            row.addEventListener('click', () => displayRunDetails(testRun.id, previousRunsData)); // Add this line back
             testRunsBody.appendChild(row);
         });
     } catch (error) {
