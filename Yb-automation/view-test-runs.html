@@ -196,13 +196,13 @@
 <div class="space-y-4">
   <!-- Filter by Team -->
   <div>
-<button type="button" class="filter-toggle-button flex w-full items-center justify-between px-4 py-3 text-sm text-gray-400 bg-gray-800 rounded-md" aria-controls="filter-mobile-team" aria-expanded="false">
-  <span class="font-medium text-white">Team</span>
+<button type="button" class="filter-toggle-button flex w-full items-center justify-between px-4 py-3 text-sm text-gray-400 bg-gray-800 rounded-md" aria-controls="filter-mobile-team" aria-expanded="false">  <span class="font-medium text-white">Team</span>
       <svg class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
       </svg>
     </button>
-    <div class="hidden" id="filter-mobile-team">
+<div class="hidden" id="filter-mobile-team">
+
       <div class="flex items-center px-4 py-2">
         <input id="filter-mobile-team-0" name="team[]" value="Legacy" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
         <label for="filter-mobile-team-0" class="ml-3 text-sm text-white">Legacy</label>
@@ -254,7 +254,7 @@
         <label for="filter-mobile-status-1" class="ml-3 text-sm text-white">Failed</label>
       </div>
       <div class="flex items-center px-4 py-2">
-        <input id="filter-mobile-status-2" name="status[]" value="untested" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
+        <input id="filter-mobile-status-2" name="status[]" value="Untested" type="checkbox" class="h-4 w-4 rounded border-gray-700 text-indigo-600 focus:ring-indigo-500">
         <label for="filter-mobile-status-2" class="ml-3 text-sm text-white">Untested</label>
       </div>
     </div>
@@ -446,7 +446,16 @@ function renderTestDataTable(filteredData) {
             });
         }
 
+document.querySelectorAll('.filter-toggle-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const targetId = this.getAttribute('aria-controls');
+        const targetElement = document.getElementById(targetId);
+        const isExpanded = this.getAttribute('aria-expanded') === 'true';
 
+        this.setAttribute('aria-expanded', !isExpanded);
+        targetElement.classList.toggle('hidden');
+    });
+});
 
 // Function to check all checkboxes
 function checkAllCheckboxes() {
@@ -649,6 +658,11 @@ function setupFilterDropdowns() {
         });
     });
 }
+
+// Call setupFilterDropdowns on DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+    setupFilterDropdowns();
+});
 
 
 
