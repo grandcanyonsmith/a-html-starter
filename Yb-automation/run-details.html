@@ -80,14 +80,27 @@ const displayPreviousRuns = async () => {
         const testRunsBody = document.getElementById('test-runs-body');
         testRunsBody.innerHTML = '';
 
-        previousRunsData.forEach(testRun => {
+        let firstRunId = null;
+        previousRunsData.forEach((testRun, index) => {
+            if (index === 0) firstRunId = testRun.id; // Save the id of the first test run
+
             const row = createElement('tr', '', '');
             row.appendChild(createElement('td', testRun.id, 'px-4 py-2'));
             row.appendChild(renderStatusCell(testRun.status));
             row.appendChild(createElement('td', testRun.timestamp, 'px-4 py-2'));
-            row.addEventListener('click', () => displayRunDetails(testRun.id, previousRunsData)); // Add this line back
+            row.addEventListener('click', () => displayRunDetails(testRun.id, previousRunsData));
             testRunsBody.appendChild(row);
         });
+
+        // Get the id from the URL
+        const { id } = getParamsFromUrl();
+
+        // If the id from the URL is null or doesn't match any of the test runs, use the id of the first test run
+        if (!id || !previousRunsData.some(run => run.id === id)) {
+            displayRunDetails(firstRunId, previousRunsData);
+        } else {
+            displayRunDetails(id, previousRunsData);
+        }
     } catch (error) {
         console.error('Error:', error);
         displayError('There was an error displaying the data. Please try again later.');
