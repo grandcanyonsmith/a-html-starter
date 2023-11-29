@@ -277,25 +277,23 @@
     <!-- Include the JavaScript for filters here -->
 <script>
 
-document.addEventListener('DOMContentLoaded', function() {
-
 let allTestData = []; // This will store all the test data after the initial fetch
 
-
 document.addEventListener('DOMContentLoaded', function() {
-    var filterToggles = document.querySelectorAll('.filter-toggle-button');
+    // Fetch the test data when the DOM content is loaded
+    fetchData('today');
 
+    // Set up filter toggle event listeners
+    var filterToggles = document.querySelectorAll('.filter-toggle-button');
     filterToggles.forEach(function(toggle) {
         toggle.addEventListener('click', function() {
             var targetId = this.getAttribute('aria-controls');
             var targetElement = document.getElementById(targetId);
             var isExpanded = this.getAttribute('aria-expanded') === 'true';
-
             this.setAttribute('aria-expanded', String(!isExpanded));
             targetElement.classList.toggle('hidden');
         });
     });
-});
     // Utility function to create DOM elements
     function createElement(tag, className, content) {
         const element = document.createElement(tag);
@@ -438,22 +436,27 @@ function checkAllCheckboxes() {
 
     // Fetch and render test data
 // Fetch and render test data
-function fetchData(timeframe, callback) {
+    function fetchData(timeframe, callback) {
+        console.log('fetchData called with timeframe:', timeframe);
     axios.post('https://4ktivmmitgsrs67idemrarllyy0ltvat.lambda-url.us-west-2.on.aws/', { timestamp: timeframe })
         .then(response => {
-            const testData = response.data;
-console.log(testData,'test data');
-            if (callback) {
-                callback(testData);
+            console.log('Response data:', response.data);
+            if (response.data && typeof response.data === 'object') {
+                // Combine all tests from each status into a single array
+                allTestData = [].concat(
+                    response.data.Passed,
+                    response.data.Failed,
+                    response.data.Untested
+                );
+                console.log('Data fetched:', allTestData);
+                applyFilters(); // Call applyFilters here to ensure it's called after data is fetched
             } else {
-                const allTests = Object.values(testData).flat();
-                renderTestDataCards(groupByStatus(allTests));
-                renderTestDataTable(allTests);
+                console.error('Expected an object with test status arrays, but got:', response.data);
             }
-            // Check all checkboxes after rendering the test data
-            checkAllCheckboxes();
         })
-        .catch(error => console.error(error));
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
 }
 
 // Group the test data by status
@@ -471,18 +474,30 @@ console.log(tests,'tests');
 
 
 
-// Function to apply filters to the test data
 function applyFilters() {
+    console.log('Applying filters...');
+
     const selectedTeams = Array.from(document.querySelectorAll('input[name="team[]"]:checked')).map(input => input.value);
     const selectedTestTypes = Array.from(document.querySelectorAll('input[name="test-type[]"]:checked')).map(input => input.value);
     const selectedStatuses = Array.from(document.querySelectorAll('input[name="status[]"]:checked')).map(input => input.value);
+
+    console.log('Selected Teams:', selectedTeams);
+    console.log('Selected Test Types:', selectedTestTypes);
+    console.log('Selected Statuses:', selectedStatuses);
 
     const filteredData = allTestData.filter(data => {
         const teamMatch = selectedTeams.length === 0 || selectedTeams.includes(data.team);
         const testTypeMatch = selectedTestTypes.length === 0 || selectedTestTypes.includes(data.testType);
         const statusMatch = selectedStatuses.length === 0 || selectedStatuses.includes(data.status);
-        return teamMatch && testTypeMatch && statusMatch;
+        const isMatch = teamMatch && testTypeMatch && statusMatch;
+        if (isMatch) {
+            console.log('Matching item:', data);
+        }
+        return isMatch;
     });
+
+    console.log('allTestData at filter time:', allTestData);
+    console.log('Filtered Data:', filteredData);
 
     // Group the filtered data by status
     const groupedData = groupByStatus(filteredData);
@@ -664,7 +679,7 @@ document.addEventListener('click', function(event) {
 // Initialize the app with filters and dropdowns
 function init() {
     setupEventListeners();
-    fetchData('today'); // Fetch data and render UI
+
     setupFilterDropdowns();
     setupCloseFiltersOnClickOutside();
 }
