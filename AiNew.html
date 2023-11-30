@@ -1,81 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanksgiving Turkey Wars</title>
-    <!-- Adding Star Jedi font from dafontfree.net -->
-    <link rel="stylesheet" href="https://freescriptfonts.com/download/3252" type="text/css">
-    <style>
-        /* Adding Star Wars font to the entire document */
-        @font-face {
-            font-family: "Star Jedi";
-            src: url("https://freescriptfonts.com/data/3252/starjedi.ttf") format("truetype");
+    <title>Waitlist Signup</title>
+    <!-- TailwindCSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['Inter var', ...tailwind.defaultTheme.fontFamily.sans],
+              },
+            },
+          },
+          plugins: [
+            require('@tailwindcss/forms'),
+          ],
         }
-
-        body {
-            font-family: "Star Jedi", sans-serif;
-        }
-
-        @keyframes crawl {
-            0% {
-                top: 100vh;
-                transform: rotateX(20deg) translateZ(0);
-            }
-            100% {
-                top: -6000px;
-                transform: rotateX(25deg) translateZ(-3500px);
-            }
-        }
-
-        .turkeywars-demo {
-            perspective: 400px;
-        }
-
-        .crawl {
-            position: absolute;
-            width: 100%;
-            transform-origin: 50% 100%;
-            top: 100vh;
-            animation: crawl 120s linear 0s forwards;
-        }
-
-        /* Dark mode styles */
-        body {
-            background-color: #111; /* Darker background for dark mode */
-            color: #ddd; /* Lighter text color for dark mode */
-        }
-
-        h1 {
-            color: #ff8c00; /* A different shade of color for the title text */
-        }
-
-        .title p {
-            color: #bbb; /* Lighter color for the paragraph text */
-        }
-    </style>
+    </script>
 </head>
-
-<body class="h-screen m-0 overflow-hidden">
-    <div class="container mx-auto px-5">
-        <div class="turkeywars-demo h-full">
-            <div class="crawl">
-                <div class="title text-center text-[90%]">
-                    <h1 class="m-0 uppercase text-4xl font-bold">The Thanksgiving Turkey Wars</h1>
-                    <p class="my-8 leading-8">Thanksgiving, a time of harvest and gratitude, became the background of the most unusual phenomenon known as the Turkey Wars. It is said that each year, as families gather to celebrate and give thanks, a peculiar event transpires in the realm of the turkeys.</p>
-
-                    <p class="my-8 leading-8">It began with the Turkeys' proclamation of sovereignty, tired of being the centerpiece of the holiday feasts. Led by the valiant Turkey Commander Gobblox, the turkeys started a rebellion, vowing to escape their fates each Thanksgiving eve.</p>
-
-                    <p class="my-8 leading-8">Humans, caught by surprise, found themselves in a tussle to maintain the tradition. Unbeknownst to many, the Turkey Wars were not fought with swords or guns but with wits, strategy, and an occasional corn maze deception.</p>
-
-                    <p class="my-8 leading-8">As the years went by, the Thanksgiving tables saw changes. Some families joined forces with the turkeys, creating vegetarian feasts, while others honed their persuasive talents, participating in the Treaty of Tofurky to ensure peace and plenty during the holiday season.</p>
-
-                    <p class="my-8 leading-8">Tales of the Turkey Wars echo through the leaf-bare trees of November. If you listen closely, you might hear the distant gobbles and the rustling of feathers in the crisp autumn air, reminding us of the ongoing saga between man and bird each Thanksgiving.</p>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm mx-auto">
+        <h1 class="text-xl font-semibold text-center mb-4">Join our Waitlist</h1>
+        <form id="waitlistForm" class="space-y-4">
+            <div>
+              <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email</label>
+              <div class="relative mt-2 rounded-md shadow-sm">
+                <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                  <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z" />
+                    <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z" />
+                  </svg>
                 </div>
+                <input type="email" name="email" id="email" class="block w-full rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="you@example.com">
+              </div>
             </div>
-        </div>
+            <div>
+                <button type="submit" class="rounded-md bg-indigo-50 px-3.5 py-2.5 text-sm font-semibold text-indigo-600 shadow-sm hover:bg-indigo-100">Sign Up</button>
+            </div>
+        </form>
     </div>
-</body>
 
+    <script>
+        document.getElementById('waitlistForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            const emailInput = document.getElementById('email');
+            console.log('Email submitted: ' + emailInput.value); // Here you could instead send the email to your server
+            emailInput.value = ''; // Clears the input after submission
+            alert('Thank you for joining our waitlist!');
+        });
+    </script>
+</body>
 </html>
