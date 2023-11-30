@@ -3,75 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jane's Career Journey</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Star Marketplace</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Ensure that the page uses tailwind styles */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* Adding dark mode colors */
+        :root {
+            --dark-bg: #121212;
+            --dark-bg-opacity: rgba(18, 18, 18, 0.75);
+            --dark-text-color: #ffffff;
+            --dark-accent-color: #4fd1c5;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212; /* Dark background color for dark mode */
-            color: #fff; /* White text color for better readability in dark mode */
+            background-color: var(--dark-bg);
+            color: var(--dark-text-color);
         }
 
-        .career-stage {
-            margin: 2rem;
-            padding: 1rem;
-            border: 2px solid #646464; /* Border color adjusted for dark mode */
-            background-color: rgba(23, 23, 23, 0.8); /* Slightly transparent black for each stage */
-            text-align: center;
+        a:hover, button:hover {
+            color: var(--dark-accent-color);
         }
 
-        .career-title {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-            color: #eee; /* Lighter color for titles in dark mode */
+        nav, section.bg-dark, footer {
+            background-color: var(--dark-bg-opacity);
         }
 
-        .stage-animation {
-            width: 100%;
-            height: auto;
-            margin-bottom: 1rem;
+        /* Customizations for the star marketplace */
+        .star-card {
+            transition: transform 0.3s ease;
         }
 
-        /* Define dark mode styles for header and footer text */
-        header, footer {
-            color: #ccc; /* Light gray color for text to stand out against the dark background */
+        .star-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
         }
     </style>
 </head>
-<body class="bg-gray-900"> <!-- Tailwind class to set the background color to a darker shade -->
+<body>
 
-    <header class="text-center p-10">
-        <h1 class="text-4xl font-bold my-4">Jane's Career Journey</h1>
-        <p class="text-lg">Experience the various chapters of Jane's professional life in animation!</p>
-    </header>
+    <!-- Navigation Bar -->
+    <nav class="p-5">
+        <ul class="flex justify-center space-x-4">
+            <li>
+                <a href="#home" class="text-lg font-semibold hover:text-accent">Home</a>
+            </li>
+            <li>
+                <a href="#about" class="text-lg font-semibold hover:text-accent">About</a>
+            </li>
+            <li>
+                <a href="#stars" class="text-lg font-semibold hover:text-accent">Stars</a>
+            </li>
+            <li>
+                <a href="#purchase" class="text-lg font-semibold hover:text-accent">Purchase a Star</a>
+            </li>
+            <li>
+                <a href="#contact" class="text-lg font-semibold hover:text-accent">Contact</a>
+            </li>
+        </ul>
+    </nav>
 
-    <section style="text-align:center;">
-        <!-- Cashier at In-N-Out -->
-        <div class="career-stage">
-            <h2 class="career-title">Cashier at In-N-Out</h2>
-            <img class="stage-animation" src="cashier-animation.gif" alt="Jane as a cashier" />
-            <p>Jane's first job was taking orders with a smile at In-N-Out. She learned the value of quick service and friendly customer interactions.</p>
-        </div>
+    <!-- Home Section -->
+    <section id="home" class="flex items-center justify-center h-screen bg-dark">
+        <h1 class="text-6xl font-bold text-center">Own a Piece of the Cosmos</h1>
+    </section>
 
-        <!-- Semi Truck Driver -->
-        <div class="career-stage">
-            <h2 class="career-title">Semi Truck Driver</h2>
-            <img class="stage-animation" src="truck-driver-animation.gif" alt="Jane driving a semi truck" />
-            <p>Embracing the call of the open road, Jane spent some time as a semi truck driver, mastering the art of long-haul logistics.</p>
-        </div>
-
-        <!-- Delivery Guy for UPS -->
-        <div class="career-stage">
-            <h2 class="career-title">Delivery Person for UPS</h2>
-            <img class="stage-animation" src="delivery-guy-animation.gif" alt="Jane delivering packages" />
-            <p>Currently, Jane brings joy one package at a time as a delivery person for UPS, ensuring every parcel reaches its destination.</p>
+    <!-- About Section -->
+    <section id="about" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-10">About Our Star Marketplace</h2>
+            <!-- About text here -->
         </div>
     </section>
 
-    <footer class="text-center p-4">
-        <p>&copy; 2023 Jane Doe. All rights reserved.</p>
+    <!-- Stars Section -->
+    <section id="stars" class="py-20 bg-dark">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-10">Featured Stars</h2>
+            <div class="grid grid-cols-3 gap-8">
+                <!-- Star cards here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Purchase a Star Section -->
+    <section id="purchase" class="py-20">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-10">Purchase Your Own Star</h2>
+            <!-- Purchase options here -->
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-dark">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center mb-10">Contact Us</h2>
+            <!-- Contact form here -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="p-5">
+        <div class="text-center">
+            <p>© 2023 Star Marketplace. All Rights Reserved.</p>
+        </div>
     </footer>
 
+    <script>
+        // Initialize TailwindCSS if needed and handle dark mode configurations
+        tailwind.config = {
+            darkMode: 'media', // enables dark mode based on user's system settings
+            theme: {
+                extend: {
+                    colors: {
+                        accent: var(--dark-accent-color)
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 </html>
