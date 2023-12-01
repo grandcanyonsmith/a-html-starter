@@ -86,6 +86,7 @@ const displayPreviousRuns = async () => {
             if (index === 0) firstRunId = testRun.id; // Save the id of the first test run
 
             const row = createElement('tr', '', '');
+            
             row.appendChild(createElement('td', testRun.id, 'px-4 py-2'));
             row.appendChild(renderStatusCell(testRun.status));
             row.appendChild(createElement('td', testRun.timestamp, 'px-4 py-2'));
@@ -120,12 +121,15 @@ const renderStatusCell = (status) => {
 // Displaying run details
 const displayRunDetails = (runId, previousRunsData) => {
     const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
+    const videoContainer = document.getElementById('videoContainer');
     const testRun = previousRunsData.find(run => run.id === runId);
+
 
     if (testRun) {
         testRunDetailsHeader.innerHTML = '';
+        videoContainer.innerHTML = ''; // Clear the video container
 
-        // Header container
+
         const headerDiv = createElement('div', '', 'lg:flex lg:items-center lg:justify-between bg-gray-800 px-4 py-5 sm:px-6');
 
         // Left side container
