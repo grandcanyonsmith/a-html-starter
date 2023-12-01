@@ -121,8 +121,13 @@ const renderStatusCell = (status) => {
 // Displaying run details
 const displayRunDetails = (runId, previousRunsData) => {
     const testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
-    const videoUrl = testRun.videoUrl || 'https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4';
+    const videoContainer = document.getElementById('videoContainer');
+    const testRun = previousRunsData.find(run => run.id === runId);
 
+    if (!testRun) {
+        console.error(`No test run found with id: ${runId}`);
+        return;
+    }
     // Create a new video element with the video URL
     const videoElement = document.createElement('video');
     videoElement.src = videoUrl;
