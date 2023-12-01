@@ -128,6 +128,9 @@ const displayRunDetails = (runId, previousRunsData) => {
         console.error(`No test run found with id: ${runId}`);
         return;
     }
+
+    // Check if the test run has a video URL, otherwise use the backup URL
+    const videoUrl = testRun.videoUrl || 'https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4';
     // Create a new video element with the video URL
     const videoElement = document.createElement('video');
     videoElement.src = videoUrl;
