@@ -47,7 +47,7 @@
                     alert(JSON.stringify(response.data));
                     console.log(response.data,'response data');
                     console.log(response.data.uId,'uId');
-                    window.location.href = `view-all-projects.html?uId=${response.data.uId}`;
+                    window.location.href = `view-all-projects-with-nav.html?uId=${response.data.uId}`;
                 }
             } catch (error) {
                 errorParagraph.textContent = 'An error occurred!';
