@@ -180,17 +180,20 @@ if (testRun) {
     const videoUrl = testRun.videoUrl || 'https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4';
     // Create a new video element with the video URL
         // Create a new video element with the video URL
-    const videoElement = document.createElement('video');
-    videoElement.src = videoUrl;
-    videoElement.controls = true;
-    videoElement.className = 'w-full h-full';
+        // Create a new video element with the video URL
+        const videoElement = document.createElement('video');
+        videoElement.src = videoUrl;
+        videoElement.controls = true;
+        videoElement.className = 'w-full h-full';
+        videoElement.preload = 'metadata'; // Ensure metadata is loaded for duration
 
-    // Append the video element to the video container
-    videoContainer.appendChild(videoElement);
+        // Append the video element to the video container
+        videoContainer.appendChild(videoElement);
 
-    // Append the video element to the video container
-    videoContainer.appendChild(videoElement);
-    }
+        // Set the video to preview at halfway point once metadata is loaded
+        videoElement.addEventListener('loadedmetadata', () => {
+            videoElement.currentTime = videoElement.duration / 2;
+        });
 };
 
 // Getting URL parameters
