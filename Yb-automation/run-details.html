@@ -129,20 +129,11 @@ const displayRunDetails = (runId, previousRunsData) => {
         return;
     }
 
-    // Check if the test run has a video URL, otherwise use the backup URL
-    const videoUrl = testRun.videoUrl || 'https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4';
-    // Create a new video element with the video URL
-    const videoElement = document.createElement('video');
-    videoElement.src = videoUrl;
-    videoElement.controls = true;
-    videoElement.className = 'w-full h-full';
 
-    // Append the video element to the video container
-    videoContainer.appendChild(videoElement);
+if (testRun) {
+    testRunDetailsHeader.innerHTML = '';
+    videoContainer.innerHTML = ''; // Clear the video container before creating a new video element
 
-    if (testRun) {
-        testRunDetailsHeader.innerHTML = '';
-        videoContainer.innerHTML = ''; // Clear the video container
 
 
         const headerDiv = createElement('div', '', 'lg:flex lg:items-center lg:justify-between bg-gray-800 px-4 py-5 sm:px-6');
@@ -184,6 +175,21 @@ const displayRunDetails = (runId, previousRunsData) => {
 
         // Append the header to the page
         testRunDetailsHeader.appendChild(headerDiv);
+    
+    // Check if the test run has a video URL, otherwise use the backup URL
+    const videoUrl = testRun.videoUrl || 'https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4';
+    // Create a new video element with the video URL
+        // Create a new video element with the video URL
+    const videoElement = document.createElement('video');
+    videoElement.src = videoUrl;
+    videoElement.controls = true;
+    videoElement.className = 'w-full h-full';
+
+    // Append the video element to the video container
+    videoContainer.appendChild(videoElement);
+
+    // Append the video element to the video container
+    videoContainer.appendChild(videoElement);
     }
 };
 
