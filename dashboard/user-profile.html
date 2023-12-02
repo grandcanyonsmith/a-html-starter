@@ -5,56 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credentials Input Form</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
 <body class="bg-gray-100 p-8">
-    <div id="app" class="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+    <div id="app" class="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <!-- AWS Access Key Field -->
         <div class="mb-4">
             <label for="awsAccessKey" class="block text-gray-700 text-sm font-bold mb-2">AWS Access Key</label>
-            <div class="relative">
+            <div class="flex justify-between items-center">
                 <input type="password" id="awsAccessKey" placeholder="AWS Access Key" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                    <a href="#" onclick="toggleVisibility('awsAccessKey')">Show</a>
-                </span>
+                <a href="#" class="ml-3 text-blue-600 hover:text-blue-800" onclick="toggleVisibility('awsAccessKey')">Show</a>
             </div>
         </div>
 
         <!-- AWS Secret ID Field -->
         <div class="mb-4">
             <label for="awsSecretId" class="block text-gray-700 text-sm font-bold mb-2">AWS Secret ID</label>
-            <div class="relative">
+            <div class="flex justify-between items-center">
                 <input type="password" id="awsSecretId" placeholder="AWS Secret ID" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                    <a href="#" onclick="toggleVisibility('awsSecretId')">Show</a>
-                </span>
+                <a href="#" class="ml-3 text-blue-600 hover:text-blue-800" onclick="toggleVisibility('awsSecretId')">Show</a>
             </div>
         </div>
 
         <!-- GitHub Personal Access Token Field -->
         <div class="mb-4">
             <label for="githubPersonalAccessToken" class="block text-gray-700 text-sm font-bold mb-2">GitHub Personal Access Token</label>
-            <div class="relative">
+            <div class="flex justify-between items-center">
                 <input type="password" id="githubPersonalAccessToken" placeholder="GitHub Personal Access Token" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                    <a href="#" onclick="toggleVisibility('githubPersonalAccessToken')">Show</a>
-                </span>
+                <a href="#" class="ml-3 text-blue-600 hover:text-blue-800" onclick="toggleVisibility('githubPersonalAccessToken')">Show</a>
             </div>
         </div>
 
         <!-- OpenAI API Key Field -->
         <div class="mb-4">
             <label for="openAiApiKey" class="block text-gray-700 text-sm font-bold mb-2">OpenAI API Key</label>
-            <div class="relative">
+            <div class="flex justify-between items-center">
                 <input type="password" id="openAiApiKey" placeholder="OpenAI API Key" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
-                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
-                    <a href="#" onclick="toggleVisibility('openAiApiKey')">Show</a>
-                </span>
+                <a href="#" class="ml-3 text-blue-600 hover:text-blue-800" onclick="toggleVisibility('openAiApiKey')">Show</a>
             </div>
         </div>
 
