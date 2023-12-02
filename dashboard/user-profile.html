@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Credentials Input Form</title>
-        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body class="bg-gray-100 p-8">
@@ -41,7 +41,7 @@
             // Get uid from URL
             const queryParams = new URLSearchParams(window.location.search);
             const uId = queryParams.get('uId');
-
+            const requestType = 'UPDATE_USER_CREDENTIALS'
             // Prepare the data to be sent
             const data = {
                 uId,
@@ -55,7 +55,7 @@
             console.log(data);
 
             // Send the post request
-            axios.post('http://localhost:5000/', data)
+            axios.post('https://birtn6fkxczvtksmiusfpagcb40zhdrb.lambda-url.us-west-2.on.aws/', data)
                 .then(function (response) {
                     alert('Credentials Successfully Updated!');
                     toggleEdit(false);
