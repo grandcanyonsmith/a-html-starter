@@ -55,8 +55,8 @@
     </div>
 
     <script>
-                function toggleEdit(isEditing) {
             const inputs = document.querySelectorAll('input, select');
+                function toggleEdit(isEditing) {
             inputs.forEach(input => {
                 input.disabled = !isEditing;
             });
