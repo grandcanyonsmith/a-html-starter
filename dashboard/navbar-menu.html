@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -13,62 +14,95 @@
             border-radius: 50%;
             display: inline-block;
         }
-    .bell-dot {
-        height: 4px;
-        width: 4px;
-        background-color: #3490dc;
-        border-radius: 50%;
-        display: inline-block;
-        position: absolute;
-        top: -2px;
-        right: -2px;
-    }
+        .bell-dot {
+            height: 4px;
+            width: 4px;
+            background-color: #3490dc;
+            border-radius: 50%;
+            display: inline-block;
+            position: absolute;
+            top: -2px;
+            right: -2px;
+        }
     </style>
 </head>
 <body>
 <nav class="flex items-center justify-between p-6 bg-white">
-        <div class="flex items-center">
-            <img src="/path/to/company-logo.png" alt="Company Logo" class="w-12 h-12">
-        </div>
-        <div class="flex items-center">
-            <button class="mr-6" onclick="navigateTo('create-new-project.html')">
-                <i class="fas fa-plus"></i>
+    <div class="flex items-center">
+        <img src="/path/to/company-logo.png" alt="Company Logo" class="w-12 h-12">
+    </div>
+    <div class="flex items-center">
+        <button class="mr-6" onclick="navigateTo('create-new-project.html')">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="relative">
+            <button id="notification-btn" class="mr-6" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
             </button>
-            <div class="relative">
-                <button id="notification-btn" class="mr-6" aria-label="Notifications">
-                    <i class="fas fa-bell"></i>
-                </button>
-                <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10">
-                    <div class="flex justify-between items-center px-4 py-2 text-sm">
-                        <strong>Notifications</strong>
-                        <button onclick="navigateTo('viewAllNotifications.html')">View all</button>
-                    </div>
-                    <!-- Notifications will be appended here by JavaScript -->
-                </div>
-            </div>
-            <div class="relative">
-                <button id="profile-btn" class="focus:outline-none" aria-label="Profile">
-                    <img src="/path/to/user-profile.jpg" alt="User Profile" class="w-6 h-6">
-                </button>
-                <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
-<div class="block px-4 py-2 text-sm text-gray-400 mb-2">canyonfsmith@gmail.com</div>
-<a href="profile.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-<a href="account.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account</a>
-<a href="logout.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
-                </div>
+            <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10">
+                <!-- Notifications will be appended here by JavaScript -->
             </div>
         </div>
-    </nav>
+        <div class="relative">
+            <button id="profile-btn" class="focus:outline-none" aria-label="Profile">
+                <img src="/path/to/user-profile.jpg" alt="User Profile" class="w-6 h-6">
+            </button>
+            <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                <div class="block px-4 py-2 text-sm text-gray-400 mb-2">canyonfsmith@gmail.com</div>
+                <a href="#" id="profile-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                <a href="account.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account</a>
+                <a href="logout.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
 <script>
     const profileBtn = document.getElementById('profile-btn');
     const profileDropdown = document.getElementById('profile-dropdown');
     const notificationBtn = document.getElementById('notification-btn');
     const notificationDropdown = document.getElementById('notification-dropdown');
+    const profileLink = document.getElementById('profile-link');
 
+    profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown(profileDropdown);
+    });
+
+    profileLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateTo('user-profile.html', { uId: 11 });
+    });
+
+    notificationBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown(notificationDropdown);
+    });
+
+    window.addEventListener('click', (e) => {
+        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    function toggleDropdown(dropdown) {
+        dropdown.classList.toggle('hidden');
+    }
+
+    function navigateTo(url, params) {
+        if (params) {
+            url += '?' + new URLSearchParams(params).toString();
+        }
+        window.location.assign(url);
+    }
+
+    // Example notifications data
     const allNotifications = [
-        {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: false},
-        {repoName: 'a-html-repo', fileName: 'about.html', updatedTime: '3 min ago', viewedNotification: true},
+        {repoName: 'a-html-repo', fileName: 'index.html', updatedTime: '3 min ago', viewedNotification: false},
+        {repoName: 'another-repo', fileName: 'contact.html', updatedTime: '10 min ago', viewedNotification: true},
         // Add more notifications as needed
     ];
 
@@ -99,32 +133,6 @@
         bellDot.classList.add('bell-dot');
         notificationBtn.style.position = 'relative';
         notificationBtn.appendChild(bellDot);
-    }
-
-profileBtn.addEventListener('click', () => {
-    navigateTo('user-profile.html', { uId: 11 });
-});
-notificationBtn.addEventListener('click', () => toggleDropdown(notificationDropdown));
-
-    window.addEventListener('click', (e) => {
-        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
-            profileDropdown.classList.add('hidden');
-        }
-        if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
-            notificationDropdown.classList.add('hidden');
-        }
-    });
-
-    function toggleDropdown(dropdown) {
-        dropdown.classList.toggle('hidden');
-    }
-
-
-    function navigateTo(url, params) {
-        if (params) {
-            url += '?' + new URLSearchParams(params).toString();
-        }
-        window.location.assign(url);
     }
 </script>
 </body>
