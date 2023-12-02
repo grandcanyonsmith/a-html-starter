@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Page with Navbar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .blue-dot {
+            height: 10px;
+            width: 10px;
+            background-color: #3490dc;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .bell-dot {
+            height: 4px;
+            width: 4px;
+            background-color: #3490dc;
+            border-radius: 50%;
+            display: inline-block;
+            position: absolute;
+            top: -2px;
+            right: -2px;
+        }
+    </style>
+</head>
+<body>
+<nav class="flex items-center justify-between p-6 bg-white">
+    <div class="flex items-center">
+        <img src="/path/to/company-logo.png" alt="Company Logo" class="w-12 h-12">
+    </div>
+    <div class="flex items-center">
+        <button class="mr-6" onclick="navigateTo('create-new-project.html')">
+            <i class="fas fa-plus"></i>
+        </button>
+        <div class="relative">
+            <button id="notification-btn" class="mr-6" aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+            </button>
+            <div id="notification-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg py-1 z-10">
+                <!-- Notifications will be appended here by JavaScript -->
+            </div>
+        </div>
+        <div class="relative">
+            <button id="profile-btn" class="focus:outline-none" aria-label="Profile">
+                <img src="/path/to/user-profile.jpg" alt="User Profile" class="w-6 h-6">
+            </button>
+            <div id="profile-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10">
+                <div class="block px-4 py-2 text-sm text-gray-400 mb-2">canyonfsmith@gmail.com</div>
+                <a href="#" id="profile-link" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                <a href="account.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account</a>
+                <a href="logout.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Log Out</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="p-10">
+    <h1 class="text-3xl mb-2">Projects</h1>
+    <div class="flex items-center mb-10">
+        <input class="border p-2 rounded mr-4 flex-grow" type="text" placeholder="Search..." id="searchInput">
+        <button class="border p-2 rounded" id="addButton">Add New +</button>
+    </div>
+    <div class="grid grid-cols-3 gap-4" id="projectsContainer">
+        <!-- Projects will be loaded here -->
+    </div>
+</div>
+
+<script>
+    // Navbar JavaScript
+    const profileBtn = document.getElementById('profile-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const notificationBtn = document.getElementById('notification-btn');
+    const notificationDropdown = document.getElementById('notification-dropdown');
+    const profileLink = document.getElementById('profile-link');
+
+    profileBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown(profileDropdown);
+    });
+
+    profileLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateTo('user-profile.html');
+    });
+
+    notificationBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleDropdown(notificationDropdown);
+    });
+
+    window.addEventListener('click', (e) => {
+        if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.add('hidden');
+        }
+        if (!notificationBtn.contains(e.target) && !notificationDropdown.contains(e.target)) {
+            notificationDropdown.classList.add('hidden');
+        }
+    });
+
+    function toggleDropdown(dropdown) {
+        dropdown.classList.toggle('hidden');
+    }
+
+    function navigateTo(url, params) {
+        let currentParams = new URLSearchParams(window.location.search);
+        let uId = currentParams.get('uId');
+        if (uId) {
+            params = params || {};
+            params.uId = uId;
+        }
+        if (params) {
+            url += '?' + new URLSearchParams(params).toString();
+        }
+        window.location.assign(url);
+    }
+
+    // Projects Page JavaScript
+    document.getElementById('addButton').addEventListener('click', () => {
+        navigateTo('create-new-project.html');
+    });
+
+    let projectList = []; // Initialize projectList to store fetched projects
+
+    const displayProjects = (projects, uId) => {
+        const projectsContainer = document.getElementById('projectsContainer');
+        projectsContainer.innerHTML = '';
+        projects.forEach(project => {
+            const projectHTML = `
+                <a class="project-link" href="view-project.html?projectId=${project.projectId}&uId=${uId}">
+                    <div class="border p-4 rounded">
+                        <div class="flex items-center">
+                            <img class="project-icon" src="${project.projectIcon || 'icon.png'}" alt="icon" class="w-6 h-6">
+                            <h2 class="ml-4">${project.projectName}</h2>
+                        </div>
+                        <p class="text-left text-sm">${project.lastUpdated}</p>
+                    </div>
+                </a>
+            `;
+            projectsContainer.innerHTML += projectHTML;
+        });
+    }
+
+    window.onload = () => {
+        let uId = new URLSearchParams(window.location.search).get('uId') || '1';
+        console.log(uId); // Console log the uId
+
+        axios.post('https://tvbuvokazmaktj5vxl3czencoy0twlmp.lambda-url.us-west-2.on.aws/', {
+            uId: uId,
+            requestType: 'FETCH_ALL_PROJECTS'
+        })
+        .then(function (response) {
+            console.log(response);
+            projectList = response.data.map(project => ({
+                ...project,
+                lastUpdated: new Date(project.lastUpdated * 1000).toLocaleString(), // Convert Unix timestamp to readable date-time
+                githubUsername: project.githubUserName
+            }));
+            displayProjects(projectList, uId);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const filteredProjects = projectList.filter(project => 
+                project.projectName.toLowerCase().includes(e.target.value.toLowerCase())
+            );
+            displayProjects(filteredProjects, uId);
+        });
+    }
+</script>
+</body>
+</html>
