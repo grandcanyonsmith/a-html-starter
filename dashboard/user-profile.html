@@ -6,38 +6,70 @@
     <title>Credentials Input Form</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 p-8">
     <div id="app" class="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
-        <button id="editButton" class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="toggleEdit(true)">Edit</button>
-        
-        <div id="buttonsGroup" class="mb-4 flex justify-between invisible">
-            <button id="cancelButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="toggleEdit(false)">Cancel</button>
-            <button id="saveButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="saveCredentials()">Save</button>
+        <!-- AWS Access Key Field -->
+        <div class="mb-4">
+            <label for="awsAccessKey" class="block text-gray-700 text-sm font-bold mb-2">AWS Access Key</label>
+            <div class="relative">
+                <input type="password" id="awsAccessKey" placeholder="AWS Access Key" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <a href="#" onclick="toggleVisibility('awsAccessKey')">Show</a>
+                </span>
+            </div>
         </div>
 
-        <label for="awsAccessKey" class="block text-gray-700 text-sm font-bold mb-2">AWS Access Key</label>
-        <input type="text" id="awsAccessKey" placeholder="AWS Access Key" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" disabled>
-        
-        <label for="awsSecretId" class="block text-gray-700 text-sm font-bold mb-2">AWS Secret ID</label>
-        <input type="text" id="awsSecretId" placeholder="AWS Secret ID" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" disabled>
-        
-        <label for="githubPersonalAccessToken" class="block text-gray-700 text-sm font-bold mb-2">GitHub Personal Access Token</label>
-        <input type="text" id="githubPersonalAccessToken" placeholder="GitHub Personal Access Token" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" disabled>
-        
-        <label for="openAiApiKey" class="block text-gray-700 text-sm font-bold mb-2">OpenAI API Key</label>
-        <input type="text" id="openAiApiKey" placeholder="OpenAI API Key" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" disabled>
-        
-        <!-- Added Default OpenAI Model dropdown -->
-        <label for="defaultOpenAiModel" class="block text-gray-700 text-sm font-bold mb-2">Default OpenAI Model</label>
-        <select id="defaultOpenAiModel" class="mb-4 bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" disabled>
-            <option value="gpt-4-0613">gpt-4-0613</option>
-            <option value="gpt-4-1106-preview">gpt-4-1106-preview</option>
-        </select>
+        <!-- AWS Secret ID Field -->
+        <div class="mb-4">
+            <label for="awsSecretId" class="block text-gray-700 text-sm font-bold mb-2">AWS Secret ID</label>
+            <div class="relative">
+                <input type="password" id="awsSecretId" placeholder="AWS Secret ID" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <a href="#" onclick="toggleVisibility('awsSecretId')">Show</a>
+                </span>
+            </div>
+        </div>
+
+        <!-- GitHub Personal Access Token Field -->
+        <div class="mb-4">
+            <label for="githubPersonalAccessToken" class="block text-gray-700 text-sm font-bold mb-2">GitHub Personal Access Token</label>
+            <div class="relative">
+                <input type="password" id="githubPersonalAccessToken" placeholder="GitHub Personal Access Token" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <a href="#" onclick="toggleVisibility('githubPersonalAccessToken')">Show</a>
+                </span>
+            </div>
+        </div>
+
+        <!-- OpenAI API Key Field -->
+        <div class="mb-4">
+            <label for="openAiApiKey" class="block text-gray-700 text-sm font-bold mb-2">OpenAI API Key</label>
+            <div class="relative">
+                <input type="password" id="openAiApiKey" placeholder="OpenAI API Key" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                <span class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <a href="#" onclick="toggleVisibility('openAiApiKey')">Show</a>
+                </span>
+            </div>
+        </div>
+
+        <!-- Default OpenAI Model Dropdown -->
+        <div class="mb-4">
+            <label for="defaultOpenAiModel" class="block text-gray-700 text-sm font-bold mb-2">Default OpenAI Model</label>
+            <select id="defaultOpenAiModel" class="bg-gray-200 border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                <option value="gpt-4-0613">gpt-4-0613</option>
+                <option value="gpt-4-1106-preview">gpt-4-1106-preview</option>
+            </select>
+        </div>
     </div>
 
     <script>
-        function toggleEdit(isEditing) {
+                function toggleEdit(isEditing) {
             const inputs = document.querySelectorAll('input, select');
             inputs.forEach(input => {
                 input.disabled = !isEditing;
@@ -93,6 +125,18 @@
                 .catch(function (error) {
                     console.error('Error fetching credentials:', error);
                 });
+        }
+
+                function toggleVisibility(id) {
+            const input = document.getElementById(id);
+            const link = input.nextElementSibling.querySelector('a');
+            if (input.type === 'password') {
+                input.type = 'text';
+                link.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                link.textContent = 'Show';
+            }
         }
 
         window.onload = function() {
