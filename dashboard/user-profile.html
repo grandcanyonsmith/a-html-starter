@@ -43,6 +43,15 @@
             </div>
         </div>
 
+        <!-- GitHub Username Field -->
+        <div class="mb-4">
+            <label for="githubUserName" class="block text-gray-700 text-sm font-bold mb-2">GitHub Username</label>
+            <div class="flex justify-between items-center">
+                <input type="password" id="githubUserName" placeholder="GitHub Username" class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+                <a href="#" class="ml-3 text-blue-600 hover:text-blue-800" onclick="toggleVisibility('githubUserName')">Show</a>
+            </div>
+        </div>
+
         <!-- OpenAI API Key Field -->
         <div class="mb-4">
             <label for="openAiApiKey" class="block text-gray-700 text-sm font-bold mb-2">OpenAI API Key</label>
@@ -79,6 +88,7 @@
             const awsSecretId = document.getElementById('awsSecretId').value;
             const githubPersonalAccessToken = document.getElementById('githubPersonalAccessToken').value;
             const openAiApiKey = document.getElementById('openAiApiKey').value;
+            const githubUserName = document.getElementById('githubUserName').value;
             const defaultOpenAiModel = document.getElementById('defaultOpenAiModel').value;
 
             const queryParams = new URLSearchParams(window.location.search);
@@ -91,6 +101,7 @@
                 githubPersonalAccessToken,
                 openAiApiKey,
                 defaultOpenAiModel,
+                githubUserName,
                 requestType
             };
 
@@ -116,6 +127,7 @@
                     document.getElementById('awsAccessKey').value = response.data.awsAccessId || '';
                     document.getElementById('awsSecretId').value = response.data.awsSecretKey || '';
                     document.getElementById('githubPersonalAccessToken').value = response.data.githubPersonalAccessToken || '';
+                    document.getElementById('githubUserName').value = response.data.githubUserName || '';
                     document.getElementById('openAiApiKey').value = response.data.openAiApiKey || '';
                     document.getElementById('defaultOpenAiModel').value = response.data.defaultOpenAiModel || 'gpt-4-0613';
                 })
@@ -141,4 +153,3 @@
         };
     </script>
 </body>
-</html>
