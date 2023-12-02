@@ -1,1 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credentials Input Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div id="app" class="max-w-lg mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col">
+        <button id="editButton" class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="toggleEdit(true)">Edit</button>
+        
+        <div id="buttonsGroup" class="mb-4 flex justify-between invisible">
+            <button id="cancelButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="toggleEdit(false)">Cancel</button>
+            <button id="saveButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="saveCredentials()">Save</button>
+        </div>
 
+        <input type="text" id="awsAccessKey" placeholder="AWS Access Key" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+        
+        <input type="text" id="awsSecretId" placeholder="AWS Secret Id" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+        
+        <input type="text" id="githubPersonalAccessToken" placeholder="Github Personal Access Token" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+        
+        <input type="text" id="openAiApiKey" placeholder="OpenAI API Key" class="mb-4 bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500">
+    </div>
+
+    <script>
+        function toggleEdit(isEditing) {
+            document.getElementById('editButton').classList.toggle('invisible', isEditing);
+            document.getElementById('buttonsGroup').classList.toggle('invisible', !isEditing);
+        }
+
+        function saveCredentials() {
+            // Collect form data
+            const awsAccessKey = document.getElementById('awsAccessKey').value;
+            const awsSecretId = document.getElementById('awsSecretId').value;
+            const githubPersonalAccessToken = document.getElementById('githubPersonalAccessToken').value;
+            const openAiApiKey = document.getElementById('openAiApiKey').value;
+
+            // Get uid from URL
+            const queryParams = new URLSearchParams(window.location.search);
+            const uId = queryParams.get('uId');
+
+            // Prepare the data to be sent
+            const data = {
+                uId,
+                awsAccessId: awsAccessKey,
+                awsSecretKey: awsSecretId,
+                githubPersonalAccessToken,
+                openAiApiKey
+            };
+
+            // Display data on the console
+            console.log(data);
+
+            // Send the post request
+            axios.post('http://localhost:5000/', data)
+                .then(function (response) {
+                    alert('Credentials Successfully Updated!');
+                    toggleEdit(false);
+                })
+                .catch(function (error) {
+                    console.error('Error updating credentials:', error);
+                });
+        }
+    </script>
+</body>
+</html>
