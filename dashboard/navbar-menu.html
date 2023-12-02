@@ -101,8 +101,10 @@
         notificationBtn.appendChild(bellDot);
     }
 
-    profileBtn.addEventListener('click', () => toggleDropdown(profileDropdown));
-    notificationBtn.addEventListener('click', () => toggleDropdown(notificationDropdown));
+profileBtn.addEventListener('click', () => {
+    navigateTo('user-profile.html', { uId: 11 });
+});
+notificationBtn.addEventListener('click', () => toggleDropdown(notificationDropdown));
 
     window.addEventListener('click', (e) => {
         if (!profileBtn.contains(e.target) && !profileDropdown.contains(e.target)) {
@@ -117,7 +119,11 @@
         dropdown.classList.toggle('hidden');
     }
 
-    function navigateTo(url) {
+
+    function navigateTo(url, params) {
+        if (params) {
+            url += '?' + new URLSearchParams(params).toString();
+        }
         window.location.assign(url);
     }
 </script>
