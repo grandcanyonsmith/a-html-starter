@@ -181,6 +181,7 @@ if (testRun) {
     // Create a new video element with the video URL
         // Create a new video element with the video URL
         // Create a new video element with the video URL
+        // Create a new video element with the video URL
         const videoElement = document.createElement('video');
         videoElement.src = videoUrl;
         videoElement.controls = true;
@@ -194,7 +195,8 @@ if (testRun) {
         videoElement.addEventListener('loadedmetadata', () => {
             videoElement.currentTime = videoElement.duration / 2;
         });
-};
+    }
+}; // This closing brace ends the displayRunDetails function
 
 // Getting URL parameters
 const getParamsFromUrl = () => {
