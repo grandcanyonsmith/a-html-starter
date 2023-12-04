@@ -43,7 +43,7 @@
             .then(function (response) {
                 alert(JSON.stringify(response.data)); // Alert the whole response
                 if(response.data.uId) {
-                    window.location.href = `view-all-projects.html?uId=${response.data.uId}`;
+                    window.location.href = `view-all-projects-with-nav.html?uId=${response.data.uId}`;
                 }
             })
             .catch(function (error) {
