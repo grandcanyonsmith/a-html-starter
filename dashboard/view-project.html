@@ -4,161 +4,46 @@
     <title>File Contents</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism-okaidia.min.css" rel="stylesheet">
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<style>
-
-    .tabsContainer, .codeBoxOptionsContainer {
-        display: flex;
-        align-items: center;
-    }
-    .tab {
-        display: inline-block;
-        padding: 10px;
-        padding-right: 20px; /* Add some padding to the right */
-        border: 1px solid #ccc;
-        margin-right: 5px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        max-width: 250px;
-        position: relative;
-        font-size: 12px;
-        cursor: pointer;
-    }
-    .close {
-        position: absolute;
-        right: 5px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: lightgray;
-        cursor: pointer;
-    }
-    .add {
-        display: inline-block;
-        padding: 10px;
-        border: 1px solid #ccc;
-        margin-left: 5px;
-        cursor: pointer;
-    }
-/* Remove or comment out styles that use absolute positioning */
-#editCodeButton {
-    /* position: absolute; */
-    /* right: 0; */
-    /* top: 60px; */
-}
-
-
-/* Add a container for the header elements */
-.header-container {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-}
-
-/* Adjust the main container to be a flex container */
-/* Adjust the main container to be a flex container */
-/* Adjust the main container to be a flex container */
-body {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0;
-    padding-bottom: 60px; /* Adjust this value based on the height of your user request container */
-
-}
-
-
-
-.code-container {
-    flex-grow: 1; /* This will allow the container to expand */
-    width: 100%;
-    overflow: auto;
-    display: flex; /* Make sure this is a flex container */
-    flex-direction: column; /* Stack children vertically */
-}
-
-/* Ensure #previewRenderCodeBox takes up all available space */
-/* Ensure both #previewRenderCodeBox and #editCodeBox take up all available space */
-#previewRenderCodeBox, #editCodeBox {
-    flex-grow: 1; /* Allow these boxes to grow and fill available space */
-    width: 100%; /* Full width */
-}
-#previewCodeIframe {
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    border: none; /* Remove border */
-}
-    #editCodeBox {
-        height: 500px; /* Add this line */
-    }
-/* Style for the user request container */
-/* Style for the user request container */
-#userRequestContainer {
-    position: fixed; /* Make the container fixed position */
-    bottom: 0; /* Stick it to the bottom */
-    left: 0; /* Align it to the left */
-    right: 0; /* Align it to the right */
-    z-index: 1000; /* Ensure it's above other elements */
-    background: #f9f9f9; /* Different background to distinguish the area */
-    border-top: 1px solid #ccc; /* Add a border at the top */
-    padding: 10px; /* Add some padding */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2); /* Optional: add shadow for better separation */
-}
-
-/* Style for the textarea inside the edit code box */
-#editCodeTextArea {
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    border: none; /* Remove border */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-</style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<!-- Add a new div with class header-container to wrap header elements -->
-<div class="header-container">
-    <select id="fileSelect" onchange="fetchFileContents(this.value)">
-        <option>Select File</option>
-    </select>
-    <button id="executeCodeButton" style="position: absolute; right: 0; display: none;">Run Code</button>
-    <div class="codeBoxOptionsContainer">
-        <button id="viewCodeButton">View Code</button>
-        <button id="previewCodeButton">Preview Code</button>
-        <button id="viewLogsButton">View Logs</button>
+<body class="flex flex-col h-screen m-0 pb-16">
+    <div class="flex flex-col items-stretch w-full">
+        <div class="mb-2">
+            <select id="fileSelect" onchange="fetchFileContents(this.value)" class="w-full">
+                <option>Select File</option>
+            </select>
+        </div>
+        <button id="executeCodeButton" class="absolute right-0 hidden">Run Code</button>
+        <div class="flex items-center mb-2">
+            <button id="viewCodeButton" class="mr-2">View Code</button>
+            <button id="previewCodeButton" class="mr-2">Preview Code</button>
+            <button id="viewLogsButton" class="mr-2">View Logs</button>
+        </div>
+        <div class="flex items-center mb-2">
+            <div id="allTabs" class="mr-2"></div>
+            <div class="inline-block px-2 border border-gray-300 cursor-pointer" id="addTab">+</div>
+        </div>
+        <div class="mb-2">
+            <button id="saveSelectedFileButton" class="w-full">Save File</button>
+        </div>
+        <button id="editCodeButton" class="mr-2">Edit Code</button>
+        <button id="saveCodeEditsButton" class="hidden mr-2">Save</button>
+        <button id="cancelCodeEditsButton" class="hidden mr-2">Cancel</button>
     </div>
-    <div class="tabsContainer">
-        <div id="allTabs"></div>
-        <div class="add" id="addTab">+</div>
+    <div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
+        <pre><code id="codeBox" class="w-full"></code></pre>
     </div>
-    <div style="position: absolute; left: 0;">
-        <button id="saveSelectedFileButton">Save File</button>
-        <button id="saveAllFilesButton">Save All Files</button>
+    <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
+        <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
     </div>
-    <button id="editCodeButton">Edit Code</button>
-    <button id="saveCodeEditsButton" style="display: none;">Save</button>
-    <button id="cancelCodeEditsButton" style="display: none;">Cancel</button>
-</div>
-    <div class="code-container" id="viewCodeBox">
-        <pre><code id="codeBox"></code></pre>
+    <div class="flex-grow w-full overflow-auto flex flex-col" id="previewRenderCodeBox">
+        <iframe id="previewCodeIframe" class="w-full h-full border-none"></iframe>
     </div>
-    <div class="code-container" style="display: none;" id="editCodeBox">
-        <textarea id="editCodeTextArea" style="width: 100%; height: 100%;"></textarea>
+    <div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-2 shadow-md">
+        <input type="text" id="userRequestInputBox" class="w-full placeholder-gray-500" placeholder="Enter your request here">
+        <button id="submitUserRequestButton" class="mt-2">Submit</button>
+        <button id="addReferenceButton" class="mt-2">Add Reference File</button>
     </div>
-<!-- Code container for the preview box -->
-<div class="code-container" id="previewRenderCodeBox">
-    <iframe id="previewCodeIframe"></iframe>
-</div>
-
-<!-- Container for the user request input and buttons -->
-<div id="userRequestContainer">
-    <input type="text" id="userRequestInputBox" placeholder="Enter your request here">
-    <button id="submitUserRequestButton">Submit</button>
-    <button id="addReferenceButton">Add Reference File</button>
-</div>
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-javascript.min.js"></script>
@@ -250,6 +135,7 @@ const handlePreviewClick = () => {
     const {fileContents} = fileDataArray[currentSelectedTab];
     elements.previewCodeIframe.srcdoc = fileContents;
     elements.previewRenderCodeBox.style.display = 'block';
+    elements.viewCodeBox.style.display = 'none';
     highlightSelectedButton('previewCodeButton');
 };
 
@@ -358,13 +244,14 @@ const showExecuteCodeButton = (fileName) => {
 };
 
 // Event listeners
-elements.addTab.addEventListener('click', handleAddClick);
 elements.viewCodeButton.addEventListener('click', () => {
     highlightSelectedButton('viewCodeButton');
-    showOrHideCodeBox('viewCodeButton');
+    elements.viewCodeBox.style.display = 'block';
     elements.previewRenderCodeBox.style.display = 'none'; 
-    elements.editCodeButton.style.display = 'inline-block'; // Add this line
+    elements.editCodeBox.style.display = 'none';
+    elements.editCodeButton.style.display = 'inline-block'; 
 });
+
 elements.viewLogsButton.addEventListener('click', () => {
     highlightSelectedButton('viewLogsButton');
     showOrHideCodeBox('viewLogsButton');
@@ -377,11 +264,10 @@ elements.viewLogsButton.addEventListener('click', () => {
 
 elements.previewCodeButton.addEventListener('click', () => {
     highlightSelectedButton('previewCodeButton');
-    showOrHideCodeBox('previewCodeButton');
+    elements.viewCodeBox.style.display = 'none';
+    elements.previewRenderCodeBox.style.display = 'block'; 
+    elements.editCodeBox.style.display = 'none';
     elements.editCodeButton.style.display = 'inline-block';
-    elements.saveCodeEditsButton.style.display = 'none';
-    elements.cancelCodeEditsButton.style.display = 'none';
-    elements.editCodeBox.style.display = 'none'; // Add this line
     handlePreviewClick();
 });
 
@@ -390,6 +276,7 @@ elements.editCodeButton.addEventListener('click', () => {
     elements.saveCodeEditsButton.style.display = 'inline-block';
     elements.cancelCodeEditsButton.style.display = 'inline-block';
     elements.viewCodeBox.style.display = 'none';
+    elements.previewRenderCodeBox.style.display = 'none';
     elements.editCodeBox.style.display = 'block';
     elements.editCodeTextArea.value = fileDataArray[currentSelectedTab].fileContents;
 });
