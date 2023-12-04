@@ -180,54 +180,48 @@ let fileDataArray = [
     "fileContents": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Explore Space</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #000; color: #fff; }\n        .container { width: 80%; margin: auto; }\n        header { text-align: center; padding: 2rem 0; }\n        h1 { margin: 0; }\n        .content { margin: 2rem 0; }\n        img { max-width: 100%; height: auto; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <header>\n            <h1>Welcome to the Space Exploration Site</h1>\n        </header>\n        <div class=\"content\">\n            <h2>Our Universe</h2>\n            <p>Space is vast and has always been a subject of mystery and intrigue. The universe is filled with wonders like stars, planets, and galaxies.</p>\n            <img src=\"images/universe.jpg\" alt=\"Universe\">\n        </div>\n        <div class=\"content\">\n            <h2>Space Missions</h2>\n            <p>Humanity has embarked on numerous space missions to explore the unknown. From the Apollo moon landings to the Mars rovers, each mission has expanded our understanding of the cosmos.</p>\n            <img src=\"images/space-mission.jpg\" alt=\"Space Mission\">\n        </div>\n    </div>\n</body>\n</html>"
 }];
 
-
-// let fileDataArray = [
-//     { fileName: 'index.html', fileContents: '<!DOCTYPE html>\n<html>\n<head>\n</head>\n</html>' },
-//     { fileName: 'styles.css', fileContents: 'body {\n    background-color: #f0f0f0;\n}' },
-//     { fileName: 'script.js', fileContents: 'console.log("Hello, World!");\nlet x = 10;\nconsole.log(x);' },
-//     { fileName: 'main.py', fileContents: 'print("Hello, World!")\nnum = 10\nprint(num)' }
-// ];
-
 let currentSelectedTab = 0;
 
 // DOM Elements
-const allTabs = document.getElementById('allTabs');
-const addTab = document.getElementById('addTab');
-const codeBox = document.getElementById('codeBox');
-const codeContainer = document.querySelector('.code-container');
-const viewCodeButton = document.getElementById('viewCodeButton');
-const previewCodeButton = document.getElementById('previewCodeButton');
-const viewLogsButton = document.getElementById('viewLogsButton');
-const editCodeButton = document.getElementById('editCodeButton');
-const saveCodeEditsButton = document.getElementById('saveCodeEditsButton');
-const cancelCodeEditsButton = document.getElementById('cancelCodeEditsButton');
-const viewCodeBox = document.getElementById('viewCodeBox');
-const editCodeBox = document.getElementById('editCodeBox');
-const editCodeTextArea = document.getElementById('editCodeTextArea');
-const previewRenderCodeBox = document.getElementById('previewRenderCodeBox');
-const previewCodeIframe = document.getElementById('previewCodeIframe');
-const submitUserRequestButton = document.getElementById('submitUserRequestButton');
-const userRequestInputBox = document.getElementById('userRequestInputBox');
-const fileSelect = document.getElementById('fileSelect');
-const saveSelectedFileButton = document.getElementById('saveSelectedFileButton');
-const executeCodeButton = document.getElementById('executeCodeButton');
-
+const elements = {
+    allTabs: document.getElementById('allTabs'),
+    addTab: document.getElementById('addTab'),
+    codeBox: document.getElementById('codeBox'),
+    codeContainer: document.querySelector('.code-container'),
+    viewCodeButton: document.getElementById('viewCodeButton'),
+    previewCodeButton: document.getElementById('previewCodeButton'),
+    viewLogsButton: document.getElementById('viewLogsButton'),
+    editCodeButton: document.getElementById('editCodeButton'),
+    saveCodeEditsButton: document.getElementById('saveCodeEditsButton'),
+    cancelCodeEditsButton: document.getElementById('cancelCodeEditsButton'),
+    viewCodeBox: document.getElementById('viewCodeBox'),
+    editCodeBox: document.getElementById('editCodeBox'),
+    editCodeTextArea: document.getElementById('editCodeTextArea'),
+    previewRenderCodeBox: document.getElementById('previewRenderCodeBox'),
+    previewCodeIframe: document.getElementById('previewCodeIframe'),
+    submitUserRequestButton: document.getElementById('submitUserRequestButton'),
+    userRequestInputBox: document.getElementById('userRequestInputBox'),
+    fileSelect: document.getElementById('fileSelect'),
+    saveSelectedFileButton: document.getElementById('saveSelectedFileButton'),
+    executeCodeButton: document.getElementById('executeCodeButton')
+};
 
 // Helper functions
+const extractFileExtension = fileName => fileName.split('.').pop();
 const mapFileExtensionToPrismLanguage = extension => LANGUAGE_MAP[extension] || '';
 const highlightCodeWithPrism = (fileName, fileContents) => {
     const extension = extractFileExtension(fileName);
     const language = mapFileExtensionToPrismLanguage(extension);
-    codeBox.className = `language-${language}`;
-    codeBox.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+    elements.codeBox.className = `language-${language}`;
+    elements.codeBox.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
 }
 
 // Event handlers
 const handleTabClick = (event) => {
     const index = event.target.getAttribute('data-index');
     displayFileContentInTab(index);
-    viewCodeButton.click();
-    editCodeButton.style.display = 'inline-block';
+    elements.viewCodeButton.click();
+    elements.editCodeButton.style.display = 'inline-block';
     const fileName = fileDataArray[index].fileName;
     showExecuteCodeButton(fileName);
 };
@@ -254,8 +248,8 @@ const handleAddClick = () => {
 
 const handlePreviewClick = () => {
     const {fileContents} = fileDataArray[currentSelectedTab];
-    previewCodeIframe.srcdoc = fileContents;
-    previewRenderCodeBox.style.display = 'block';
+    elements.previewCodeIframe.srcdoc = fileContents;
+    elements.previewRenderCodeBox.style.display = 'block';
     highlightSelectedButton('previewCodeButton');
 };
 
@@ -274,11 +268,11 @@ const generateFileTabElement = (fileName, index) => {
     close.addEventListener('click', handleCloseClick);
 
     tab.appendChild(close);
-    allTabs.appendChild(tab);
+    elements.allTabs.appendChild(tab);
 };
 
 const generateAllFileTabElements = () => {
-    allTabs.innerHTML = '';
+    elements.allTabs.innerHTML = '';
     fileDataArray.forEach(({fileName}, index) => {
         generateFileTabElement(fileName, index);
     });
@@ -289,10 +283,10 @@ const displayFileContentInTab = index => {
     const {fileName, fileContents} = fileDataArray[index];
     highlightCodeWithPrism(fileName, fileContents);
     toggleViewButtonsBasedOnFileType(fileName);
-    viewCodeButton.click();
+    elements.viewCodeButton.click();
     highlightSelectedTab(index);
     resetEditCodeBox();
-    previewRenderCodeBox.style.display = 'none';
+    elements.previewRenderCodeBox.style.display = 'none';
 };
 
 const removeTabAndFileData = index => {
@@ -306,20 +300,19 @@ const removeTabAndFileData = index => {
 const toggleViewButtonsBasedOnFileType = (fileName) => {
     const extension = extractFileExtension(fileName);
     if (extension === 'html') {
-        previewCodeButton.style.display = 'inline-block';
-        viewLogsButton.style.display = 'inline-block';
-        executeCodeButton.style.display = 'none'; // Hide execute button
+        elements.previewCodeButton.style.display = 'inline-block';
+        elements.viewLogsButton.style.display = 'inline-block';
+        elements.executeCodeButton.style.display = 'none'; // Hide execute button
     } else if (extension === 'py') {
-        previewCodeButton.style.display = 'none';
-        viewLogsButton.style.display = 'inline-block';
-        executeCodeButton.style.display = 'inline-block'; // Show execute button
+        elements.previewCodeButton.style.display = 'none';
+        elements.viewLogsButton.style.display = 'inline-block';
+        elements.executeCodeButton.style.display = 'inline-block'; // Show execute button
     } else {
-        previewCodeButton.style.display = 'none';
-        viewLogsButton.style.display = 'none';
-        executeCodeButton.style.display = 'none'; // Hide execute button
+        elements.previewCodeButton.style.display = 'none';
+        elements.viewLogsButton.style.display = 'none';
+        elements.executeCodeButton.style.display = 'none'; // Hide execute button
     }
 }
-
 
 const highlightSelectedTab = (index) => {
     const tabs = document.querySelectorAll('.tab');
@@ -340,98 +333,75 @@ const highlightSelectedButton = (selectedButtonId) => {
 
 const showOrHideCodeBox = (selectedButtonId) => {
     if (selectedButtonId === 'viewCodeButton') {
-        codeContainer.style.display = 'block';
+        elements.codeContainer.style.display = 'block';
     } else {
-        codeContainer.style.display = 'none';
+        elements.codeContainer.style.display = 'none';
     }
 }
 
 const resetEditCodeBox = () => {
-    editCodeButton.style.display = 'inline-block';
-    saveCodeEditsButton.style.display = 'none';
-    cancelCodeEditsButton.style.display = 'none';
-    executeCodeButton.style.display = 'none'; // Hide execute button
-    viewCodeBox.style.display = 'block';
-    editCodeBox.style.display = 'none';
+    elements.editCodeButton.style.display = 'inline-block';
+    elements.saveCodeEditsButton.style.display = 'none';
+    elements.cancelCodeEditsButton.style.display = 'none';
+    elements.executeCodeButton.style.display = 'none'; // Hide execute button
+    elements.viewCodeBox.style.display = 'block';
+    elements.editCodeBox.style.display = 'none';
 }
-
-let uId;
-let projectId;
-
-function extractuIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    uId = urlParams.get('uId');
-    console.log('uId:', uId);
-    return uId;
-}
-
-function extractprojectIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    projectId = urlParams.get('projectId');
-    console.log('projectId:', projectId);
-    return projectId;
-}
-
-const extractFileExtension = fileName => {
-    const extension = fileName.split('.').pop();
-    console.log('File extension:', extension); // Add this line
-    return extension;
-};
 
 const showExecuteCodeButton = (fileName) => {
     const extension = extractFileExtension(fileName);
     if (extension === 'py') {
-        executeCodeButton.style.display = 'inline-block'; // Show execute button
+        elements.executeCodeButton.style.display = 'inline-block'; // Show execute button
     } else {
-        executeCodeButton.style.display = 'none'; // Hide execute button
+        elements.executeCodeButton.style.display = 'none'; // Hide execute button
     }
 };
 
 // Event listeners
-addTab.addEventListener('click', handleAddClick);
-viewCodeButton.addEventListener('click', () => {
+elements.addTab.addEventListener('click', handleAddClick);
+elements.viewCodeButton.addEventListener('click', () => {
     highlightSelectedButton('viewCodeButton');
     showOrHideCodeBox('viewCodeButton');
-    previewRenderCodeBox.style.display = 'none'; 
-    editCodeButton.style.display = 'inline-block'; // Add this line
+    elements.previewRenderCodeBox.style.display = 'none'; 
+    elements.editCodeButton.style.display = 'inline-block'; // Add this line
 });
-viewLogsButton.addEventListener('click', () => {
+elements.viewLogsButton.addEventListener('click', () => {
     highlightSelectedButton('viewLogsButton');
     showOrHideCodeBox('viewLogsButton');
-    previewRenderCodeBox.style.display = 'none'; 
-    editCodeButton.style.display = 'inline-block';
-    saveCodeEditsButton.style.display = 'none';
-    cancelCodeEditsButton.style.display = 'none';
-    editCodeBox.style.display = 'none'; // Add this line
+    elements.previewRenderCodeBox.style.display = 'none'; 
+    elements.editCodeButton.style.display = 'inline-block';
+    elements.saveCodeEditsButton.style.display = 'none';
+    elements.cancelCodeEditsButton.style.display = 'none';
+    elements.editCodeBox.style.display = 'none'; // Add this line
 });
 
-previewCodeButton.addEventListener('click', () => {
+elements.previewCodeButton.addEventListener('click', () => {
     highlightSelectedButton('previewCodeButton');
     showOrHideCodeBox('previewCodeButton');
-    editCodeButton.style.display = 'inline-block';
-    saveCodeEditsButton.style.display = 'none';
-    cancelCodeEditsButton.style.display = 'none';
-    editCodeBox.style.display = 'none'; // Add this line
+    elements.editCodeButton.style.display = 'inline-block';
+    elements.saveCodeEditsButton.style.display = 'none';
+    elements.cancelCodeEditsButton.style.display = 'none';
+    elements.editCodeBox.style.display = 'none'; // Add this line
     handlePreviewClick();
 });
 
-editCodeButton.addEventListener('click', () => {
-    editCodeButton.style.display = 'none';
-    saveCodeEditsButton.style.display = 'inline-block';
-    cancelCodeEditsButton.style.display = 'inline-block';
-    viewCodeBox.style.display = 'none';
-    editCodeBox.style.display = 'block';
-    editCodeTextArea.value = fileDataArray[currentSelectedTab].fileContents;
+elements.editCodeButton.addEventListener('click', () => {
+    elements.editCodeButton.style.display = 'none';
+    elements.saveCodeEditsButton.style.display = 'inline-block';
+    elements.cancelCodeEditsButton.style.display = 'inline-block';
+    elements.viewCodeBox.style.display = 'none';
+    elements.editCodeBox.style.display = 'block';
+    elements.editCodeTextArea.value = fileDataArray[currentSelectedTab].fileContents;
 });
-saveCodeEditsButton.addEventListener('click', () => {
-    fileDataArray[currentSelectedTab].fileContents = editCodeTextArea.value;
+elements.saveCodeEditsButton.addEventListener('click', () => {
+    fileDataArray[currentSelectedTab].fileContents = elements.editCodeTextArea.value;
     resetEditCodeBox();
     displayFileContentInTab(currentSelectedTab);
 });
-cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
-previewCodeButton.addEventListener('click', handlePreviewClick);
+elements.cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
+elements.previewCodeButton.addEventListener('click', handlePreviewClick);
 
-saveSelectedFileButton.addEventListener('click', () => {
+elements.saveSelectedFileButton.addEventListener('click', () => {
     const currentFile = fileDataArray[currentSelectedTab];
     console.log(uId,'uId')
     console.log(projectId,'projectId')
@@ -451,9 +421,9 @@ saveSelectedFileButton.addEventListener('click', () => {
     });
 });
 
-submitUserRequestButton.addEventListener('click', () => {
+elements.submitUserRequestButton.addEventListener('click', () => {
     const currentFile = fileDataArray[currentSelectedTab];
-    const userRequest = userRequestInputBox.value;
+    const userRequest = elements.userRequestInputBox.value;
     
     axios.post('https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/', {
         fileName: currentFile.fileName,
@@ -471,17 +441,17 @@ submitUserRequestButton.addEventListener('click', () => {
             fileToUpdate.fileContents = newCode;
             const updatedFileIndex = fileDataArray.indexOf(fileToUpdate);
             displayFileContentInTab(updatedFileIndex);
-            viewCodeButton.click();
+            elements.viewCodeButton.click();
         }
     })
     .catch(function (error) {
                console.log(error);
     });
 
-    userRequestInputBox.value = '';
+    elements.userRequestInputBox.value = '';
 });
 
-executeCodeButton.addEventListener('click', () => {
+elements.executeCodeButton.addEventListener('click', () => {
     // Add your code execution logic here
 });
 
