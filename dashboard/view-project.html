@@ -504,6 +504,17 @@ function fetchFileContents(fileName) {
         console.log(error);
     });
 }
+function extractuIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const uId = urlParams.get('uId');
+    return uId;
+}
+function extractprojectIdFromUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const projectId = urlParams.get('projectId');
+    return projectId;
+}
+let uId = extractuIdFromUrl();
 
 // Initialize
 generateAllFileTabElements();
