@@ -31,29 +31,27 @@
   <path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" />
 </svg>
 </button>
-<div class="flex space-x-1 rounded-xl bg-blue-900 p-1" id="tab-list">
-    <button id="previewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-400 focus:outline-none flex items-center justify-center" data-target="preview">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-  </svg>
-        Preview
-    </button>
-    <button id="viewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-400 focus:outline-none flex items-center justify-center" data-target="code">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
-    <path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
-  </svg>
-        Code
-    </button>
-
-    <button id="viewLogsButton" class="tab-button w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-400 focus:outline-none flex items-center justify-center" data-target="logs">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
-    <path fill-rule="evenodd" d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h13.5A2.25 2.25 0 0019 14.75v-9.5A2.25 2.25 0 0016.75 3H3.25zm.943 8.752a.75.75 0 01.055-1.06L6.128 9l-1.88-1.693a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 01-1.06-.055zM9.75 10.25a.75.75 0 000 1.5h2.5a.75.75 0 000-1.5h-2.5z" clip-rule="evenodd" />
-  </svg>
-
-        Logs
-    </button>
-</div>
+    <div class="flex space-x-1 rounded-xl bg-blue-900 p-1" id="tab-list">
+        <button id="viewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-400 hover:text-blue-700 hover:bg-white focus:outline-none flex items-center justify-center" data-target="code">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+<path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
+            </svg>
+            Code
+        </button>
+        <button id="previewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-400 hover:text-blue-700 hover:bg-white focus:outline-none flex items-center justify-center" data-target="preview">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+  <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
+  <path fill-rule="evenodd" d="M.664 10.59a1.651 1.651 0 010-1.186A10.004 10.004 0 0110 3c4.257 0 7.893 2.66 9.336 6.41.147.381.146.804 0 1.186A10.004 10.004 0 0110 17c-4.257 0-7.893-2.66-9.336-6.41zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+</svg>
+            Preview
+        </button>
+        <button id="viewLogsButton" class="tab-button w-full rounded-lg py-2.5 text-sm font-medium leading-5 text-gray-400 hover:text-blue-700 hover:bg-white focus:outline-none flex items-center justify-center" data-target="logs">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+  <path fill-rule="evenodd" d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h13.5A2.25 2.25 0 0019 14.75v-9.5A2.25 2.25 0 0016.75 3H3.25zm.943 8.752a.75.75 0 01.055-1.06L6.128 9l-1.88-1.693a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 01-1.06-.055zM9.75 10.25a.75.75 0 000 1.5h2.5a.75.75 0 000-1.5h-2.5z" clip-rule="evenodd" />
+</svg>
+            Logs
+        </button>
+    </div>
         </div>
         <div class="flex items-center mb-2">
             <div id="allTabs" class="mr-2"></div>
@@ -95,7 +93,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-markup.min.js"></script>
 <script>
-// JavaScript to handle tab switching
+
 document.addEventListener('DOMContentLoaded', () => {
     const tabs = document.querySelectorAll('.tab-button');
     const tabContents = {
@@ -106,25 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to remove active class from all tabs and reset to default
     function deactivateTabs() {
-        tabs.forEach(t => {
-            t.classList.remove('text-blue-700', 'bg-white', 'shadow');
-            t.classList.add('text-gray-400');
-            t.style.backgroundColor = ''; // Clear inline style for non-active tabs
-            t.style.color = ''; // Clear inline style for text color
+        tabs.forEach(tab => {
+            tab.classList.remove('text-blue-700', 'bg-white', 'shadow');
+            tab.classList.add('text-gray-400');
         });
     }
 
     // Function to hide all tab contents
     function hideTabContents() {
         Object.values(tabContents).forEach(content => {
-            if (content) content.style.display = 'none';
+            if (content) content.classList.add('hidden');
         });
     }
 
     // Initialize the first tab as active
     tabs[0].classList.add('text-blue-700', 'bg-white', 'shadow');
-    tabs[0].style.color = 'black'; // Set text color for active tab
-    tabContents.code.style.display = 'block'; // Show the first tab content
+    tabContents.code.classList.remove('hidden'); // Show the first tab content
 
     // Add click event listener to each tab
     tabs.forEach(tab => {
@@ -133,25 +128,14 @@ document.addEventListener('DOMContentLoaded', () => {
             deactivateTabs();
             hideTabContents();
             tab.classList.add('text-blue-700', 'bg-white', 'shadow');
-            tab.style.color = 'black'; // Set text color for active tab
             if (tabContents[target]) {
-                tabContents[target].style.display = 'block'; // Show the selected tab content
-            }
-        });
-
-        // Add mouseover and mouseout event listeners for hover effect
-        tab.addEventListener('mouseover', () => {
-            tab.style.backgroundColor = 'rgba(255, 255, 255, 0.12)';
-            tab.style.color = 'white';
-        });
-        tab.addEventListener('mouseout', () => {
-            if (!tab.classList.contains('text-blue-700')) {
-                tab.style.backgroundColor = '';
-                tab.style.color = '';
+                tabContents[target].classList.remove('hidden'); // Show the selected tab content
             }
         });
     });
 });
+
+
 // Constants
 const LANGUAGE_MAP = {
     'py': 'python',
