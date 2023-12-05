@@ -257,6 +257,44 @@ const showExecuteCodeButton = (fileName) => {
     }
 };
 
+// Add the executeCode function
+const executeCode = () => {
+    const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
+    const currentFile = fileDataArray[currentSelectedTab];
+    const codeExecutionData = {
+        'filePath': currentFile.fileName,
+        'ec2InstanceId': 'i-09a3e0707ffcfdfdb', // You might want to make this dynamic
+        'code': currentFile.fileContents,
+        'uId': uId,
+        'projectId': projectId
+    };
+    
+    // Indicate that the code execution is in progress
+    elements.executeCodeButton.textContent = 'Running...';
+    elements.executeCodeButton.disabled = true;
+
+    // Send the POST request using Axios
+    axios.post(apiUrl, codeExecutionData, {
+        headers: {
+            'Content-type': 'application/json'
+        }
+    })
+    .then(response => {
+        // Display the output from the response
+        const { StandardOutputContent, StandardErrorContent } = response.data;
+        alert(`Standard Output: ${StandardOutputContent}\nStandard Error: ${StandardErrorContent}`);
+    })
+    .catch(error => {
+        // Display the error
+        alert(`Error: ${error}`);
+    })
+    .finally(() => {
+        // Reset the button state after execution
+        elements.executeCodeButton.textContent = 'Run Code';
+        elements.executeCodeButton.disabled = false;
+    });
+};
+
 // Event listeners
 elements.viewCodeButton.addEventListener('click', () => {
     highlightSelectedButton('viewCodeButton');
@@ -354,9 +392,8 @@ elements.submitUserRequestButton.addEventListener('click', () => {
 
 elements.addTab.addEventListener('click', handleAddClick);
 
-elements.executeCodeButton.addEventListener('click', () => {
-    // Add your code execution logic here
-});
+// Add the event listener to the "Run Code" button
+elements.executeCodeButton.addEventListener('click', executeCode);
 
 window.onload = function() {
     extractuIdFromUrl();
