@@ -27,15 +27,31 @@
                 <option>Select File</option>
             </select>
         </div>
-        <button id="executeCodeButton" class="absolute right-0 hidden">Run Code</button>
+        <button id="executeCodeButton" class="absolute right-0 hidden"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+  <path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" />
+</svg>
+</button>
         <div class="flex items-center mb-2">
-            <button id="viewCodeButton" class="mr-2">View Code</button>
-            <button id="previewCodeButton" class="mr-2">Preview Code</button>
-            <button id="viewLogsButton" class="mr-2">View Logs</button>
+            <button id="viewCodeButton" class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5" />
+</svg>
+</button>
+            <button id="previewCodeButton" class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+</svg>
+</button>
+            <button id="viewLogsButton" class="mr-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z" />
+</svg>
+</button>
         </div>
         <div class="flex items-center mb-2">
             <div id="allTabs" class="mr-2"></div>
-            <div class="inline-block px-2 border border-gray-300 cursor-pointer" id="addTab">+</div>
+            <div class="inline-block px-2 border border-gray-300 cursor-pointer" id="addTab"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+  <path fill-rule="evenodd" d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+</svg>
+</div>
         </div>
         <div class="mb-2">
             <button id="saveSelectedFileButton" class="w-full">Save File</button>
@@ -55,8 +71,14 @@
     </div>
     <div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-2 shadow-md">
         <input type="text" id="userRequestInputBox" class="w-full placeholder-gray-500" placeholder="Enter your request here">
-        <button id="submitUserRequestButton" class="mt-2">Submit</button>
-        <button id="addReferenceButton" class="mt-2">Add Reference File</button>
+        <button id="submitUserRequestButton" class="mt-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+</svg>
+</button>
+        <button id="addReferenceButton" class="mt-2"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+  <path fill-rule="evenodd" d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+</svg>
+</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script>
@@ -156,17 +178,35 @@ const handlePreviewClick = () => {
 // Main functions
 const generateFileTabElement = (fileName, index) => {
     const tab = document.createElement('div');
-    tab.className = 'tab';
+    tab.className = 'tab flex items-center'; // Add flex and items-center for alignment
     tab.textContent = fileName;
     tab.setAttribute('data-index', index);
     tab.addEventListener('click', handleTabClick);
 
-    const close = document.createElement('span');
-    close.className = 'close';
-    close.textContent = 'x';
+    // Create an SVG element for the close icon
+    const svgNS = "http://www.w3.org/2000/svg";
+    const closeIcon = document.createElementNS(svgNS, "svg");
+    closeIcon.setAttributeNS(null, "viewBox", "0 0 20 20");
+    closeIcon.setAttributeNS(null, "fill", "currentColor");
+    closeIcon.classList.add("w-5", "h-5", "ml-2"); // Add margin-left for spacing
+
+    // Create a path element for the SVG
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttributeNS(null, "d", "M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z");
+
+    // Append the path to the SVG, and the SVG to the close button container
+    closeIcon.appendChild(path);
+
+    // Create a container for the close button
+    const close = document.createElement('div');
+    close.className = 'close cursor-pointer'; // Add cursor-pointer for better UX
     close.setAttribute('data-index', index);
     close.addEventListener('click', handleCloseClick);
 
+    // Append the SVG icon to the close button container
+    close.appendChild(closeIcon);
+
+    // Append the file name and close button to the tab
     tab.appendChild(close);
     elements.allTabs.appendChild(tab);
 };
@@ -268,7 +308,7 @@ const executeCode = () => {
         'uId': uId,
         'projectId': projectId
     };
-    console.log(codeExecutionData,'codeExecutionData');
+    
     // Indicate that the code execution is in progress
     elements.executeCodeButton.textContent = 'Running...';
     elements.executeCodeButton.disabled = true;
