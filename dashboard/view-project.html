@@ -350,12 +350,12 @@ const highlightSelectedButton = (selectedButtonId) => {
 }
 
 const showOrHideCodeBox = (selectedButtonId) => {
-    if (selectedButtonId === 'viewCodeButton') {
-        elements.codeContainer.style.display = 'block';
-    } else {
-        elements.codeContainer.style.display = 'none';
+    if (selectedButtonId === 'viewCodeButton' && elements.codeContainer) {
+      elements.codeContainer.style.display = 'block';
+    } else if (elements.codeContainer) {
+      elements.codeContainer.style.display = 'none';
     }
-}
+  };
 
 const resetEditCodeBox = () => {
     elements.editCodeButton.style.display = 'inline-block';
