@@ -223,10 +223,13 @@ const displayFileContentInTab = index => {
     const {fileName, fileContents} = fileDataArray[index];
     highlightCodeWithPrism(fileName, fileContents);
     toggleViewButtonsBasedOnFileType(fileName);
-    elements.viewCodeButton.click();
     highlightSelectedTab(index);
     resetEditCodeBox();
     elements.previewRenderCodeBox.style.display = 'none';
+    const extension = extractFileExtension(fileName);
+    if (extension === 'html') {
+        handlePreviewClick();
+    }
 };
 
 const removeTabAndFileData = index => {
@@ -421,10 +424,14 @@ elements.submitUserRequestButton.addEventListener('click', () => {
             const updatedFileIndex = fileDataArray.indexOf(fileToUpdate);
             displayFileContentInTab(updatedFileIndex);
             elements.viewCodeButton.click();
+            const extension = extractFileExtension(fileName);
+            if (extension === 'html') {
+                handlePreviewClick();
+            }
         }
     })
     .catch(function (error) {
-               console.log(error);
+        console.log(error);
     });
 
     elements.userRequestInputBox.value = '';
