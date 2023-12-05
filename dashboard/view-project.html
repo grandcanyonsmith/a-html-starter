@@ -18,8 +18,7 @@
             margin-left: 5px;
             cursor: pointer;
         }
-    /* Increase font size for Prism.js code blocks */
-    pre code {
+    body .flex-grow pre code {
         font-size: 1.5em; /* Adjust the value as needed */
     }
     </style>
@@ -76,7 +75,8 @@
         <button id="cancelCodeEditsButton" class="hidden mr-2">Cancel</button>
     </div>
     <div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
-        <pre><code id="codeBox" class="w-full"></code></pre>
+<pre><code id="codeBox" class="w-full text-4xl"></code></pre>
+
     </div>
     <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
         <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
