@@ -19,8 +19,9 @@
             margin-left: 5px;
             cursor: pointer;
         }
+
     body .flex-grow pre code {
-        font-size: 2em; /* Adjust the value as needed */
+        font-size: 1.5em; /* Adjust the value as needed */
     }
     </style>
 </head>
@@ -75,10 +76,9 @@
         <button id="saveCodeEditsButton" class="hidden mr-2">Save</button>
         <button id="cancelCodeEditsButton" class="hidden mr-2">Cancel</button>
     </div>
-    <div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
-<pre><code id="codeBox" class="w-full text-4xl"></code></pre>
-
-    </div>
+<div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
+    <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="codeBox" class="w-full text-4xl"></code></pre>
+</div>
     <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
         <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
     </div>
