@@ -141,10 +141,15 @@ const highlightCodeWithPrism = (fileName, fileContents) => {
 const handleTabClick = (event) => {
     const index = event.target.getAttribute('data-index');
     displayFileContentInTab(index);
-    elements.viewCodeButton.click();
     elements.editCodeButton.style.display = 'inline-block';
     const fileName = fileDataArray[index].fileName;
     showExecuteCodeButton(fileName);
+    const extension = extractFileExtension(fileName);
+    if (extension === 'html') {
+        handlePreviewClick();
+    } else {
+        elements.viewCodeButton.click();
+    }
 };
 
 const handleCloseClick = (event) => {
