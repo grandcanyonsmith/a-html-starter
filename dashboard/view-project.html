@@ -85,6 +85,9 @@
     <div class="flex-grow w-full overflow-auto flex flex-col" id="previewRenderCodeBox">
         <iframe id="previewCodeIframe" class="w-full h-full border-none"></iframe>
     </div>
+    <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="viewLogsContainer">
+        <pre id="logsBox" class="line-numbers pl-14 pt-4 pb-4 pr-4"></pre>
+    </div>
     <div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-2 shadow-md">
         <input type="text" id="userRequestInputBox" class="w-full placeholder-gray-500" placeholder="Enter your request here">
         <button id="submitUserRequestButton" class="mt-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -188,7 +191,10 @@ const elements = {
     userRequestInputBox: document.getElementById('userRequestInputBox'),
     fileSelect: document.getElementById('fileSelect'),
     saveSelectedFileButton: document.getElementById('saveSelectedFileButton'),
-    executeCodeButton: document.getElementById('executeCodeButton')
+    executeCodeButton: document.getElementById('executeCodeButton'),
+    viewLogsContainer: document.getElementById('viewLogsContainer'),
+    logsBox: document.getElementById('logsBox'),
+
 };
 
 // Helper functions
@@ -358,7 +364,8 @@ const resetEditCodeBox = () => {
     elements.executeCodeButton.style.display = 'none'; // Hide execute button
     elements.viewCodeBox.style.display = 'block';
     elements.editCodeBox.style.display = 'none';
-}
+    elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
+};
 
 const showExecuteCodeButton = (fileName) => {
     const extension = extractFileExtension(fileName);
@@ -394,7 +401,9 @@ const executeCode = () => {
     .then(response => {
         // Display the output from the response
         const { StandardOutputContent, StandardErrorContent } = response.data;
-        alert(`Standard Output: ${StandardOutputContent}\nStandard Error: ${StandardErrorContent}`);
+        elements.logsBox.textContent = `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}`;
+        elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
+
     })
     .catch(error => {
         // Display the error
@@ -413,7 +422,8 @@ elements.viewCodeButton.addEventListener('click', () => {
     elements.viewCodeBox.style.display = 'block';
     elements.previewRenderCodeBox.style.display = 'none'; 
     elements.editCodeBox.style.display = 'none';
-    elements.editCodeButton.style.display = 'inline-block'; 
+    elements.editCodeButton.style.display = 'inline-block';
+    elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
 });
 
 elements.viewLogsButton.addEventListener('click', () => {
@@ -424,6 +434,10 @@ elements.viewLogsButton.addEventListener('click', () => {
     elements.saveCodeEditsButton.style.display = 'none';
     elements.cancelCodeEditsButton.style.display = 'none';
     elements.editCodeBox.style.display = 'none'; // Add this line
+    elements.viewLogsContainer.style.display = 'block'; // Show the logs container
+    elements.viewCodeBox.style.display = 'none';
+    elements.previewRenderCodeBox.style.display = 'none';
+    elements.editCodeBox.style.display = 'none';
 });
 
 elements.previewCodeButton.addEventListener('click', () => {
@@ -432,6 +446,7 @@ elements.previewCodeButton.addEventListener('click', () => {
     elements.previewRenderCodeBox.style.display = 'block'; 
     elements.editCodeBox.style.display = 'none';
     elements.editCodeButton.style.display = 'inline-block';
+    elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
     handlePreviewClick();
 });
 
