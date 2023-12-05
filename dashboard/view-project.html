@@ -86,7 +86,7 @@
         <iframe id="previewCodeIframe" class="w-full h-full border-none"></iframe>
     </div>
     <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="viewLogsContainer">
-        <pre id="logsBox" class="line-numbers pl-14 pt-4 pb-4 pr-4"></pre>
+        <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="logsBox" class="language-bash"></code></pre>
     </div>
     <div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-2 shadow-md">
         <input type="text" id="userRequestInputBox" class="w-full placeholder-gray-500" placeholder="Enter your request here">
@@ -105,6 +105,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-markup.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-bash.min.js"></script>
 <script>
 
 
@@ -401,9 +402,10 @@ const executeCode = () => {
     .then(response => {
         // Display the output from the response
         const { StandardOutputContent, StandardErrorContent } = response.data;
-        elements.logsBox.textContent = `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}`;
+        const combinedLogs = `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}`;
+        elements.logsBox.className = 'language-bash'; // Set the language for Prism.js
+        elements.logsBox.innerHTML = Prism.highlight(combinedLogs, Prism.languages.bash, 'bash');
         elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
-
     })
     .catch(error => {
         // Display the error
