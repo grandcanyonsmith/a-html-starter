@@ -33,10 +33,10 @@
                 <option>Select File</option>
             </select>
         </div>
-        <button id="executeCodeButton" class="absolute right-0 hidden"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+        <!-- <button id="executeCodeButton" class="absolute right-0 hidden"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
   <path fill-rule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clip-rule="evenodd" />
 </svg>
-</button>
+</button> -->
     <div class="flex space-x-1 rounded-xl bg-gray-800 p-1" id="tab-list">
 <button id="previewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none flex items-center justify-center">
         <div class="flex items-center justify-center">
@@ -405,7 +405,7 @@ const executeCode = () => {
     // Indicate that the code execution is in progress
     elements.executeCodeButton.textContent = 'Running...';
     elements.executeCodeButton.disabled = true;
-    executePythonCodeButton.textContent = 'Run Code';
+    executePythonCodeButton.textContent = 'Running';
     executePythonCodeButton.disabled = false;
     // Send the POST request using Axios
     axios.post(apiUrl, codeExecutionData, {
@@ -633,3 +633,5 @@ displayFileContentInTab(0);
 </script>
 </body>
 </html>
+
+
