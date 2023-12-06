@@ -198,7 +198,6 @@ const elements = {
     userRequestInputBox: document.getElementById('userRequestInputBox'),
     fileSelect: document.getElementById('fileSelect'),
     saveSelectedFileButton: document.getElementById('saveSelectedFileButton'),
-    executeCodeButton: document.getElementById('executeCodeButton'),
     viewLogsContainer: document.getElementById('viewLogsContainer'),
     logsBox: document.getElementById('logsBox'),
 
@@ -220,7 +219,7 @@ const handleTabClick = (event) => {
     displayFileContentInTab(index);
     elements.editCodeButton.style.display = 'inline-block';
     const fileName = fileDataArray[index].fileName;
-    showExecuteCodeButton(fileName);
+    
     const extension = extractFileExtension(fileName);
     if (extension === 'html') {
         handlePreviewClick();
@@ -245,7 +244,7 @@ const handleAddClick = () => {
         fileDataArray.push(newFile);
         generateAllFileTabElements();
         displayFileContentInTab(fileDataArray.length - 1);
-        showExecuteCodeButton(fileName);
+        
     }
 };
 
@@ -328,17 +327,17 @@ const toggleViewButtonsBasedOnFileType = (fileName) => {
     if (extension === 'html') {
         elements.previewCodeButton.style.display = 'inline-block';
         elements.viewLogsButton.style.display = 'inline-block';
-        elements.executeCodeButton.style.display = 'none'; // Hide execute button
+         
         executePythonCodeButton.classList.add('hidden')
     } else if (extension === 'py') {
         executePythonCodeButton.classList.remove('hidden');
         elements.previewCodeButton.style.display = 'none';
         elements.viewLogsButton.style.display = 'inline-block';
-        elements.executeCodeButton.style.display = 'inline-block'; // Show execute button
+        
     } else {
         elements.previewCodeButton.style.display = 'none';
         elements.viewLogsButton.style.display = 'none';
-        elements.executeCodeButton.style.display = 'none'; // Hide execute button
+        
         executePythonCodeButton.classList.add('hidden')
     }
 }
@@ -372,20 +371,13 @@ const resetEditCodeBox = () => {
     elements.editCodeButton.style.display = 'inline-block';
     elements.saveCodeEditsButton.style.display = 'none';
     elements.cancelCodeEditsButton.style.display = 'none';
-    elements.executeCodeButton.style.display = 'none'; // Hide execute button
+    
     elements.viewCodeBox.style.display = 'block';
     elements.editCodeBox.style.display = 'none';
     elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
 };
 
-const showExecuteCodeButton = (fileName) => {
-    const extension = extractFileExtension(fileName);
-    if (extension === 'py') {
-        elements.executeCodeButton.style.display = 'inline-block'; // Show execute button
-    } else {
-        elements.executeCodeButton.style.display = 'none'; // Hide execute button
-    }
-};
+
 
 // Add the executeCode function
 const executeCode = () => {
@@ -403,8 +395,7 @@ const executeCode = () => {
     executePythonCodeButton.disabled = true;
     
     // Indicate that the code execution is in progress
-    elements.executeCodeButton.textContent = 'Running...';
-    elements.executeCodeButton.disabled = true;
+
     executePythonCodeButton.textContent = 'Running';
     executePythonCodeButton.disabled = false;
     // Send the POST request using Axios
@@ -425,11 +416,6 @@ const executeCode = () => {
         // Display the error
         alert(`Error: ${error}`);
     })
-    .finally(() => {
-        // Reset the button state after execution
-        elements.executeCodeButton.textContent = 'Run Code';
-        elements.executeCodeButton.disabled = false;
-    });
 };
 document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
 
@@ -541,7 +527,7 @@ elements.submitUserRequestButton.addEventListener('click', () => {
 elements.addTab.addEventListener('click', handleAddClick);
 
 // Add the event listener to the "Run Code" button
-elements.executeCodeButton.addEventListener('click', executeCode);
+
 
 window.onload = function() {
     extractuIdFromUrl();
@@ -585,7 +571,7 @@ function fetchFileContents(fileName) {
             fileDataArray.push(fileData);
             generateAllFileTabElements();
             displayFileContentInTab(fileDataArray.length - 1);
-            showExecuteCodeButton(fileName);
+            
         }
     })
     .catch(function (error) {
