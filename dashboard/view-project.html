@@ -20,10 +20,9 @@
             margin-left: 5px;
             cursor: pointer;
         }
-        /* Set the initial height of the textarea to be smaller */
         #userRequestInputBox {
-            height: 20px; /* Adjust this value as needed */
             overflow-y: hidden; /* Prevent scrollbar */
+            resize: none; /* Prevent manual resizing */
         }
     </style>
 </head>
@@ -91,19 +90,14 @@
         <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="logsBox" class="language-bash"></code></pre>
     </div>
     <div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-2 shadow-md">
-        <form action="#" class="relative flex flex-col sm:flex-row items-stretch sm:items-end">
-            <div class="overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600 p-1.5 flex-grow">
-                <label for="userRequestInputBox" class="sr-only">Enter your request here</label>
-                <textarea name="userRequestInputBox" id="userRequestInputBox" class="block w-full resize-none border-0 bg-transparent text-base sm:text-sm sm:leading-6 placeholder:text-gray-400 focus:ring-0 h-5" placeholder="Enter your request here" oninput="autoResizeTextarea(this)"></textarea>
-            </div>
-            <div class="flex-shrink-0 mt-2 sm:mt-0 sm:ml-2">
-                <button type="button" id="submitUserRequestButton" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-                    </svg>
-                </button>
-            </div>
-        </form>
+        <div class="relative flex items-center border rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+            <textarea name="userRequestInputBox" id="userRequestInputBox" class="block w-full resize-none border-none bg-transparent text-base sm:text-sm sm:leading-6 placeholder:text-gray-400 focus:ring-0 rounded-l-lg p-2" placeholder="Enter your request here" oninput="autoResizeTextarea(this)" style="height: 2.5rem;"></textarea>
+            <button type="button" id="submitUserRequestButton" class="ml-auto inline-flex items-center rounded-r-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                </svg>
+            </button>
+        </div>
     </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
@@ -596,10 +590,10 @@ function extractprojectIdFromUrl() {
 }
 
 function autoResizeTextarea(textarea) {
-    // Reset the height to allow shrink if text is removed
-    textarea.style.height = 'auto';
+    // Reset the height to 0 to shrink to the minimum content size
+    textarea.style.height = '0px';
     // Set the height to the scroll height to remove the scrollbar
-    textarea.style.height = textarea.scrollHeight + 'px';
+    textarea.style.height = Math.max(textarea.scrollHeight, 20) + 'px'; // Ensure the height is at least 20px
 }
 
 // Initialize the textarea height on page load
@@ -608,6 +602,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     autoResizeTextarea(textarea);
 });
 
+// Use the 'load' event to ensure all resources are loaded
+window.addEventListener('load', (event) => {
+    const textarea = document.getElementById('userRequestInputBox');
+    autoResizeTextarea(textarea); // This should set the correct initial height
+});
 
 let uId = extractuIdFromUrl();
 let projectId = extractprojectIdFromUrl();
