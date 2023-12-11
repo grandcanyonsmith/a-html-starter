@@ -8,6 +8,25 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <style>
+      .row {
+         display: flex;
+         align-items: center;
+       }
+       .icon-button {
+         border: none;
+         background: none;
+         cursor: pointer;
+         padding: 0;
+         margin-right: 10px;
+       }
+       .icon {
+         height: 10px; /* Establishing a consistent icon height */
+         width: auto; /* Width will scale proportionally */
+         display: block; /* Ensuring the icon takes a block formatting context */
+       }
+       .edit-actions {
+         display: none;
+       }
         #allTabs {
             display: flex;
             align-items: center;
@@ -105,12 +124,26 @@
 </svg>
 </div>
         </div>
-        <div class="mb-2">
+        <!-- <div class="mb-2">
             <button id="saveSelectedFileButton" class="w-full">Save File</button>
         </div>
         <button id="editCodeButton" class="mr-2">Edit Code</button>
         <button id="saveCodeEditsButton" class="hidden mr-2">Save</button>
-        <button id="cancelCodeEditsButton" class="hidden mr-2">Cancel</button>
+        <button id="cancelCodeEditsButton" class="hidden mr-2">Cancel</button> -->
+        <div class="row">
+         <button id="editCodeButton" class="icon-button" onclick="toggleEdit(true)">
+           <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+             <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+           </svg>
+         </button>
+         <button id="saveSelectedFileButton" class="icon-button">
+           <img src="https://www.svgrepo.com/show/521819/save.svg" alt="Save Icon" class="icon">
+         </button>
+         <div id="editActions" class="edit-actions">
+           <button id="cancelCodeEditsButton" class="icon-button" onclick="toggleEdit(false)">Cancel</button>
+           <button id="saveCodeEditsButton" class="icon-button" onclick="toggleEdit(false)">Update</button>
+         </div>
+       </div>
     </div>
 <div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
     <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="codeBox" class="w-full text-4xl"></code></pre>
@@ -689,6 +722,23 @@ window.onload = function() {
         console.log(error);
     });
 };
+
+function toggleEdit(editMode) {
+   var editBtn = document.getElementById('editCodeButton');
+   var editActions = document.getElementById('editActions');
+   var commitBtn = document.getElementById('saveSelectedFileButton');
+
+   if (editMode) {
+     editBtn.style.display = 'none';
+     editActions.style.display = 'flex';
+     commitBtn.style.display = 'none';
+   } else {
+     editBtn.style.display = 'inline-block';
+     editActions.style.display = 'none';
+     commitBtn.style.display = 'inline-block';
+   }
+ }
+
 
 function fetchFileContents(fileName) {
     axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
