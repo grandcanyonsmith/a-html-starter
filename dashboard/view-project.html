@@ -475,6 +475,21 @@ const updateTabIcon = (tabIndex, iconUrl, isSpinner = false) => {
     }
 };
 
+const getIconUrlByExtension = (extension) => {
+    switch (extension) {
+        case 'py':
+            return 'https://www.svgrepo.com/show/376344/python.svg';
+        case 'html':
+            return 'https://www.svgrepo.com/show/452228/html-5.svg';
+        case 'js':
+            return 'https://www.svgrepo.com/show/373703/js.svg';
+        case 'css':
+            return 'https://www.svgrepo.com/show/452185/css-3.svg';
+        default:
+            return ''; // Default icon or leave empty if no icon should be shown
+    }
+};
+
 const executeCode = () => {
     const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
     const currentFile = fileDataArray[currentSelectedTab];
