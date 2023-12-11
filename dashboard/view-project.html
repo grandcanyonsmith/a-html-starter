@@ -379,7 +379,6 @@ const resetEditCodeBox = () => {
 
 
 
-// Add the executeCode function
 const executeCode = () => {
     const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
     const currentFile = fileDataArray[currentSelectedTab];
@@ -394,10 +393,6 @@ const executeCode = () => {
     executePythonCodeButton.textContent = 'Running...';
     executePythonCodeButton.disabled = true;
     
-    // Indicate that the code execution is in progress
-
-    executePythonCodeButton.textContent = 'Running';
-    executePythonCodeButton.disabled = false;
     // Send the POST request using Axios
     axios.post(apiUrl, codeExecutionData, {
         headers: {
@@ -411,11 +406,27 @@ const executeCode = () => {
         elements.logsBox.className = 'language-bash'; // Set the language for Prism.js
         elements.logsBox.innerHTML = Prism.highlight(combinedLogs, Prism.languages.bash, 'bash');
         elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
+
+        // Reset the button text and disabled state
+        executePythonCodeButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+            </svg>
+        `;
+        executePythonCodeButton.disabled = false;
     })
     .catch(error => {
         // Display the error
         alert(`Error: ${error}`);
-    })
+
+        // Reset the button text and disabled state
+        executePythonCodeButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+            </svg>
+        `;
+        executePythonCodeButton.disabled = false;
+    });
 };
 document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
 
@@ -619,5 +630,3 @@ displayFileContentInTab(0);
 </script>
 </body>
 </html>
-
-
