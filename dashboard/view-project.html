@@ -532,7 +532,10 @@ elements.submitUserRequestButton.addEventListener('click', () => {
         console.log(error);
     });
 
+    // Clear the textarea value
     elements.userRequestInputBox.value = '';
+    // Reset the textarea height
+    autoResizeTextarea(elements.userRequestInputBox);
 });
 
 elements.addTab.addEventListener('click', handleAddClick);
