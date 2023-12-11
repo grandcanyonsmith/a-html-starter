@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -78,8 +80,6 @@
               transform: rotate(360deg);
             }
           }
-         .icon-size { width: 16px; height: 16px; }
-         .mr-1 { margin-right: 5px; }
     </style>
 </head>
 <body class="flex flex-col h-screen m-0 pb-16 line-numbers">
@@ -176,615 +176,634 @@
 <script>
 
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const viewTabs = document.querySelectorAll('.tab-button');
-    const tabContents = {
-        code: elements.viewCodeBox,
-        preview: elements.previewRenderCodeBox,
-        logs: null // Placeholder for logs content
-    };
-
-    // Function to remove active class from all tabs and reset to default
-    function deactivateTabs() {
-        viewTabs.forEach(tab => {
-            tab.classList.remove('text-blue-700', 'bg-white', 'shadow');
-            tab.classList.add('text-gray-400');
-        });
-    }
-
-    // Function to hide all tab contents
-    function hideTabContents() {
-        Object.values(tabContents).forEach(content => {
-            if (content) content.classList.add('hidden');
-        });
-    }
-
-    // Initialize the first tab as active
-    viewTabs[0].classList.add('text-blue-700', 'bg-white', 'shadow');
-    tabContents.code.classList.remove('hidden'); // Show the first tab content
-
-    // Add click event listener to each tab
-    viewTabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            const target = tab.getAttribute('data-target');
-            deactivateTabs();
-            hideTabContents();
-            tab.classList.add('text-blue-700', 'bg-white', 'shadow');
-            if (tabContents[target]) {
-                tabContents[target].classList.remove('hidden'); // Show the selected tab content
-            }
-        });
-    });
-});
-
-
-
-// Constants
-const LANGUAGE_MAP = {
-    'py': 'python',
-    'js': 'javascript',
-    'css': 'css',
-    'html': 'markup'
-};
-
-// File data
-let fileDataArray = [
-{
-    "fileName": "index.html",
-    "fileContents": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Explore Space</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #000; color: #fff; }\n        .container { width: 80%; margin: auto; }\n        header { text-align: center; padding: 2rem 0; }\n        h1 { margin: 0; }\n        .content { margin: 2rem 0; }\n        img { max-width: 100%; height: auto; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <header>\n            <h1>Welcome to the Space Exploration Site</h1>\n        </header>\n        <div class=\"content\">\n            <h2>Our Universe</h2>\n            <p>Space is vast and has always been a subject of mystery and intrigue. The universe is filled with wonders like stars, planets, and galaxies.</p>\n            <img src=\"images/universe.jpg\" alt=\"Universe\">\n        </div>\n        <div class=\"content\">\n            <h2>Space Missions</h2>\n            <p>Humanity has embarked on numerous space missions to explore the unknown. From the Apollo moon landings to the Mars rovers, each mission has expanded our understanding of the cosmos.</p>\n            <img src=\"images/space-mission.jpg\" alt=\"Space Mission\">\n        </div>\n    </div>\n</body>\n</html>"
-}];
-
-let currentSelectedTab = 0;
-
-// DOM Elements
-const elements = {
-    allTabs: document.getElementById('allTabs'),
-    addTab: document.getElementById('addTab'),
-    codeBox: document.getElementById('codeBox'),
-    codeContainer: document.querySelector('.code-container'),
-    viewCodeButton: document.getElementById('viewCodeButton'),
-    previewCodeButton: document.getElementById('previewCodeButton'),
-    viewLogsButton: document.getElementById('viewLogsButton'),
-    editCodeButton: document.getElementById('editCodeButton'),
-    saveCodeEditsButton: document.getElementById('saveCodeEditsButton'),
-    cancelCodeEditsButton: document.getElementById('cancelCodeEditsButton'),
-    viewCodeBox: document.getElementById('viewCodeBox'),
-    editCodeBox: document.getElementById('editCodeBox'),
-    editCodeTextArea: document.getElementById('editCodeTextArea'),
-    previewRenderCodeBox: document.getElementById('previewRenderCodeBox'),
-    previewCodeIframe: document.getElementById('previewCodeIframe'),
-    submitUserRequestButton: document.getElementById('submitUserRequestButton'),
-    userRequestInputBox: document.getElementById('userRequestInputBox'),
-    fileSelect: document.getElementById('fileSelect'),
-    saveSelectedFileButton: document.getElementById('saveSelectedFileButton'),
-    viewLogsContainer: document.getElementById('viewLogsContainer'),
-    logsBox: document.getElementById('logsBox'),
-
-};
-
-// Helper functions
-const extractFileExtension = fileName => fileName.split('.').pop();
-const mapFileExtensionToPrismLanguage = extension => LANGUAGE_MAP[extension] || '';
-const highlightCodeWithPrism = (fileName, fileContents) => {
-    const extension = extractFileExtension(fileName);
-    const language = mapFileExtensionToPrismLanguage(extension);
-    elements.codeBox.className = `language-${language}`;
-    elements.codeBox.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
-}
-
-// Event handlers
-const handleTabClick = (event) => {
-    const index = event.target.getAttribute('data-index');
-    displayFileContentInTab(index);
-    elements.editCodeButton.style.display = 'inline-block';
-    const fileName = fileDataArray[index].fileName;
-    
-    const extension = extractFileExtension(fileName);
-    if (extension === 'html') {
-        handlePreviewClick();
-    } else {
-        elements.viewCodeButton.click();
-    }
-};
-
-const handleCloseClick = (event) => {
-    event.stopPropagation();
-    const index = event.target.getAttribute('data-index');
-    removeTabAndFileData(index);
-};
-
-const handleAddClick = () => {
-    const fileName = prompt("Enter file name:");
-    const fileExists = fileDataArray.some(file => file.fileName === fileName);
-    if (fileExists) {
-        alert('File name already exists. Please choose another file name');
-    } else if (fileName) {
-        const newFile = { fileName, fileContents: '' };
-        fileDataArray.push(newFile);
-        generateAllFileTabElements();
-        displayFileContentInTab(fileDataArray.length - 1);
-        
-    }
-};
-
-const handlePreviewClick = () => {
-    const {fileContents} = fileDataArray[currentSelectedTab];
-    elements.previewCodeIframe.srcdoc = fileContents;
-    elements.previewRenderCodeBox.style.display = 'block';
-    elements.viewCodeBox.style.display = 'none';
-    highlightSelectedButton('previewCodeButton');
-};
-
-// Main functions
-function createIconElement(extension) {
-   const iconMap = {
-       'py': 'https://www.svgrepo.com/show/452091/python.svg',
-       'html': 'https://www.svgrepo.com/show/452228/html-5.svg',
-       'js': 'https://www.svgrepo.com/show/373703/js.svg',
-       'css': 'https://www.svgrepo.com/show/452185/css-3.svg'
-   };
-
-   const iconUrl = iconMap[extension];
-   if (!iconUrl) return null;
-
-   const iconImg = document.createElement('img');
-   iconImg.src = iconUrl;
-   iconImg.alt = `${extension} file icon`;
-   iconImg.classList.add('icon-size', 'mr-1'); // Assuming these classes are defined in CSS
-   return iconImg;
-}
-
-function createCloseButton(index, fileName) {
-   const svgNS = "http://www.w3.org/2000/svg";
-   const closeIcon = document.createElementNS(svgNS, "svg");
-   closeIcon.setAttributeNS(null, "viewBox", "0 0 20 20");
-   closeIcon.setAttributeNS(null, "fill", "currentColor");
-   closeIcon.classList.add("w-5", "h-5", "ml-2");
-
-   const path = document.createElementNS(svgNS, "path");
-   path.setAttributeNS(null, "d", "M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z");
-   closeIcon.appendChild(path);
-
-   const close = document.createElement('button');
-   close.className = 'close';
-   close.setAttribute('data-index', index);
-   close.setAttribute('aria-label', `Close ${fileName}`);
-   close.addEventListener('click', handleCloseClick);
-   close.appendChild(closeIcon);
-
-   return close;
-}
-
-function generateFileTabElement(fileName, index) {
-   const tab = document.createElement('div');
-   tab.className = 'tab flex items-center';
-   tab.setAttribute('data-index', index);
-   tab.setAttribute('role', 'tab');
-   tab.addEventListener('click', handleTabClick);
-
-   const extension = extractFileExtension(fileName);
-   const iconElement = createIconElement(extension);
-   if (iconElement) {
-       tab.appendChild(iconElement);
-   }
-
-   const textNode = document.createTextNode(fileName);
-   tab.appendChild(textNode);
-
-   const closeButton = createCloseButton(index, fileName);
-   tab.appendChild(closeButton);
-
-   elements.allTabs.appendChild(tab); // Assuming elements.allTabs is a valid DOM element
-}
-
-const generateAllFileTabElements = () => {
-    elements.allTabs.innerHTML = '';
-    fileDataArray.forEach(({fileName}, index) => {
-        generateFileTabElement(fileName, index);
-    });
-};
-
-const displayFileContentInTab = index => {
-    currentSelectedTab = index;
-    const {fileName, fileContents} = fileDataArray[index];
-    highlightCodeWithPrism(fileName, fileContents);
-    toggleViewButtonsBasedOnFileType(fileName);
-    highlightSelectedTab(index);
-    resetEditCodeBox();
-    elements.previewRenderCodeBox.style.display = 'none';
-    const extension = extractFileExtension(fileName);
-    if (extension === 'html') {
-        handlePreviewClick();
-    }
-};
-
-const removeTabAndFileData = index => {
-    fileDataArray.splice(index, 1);
-    generateAllFileTabElements();
-    if (fileDataArray.length > 0) {
-        displayFileContentInTab(0);
-    }
-};
-
-const toggleViewButtonsBasedOnFileType = (fileName) => {
-    const extension = extractFileExtension(fileName);
-    const executePythonCodeButton = document.getElementById('executePythonCodeButton');
-    if (extension === 'html') {
-        elements.previewCodeButton.style.display = 'inline-block';
-        elements.viewLogsButton.style.display = 'inline-block';
-         
-        executePythonCodeButton.classList.add('hidden')
-    } else if (extension === 'py') {
-        executePythonCodeButton.classList.remove('hidden');
-        elements.previewCodeButton.style.display = 'none';
-        elements.viewLogsButton.style.display = 'inline-block';
-        
-    } else {
-        elements.previewCodeButton.style.display = 'none';
-        elements.viewLogsButton.style.display = 'none';
-        
-        executePythonCodeButton.classList.add('hidden')
-    }
-}
-
-const highlightSelectedTab = (index) => {
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(t => t.style.fontWeight = 'normal');
-    tabs[index].style.fontWeight = 'bold';
-}
-
-const highlightSelectedButton = (selectedButtonId) => {
-    const buttons = document.querySelectorAll('.codeBoxOptionsContainer button');
-    buttons.forEach(button => {
-        if (button.id === selectedButtonId) {
-            button.style.fontWeight = 'bold';
-        } else {
-            button.style.fontWeight = 'normal';
-        }
-    });
-}
-
-const showOrHideCodeBox = (selectedButtonId) => {
-    if (selectedButtonId === 'viewCodeButton' && elements.codeContainer) {
-      elements.codeContainer.style.display = 'block';
-    } else if (elements.codeContainer) {
-      elements.codeContainer.style.display = 'none';
-    }
+   document.addEventListener('DOMContentLoaded', () => {
+      const viewTabs = document.querySelectorAll('.tab-button');
+      const tabContents = {
+          code: elements.viewCodeBox,
+          preview: elements.previewRenderCodeBox,
+          logs: null // Placeholder for logs content
+      };
+  
+      // Function to remove active class from all tabs and reset to default
+      function deactivateTabs() {
+          viewTabs.forEach(tab => {
+              tab.classList.remove('text-blue-700', 'bg-white', 'shadow');
+              tab.classList.add('text-gray-400');
+          });
+      }
+  
+      // Function to hide all tab contents
+      function hideTabContents() {
+          Object.values(tabContents).forEach(content => {
+              if (content) content.classList.add('hidden');
+          });
+      }
+  
+      // Initialize the first tab as active
+      viewTabs[0].classList.add('text-blue-700', 'bg-white', 'shadow');
+      tabContents.code.classList.remove('hidden'); // Show the first tab content
+  
+      // Add click event listener to each tab
+      viewTabs.forEach(tab => {
+          tab.addEventListener('click', () => {
+              const target = tab.getAttribute('data-target');
+              deactivateTabs();
+              hideTabContents();
+              tab.classList.add('text-blue-700', 'bg-white', 'shadow');
+              if (tabContents[target]) {
+                  tabContents[target].classList.remove('hidden'); // Show the selected tab content
+              }
+          });
+      });
+  });
+  
+  
+  
+  // Constants
+  const LANGUAGE_MAP = {
+      'py': 'python',
+      'js': 'javascript',
+      'css': 'css',
+      'html': 'markup'
   };
-
-const resetEditCodeBox = () => {
-    elements.editCodeButton.style.display = 'inline-block';
-    elements.saveCodeEditsButton.style.display = 'none';
-    elements.cancelCodeEditsButton.style.display = 'none';
-    
-    elements.viewCodeBox.style.display = 'block';
-    elements.editCodeBox.style.display = 'none';
-    elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
-};
-
-const updateTabIcon = (tabIndex, iconUrl, isSpinner = false) => {
-    const tab = document.querySelector(`.tab[data-index="${tabIndex}"]`);
-    if (tab) {
-        // Remove any existing img or spinner
-        const existingIcon = tab.querySelector('img');
-        const existingSpinner = tab.querySelector('.lds-ring');
-        if (existingIcon) existingIcon.remove();
-        if (existingSpinner) existingSpinner.remove();
-
-        // If it's a spinner, add the spinner HTML
-        if (isSpinner) {
-            const spinnerHtml = `
-                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-            `;
-            tab.insertAdjacentHTML('afterbegin', spinnerHtml);
-        } else {
-            // Otherwise, create and add the img element
-            const iconImg = document.createElement('img');
-            iconImg.src = iconUrl;
-            iconImg.alt = 'file icon';
-            iconImg.style.width = '16px';
-            iconImg.style.height = '16px';
-            iconImg.style.marginRight = '5px';
-            tab.insertAdjacentElement('afterbegin', iconImg);
-        }
-    }
-};
-
-const getIconUrlByExtension = (extension) => {
-    switch (extension) {
-        case 'py':
-            return 'https://www.svgrepo.com/show/452091/python.svg';
-        case 'html':
-            return 'https://www.svgrepo.com/show/452228/html-5.svg';
-        case 'js':
-            return 'https://www.svgrepo.com/show/373703/js.svg';
-        case 'css':
-            return 'https://www.svgrepo.com/show/452185/css-3.svg';
-        default:
-            return ''; // Default icon or leave empty if no icon should be shown
-    }
-};
-
-const executeCode = () => {
-    const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
-    const currentFile = fileDataArray[currentSelectedTab];
-    const codeExecutionData = {
-        'filePath': currentFile.fileName,
-        'ec2InstanceId': 'i-09a3e0707ffcfdfdb', // You might want to make this dynamic
-        'code': currentFile.fileContents,
-        'uId': uId,
-        'projectId': projectId
-    };
-    const executePythonCodeButton = document.getElementById('executePythonCodeButton');
-    executePythonCodeButton.textContent = 'Running...';
-    executePythonCodeButton.disabled = true;
-    
-    // Send the POST request using Axios
-    axios.post(apiUrl, codeExecutionData, {
-        headers: {
-            'Content-type': 'application/json'
-        }
-    })
-    .then(response => {
-        // Display the output from the response
-        const { StandardOutputContent, StandardErrorContent } = response.data;
-        const combinedLogs = `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}`;
-        elements.logsBox.className = 'language-bash'; // Set the language for Prism.js
-        elements.logsBox.innerHTML = Prism.highlight(combinedLogs, Prism.languages.bash, 'bash');
-        elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
-
-        // Reset the button text and disabled state
-        executePythonCodeButton.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-            </svg>
-        `;
-        executePythonCodeButton.disabled = false;
-    })
-    .catch(error => {
-        // Display the error
-        alert(`Error: ${error}`);
-
-        // Reset the button text and disabled state
-        executePythonCodeButton.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-            </svg>
-        `;
-        executePythonCodeButton.disabled = false;
-    });
-};
-document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
-
-// Event listeners
-elements.viewCodeButton.addEventListener('click', () => {
-    highlightSelectedButton('viewCodeButton');
-    elements.viewCodeBox.style.display = 'block';
-    elements.previewRenderCodeBox.style.display = 'none'; 
-    elements.editCodeBox.style.display = 'none';
-    elements.editCodeButton.style.display = 'inline-block';
-    elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
-});
-
-elements.viewLogsButton.addEventListener('click', () => {
-    highlightSelectedButton('viewLogsButton');
-    showOrHideCodeBox('viewLogsButton');
-    elements.previewRenderCodeBox.style.display = 'none'; 
-    elements.editCodeButton.style.display = 'inline-block';
-    elements.saveCodeEditsButton.style.display = 'none';
-    elements.cancelCodeEditsButton.style.display = 'none';
-    elements.editCodeBox.style.display = 'none'; // Add this line
-    elements.viewLogsContainer.style.display = 'block'; // Show the logs container
-    elements.viewCodeBox.style.display = 'none';
-    elements.previewRenderCodeBox.style.display = 'none';
-    elements.editCodeBox.style.display = 'none';
-});
-
-elements.previewCodeButton.addEventListener('click', () => {
-    highlightSelectedButton('previewCodeButton');
-    elements.viewCodeBox.style.display = 'none';
-    elements.previewRenderCodeBox.style.display = 'block'; 
-    elements.editCodeBox.style.display = 'none';
-    elements.editCodeButton.style.display = 'inline-block';
-    elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
-    handlePreviewClick();
-});
-
-elements.editCodeButton.addEventListener('click', () => {
-    elements.editCodeButton.style.display = 'none';
-    elements.saveCodeEditsButton.style.display = 'inline-block';
-    elements.cancelCodeEditsButton.style.display = 'inline-block';
-    elements.viewCodeBox.style.display = 'none';
-    elements.previewRenderCodeBox.style.display = 'none';
-    elements.editCodeBox.style.display = 'block';
-    elements.editCodeTextArea.value = fileDataArray[currentSelectedTab].fileContents;
-});
-elements.saveCodeEditsButton.addEventListener('click', () => {
-    fileDataArray[currentSelectedTab].fileContents = elements.editCodeTextArea.value;
-    resetEditCodeBox();
-    displayFileContentInTab(currentSelectedTab);
-});
-elements.cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
-elements.previewCodeButton.addEventListener('click', handlePreviewClick);
-
-elements.saveSelectedFileButton.addEventListener('click', () => {
-    const currentFile = fileDataArray[currentSelectedTab];
-    console.log(uId,'uId')
-    console.log(projectId,'projectId')
-    console.log(currentFile,'currentFile')
-    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-        'requestType': 'COMMIT_FILE',
-        'fileContents': currentFile.fileContents,
-        'fileName': currentFile.fileName,
-        'uId': uId,
-        'projectId': projectId
-    })
-    .then(function (response) {
-        console.log(response);
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-});
-
-elements.submitUserRequestButton.addEventListener('click', () => {
-    const currentFile = fileDataArray[currentSelectedTab];
-    const userRequest = elements.userRequestInputBox.value;
-    // Replace the icon with the loading spinner
-    updateTabIcon(currentSelectedTab, '', true); // Pass true for isSpinner
-    axios.post('https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/', {
-        fileName: currentFile.fileName,
-        request: userRequest,
-        code: currentFile.fileContents,
-        uId: uId
-    })
-    .then(function (response) {
-        alert(response);
-        const newCode = response.data.newCode;
-        const fileName = response.data.fileName;
-        
-        const fileToUpdate = fileDataArray.find(file => file.fileName === fileName);
-        if (fileToUpdate) {
-            fileToUpdate.fileContents = newCode;
-            const updatedFileIndex = fileDataArray.indexOf(fileToUpdate);
-            displayFileContentInTab(updatedFileIndex);
-            elements.viewCodeButton.click();
-            const extension = extractFileExtension(fileName);
-            if (extension === 'html') {
-                handlePreviewClick();
-            }
-        }
-        // Replace the loading spinner with the appropriate file icon
-        const extension = extractFileExtension(currentFile.fileName);
-        const iconUrl = getIconUrlByExtension(extension);
-        updateTabIcon(currentSelectedTab, iconUrl);
-
-        })
-    .catch(function (error) {
-        console.log(error);
-        // Replace the loading spinner with the appropriate file icon
-        const extension = extractFileExtension(currentFile.fileName);
-        const iconUrl = getIconUrlByExtension(extension);
-        updateTabIcon(currentSelectedTab, iconUrl);
-    });
-
-    // Clear the textarea value
-    elements.userRequestInputBox.value = '';
-    // Reset the textarea height
-    autoResizeTextarea(elements.userRequestInputBox);
-});
-
-elements.addTab.addEventListener('click', handleAddClick);
-
-// Add the event listener to the "Run Code" button
-
-
-window.onload = function() {
-    extractuIdFromUrl();
-    extractprojectIdFromUrl();
-
-    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-        'uId': uId,
-        'projectId': projectId,
-        'requestType': 'fetchAllProjectFiles'
-    })
-    .then(function (response) {
-        if(response.status === 200) {
-            const projectFilesArray = response.data;
-            const select = document.getElementById('fileSelect');
-            projectFilesArray.forEach((filePath, index) => {
-                const option = document.createElement('option');
-                option.value = filePath;
-                option.text = filePath;
-                select.appendChild(option);
-            });
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-};
-
-function toggleEdit(editMode) {
-   var editBtn = document.getElementById('editCodeButton');
-   var editActions = document.getElementById('editActions');
-   var commitBtn = document.getElementById('saveSelectedFileButton');
-
-   if (editMode) {
-     editBtn.style.display = 'none';
-     editActions.style.display = 'flex';
-     commitBtn.style.display = 'none';
-   } else {
-     editBtn.style.display = 'inline-block';
-     editActions.style.display = 'none';
-     commitBtn.style.display = 'inline-block';
-   }
- }
-
-
-function fetchFileContents(fileName) {
-    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-        'uId': uId,
-        'projectId': projectId,
-        'requestType': 'fetchFileContents',
-        'filePath': fileName
-    })
-    .then(function (response) {
-        if(response.status === 200) {
-            const fileData = {
-                'fileName': response.data.fileName,
-                'fileContents': response.data.fileContents
-            };
-            fileDataArray.push(fileData);
-            generateAllFileTabElements();
-            displayFileContentInTab(fileDataArray.length - 1);
-            
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-}
-function extractuIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const uId = urlParams.get('uId');
-    return uId;
-}
-function extractprojectIdFromUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const projectId = urlParams.get('projectId');
-    return projectId;
-}
-
-function autoResizeTextarea(textarea) {
-    // Reset the height to 0 to shrink to the minimum content size
-    textarea.style.height = '0px';
-    // Set the height to the scroll height to remove the scrollbar
-    textarea.style.height = Math.max(textarea.scrollHeight, 20) + 'px'; // Ensure the height is at least 20px
-}
-
-// Initialize the textarea height on page load
-window.addEventListener('DOMContentLoaded', (event) => {
-    const textarea = document.getElementById('userRequestInputBox');
-    autoResizeTextarea(textarea);
-});
-
-// Use the 'load' event to ensure all resources are loaded
-window.addEventListener('load', (event) => {
-    const textarea = document.getElementById('userRequestInputBox');
-    autoResizeTextarea(textarea); // This should set the correct initial height
-});
-
-let uId = extractuIdFromUrl();
-let projectId = extractprojectIdFromUrl();
-
-// Initialize
-generateAllFileTabElements();
-displayFileContentInTab(0);
-
-
+  
+  // File data
+  let fileDataArray = [{
+      "fileName": "index.html",
+      "fileContents": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Explore Space</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #000; color: #fff; }\n        .container { width: 80%; margin: auto; }\n        header { text-align: center; padding: 2rem 0; }\n        h1 { margin: 0; }\n        .content { margin: 2rem 0; }\n        img { max-width: 100%; height: auto; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <header>\n            <h1>Welcome to the Space Exploration Site</h1>\n        </header>\n        <div class=\"content\">\n            <h2>Our Universe</h2>\n            <p>Space is vast and has always been a subject of mystery and intrigue. The universe is filled with wonders like stars, planets, and galaxies.</p>\n            <img src=\"images/universe.jpg\" alt=\"Universe\">\n        </div>\n        <div class=\"content\">\n            <h2>Space Missions</h2>\n            <p>Humanity has embarked on numerous space missions to explore the unknown. From the Apollo moon landings to the Mars rovers, each mission has expanded our understanding of the cosmos.</p>\n            <img src=\"images/space-mission.jpg\" alt=\"Space Mission\">\n        </div>\n    </div>\n</body>\n</html>"
+  }];
+  
+  let currentSelectedTab = 0;
+  
+  // DOM Elements
+  const elements = {
+      allTabs: document.getElementById('allTabs'),
+      addTab: document.getElementById('addTab'),
+      codeBox: document.getElementById('codeBox'),
+      codeContainer: document.querySelector('.code-container'),
+      viewCodeButton: document.getElementById('viewCodeButton'),
+      previewCodeButton: document.getElementById('previewCodeButton'),
+      viewLogsButton: document.getElementById('viewLogsButton'),
+      editCodeButton: document.getElementById('editCodeButton'),
+      saveCodeEditsButton: document.getElementById('saveCodeEditsButton'),
+      cancelCodeEditsButton: document.getElementById('cancelCodeEditsButton'),
+      viewCodeBox: document.getElementById('viewCodeBox'),
+      editCodeBox: document.getElementById('editCodeBox'),
+      editCodeTextArea: document.getElementById('editCodeTextArea'),
+      previewRenderCodeBox: document.getElementById('previewRenderCodeBox'),
+      previewCodeIframe: document.getElementById('previewCodeIframe'),
+      submitUserRequestButton: document.getElementById('submitUserRequestButton'),
+      userRequestInputBox: document.getElementById('userRequestInputBox'),
+      fileSelect: document.getElementById('fileSelect'),
+      saveSelectedFileButton: document.getElementById('saveSelectedFileButton'),
+      viewLogsContainer: document.getElementById('viewLogsContainer'),
+      logsBox: document.getElementById('logsBox'),
+  
+  };
+  
+  // Helper functions
+  const extractFileExtension = fileName => fileName.split('.').pop();
+  const mapFileExtensionToPrismLanguage = extension => LANGUAGE_MAP[extension] || '';
+  const highlightCodeWithPrism = (fileName, fileContents) => {
+      const extension = extractFileExtension(fileName);
+      const language = mapFileExtensionToPrismLanguage(extension);
+      elements.codeBox.className = `language-${language}`;
+      elements.codeBox.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+  }
+  
+  // Event handlers
+  const handleTabClick = (event) => {
+      const index = event.target.getAttribute('data-index');
+      displayFileContentInTab(index);
+      elements.editCodeButton.style.display = 'inline-block';
+      const fileName = fileDataArray[index].fileName;
+  
+      const extension = extractFileExtension(fileName);
+      if (extension === 'html') {
+          handlePreviewClick();
+      } else {
+          elements.viewCodeButton.click();
+      }
+  };
+  
+  const handleCloseClick = (event) => {
+      event.stopPropagation();
+      const index = event.target.getAttribute('data-index');
+      removeTabAndFileData(index);
+  };
+  
+  const handleAddClick = () => {
+      const fileName = prompt("Enter file name:");
+      const fileExists = fileDataArray.some(file => file.fileName === fileName);
+      if (fileExists) {
+          alert('File name already exists. Please choose another file name');
+      } else if (fileName) {
+          const newFile = {
+              fileName,
+              fileContents: ''
+          };
+          fileDataArray.push(newFile);
+          generateAllFileTabElements();
+          displayFileContentInTab(fileDataArray.length - 1);
+  
+      }
+  };
+  
+  const handlePreviewClick = () => {
+      const {
+          fileContents
+      } = fileDataArray[currentSelectedTab];
+      elements.previewCodeIframe.srcdoc = fileContents;
+      elements.previewRenderCodeBox.style.display = 'block';
+      elements.viewCodeBox.style.display = 'none';
+      highlightSelectedButton('previewCodeButton');
+  };
+  
+  // Main functions
+  const generateFileTabElement = (fileName, index) => {
+      const tab = document.createElement('div');
+      tab.className = 'tab flex items-center'; // Add flex and items-center for alignment
+      tab.setAttribute('data-index', index);
+      tab.addEventListener('click', handleTabClick);
+  
+      // Determine the icon based on the file extension
+      const extension = extractFileExtension(fileName);
+      let iconUrl;
+      switch (extension) {
+          case 'py':
+              iconUrl = 'https://www.svgrepo.com/show/452091/python.svg';
+              break;
+          case 'html':
+              iconUrl = 'https://www.svgrepo.com/show/452228/html-5.svg';
+              break;
+          case 'js':
+              iconUrl = 'https://www.svgrepo.com/show/373703/js.svg';
+              break;
+          case 'css':
+              iconUrl = 'https://www.svgrepo.com/show/452185/css-3.svg';
+              break;
+          default:
+              iconUrl = ''; // Default icon or leave empty if no icon should be shown
+              break;
+      }
+  
+      // Create an img element for the icon if an icon URL is provided
+      if (iconUrl) {
+          const iconImg = document.createElement('img');
+          iconImg.src = iconUrl;
+          iconImg.alt = `${extension} file icon`;
+          iconImg.style.width = '16px'; // Set the icon size
+          iconImg.style.height = '16px';
+          iconImg.style.marginRight = '5px'; // Add some space between the icon and the file name
+          tab.appendChild(iconImg);
+      }
+  
+      // Add the file name text
+      const textNode = document.createTextNode(fileName);
+      tab.appendChild(textNode);
+  
+      // Create an SVG element for the close icon
+      const svgNS = "http://www.w3.org/2000/svg";
+      const closeIcon = document.createElementNS(svgNS, "svg");
+      closeIcon.setAttributeNS(null, "viewBox", "0 0 20 20");
+      closeIcon.setAttributeNS(null, "fill", "currentColor");
+      closeIcon.classList.add("w-5", "h-5", "ml-2"); // Add margin-left for spacing
+  
+      // Create a path element for the SVG
+      const path = document.createElementNS(svgNS, "path");
+      path.setAttributeNS(null, "d", "M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z");
+  
+      // Append the path to the SVG, and the SVG to the close button container
+      closeIcon.appendChild(path);
+  
+      // Create a container for the close button
+      const close = document.createElement('div');
+      close.className = 'close cursor-pointer'; // Add cursor-pointer for better UX
+      close.setAttribute('data-index', index);
+      close.addEventListener('click', handleCloseClick);
+  
+      // Append the SVG icon to the close button container
+      close.appendChild(closeIcon);
+  
+      // Append the file name and close button to the tab
+      tab.appendChild(close);
+      elements.allTabs.appendChild(tab);
+  };
+  
+  const generateAllFileTabElements = () => {
+      elements.allTabs.innerHTML = '';
+      fileDataArray.forEach(({
+          fileName
+      }, index) => {
+          generateFileTabElement(fileName, index);
+      });
+  };
+  
+  const displayFileContentInTab = index => {
+      currentSelectedTab = index;
+      const {
+          fileName,
+          fileContents
+      } = fileDataArray[index];
+      highlightCodeWithPrism(fileName, fileContents);
+      toggleViewButtonsBasedOnFileType(fileName);
+      highlightSelectedTab(index);
+      resetEditCodeBox();
+      elements.previewRenderCodeBox.style.display = 'none';
+      const extension = extractFileExtension(fileName);
+      if (extension === 'html') {
+          handlePreviewClick();
+      }
+  };
+  
+  const removeTabAndFileData = index => {
+      fileDataArray.splice(index, 1);
+      generateAllFileTabElements();
+      if (fileDataArray.length > 0) {
+          displayFileContentInTab(0);
+      }
+  };
+  
+  const toggleViewButtonsBasedOnFileType = (fileName) => {
+      const extension = extractFileExtension(fileName);
+      const executePythonCodeButton = document.getElementById('executePythonCodeButton');
+      if (extension === 'html') {
+          elements.previewCodeButton.style.display = 'inline-block';
+          elements.viewLogsButton.style.display = 'inline-block';
+  
+          executePythonCodeButton.classList.add('hidden')
+      } else if (extension === 'py') {
+          executePythonCodeButton.classList.remove('hidden');
+          elements.previewCodeButton.style.display = 'none';
+          elements.viewLogsButton.style.display = 'inline-block';
+  
+      } else {
+          elements.previewCodeButton.style.display = 'none';
+          elements.viewLogsButton.style.display = 'none';
+  
+          executePythonCodeButton.classList.add('hidden')
+      }
+  }
+  
+  const highlightSelectedTab = (index) => {
+      const tabs = document.querySelectorAll('.tab');
+      tabs.forEach(t => t.style.fontWeight = 'normal');
+      tabs[index].style.fontWeight = 'bold';
+  }
+  
+  const highlightSelectedButton = (selectedButtonId) => {
+      const buttons = document.querySelectorAll('.codeBoxOptionsContainer button');
+      buttons.forEach(button => {
+          if (button.id === selectedButtonId) {
+              button.style.fontWeight = 'bold';
+          } else {
+              button.style.fontWeight = 'normal';
+          }
+      });
+  }
+  
+  const showOrHideCodeBox = (selectedButtonId) => {
+      if (selectedButtonId === 'viewCodeButton' && elements.codeContainer) {
+          elements.codeContainer.style.display = 'block';
+      } else if (elements.codeContainer) {
+          elements.codeContainer.style.display = 'none';
+      }
+  };
+  
+  const resetEditCodeBox = () => {
+      elements.editCodeButton.style.display = 'inline-block';
+      elements.saveCodeEditsButton.style.display = 'none';
+      elements.cancelCodeEditsButton.style.display = 'none';
+  
+      elements.viewCodeBox.style.display = 'block';
+      elements.editCodeBox.style.display = 'none';
+      elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
+  };
+  
+  const updateTabIcon = (tabIndex, iconUrl, isSpinner = false) => {
+      const tab = document.querySelector(`.tab[data-index="${tabIndex}"]`);
+      if (tab) {
+          // Remove any existing img or spinner
+          const existingIcon = tab.querySelector('img');
+          const existingSpinner = tab.querySelector('.lds-ring');
+          if (existingIcon) existingIcon.remove();
+          if (existingSpinner) existingSpinner.remove();
+  
+          // If it's a spinner, add the spinner HTML
+          if (isSpinner) {
+              const spinnerHtml = `
+                  <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+              `;
+              tab.insertAdjacentHTML('afterbegin', spinnerHtml);
+          } else {
+              // Otherwise, create and add the img element
+              const iconImg = document.createElement('img');
+              iconImg.src = iconUrl;
+              iconImg.alt = 'file icon';
+              iconImg.style.width = '16px';
+              iconImg.style.height = '16px';
+              iconImg.style.marginRight = '5px';
+              tab.insertAdjacentElement('afterbegin', iconImg);
+          }
+      }
+  };
+  
+  const getIconUrlByExtension = (extension) => {
+      switch (extension) {
+          case 'py':
+              return 'https://www.svgrepo.com/show/452091/python.svg';
+          case 'html':
+              return 'https://www.svgrepo.com/show/452228/html-5.svg';
+          case 'js':
+              return 'https://www.svgrepo.com/show/373703/js.svg';
+          case 'css':
+              return 'https://www.svgrepo.com/show/452185/css-3.svg';
+          default:
+              return ''; // Default icon or leave empty if no icon should be shown
+      }
+  };
+  
+  const executeCode = () => {
+      const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
+      const currentFile = fileDataArray[currentSelectedTab];
+      const codeExecutionData = {
+          'filePath': currentFile.fileName,
+          'ec2InstanceId': 'i-09a3e0707ffcfdfdb', // You might want to make this dynamic
+          'code': currentFile.fileContents,
+          'uId': uId,
+          'projectId': projectId
+      };
+      const executePythonCodeButton = document.getElementById('executePythonCodeButton');
+      executePythonCodeButton.textContent = 'Running...';
+      executePythonCodeButton.disabled = true;
+  
+      // Send the POST request using Axios
+      axios.post(apiUrl, codeExecutionData, {
+              headers: {
+                  'Content-type': 'application/json'
+              }
+          })
+          .then(response => {
+              // Display the output from the response
+              const {
+                  StandardOutputContent,
+                  StandardErrorContent
+              } = response.data;
+              const combinedLogs = `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}`;
+              elements.logsBox.className = 'language-bash'; // Set the language for Prism.js
+              elements.logsBox.innerHTML = Prism.highlight(combinedLogs, Prism.languages.bash, 'bash');
+              elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
+  
+              // Reset the button text and disabled state
+              executePythonCodeButton.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+              </svg>
+          `;
+              executePythonCodeButton.disabled = false;
+          })
+          .catch(error => {
+              // Display the error
+              alert(`Error: ${error}`);
+  
+              // Reset the button text and disabled state
+              executePythonCodeButton.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+              </svg>
+          `;
+              executePythonCodeButton.disabled = false;
+          });
+  };
+  document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
+  
+  // Event listeners
+  elements.viewCodeButton.addEventListener('click', () => {
+      highlightSelectedButton('viewCodeButton');
+      elements.viewCodeBox.style.display = 'block';
+      elements.previewRenderCodeBox.style.display = 'none';
+      elements.editCodeBox.style.display = 'none';
+      elements.editCodeButton.style.display = 'inline-block';
+      elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
+  });
+  
+  elements.viewLogsButton.addEventListener('click', () => {
+      highlightSelectedButton('viewLogsButton');
+      showOrHideCodeBox('viewLogsButton');
+      elements.previewRenderCodeBox.style.display = 'none';
+      elements.editCodeButton.style.display = 'inline-block';
+      elements.saveCodeEditsButton.style.display = 'none';
+      elements.cancelCodeEditsButton.style.display = 'none';
+      elements.editCodeBox.style.display = 'none'; // Add this line
+      elements.viewLogsContainer.style.display = 'block'; // Show the logs container
+      elements.viewCodeBox.style.display = 'none';
+      elements.previewRenderCodeBox.style.display = 'none';
+      elements.editCodeBox.style.display = 'none';
+  });
+  
+  elements.previewCodeButton.addEventListener('click', () => {
+      highlightSelectedButton('previewCodeButton');
+      elements.viewCodeBox.style.display = 'none';
+      elements.previewRenderCodeBox.style.display = 'block';
+      elements.editCodeBox.style.display = 'none';
+      elements.editCodeButton.style.display = 'inline-block';
+      elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
+      handlePreviewClick();
+  });
+  
+  elements.editCodeButton.addEventListener('click', () => {
+      elements.editCodeButton.style.display = 'none';
+      elements.saveCodeEditsButton.style.display = 'inline-block';
+      elements.cancelCodeEditsButton.style.display = 'inline-block';
+      elements.viewCodeBox.style.display = 'none';
+      elements.previewRenderCodeBox.style.display = 'none';
+      elements.editCodeBox.style.display = 'block';
+      elements.editCodeTextArea.value = fileDataArray[currentSelectedTab].fileContents;
+  });
+  elements.saveCodeEditsButton.addEventListener('click', () => {
+      fileDataArray[currentSelectedTab].fileContents = elements.editCodeTextArea.value;
+      resetEditCodeBox();
+      displayFileContentInTab(currentSelectedTab);
+  });
+  elements.cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
+  elements.previewCodeButton.addEventListener('click', handlePreviewClick);
+  
+  elements.saveSelectedFileButton.addEventListener('click', () => {
+      const currentFile = fileDataArray[currentSelectedTab];
+      console.log(uId, 'uId')
+      console.log(projectId, 'projectId')
+      console.log(currentFile, 'currentFile')
+      axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
+              'requestType': 'COMMIT_FILE',
+              'fileContents': currentFile.fileContents,
+              'fileName': currentFile.fileName,
+              'uId': uId,
+              'projectId': projectId
+          })
+          .then(function(response) {
+              console.log(response);
+          })
+          .catch(function(error) {
+              console.log(error);
+          });
+  });
+  
+  elements.submitUserRequestButton.addEventListener('click', () => {
+      const currentFile = fileDataArray[currentSelectedTab];
+      const userRequest = elements.userRequestInputBox.value;
+      // Replace the icon with the loading spinner
+      updateTabIcon(currentSelectedTab, '', true); // Pass true for isSpinner
+      axios.post('https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/', {
+              fileName: currentFile.fileName,
+              request: userRequest,
+              code: currentFile.fileContents,
+              uId: uId
+          })
+          .then(function(response) {
+              alert(response);
+              const newCode = response.data.newCode;
+              const fileName = response.data.fileName;
+  
+              const fileToUpdate = fileDataArray.find(file => file.fileName === fileName);
+              if (fileToUpdate) {
+                  fileToUpdate.fileContents = newCode;
+                  const updatedFileIndex = fileDataArray.indexOf(fileToUpdate);
+                  displayFileContentInTab(updatedFileIndex);
+                  elements.viewCodeButton.click();
+                  const extension = extractFileExtension(fileName);
+                  if (extension === 'html') {
+                      handlePreviewClick();
+                  }
+              }
+              // Replace the loading spinner with the appropriate file icon
+              const extension = extractFileExtension(currentFile.fileName);
+              const iconUrl = getIconUrlByExtension(extension);
+              updateTabIcon(currentSelectedTab, iconUrl);
+  
+          })
+          .catch(function(error) {
+              console.log(error);
+              // Replace the loading spinner with the appropriate file icon
+              const extension = extractFileExtension(currentFile.fileName);
+              const iconUrl = getIconUrlByExtension(extension);
+              updateTabIcon(currentSelectedTab, iconUrl);
+          });
+  
+      // Clear the textarea value
+      elements.userRequestInputBox.value = '';
+      // Reset the textarea height
+      autoResizeTextarea(elements.userRequestInputBox);
+  });
+  
+  elements.addTab.addEventListener('click', handleAddClick);
+  
+  // Add the event listener to the "Run Code" button
+  
+  
+  window.onload = function() {
+      extractuIdFromUrl();
+      extractprojectIdFromUrl();
+  
+      axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
+              'uId': uId,
+              'projectId': projectId,
+              'requestType': 'fetchAllProjectFiles'
+          })
+          .then(function(response) {
+              if (response.status === 200) {
+                  const projectFilesArray = response.data;
+                  const select = document.getElementById('fileSelect');
+                  projectFilesArray.forEach((filePath, index) => {
+                      const option = document.createElement('option');
+                      option.value = filePath;
+                      option.text = filePath;
+                      select.appendChild(option);
+                  });
+              }
+          })
+          .catch(function(error) {
+              console.log(error);
+          });
+  };
+  
+  function toggleEdit(editMode) {
+      var editBtn = document.getElementById('editCodeButton');
+      var editActions = document.getElementById('editActions');
+      var commitBtn = document.getElementById('saveSelectedFileButton');
+  
+      if (editMode) {
+          editBtn.style.display = 'none';
+          editActions.style.display = 'flex';
+          commitBtn.style.display = 'none';
+      } else {
+          editBtn.style.display = 'inline-block';
+          editActions.style.display = 'none';
+          commitBtn.style.display = 'inline-block';
+      }
+  }
+  
+  
+  function fetchFileContents(fileName) {
+      axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
+              'uId': uId,
+              'projectId': projectId,
+              'requestType': 'fetchFileContents',
+              'filePath': fileName
+          })
+          .then(function(response) {
+              if (response.status === 200) {
+                  const fileData = {
+                      'fileName': response.data.fileName,
+                      'fileContents': response.data.fileContents
+                  };
+                  fileDataArray.push(fileData);
+                  generateAllFileTabElements();
+                  displayFileContentInTab(fileDataArray.length - 1);
+  
+              }
+          })
+          .catch(function(error) {
+              console.log(error);
+          });
+  }
+  
+  function extractuIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const uId = urlParams.get('uId');
+      return uId;
+  }
+  
+  function extractprojectIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const projectId = urlParams.get('projectId');
+      return projectId;
+  }
+  
+  function autoResizeTextarea(textarea) {
+      // Reset the height to 0 to shrink to the minimum content size
+      textarea.style.height = '0px';
+      // Set the height to the scroll height to remove the scrollbar
+      textarea.style.height = Math.max(textarea.scrollHeight, 20) + 'px'; // Ensure the height is at least 20px
+  }
+  
+  // Initialize the textarea height on page load
+  window.addEventListener('DOMContentLoaded', (event) => {
+      const textarea = document.getElementById('userRequestInputBox');
+      autoResizeTextarea(textarea);
+  });
+  
+  // Use the 'load' event to ensure all resources are loaded
+  window.addEventListener('load', (event) => {
+      const textarea = document.getElementById('userRequestInputBox');
+      autoResizeTextarea(textarea); // This should set the correct initial height
+  });
+  
+  let uId = extractuIdFromUrl();
+  let projectId = extractprojectIdFromUrl();
+  
+  // Initialize
+  generateAllFileTabElements();
+  displayFileContentInTab(0);
 </script>
 </body>
 </html>
