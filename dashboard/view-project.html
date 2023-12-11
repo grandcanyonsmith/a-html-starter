@@ -24,6 +24,41 @@
             overflow-y: hidden; /* Prevent scrollbar */
             resize: none; /* Prevent manual resizing */
         }
+        .lds-ring {
+            display: inline-block;
+            position: relative;
+            width: 20px; /* Adjusted for smaller size */
+            height: 20px; /* Adjusted for smaller size */
+          }
+          .lds-ring div {
+            box-sizing: border-box;
+            display: block;
+            position: absolute;
+            width: 16px; /* Adjusted for smaller size */
+            height: 16px; /* Adjusted for smaller size */
+            margin: 2px; /* Adjusted for smaller size */
+            border: 2px solid blue; /* Adjusted border width and color */
+            border-radius: 50%;
+            animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+            border-color: blue transparent transparent transparent; /* Adjusted border color */
+          }
+          .lds-ring div:nth-child(1) {
+            animation-delay: -0.45s;
+          }
+          .lds-ring div:nth-child(2) {
+            animation-delay: -0.3s;
+          }
+          .lds-ring div:nth-child(3) {
+            animation-delay: -0.15s;
+          }
+          @keyframes lds-ring {
+            0% {
+              transform: rotate(0deg);
+            }
+            100% {
+              transform: rotate(360deg);
+            }
+          }
     </style>
 </head>
 <body class="flex flex-col h-screen m-0 pb-16 line-numbers">
@@ -412,7 +447,33 @@ const resetEditCodeBox = () => {
     elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
 };
 
+const updateTabIcon = (tabIndex, iconUrl, isSpinner = false) => {
+    const tab = document.querySelector(`.tab[data-index="${tabIndex}"]`);
+    if (tab) {
+        // Remove any existing img or spinner
+        const existingIcon = tab.querySelector('img');
+        const existingSpinner = tab.querySelector('.lds-ring');
+        if (existingIcon) existingIcon.remove();
+        if (existingSpinner) existingSpinner.remove();
 
+        // If it's a spinner, add the spinner HTML
+        if (isSpinner) {
+            const spinnerHtml = `
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            `;
+            tab.insertAdjacentHTML('afterbegin', spinnerHtml);
+        } else {
+            // Otherwise, create and add the img element
+            const iconImg = document.createElement('img');
+            iconImg.src = iconUrl;
+            iconImg.alt = 'file icon';
+            iconImg.style.width = '16px';
+            iconImg.style.height = '16px';
+            iconImg.style.marginRight = '5px';
+            tab.insertAdjacentElement('afterbegin', iconImg);
+        }
+    }
+};
 
 const executeCode = () => {
     const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
@@ -539,7 +600,8 @@ elements.saveSelectedFileButton.addEventListener('click', () => {
 elements.submitUserRequestButton.addEventListener('click', () => {
     const currentFile = fileDataArray[currentSelectedTab];
     const userRequest = elements.userRequestInputBox.value;
-    
+    // Replace the icon with the loading spinner
+    updateTabIcon(currentSelectedTab, '', true); // Pass true for isSpinner
     axios.post('https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/', {
         fileName: currentFile.fileName,
         request: userRequest,
@@ -562,9 +624,18 @@ elements.submitUserRequestButton.addEventListener('click', () => {
                 handlePreviewClick();
             }
         }
-    })
+        // Replace the loading spinner with the appropriate file icon
+        const extension = extractFileExtension(currentFile.fileName);
+        const iconUrl = getIconUrlByExtension(extension);
+        updateTabIcon(currentSelectedTab, iconUrl);
+
+        })
     .catch(function (error) {
         console.log(error);
+        // Replace the loading spinner with the appropriate file icon
+        const extension = extractFileExtension(currentFile.fileName);
+        const iconUrl = getIconUrlByExtension(extension);
+        updateTabIcon(currentSelectedTab, iconUrl);
     });
 
     // Clear the textarea value
