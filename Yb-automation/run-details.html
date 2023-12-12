@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Dashboard with Filters</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.js"></script>
 </head>
 <body class="bg-gray-900 text-white">
 <div id="testRunDetailsHeader" class="border-b border-gray-700 bg-gray-800 px-4 py-5 sm:px-6">
@@ -16,7 +18,7 @@
 </div>
 <h2 class="text-2xl font-bold mt-4 mb-2">Logs</h2>
 <div id="logsContainer" class="w-full p-4 bg-gray-800">
-  <!-- Logs will be appended here -->
+  <pre><code id="logsCode" class="language-markup"></code></pre>
 </div>
 <h2 class="text-2xl font-bold mt-4 mb-2">Test Runs Report</h2>
 <div class="mt-8 flow-root">
@@ -197,23 +199,26 @@ if (testRun) {
         videoElement.currentTime = videoElement.duration / 2;
     });
 
-    // Clear the logs container before appending new logs
-    logsContainer.innerHTML = '';
+  // Clear the logs container before appending new logs
+  const logsCode = document.getElementById('logsCode');
+  logsCode.textContent = '';
 
-    // Check if the test run has logs
-    if (testRun.logs && testRun.logs.length > 0) {
-        // Iterate over each log and append it to the logs container
-        testRun.logs.forEach(log => {
-            const logElement = createElement('p', log, 'text-sm text-gray-300');
-            logsContainer.appendChild(logElement);
-        });
-    } else {
-        // If there are no logs, display a message
-        const noLogsMessage = createElement('p', 'No logs available for this test run.', 'text-sm text-gray-300');
-        logsContainer.appendChild(noLogsMessage);
-    }
+  // Check if the test run has logs
+  if (testRun.logs && testRun.logs.length > 0) {
+    // Iterate over each log and append it to the logs container
+    testRun.logs.forEach(log => {
+      logsCode.textContent += log + '\n';
+    });
+  } else {
+    // If there are no logs, display a message
+    logsCode.textContent = 'No logs available for this test run.';
   }
-}; // This closing brace ends the displayRunDetails function
+
+  // Highlight the logs with Prism.js
+  Prism.highlightElement(logsCode);
+};
+  }
+
 
 // Getting URL parameters
 const getParamsFromUrl = () => {
