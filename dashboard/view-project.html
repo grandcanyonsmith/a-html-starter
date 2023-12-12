@@ -407,25 +407,26 @@
   };
   
   const displayFileContentInTab = index => {
-      currentSelectedTab = index;
-      const {
-          fileName,
-          fileContents
-      } = fileDataArray[index];
-      highlightCodeWithPrism(fileName, fileContents);
-      toggleViewButtonsBasedOnFileType(fileName);
-      highlightSelectedTab(index);
-      resetEditCodeBox();
-      elements.previewRenderCodeBox.style.display = 'none';
-      const extension = extractFileExtension(fileName);
-      if (extension === 'html') {
-          handlePreviewClick();
-      }
-          // Update the logs view with the logs for the selected file
+    currentSelectedTab = index;
+    const { fileName, fileContents } = fileDataArray[index];
+    highlightCodeWithPrism(fileName, fileContents);
+    toggleViewButtonsBasedOnFileType(fileName);
+    highlightSelectedTab(index);
+    resetEditCodeBox();
+    elements.previewRenderCodeBox.style.display = 'none';
+    const extension = extractFileExtension(fileName);
+    if (extension === 'html') {
+        handlePreviewClick();
+    }
+    // Update the logs view with the logs for the selected file
     const currentFileLogs = fileDataArray[index].logs;
     elements.logsBox.className = 'language-bash';
     elements.logsBox.innerHTML = Prism.highlight(currentFileLogs, Prism.languages.bash, 'bash');
-  };
+    elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
+
+    // Manually trigger Prism to re-highlight the code with line numbers
+    Prism.highlightAll(); // <-- Add this line
+};
   
   const removeTabAndFileData = index => {
       fileDataArray.splice(index, 1);
@@ -764,7 +765,7 @@
   }
   
   function commitFile() {
-    alert('File Commited!');
+    alert('File Commit!');
   }
 
   function fetchFileContents(fileName) {
