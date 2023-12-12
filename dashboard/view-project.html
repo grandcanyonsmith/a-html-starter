@@ -348,11 +348,21 @@
         .map(file => `<script>${file.fileContents}</script>`)
         .join('\n');
 
+    // Function to safely inject content before a closing tag
+    const injectBeforeClosingTag = (content, tag, injection) => {
+        const closingTag = `</${tag}>`;
+        const position = content.toLowerCase().lastIndexOf(closingTag.toLowerCase());
+        if (position !== -1) {
+            return content.slice(0, position) + injection + content.slice(position);
+        }
+        return content + injection; // Fallback if closing tag is not found
+    };
+
     // Inject CSS contents into the HTML file's <head> section
-    fileContents = fileContents.replace(/(<\/head>)/i, `${cssContents}$1`);
+    fileContents = injectBeforeClosingTag(fileContents, 'head', cssContents);
 
     // Inject JS contents into the HTML file's <body> section
-    fileContents = fileContents.replace(/(<\/body>)/i, `${jsContents}$1`);
+    fileContents = injectBeforeClosingTag(fileContents, 'body', jsContents);
 
     elements.previewCodeIframe.srcdoc = fileContents;
     elements.previewRenderCodeBox.style.display = 'block';
