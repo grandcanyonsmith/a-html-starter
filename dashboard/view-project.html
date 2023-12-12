@@ -38,6 +38,10 @@
             display: flex;
             align-items: center;
         }
+        #codeBox {
+            font-size: 14px; /* Adjust the font size as needed */
+            line-height: 1.95; /* Adjust the line height as needed */
+        }
         .tab {
             margin-right: 10px;
             cursor: pointer;
@@ -130,7 +134,7 @@
    </div>
    </div>
    <div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
-      <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="codeBox" class="w-full text-4xl"></code></pre>
+    <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="codeBox" class="w-full text-lg leading-relaxed"></code></pre>
    </div>
    <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
       <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
