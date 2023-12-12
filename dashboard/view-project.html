@@ -556,11 +556,15 @@
                   StandardErrorContent
               } = response.data;
               const combinedLogs = `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}`;
-              elements.logsBox.className = 'language-bash'; // Set the language for Prism.js
-              elements.logsBox.innerHTML = Prism.highlight(combinedLogs, Prism.languages.bash, 'bash');
-              elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
-              // Append logs to the fileDataArray for the current file
-              fileDataArray[currentSelectedTab].logs += `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}\n`;
+                          // Replace the current logs with the new logs for the fileDataArray
+            const newLogs = `Standard Output:\n${response.data.StandardOutputContent}\nStandard Error:\n${response.data.StandardErrorContent}`;
+            fileDataArray[currentSelectedTab].logs = newLogs;
+
+            // Update the logs view with the new logs
+            elements.logsBox.className = 'language-bash';
+            elements.logsBox.innerHTML = Prism.highlight(newLogs, Prism.languages.bash, 'bash');
+            elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
+              
               // Reset the button text and disabled state
               executePythonCodeButton.innerHTML = `
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -607,6 +611,7 @@
       elements.previewRenderCodeBox.style.display = 'none';
       elements.editCodeBox.style.display = 'none';
           // Set the logs content for the current file
+        // Set the logs content for the current file
     const currentFileLogs = fileDataArray[currentSelectedTab].logs;
     elements.logsBox.className = 'language-bash';
     elements.logsBox.innerHTML = Prism.highlight(currentFileLogs, Prism.languages.bash, 'bash');
