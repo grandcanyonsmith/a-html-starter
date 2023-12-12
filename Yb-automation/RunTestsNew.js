@@ -1,4 +1,4 @@
-RunTestsNew.js
+
 const API_ENDPOINT =
   "https://nyk43gzspnm7wfhwqrc4uaprya0ecdap.lambda-url.us-west-2.on.aws/";
 const SUBMIT_REQUEST_API_ENDPOINT =
