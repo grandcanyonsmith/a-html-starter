@@ -340,29 +340,27 @@
     let { fileContents } = fileDataArray[currentSelectedTab];
     const cssContents = fileDataArray
         .filter(file => extractFileExtension(file.fileName) === 'css')
-        .map(file => `<style>${file.fileContents}</style>`)
+        .map(file => '<style>' + file.fileContents + '</style>')
         .join('\n');
 
     const jsContents = fileDataArray
         .filter(file => extractFileExtension(file.fileName) === 'js')
-        .map(file => `<script>${file.fileContents}</script>`)
+        .map(file => '<script type="text/javascript">' + file.fileContents + '</script>')
         .join('\n');
 
-    // Function to safely inject content before a closing tag
-    const injectBeforeClosingTag = (content, tag, injection) => {
-        const closingTag = `</${tag}>`;
-        const position = content.toLowerCase().lastIndexOf(closingTag.toLowerCase());
-        if (position !== -1) {
-            return content.slice(0, position) + injection + content.slice(position);
-        }
-        return content + injection; // Fallback if closing tag is not found
-    };
+    // Find the position of the closing </head> tag
+    const headCloseIndex = fileContents.toLowerCase().indexOf('</head>');
+    if (headCloseIndex !== -1) {
+        // Inject CSS contents into the HTML file's <head> section
+        fileContents = fileContents.slice(0, headCloseIndex) + cssContents + fileContents.slice(headCloseIndex);
+    }
 
-    // Inject CSS contents into the HTML file's <head> section
-    fileContents = injectBeforeClosingTag(fileContents, 'head', cssContents);
-
-    // Inject JS contents into the HTML file's <body> section
-    fileContents = injectBeforeClosingTag(fileContents, 'body', jsContents);
+    // Find the position of the closing </body> tag
+    const bodyCloseIndex = fileContents.toLowerCase().indexOf('</body>');
+    if (bodyCloseIndex !== -1) {
+        // Inject JS contents into the HTML file's <body> section
+        fileContents = fileContents.slice(0, bodyCloseIndex) + jsContents + fileContents.slice(bodyCloseIndex);
+    }
 
     elements.previewCodeIframe.srcdoc = fileContents;
     elements.previewRenderCodeBox.style.display = 'block';
