@@ -769,28 +769,30 @@
   }
 
   function fetchFileContents(fileName) {
-      axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-              'uId': uId,
-              'projectId': projectId,
-              'requestType': 'fetchFileContents',
-              'filePath': fileName
-          })
-          .then(function(response) {
-              if (response.status === 200) {
-                  const fileData = {
-                      'fileName': response.data.fileName,
-                      'fileContents': response.data.fileContents
-                  };
-                  fileDataArray.push(fileData);
-                  generateAllFileTabElements();
-                  displayFileContentInTab(fileDataArray.length - 1);
-  
-              }
-          })
-          .catch(function(error) {
-              console.log(error);
-          });
-  }
+    axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
+        'uId': uId,
+        'projectId': projectId,
+        'requestType': 'fetchFileContents',
+        'filePath': fileName
+    })
+    .then(function(response) {
+        if (response.status === 200) {
+            const fileData = {
+                'fileName': response.data.fileName,
+                'fileContents': response.data.fileContents
+            };
+            fileDataArray.push(fileData);
+            generateAllFileTabElements();
+            displayFileContentInTab(fileDataArray.length - 1);
+
+            // Manually trigger Prism to re-highlight the code with line numbers
+            Prism.highlightAll(); // <-- Add this line
+        }
+    })
+    .catch(function(error) {
+        console.log(error);
+    });
+}
   
   function extractuIdFromUrl() {
       const urlParams = new URLSearchParams(window.location.search);
