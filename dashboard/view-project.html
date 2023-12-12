@@ -343,8 +343,16 @@
         .map(file => `<style>${file.fileContents}</style>`)
         .join('\n');
 
+    const jsContents = fileDataArray
+        .filter(file => extractFileExtension(file.fileName) === 'js')
+        .map(file => `<script>${file.fileContents}</script>`)
+        .join('\n');
+
     // Inject CSS contents into the HTML file's <head> section
     fileContents = fileContents.replace(/(<\/head>)/i, `${cssContents}$1`);
+
+    // Inject JS contents into the HTML file's <body> section
+    fileContents = fileContents.replace(/(<\/body>)/i, `${jsContents}$1`);
 
     elements.previewCodeIframe.srcdoc = fileContents;
     elements.previewRenderCodeBox.style.display = 'block';
