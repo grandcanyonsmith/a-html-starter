@@ -313,10 +313,10 @@
   };
   
   const handleCloseClick = (event) => {
-      event.stopPropagation();
-      const index = event.target.getAttribute('data-index');
-      removeTabAndFileData(index);
-  };
+    event.stopPropagation();
+    const index = event.currentTarget.getAttribute('data-index'); // Use currentTarget instead of target
+    removeTabAndFileData(index);
+};
   
   const handleAddClick = () => {
       const fileName = prompt("Enter file name:");
@@ -421,18 +421,18 @@
       // Append the path to the SVG, and the SVG to the close button container
       closeIcon.appendChild(path);
   
-      // Create a container for the close button
-      const close = document.createElement('div');
-      close.className = 'close cursor-pointer'; // Add cursor-pointer for better UX
-      close.setAttribute('data-index', index);
-      close.addEventListener('click', handleCloseClick);
+    // Create a container for the close button
+    const close = document.createElement('div');
+    close.className = 'close cursor-pointer'; // Add cursor-pointer for better UX
+    close.setAttribute('data-index', index);
+    close.addEventListener('click', handleCloseClick);
   
       // Append the SVG icon to the close button container
       close.appendChild(closeIcon);
   
-      // Append the file name and close button to the tab
-      tab.appendChild(close);
-      elements.allTabs.appendChild(tab);
+          // Append the file name and close button to the tab
+    tab.appendChild(close);
+    elements.allTabs.appendChild(tab);
   };
   
   const generateAllFileTabElements = () => {
