@@ -337,14 +337,20 @@
   };
   
   const handlePreviewClick = () => {
-      const {
-          fileContents
-      } = fileDataArray[currentSelectedTab];
-      elements.previewCodeIframe.srcdoc = fileContents;
-      elements.previewRenderCodeBox.style.display = 'block';
-      elements.viewCodeBox.style.display = 'none';
-      highlightSelectedButton('previewCodeButton');
-  };
+    let { fileContents } = fileDataArray[currentSelectedTab];
+    const cssContents = fileDataArray
+        .filter(file => extractFileExtension(file.fileName) === 'css')
+        .map(file => `<style>${file.fileContents}</style>`)
+        .join('\n');
+
+    // Inject CSS contents into the HTML file's <head> section
+    fileContents = fileContents.replace(/(<\/head>)/i, `${cssContents}$1`);
+
+    elements.previewCodeIframe.srcdoc = fileContents;
+    elements.previewRenderCodeBox.style.display = 'block';
+    elements.viewCodeBox.style.display = 'none';
+    highlightSelectedButton('previewCodeButton');
+};
   
   // Main functions
   const generateFileTabElement = (fileName, index) => {
