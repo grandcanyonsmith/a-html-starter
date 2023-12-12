@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game with AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .board-row:after {
+            clear: both;
+            content: "";
+            display: table;
+        }
+
+        .status {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body class="bg-gray-800 text-white min-h-screen flex flex-col items-center justify-center p-6">
+
+<div id="user-input-form" class="mb-4">
+    <label for="player-name" class="mr-2 font-semibold">Enter your name:</label>
+    <input type="text" id="player-name" placeholder="Your Name" class="p-2 rounded bg-gray-700 border-gray-600">
+    <button onclick="startGame()" class="ml-2 py-2 px-4 border border-transparent text-sm font-medium rounded-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring-blue active:bg-blue-700">Start Game</button>
+</div>
+
+<div id="game" class="hidden p-4">
+    <div id="status" class="status p-2 mb-4 text-lg font-semibold"></div>
+    <div class="grid grid-cols-3 gap-3">
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(0)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(1)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(2)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(3)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(4)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(5)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(6)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(7)"></div>
+        <div class="w-24 h-24 sm:w-32 sm:h-32 bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-4xl font-bold cursor-pointer" onclick="playerMove(8)"></div>
+    </div>
+    <button onclick="resetGame()" class="mt-4 py-2 px-4 border border-transparent text-sm font-medium rounded-md bg-blue-600 hover:bg-blue-700 focus:outline-none focus:border-blue-700 focus:ring-blue active:bg-blue-700">Restart Game</button>
+</div>
+
+<script>
+    const playerNameInput = document.getElementById('player-name');
+    const gameForm = document.getElementById('user-input-form');
+    const gameContainer = document.getElementById('game');
+    const statusDisplay = document.getElementById('status');
+
+    let gameActive = true;
+    let currentPlayer = "X"; // Human player
+    let playerXName = "";
+    let playerOName = "AI";
+    let gameState = ["", "", "", "", "", "", "", "", ""];
+
+    const winningConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    function startGame() {
+        playerXName = playerNameInput.value || "Player";
+        updateStatus();
+        gameForm.style.display = 'none';
+        gameContainer.style.display = 'block';
+    }
+
+    function updateStatus() {
+        statusDisplay.innerHTML = currentPlayer === "X" ? `${playerXName}'s turn` : `${playerOName}'s turn`;
+    }
+
+    function handleResultValidation() {
+        let roundWon = false;
+        for (let i = 0; i <= 7; i++) {
+            const winCondition = winningConditions[i];
+            let a = gameState[winCondition[0]];
+            let b = gameState[winCondition[1]];
+            let c = gameState[winCondition[2]];
+            if (a === '' || b === '' || c === '') {
+                continue;
+            }
+            if (a === b && b === c) {
+                roundWon = true;
+                break;
+            }
+        }
+
+        if (roundWon) {
+            statusDisplay.innerHTML = `Player ${currentPlayer === "X" ? playerXName : playerOName} has won!`;
+            gameActive = false;
+            return;
+        }
+
+        let roundDraw = !gameState.includes("");
+        if (roundDraw) {
+            statusDisplay.innerHTML = "Game ended in a draw!";
+            gameActive = false;
+            return;
+        }
+
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        updateStatus();
+        
+        if (currentPlayer === "O") {
+            aiMove();
+        }        
+    }
+
+    function playerMove(cellIndex) {
+        if (gameState[cellIndex] !== "" || !gameActive || currentPlayer !== "X") {
+            return;
+        }
+
+        makeMove(cellIndex);
+    }
+
+    function aiMove() {
+        let emptyCells = gameState.map((cell, index) => cell === "" ? index : null).filter(val => val !== null);
+        let randomCellIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+        makeMove(randomCellIndex);
+    }
+
+    function makeMove(cellIndex) {
+        gameState[cellIndex] = currentPlayer;
+        document.querySelectorAll('.grid div')[cellIndex].innerHTML = currentPlayer;
+        handleResultValidation();
+    }
+
+    function resetGame() {
+        gameActive = true;
+        currentPlayer = "X"; // Human player starts first
+        gameState = ["", "", "", "", "", "", "", "", ""];
+        updateStatus();
+        document.querySelectorAll('.grid div').forEach(cell => cell.innerHTML = "");
+    }
+</script>
+
+</body>
+</html>
