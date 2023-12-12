@@ -336,29 +336,25 @@
       }
   };
   
-  const handlePreviewClick = () => {
-    let { fileContents } = fileDataArray[currentSelectedTab];
+  const handlePreviewClick = function() {
+    let fileContents = fileDataArray[currentSelectedTab].fileContents;
     const cssContents = fileDataArray
-        .filter(file => extractFileExtension(file.fileName) === 'css')
-        .map(file => '<style>' + file.fileContents + '</style>')
+        .filter(function(file) { return extractFileExtension(file.fileName) === 'css'; })
+        .map(function(file) { return '<style>' + file.fileContents + '</style>'; })
         .join('\n');
 
     const jsContents = fileDataArray
-        .filter(file => extractFileExtension(file.fileName) === 'js')
-        .map(file => '<script type="text/javascript">' + file.fileContents + '</script>')
+        .filter(function(file) { return extractFileExtension(file.fileName) === 'js'; })
+        .map(function(file) { return '<script>' + file.fileContents + '<' + '/script>'; })
         .join('\n');
 
-    // Find the position of the closing </head> tag
     const headCloseIndex = fileContents.toLowerCase().indexOf('</head>');
     if (headCloseIndex !== -1) {
-        // Inject CSS contents into the HTML file's <head> section
         fileContents = fileContents.slice(0, headCloseIndex) + cssContents + fileContents.slice(headCloseIndex);
     }
 
-    // Find the position of the closing </body> tag
     const bodyCloseIndex = fileContents.toLowerCase().indexOf('</body>');
     if (bodyCloseIndex !== -1) {
-        // Inject JS contents into the HTML file's <body> section
         fileContents = fileContents.slice(0, bodyCloseIndex) + jsContents + fileContents.slice(bodyCloseIndex);
     }
 
