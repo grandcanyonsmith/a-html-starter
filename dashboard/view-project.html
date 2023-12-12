@@ -54,6 +54,9 @@
             overflow-y: hidden; /* Prevent scrollbar */
             resize: none; /* Prevent manual resizing */
         }
+        #viewCodeBox pre {
+            padding-top: 0;
+        }
         .lds-ring {
             display: inline-block;
             position: relative;
@@ -124,7 +127,7 @@
          </button>
       </div>
    </div>
-   <div class="flex items-center mb-2">
+   <div class="flex items-center mb-0">
       <div id="allTabs" class="mr-2"></div>
       <div class="inline-block px-2 border border-gray-300 cursor-pointer" id="addTab">
          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
@@ -134,7 +137,7 @@
    </div>
    </div>
    <div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
-    <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="codeBox" class="w-full text-lg leading-relaxed"></code></pre>
+    <pre class="line-numbers pl-14 pt-4 pb-4 pr-4 mt-0"><code id="codeBox" class="w-full text-lg leading-relaxed"></code></pre>
    </div>
    <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
       <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
@@ -143,7 +146,7 @@
       <iframe id="previewCodeIframe" class="w-full h-full border-none"></iframe>
    </div>
    <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="viewLogsContainer">
-      <pre class="line-numbers pl-14 pt-4 pb-4 pr-4"><code id="logsBox" class="language-bash"></code></pre>
+    <pre class="line-numbers pl-14 pt-0 pb-0 pr-0 mt-0 language-markup" tabindex="0"><code id="codeBox" class="language-markup"></code></pre>
    </div>
    <div class="row">
       <button id="editCodeButton" class="icon-button" onclick="toggleEdit(true)">
