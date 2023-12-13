@@ -165,12 +165,12 @@ const displayRunDetails = (runId, previousRunsData) => {
     // Right side container
     const rightDiv = createElement('div', '', 'mt-5 flex lg:ml-4 lg:mt-0');
     headerDiv.appendChild(rightDiv);
-
+    
     // View Code button
     const viewCodeButton = createElement('button', 'View Code', 'inline-flex items-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400');
     viewCodeButton.addEventListener('click', () => {
-        const testName = getParamsFromUrl().testName;
-        window.location.href = `viewCode.html?testName=${encodeURIComponent(testName)}&filePath=${encodeURIComponent(testRun.filePath)}`;
+        const testName = getParamsFromUrl().testName.split('::')[0]; // Split the testName and take the first part
+        window.location.href = `viewCode.html?testName=${testName}`; // Redirect without encoding
     });
     rightDiv.appendChild(viewCodeButton);
 
