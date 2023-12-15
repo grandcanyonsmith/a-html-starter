@@ -387,27 +387,44 @@ const displayFileContentInTab = index => {
       Prism.highlightAll(); // <-- Add this line
   };
 
-function executeCode() {
-    // Assuming this function sends code to a server for execution and handles the response
+async function executeCode() {
     const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
-    const code = elements.editCodeTextArea.value;
-    const payload = { code };
+    const currentFile = fileDataArray[currentSelectedTab];
+    const codeExecutionData = {
+        'filePath': currentFile.fileName,
+        'code': currentFile.fileContents,
+        'uId': uId,
+        'projectId': projectId
+    };
 
-    axios.post(apiUrl, payload)
-        .then(response => {
-            const { stdout, stderr } = response.data;
-            fileDataArray[currentSelectedTab].logs = formatLogs(stdout, stderr);
-            updateLogsView(fileDataArray[currentSelectedTab].logs);
-        })
-        .catch(error => {
-            console.error('Execution error:', error);
+    try {
+        const response = await axios.post(apiUrl, codeExecutionData, {
+            headers: {
+                'Content-type': 'application/json'
+            }
         });
+
+        // Handle the response from the server
+        const { StandardOutputContent, StandardErrorContent } = response.data;
+        const newLogs = formatLogs(StandardOutputContent, StandardErrorContent);
+        currentFile.logs = newLogs; // Update the logs for the current file
+
+        updateLogsView(newLogs); // Update the logs view in the UI
+
+        // Optionally, update the UI to indicate that code execution is complete
+        // For example, change the button text back to "Run" or hide a loading indicator
+    } catch (error) {
+        console.error('Error executing code:', error);
+        // Optionally, update the UI to indicate that an error occurred
+    }
 }
 
+// Helper function to format logs for display
 function formatLogs(stdout, stderr) {
-    return `Output:\n${stdout}\n\nErrors:\n${stderr}`;
+    return `Standard Output:\n${stdout}\nStandard Error:\n${stderr}`;
 }
 
+// Helper function to update the logs view in the UI
 function updateLogsView(logs) {
     elements.logsBox.textContent = logs;
     Prism.highlightElement(elements.logsBox);
