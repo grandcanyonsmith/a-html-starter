@@ -624,12 +624,22 @@ function fetchAllProjectFiles(uId, projectId) {
             if (response.status === 200) {
                 const projectFilesArray = response.data;
                 populateFileSelector(projectFilesArray);
-                initializeFileDataArray(projectFilesArray);
+                if (projectFilesArray.length > 0) {
+                    // Only initialize the first file in the array
+                    initializeFileDataArray(projectFilesArray[0]);
+                }
             }
         })
         .catch(error => {
             console.error('Error fetching project files:', error);
         });
+}
+
+function initializeFileDataArray(firstFilePath) {
+    // Ensure that firstFilePath is defined and not null
+    if (firstFilePath) {
+        fetchFileContents(firstFilePath);
+    }
 }
 
 function populateFileSelector(filePaths) {
