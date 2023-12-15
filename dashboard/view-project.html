@@ -541,8 +541,9 @@ function handleCloseClick(event) {
 function handlePreviewClick() {
     const fileContents = fileDataArray[currentSelectedTab].fileContents;
     elements.previewCodeIframe.srcdoc = fileContents;
-    toggleTabVisibility('preview');
+    showTabContent('preview');
 }
+
 
 function handleSaveEdits() {
     fileDataArray[currentSelectedTab].fileContents = elements.editCodeTextArea.value;
