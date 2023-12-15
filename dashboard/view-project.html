@@ -496,18 +496,42 @@ function handleSaveSelectedFile() {
 }
 
 function handleSubmitUserRequest() {
+    const currentFile = fileDataArray[currentSelectedTab];
     const userRequest = elements.userRequestInputBox.value;
-    // Assuming this function sends a user request to a server and handles the response
-    const apiUrl = 'https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/';
-    const payload = { request: userRequest };
 
-    axios.post(apiUrl, payload)
-        .then(response => {
-            console.log('User request handled:', response.data);
-        })
-        .catch(error => {
-            console.error('User request error:', error);
-        });
+    // Replace the icon with the loading spinner
+    updateTabIcon(currentSelectedTab, '', true); // Pass true for isSpinner
+
+    axios.post('https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/', {
+        fileName: currentFile.fileName,
+        request: userRequest,
+        code: currentFile.fileContents,
+        uId: uId
+    })
+    .then(function(response) {
+        // Handle the response from the server
+        // Assuming the server responds with the updated code
+        const updatedCode = response.data.newCode;
+        if (updatedCode) {
+            currentFile.fileContents = updatedCode;
+            highlightCodeWithPrism(currentFile.fileName, updatedCode);
+        }
+
+        // Replace the loading spinner with the file icon
+        const iconUrl = getIconUrlByExtension(extractFileExtension(currentFile.fileName));
+        updateTabIcon(currentSelectedTab, iconUrl);
+
+        // Clear the user request input box
+        elements.userRequestInputBox.value = '';
+        autoResizeTextarea(elements.userRequestInputBox); // Reset the textarea height
+    })
+    .catch(function(error) {
+        console.error('Error handling user request:', error);
+
+        // Replace the loading spinner with the file icon
+        const iconUrl = getIconUrlByExtension(extractFileExtension(currentFile.fileName));
+        updateTabIcon(currentSelectedTab, iconUrl);
+    });
 }
 
 function handleFetchFileContents(fileName) {
