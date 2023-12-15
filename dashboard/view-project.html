@@ -270,7 +270,11 @@ function toggleTabVisibility(tabName) {
     };
 
     Object.keys(tabContents).forEach(key => {
-        tabContents[key].classList.toggle('hidden', key !== tabName);
+        if (key === tabName) {
+            tabContents[key].classList.remove('hidden');
+        } else {
+            tabContents[key].classList.add('hidden');
+        }
     });
 }
 
