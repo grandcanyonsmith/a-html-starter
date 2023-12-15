@@ -639,15 +639,6 @@ elements.previewCodeButton.addEventListener('click', () => showTabContent('previ
 elements.viewCodeButton.addEventListener('click', () => showTabContent('code'));
 elements.viewLogsButton.addEventListener('click', () => showTabContent('logs'));
 
-// Initialization
-window.addEventListener('DOMContentLoaded', () => {
-    // Set the default tab to 'code'
-    showTabContent('code');
-    // Fetch all project files
-    fetchAllProjectFiles(uId, projectId);
-    // Auto resize the user request input box
-    autoResizeTextarea(elements.userRequestInputBox);
-});
 function fetchAllProjectFiles(uId, projectId) {
     const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
     const payload = {
@@ -719,6 +710,16 @@ function fetchFileContents(selectedFileName) {
         console.error('Error fetching contents for file:', selectedFileName, error);
     });
 }
+
+// Initialization
+window.addEventListener('DOMContentLoaded', () => {
+    // Set the default tab to 'code'
+    showTabContent('code');
+    // Fetch all project files
+    fetchAllProjectFiles(uId, projectId);
+    // Auto resize the user request input box
+    autoResizeTextarea(elements.userRequestInputBox);
+});
 </script>
 </body>
 </html>
