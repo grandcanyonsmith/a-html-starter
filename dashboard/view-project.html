@@ -653,12 +653,6 @@ function populateFileSelector(filePaths) {
     });
 }
 
-function initializeFileDataArray(filePaths) {
-    filePaths.forEach(filePath => {
-        fetchFileContents(filePath);
-    });
-}
-
 function fetchFileContents(selectedFileName) {
     // Ensure that selectedFileName is defined and not null
     if (!selectedFileName) {
@@ -697,16 +691,6 @@ elements.fileSelect.addEventListener('change', (event) => {
         fetchFileContents(selectedFileName);
     }
 });
-
-// Initialize file data array with files from the server
-function initializeFileDataArray(filePaths) {
-    filePaths.forEach(filePath => {
-        // Ensure that filePath is defined and not null
-        if (filePath) {
-            fetchFileContents(filePath);
-        }
-    });
-}
 
 // Call the function to fetch all project files
 fetchAllProjectFiles(uId, projectId);
