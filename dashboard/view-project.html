@@ -408,7 +408,7 @@ async function executeCode() {
         const { StandardOutputContent, StandardErrorContent } = response.data;
         const newLogs = formatLogs(StandardOutputContent, StandardErrorContent);
         currentFile.logs = newLogs; // Update the logs for the current file
-
+        console.log(newLogs,'newLogs');
         updateLogsView(newLogs); // Update the logs view in the UI
 
         // Optionally, update the UI to indicate that code execution is complete
