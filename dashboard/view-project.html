@@ -524,7 +524,10 @@ const handleAddClick = () => {
 };
 
 // Ensure that the handlePreviewClick function is defined correctly
+// Ensure that the handlePreviewClick function is defined correctly
 function handlePreviewClick() {
+    console.log('Preview button clicked'); // Log the click action
+
     if (currentSelectedTab < 0 || currentSelectedTab >= fileDataArray.length) {
         console.error('No file selected or index out of bounds');
         return;
@@ -535,7 +538,10 @@ function handlePreviewClick() {
 }
 
 // Attach the event listener to the previewCodeButton using its ID
-document.getElementById('previewCodeButton').addEventListener('click', handlePreviewClick);
+document.getElementById('previewCodeButton').addEventListener('click', function() {
+    console.log('Preview button clicked (event listener)'); // Log the click action from the event listener
+    handlePreviewClick();
+});
 
 
 function handleSaveEdits() {
