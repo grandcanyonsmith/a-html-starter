@@ -200,330 +200,76 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-bash.min.js"></script>
 <script>
 
+// Constants and DOM elements
+const elements = {
+    allTabs: document.getElementById('allTabs'),
+    addTab: document.getElementById('addTab'),
+    codeBox: document.getElementById('codeBox'),
+    viewCodeButton: document.getElementById('viewCodeButton'),
+    previewCodeButton: document.getElementById('previewCodeButton'),
+    viewLogsButton: document.getElementById('viewLogsButton'),
+    editCodeButton: document.getElementById('editCodeButton'),
+    saveCodeEditsButton: document.getElementById('saveCodeEditsButton'),
+    cancelCodeEditsButton: document.getElementById('cancelCodeEditsButton'),
+    viewCodeBox: document.getElementById('viewCodeBox'),
+    editCodeBox: document.getElementById('editCodeBox'),
+    editCodeTextArea: document.getElementById('editCodeTextArea'),
+    previewRenderCodeBox: document.getElementById('previewRenderCodeBox'),
+    previewCodeIframe: document.getElementById('previewCodeIframe'),
+    submitUserRequestButton: document.getElementById('submitUserRequestButton'),
+    userRequestInputBox: document.getElementById('userRequestInputBox'),
+    fileSelect: document.getElementById('fileSelect'),
+    saveSelectedFileButton: document.getElementById('saveSelectedFileButton'),
+    viewLogsContainer: document.getElementById('viewLogsContainer'),
+    logsBox: document.getElementById('logsBox'),
+    executePythonCodeButton: document.getElementById('executePythonCodeButton')
+};
 
-   document.addEventListener('DOMContentLoaded', () => {
-      const viewTabs = document.querySelectorAll('.tab-button');
-      const tabContents = {
-          code: elements.viewCodeBox,
-          preview: elements.previewRenderCodeBox,
-          logs: null // Placeholder for logs content
-      };
+const LANGUAGE_MAP = {
+    'py': 'python',
+    'js': 'javascript',
+    'css': 'css',
+    'html': 'markup'
+};
 
-      // Function to remove active class from all tabs and reset to default
-      function deactivateTabs() {
-          viewTabs.forEach(tab => {
-              tab.classList.remove('text-blue-700', 'bg-white', 'shadow');
-              tab.classList.add('text-gray-400');
-          });
-      }
+let fileDataArray = [];
+let currentSelectedTab = 0;
+let uId = extractQueryParam('uId');
+let projectId = extractQueryParam('projectId');
 
-      // Function to hide all tab contents
-      function hideTabContents() {
-          Object.values(tabContents).forEach(content => {
-              if (content) content.classList.add('hidden');
-          });
-      }
+// Helper functions
+function extractQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
 
-      // Initialize the first tab as active
-      viewTabs[0].classList.add('text-blue-700', 'bg-white', 'shadow');
-      tabContents.code.classList.remove('hidden'); // Show the first tab content
+function extractFileExtension(fileName) {
+    return fileName.split('.').pop();
+}
 
-      // Add click event listener to each tab
-      viewTabs.forEach(tab => {
-          tab.addEventListener('click', () => {
-              const target = tab.getAttribute('data-target');
-              deactivateTabs();
-              hideTabContents();
-              tab.classList.add('text-blue-700', 'bg-white', 'shadow');
-              if (tabContents[target]) {
-                  tabContents[target].classList.remove('hidden'); // Show the selected tab content
-              }
-          });
-      });
-  });
+function mapFileExtensionToPrismLanguage(extension) {
+    return LANGUAGE_MAP[extension] || '';
+}
 
+function highlightCodeWithPrism(fileName, fileContents) {
+    const extension = extractFileExtension(fileName);
+    const language = mapFileExtensionToPrismLanguage(extension);
+    elements.codeBox.className = `language-${language}`;
+    elements.codeBox.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
+}
 
+function toggleTabVisibility(tabName) {
+    const tabContents = {
+        code: elements.viewCodeBox,
+        preview: elements.previewRenderCodeBox,
+        logs: elements.viewLogsContainer,
+        edit: elements.editCodeBox
+    };
 
-  // Constants
-  const LANGUAGE_MAP = {
-      'py': 'python',
-      'js': 'javascript',
-      'css': 'css',
-      'html': 'markup'
-  };
-
-  // File data
-  let fileDataArray = [{
-      "fileName": "index.html",
-      "fileContents": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Explore Space</title>\n    <style>\n        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #000; color: #fff; }\n        .container { width: 80%; margin: auto; }\n        header { text-align: center; padding: 2rem 0; }\n        h1 { margin: 0; }\n        .content { margin: 2rem 0; }\n        img { max-width: 100%; height: auto; }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <header>\n            <h1>Welcome to the Space Exploration Site</h1>\n        </header>\n        <div class=\"content\">\n            <h2>Our Universe</h2>\n            <p>Space is vast and has always been a subject of mystery and intrigue. The universe is filled with wonders like stars, planets, and galaxies.</p>\n            <img src=\"images/universe.jpg\" alt=\"Universe\">\n        </div>\n        <div class=\"content\">\n            <h2>Space Missions</h2>\n            <p>Humanity has embarked on numerous space missions to explore the unknown. From the Apollo moon landings to the Mars rovers, each mission has expanded our understanding of the cosmos.</p>\n            <img src=\"images/space-mission.jpg\" alt=\"Space Mission\">\n        </div>\n    </div>\n</body>\n</html>",
-      "logs": "" // Initialize logs as an empty string
-  }];
-
-  let currentSelectedTab = 0;
-
-  // DOM Elements
-  const elements = {
-      allTabs: document.getElementById('allTabs'),
-      addTab: document.getElementById('addTab'),
-      codeBox: document.getElementById('codeBox'),
-      codeContainer: document.querySelector('.code-container'),
-      viewCodeButton: document.getElementById('viewCodeButton'),
-      previewCodeButton: document.getElementById('previewCodeButton'),
-      viewLogsButton: document.getElementById('viewLogsButton'),
-      editCodeButton: document.getElementById('editCodeButton'),
-      saveCodeEditsButton: document.getElementById('saveCodeEditsButton'),
-      cancelCodeEditsButton: document.getElementById('cancelCodeEditsButton'),
-      viewCodeBox: document.getElementById('viewCodeBox'),
-      editCodeBox: document.getElementById('editCodeBox'),
-      editCodeTextArea: document.getElementById('editCodeTextArea'),
-      previewRenderCodeBox: document.getElementById('previewRenderCodeBox'),
-      previewCodeIframe: document.getElementById('previewCodeIframe'),
-      submitUserRequestButton: document.getElementById('submitUserRequestButton'),
-      userRequestInputBox: document.getElementById('userRequestInputBox'),
-      fileSelect: document.getElementById('fileSelect'),
-      saveSelectedFileButton: document.getElementById('saveSelectedFileButton'),
-      viewLogsContainer: document.getElementById('viewLogsContainer'),
-      logsBox: document.getElementById('logsBox'),
-
-  };
-
-  // Helper functions
-  const extractFileExtension = fileName => fileName.split('.').pop();
-  const mapFileExtensionToPrismLanguage = extension => LANGUAGE_MAP[extension] || '';
-  const highlightCodeWithPrism = (fileName, fileContents) => {
-      const extension = extractFileExtension(fileName);
-      const language = mapFileExtensionToPrismLanguage(extension);
-      elements.codeBox.className = `language-${language}`;
-      elements.codeBox.innerHTML = Prism.highlight(fileContents, Prism.languages[language], language);
-  }
-
-  // Event handlers
-  const handleTabClick = (event) => {
-      const index = event.target.getAttribute('data-index');
-      displayFileContentInTab(index);
-      elements.editCodeButton.style.display = 'inline-block';
-      const fileName = fileDataArray[index].fileName;
-
-      const extension = extractFileExtension(fileName);
-      if (extension === 'html') {
-          handlePreviewClick();
-      } else {
-          elements.viewCodeButton.click();
-      }
-  };
-
-  const handleCloseClick = (event) => {
-      event.stopPropagation();
-      const index = event.currentTarget.getAttribute('data-index'); // Use currentTarget instead of target
-      removeTabAndFileData(index);
-  };
-
-  const handleAddClick = () => {
-      const fileName = prompt("Enter file name:");
-      const fileExists = fileDataArray.some(file => file.fileName === fileName);
-      if (fileExists) {
-          alert('File name already exists. Please choose another file name');
-      } else if (fileName) {
-          const newFile = {
-              fileName,
-              fileContents: '',
-              logs: '' // Initialize logs for the new file
-          };
-          fileDataArray.push(newFile);
-          generateAllFileTabElements();
-          displayFileContentInTab(fileDataArray.length - 1);
-
-      }
-  };
-
-  const handlePreviewClick = function() {
-      let fileContents = fileDataArray[currentSelectedTab].fileContents;
-      const cssContents = fileDataArray
-          .filter(function(file) {
-              return extractFileExtension(file.fileName) === 'css';
-          })
-          .map(function(file) {
-              return '<style>' + file.fileContents + '</style>';
-          })
-          .join('\n');
-
-      const jsContents = fileDataArray
-          .filter(function(file) {
-              return extractFileExtension(file.fileName) === 'js';
-          })
-          .map(function(file) {
-              return '<script>' + file.fileContents + '<' + '/script>';
-          })
-          .join('\n');
-
-      const headCloseIndex = fileContents.toLowerCase().indexOf('</head>');
-      if (headCloseIndex !== -1) {
-          fileContents = fileContents.slice(0, headCloseIndex) + cssContents + fileContents.slice(headCloseIndex);
-      }
-
-      const bodyCloseIndex = fileContents.toLowerCase().indexOf('</body>');
-      if (bodyCloseIndex !== -1) {
-          fileContents = fileContents.slice(0, bodyCloseIndex) + jsContents + fileContents.slice(bodyCloseIndex);
-      }
-
-      elements.previewCodeIframe.srcdoc = fileContents;
-      elements.previewRenderCodeBox.style.display = 'block';
-      elements.viewCodeBox.style.display = 'none';
-      highlightSelectedButton('previewCodeButton');
-  };
-
-  // Main functions
-  // Extracted as constants for better maintainability
-  const fileIcons = {
-      py: 'https://www.svgrepo.com/show/452091/python.svg',
-      html: 'https://www.svgrepo.com/show/452228/html-5.svg',
-      js: 'https://www.svgrepo.com/show/373703/js.svg',
-      css: 'https://www.svgrepo.com/show/452185/css-3.svg'
-  };
-  const iconSize = {
-      width: '16px',
-      height: '16px',
-      marginRight: '5px'
-  };
-  const svgNS = 'http://www.w3.org/2000/svg';
-
-  // Extracts inline styles to improve the function purview and reusability
-  function setIconStyles(iconImg) {
-      iconImg.style.width = iconSize.width;
-      iconImg.style.height = iconSize.height;
-      iconImg.style.marginRight = iconSize.marginRight;
-  }
-
-  // Refactor to create elements with options for better code readability
-  function createElement(tag, options = {}) {
-      const element = document.createElement(tag);
-      Object.entries(options.attributes || {}).forEach(([key, value]) => element.setAttribute(key, value));
-      (options.classes || []).forEach(cls => element.classList.add(cls));
-      if (options.styles) Object.assign(element.style, options.styles);
-      if (options.textContent) element.textContent = options.textContent;
-      if (options.listeners) {
-          Object.entries(options.listeners).forEach(([event, listener]) => {
-              element.addEventListener(event, listener);
-          });
-      }
-      return element;
-  }
-
-  function createImageElement(extension) {
-      const iconUrl = fileIcons[extension] || '';
-      return createElement('img', {
-          attributes: {
-              src: iconUrl,
-              alt: `${extension} file icon`
-          },
-          styles: iconSize
-      });
-  }
-
-  function createCloseIcon(index) {
-      const path = createElement('path', {
-          attributes: {
-              d: "M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 " +
-                  "101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 " +
-                  "00-1.06-1.06L10 8.94 6.28 5.22z"
-          },
-          namespaces: {
-              xmlns: svgNS
-          }
-      });
-
-      const closeIcon = createElement('svg', {
-          attributes: {
-              viewBox: "0 0 20 20",
-              fill: "currentColor"
-          },
-          classes: ["w-5", "h-5", "ml-2"],
-          namespaces: {
-              xmlns: svgNS
-          }
-      });
-      closeIcon.appendChild(path);
-
-      return createElement('div', {
-          classes: ['close', 'cursor-pointer'],
-          attributes: {
-              'data-index': index
-          },
-          listeners: {
-              'click': handleCloseClick
-          }
-      }).appendChild(closeIcon);
-  }
-
-  // Refactored generateFileTabElement function
-  function generateFileTabElement(fileName, index) {
-      const extension = extractFileExtension(fileName);
-      const tab = createElement('div', {
-          classes: ['tab', 'flex', 'items-center'],
-          attributes: {
-              'data-index': index
-          },
-          listeners: {
-              'click': handleTabClick
-          }
-      });
-
-      // Append icon image if applicable
-      if (fileIcons[extension]) {
-          tab.appendChild(createImageElement(extension));
-      }
-
-      // Append file name text
-      tab.appendChild(document.createTextNode(fileName));
-
-      // Append close icon
-      tab.appendChild(createCloseIcon(index));
-
-      // Append tab to container
-      elements.allTabs.appendChild(tab);
-  }
-
-  const generateAllFileTabElements = () => {
-      elements.allTabs.innerHTML = '';
-      fileDataArray.forEach(({
-          fileName
-      }, index) => {
-          generateFileTabElement(fileName, index);
-      });
-  };
-
-  const displayFileContentInTab = index => {
-      currentSelectedTab = index;
-      const {
-          fileName,
-          fileContents
-      } = fileDataArray[index];
-      highlightCodeWithPrism(fileName, fileContents);
-      toggleViewButtonsBasedOnFileType(fileName);
-      highlightSelectedTab(index);
-      resetEditCodeBox();
-      elements.previewRenderCodeBox.style.display = 'none';
-      const extension = extractFileExtension(fileName);
-      if (extension === 'html') {
-          handlePreviewClick();
-      }
-      // Update the logs view with the logs for the selected file
-      const currentFileLogs = fileDataArray[index].logs;
-      elements.logsBox.className = 'language-bash';
-      elements.logsBox.innerHTML = Prism.highlight(currentFileLogs, Prism.languages.bash, 'bash');
-      elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
-
-      // Manually trigger Prism to re-highlight the code with line numbers
-      Prism.highlightAll(); // <-- Add this line
-  };
-
-  const removeTabAndFileData = index => {
-      fileDataArray.splice(index, 1);
-      generateAllFileTabElements();
-      if (fileDataArray.length > 0) {
-          displayFileContentInTab(0);
-      }
-  };
+    Object.keys(tabContents).forEach(key => {
+        tabContents[key].classList.toggle('hidden', key !== tabName);
+    });
+}
 
   const toggleViewButtonsBasedOnFileType = (fileName) => {
       const extension = extractFileExtension(fileName);
@@ -552,24 +298,126 @@
       tabs[index].style.fontWeight = 'bold';
   }
 
-  const highlightSelectedButton = (selectedButtonId) => {
-      const buttons = document.querySelectorAll('.codeBoxOptionsContainer button');
-      buttons.forEach(button => {
-          if (button.id === selectedButtonId) {
-              button.style.fontWeight = 'bold';
-          } else {
-              button.style.fontWeight = 'normal';
-          }
-      });
-  }
+function toggleEditMode(editMode) {
+    elements.editCodeButton.style.display = editMode ? 'none' : 'inline-block';
+    elements.saveCodeEditsButton.style.display = editMode ? 'inline-block' : 'none';
+    elements.cancelCodeEditsButton.style.display = editMode ? 'inline-block' : 'none';
+    elements.saveSelectedFileButton.style.display = editMode ? 'none' : 'inline-block';
+}
 
-  const showOrHideCodeBox = (selectedButtonId) => {
-      if (selectedButtonId === 'viewCodeButton' && elements.codeContainer) {
-          elements.codeContainer.style.display = 'block';
-      } else if (elements.codeContainer) {
-          elements.codeContainer.style.display = 'none';
+function generateAllFileTabElements() {
+    elements.allTabs.innerHTML = ''; // Clear existing tabs
+
+    fileDataArray.forEach((file, index) => {
+        const tab = document.createElement('div');
+        tab.className = 'tab flex items-center';
+        tab.setAttribute('data-index', index);
+        tab.addEventListener('click', handleTabClick);
+
+        const iconUrl = getIconUrlByExtension(extractFileExtension(file.fileName));
+        if (iconUrl) {
+            const iconImg = document.createElement('img');
+            iconImg.src = iconUrl;
+            iconImg.alt = 'file icon';
+            iconImg.style.width = '16px';
+            iconImg.style.height = '16px';
+            iconImg.style.marginRight = '5px';
+            tab.appendChild(iconImg);
+        }
+
+        const fileNameText = document.createTextNode(file.fileName);
+        tab.appendChild(fileNameText);
+
+        const closeIcon = document.createElement('span');
+        closeIcon.className = 'close cursor-pointer';
+        closeIcon.setAttribute('data-index', index);
+        closeIcon.innerHTML = '&times;'; // Example close icon
+        closeIcon.addEventListener('click', handleCloseClick);
+        tab.appendChild(closeIcon);
+
+        elements.allTabs.appendChild(tab);
+    });
+}
+
+function updateTabIcon(tabIndex, iconUrl, isSpinner = false) {
+    const tab = document.querySelector(`.tab[data-index="${tabIndex}"] .icon-container`);
+    if (!tab) return;
+
+    tab.innerHTML = isSpinner
+        ? '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>'
+        : `<img src="${iconUrl}" alt="file icon" style="width: 16px; height: 16px; margin-right: 5px;">`;
+}
+
+function getIconUrlByExtension(extension) {
+    const icons = {
+        'py': 'https://www.svgrepo.com/show/452091/python.svg',
+        'html': 'https://www.svgrepo.com/show/452228/html-5.svg',
+        'js': 'https://www.svgrepo.com/show/373703/js.svg',
+        'css': 'https://www.svgrepo.com/show/452185/css-3.svg'
+    };
+    return icons[extension] || '';
+}
+
+const displayFileContentInTab = index => {
+      currentSelectedTab = index;
+      const {
+          fileName,
+          fileContents
+      } = fileDataArray[index];
+      highlightCodeWithPrism(fileName, fileContents);
+      toggleViewButtonsBasedOnFileType(fileName);
+      highlightSelectedTab(index);
+      resetEditCodeBox();
+      elements.previewRenderCodeBox.style.display = 'none';
+      const extension = extractFileExtension(fileName);
+      if (extension === 'html') {
+          handlePreviewClick();
       }
+      // Update the logs view with the logs for the selected file
+      const currentFileLogs = fileDataArray[index].logs;
+      elements.logsBox.className = 'language-bash';
+      elements.logsBox.innerHTML = Prism.highlight(currentFileLogs, Prism.languages.bash, 'bash');
+      elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
+
+      // Manually trigger Prism to re-highlight the code with line numbers
+      Prism.highlightAll(); // <-- Add this line
   };
+
+function executeCode() {
+    // Assuming this function sends code to a server for execution and handles the response
+    const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
+    const code = elements.editCodeTextArea.value;
+    const payload = { code };
+
+    axios.post(apiUrl, payload)
+        .then(response => {
+            const { stdout, stderr } = response.data;
+            fileDataArray[currentSelectedTab].logs = formatLogs(stdout, stderr);
+            updateLogsView(fileDataArray[currentSelectedTab].logs);
+        })
+        .catch(error => {
+            console.error('Execution error:', error);
+        });
+}
+
+function formatLogs(stdout, stderr) {
+    return `Output:\n${stdout}\n\nErrors:\n${stderr}`;
+}
+
+function updateLogsView(logs) {
+    elements.logsBox.textContent = logs;
+    Prism.highlightElement(elements.logsBox);
+}
+
+function setButtonState(button, content, isDisabled) {
+    button.innerHTML = content;
+    button.disabled = isDisabled;
+}
+
+function autoResizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+}
 
   const resetEditCodeBox = () => {
       elements.editCodeButton.style.display = 'inline-block';
@@ -581,347 +429,186 @@
       elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
   };
 
-  const updateTabIcon = (tabIndex, iconUrl, isSpinner = false) => {
-      const tab = document.querySelector(`.tab[data-index="${tabIndex}"]`);
-      if (!tab) return;
+function handleTabClick(event) {
+    const tabIndex = event.currentTarget.dataset.index;
+    currentSelectedTab = tabIndex;
+    highlightCodeWithPrism(fileDataArray[tabIndex].fileName, fileDataArray[tabIndex].fileContents);
+    toggleTabVisibility('code');
+}
 
-      // Clear existing icon or spinner
-      const iconContainer = tab.querySelector('.icon-container');
-      if (iconContainer) {
-          iconContainer.innerHTML = '';
-      } else {
-          const newIconContainer = document.createElement('div');
-          newIconContainer.className = 'icon-container';
-          tab.prepend(newIconContainer);
-      }
+function handleCloseClick(event) {
+    const tabIndex = event.currentTarget.dataset.index;
+    fileDataArray.splice(tabIndex, 1);
+    // Update the UI to reflect the removal of the tab
+}
 
-      const updatedIconContainer = tab.querySelector('.icon-container');
+  const handleAddClick = () => {
+      const fileName = prompt("Enter file name:");
+      const fileExists = fileDataArray.some(file => file.fileName === fileName);
+      if (fileExists) {
+          alert('File name already exists. Please choose another file name');
+      } else if (fileName) {
+          const newFile = {
+              fileName,
+              fileContents: '',
+              logs: '' // Initialize logs for the new file
+          };
+          fileDataArray.push(newFile);
+          generateAllFileTabElements();
+          displayFileContentInTab(fileDataArray.length - 1);
 
-      // Insert spinner or image based on isSpinner flag
-      if (isSpinner) {
-          updatedIconContainer.innerHTML = '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>';
-      } else {
-          const iconImg = new Image(16, 16);
-          iconImg.src = iconUrl;
-          iconImg.alt = 'file icon';
-          iconImg.style.marginRight = '5px';
-          updatedIconContainer.appendChild(iconImg);
-      }
-  };
-
-  const getIconUrlByExtension = (extension) => {
-      switch (extension) {
-          case 'py':
-              return 'https://www.svgrepo.com/show/452091/python.svg';
-          case 'html':
-              return 'https://www.svgrepo.com/show/452228/html-5.svg';
-          case 'js':
-              return 'https://www.svgrepo.com/show/373703/js.svg';
-          case 'css':
-              return 'https://www.svgrepo.com/show/452185/css-3.svg';
-          default:
-              return ''; // Default icon or leave empty if no icon should be shown
       }
   };
 
-  async function executeCode() {
-      const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
-      const currentFile = fileDataArray[currentSelectedTab];
-      const codeExecutionData = {
-          'filePath': currentFile.fileName,
-          'ec2InstanceId': 'i-09a3e0707ffcfdfdb', // TODO: Make dynamic if needed
-          'code': currentFile.fileContents,
-          'uId': uId,
-          'projectId': projectId
-      };
+function handlePreviewClick() {
+    const fileContents = fileDataArray[currentSelectedTab].fileContents;
+    elements.previewCodeIframe.srcdoc = fileContents;
+    toggleTabVisibility('preview');
+}
 
-      const executePythonCodeButton = document.getElementById('executePythonCodeButton');
-      setButtonState(executePythonCodeButton, 'Running...', true);
+function handleSaveEdits() {
+    fileDataArray[currentSelectedTab].fileContents = elements.editCodeTextArea.value;
+    toggleEditMode(false);
+    highlightCodeWithPrism(fileDataArray[currentSelectedTab].fileName, fileDataArray[currentSelectedTab].fileContents);
+}
 
-      try {
-          const response = await axios.post(apiUrl, codeExecutionData, {
-              headers: {
-                  'Content-type': 'application/json'
-              }
-          });
+function handleCancelEdits() {
+    toggleEditMode(false);
+}
 
-          const {
-              StandardOutputContent,
-              StandardErrorContent
-          } = response.data;
-          const newLogs = formatLogs(StandardOutputContent, StandardErrorContent);
-          fileDataArray[currentSelectedTab].logs = newLogs;
+function handleSaveSelectedFile() {
+    const currentFile = fileDataArray[currentSelectedTab];
+    // Assuming this function sends the current file to a server to be saved
+    const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
+    const payload = { fileName: currentFile.fileName, fileContents: currentFile.fileContents };
 
-          updateLogsView(newLogs);
+    axios.post(apiUrl, payload)
+        .then(response => {
+            console.log('File saved:', response.data);
+        })
+        .catch(error => {
+            console.error('Save error:', error);
+        });
+}
 
-          setButtonState(executePythonCodeButton, getPlayIconSvg(), false);
-      } catch (error) {
-          alert(`Error: ${error}`);
-          setButtonState(executePythonCodeButton, getPlayIconSvg(), false);
-      }
-  }
+function handleSubmitUserRequest() {
+    const userRequest = elements.userRequestInputBox.value;
+    // Assuming this function sends a user request to a server and handles the response
+    const apiUrl = 'https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/';
+    const payload = { request: userRequest };
 
-  function formatLogs(stdout, stderr) {
-      return `Standard Output:\n${stdout}\nStandard Error:\n${stderr}`;
-  }
+    axios.post(apiUrl, payload)
+        .then(response => {
+            console.log('User request handled:', response.data);
+        })
+        .catch(error => {
+            console.error('User request error:', error);
+        });
+}
 
-  function updateLogsView(logs) {
-      elements.logsBox.className = 'language-bash';
-      elements.logsBox.innerHTML = Prism.highlight(logs, Prism.languages.bash, 'bash');
-      elements.viewLogsButton.click(); // Show the logs
-  }
+function handleFetchFileContents(fileName) {
+    // Assuming this function fetches file contents from a server
+    const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
+    const payload = { fileName };
 
-  function getPlayIconSvg() {
-      return `
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-    </svg>
-  `;
-  }
+    axios.post(apiUrl, payload)
+        .then(response => {
+            const fileData = { fileName, fileContents: response.data.contents };
+            fileDataArray.push(fileData);
+            // Update the UI to include the content of the fetched file
+        })
+        .catch(error => {
+            console.error('Fetch file error:', error);
+        });
+}
 
-  function setButtonState(button, content, isDisabled) {
-      button.innerHTML = content;
-      button.disabled = isDisabled;
-  }
-  document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
+// Event listeners
+elements.viewCodeButton.addEventListener('click', () => toggleTabVisibility('code'));
+elements.viewLogsButton.addEventListener('click', () => toggleTabVisibility('logs'));
+elements.previewCodeButton.addEventListener('click', () => toggleTabVisibility('preview'));
+elements.editCodeButton.addEventListener('click', () => toggleEditMode(true));
+elements.saveCodeEditsButton.addEventListener('click', handleSaveEdits);
+elements.cancelCodeEditsButton.addEventListener('click', handleCancelEdits);
+elements.saveSelectedFileButton.addEventListener('click', handleSaveSelectedFile);
+elements.submitUserRequestButton.addEventListener('click', handleSubmitUserRequest);
+elements.addTab.addEventListener('click', handleAddClick);
+elements.executePythonCodeButton.addEventListener('click', executeCode);
+elements.fileSelect.addEventListener('change', (event) => handleFetchFileContents(event.target.value));
 
-  // Event listeners
-  elements.viewCodeButton.addEventListener('click', () => {
-      highlightSelectedButton('viewCodeButton');
-      elements.viewCodeBox.style.display = 'block';
-      elements.previewRenderCodeBox.style.display = 'none';
-      elements.editCodeBox.style.display = 'none';
-      elements.editCodeButton.style.display = 'inline-block';
-      elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
-  });
+// Initialization
+window.addEventListener('DOMContentLoaded', () => {
+    fetchAllProjectFiles(uId, projectId);
+    autoResizeTextarea(elements.userRequestInputBox);
+});
 
-  elements.viewLogsButton.addEventListener('click', () => {
-      highlightSelectedButton('viewLogsButton');
-      showOrHideCodeBox('viewLogsButton');
-      elements.previewRenderCodeBox.style.display = 'none';
-      elements.editCodeButton.style.display = 'inline-block';
-      elements.saveCodeEditsButton.style.display = 'none';
-      elements.cancelCodeEditsButton.style.display = 'none';
-      elements.editCodeBox.style.display = 'none'; // Add this line
-      elements.viewLogsContainer.style.display = 'block'; // Show the logs container
-      elements.viewCodeBox.style.display = 'none';
-      elements.previewRenderCodeBox.style.display = 'none';
-      elements.editCodeBox.style.display = 'none';
-      // Set the logs content for the current file
-      // Set the logs content for the current file
-      const currentFileLogs = fileDataArray[currentSelectedTab].logs;
-      elements.logsBox.className = 'language-bash';
-      elements.logsBox.innerHTML = Prism.highlight(currentFileLogs, Prism.languages.bash, 'bash');
-  });
+function fetchAllProjectFiles(uId, projectId) {
+    const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
+    const payload = {
+        'uId': uId,
+        'projectId': projectId,
+        'requestType': 'fetchAllProjectFiles'
+    };
 
-  elements.previewCodeButton.addEventListener('click', () => {
-      highlightSelectedButton('previewCodeButton');
-      elements.viewCodeBox.style.display = 'none';
-      elements.previewRenderCodeBox.style.display = 'block';
-      elements.editCodeBox.style.display = 'none';
-      elements.editCodeButton.style.display = 'inline-block';
-      elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
-      handlePreviewClick();
-  });
+    axios.post(apiUrl, payload)
+        .then(response => {
+            if (response.status === 200) {
+                const projectFilesArray = response.data;
+                populateFileSelector(projectFilesArray);
+                initializeFileDataArray(projectFilesArray);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching project files:', error);
+        });
+}
 
-  elements.editCodeButton.addEventListener('click', () => {
-      elements.editCodeButton.style.display = 'none';
-      elements.saveCodeEditsButton.style.display = 'inline-block';
-      elements.cancelCodeEditsButton.style.display = 'inline-block';
-      elements.viewCodeBox.style.display = 'none';
-      elements.previewRenderCodeBox.style.display = 'none';
-      elements.editCodeBox.style.display = 'block';
-      elements.editCodeTextArea.value = fileDataArray[currentSelectedTab].fileContents;
-  });
-  elements.saveCodeEditsButton.addEventListener('click', () => {
-      fileDataArray[currentSelectedTab].fileContents = elements.editCodeTextArea.value;
-      resetEditCodeBox();
-      displayFileContentInTab(currentSelectedTab);
-  });
-  elements.cancelCodeEditsButton.addEventListener('click', resetEditCodeBox);
-  elements.previewCodeButton.addEventListener('click', handlePreviewClick);
+function populateFileSelector(filePaths) {
+    const fileSelect = elements.fileSelect;
+    filePaths.forEach(filePath => {
+        const option = document.createElement('option');
+        option.value = filePath;
+        option.textContent = filePath;
+        fileSelect.appendChild(option);
+    });
+}
 
-  elements.saveSelectedFileButton.addEventListener('click', () => {
-      const currentFile = fileDataArray[currentSelectedTab];
-      console.log(uId, 'uId')
-      console.log(projectId, 'projectId')
-      console.log(currentFile, 'currentFile')
-      axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-              'requestType': 'COMMIT_FILE',
-              'fileContents': currentFile.fileContents,
-              'fileName': currentFile.fileName,
-              'uId': uId,
-              'projectId': projectId
-          })
-          .then(function(response) {
-              console.log(response);
-          })
-          .catch(function(error) {
-              console.log(error);
-          });
-  });
+function initializeFileDataArray(filePaths) {
+    filePaths.forEach(filePath => {
+        fetchFileContents(filePath);
+    });
+}
 
-  elements.submitUserRequestButton.addEventListener('click', () => {
-      const currentFile = fileDataArray[currentSelectedTab];
-      const userRequest = elements.userRequestInputBox.value;
-      // Replace the icon with the loading spinner
-      updateTabIcon(currentSelectedTab, '', true); // Pass true for isSpinner
-      axios.post('https://mse2nh3pjqhy5qwkenzfeds7dq0ulcfy.lambda-url.us-west-2.on.aws/', {
-              fileName: currentFile.fileName,
-              request: userRequest,
-              code: currentFile.fileContents,
-              uId: uId
-          })
-          .then(function(response) {
-              alert(response);
-              const newCode = response.data.newCode;
-              const fileName = response.data.fileName;
+function fetchFileContents(filePath) {
+    const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
+    const payload = {
+        'uId': uId,
+        'projectId': projectId,
+        'requestType': 'fetchFileContents',
+        'filePath': filePath
+    };
 
-              const fileToUpdate = fileDataArray.find(file => file.fileName === fileName);
-              if (fileToUpdate) {
-                  fileToUpdate.fileContents = newCode;
-                  const updatedFileIndex = fileDataArray.indexOf(fileToUpdate);
-                  displayFileContentInTab(updatedFileIndex);
-                  elements.viewCodeButton.click();
-                  const extension = extractFileExtension(fileName);
-                  if (extension === 'html') {
-                      handlePreviewClick();
-                  }
-              }
-              // Replace the loading spinner with the appropriate file icon
-              const extension = extractFileExtension(currentFile.fileName);
-              const iconUrl = getIconUrlByExtension(extension);
-              updateTabIcon(currentSelectedTab, iconUrl);
+    axios.post(apiUrl, payload)
+        .then(response => {
+            if (response.status === 200) {
+                const fileData = {
+                    'fileName': response.data.fileName,
+                    'fileContents': response.data.fileContents,
+                    'logs': ''
+                };
+                fileDataArray.push(fileData);
+                if (fileDataArray.length === 1) {
+                    // If this is the first file, display its content
+                    displayFileContentInTab(0);
+                }
+            }
+        })
+        .catch(error => {
+            console.error(`Error fetching contents for file ${filePath}:`, error);
+        });
+}
 
-          })
-          .catch(function(error) {
-              console.log(error);
-              // Replace the loading spinner with the appropriate file icon
-              const extension = extractFileExtension(currentFile.fileName);
-              const iconUrl = getIconUrlByExtension(extension);
-              updateTabIcon(currentSelectedTab, iconUrl);
-          });
-
-      // Clear the textarea value
-      elements.userRequestInputBox.value = '';
-      // Reset the textarea height
-      autoResizeTextarea(elements.userRequestInputBox);
-  });
-
-  elements.addTab.addEventListener('click', handleAddClick);
-
-  // Add the event listener to the "Run Code" button
-
-
-  window.onload = function() {
-      extractuIdFromUrl();
-      extractprojectIdFromUrl();
-
-      axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-              'uId': uId,
-              'projectId': projectId,
-              'requestType': 'fetchAllProjectFiles'
-          })
-          .then(function(response) {
-              if (response.status === 200) {
-                  const projectFilesArray = response.data;
-                  const select = document.getElementById('fileSelect');
-                  projectFilesArray.forEach((filePath, index) => {
-                      const option = document.createElement('option');
-                      option.value = filePath;
-                      option.text = filePath;
-                      select.appendChild(option);
-                  });
-              }
-          })
-          .catch(function(error) {
-              console.log(error);
-          });
-  };
-
-  function toggleEdit(editMode) {
-      var editBtn = document.getElementById('editCodeButton');
-      var editActions = document.getElementById('editActions');
-      var commitBtn = document.getElementById('saveSelectedFileButton');
-
-      if (editMode) {
-          editBtn.style.display = 'none';
-          editActions.style.display = 'flex';
-          commitBtn.style.display = 'none';
-      } else {
-          editBtn.style.display = 'inline-block';
-          editActions.style.display = 'none';
-          commitBtn.style.display = 'inline-block';
-      }
-  }
-
-  function commitFile() {
-      alert('File Commit!');
-  }
-
-  function fetchFileContents(fileName) {
-      axios.post('https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/', {
-              'uId': uId,
-              'projectId': projectId,
-              'requestType': 'fetchFileContents',
-              'filePath': fileName
-          })
-          .then(function(response) {
-              if (response.status === 200) {
-                  const fileData = {
-                      'fileName': response.data.fileName,
-                      'fileContents': response.data.fileContents
-                  };
-                  fileDataArray.push(fileData);
-                  generateAllFileTabElements();
-                  displayFileContentInTab(fileDataArray.length - 1);
-
-                  // Manually trigger Prism to re-highlight the code with line numbers
-                  Prism.highlightAll(); // <-- Add this line
-              }
-          })
-          .catch(function(error) {
-              console.log(error);
-          });
-  }
-
-  function extractuIdFromUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const uId = urlParams.get('uId');
-      return uId;
-  }
-
-  function extractprojectIdFromUrl() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const projectId = urlParams.get('projectId');
-      return projectId;
-  }
-
-  function autoResizeTextarea(textarea) {
-      // Reset the height to 0 to shrink to the minimum content size
-      textarea.style.height = '0px';
-      // Set the height to the scroll height to remove the scrollbar
-      textarea.style.height = Math.max(textarea.scrollHeight, 20) + 'px'; // Ensure the height is at least 20px
-  }
-
-  // Initialize the textarea height on page load
-  window.addEventListener('DOMContentLoaded', (event) => {
-      const textarea = document.getElementById('userRequestInputBox');
-      autoResizeTextarea(textarea);
-  });
-
-  // Use the 'load' event to ensure all resources are loaded
-  window.addEventListener('load', (event) => {
-      const textarea = document.getElementById('userRequestInputBox');
-      autoResizeTextarea(textarea); // This should set the correct initial height
-  });
-
-  let uId = extractuIdFromUrl();
-  let projectId = extractprojectIdFromUrl();
-
-  // Initialize
-  generateAllFileTabElements();
-  displayFileContentInTab(0);
+// Call the function to fetch all project files
+fetchAllProjectFiles(uId, projectId);
 </script>
 </body>
 </html>
