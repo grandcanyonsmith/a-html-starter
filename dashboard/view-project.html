@@ -602,6 +602,7 @@ function handleSubmitUserRequest() {
 }
 
 function handleFetchFileContents(fileName) {
+    console.log(`Fetching contents for file: ${fileName}`);
     const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
     const payload = {
         'uId': uId,
@@ -610,17 +611,28 @@ function handleFetchFileContents(fileName) {
         'filePath': fileName
     };
 
+    console.log('Sending POST request with payload:', payload);
     axios.post(apiUrl, payload)
         .then(response => {
+            console.log('Received response:', response);
             if (response.status === 200) {
+                console.log('Response status is 200, processing file data');
                 const fileData = {
                     'fileName': fileName,
                     'fileContents': response.data.fileContents,
                     'logs': '' // Initialize logs as an empty string
                 };
+                console.log('File data constructed:', fileData);
                 fileDataArray.push(fileData);
+                console.log('File data added to fileDataArray:', fileDataArray);
+
+                console.log('Generating all file tab elements');
                 generateAllFileTabElements(); // Update the UI with the new tab
+
+                console.log('Displaying content for the new file tab');
                 displayFileContentInTab(fileDataArray.length - 1); // Display the content of the new file
+            } else {
+                console.error(`Unexpected response status: ${response.status}`);
             }
         })
         .catch(error => {
