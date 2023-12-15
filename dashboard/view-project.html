@@ -449,7 +449,7 @@ function showTabContent(target) {
         'preview': elements.previewRenderCodeBox,
         'code': elements.viewCodeBox,
         'logs': elements.viewLogsContainer,
-        'edit': elements.editCodeBox // If you have an edit mode, include this as well
+        'edit': elements.editCodeBox
     };
 
     // Hide all content areas
@@ -459,15 +459,6 @@ function showTabContent(target) {
     if (contentAreas[target]) {
         contentAreas[target].classList.remove('hidden');
     }
-
-    // Update the active state of the tab buttons
-    document.querySelectorAll('.tab-button').forEach(button => {
-        if (button.dataset.target === target) {
-            button.classList.add('text-white', 'bg-gray-700'); // Add active state classes
-        } else {
-            button.classList.remove('text-white', 'bg-gray-700'); // Remove active state classes
-        }
-    });
 }
 
 // Helper function to format logs for display
@@ -533,10 +524,17 @@ const handleAddClick = () => {
 };
 
 function handlePreviewClick() {
+    if (currentSelectedTab < 0 || currentSelectedTab >= fileDataArray.length) {
+        console.error('No file selected or index out of bounds');
+        return;
+    }
     const fileContents = fileDataArray[currentSelectedTab].fileContents;
     elements.previewCodeIframe.srcdoc = fileContents;
     showTabContent('preview');
 }
+
+// Attach the event listener to the previewCodeButton
+elements.previewCodeButton.addEventListener('click', handlePreviewClick);
 
 
 function handleSaveEdits() {
