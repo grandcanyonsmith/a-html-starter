@@ -459,7 +459,21 @@ function showTabContent(target) {
     if (contentAreas[target]) {
         contentAreas[target].classList.remove('hidden');
     }
+
+    // Update the active state of the tab buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+        if (button.id.startsWith(target)) {
+            button.classList.add('text-white', 'bg-gray-700'); // Add active state classes
+        } else {
+            button.classList.remove('text-white', 'bg-gray-700'); // Remove active state classes
+        }
+    });
 }
+
+// Event listeners for tab buttons
+elements.previewCodeButton.addEventListener('click', () => showTabContent('preview'));
+elements.viewCodeButton.addEventListener('click', () => showTabContent('code'));
+elements.viewLogsButton.addEventListener('click', () => showTabContent('logs'));
 
 // Helper function to format logs for display
 function formatLogs(stdout, stderr) {
