@@ -523,6 +523,7 @@ const handleAddClick = () => {
     }
 };
 
+// Ensure that the handlePreviewClick function is defined correctly
 function handlePreviewClick() {
     if (currentSelectedTab < 0 || currentSelectedTab >= fileDataArray.length) {
         console.error('No file selected or index out of bounds');
@@ -533,8 +534,8 @@ function handlePreviewClick() {
     showTabContent('preview');
 }
 
-// Attach the event listener to the previewCodeButton
-elements.previewCodeButton.addEventListener('click', handlePreviewClick);
+// Attach the event listener to the previewCodeButton using its ID
+document.getElementById('previewCodeButton').addEventListener('click', handlePreviewClick);
 
 
 function handleSaveEdits() {
