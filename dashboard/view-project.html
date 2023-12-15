@@ -398,7 +398,7 @@ function displayFileContentInTab(index) {
       highlightSelectedTab(index);
       resetEditCodeBox();
       elements.previewRenderCodeBox.style.display = 'none';
-      const extension = extractFileExtension(fileName);
+      const extension = extractFileExtension(file.fileName);
       if (extension === 'html') {
           handlePreviewClick();
       }
