@@ -394,7 +394,7 @@ function displayFileContentInTab(index) {
 
     highlightCodeWithPrism(file.fileName, file.fileContents);
     // Additional logic to update the UI based on the selected tab
-      toggleViewButtonsBasedOnFileType(fileName);
+      toggleViewButtonsBasedOnFileType(file.fileName);
       highlightSelectedTab(index);
       resetEditCodeBox();
       elements.previewRenderCodeBox.style.display = 'none';
