@@ -643,22 +643,19 @@ function initializeFileDataArray(filePaths) {
     });
 }
 
-function fetchFileContents(fileName) {
-    // Check if the file is already in the array
-    const existingFileIndex = fileDataArray.findIndex(file => file.fileName === fileName);
-    if (existingFileIndex !== -1) {
-        // File already exists, so just display its tab
-        displayFileContentInTab(existingFileIndex);
+function fetchFileContents(selectedFileName) {
+    // Ensure that selectedFileName is defined and not null
+    if (!selectedFileName) {
+        console.error('No file name provided for fetching contents.');
         return;
     }
 
-    // If the file doesn't exist, fetch its contents and create a new tab
     const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
     axios.post(apiUrl, {
         'uId': uId,
         'projectId': projectId,
         'requestType': 'fetchFileContents',
-        'filePath': fileName
+        'filePath': selectedFileName
     })
     .then(function(response) {
         if (response.status === 200) {
@@ -673,17 +670,27 @@ function fetchFileContents(fileName) {
         }
     })
     .catch(function(error) {
-        console.error(error);
+        console.error('Error fetching contents for file:', selectedFileName, error);
     });
 }
 
 // Dropdown change event listener
 elements.fileSelect.addEventListener('change', (event) => {
-    const fileName = event.target.value;
-    if (fileName) {
-        fetchFileContents(fileName);
+    const selectedFileName = event.target.value;
+    if (selectedFileName && selectedFileName !== 'Select File') {
+        fetchFileContents(selectedFileName);
     }
 });
+
+// Initialize file data array with files from the server
+function initializeFileDataArray(filePaths) {
+    filePaths.forEach(filePath => {
+        // Ensure that filePath is defined and not null
+        if (filePath) {
+            fetchFileContents(filePath);
+        }
+    });
+}
 
 // Call the function to fetch all project files
 fetchAllProjectFiles(uId, projectId);
