@@ -621,16 +621,18 @@ function fetchAllProjectFiles(uId, projectId) {
 
     axios.post(apiUrl, payload)
         .then(response => {
-            // Check if the response data is an array
-            if (Array.isArray(response.data)) {
-                const projectFilesArray = response.data;
+            console.log('Server response:', response.data); // Log the server response for debugging
+
+            // Assuming the server response is an object with a 'files' property that is an array
+            if (response.data && Array.isArray(response.data.files)) {
+                const projectFilesArray = response.data.files;
                 populateFileSelector(projectFilesArray);
                 if (projectFilesArray.length > 0) {
                     // Only initialize the first file in the array
                     initializeFileDataArray(projectFilesArray[0]);
                 }
             } else {
-                // Handle the case where response.data is not an array
+                // Handle the case where response.data.files is not an array
                 console.error('Unexpected response format:', response.data);
             }
         })
