@@ -308,6 +308,7 @@ function toggleEditMode(editMode) {
     elements.cancelCodeEditsButton.style.display = editMode ? 'inline-block' : 'none';
     elements.saveSelectedFileButton.style.display = editMode ? 'none' : 'inline-block';
 }
+    
 function generateAllFileTabElements() {
     elements.allTabs.innerHTML = ''; // Clear existing tabs
 
@@ -354,6 +355,20 @@ function updateTabIcon(tabIndex, iconUrl, isSpinner = false) {
         : `<img src="${iconUrl}" alt="file icon" style="width: 16px; height: 16px; margin-right: 5px;">`;
 }
 
+function removeTabAndFileData(index) {
+    // Remove the file from the array
+    fileDataArray.splice(index, 1);
+    // Regenerate the tabs
+    generateAllFileTabElements();
+    // If there are remaining files, display the first one, otherwise clear the view
+    if (fileDataArray.length > 0) {
+        displayFileContentInTab(0);
+    } else {
+        elements.codeBox.textContent = ''; // Clear the code box if no files are left
+        currentSelectedTab = -1; // Reset the selected tab index
+    }
+}
+
 function getIconUrlByExtension(extension) {
     const icons = {
         'py': 'https://www.svgrepo.com/show/452091/python.svg',
@@ -364,13 +379,16 @@ function getIconUrlByExtension(extension) {
     return icons[extension] || '';
 }
 
-const displayFileContentInTab = index => {
-      currentSelectedTab = index;
-      const {
-          fileName,
-          fileContents
-      } = fileDataArray[index];
-      highlightCodeWithPrism(fileName, fileContents);
+function displayFileContentInTab(index) {
+    if (index < 0 || index >= fileDataArray.length) {
+        console.error('Tab index out of bounds:', index);
+        return;
+    }
+
+    currentSelectedTab = index;
+    const file = fileDataArray[index];
+    highlightCodeWithPrism(file.fileName, file.fileContents);
+    // Additional logic to update the UI based on the selected tab
       toggleViewButtonsBasedOnFileType(fileName);
       highlightSelectedTab(index);
       resetEditCodeBox();
