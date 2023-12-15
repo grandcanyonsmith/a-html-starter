@@ -624,8 +624,8 @@ function handleFetchFileContents(fileName) {
 
 // Event listeners
 elements.viewCodeButton.addEventListener('click', () => toggleTabVisibility('code'));
-elements.viewLogsButton.addEventListener('click', () => toggleTabVisibility('logs'));
 elements.previewCodeButton.addEventListener('click', () => toggleTabVisibility('preview'));
+elements.viewLogsButton.addEventListener('click', () => toggleTabVisibility('logs'));
 elements.editCodeButton.addEventListener('click', () => toggleEditMode(true));
 elements.saveCodeEditsButton.addEventListener('click', handleSaveEdits);
 elements.cancelCodeEditsButton.addEventListener('click', handleCancelEdits);
@@ -634,9 +634,6 @@ elements.submitUserRequestButton.addEventListener('click', handleSubmitUserReque
 elements.addTab.addEventListener('click', handleAddClick);
 elements.executePythonCodeButton.addEventListener('click', executeCode);
 elements.fileSelect.addEventListener('change', (event) => handleFetchFileContents(event.target.value));
-elements.previewCodeButton.addEventListener('click', () => showTabContent('preview'));
-elements.viewCodeButton.addEventListener('click', () => showTabContent('code'));
-elements.viewLogsButton.addEventListener('click', () => showTabContent('logs'));
 
 function fetchAllProjectFiles(uId, projectId) {
     const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
