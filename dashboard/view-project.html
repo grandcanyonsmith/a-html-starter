@@ -573,63 +573,60 @@
       }
   };
   
-  const executeCode = () => {
-      const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
-      const currentFile = fileDataArray[currentSelectedTab];
-      const codeExecutionData = {
-          'filePath': currentFile.fileName,
-          'ec2InstanceId': 'i-09a3e0707ffcfdfdb', // You might want to make this dynamic
-          'code': currentFile.fileContents,
-          'uId': uId,
-          'projectId': projectId
-      };
-      const executePythonCodeButton = document.getElementById('executePythonCodeButton');
-      executePythonCodeButton.textContent = 'Running...';
-      executePythonCodeButton.disabled = true;
-  
-      // Send the POST request using Axios
-      axios.post(apiUrl, codeExecutionData, {
-              headers: {
-                  'Content-type': 'application/json'
-              }
-          })
-          .then(response => {
-              // Display the output from the response
-              const {
-                  StandardOutputContent,
-                  StandardErrorContent
-              } = response.data;
-              const combinedLogs = `Standard Output:\n${StandardOutputContent}\nStandard Error:\n${StandardErrorContent}`;
-                          // Replace the current logs with the new logs for the fileDataArray
-            const newLogs = `Standard Output:\n${response.data.StandardOutputContent}\nStandard Error:\n${response.data.StandardErrorContent}`;
-            fileDataArray[currentSelectedTab].logs = newLogs;
-
-            // Update the logs view with the new logs
-            elements.logsBox.className = 'language-bash';
-            elements.logsBox.innerHTML = Prism.highlight(newLogs, Prism.languages.bash, 'bash');
-            elements.viewLogsButton.click(); // Select the viewLogsButton to show the logs
-              
-              // Reset the button text and disabled state
-              executePythonCodeButton.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-              </svg>
-          `;
-              executePythonCodeButton.disabled = false;
-          })
-          .catch(error => {
-              // Display the error
-              alert(`Error: ${error}`);
-  
-              // Reset the button text and disabled state
-              executePythonCodeButton.innerHTML = `
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-              </svg>
-          `;
-              executePythonCodeButton.disabled = false;
-          });
+  async function executeCode() {
+  const apiUrl = "https://4x3ubnjm4rwzbwaucrcn2trn3m0vvsqp.lambda-url.us-west-2.on.aws/";
+  const currentFile = fileDataArray[currentSelectedTab];
+  const codeExecutionData = {
+    'filePath': currentFile.fileName,
+    'ec2InstanceId': 'i-09a3e0707ffcfdfdb', // TODO: Make dynamic if needed
+    'code': currentFile.fileContents,
+    'uId': uId,
+    'projectId': projectId
   };
+
+  const executePythonCodeButton = document.getElementById('executePythonCodeButton');
+  setButtonState(executePythonCodeButton, 'Running...', true);
+
+  try {
+    const response = await axios.post(apiUrl, codeExecutionData, {
+      headers: { 'Content-type': 'application/json' }
+    });
+
+    const { StandardOutputContent, StandardErrorContent } = response.data;
+    const newLogs = formatLogs(StandardOutputContent, StandardErrorContent);
+    fileDataArray[currentSelectedTab].logs = newLogs;
+
+    updateLogsView(newLogs);
+
+    setButtonState(executePythonCodeButton, getPlayIconSvg(), false);
+  } catch (error) {
+    alert(`Error: ${error}`);
+    setButtonState(executePythonCodeButton, getPlayIconSvg(), false);
+  }
+}
+
+function formatLogs(stdout, stderr) {
+  return `Standard Output:\n${stdout}\nStandard Error:\n${stderr}`;
+}
+
+function updateLogsView(logs) {
+  elements.logsBox.className = 'language-bash';
+  elements.logsBox.innerHTML = Prism.highlight(logs, Prism.languages.bash, 'bash');
+  elements.viewLogsButton.click(); // Show the logs
+}
+
+function getPlayIconSvg() {
+  return `
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+    </svg>
+  `;
+}
+
+function setButtonState(button, content, isDisabled) {
+  button.innerHTML = content;
+  button.disabled = isDisabled;
+}
   document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
   
   // Event listeners
