@@ -444,6 +444,23 @@ async function executeCode() {
     }
 }
 
+// Helper function to show the correct tab content
+function showTabContent(target) {
+    const contentAreas = {
+        'preview': elements.previewRenderCodeBox,
+        'code': elements.viewCodeBox,
+        'logs': elements.viewLogsContainer
+    };
+
+    // Hide all content areas
+    Object.values(contentAreas).forEach(content => content.classList.add('hidden'));
+
+    // Show the target content area
+    if (contentAreas[target]) {
+        contentAreas[target].classList.remove('hidden');
+    }
+}
+
 // Helper function to format logs for display
 function formatLogs(stdout, stderr) {
     return `Standard Output:\n${stdout}\nStandard Error:\n${stderr}`;
@@ -604,13 +621,19 @@ elements.submitUserRequestButton.addEventListener('click', handleSubmitUserReque
 elements.addTab.addEventListener('click', handleAddClick);
 elements.executePythonCodeButton.addEventListener('click', executeCode);
 elements.fileSelect.addEventListener('change', (event) => handleFetchFileContents(event.target.value));
+elements.previewCodeButton.addEventListener('click', () => showTabContent('preview'));
+elements.viewCodeButton.addEventListener('click', () => showTabContent('code'));
+elements.viewLogsButton.addEventListener('click', () => showTabContent('logs'));
 
 // Initialization
 window.addEventListener('DOMContentLoaded', () => {
+    // Set the default tab to 'code'
+    showTabContent('code');
+    // Fetch all project files
     fetchAllProjectFiles(uId, projectId);
+    // Auto resize the user request input box
     autoResizeTextarea(elements.userRequestInputBox);
 });
-
 function fetchAllProjectFiles(uId, projectId) {
     const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
     const payload = {
@@ -682,14 +705,6 @@ function fetchFileContents(selectedFileName) {
         console.error('Error fetching contents for file:', selectedFileName, error);
     });
 }
-
-// // Dropdown change event listener
-// elements.fileSelect.addEventListener('change', (event) => {
-//     const selectedFileName = event.target.value;
-//     if (selectedFileName && selectedFileName !== 'Select File') {
-//         fetchFileContents(selectedFileName);
-//     }
-// });
 </script>
 </body>
 </html>
