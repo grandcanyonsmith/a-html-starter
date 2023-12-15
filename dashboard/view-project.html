@@ -378,7 +378,7 @@ function getIconUrlByExtension(extension) {
     };
     return icons[extension] || '';
 }
-
+    
 function displayFileContentInTab(index) {
     if (index < 0 || index >= fileDataArray.length) {
         console.error('Tab index out of bounds:', index);
@@ -387,6 +387,11 @@ function displayFileContentInTab(index) {
 
     currentSelectedTab = index;
     const file = fileDataArray[index];
+    if (!file) {
+        console.error('No file data found at index:', index);
+        return;
+    }
+
     highlightCodeWithPrism(file.fileName, file.fileContents);
     // Additional logic to update the UI based on the selected tab
       toggleViewButtonsBasedOnFileType(fileName);
