@@ -623,12 +623,11 @@ function fetchAllProjectFiles(uId, projectId) {
         .then(response => {
             console.log('Server response:', response.data); // Log the server response for debugging
 
-            // Since the response is an array, we can directly use it
             const projectFilesArray = response.data;
             populateFileSelector(projectFilesArray);
             if (projectFilesArray.length > 0) {
-                // Only initialize the first file in the array
-                initializeFileDataArray(projectFilesArray[0]);
+                // Fetch contents for the first file only
+                fetchFileContents(projectFilesArray[0]);
             }
         })
         .catch(error => {
