@@ -530,33 +530,33 @@
       elements.viewLogsContainer.style.display = 'none'; // Hide the logs container
   };
   
-  const updateTabIcon = (tabIndex, iconUrl, isSpinner = false) => {
-      const tab = document.querySelector(`.tab[data-index="${tabIndex}"]`);
-      if (tab) {
-          // Remove any existing img or spinner
-          const existingIcon = tab.querySelector('img');
-          const existingSpinner = tab.querySelector('.lds-ring');
-          if (existingIcon) existingIcon.remove();
-          if (existingSpinner) existingSpinner.remove();
-  
-          // If it's a spinner, add the spinner HTML
-          if (isSpinner) {
-              const spinnerHtml = `
-                  <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
-              `;
-              tab.insertAdjacentHTML('afterbegin', spinnerHtml);
-          } else {
-              // Otherwise, create and add the img element
-              const iconImg = document.createElement('img');
-              iconImg.src = iconUrl;
-              iconImg.alt = 'file icon';
-              iconImg.style.width = '16px';
-              iconImg.style.height = '16px';
-              iconImg.style.marginRight = '5px';
-              tab.insertAdjacentElement('afterbegin', iconImg);
-          }
-      }
-  };
+const updateTabIcon = (tabIndex, iconUrl, isSpinner = false) => {
+    const tab = document.querySelector(`.tab[data-index="${tabIndex}"]`);
+    if (!tab) return;
+
+    // Clear existing icon or spinner
+    const iconContainer = tab.querySelector('.icon-container');
+    if (iconContainer) {
+        iconContainer.innerHTML = '';
+    } else {
+        const newIconContainer = document.createElement('div');
+        newIconContainer.className = 'icon-container';
+        tab.prepend(newIconContainer);
+    }
+
+    const updatedIconContainer = tab.querySelector('.icon-container');
+
+    // Insert spinner or image based on isSpinner flag
+    if (isSpinner) {
+        updatedIconContainer.innerHTML = '<div class="lds-ring"><div></div><div></div><div></div><div></div></div>';
+    } else {
+        const iconImg = new Image(16, 16);
+        iconImg.src = iconUrl;
+        iconImg.alt = 'file icon';
+        iconImg.style.marginRight = '5px';
+        updatedIconContainer.appendChild(iconImg);
+    }
+};
   
   const getIconUrlByExtension = (extension) => {
       switch (extension) {
