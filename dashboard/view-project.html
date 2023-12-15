@@ -683,13 +683,13 @@ function fetchFileContents(selectedFileName) {
     });
 }
 
-// Dropdown change event listener
-elements.fileSelect.addEventListener('change', (event) => {
-    const selectedFileName = event.target.value;
-    if (selectedFileName && selectedFileName !== 'Select File') {
-        fetchFileContents(selectedFileName);
-    }
-});
+// // Dropdown change event listener
+// elements.fileSelect.addEventListener('change', (event) => {
+//     const selectedFileName = event.target.value;
+//     if (selectedFileName && selectedFileName !== 'Select File') {
+//         fetchFileContents(selectedFileName);
+//     }
+// });
 </script>
 </body>
 </html>
