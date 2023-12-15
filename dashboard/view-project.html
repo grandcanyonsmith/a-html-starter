@@ -458,6 +458,9 @@ function showTabContent(target) {
     // Show the target content area
     if (contentAreas[target]) {
         contentAreas[target].classList.remove('hidden');
+        if (target === 'preview') {
+            console.log('Preview tab content is now visible'); // Log when the preview tab is shown
+        }
     }
 }
 
