@@ -308,7 +308,6 @@ function toggleEditMode(editMode) {
     elements.cancelCodeEditsButton.style.display = editMode ? 'inline-block' : 'none';
     elements.saveSelectedFileButton.style.display = editMode ? 'none' : 'inline-block';
 }
-
 function generateAllFileTabElements() {
     elements.allTabs.innerHTML = ''; // Clear existing tabs
 
@@ -316,7 +315,7 @@ function generateAllFileTabElements() {
         const tab = document.createElement('div');
         tab.className = 'tab flex items-center';
         tab.setAttribute('data-index', index);
-        tab.addEventListener('click', handleTabClick);
+        tab.addEventListener('click', () => displayFileContentInTab(index));
 
         const iconUrl = getIconUrlByExtension(extractFileExtension(file.fileName));
         if (iconUrl) {
@@ -335,8 +334,11 @@ function generateAllFileTabElements() {
         const closeIcon = document.createElement('span');
         closeIcon.className = 'close cursor-pointer';
         closeIcon.setAttribute('data-index', index);
-        closeIcon.innerHTML = '&times;'; // Example close icon
-        closeIcon.addEventListener('click', handleCloseClick);
+        closeIcon.innerHTML = '&times;';
+        closeIcon.addEventListener('click', (event) => {
+            event.stopPropagation();
+            removeTabAndFileData(index);
+        });
         tab.appendChild(closeIcon);
 
         elements.allTabs.appendChild(tab);
@@ -623,34 +625,47 @@ function initializeFileDataArray(filePaths) {
     });
 }
 
-function fetchFileContents(filePath) {
+function fetchFileContents(fileName) {
+    // Check if the file is already in the array
+    const existingFileIndex = fileDataArray.findIndex(file => file.fileName === fileName);
+    if (existingFileIndex !== -1) {
+        // File already exists, so just display its tab
+        displayFileContentInTab(existingFileIndex);
+        return;
+    }
+
+    // If the file doesn't exist, fetch its contents and create a new tab
     const apiUrl = 'https://3xe2jl5kc5ypwyvu4om4nrsoxa0ykhxh.lambda-url.us-west-2.on.aws/';
-    const payload = {
+    axios.post(apiUrl, {
         'uId': uId,
         'projectId': projectId,
         'requestType': 'fetchFileContents',
-        'filePath': filePath
-    };
-
-    axios.post(apiUrl, payload)
-        .then(response => {
-            if (response.status === 200) {
-                const fileData = {
-                    'fileName': response.data.fileName,
-                    'fileContents': response.data.fileContents,
-                    'logs': ''
-                };
-                fileDataArray.push(fileData);
-                if (fileDataArray.length === 1) {
-                    // If this is the first file, display its content
-                    displayFileContentInTab(0);
-                }
-            }
-        })
-        .catch(error => {
-            console.error(`Error fetching contents for file ${filePath}:`, error);
-        });
+        'filePath': fileName
+    })
+    .then(function(response) {
+        if (response.status === 200) {
+            const fileData = {
+                'fileName': response.data.fileName,
+                'fileContents': response.data.fileContents,
+                'logs': ''
+            };
+            fileDataArray.push(fileData);
+            generateAllFileTabElements();
+            displayFileContentInTab(fileDataArray.length - 1);
+        }
+    })
+    .catch(function(error) {
+        console.error(error);
+    });
 }
+
+// Dropdown change event listener
+elements.fileSelect.addEventListener('change', (event) => {
+    const fileName = event.target.value;
+    if (fileName) {
+        fetchFileContents(fileName);
+    }
+});
 
 // Call the function to fetch all project files
 fetchAllProjectFiles(uId, projectId);
