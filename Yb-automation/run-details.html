@@ -56,6 +56,10 @@ class TestDashboard {
     this.testRunDetailsHeader = document.getElementById('testRunDetailsHeader');
     this.videoContainer = document.getElementById('videoContainer');
     this.logsCode = document.getElementById('logsCode');
+    this.loadingSpinner = document.getElementById('loadingSpinner');
+    this.codeModal = document.getElementById('codeModal');
+    this.code = document.getElementById('code');
+    this.closeModal = document.getElementById('closeModal');
   }
 
   createElement(type, text, classes) {
@@ -69,7 +73,16 @@ class TestDashboard {
     return this.statusColors[status] || 'bg-gray-500';
   }
 
+  showLoading() {
+    this.loadingSpinner.style.display = 'flex';
+  }
+
+  hideLoading() {
+    this.loadingSpinner.style.display = 'none';
+  }
+
   async fetchPreviousRuns() {
+    this.showLoading();
     const { testName } = this.getParamsFromUrl();
     const url = "https://m3safcz3boalyw7x7dl4qig3wq0tucft.lambda-url.us-west-2.on.aws/";
     const data = { "testName": testName };
@@ -78,10 +91,12 @@ class TestDashboard {
     try {
       const response = await axios.post(url, data, { headers: headers });
       console.log(response.data);
+      this.hideLoading();
       return response.data;
     } catch (error) {
       console.error('Error:', error);
       this.displayError('There was an error fetching the data. Please try again later.');
+      this.hideLoading();
     }
   }
 
@@ -138,7 +153,7 @@ class TestDashboard {
       this.testRunDetailsHeader.innerHTML = '';
       this.videoContainer.innerHTML = ''; // Clear the video container before creating a new video element
 
-      const headerDiv = this.createElement('div', '', 'lg:flex lg:items-center lg:justify-between bg-gray-800 px-4 py-5');
+      const headerDiv = this.createElement('div', '', 'lg:flex lg:items-center lg:justify-between bg-gray-800 px-4 py-5 sm:px-6');
 
       // Left side container
       const leftDiv = this.createElement('div', '', 'min-w-0 flex-1');
@@ -172,7 +187,8 @@ class TestDashboard {
       const viewCodeButton = this.createElement('button', 'View Code', 'inline-flex items-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400');
       viewCodeButton.addEventListener('click', () => {
           const testName = this.getParamsFromUrl().testName.split('::')[0]; // Split the testName and take the first part
-          window.location.href = `viewCode.html?testName=${testName}`; // Redirect without encoding
+          this.code.textContent = testName;
+          this.codeModal.style.display = 'flex';
       });
       rightDiv.appendChild(viewCodeButton);
 
@@ -233,6 +249,9 @@ class TestDashboard {
 
   init() {
     this.displayPreviousRuns();
+    this.closeModal.addEventListener('click', () => {
+      this.codeModal.style.display = 'none';
+    });
   }
 }
 
