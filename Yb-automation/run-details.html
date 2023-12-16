@@ -32,7 +32,7 @@
                             <thead class="bg-gray-700">
                                 <tr>
                                     <th scope="col" class="pl-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Run ID</th>
-                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Last Run</th>
+                                    <th scope="col" class="pl-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Last Run</th>
                                 </tr>
                             </thead>
                             <tbody id="test-runs-body" class="bg-gray-800 divide-y divide-gray-700">
@@ -126,7 +126,7 @@ class TestDashboard {
 
         const row = this.createElement('tr', '', '');
         
-        row.appendChild(this.createElement('td', testRun.id, 'pl-6 py-2'));
+        row.appendChild(this.createElement('td', testRun.id, 'py-2'));
         row.appendChild(this.renderLastRunCell(testRun.timestamp, testRun.status));
         row.addEventListener('click', () => this.displayRunDetails(testRun.id, previousRunsData));
         this.testRunsBody.appendChild(row);
@@ -145,11 +145,11 @@ class TestDashboard {
   }
 
   renderLastRunCell(timestamp, status) {
-    const lastRunCell = this.createElement('td', '', 'px-4 py-2 flex items-center justify-end');
-    const statusDot = this.createElement('div', '', `inline-block h-2 w-2 rounded-full ${this.getStatusColor(status)} mr-2`);
-    lastRunCell.appendChild(statusDot);
-    const timestampSpan = this.createElement('span', timestamp, 'ml-2');
+    const lastRunCell = this.createElement('td', '', 'py-2 flex items-center justify-end');
+    const timestampSpan = this.createElement('span', timestamp, 'mr-2');
     lastRunCell.appendChild(timestampSpan);
+    const statusDot = this.createElement('div', '', `inline-block h-2 w-2 rounded-full ${this.getStatusColor(status)} ml-2`);
+    lastRunCell.appendChild(statusDot);
     return lastRunCell;
   }
 
