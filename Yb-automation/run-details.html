@@ -8,35 +8,41 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body class="bg-gray-900 text-gray-200">
-<div id="testRunDetailsHeader" class="border-b border-gray-700 bg-gray-800 px-6 py-5">
-  <!-- Test Details will be appended here -->
-</div>
-<div id="videoContainer" class="w-full h-1/2 flex items-center justify-center bg-gray-800 relative mt-4">
-  <video src="https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4" controls class="w-full h-full"></video>
-</div>
-<h2 class="text-2xl font-bold mt-8 mb-4">Logs</h2>
-<div id="logsContainer" class="w-full p-6 bg-gray-800 shadow rounded-lg">
-  <pre><code id="logsCode" class="language-markup"></code></pre>
-</div>
-<h2 class="text-2xl font-bold mt-8 mb-4">Test Runs Report</h2>
-<div class="mt-8 flow-root">
-  <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-      <table class="min-w-full divide-y divide-gray-700 shadow-sm rounded-lg overflow-hidden">
-        <thead class="bg-gray-700">
-          <tr>
-            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Run ID</th>
-            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Status</th>
-            <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Last Run</th>
-          </tr>
-        </thead>
-        <tbody id="test-runs-body" class="bg-gray-800 divide-y divide-gray-700">
-          <!-- Test runs data will be appended here -->
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
+    <header class="border-b border-gray-700 bg-gray-800 px-6 py-5">
+        <!-- Test Details will be appended here -->
+    </header>
+    <main class="mt-4">
+        <section id="videoContainer" class="w-full h-1/2 flex items-center justify-center bg-gray-800 relative">
+            <video src="https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4" controls class="w-full h-full"></video>
+        </section>
+        <section class="mt-8">
+            <h2 class="text-2xl font-bold mb-4">Logs</h2>
+            <div id="logsContainer" class="w-full p-6 bg-gray-800 shadow rounded-lg">
+                <pre><code id="logsCode" class="language-markup"></code></pre>
+            </div>
+        </section>
+        <section class="mt-8">
+            <h2 class="text-2xl font-bold mb-4">Test Runs Report</h2>
+            <div class="flow-root">
+                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                        <table class="min-w-full divide-y divide-gray-700 shadow-sm rounded-lg overflow-hidden">
+                            <thead class="bg-gray-700">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Run ID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Last Run</th>
+                                </tr>
+                            </thead>
+                            <tbody id="test-runs-body" class="bg-gray-800 divide-y divide-gray-700">
+                                <!-- Test runs data will be appended here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 <script>
 // Utility functions
 const createElement = (type, text, classes) => {
