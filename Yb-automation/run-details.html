@@ -41,6 +41,24 @@
                     </div>
                 </div>
             </div>
+            <!-- Add a loading spinner -->
+<div id="loadingSpinner" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
+  <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+</div>
+
+<!-- Add a modal for viewing code -->
+<div id="codeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
+  <div class="bg-gray-800 p-6 rounded-lg max-w-lg w-full mx-4">
+    <h2 class="text-2xl font-bold mb-4">Code</h2>
+    <pre><code id="code" class="language-markup"></code></pre>
+    <button id="closeModal" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">Close</button>
+  </div>
+</div>
+
+<!-- Add an error container -->
+<div id="errorContainer" class="fixed inset-0 bg-red-500 bg-opacity-50 flex items-center justify-center text-white p-4" style="display: none;">
+  <!-- Error message will be displayed here -->
+</div>
         </section>
     </main>
 <script>
@@ -237,26 +255,32 @@ class TestDashboard {
     return { testName };
   }
 
-  displayError(message) {
-    const errorContainer = document.getElementById('errorContainer');
-    if (!errorContainer) {
-        console.error('Error container not found in the DOM');
-        return;
-    }
-    errorContainer.textContent = message;
-    errorContainer.style.display = 'block';
+displayError(message) {
+  const errorContainer = document.getElementById('errorContainer');
+  if (!errorContainer) {
+    console.error('Error container not found in the DOM');
+    return;
   }
+  errorContainer.textContent = message;
+  errorContainer.style.display = 'flex'; // Change 'block' to 'flex' to center the message
+}
 
-  init() {
-    this.displayPreviousRuns();
+init() {
+  this.displayPreviousRuns();
+  // Check if closeModal exists before adding the event listener
+  if (this.closeModal) {
     this.closeModal.addEventListener('click', () => {
       this.codeModal.style.display = 'none';
     });
+  } else {
+    console.error('Close modal button not found in the DOM');
   }
 }
-
+    
 const testDashboard = new TestDashboard();
 testDashboard.init();
 </script>
 </body>
 </html>
+
+
