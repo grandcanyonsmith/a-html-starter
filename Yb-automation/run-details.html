@@ -60,8 +60,7 @@
   <!-- Error message will be displayed here -->
 </div>
         </section>
-    </main>
-<script>
+    </main><script>
 class TestDashboard {
   constructor() {
     this.statusColors = {
@@ -101,7 +100,7 @@ class TestDashboard {
 
   async fetchPreviousRuns() {
     this.showLoading();
-    const { testName } = this.getParamsFromUrl();
+    const testName = this.getParamsFromUrl().testName;
     const url = "https://m3safcz3boalyw7x7dl4qig3wq0tucft.lambda-url.us-west-2.on.aws/";
     const data = { "testName": testName };
     const headers = { 'Content-type': 'application/json' };
@@ -137,7 +136,7 @@ class TestDashboard {
       });
 
       // Get the id from the URL
-      const { id } = this.getParamsFromUrl();
+      const id = this.getParamsFromUrl().id;
 
       // If the id from the URL is null or doesn't match any of the test runs, use the id of the first test run
       if (!id || !previousRunsData.some(run => run.id === id)) {
@@ -252,33 +251,33 @@ class TestDashboard {
   getParamsFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
     const testName = urlParams.get('testName');
-    return { testName };
+    const id = urlParams.get('id');
+    return { testName, id };
   }
 
-displayError(message) {
-  const errorContainer = document.getElementById('errorContainer');
-  if (!errorContainer) {
-    console.error('Error container not found in the DOM');
-    return;
-  }
-  errorContainer.textContent = message;
-  errorContainer.style.display = 'flex'; // Change 'block' to 'flex' to center the message
-}
-
-
-init() {
-  this.displayPreviousRuns();
-  // Check if closeModal exists before adding the event listener
-  if (this.closeModal) {
-    this.closeModal.addEventListener('click', () => {
-      this.codeModal.style.display = 'none';
-    });
-  } else {
-    console.error('Close modal button not found in the DOM');
-  }
-}
+  displayError(message) {
+    const errorContainer = document.getElementById('errorContainer');
+    if (!errorContainer) {
+      console.error('Error container not found in the DOM');
+      return;
     }
-    
+    errorContainer.textContent = message;
+    errorContainer.style.display = 'flex'; // Change 'block' to 'flex' to center the message
+  }
+
+  init() {
+    this.displayPreviousRuns();
+    // Check if closeModal exists before adding the event listener
+    if (this.closeModal) {
+      this.closeModal.addEventListener('click', () => {
+        this.codeModal.style.display = 'none';
+      });
+    } else {
+      console.error('Close modal button not found in the DOM');
+    }
+  }
+}
+
 const testDashboard = new TestDashboard();
 testDashboard.init();
 </script>
