@@ -8,16 +8,34 @@
     <link href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism-tomorrow.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h2 {
+            color: #4A5568;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:hover {background-color: #f5f5f5;}
+    </style>
 </head>
-<body class="bg-gray-900 text-white">
-<div id="testRunDetailsHeader" class="border-b border-gray-700 bg-gray-800 px-4 py-5 sm:px-6">
+<body class="bg-gray-200 text-black">
+<div id="testRunDetailsHeader" class="border-b border-gray-700 bg-gray-300 px-4 py-5 sm:px-6">
   <!-- Test Details will be appended here -->
 </div>
-<div id="videoContainer" class="w-full h-1/2 flex items-center justify-center bg-gray-800 relative">
+<div id="videoContainer" class="w-full h-1/2 flex items-center justify-center bg-gray-300 relative">
   <video src="https://yb-automation-ui-test-recordings.s3.us-west-2.amazonaws.com/screen-recording-mp4-format/39928a964a711a12c6b238dd1f2e7e67.mp4" controls class="w-full h-full"></video>
 </div>
 <h2 class="text-2xl font-bold mt-4 mb-2">Logs</h2>
-<div id="logsContainer" class="w-full p-4 bg-gray-800">
+<div id="logsContainer" class="w-full p-4 bg-gray-300">
   <pre><code id="logsCode" class="language-markup"></code></pre>
 </div>
 <h2 class="text-2xl font-bold mt-4 mb-2">Test Runs Report</h2>
@@ -27,9 +45,9 @@
       <table class="min-w-full divide-y divide-gray-700">
         <thead>
           <tr>
-            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0">Run ID</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Status</th>
-            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Last Run</th>
+            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-black sm:pl-0">Run ID</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-black">Status</th>
+            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-black">Last Run</th>
           </tr>
         </thead>
         <tbody id="test-runs-body" class="divide-y divide-gray-800">
