@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
 </head>
 <body class="bg-gray-900 text-gray-200">
-    <header id="testRunDetailsHeader" class="border-b border-gray-700 bg-gray-800 px-6 py-5">
+    <header id="testRunDetailsHeader" class="border-b border-gray-700 bg-gray-800 pl-6 py-5">
         <!-- Test Details will be appended here -->
     </header>
     <main class="mt-4">
@@ -31,7 +31,7 @@
                         <table class="min-w-full divide-y divide-gray-700 shadow-sm rounded-lg overflow-hidden">
                             <thead class="bg-gray-700">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Run ID</th>
+                                    <th scope="col" class="pl-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Run ID</th>
                                     <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-300 uppercase tracking-wider">Last Run</th>
                                 </tr>
                             </thead>
@@ -45,21 +45,21 @@
         </section>
     </main>
     <div id="loadingSpinner" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
-  <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
-</div>
+        <div class="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-white"></div>
+    </div>
 
-<div id="codeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
-  <div class="bg-gray-800 p-6 rounded-lg max-w-lg w-full mx-4">
-    <h2 class="text-2xl font-bold mb-4">Code</h2>
-    <pre><code id="code" class="language-markup"></code></pre>
-    <button id="closeModal" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">Close</button>
-  </div>
-</div>
+    <div id="codeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none;">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-lg w-full mx-4">
+            <h2 class="text-2xl font-bold mb-4">Code</h2>
+            <pre><code id="code" class="language-markup"></code></pre>
+            <button id="closeModal" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">Close</button>
+        </div>
+    </div>
 
-<div id="errorContainer" class="fixed inset-0 bg-red-500 bg-opacity-50 flex items-center justify-center text-white p-4" style="display: none;">
-  <!-- Error message will be displayed here -->
-</div>
-<script>
+    <div id="errorContainer" class="fixed inset-0 bg-red-500 bg-opacity-50 flex items-center justify-center text-white p-4" style="display: none;">
+        <!-- Error message will be displayed here -->
+    </div>
+    <script>
 class TestDashboard {
   constructor() {
     this.statusColors = {
@@ -74,7 +74,6 @@ class TestDashboard {
     this.logsCode = document.getElementById('logsCode');
     this.loadingSpinner = document.getElementById('loadingSpinner');
     this.codeModal = document.getElementById('codeModal');
-    this.code = document.getElementById('code');
     this.closeModal = document.getElementById('closeModal');
   }
 
@@ -127,7 +126,7 @@ class TestDashboard {
 
         const row = this.createElement('tr', '', '');
         
-        row.appendChild(this.createElement('td', testRun.id, 'px-4 py-2'));
+        row.appendChild(this.createElement('td', testRun.id, 'pl-6 py-2'));
         row.appendChild(this.renderLastRunCell(testRun.timestamp, testRun.status));
         row.addEventListener('click', () => this.displayRunDetails(testRun.id, previousRunsData));
         this.testRunsBody.appendChild(row);
@@ -146,11 +145,11 @@ class TestDashboard {
   }
 
   renderLastRunCell(timestamp, status) {
-    const lastRunCell = this.createElement('td', '', 'px-4 py-2 flex items-center justify-between');
-    const timestampSpan = this.createElement('span', timestamp, '');
-    lastRunCell.appendChild(timestampSpan);
-    const statusDot = this.createElement('div', '', `inline-block h-2 w-2 rounded-full ${this.getStatusColor(status)} ml-2`);
+    const lastRunCell = this.createElement('td', '', 'px-4 py-2 flex items-center justify-end');
+    const statusDot = this.createElement('div', '', `inline-block h-2 w-2 rounded-full ${this.getStatusColor(status)} mr-2`);
     lastRunCell.appendChild(statusDot);
+    const timestampSpan = this.createElement('span', timestamp, 'ml-2');
+    lastRunCell.appendChild(timestampSpan);
     return lastRunCell;
   }
 
@@ -203,13 +202,7 @@ class TestDashboard {
       videoElement.src = videoUrl;
       videoElement.controls = true;
       videoElement.className = 'w-full h-full';
-      videoElement.preload = 'metadata';
-
       this.videoContainer.appendChild(videoElement);
-
-      videoElement.addEventListener('loadedmetadata', () => {
-          videoElement.currentTime = videoElement.duration / 2;
-      });
 
       this.logsCode.textContent = '';
       if (testRun.logs && testRun.logs.length > 0) {
