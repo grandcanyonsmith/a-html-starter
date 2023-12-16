@@ -264,7 +264,7 @@ displayError(message) {
   errorContainer.textContent = message;
   errorContainer.style.display = 'flex'; // Change 'block' to 'flex' to center the message
 }
-}
+
 
 init() {
   this.displayPreviousRuns();
@@ -277,6 +277,7 @@ init() {
     console.error('Close modal button not found in the DOM');
   }
 }
+    }
     
 const testDashboard = new TestDashboard();
 testDashboard.init();
