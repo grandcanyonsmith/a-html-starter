@@ -208,7 +208,7 @@ class TestDashboard {
 
   getParamsFromUrl() {
     const urlParams = new URLSearchParams(window.location.search);
-    const testName = urlParams.get('testName');
+    const testName = decodeURIComponent(urlParams.get('testName'));
     const id = urlParams.get('id');
     return { testName, id };
   }
