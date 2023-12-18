@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Extract testName</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <script>
@@ -27,6 +28,20 @@
 
         // Log testName to the console
         console.log(testName);
+
+        // Send a POST request to the specified URL
+        axios.post('https://zyw4xz6b5m2c7mdbhhsoerydve0mgnfl.lambda-url.us-west-2.on.aws/', {
+            fileName: testName,
+            requestType: 'FETCH_FILE_CONTENTS',
+            branchName: 'main'
+        })
+        .then(function (response) {
+            // Log the response to the console
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
     </script>
 </body>
 </html>
