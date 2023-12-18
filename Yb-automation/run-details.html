@@ -180,7 +180,7 @@ class TestDashboard {
       const viewCodeButton = this.createElement('button', 'View Code', 'inline-flex items-center rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400');
       viewCodeButton.addEventListener('click', () => {
     const testName = testRun.testName.split('::')[0];
-    window.location.href = `viewCode.html?testName=${encodeURIComponent(testName)}`;
+    window.location.href = `viewCode.html?testName=${testName}`;
 });
       rightDiv.appendChild(viewCodeButton);
 
