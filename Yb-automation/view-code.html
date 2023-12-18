@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extract testName</title>
+</head>
+<body>
+    <script>
+        // Function to get query parameters
+        function getQueryParams(url) {
+            let queryParams = {};
+            let anchor = document.createElement('a');
+            anchor.href = url;
+            let queryStrings = anchor.search.substring(1);
+            let params = queryStrings.split('&');
+
+            for (var i = 0; i < params.length; i++) {
+                var pair = params[i].split('=');
+                queryParams[pair[0]] = decodeURIComponent(pair[1]);
+            }
+
+            return queryParams;
+        }
+
+        // Extract testName from the URL
+        let params = getQueryParams(window.location.href);
+        let testName = params.testName || "tests/publishing/ui_tests/test_text_assets.py";
+
+        // Log testName to the console
+        console.log(testName);
+    </script>
+</body>
+</html>
