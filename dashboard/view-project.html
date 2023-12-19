@@ -10,9 +10,6 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        .hidden {
-            display: none;
-        }
         .flex-grow {
             display: flex;
             flex-direction: column;
@@ -115,7 +112,7 @@
          </select>
       </div>
       <div class="flex space-x-1 rounded-xl bg-gray-800 p-1" id="tab-list">
-         <button id="previewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none flex items-center justify-center hidden"  data-target="preview">
+         <button id="previewCodeButton" data-target="preview" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none flex items-center justify-center">
             <div class="flex items-center justify-center">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
                   <path d="M10 12.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" />
@@ -130,7 +127,7 @@
             </svg>
             Code
          </button>
-         <button id="viewLogsButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none flex items-center justify-center hidden" data-target="logs">
+         <button id="viewLogsButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none flex items-center justify-center" data-target="logs">
             <div class="flex items-center justify-center">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
                   <path fill-rule="evenodd" d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h13.5A2.25 2.25 0 0019 14.75v-9.5A2.25 2.25 0 0016.75 3H3.25zm.943 8.752a.75.75 0 01.055-1.06L6.128 9l-1.88-1.693a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 01-1.06-.055zM9.75 10.25a.75.75 0 000 1.5h2.5a.75.75 0 000-1.5h-2.5z" clip-rule="evenodd" />
@@ -149,14 +146,14 @@
       </div>
    </div>
    </div>
-   <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="viewCodeBox">
+   <div class="flex-grow w-full overflow-auto flex flex-col" id="viewCodeBox">
     <!-- Set min-height to 100vh to fill the height of the page -->
     <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="codeBox" class="w-full text-lg leading-relaxed"></code></pre>
 </div>
    <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
       <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
    </div>
-   <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="previewRenderCodeBox">
+   <div class="flex-grow w-full overflow-auto flex flex-col" id="previewRenderCodeBox">
       <iframe id="previewCodeIframe" class="w-full h-full border-none"></iframe>
    </div>
        <!-- Logs view box -->
@@ -538,7 +535,7 @@ function handlePreviewClick() {
     }
     const fileContents = fileDataArray[currentSelectedTab].fileContents;
     elements.previewCodeIframe.srcdoc = fileContents;
-    showTabContent('preview'); // This should show the preview content and hide others
+    showTabContent('preview');
 }
 
 // Attach the event listener to the previewCodeButton using its ID
