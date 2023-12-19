@@ -18,7 +18,7 @@
          fetchFileContents();
       </script>
    </head>
-   <body>
+   <body class="bg-gray-900 text-white">
       <div class="flex space-x-1 rounded-xl bg-gray-800 p-1" id="tab-list">
          <button id="viewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white hover:bg-gray-400 focus:outline-none flex items-center justify-center" data-target="code">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
@@ -36,7 +36,7 @@
          </button>
       </div>
       <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="viewCodeBox">
-         <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="codeBox" class="w-full text-lg leading-relaxed"></code></pre>
+         <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="codeBox" class="language-python w-full text-lg leading-relaxed"></code></pre>
       </div>
       <div class="flex-grow w-full overflow-auto hidden" id="viewLogsContainer">
          <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="logsBox" class="language-bash"></code></pre>
@@ -65,7 +65,8 @@
                 filePath: filePath
             })
             .then(function (response) {
-                document.getElementById('logsBox').textContent = response.data;
+                document.getElementById('logsBox').textContent = JSON.stringify(response.data, null, 2);
+                document.getElementById('viewLogsButton').click();
             })
             .catch(function (error) {
                 console.error('Error executing code:', error);
@@ -83,6 +84,10 @@
             document.getElementById('viewLogsContainer').classList.remove('hidden');
             document.getElementById('viewCodeBox').classList.add('hidden');
         });
+
+        window.onload = function() {
+            document.getElementById('viewCodeButton').click();
+        }
     </script>
 </body>
 </html>
