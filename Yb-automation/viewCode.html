@@ -34,7 +34,7 @@
 
     <script>
         // Function to get query parameters
-        function getQueryParams(url) {
+        function getQueryParameters(url) {
             let queryParams = {};
             let anchor = document.createElement('a');
             anchor.href = url;
@@ -51,7 +51,7 @@
 
         // Extract testName from the URL
         function getTestName() {
-            let params = getQueryParams(window.location.href);
+            let params = getQueryParameters(window.location.href);
             return params.testName || "tests/publishing/ui_tests/test_text_assets.py";
         }
 
