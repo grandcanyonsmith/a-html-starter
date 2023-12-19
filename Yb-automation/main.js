@@ -4,50 +4,46 @@ document.addEventListener("DOMContentLoaded", function() {
         textarea.style.height = textarea.scrollHeight + 'px';
     }
 
-function executeCode() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const filePath = urlParams.get('testName');
-    const executeButton = document.getElementById('executePythonCodeButton');
-    const playIcon = executeButton.innerHTML;
-    const spinnerIcon = '<div class="loader"></div>'; // Add your spinner icon HTML here
-    const code = document.getElementById('codeBox').textContent;
+    function executeCode() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const filePath = urlParams.get('testName');
+        const executeButton = document.getElementById('executePythonCodeButton');
+        const playIcon = executeButton.innerHTML;
+        const spinnerIcon = '<div class="loader"></div>'; // Add your spinner icon HTML here
+        const code = document.getElementById('codeBox').textContent;
 
-    executeButton.innerHTML = spinnerIcon;
+        executeButton.innerHTML = spinnerIcon;
 
-    axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', {
-        filePath: filePath,
-        code: code
-    })
-    .then(function (response) {
-        console.log(response,'response');
-        const output = response.data.StandardOutputContent || '';
-        const error = response.data.StandardErrorContent || '';
-        document.getElementById('standardOutput').textContent = output;
-        document.getElementById('standardError').textContent = error;
-        Prism.highlightAll();
-        executeButton.innerHTML = playIcon;
-        document.getElementById('viewLogsButton').click();
-    })
-    .catch(function (error) {
-        console.error('Error executing code:', error);
-        executeButton.innerHTML = playIcon;
-    });
-}
+        axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', {
+            filePath: filePath,
+            code: code
+        })
+        .then(function (response) {
+            const { StandardOutputContent, StandardErrorContent } = response.data;
+            updateLogsView(StandardOutputContent, StandardErrorContent); // Update the logs view in the UI
+            executeButton.innerHTML = playIcon;
+            document.getElementById('viewLogsButton').click();
+        })
+        .catch(function (error) {
+            console.error('Error executing code:', error);
+            executeButton.innerHTML = playIcon;
+        });
+    }
 
     document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
 
-function toggleTab(selectedTab) {
-    const tabs = document.querySelectorAll('.tab-button');
-    tabs.forEach(tab => {
-        if (tab === selectedTab) {
-            tab.classList.add('text-white', 'bg-gray-600');
-            tab.classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-gray-400');
-        } else {
-            tab.classList.remove('text-white', 'bg-gray-600');
-            tab.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-gray-400');
-        }
-    });
-}
+    function toggleTab(selectedTab) {
+        const tabs = document.querySelectorAll('.tab-button');
+        tabs.forEach(tab => {
+            if (tab === selectedTab) {
+                tab.classList.add('text-white', 'bg-gray-600');
+                tab.classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-gray-400');
+            } else {
+                tab.classList.remove('text-white', 'bg-gray-600');
+                tab.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-gray-400');
+            }
+        });
+    }
 
     document.getElementById('viewCodeButton').addEventListener('click', function() {
         toggleTab(this);
@@ -65,3 +61,9 @@ function toggleTab(selectedTab) {
         document.getElementById('viewCodeButton').click();
     }
 });
+
+function updateLogsView(stdout, stderr) {
+    document.getElementById('standardOutput').textContent = stdout;
+    document.getElementById('standardError').textContent = stderr;
+    Prism.highlightAll();
+}
