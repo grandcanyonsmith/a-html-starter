@@ -1,8 +1,8 @@
-
-function autoResizeTextarea(textarea) {
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
-}
+document.addEventListener("DOMContentLoaded", function() {
+    function autoResizeTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    }
 
 function executeCode() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -30,7 +30,7 @@ function executeCode() {
     });
 }
 
-document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
+    document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
 
 function toggleTab(selectedTab) {
     const tabs = document.querySelectorAll('.tab-button');
@@ -45,18 +45,19 @@ function toggleTab(selectedTab) {
     });
 }
 
-document.getElementById('viewCodeButton').addEventListener('click', function() {
-    toggleTab(this);
-    document.getElementById('viewCodeBox').classList.remove('hidden');
-    document.getElementById('viewLogsContainer').classList.add('hidden');
-});
+    document.getElementById('viewCodeButton').addEventListener('click', function() {
+        toggleTab(this);
+        document.getElementById('viewCodeBox').classList.remove('hidden');
+        document.getElementById('viewLogsContainer').classList.add('hidden');
+    });
 
-document.getElementById('viewLogsButton').addEventListener('click', function() {
-    toggleTab(this);
-    document.getElementById('viewLogsContainer').classList.remove('hidden');
-    document.getElementById('viewCodeBox').classList.add('hidden');
-});
+    document.getElementById('viewLogsButton').addEventListener('click', function() {
+        toggleTab(this);
+        document.getElementById('viewLogsContainer').classList.remove('hidden');
+        document.getElementById('viewCodeBox').classList.add('hidden');
+    });
 
-window.onload = function() {
-    document.getElementById('viewCodeButton').click();
-}
+    window.onload = function() {
+        document.getElementById('viewCodeButton').click();
+    }
+});
