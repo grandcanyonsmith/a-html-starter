@@ -85,8 +85,8 @@
             document.getElementById('spinner').style.display = 'block';
 
             axios.post('https://kvqpfgxn2jz5pyh4wz7thbmhay0hqcvh.lambda-url.us-west-2.on.aws/', {
-               test_name: testName,
-               user_request: userRequest,
+               fileName: testName,
+               request: userRequest,
                code: code
             })
             .then(function (response) {
