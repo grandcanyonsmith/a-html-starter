@@ -13,6 +13,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-bash.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script type="module">
+        import { fetchFileContents } from './fetchFileContents.js';
+        fetchFileContents();
+    </script>
 </head>
 <body>
     <pre class="line-numbers"><code id="code" class="language-python"></code></pre>
@@ -31,49 +35,4 @@
          </button>
       </div>
    </div>
-    <script>
-        // Function to get query parameters
-        function getQueryParams(url) {
-            let queryParams = {};
-            let anchor = document.createElement('a');
-            anchor.href = url;
-            let queryStrings = anchor.search.substring(1);
-            let params = queryStrings.split('&');
-
-            for (var i = 0; i < params.length; i++) {
-                var pair = params[i].split('=');
-                queryParams[pair[0]] = decodeURIComponent(pair[1]);
-            }
-
-            return queryParams;
-        }
-
-        // Extract testName from the URL
-        let params = getQueryParams(window.location.href);
-        let testName = params.testName || "tests/publishing/ui_tests/test_text_assets.py";
-
-        // Log testName to the console
-        console.log(testName);
-
-        // Send a POST request to the specified URL
-        axios.post('https://zyw4xz6b5m2c7mdbhhsoerydve0mgnfl.lambda-url.us-west-2.on.aws/', {
-            filePath: testName,
-            requestType: 'FETCH_FILE_CONTENTS',
-            branchName: 'main'
-        })
-        .then(function (response) {
-            // Log the response to the console
-            console.log(response);
-
-            // Set the response data as the text content of the code element
-            document.getElementById('code').textContent = response.data;
-
-            // Highlight the code
-            Prism.highlightAll();
-        })
-        .catch(function (error) {
-            console.log(error);
-        });
-    </script>
 </body>
-</html>
