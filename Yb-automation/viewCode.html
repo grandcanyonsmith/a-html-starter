@@ -19,64 +19,63 @@
       </script>
       <script src="main.js"></script>
    </head>
-<body class="bg-gray-900 text-white">
-<div class="flex space-x-1 rounded-xl bg-gray-800 p-1" id="tab-list">
-    <!-- Code View Button -->
-    <button id="viewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white focus:outline-none flex items-center justify-center" data-target="code">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+   <body class="bg-gray-900 text-white">
+      <div class="flex space-x-1 rounded-xl bg-gray-800 p-1" id="tab-list">
+         <!-- Code View Button -->
+         <button id="viewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white focus:outline-none flex items-center justify-center" data-target="code">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
                <path fill-rule="evenodd" d="M6.28 5.22a.75.75 0 010 1.06L2.56 10l3.72 3.72a.75.75 0 01-1.06 1.06L.97 10.53a.75.75 0 010-1.06l4.25-4.25a.75.75 0 011.06 0zm7.44 0a.75.75 0 011.06 0l4.25 4.25a.75.75 0 010 1.06l-4.25 4.25a.75.75 0 01-1.06-1.06L17.44 10l-3.72-3.72a.75.75 0 010-1.06zM11.377 2.011a.75.75 0 01.612.867l-2.5 14.5a.75.75 0 01-1.478-.255l2.5-14.5a.75.75 0 01.866-.612z" clip-rule="evenodd" />
             </svg>
             Code
-   </button>
-    <!-- Logs View Button -->
-    <button id="viewLogsButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white focus:outline-none flex items-center justify-center" data-target="logs">
-                    <div class="flex items-center justify-center">
+         </button>
+         <!-- Logs View Button -->
+         <button id="viewLogsButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white focus:outline-none flex items-center justify-center" data-target="logs">
+            <div class="flex items-center justify-center">
                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
                   <path fill-rule="evenodd" d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h13.5A2.25 2.25 0 0019 14.75v-9.5A2.25 2.25 0 0016.75 3H3.25zm.943 8.752a.75.75 0 01.055-1.06L6.128 9l-1.88-1.693a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 01-1.06-.055zM9.75 10.25a.75.75 0 000 1.5h2.5a.75.75 0 000-1.5h-2.5z" clip-rule="evenodd" />
                </svg>
                Logs
             </div>
          </button>
-</div>
-<!-- Code Box -->
-<div class="flex-grow w-full overflow-auto flex flex-col hidden mb-16" id="viewCodeBox">
-    <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="codeBox" class="language-python w-full text-lg leading-relaxed"></code></pre>
-</div>
-<!-- Logs Container -->
-<div class="flex-grow w-full overflow-auto hidden mb-16" id="viewLogsContainer">
-    <div id="standardOutput" class="language-bash"></div>
-    <div id="standardError" class="language-bash text-red-500"></div>
-</div>
-<!-- User Request Container -->
-<div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-0.75 shadow-md">
-      <div class="relative flex items-center border rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
-         <textarea name="userRequestInputBox" id="userRequestInputBox" class="block w-full resize-none border-none bg-transparent text-base sm:text-sm sm:leading-6 placeholder:text-gray-400 focus:ring-0 rounded-l-lg p-2" placeholder="Enter your request here..." oninput="autoResizeTextarea(this)" style="height: 2.5rem;"></textarea>
-         <button type="button" id="submitUserRequestButton" class="ml-auto inline-flex items-center rounded-r-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-               <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-            </svg>
-         </button>
-         <button type="button" id="executePythonCodeButton" class="inline-flex items-center rounded-r-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-               <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
-            </svg>
-         </button>
       </div>
-   </div>
-<style>
-    .loader {
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #3498db;
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        animation: spin 2s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-</style>
-</body>
+      <!-- Code Box -->
+      <div class="flex-grow w-full overflow-auto flex flex-col hidden mb-16" id="viewCodeBox">
+         <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="codeBox" class="language-python w-full text-lg leading-relaxed"></code></pre>
+      </div>
+      <!-- Logs Container -->
+      <div class="flex-grow w-full overflow-auto hidden mb-16" id="viewLogsContainer">
+         <div id="standardOutput" class="language-bash"></div>
+         <div id="standardError" class="language-bash text-red-500"></div>
+      </div>
+      <!-- User Request Container -->
+      <div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-0.75 shadow-md">
+         <div class="relative flex items-center border rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+            <textarea name="userRequestInputBox" id="userRequestInputBox" class="block w-full resize-none border-none bg-transparent text-base sm:text-sm sm:leading-6 placeholder:text-gray-400 focus:ring-0 rounded-l-lg p-2" placeholder="Enter your request here..." oninput="autoResizeTextarea(this)" style="height: 2.5rem;"></textarea>
+            <button type="button" id="submitUserRequestButton" class="ml-auto inline-flex items-center rounded-r-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+               </svg>
+            </button>
+            <button type="button" id="executePythonCodeButton" class="inline-flex items-center rounded-r-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-600">
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" />
+               </svg>
+            </button>
+         </div>
+      </div>
+      <style>
+         .loader {
+         border: 4px solid #f3f3f3;
+         border-top: 4px solid #3498db;
+         border-radius: 50%;
+         width: 24px;
+         height: 24px;
+         animation: spin 2s linear infinite;
+         }
+         @keyframes spin {
+         0% { transform: rotate(0deg); }
+         100% { transform: rotate(360deg); }
+         }
+      </style>
+   </body>
 </html>
