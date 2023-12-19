@@ -43,7 +43,7 @@
         function executeCode() {
             const urlParams = new URLSearchParams(window.location.search);
             const filePath = urlParams.get('testName'); // Get testName from URL
-
+            console.log(filePath,'filePath');
             axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', {
                 filePath: filePath
             })
