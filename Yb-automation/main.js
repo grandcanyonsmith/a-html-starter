@@ -10,10 +10,13 @@ function executeCode() {
     const executeButton = document.getElementById('executePythonCodeButton');
     const playIcon = executeButton.innerHTML;
     const spinnerIcon = '<div class="loader"></div>'; // Add your spinner icon HTML here
+    const code = document.getElementById('codeBox').textContent;
+
     executeButton.innerHTML = spinnerIcon;
 
     axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', {
-        filePath: filePath
+        filePath: filePath,
+        code: code
     })
     .then(function (response) {
         const output = response.data.StandardOutputContent || '';
