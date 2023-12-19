@@ -19,6 +19,7 @@ function executeCode() {
         code: code
     })
     .then(function (response) {
+        console.log(response,'response');
         const output = response.data.StandardOutputContent || '';
         const error = response.data.StandardErrorContent || '';
         document.getElementById('standardOutput').textContent = output;
