@@ -35,7 +35,7 @@ function fetchFileContents() {
         console.log(response);
 
         // Set the response data as the text content of the code element
-        document.getElementById('code').textContent = response.data;
+        document.getElementById('codeBox').textContent = response.data;
 
         // Highlight the code
         Prism.highlightAll();
