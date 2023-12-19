@@ -36,7 +36,17 @@
          </button>
       </div>
       </div>
-      <pre class="line-numbers"><code id="code" class="language-python"></code></pre>
+      <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="viewCodeBox">
+         <!-- Set min-height to 100vh to fill the height of the page -->
+         <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="codeBox" class="w-full text-lg leading-relaxed"></code></pre>
+      </div>
+      <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
+         <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
+      </div>
+      <!-- Logs view box -->
+      <div class="flex-grow w-full overflow-auto hidden" id="viewLogsContainer">
+         <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="logsBox" class="language-bash"></code></pre>
+      </div>
       <div id="userRequestContainer" class="fixed bottom-0 left-0 right-0 z-50 bg-gray-100 border-t border-gray-300 p-0.75 shadow-md">
          <div class="relative flex items-center border rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
             <textarea name="userRequestInputBox" id="userRequestInputBox" class="block w-full resize-none border-none bg-transparent text-base sm:text-sm leading-6 placeholder:text-gray-400 focus:ring-0 rounded-l-lg p-2" placeholder="Enter your request here..." oninput="autoResizeTextarea(this)" style="height: 2.5rem;"></textarea>
