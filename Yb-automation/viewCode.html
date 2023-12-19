@@ -13,6 +13,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-bash.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <script type="module">
+        import { fetchFileContents } from './fetchFileContents.js';
+        fetchFileContents();
+    </script>
 </head>
 <body>
     <pre class="line-numbers"><code id="code" class="language-python"></code></pre>
@@ -33,31 +37,17 @@
    </div>
 
     <script>
-        // Function to get query parameters
-        function getQueryParameters(url) {
-            let queryParams = {};
-            let anchor = document.createElement('a');
-            anchor.href = url;
-            let queryStrings = anchor.search.substring(1);
-            let params = queryStrings.split('&');
-
-            for (var i = 0; i < params.length; i++) {
-                var pair = params[i].split('=');
-                queryParams[pair[0]] = decodeURIComponent(pair[1]);
-            }
-
-            return queryParams;
-        }
-
-        // Extract testName from the URL
-        function getTestName() {
-            let params = getQueryParameters(window.location.href);
-            return params.testName || "tests/publishing/ui_tests/test_text_assets.py";
+        // Function to auto resize the textarea
+        function autoResizeTextarea(textarea) {
+            // Logic to resize textarea
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
         }
 
         // Function to send POST request
         function executeCode() {
-            const filePath = getTestName();
+            const urlParams = new URLSearchParams(window.location.search);
+            const filePath = urlParams.get('testName'); // Get testName from URL
 
             axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', {
                 filePath: filePath
