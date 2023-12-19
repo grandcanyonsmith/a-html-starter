@@ -74,5 +74,26 @@
          100% { transform: rotate(360deg); }
          }
       </style>
+      <script>
+         document.getElementById('submitUserRequestButton').addEventListener('click', function() {
+            const testName = new URL(window.location.href).searchParams.get('testName');
+            const userRequest = document.getElementById('userRequestInputBox').value;
+            const code = document.getElementById('codeBox').innerText;
+
+            axios.post('https://kvqpfgxn2jz5pyh4wz7thbmhay0hqcvh.lambda-url.us-west-2.on.aws/', {
+               test_name: testName,
+               user_request: userRequest,
+               code: code
+            })
+            .then(function (response) {
+               console.log(response);
+               document.getElementById('codeBox').innerText = response.data.newCode;
+               document.getElementById('viewCodeButton').click();
+            })
+            .catch(function (error) {
+               console.log(error);
+            });
+         });
+      </script>
    </body>
 </html>
