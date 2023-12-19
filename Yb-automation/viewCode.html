@@ -17,6 +17,10 @@
       <script src="main.js"></script>
    </head>
    <body class="bg-gray-900 text-white">
+      <button onclick="window.history.back();" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+         Back
+      </button>
+      <h1 id="testName" class="text-4xl text-center my-4"></h1>
       <div class="flex space-x-1 rounded-xl bg-gray-800 p-1" id="tab-list">
          <!-- Code View Button -->
          <button id="viewCodeButton" class="tab-button w-full rounded-lg py-2.5 text-md font-medium leading-5 text-gray-400 hover:text-white focus:outline-none flex items-center justify-center" data-target="code">
@@ -104,6 +108,11 @@
       document.getElementById('spinner').style.display = 'none';
    });
 });
+
+         window.onload = function() {
+            const testName = new URL(window.location.href).searchParams.get('testName');
+            document.getElementById('testName').textContent = testName;
+         }
       </script>
    </body>
 </html>
