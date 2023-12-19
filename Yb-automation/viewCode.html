@@ -35,15 +35,9 @@
             </div>
          </button>
       </div>
-      </div>
       <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="viewCodeBox">
-         <!-- Set min-height to 100vh to fill the height of the page -->
          <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="codeBox" class="w-full text-lg leading-relaxed"></code></pre>
       </div>
-      <div class="flex-grow w-full overflow-auto flex flex-col hidden" id="editCodeBox">
-         <textarea id="editCodeTextArea" class="w-full h-full border-none box-border"></textarea>
-      </div>
-      <!-- Logs view box -->
       <div class="flex-grow w-full overflow-auto hidden" id="viewLogsContainer">
          <pre class="line-numbers pl-14 pt-0 pb-4 pr-4 min-h-screen"><code id="logsBox" class="language-bash"></code></pre>
       </div>
@@ -59,31 +53,36 @@
       </div>
 
     <script>
-        // Function to auto resize the textarea
         function autoResizeTextarea(textarea) {
-            // Logic to resize textarea
             textarea.style.height = 'auto';
             textarea.style.height = textarea.scrollHeight + 'px';
         }
 
-        // Function to send POST request
         function executeCode() {
             const urlParams = new URLSearchParams(window.location.search);
-            const filePath = urlParams.get('testName'); // Get testName from URL
-            console.log(filePath,'filePath');
+            const filePath = urlParams.get('testName');
             axios.post('https://xmichysgq4emm6orafcdnwwhwu0lvmez.lambda-url.us-west-2.on.aws/', {
                 filePath: filePath
             })
             .then(function (response) {
-                console.log(response.data);
+                document.getElementById('logsBox').textContent = response.data;
             })
             .catch(function (error) {
                 console.error('Error executing code:', error);
             });
         }
 
-        // Add event listener to the "Execute Code" button
         document.getElementById('executePythonCodeButton').addEventListener('click', executeCode);
+
+        document.getElementById('viewCodeButton').addEventListener('click', function() {
+            document.getElementById('viewCodeBox').classList.remove('hidden');
+            document.getElementById('viewLogsContainer').classList.add('hidden');
+        });
+
+        document.getElementById('viewLogsButton').addEventListener('click', function() {
+            document.getElementById('viewLogsContainer').classList.remove('hidden');
+            document.getElementById('viewCodeBox').classList.add('hidden');
+        });
     </script>
 </body>
 </html>
