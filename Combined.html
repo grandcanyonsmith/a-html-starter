@@ -4,21 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Card Editor</title>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+    <script src="https://unpkg.com/panzoom@9.2.2/dist/panzoom.min.js"></script>
+
     <style>
         .card {
-            position: fixed;
+            position: relative;
             width: 300px;
             height: 200px;
             background-color: #f1f1f1;
             border: 1px solid #ccc;
             margin: 10px;
         }
-        .editArea {
-            width: 100%;
-            height: 160px;
-            display: none;
-        }
-        .saveCancelButtons {
+        .editArea, .saveCancelButtons {
             display: none;
         }
         .dragHandle {
@@ -54,9 +52,64 @@
 
     <script>
         const canvas = document.getElementById('canvas');
-        let zoomLevel = 1;
+        const panzoomInstance = panzoom(canvas, {
+            maxZoom: 5,
+            minZoom: 0.5
+        });
 
-        function createCard() {
+        document.getElementById('zoomInButton').addEventListener('click', () => {
+            panzoomInstance.zoom(1.1);
+        });
+
+        document.getElementById('zoomOutButton').addEventListener('click', () => {
+            panzoomInstance.zoom(0.9);
+        });
+
+        const addEventListeners = (card) => {
+            const editButton = card.querySelector('.editButton');
+            const saveButton = card.querySelector('.saveButton');
+            const cancelButton = card.querySelector('.cancelButton');
+            const editArea = card.querySelector('.editArea');
+            const content = card.querySelector('.content'); // This is an iframe
+            const saveCancelButtons = card.querySelector('.saveCancelButtons');
+
+            interact(card).draggable({
+                allowFrom: '.dragHandle',
+                onmove: function (event) {
+                    const target = event.target;
+                    const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                    const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+                    target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+                    target.setAttribute('data-x', x);
+                    target.setAttribute('data-y', y);
+                }
+            });
+
+            editButton.addEventListener('click', () => {
+                editArea.style.display = 'block';
+                saveCancelButtons.style.display = 'block';
+                editButton.style.display = 'none';
+                content.style.display = 'none';
+                editArea.value = content.srcdoc;
+            });
+
+            saveButton.addEventListener('click', () => {
+                content.srcdoc = editArea.value;
+                editArea.style.display = 'none';
+                saveCancelButtons.style.display = 'none';
+                editButton.style.display = 'block';
+                content.style.display = 'block';
+            });
+
+            cancelButton.addEventListener('click', () => {
+                editArea.style.display = 'none';
+                saveCancelButtons.style.display = 'none';
+                editButton.style.display = 'block';
+                content.style.display = 'block';
+            });
+        };
+
+        const createCard = () => {
             const newCard = document.createElement('div');
             newCard.className = 'card';
             newCard.innerHTML = `
@@ -72,87 +125,17 @@
             canvas.appendChild(newCard);
             addEventListeners(newCard);
             return newCard;
-        }
-
-        // Initialize the first card
-        const firstCard = createCard();
-        firstCard.style.top = "10px";
-        firstCard.style.left = "10px";
-
-        document.getElementById('zoomInButton').addEventListener('click', () => {
-            zoomLevel += 0.1;
-            canvas.style.transform = `scale(${zoomLevel})`;
-        });
-
-        document.getElementById('zoomOutButton').addEventListener('click', () => {
-            if (zoomLevel > 0.1) {
-                zoomLevel -= 0.1;
-                canvas.style.transform = `scale(${zoomLevel})`;
-            }
-        });
+        };
 
         document.getElementById('addCardButton').addEventListener('click', () => {
             const newCard = createCard();
             newCard.style.top = "10px";
             newCard.style.left = `${10 + canvas.getElementsByClassName('card').length * 310}px`;
+            panzoomInstance.moveTo(10, 10);
         });
 
-        function addEventListeners(card) {
-            const dragHandle = card.querySelector('.dragHandle');
-            const editButton = card.querySelector('.editButton');
-            const saveButton = card.querySelector('.saveButton');
-            const cancelButton = card.querySelector('.cancelButton');
-            const editArea = card.querySelector('.editArea');
-            const content = card.querySelector('.content');
-            const saveCancelButtons = card.querySelector('.saveCancelButtons');
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-            dragHandle.onmousedown = function(e) {
-                e.preventDefault();
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-            };
-
-            function elementDrag(e) {
-                e.preventDefault();
-                pos1 = pos3 - e.clientX;
-                pos2 = pos4 - e.clientY;
-                pos3 = e.clientX;
-                pos4 = e.clientY;
-                card.style.top = `${card.offsetTop - pos2}px`;
-                card.style.left = `${card.offsetLeft - pos1}px`;
-            }
-
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-            }
-
-            editButton.onclick = () => {
-                editArea.style.display = 'block';
-                saveCancelButtons.style.display = 'block';
-                editButton.style.display = 'none';
-                content.style.display = 'none';
-                editArea.value = content.srcdoc;
-            };
-
-            saveButton.onclick = () => {
-                content.srcdoc = editArea.value;
-                editArea.style.display = 'none';
-                saveCancelButtons.style.display = 'none';
-                editButton.style.display = 'block';
-                content.style.display = 'block';
-            };
-
-            cancelButton.onclick = () => {
-                editArea.style.display = 'none';
-                saveCancelButtons.style.display = 'none';
-                editButton.style.display = 'block';
-                content.style.display = 'block';
-            };
-        }
+        // Initialize the first card
+        createCard();
     </script>
 </body>
 </html>
