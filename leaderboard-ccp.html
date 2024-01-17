@@ -26,7 +26,12 @@
 
     <script>
         document.getElementById('fetchData').addEventListener('click', function() {
-            const date = document.getElementById('dateInput').value;
+            let date = document.getElementById('dateInput').value;
+            let dateParts = date.split('/');
+            if (dateParts[1].startsWith('0')) {
+                dateParts[1] = dateParts[1].substring(1);
+                date = dateParts.join('/');
+            }
             axios.post('https://7zgyrjta4qx3hdlo3nfjidisiq0zuqfp.lambda-url.us-west-2.on.aws/', {
                 date: date
             })
