@@ -5,14 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/themes/prism.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.24.1/prism.js"></script>
     <style>
         pre {
             white-space: pre-wrap;
-            white-space: -moz-pre-wrap;
-            white-space: -pre-wrap;
-            white-space: -o-pre-wrap;
             word-wrap: break-word;
         }
     </style>
@@ -24,7 +19,7 @@
                 <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">Instagram Handle Form</div>
                 <input type="text" id="instagram" placeholder="Enter Instagram Handle" class="mt-2 block w-full p-3 rounded bg-gray-200 border border-transparent focus:outline-none">
                 <button id="submit-button" onclick="sendPostRequest()" class="mt-3 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
-                <pre id="response" class="mt-3 language-json"><code></code></pre>
+                <pre id="response" class="mt-3"><code></code></pre>
                 <button id="copy-button" onclick="copyToClipboard()" class="mt-3 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 hidden">Copy</button>
             </div>
         </div>
