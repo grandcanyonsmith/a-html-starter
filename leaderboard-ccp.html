@@ -40,20 +40,20 @@
                 document.getElementById('data').innerHTML = `
                     <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
                         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                            <dt class="truncate text-sm font-medium text-gray-500">New Lead Count</dt>
+                            <dt class="truncate text-sm font-medium text-gray-500">New Lead</dt>
                             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.new_lead_count}</dd>
                         </div>
                         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                            <dt class="truncate text-sm font-medium text-gray-500">Called Scheduled Count</dt>
+                            <dt class="truncate text-sm font-medium text-gray-500">Voice Memo Sent</dt>
+                            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.voice_memo_sent_count}</dd>
+                        </div>
+                        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                            <dt class="truncate text-sm font-medium text-gray-500">Called Scheduled</dt>
                             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.called_scheduled_count}</dd>
                         </div>
                         <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                            <dt class="truncate text-sm font-medium text-gray-500">Closed Count</dt>
+                            <dt class="truncate text-sm font-medium text-gray-500">Closed</dt>
                             <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.closed_count}</dd>
-                        </div>
-                        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                            <dt class="truncate text-sm font-medium text-gray-500">Voice Memo Sent Count</dt>
-                            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.voice_memo_sent_count}</dd>
                         </div>
                     </div>
                 `;
