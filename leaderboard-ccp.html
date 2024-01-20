@@ -21,62 +21,66 @@
     </div>
 
     <script>
-function formatDate(date) {
-    let d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+    function formatDate(date) {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
 
-    return [day, month, year].join('/');
-}
-
-function fetchData(date) {
-    axios.post('https://7zgyrjta4qx3hdlo3nfjidisiq0zuqfp.lambda-url.us-west-2.on.aws/', {
-        date: date
-    })
-    .then(function (response) {
-        if (response.data) {
-            const data = response.data;
-            document.getElementById('data').innerHTML = `
-                <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-                    <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500">New Lead Count</dt>
-                        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.new_lead_count}</dd>
-                    </div>
-                    <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500">Called Scheduled Count</dt>
-                        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.called_scheduled_count}</dd>
-                    </div>
-                    <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
-                        <dt class="truncate text-sm font-medium text-gray-500">Closed Count</dt>
-                        <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.closed_count}</dd>
-                    </div>
-                </div>
-            `;
-        } else {
-            console.log('Unexpected response format:', response);
-        }
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-}
-
-document.getElementById('dateSelector').addEventListener('change', function() {
-    let selectedValue = this.value;
-    let date;
-    if (selectedValue === 'today') {
-        date = formatDate(new Date()); // Today's date
-    } else if (selectedValue === 'yesterday') {
-        let yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        date = formatDate(yesterday); // Yesterday's date
+        return [day, month, year].join('/');
     }
-    fetchData(date);
-});
 
-// Fetch data for today by default when the page loads
-fetchData(formatDate(new Date()));
+    function fetchData(date) {
+        axios.post('https://7zgyrjta4qx3hdlo3nfjidisiq0zuqfp.lambda-url.us-west-2.on.aws/', {
+            date: date
+        })
+        .then(function (response) {
+            if (response.data) {
+                const data = response.data;
+                document.getElementById('data').innerHTML = `
+                    <div class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-4">
+                        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                            <dt class="truncate text-sm font-medium text-gray-500">New Lead Count</dt>
+                            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.new_lead_count}</dd>
+                        </div>
+                        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                            <dt class="truncate text-sm font-medium text-gray-500">Called Scheduled Count</dt>
+                            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.called_scheduled_count}</dd>
+                        </div>
+                        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                            <dt class="truncate text-sm font-medium text-gray-500">Closed Count</dt>
+                            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.closed_count}</dd>
+                        </div>
+                        <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                            <dt class="truncate text-sm font-medium text-gray-500">Voice Memo Sent Count</dt>
+                            <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">${data.voice_memo_sent_count}</dd>
+                        </div>
+                    </div>
+                `;
+            } else {
+                console.log('Unexpected response format:', response);
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
+
+    document.getElementById('dateSelector').addEventListener('change', function() {
+        let selectedValue = this.value;
+        let date;
+        if (selectedValue === 'today') {
+            date = formatDate(new Date()); // Today's date
+        } else if (selectedValue === 'yesterday') {
+            let yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            date = formatDate(yesterday); // Yesterday's date
+        }
+        fetchData(date);
+    });
+
+    // Fetch data for today by default when the page loads
+    fetchData(formatDate(new Date()));
     </script>
 </body>
 </html>
