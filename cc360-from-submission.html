@@ -53,7 +53,7 @@
                 website_copy: document.getElementById('website_copy').value
             };
 
-            axios.post('http://localhost:5000', data)
+            axios.post('https://2xg4wyt2ysxr4r6eqpxdboc7oy0owumu.lambda-url.us-west-2.on.aws/', data)
                 .then(function (response) {
                     alert('Sent!');
                     console.log(data);
