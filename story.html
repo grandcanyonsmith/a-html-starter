@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Builder</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-200">
+    <div class="container mx-auto py-10">
+        <h1 class="text-4xl font-bold text-center mb-5">Story Builder</h1>
+        <div class="w-full max-w-md mx-auto">
+            <form id="story-form" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="prompt">
+                        Your Prompt
+                    </label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="prompt" type="text" placeholder="Enter your prompt">
+                </div>
+                <div class="flex items-center justify-between">
+                    <button id="submit-button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                        Build Story
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="w-full max-w-md mx-auto mt-10">
+            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <h2 class="text-2xl font-bold mb-2">Your Story:</h2>
+                <p id="story" class="text-gray-700 text-base">Your story will appear here...</p>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById('story-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var prompt = document.getElementById('prompt').value;
+            var submitButton = document.getElementById('submit-button');
+            var storyElement = document.getElementById('story');
+
+            submitButton.textContent = 'Loading...';
+
+            axios.post('https://lxklt6quzvihvmzsnyik5q7sxq0hwhjm.lambda-url.us-west-2.on.aws/', {
+                story: prompt
+            })
+            .then(function (response) {
+                storyElement.textContent = response.data;
+                submitButton.textContent = 'Build Story';
+            })
+            .catch(function (error) {
+                console.log(error);
+                submitButton.textContent = 'Build Story';
+            });
+        });
+    </script>
+</body>
+</html>
