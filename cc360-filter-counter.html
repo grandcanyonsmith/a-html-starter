@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,30 +18,17 @@
                 <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
                 <input type="date" id="end_date" name="end_date" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
-            <div>
-                <label for="stages" class="block text-sm font-medium text-gray-700">Stages</label>
-                <div id="stages" class="mt-1 space-y-1">
-                    <div><input type="checkbox" id="new_lead" name="new_lead" value="new lead"><label for="new_lead">New Lead</label></div>
-                    <div><input type="checkbox" id="closed" name="closed" value="closed"><label for="closed">Closed</label></div>
-                    <div><input type="checkbox" id="call_scheduled" name="call_scheduled" value="call scheduled"><label for="call_scheduled">Call Scheduled</label></div>
-                    <div><input type="checkbox" id="qualified" name="qualified" value="qualified"><label for="qualified">Qualified</label></div>
-                </div>
-            </div>
-            <div>
-                <label for="voice_memo_sent" class="block text-sm font-medium text-gray-700">Voice Memo Sent</label>
-                <div id="voice_memo_sent" class="mt-1 space-y-1">
-                    <div><input type="checkbox" id="voice_memo_sent_true" name="voice_memo_sent_true" value="True"><label for="voice_memo_sent_true">True</label></div>
-                    <div><input type="checkbox" id="voice_memo_sent_false" name="voice_memo_sent_false" value="False"><label for="voice_memo_sent_false">False</label></div>
-                </div>
-            </div>
-            <div>
-                <label for="contact_lead_types" class="block text-sm font-medium text-gray-700">Contact Lead Type</label>
-                <div id="contact_lead_types" class="mt-1 space-y-1">
-                    <div><input type="checkbox" id="inorganic" name="inorganic" value="inorganic"><label for="inorganic">Inorganic</label></div>
-                    <div><input type="checkbox" id="organic" name="organic" value="organic"><label for="organic">Organic</label></div>
-                </div>
-            </div>
             <button id="fetch_leads" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-7">Fetch Leads</button>
+        </div>
+        <div id="data" class="mt-4 text-gray-500"></div>
+        <div>
+            <label for="stages" class="block text-sm font-medium text-gray-700">Stages</label>
+            <div id="stages" class="mt-1 space-y-1">
+                <div><input type="checkbox" id="new_lead" name="new_lead" value="new lead"><label for="new_lead">New Lead</label></div>
+                <div><input type="checkbox" id="qualified" name="qualified" value="qualified"><label for="qualified">Qualified</label></div>
+                <div><input type="checkbox" id="call_scheduled" name="call_scheduled" value="call scheduled"><label for="call_scheduled">Call Scheduled</label></div>
+                <div><input type="checkbox" id="closed" name="closed" value="closed"><label for="closed">Closed</label></div>
+            </div>
         </div>
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -55,114 +40,148 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                 </tr>
             </thead>
+        <div id="status_cards" class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-8">
+            <!-- Status Cards -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">New Lead</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="new_lead_count">0</dd>
+                </div>
+            </div>
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">Qualified Lead</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="qualified_lead_count">0</dd>
+                </div>
+            </div>
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">Call Scheduled</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="call_scheduled_count">0</dd>
+                </div>
+            </div>
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">Closed</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="closed_count">0</dd>
+                </div>
+            </div>
+        </div>
             <tbody id="leads_table" class="bg-white divide-y divide-gray-200">
                 <!-- Data will be inserted here -->
             </tbody>
         </table>
     </div>
     <script>
-document.getElementById('fetch_leads').addEventListener('click', function() {
-    let startDate = new Date(document.getElementById('start_date').value);
-    let endDate = new Date(document.getElementById('end_date').value);
+window.onload = function() {
+    // Your JavaScript code here
+    document.getElementById('fetch_leads').addEventListener('click', function() {
+        let startDate = new Date(document.getElementById('start_date').value);
+        let endDate = new Date(document.getElementById('end_date').value);
 
-    // Add one day to the end date to include the entire day
-    endDate.setDate(endDate.getDate() + 1);
+        // Add one day to the end date to include the entire day
+        endDate.setDate(endDate.getDate() + 1);
 
-    // Format dates to 'DD/Mon/YYYY:HH:MM:SS +0000'
-    function formatDate(date) {
-        const pad = (num) => num.toString().padStart(2, '0');
-        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        return [
-            pad(date.getUTCDate()),
-            months[date.getUTCMonth()],
-            date.getUTCFullYear(),
-            pad(date.getUTCHours()),
-            pad(date.getUTCMinutes()),
-            pad(date.getUTCSeconds())
-        ].join('/') + ' +0000';
-    }
+        // Format dates to 'DD/Mon/YYYY:HH:MM:SS +0000'
+        function formatDate(date) {
+            const pad = (num) => num.toString().padStart(2, '0');
+            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            return [
+                pad(date.getUTCDate()),
+                months[date.getUTCMonth()],
+                date.getUTCFullYear(),
+                pad(date.getUTCHours()),
+                pad(date.getUTCMinutes()),
+                pad(date.getUTCSeconds())
+            ].join('/') + ' +0000';
+        }
 
-    let formattedStartDate = formatDate(startDate);
-    let formattedEndDate = formatDate(endDate);
+        let formattedStartDate = formatDate(startDate);
+        let formattedEndDate = formatDate(endDate);
 
-    // Get selected stages
-    let stages = Array.from(document.getElementById('stages').querySelectorAll('input:checked'), input => input.value);
+        // Get selected stages
+        let stages = Array.from(document.getElementById('stages').querySelectorAll('input:checked'), input => input.value);
 
-    // Get selected voice memo sent values
-    let voiceMemoSentValues = Array.from(document.getElementById('voice_memo_sent').querySelectorAll('input:checked'), input => input.value);
-
-    // Get selected contact lead types
-    let contactLeadTypes = Array.from(document.getElementById('contact_lead_types').querySelectorAll('input:checked'), input => input.value);
-
-    axios.post('https://yn2y4yeni5ahcygtsw42ps4vum0pngen.lambda-url.us-west-2.on.aws/', {
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-        stages: stages,
-        voice_memo_sent_values: voiceMemoSentValues,
-        contact_lead_types: contactLeadTypes
-    })
-    .then(response => populateTable(response.data))
-    .catch(error => console.error('Error:', error));
-});
-
-function populateTable(data) {
-    // Sort data by time in ascending order
-    data.sort((a, b) => {
-        let timeA = parseDateString(a.time);
-        let timeB = parseDateString(b.time);
-        return timeA - timeB;
+        axios.post('https://yn2y4yeni5ahcygtsw42ps4vum0pngen.lambda-url.us-west-2.on.aws/', {
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+            stages: stages
+        })
+        .then(response => {
+            populateTable(response.data);
+            populateCards(response.data);
+        })
+        .catch(error => console.error('Error:', error));
     });
 
-    const table = document.getElementById('leads_table');
-    table.innerHTML = ''; // Clear the table
+    function populateTable(data) {
+        // Sort data by time in ascending order
+        data.sort((a, b) => {
+            let timeA = parseDateString(a.time);
+            let timeB = parseDateString(b.time);
+            return timeA - timeB;
+        });
 
-    // Add a new row for each item in the sorted data array
-    data.forEach(item => {
-        const row = table.insertRow(-1); // Insert a new row at the end of the table
+        const table = document.getElementById('leads_table');
+        table.innerHTML = ''; // Clear the table
 
-        // Insert new cells for each property of the item
-        const cell1 = row.insertCell(0);
-        const cell2 = row.insertCell(1);
-        const cell3 = row.insertCell(2);
-        const cell4 = row.insertCell(3);
-        const cell5 = row.insertCell(4);
+        // Add a new row for each item in the sorted data array
+        data.forEach(item => {
+            const row = table.insertRow(-1); // Insert a new row at the end of the table
 
-        // Set the text of each cell
-        cell1.innerText = item.first_name + ' ' + (item.last_name || '');
-        cell2.innerText = item.stage;
-        cell3.innerText = item.voice_memo_sent;
-        cell4.innerText = item.contact_lead_type || 'N/A'; // Handle null or undefined
+            // Insert new cells for each property of the item
+            const cell1 = row.insertCell(0);
+            const cell2 = row.insertCell(1);
+            const cell3 = row.insertCell(2);
+            const cell4 = row.insertCell(3);
+            const cell5 = row.insertCell(4);
 
-        // Format the date and time
-        let date = parseDateString(item.time);
-        let formattedDate = date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
-        let formattedTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
-        cell5.innerHTML = `<span>${formattedDate}</span><br><span class="text-gray-400 text-xs">${formattedTime}</span>`;
-    });
+            // Set the text of each cell
+            cell1.innerText = item.first_name + ' ' + (item.last_name || '');
+            cell2.innerText = item.stage;
+            cell3.innerText = item.voice_memo_sent;
+            cell4.innerText = item.contact_lead_type || 'N/A'; // Handle null or undefined
+
+            // Format the date and time
+            let date = parseDateString(item.time);
+            let formattedDate = date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+            let formattedTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+            cell5.innerHTML = `<span>${formattedDate}</span><br><span class="text-gray-400 text-xs">${formattedTime}</span>`;
+        });
+    }
+
+function populateCards(data) {
+    let newLeadCount = data.filter(item => item.stage === 'new lead').length;
+    let qualifiedCount = data.filter(item => item.stage === 'qualified').length;
+    let callScheduledCount = data.filter(item => item.stage === 'call scheduled').length;
+    let closedCount = data.filter(item => item.stage === 'closed').length;
+
+    document.getElementById('new_lead_count').innerText = newLeadCount;
+    document.getElementById('qualified_lead_count').innerText = qualifiedCount;
+    document.getElementById('call_scheduled_count').innerText = callScheduledCount;
+    document.getElementById('closed_count').innerText = closedCount;
 }
 
-// Helper function to parse date strings in the format 'DD/Mon/YYYY:HH:MM:SS +0000'
-function parseDateString(dateString) {
-    const months = {
-        Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
-        Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
-    };
-    const match = dateString.match(/(\d{2})\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2}) \+0000/);
-    if (match) {
-        const year = match[3];
-        const month = months[match[2]];
-        const day = match[1];
-        const hours = match[4];
-        const minutes = match[5];
-        const seconds = match[6];
-        return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`);
-    } else {
-        return new Date(); // Return current date as fallback
+    // Helper function to parse date strings in the format 'DD/Mon/YYYY:HH:MM:SS +0000'
+    function parseDateString(dateString) {
+        const months = {
+            Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+            Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
+        };
+        const match = dateString.match(/(\d{2})\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2}) \+0000/);
+        if (match) {
+            const year = match[3];
+            const month = months[match[2]];
+            const day = match[1];
+            const hours = match[4];
+            const minutes = match[5];
+            const seconds = match[6];
+            return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`);
+        } else {
+            return new Date(); // Return current date as fallback
+        }
     }
 }
-</script>
+    </script>
 </body>
 </html>
-
-
-
