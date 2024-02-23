@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +48,6 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead ID</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Full Name</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage</th>
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Voice Memo Sent</th>
@@ -64,9 +65,25 @@ document.getElementById('fetch_leads').addEventListener('click', function() {
     let startDate = new Date(document.getElementById('start_date').value);
     let endDate = new Date(document.getElementById('end_date').value);
 
-    // Convert dates to the desired format
-    startDate = startDate.toGMTString().slice(5, 16) + ':00:00 +0000';
-    endDate = endDate.toGMTString().slice(5, 16) + ':23:59:59 +0000';
+    // Add one day to the end date to include the entire day
+    endDate.setDate(endDate.getDate() + 1);
+
+    // Format dates to 'DD/Mon/YYYY:HH:MM:SS +0000'
+    function formatDate(date) {
+        const pad = (num) => num.toString().padStart(2, '0');
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        return [
+            pad(date.getUTCDate()),
+            months[date.getUTCMonth()],
+            date.getUTCFullYear(),
+            pad(date.getUTCHours()),
+            pad(date.getUTCMinutes()),
+            pad(date.getUTCSeconds())
+        ].join('/') + ' +0000';
+    }
+
+    let formattedStartDate = formatDate(startDate);
+    let formattedEndDate = formatDate(endDate);
 
     // Get selected stages
     let stages = Array.from(document.getElementById('stages').querySelectorAll('input:checked'), input => input.value);
@@ -78,8 +95,8 @@ document.getElementById('fetch_leads').addEventListener('click', function() {
     let contactLeadTypes = Array.from(document.getElementById('contact_lead_types').querySelectorAll('input:checked'), input => input.value);
 
     axios.post('https://yn2y4yeni5ahcygtsw42ps4vum0pngen.lambda-url.us-west-2.on.aws/', {
-        start_date: startDate,
-        end_date: endDate,
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
         stages: stages,
         voice_memo_sent_values: voiceMemoSentValues,
         contact_lead_types: contactLeadTypes
@@ -89,10 +106,17 @@ document.getElementById('fetch_leads').addEventListener('click', function() {
 });
 
 function populateTable(data) {
+    // Sort data by time in ascending order
+    data.sort((a, b) => {
+        let timeA = parseDateString(a.time);
+        let timeB = parseDateString(b.time);
+        return timeA - timeB;
+    });
+
     const table = document.getElementById('leads_table');
     table.innerHTML = ''; // Clear the table
 
-    // Add a new row for each item in the data array
+    // Add a new row for each item in the sorted data array
     data.forEach(item => {
         const row = table.insertRow(-1); // Insert a new row at the end of the table
 
@@ -102,17 +126,43 @@ function populateTable(data) {
         const cell3 = row.insertCell(2);
         const cell4 = row.insertCell(3);
         const cell5 = row.insertCell(4);
-        const cell6 = row.insertCell(5);
 
         // Set the text of each cell
-        cell1.innerText = item.record_id;
-        cell2.innerText = item.first_name + ' ' + (item.last_name || '');
-        cell3.innerText = item.stage;
-        cell4.innerText = item.voice_memo_sent;
-        cell5.innerText = item.contact_lead_type;
-        cell6.innerText = item.time;
+        cell1.innerText = item.first_name + ' ' + (item.last_name || '');
+        cell2.innerText = item.stage;
+        cell3.innerText = item.voice_memo_sent;
+        cell4.innerText = item.contact_lead_type || 'N/A'; // Handle null or undefined
+
+        // Format the date and time
+        let date = parseDateString(item.time);
+        let formattedDate = date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+        let formattedTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+        cell5.innerHTML = `<span>${formattedDate}</span><br><span class="text-gray-400 text-xs">${formattedTime}</span>`;
     });
+}
+
+// Helper function to parse date strings in the format 'DD/Mon/YYYY:HH:MM:SS +0000'
+function parseDateString(dateString) {
+    const months = {
+        Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
+        Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
+    };
+    const match = dateString.match(/(\d{2})\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2}) \+0000/);
+    if (match) {
+        const year = match[3];
+        const month = months[match[2]];
+        const day = match[1];
+        const hours = match[4];
+        const minutes = match[5];
+        const seconds = match[6];
+        return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`);
+    } else {
+        return new Date(); // Return current date as fallback
+    }
 }
 </script>
 </body>
 </html>
+
+
+
