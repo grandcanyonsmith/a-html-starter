@@ -18,13 +18,6 @@
                 <label for="end_date" class="block text-sm font-medium text-gray-700">End Date</label>
                 <input type="date" id="end_date" name="end_date" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
-            <div>
-                <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
-                <div id="type" class="mt-1 space-y-1">
-                    <div><input type="checkbox" id="inorganic" name="inorganic" value="inorganic"><label for="inorganic">Inorganic</label></div>
-                    <div><input type="checkbox" id="organic" name="organic" value="organic"><label for="organic">Organic</label></div>
-                </div>
-            </div>
             <button id="fetch_leads" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-7">Fetch Leads</button>
         </div>
         <div id="data" class="mt-4 text-gray-500"></div>
@@ -47,6 +40,33 @@
                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                 </tr>
             </thead>
+        <div id="status_cards" class="grid grid-cols-1 sm:grid-cols-4 gap-4 mt-8">
+            <!-- Status Cards -->
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">New Lead</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="new_lead_count">0</dd>
+                </div>
+            </div>
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">Qualified Lead</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="qualified_lead_count">0</dd>
+                </div>
+            </div>
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">Call Scheduled</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="call_scheduled_count">0</dd>
+                </div>
+            </div>
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="px-4 py-5 sm:p-6">
+                    <dt class="text-sm font-medium text-gray-500 truncate">Closed</dt>
+                    <dd class="mt-1 text-3xl font-semibold text-gray-900" id="closed_count">0</dd>
+                </div>
+            </div>
+        </div>
             <tbody id="leads_table" class="bg-white divide-y divide-gray-200">
                 <!-- Data will be inserted here -->
             </tbody>
@@ -82,14 +102,10 @@ window.onload = function() {
         // Get selected stages
         let stages = Array.from(document.getElementById('stages').querySelectorAll('input:checked'), input => input.value);
 
-        // Get selected types
-        let types = Array.from(document.getElementById('type').querySelectorAll('input:checked'), input => input.value);
-
         axios.post('https://yn2y4yeni5ahcygtsw42ps4vum0pngen.lambda-url.us-west-2.on.aws/', {
             start_date: formattedStartDate,
             end_date: formattedEndDate,
-            stages: stages,
-            types: types
+            stages: stages
         })
         .then(response => {
             populateTable(response.data);
