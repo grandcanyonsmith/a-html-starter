@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    #progress-bar {
+      background-color: lightgray;
+      height: 20px;
+      width: 100%;
+      border: 1px solid #000;
+    }
+    #progress-bar-inner {
+      background-color: black;
+      height: 100%;
+      width: 0%;
+    }
+    select:after {
+      content: "\25BC";
+      color: lightgray;
+      padding: 0 8px;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="container mx-auto p-6">
+    <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/c2DjRsOo4e13Od6ZTU6S/media/6258b4470b05098bfa37332a.png" alt="Logo" class="w-24 h-24">
+  </div>
+  <div id="progress-bar" class="w-full">
+    <div id="progress-bar-inner"></div>
+  </div>
+
+  <div id="welcome" class="container mx-auto p-6 text-center">
+    <h1 class="text-4xl font-bold mb-4">Welcome! We're so excited to have you.</h1>
+    <p class="text-gray-500 text-lg mb-6">We have a few questions to help you get started.</p>
+    <button onclick="startSurvey()" class="bg-black text-white font-bold py-2 px-4 rounded">Let's get started</button>
+  </div>
+
+  <div id="survey" class="container mx-auto p-6 hidden">
+    <p class="text-gray-500 text-sm mb-2">Step 1 of 2</p>
+    <h1 class="text-4xl font-bold mb-4">What best describes your business idea?</h1>
+    <p class="text-gray-400 text-xs mb-6">This helps us provide the best experience for you.</p>
+  <form>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="question1">
+        What brings you to Course Creator 360?
+      </label>
+      <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question1">
+        <option selected>Select an option</option>
+        <option>Just casually exploring</option>
+        <option>I want to start monetizing my knowledge online</option>
+        <option>Looking for a better solution for my online business</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="question2">
+        How would you describe yourself professionally?
+      </label>
+      <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question2">
+        <option selected>Select an option</option>
+        <option>Coach, Teacher, or Instructor</option>
+        <option>Content Creator</option>
+        <option>Freelancer</option>
+        <option>Consultant</option>
+        <option>Entrepreneur</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="question3">
+        Do you currently run an online business?
+      </label>
+      <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question3">
+        <option selected>Select an option</option>
+        <option>Yes, full-time</option>
+        <option>Yes, part-time</option>
+        <option>No, I'm helping someone else</option>
+        <option>No, I'm interested in starting one</option>
+        <option>No, but I physically run one</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="question4">
+        Which industry is most relevant to your business?
+      </label>
+      <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question4">
+        <option selected>Select an option</option>
+        <option>Health and Fitness</option>
+        <option>Business and Finance</option>
+        <option>Fashion and Beauty</option>
+        <option>Lifestyle and Hobbies</option>
+        <option>Personal Development</option>
+        <option>Family and Parenting</option>
+        <option>Design</option>
+        <option>Academics and Teaching</option>
+        <option>Teacher Training</option>
+        <option>Software and Technology</option>
+        <option>Marketing</option>
+      </select>
+    </div>
+
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="question5">
+        How many followers do you have on socials?
+      </label>
+      <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question5">
+        <option selected>Select an option</option>
+        <option>0 to 999</option>
+        <option>1,000 to 10,000</option>
+        <option>10,001 to 100,000</option>
+        <option>100,001 to 1,000,000</option>
+        <option>1 million plus</option>
+      </select>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <button class="bg-black w-full text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+        Continue
+      </button>
+    </div>
+  </form>  </div>
+
+  <script>
+    function startSurvey() {
+      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('survey').style.display = 'block';
+      document.getElementById('progress-bar-inner').style.width = '50%';
+    }
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('progress-bar-inner').style.width = '100%';
+    });
+  </script>
+</body>
+</html>
