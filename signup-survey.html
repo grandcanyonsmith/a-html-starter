@@ -143,6 +143,51 @@
     </div>
   </form>  </div>
 
+  <div id="survey2" class="container mx-auto p-6 hidden">
+    <p class="text-gray-500 text-sm mb-2">Step 2 of 2</p>
+    <h1 class="text-4xl font-bold mb-4">Tell us about your course</h1>
+    <p class="text-gray-400 text-xs mb-6">Your answers will help us to provide the best experience for you.</p>
+    <form>
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="question7">
+          Do you already have an existing course?
+        </label>
+        <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question7">
+          <option selected>Select an option</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="question8">
+          Do you have an existing website domain?
+        </label>
+        <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question8">
+          <option selected>Select an option</option>
+          <option>Yes</option>
+          <option>No</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="question9">
+          If yes, please paste the domain to your existing website:
+        </label>
+        <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="question9">
+      </div>
+
+      <div class="flex items-center justify-between">
+        <button onclick="goBack()" class="bg-white text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Go back
+        </button>
+        <button class="bg-black text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+          Finish
+        </button>
+      </div>
+    </form>
+  </div>
+
   <script>
     function startSurvey() {
       document.getElementById('welcome').style.display = 'none';
@@ -150,9 +195,22 @@
       document.getElementById('progress-bar-inner').style.width = '50%';
     }
 
+    function goBack() {
+      document.getElementById('survey').style.display = 'block';
+      document.getElementById('survey2').style.display = 'none';
+      document.getElementById('progress-bar-inner').style.width = '50%';
+    }
+
     document.querySelector('form').addEventListener('submit', function(e) {
       e.preventDefault();
+      document.getElementById('survey').style.display = 'none';
+      document.getElementById('survey2').style.display = 'block';
       document.getElementById('progress-bar-inner').style.width = '100%';
+    });
+
+    document.querySelector('#survey2 form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      /* handle form submission here */
     });
   </script>
 </body>
