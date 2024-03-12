@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,20 +12,28 @@
         <h1 class="text-4xl font-serif">Interior Design Co.</h1>
     </header>
     <main class="p-4">
-        <section class="flex flex-col justify-between">
-            <div class="bg-white p-4 rounded shadow mb-2">
-                <h2 class="text-2xl mb-2">Living Room Design</h2>
-                <p>Our living room designs are focused on comfort and aesthetics.</p>
-            </div>
-            <div class="bg-white p-4 rounded shadow my-2">
-                <h2 class="text-2xl mb-2">Kitchen Design</h2>
-                <p>We create functional and beautiful kitchen spaces.</p>
-            </div>
-            <div class="bg-white p-4 rounded shadow mt-2">
-                <h2 class="text-2xl mb-2">Bedroom Design</h2>
-                <p>Our bedroom designs prioritize relaxation and personal style.</p>
-            </div>
-        </section>
+        <table class="table-auto w-full">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">Design Type</th>
+                    <th class="px-4 py-2">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white">
+                    <td class="border px-4 py-2">Living Room Design</td>
+                    <td class="border px-4 py-2">Our living room designs are focused on comfort and aesthetics.</td>
+                </tr>
+                <tr class="bg-gray-100">
+                    <td class="border px-4 py-2">Kitchen Design</td>
+                    <td class="border px-4 py-2">We create functional and beautiful kitchen spaces.</td>
+                </tr>
+                <tr class="bg-white">
+                    <td class="border px-4 py-2">Bedroom Design</td>
+                    <td class="border px-4 py-2">Our bedroom designs prioritize relaxation and personal style.</td>
+                </tr>
+            </tbody>
+        </table>
     </main>
     <footer class="bg-brown-500 text-white p-4 mt-4 text-center">
         <p>&copy; 2022 Interior Design Co.</p>
