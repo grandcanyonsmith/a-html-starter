@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Partnering with Emmanuel Maylarovich</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 font-sans">
+    <div class="max-w-7xl mx-auto p-8">
+        <h1 class="text-4xl font-semibold text-gray-900 mb-6">Boost Your Trading Course Sales with Our Platform</h1>
+        <p class="text-lg text-gray-700 mb-8">We are excited to offer you an opportunity to expand your reach and increase your revenue without disrupting your current operations on Discord.</p>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">The Opportunity</h2>
+            <p class="text-lg text-gray-700 mb-8">The market for trading courses is vast and growing. Your course has already seen success on Discord, and we believe it has the potential for even greater growth and expansion on our platform.</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">The Enhancement</h2>
+            <p class="text-lg text-gray-700 mb-8">While your current setup on Discord is working well, our platform can provide an additional stream of income and reach a wider audience. We offer an easy-to-navigate interface, automated systems, and dedicated support to enhance your sales process.</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">The Offer</h2>
+            <p class="text-lg text-gray-700 mb-8">We propose to sell your course on our platform for a 50% commission. This partnership will not only increase your revenue but also allow you to reach a broader audience without any additional work on your part.</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">The Process</h2>
+            <p class="text-lg text-gray-700 mb-8">We will handle the integration of your course onto our platform, providing all the necessary support and resources to ensure a smooth transition. You can continue to sell your course on Discord while enjoying the benefits of an additional sales channel. First we will setup the same offer on a different platform and then we will launch a campaign for a Low Ticket Offer course.</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">The Future</h2>
+            <p class="text-lg text-gray-700 mb-8">By partnering with us, you can achieve greater growth and success. We are committed to your success and will work tirelessly to ensure your course reaches its full potential on our platform.</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Call to Action</h2>
+            <p class="text-lg text-gray-700 mb-8">We invite you to take the next step and partner with us. Contact us today to get started on this exciting new venture.</p>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Thank You</h2>
+            <p class="text-lg text-gray-700 mb-8">We appreciate your time and consideration. We are excited about the potential partnership and look forward to hearing from you soon.</p>
+        </div>
+    </div>
+</body>
+</html>
