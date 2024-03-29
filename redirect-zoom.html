@@ -2,17 +2,18 @@
 <html>
 <head>
     <title>Redirecting...</title>
-</head>
-<body>
-    <p>If you are not redirected in five seconds, <a href="https://us06web.zoom.us/j/8908845279?pwd=dUxpYmd3MGNFVHlIWC9ha3k0YXlQQT09">click here</a>.</p>
-
     <script>
         var head = document.head;
         var script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = "https://174657.t.hyros.com/v1/lst/universal-script?ph=bdeb637b658515b62841f4a4d102f258353fd4f7182cae8d051c84950fd9b4b3&tag=!clicked&spa=true&ref_url=" + encodeURI(document.URL);
         head.appendChild(script);
+    </script>
+</head>
+<body>
+    <p>If you are not redirected in five seconds, <a href="https://us06web.zoom.us/j/8908845279?pwd=dUxpYmd3MGNFVHlIWC9ha3k0YXlQQT09">click here</a>.</p>
 
+    <script>
         setTimeout(function(){
             window.location.href = "https://us06web.zoom.us/j/8908845279?pwd=dUxpYmd3MGNFVHlIWC9ha3k0YXlQQT09";
         }, 5000);
