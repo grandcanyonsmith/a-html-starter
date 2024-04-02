@@ -28,7 +28,7 @@
         document.getElementById('myForm').addEventListener('submit', function(e) {
             e.preventDefault();
             document.getElementById('status').textContent = 'Sending...';
-            axios.post('https://hooks.zapier.com/hooks/catch/1202885/3potve8/', {
+            axios.post('https://h7rq7apdmf7malgphv3plo4caq0qrrgr.lambda-url.us-west-2.on.aws/', {
                 course_description: document.getElementById('course_description').value,
                 email: document.getElementById('email').value
             })
