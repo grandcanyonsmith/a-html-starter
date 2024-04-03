@@ -21,6 +21,7 @@
             <label for="funnel" class="block text-sm font-medium text-gray-700">Funnel</label>
             <select id="funnel" name="funnel" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md">
                 <option>Opt-in Funnel</option>
+                <option>Gusten Sun Landing Page</option>
             </select>
         </div>
         <div>
@@ -31,13 +32,18 @@
     </form>
     <p id="status" class="mt-5 text-lg text-gray-700"></p>
     <script>
+        const OPTIN_FUNNEL_ENDPOINT = 'https://h7rq7apdmf7malgphv3plo4caq0qrrgr.lambda-url.us-west-2.on.aws/';
+        const GUSTEN_SUN_LANDING_PAGE_ENDPOINT = 'https://ibd74mhltmlwrowrqtx44r4com0uncqb.lambda-url.us-west-2.on.aws/';
+
         document.getElementById('myForm').addEventListener('submit', function(e) {
             e.preventDefault();
             document.getElementById('status').textContent = 'Sending...';
-            axios.post('https://h7rq7apdmf7malgphv3plo4caq0qrrgr.lambda-url.us-west-2.on.aws/', {
+            const funnel = document.getElementById('funnel').value;
+            const endpoint = funnel === 'Gusten Sun Landing Page' ? GUSTEN_SUN_LANDING_PAGE_ENDPOINT : OPTIN_FUNNEL_ENDPOINT;
+            axios.post(endpoint, {
                 course_description: document.getElementById('course_description').value,
                 email: document.getElementById('email').value,
-                funnel: document.getElementById('funnel').value
+                funnel: funnel
             })
             .then(function (response) {
                 document.getElementById('status').textContent = 'Response: ' + response.status + ', ' + response.data;
