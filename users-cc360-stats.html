@@ -36,6 +36,7 @@
                                 <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Created Time</th>
                                 <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Time to Revenue</th>
                                 <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortFirstTransaction">First Transaction</th>
+<th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Mailgun Connected</th>
                             </tr>
                         </thead>
                         <tbody id="usersTable">
@@ -124,25 +125,34 @@ axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws
        });
    });
     function renderTable(users) {
-        const tableBody = document.getElementById('usersTable');
-        tableBody.innerHTML = ''; // Clear existing rows
-        users.forEach(user => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">${user.location_name}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_thirty_day_income)}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_ninety_day_income)}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_seven_day_income)}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.total_calendars}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.total_products}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
-            `;
-            tableBody.appendChild(tr);
-        });
+    const tableBody = document.getElementById('usersTable');
+    tableBody.innerHTML = ''; // Clear existing rows
+    users.forEach(user => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">${user.location_name}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_thirty_day_income)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_ninety_day_income)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_seven_day_income)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.total_calendars}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.total_products}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
+        `;
+        tableBody.appendChild(tr);
+    });
+}
+
+function formatMailgunConnected(isConnected) {
+    if (isConnected) {
+        return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
+    } else {
+        return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
     }
+}
 
     function formatIncome(income) {
         if (parseFloat(income) === 0) {
