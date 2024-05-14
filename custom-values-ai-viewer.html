@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Fields Viewer</title>
+  <!-- TailwindCSS CDN -->
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Axios CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- Vibrant.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/node-vibrant/3.1.6/vibrant.min.js"></script>
+</head>
+<body>
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="sm:flex sm:items-center">
+      <div class="sm:flex-auto">
+        <h1 class="text-base font-semibold leading-6 text-gray-900">Custom Fields</h1>
+        <p class="mt-2 text-sm text-gray-700">A list of all the custom fields in the DynamoDB table including their keys and values.</p>
+      </div>
+    </div>
+    <div class="mt-8 flow-root">
+      <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+          <table class="min-w-full divide-y divide-gray-300">
+            <thead>
+              <tr>
+                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Custom Field</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Funnel Name</th>
+                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Custom Value</th>
+              </tr>
+            </thead>
+            <tbody id="custom-fields-tbody" class="divide-y divide-gray-200">
+              <!-- Table rows will be inserted here dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchCustomFields() {
+      const url = "https://ionnjdho4ntxa2latjo5yf7i3m0yswoy.lambda-url.us-west-2.on.aws/";
+
+      try {
+        // Sending a POST request
+        const response = await axios.post(url, {});
+        console.log("Post request sent to Lambda function.");
+        
+        // Log the full response to understand its structure
+        console.log("Response received from Lambda:", response);
+
+        let items;
+
+        // Check if response.data.body is directly an array
+        if (Array.isArray(response.data)) {
+          items = response.data;
+        } else if (response.data && Array.isArray(response.data.body)) {
+          items = response.data.body;
+        } else {
+          throw new TypeError("Response body should be an array");
+        }
+
+        // Sort the items by Funnel Name alphabetically
+        items.sort((a, b) => {
+          if (a.funnel_name < b.funnel_name) {
+            return -1;
+          }
+          if (a.funnel_name > b.funnel_name) {
+            return 1;
+          }
+          return 0;
+        });
+
+        const tbody = document.getElementById('custom-fields-tbody');
+
+        // Clear any existing rows in the table
+        tbody.innerHTML = '';
+
+        // Function to generate a unique color based on a given string (funnel name)
+        const stringToColor = (str) => {
+          let hash = 0;
+          for (let i = 0; i < str.length; i++) {
+            hash = str.charCodeAt(i) + ((hash << 5) - hash);
+          }
+          const color = `hsl(${hash % 360}, 70%, 80%)`;
+          const textColor = `hsl(${(hash % 360) - 20 % 360}, 70%, 30%)`;
+          return { bgColor: color, textColor: textColor };
+        };
+
+        // Iterate over each item and create a table row
+        items.forEach(item => {
+          const { bgColor, textColor } = stringToColor(item.funnel_name);
+          const row = document.createElement('tr');
+
+          row.innerHTML = `
+            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">${item.custom_field}</td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+              <span class="inline-flex items-center rounded-md" style="background-color: ${bgColor}; color: ${textColor}; padding: 2px 4px; text-xs font-medium;">
+                ${item.funnel_name}
+              </span>
+            </td>
+            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${item.custom_value}</td>
+          `;
+
+          // Append the row to the table body
+          tbody.appendChild(row);
+        });
+
+        console.log("Successfully fetched, sorted, and displayed custom fields:", items);
+      } catch (error) {
+        console.error("Error fetching custom fields:", error);
+      }
+    }
+
+    // Automatically fetch the custom fields when the page loads
+    window.onload = fetchCustomFields;
+  </script>
+</body>
+</html>
