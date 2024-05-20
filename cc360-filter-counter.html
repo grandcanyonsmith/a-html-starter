@@ -72,9 +72,8 @@
             </tbody>
         </table>
     </div>
-    <script>
+<script>
 window.onload = function() {
-    // Your JavaScript code here
     document.getElementById('fetch_leads').addEventListener('click', function() {
         let startDate = new Date(document.getElementById('start_date').value);
         let endDate = new Date(document.getElementById('end_date').value);
@@ -82,18 +81,10 @@ window.onload = function() {
         // Add one day to the end date to include the entire day
         endDate.setDate(endDate.getDate() + 1);
 
-        // Format dates to 'DD/Mon/YYYY:HH:MM:SS +0000'
+        // Format dates to 'YYYY-MM-DD'
         function formatDate(date) {
             const pad = (num) => num.toString().padStart(2, '0');
-            const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-            return [
-                pad(date.getUTCDate()),
-                months[date.getUTCMonth()],
-                date.getUTCFullYear(),
-                pad(date.getUTCHours()),
-                pad(date.getUTCMinutes()),
-                pad(date.getUTCSeconds())
-            ].join('/') + ' +0000';
+            return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
         }
 
         let formattedStartDate = formatDate(startDate);
@@ -102,10 +93,12 @@ window.onload = function() {
         // Get selected stages
         let stages = Array.from(document.getElementById('stages').querySelectorAll('input:checked'), input => input.value);
 
-        axios.post('https://yn2y4yeni5ahcygtsw42ps4vum0pngen.lambda-url.us-west-2.on.aws/', {
-            start_date: formattedStartDate,
-            end_date: formattedEndDate,
-            stages: stages
+        axios.post('https://rcutu7pdyaizegsrrpkzaxujo40lfzzv.lambda-url.us-west-2.on.aws/', {
+            body: JSON.stringify({
+                start_date: formattedStartDate,
+                end_date: formattedEndDate,
+                stages: stages
+            })
         })
         .then(response => {
             populateTable(response.data);
@@ -115,11 +108,9 @@ window.onload = function() {
     });
 
     function populateTable(data) {
-        // Sort data by time in ascending order
+        // Sort data by created_at in ascending order
         data.sort((a, b) => {
-            let timeA = parseDateString(a.time);
-            let timeB = parseDateString(b.time);
-            return timeA - timeB;
+            return a.created_at - b.created_at;
         });
 
         const table = document.getElementById('leads_table');
@@ -143,45 +134,26 @@ window.onload = function() {
             cell4.innerText = item.contact_lead_type || 'N/A'; // Handle null or undefined
 
             // Format the date and time
-            let date = parseDateString(item.time);
+            let date = new Date(item.created_at * 1000); // Convert Unix timestamp to milliseconds
             let formattedDate = date.toLocaleString('en-US', { month: 'short', day: 'numeric' });
             let formattedTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
             cell5.innerHTML = `<span>${formattedDate}</span><br><span class="text-gray-400 text-xs">${formattedTime}</span>`;
         });
     }
 
-function populateCards(data) {
-    let newLeadCount = data.filter(item => item.stage === 'new lead').length;
-    let qualifiedCount = data.filter(item => item.stage === 'qualified').length;
-    let callScheduledCount = data.filter(item => item.stage === 'call scheduled').length;
-    let closedCount = data.filter(item => item.stage === 'closed').length;
+    function populateCards(data) {
+        let newLeadCount = data.filter(item => item.stage === 'new lead').length;
+        let qualifiedCount = data.filter(item => item.stage === 'qualified').length;
+        let callScheduledCount = data.filter(item => item.stage === 'call scheduled').length;
+        let closedCount = data.filter(item => item.stage === 'closed').length;
 
-    document.getElementById('new_lead_count').innerText = newLeadCount;
-    document.getElementById('qualified_lead_count').innerText = qualifiedCount;
-    document.getElementById('call_scheduled_count').innerText = callScheduledCount;
-    document.getElementById('closed_count').innerText = closedCount;
-}
-
-    // Helper function to parse date strings in the format 'DD/Mon/YYYY:HH:MM:SS +0000'
-    function parseDateString(dateString) {
-        const months = {
-            Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06',
-            Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12'
-        };
-        const match = dateString.match(/(\d{2})\/(\w{3})\/(\d{4}):(\d{2}):(\d{2}):(\d{2}) \+0000/);
-        if (match) {
-            const year = match[3];
-            const month = months[match[2]];
-            const day = match[1];
-            const hours = match[4];
-            const minutes = match[5];
-            const seconds = match[6];
-            return new Date(`${year}-${month}-${day}T${hours}:${minutes}:${seconds}Z`);
-        } else {
-            return new Date(); // Return current date as fallback
-        }
+        document.getElementById('new_lead_count').innerText = newLeadCount;
+        document.getElementById('qualified_lead_count').innerText = qualifiedCount;
+        document.getElementById('call_scheduled_count').innerText = callScheduledCount;
+        document.getElementById('closed_count').innerText = closedCount;
     }
 }
-    </script>
+</script>
+
 </body>
 </html>
