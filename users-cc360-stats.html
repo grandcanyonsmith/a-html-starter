@@ -30,9 +30,7 @@
 
                 <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
 
-                <input type="date" id="startDate" name="startDate"
-
-                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <input type="date" id="startDate" name="startDate" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
 
             </div>
 
@@ -40,17 +38,11 @@
 
                 <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
 
-                <input type="date" id="endDate" name="endDate"
-
-                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <input type="date" id="endDate" name="endDate" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
 
             </div>
 
-            <button id="fetchData"
-
-                class="w-full sm:w-auto ml-0 sm:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Fetch
-
-                Data</button>
+            <button id="fetchData" class="w-full sm:w-auto ml-0 sm:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Fetch Data</button>
 
         </div>
 
@@ -62,9 +54,7 @@
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">MailGun Connected</h3>
 
-                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="mailgunPercentage">0%
-
-                </div>
+                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="mailgunPercentage">0%</div>
 
                 <div class="text-sm text-gray-500" id="mailgunCount">0 of 0</div>
 
@@ -74,9 +64,7 @@
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">First Transaction Completed</h3>
 
-                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="transactionPercentage">0%
-
-                </div>
+                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="transactionPercentage">0%</div>
 
                 <div class="text-sm text-gray-500" id="transactionCount">0 of 0</div>
 
@@ -86,9 +74,7 @@
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">Average Time to Revenue</h3>
 
-                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="averageTimeToRevenue">0
-
-                    days</div>
+                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="averageTimeToRevenue">0 days</div>
 
             </div>
 
@@ -96,77 +82,301 @@
 
 
 
-        <div class="flex flex-col sm:flex-row justify-between items-center py-4 space-y-4 sm:space-y-0 sm:space-x-4">
+        <div class="flex items-center justify-between py-4">
 
-            <div class="flex items-center">
+            <div class="relative inline-block text-left">
 
-                <label for="filterCalendar" class="ml-2 block text-sm text-gray-900">Calendar</label>
+                <div>
 
-                <select id="filterCalendar" name="filterCalendar"
+                    <button type="button" class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900" id="sortMenuButton" aria-expanded="false" aria-haspopup="true">
 
-                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        Sort
 
-                    <option value="all">All</option>
+                        <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
 
-                    <option value="true">True</option>
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
 
-                    <option value="false">False</option>
+                        </svg>
 
-                </select>
+                    </button>
 
-            </div>
+                </div>
 
-            <div class="flex items-center">
+                <div class="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="sortMenuButton" tabindex="-1" style="display: none;">
 
-                <label for="filterProduct" class="ml-2 block text-sm text-gray-900">Product</label>
+                    <div class="py-1" role="none">
 
-                <select id="filterProduct" name="filterProduct"
+                        <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-900" role="menuitem" tabindex="-1" id="sortIncomeAllTime">All Time Revenue</a>
 
-                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <a href="#" class="block px-4 py-2 text-sm font-medium text-gray-900" role="menuitem" tabindex="-1" id="sortTimestamp">Timestamp</a>
 
-                    <option value="all">All</option>
+                    </div>
 
-                    <option value="true">True</option>
-
-                    <option value="false">False</option>
-
-                </select>
+                </div>
 
             </div>
 
-            <div class="flex items-center">
+            <button type="button" class="inline-block text-sm font-medium text-gray-700 hover:text-gray-900" id="filterButton">Filters</button>
 
-                <label for="filterFirstTransaction" class="ml-2 block text-sm text-gray-900">First Transaction</label>
+        </div>
 
-                <select id="filterFirstTransaction" name="filterFirstTransaction"
 
-                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
 
-                    <option value="all">All</option>
+        <div class="relative z-40 sm:hidden" role="dialog" id="filterPanel" aria-modal="true" style="display: none;">
 
-                    <option value="true">True</option>
+            <div class="fixed inset-0 bg-black bg-opacity-25"></div>
 
-                    <option value="false">False</option>
+            <div class="fixed inset-0 z-40 flex">
 
-                </select>
+                <div class="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-6 shadow-xl">
 
-            </div>
+                    <div class="flex items-center justify-between px-4">
 
-            <div class="flex items-center">
+                        <h2 class="text-lg font-medium text-gray-900">Filters</h2>
 
-                <label for="filterMailgun" class="ml-2 block text-sm text-gray-900">Mailgun Connected</label>
+                        <button type="button" class="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500" id="closeFilterPanel">
 
-                <select id="filterMailgun" name="filterMailgun"
+                            <span class="sr-only">Close menu</span>
 
-                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
 
-                    <option value="all">All</option>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 
-                    <option value="true">True</option>
+                            </svg>
 
-                    <option value="false">False</option>
+                        </button>
 
-                </select>
+                    </div>
+
+                    <form class="mt-4">
+
+                        <div class="border-t border-gray-200 px-4 py-6">
+
+                            <h3 class="-mx-2 -my-3 flow-root">
+
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-0" aria-expanded="false">
+
+                                    <span class="font-medium text-gray-900">Calendar</span>
+
+                                    <span class="ml-6 flex items-center">
+
+                                        <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+
+                                        </svg>
+
+                                    </span>
+
+                                </button>
+
+                            </h3>
+
+                            <div class="pt-6" id="filter-section-0">
+
+                                <div class="space-y-6">
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterCalendarAll" name="filterCalendar" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+
+                                        <label for="filterCalendarAll" class="ml-3 text-sm text-gray-500">All</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterCalendarTrue" name="filterCalendar" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterCalendarTrue" class="ml-3 text-sm text-gray-500">True</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterCalendarFalse" name="filterCalendar" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterCalendarFalse" class="ml-3 text-sm text-gray-500">False</label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="border-t border-gray-200 px-4 py-6">
+
+                            <h3 class="-mx-2 -my-3 flow-root">
+
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-1" aria-expanded="false">
+
+                                    <span class="font-medium text-gray-900">Product</span>
+
+                                    <span class="ml-6 flex items-center">
+
+                                        <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+
+                                        </svg>
+
+                                    </span>
+
+                                </button>
+
+                            </h3>
+
+                            <div class="pt-6" id="filter-section-1">
+
+                                <div class="space-y-6">
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterProductAll" name="filterProduct" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+
+                                        <label for="filterProductAll" class="ml-3 text-sm text-gray-500">All</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterProductTrue" name="filterProduct" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterProductTrue" class="ml-3 text-sm text-gray-500">True</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterProductFalse" name="filterProduct" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterProductFalse" class="ml-3 text-sm text-gray-500">False</label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="border-t border-gray-200 px-4 py-6">
+
+                            <h3 class="-mx-2 -my-3 flow-root">
+
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-2" aria-expanded="false">
+
+                                    <span class="font-medium text-gray-900">First Transaction</span>
+
+                                    <span class="ml-6 flex items-center">
+
+                                        <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+
+                                        </svg>
+
+                                    </span>
+
+                                </button>
+
+                            </h3>
+
+                            <div class="pt-6" id="filter-section-2">
+
+                                <div class="space-y-6">
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterFirstTransactionAll" name="filterFirstTransaction" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+
+                                        <label for="filterFirstTransactionAll" class="ml-3 text-sm text-gray-500">All</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterFirstTransactionTrue" name="filterFirstTransaction" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterFirstTransactionTrue" class="ml-3 text-sm text-gray-500">True</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterFirstTransactionFalse" name="filterFirstTransaction" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterFirstTransactionFalse" class="ml-3 text-sm text-gray-500">False</label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="border-t border-gray-200 px-4 py-6">
+
+                            <h3 class="-mx-2 -my-3 flow-root">
+
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-3" aria-expanded="false">
+
+                                    <span class="font-medium text-gray-900">Mailgun Connected</span>
+
+                                    <span class="ml-6 flex items-center">
+
+                                        <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+
+                                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+
+                                        </svg>
+
+                                    </span>
+
+                                </button>
+
+                            </h3>
+
+                            <div class="pt-6" id="filter-section-3">
+
+                                <div class="space-y-6">
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterMailgunAll" name="filterMailgun" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+
+                                        <label for="filterMailgunAll" class="ml-3 text-sm text-gray-500">All</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterMailgunTrue" name="filterMailgun" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterMailgunTrue" class="ml-3 text-sm text-gray-500">True</label>
+
+                                    </div>
+
+                                    <div class="flex items-center">
+
+                                        <input id="filterMailgunFalse" name="filterMailgun" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                                        <label for="filterMailgunFalse" class="ml-3 text-sm text-gray-500">False</label>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </form>
+
+                </div>
 
             </div>
 
@@ -186,71 +396,27 @@
 
                             <tr>
 
-                                <th scope="col"
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Location Name</th>
 
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncomeAllTime">All Time $</th>
 
-                                    Location Name</th>
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome90Days">90D $</th>
 
-                                <th scope="col"
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome30Days">30D $</th>
 
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer"
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome7Days">7D $</th>
 
-                                    id="sortIncomeAllTime">All Time $</th>
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Calendars</th>
 
-                                <th scope="col"
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Products</th>
 
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell"
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Created Time</th>
 
-                                    id="sortIncome90Days">90D $</th>
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Time to Revenue</th>
 
-                                <th scope="col"
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortFirstTransaction">First Transaction</th>
 
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell"
-
-                                    id="sortIncome30Days">30D $</th>
-
-                                <th scope="col"
-
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell"
-
-                                    id="sortIncome7Days">7D $</th>
-
-                                <th scope="col"
-
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
-
-                                    Calendars</th>
-
-                                <th scope="col"
-
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
-
-                                    Products</th>
-
-                                <th scope="col"
-
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
-
-                                    Relative Created Time</th>
-
-                                <th scope="col"
-
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
-
-                                    Relative Time to Revenue</th>
-
-                                <th scope="col"
-
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer"
-
-                                    id="sortFirstTransaction">First Transaction</th>
-
-                                <th scope="col"
-
-                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
-
-                                    Mailgun Connected</th>
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Mailgun Connected</th>
 
                             </tr>
 
@@ -320,8 +486,6 @@
 
                 .then(function (response) {
 
-                    console.log("Sample data:", response.data[0]); // Log the first data object
-
                     users = response.data.map(user => ({
 
                         ...user,
@@ -331,8 +495,6 @@
                         has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
 
                     }));
-
-                    console.log("Processed users data:", users); // Debug: Log processed users data
 
                     renderTable(users);
 
@@ -386,8 +548,6 @@
 
                 }
 
-                console.log("Sorting by field:", field); // Debug: Check which field is being sorted
-
 
 
                 if (sortField === field) {
@@ -409,8 +569,6 @@
                     let valA = parseFloat(a[field]);
 
                     let valB = parseFloat(b[field]);
-
-                    console.log(`Comparing ${valA} to ${valB}`); // Debug: Log values being compared
 
 
 
@@ -440,13 +598,33 @@
 
 
 
-        document.querySelectorAll('select').forEach(element => {
+        document.getElementById('filterButton').addEventListener('click', function () {
+
+            document.getElementById('filterPanel').style.display = 'block';
+
+        });
+
+
+
+        document.getElementById('closeFilterPanel').addEventListener('click', function () {
+
+            document.getElementById('filterPanel').style.display = 'none';
+
+            renderTable(users);
+
+            updateCards(users);
+
+        });
+
+
+
+        document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"]').forEach(element => {
 
             element.addEventListener('change', function () {
 
                 renderTable(users);
 
-                updateCards(users); // Update cards with filtered data
+                updateCards(users);
 
             });
 
@@ -462,13 +640,13 @@
 
 
 
-            const filterCalendar = document.getElementById('filterCalendar').value;
+            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
 
-            const filterProduct = document.getElementById('filterProduct').value;
+            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
 
-            const filterFirstTransaction = document.getElementById('filterFirstTransaction').value;
+            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
 
-            const filterMailgun = document.getElementById('filterMailgun').value;
+            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
 
 
 
@@ -492,35 +670,35 @@
 
                 tr.innerHTML = `
 
-                <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
+                    <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
 
-                    <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
+                        <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
 
-                        ${user.location_name}
+                            ${user.location_name}
 
-                    </a>
+                        </a>
 
-                </td>
+                    </td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
 
                 `;
 
@@ -620,8 +798,6 @@
 
             const filteredUsers = getFilteredUsers(users);
 
-
-
             const totalUsers = filteredUsers.length;
 
             const mailgunConnectedCount = filteredUsers.filter(user => user.mailgun_connected).length;
@@ -666,13 +842,13 @@
 
         function getFilteredUsers(users) {
 
-            const filterCalendar = document.getElementById('filterCalendar').value;
+            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
 
-            const filterProduct = document.getElementById('filterProduct').value;
+            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
 
-            const filterFirstTransaction = document.getElementById('filterFirstTransaction').value;
+            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
 
-            const filterMailgun = document.getElementById('filterMailgun').value;
+            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
 
 
 
