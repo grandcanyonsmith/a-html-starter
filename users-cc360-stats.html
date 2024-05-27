@@ -2,6 +2,8 @@
 
 <html lang="en">
 
+
+
 <head>
 
     <meta charset="UTF-8">
@@ -16,6 +18,8 @@
 
 </head>
 
+
+
 <body>
 
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,7 +30,9 @@
 
                 <label for="startDate" class="block text-sm font-medium text-gray-700">Start Date</label>
 
-                <input type="date" id="startDate" name="startDate" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <input type="date" id="startDate" name="startDate"
+
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
 
             </div>
 
@@ -34,11 +40,17 @@
 
                 <label for="endDate" class="block text-sm font-medium text-gray-700">End Date</label>
 
-                <input type="date" id="endDate" name="endDate" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                <input type="date" id="endDate" name="endDate"
+
+                    class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
 
             </div>
 
-            <button id="fetchData" class="w-full sm:w-auto ml-0 sm:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Fetch Data</button>
+            <button id="fetchData"
+
+                class="w-full sm:w-auto ml-0 sm:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Fetch
+
+                Data</button>
 
         </div>
 
@@ -50,7 +62,9 @@
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">MailGun Connected</h3>
 
-                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="mailgunPercentage">0%</div>
+                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="mailgunPercentage">0%
+
+                </div>
 
                 <div class="text-sm text-gray-500" id="mailgunCount">0 of 0</div>
 
@@ -60,7 +74,9 @@
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">First Transaction Completed</h3>
 
-                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="transactionPercentage">0%</div>
+                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="transactionPercentage">0%
+
+                </div>
 
                 <div class="text-sm text-gray-500" id="transactionCount">0 of 0</div>
 
@@ -70,7 +86,87 @@
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">Average Time to Revenue</h3>
 
-                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="averageTimeToRevenue">0 days</div>
+                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="averageTimeToRevenue">0
+
+                    days</div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="flex flex-col sm:flex-row justify-between items-center py-4 space-y-4 sm:space-y-0 sm:space-x-4">
+
+            <div class="flex items-center">
+
+                <label for="filterCalendar" class="ml-2 block text-sm text-gray-900">Calendar</label>
+
+                <select id="filterCalendar" name="filterCalendar"
+
+                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+
+                    <option value="all">All</option>
+
+                    <option value="true">True</option>
+
+                    <option value="false">False</option>
+
+                </select>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <label for="filterProduct" class="ml-2 block text-sm text-gray-900">Product</label>
+
+                <select id="filterProduct" name="filterProduct"
+
+                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+
+                    <option value="all">All</option>
+
+                    <option value="true">True</option>
+
+                    <option value="false">False</option>
+
+                </select>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <label for="filterFirstTransaction" class="ml-2 block text-sm text-gray-900">First Transaction</label>
+
+                <select id="filterFirstTransaction" name="filterFirstTransaction"
+
+                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+
+                    <option value="all">All</option>
+
+                    <option value="true">True</option>
+
+                    <option value="false">False</option>
+
+                </select>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <label for="filterMailgun" class="ml-2 block text-sm text-gray-900">Mailgun Connected</label>
+
+                <select id="filterMailgun" name="filterMailgun"
+
+                    class="ml-2 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+
+                    <option value="all">All</option>
+
+                    <option value="true">True</option>
+
+                    <option value="false">False</option>
+
+                </select>
 
             </div>
 
@@ -90,27 +186,71 @@
 
                             <tr>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Location Name</th>
+                                <th scope="col"
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncomeAllTime">All Time $</th>
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncome90Days">90D $</th>
+                                    Location Name</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncome30Days">30D $</th>
+                                <th scope="col"
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncome7Days">7D $</th>
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer"
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Calendars</th>
+                                    id="sortIncomeAllTime">All Time $</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Products</th>
+                                <th scope="col"
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Created Time</th>
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell"
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Time to Revenue</th>
+                                    id="sortIncome90Days">90D $</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortFirstTransaction">First Transaction</th>
+                                <th scope="col"
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Mailgun Connected</th>
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell"
+
+                                    id="sortIncome30Days">30D $</th>
+
+                                <th scope="col"
+
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell"
+
+                                    id="sortIncome7Days">7D $</th>
+
+                                <th scope="col"
+
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
+
+                                    Calendars</th>
+
+                                <th scope="col"
+
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
+
+                                    Products</th>
+
+                                <th scope="col"
+
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
+
+                                    Relative Created Time</th>
+
+                                <th scope="col"
+
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
+
+                                    Relative Time to Revenue</th>
+
+                                <th scope="col"
+
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer"
+
+                                    id="sortFirstTransaction">First Transaction</th>
+
+                                <th scope="col"
+
+                                    class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">
+
+                                    Mailgun Connected</th>
 
                             </tr>
 
@@ -134,187 +274,225 @@
 
 
 
-<script>
+    <script>
 
-    let users = [];
+        let users = [];
 
-    let sortField = null;
+        let sortField = null;
 
-    let sortDirection = 1; // 1: ascending, -1: descending
-
-
-
-    document.getElementById('fetchData').addEventListener('click', function() {
-
-        const startDate = document.getElementById('startDate').value;
-
-        const endDate = document.getElementById('endDate').value;
+        let sortDirection = 1; // 1: ascending, -1: descending
 
 
 
-        if (!startDate || !endDate) {
+        document.getElementById('fetchData').addEventListener('click', function () {
 
-            alert('Please select both start and end dates.');
+            const startDate = document.getElementById('startDate').value;
 
-            return;
-
-        }
+            const endDate = document.getElementById('endDate').value;
 
 
 
-        axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
+            if (!startDate || !endDate) {
 
-            startDate: startDate,
+                alert('Please select both start and end dates.');
 
-            endDate: endDate
-
-        }, {
-
-            headers: {
-
-                'Content-Type': 'application/json'
+                return;
 
             }
 
-        })
 
-        .then(function (response) {
 
-            console.log("Sample data:", response.data[0]); // Log the first data object
+            axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
 
-            users = response.data.map(user => ({
+                startDate: startDate,
 
-                ...user,
+                endDate: endDate
 
-                mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
+            }, {
 
-                has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
+                headers: {
 
-            }));
+                    'Content-Type': 'application/json'
 
-            console.log("Processed users data:", users); // Debug: Log processed users data
+                }
 
-            renderTable(users);
+            })
 
-            updateCards(users);
+                .then(function (response) {
 
-        })
+                    console.log("Sample data:", response.data[0]); // Log the first data object
 
-        .catch(function (error) {
+                    users = response.data.map(user => ({
 
-            console.error('Error fetching users:', error);
+                        ...user,
+
+                        mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
+
+                        has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
+
+                    }));
+
+                    console.log("Processed users data:", users); // Debug: Log processed users data
+
+                    renderTable(users);
+
+                    updateCards(users);
+
+                })
+
+                .catch(function (error) {
+
+                    console.error('Error fetching users:', error);
+
+                });
 
         });
 
-    });
+
+
+        document.querySelectorAll('[id^="sort"]').forEach(element => {
+
+            element.addEventListener('click', function () {
+
+                let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
+
+                // Adjust field names based on actual data properties
+
+                switch (field) {
+
+                    case 'income_30_days':
+
+                        field = 'last_thirty_day_income';
+
+                        break;
+
+                    case 'income_90_days':
+
+                        field = 'last_ninety_day_income';
+
+                        break;
+
+                    case 'income_7_days':
+
+                        field = 'last_seven_day_income';
+
+                        break;
+
+                    case 'income_all_time':
+
+                        field = 'income_all_time';
+
+                        break;
+
+                }
+
+                console.log("Sorting by field:", field); // Debug: Check which field is being sorted
 
 
 
-    document.querySelectorAll('[id^="sort"]').forEach(element => {
+                if (sortField === field) {
 
-        element.addEventListener('click', function() {
-
-            let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
-
-            // Adjust field names based on actual data properties
-
-            switch (field) {
-
-                case 'income_30_days':
-
-                    field = 'last_thirty_day_income';
-
-                    break;
-
-                case 'income_90_days':
-
-                    field = 'last_ninety_day_income';
-
-                    break;
-
-                case 'income_7_days':
-
-                    field = 'last_seven_day_income';
-
-                    break;
-
-                case 'income_all_time':
-
-                    field = 'income_all_time';
-
-                    break;
-
-            }
-
-            console.log("Sorting by field:", field); // Debug: Check which field is being sorted
-
-
-
-            if (sortField === field) {
-
-                sortDirection *= -1; // Toggle the direction
-
-            } else {
-
-                sortField = field;
-
-                sortDirection = -1; // Default to descending for all fields initially
-
-            }
-
-
-
-            users.sort((a, b) => {
-
-                let valA = parseFloat(a[field]);
-
-                let valB = parseFloat(b[field]);
-
-
-
-                console.log(`Comparing ${valA} to ${valB}`); // Debug: Log values being compared
-
-
-
-                if (isNaN(valA) || isNaN(valB)) {
-
-                    // Fallback for non-numeric or missing data
-
-                    return 0; // or handle differently as per requirement
+                    sortDirection *= -1; // Toggle the direction
 
                 } else {
 
-                    // Numeric sorting
+                    sortField = field;
 
-                    return (valA < valB ? -1 : 1) * sortDirection;
+                    sortDirection = -1; // Default to descending for all fields initially
 
                 }
+
+
+
+                users.sort((a, b) => {
+
+                    let valA = parseFloat(a[field]);
+
+                    let valB = parseFloat(b[field]);
+
+                    console.log(`Comparing ${valA} to ${valB}`); // Debug: Log values being compared
+
+
+
+                    if (isNaN(valA) || isNaN(valB)) {
+
+                        // Fallback for non-numeric or missing data
+
+                        return 0; // or handle differently as per requirement
+
+                    } else {
+
+                        // Numeric sorting
+
+                        return (valA < valB ? -1 : 1) * sortDirection;
+
+                    }
+
+                });
+
+
+
+                renderTable(users);
+
+            });
+
+        });
+
+
+
+        document.querySelectorAll('select').forEach(element => {
+
+            element.addEventListener('change', function () {
+
+                renderTable(users);
+
+                updateCards(users); // Update cards with filtered data
+
+            });
+
+        });
+
+
+
+        function renderTable(users) {
+
+            const tableBody = document.getElementById('usersTable');
+
+            tableBody.innerHTML = ''; // Clear existing rows
+
+
+
+            const filterCalendar = document.getElementById('filterCalendar').value;
+
+            const filterProduct = document.getElementById('filterProduct').value;
+
+            const filterFirstTransaction = document.getElementById('filterFirstTransaction').value;
+
+            const filterMailgun = document.getElementById('filterMailgun').value;
+
+
+
+            const filteredUsers = users.filter(user => {
+
+                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
+
+                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
+
+                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
+
+                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
 
             });
 
 
 
-            renderTable(users);
+            filteredUsers.forEach(user => {
 
-        });
+                const tr = document.createElement('tr');
 
-    });
+                tr.innerHTML = `
 
-
-
-    function renderTable(users) {
-
-        const tableBody = document.getElementById('usersTable');
-
-        tableBody.innerHTML = ''; // Clear existing rows
-
-        users.forEach(user => {
-
-            const tr = document.createElement('tr');
-
-            tr.innerHTML = `
-
-                <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+                <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
 
                     <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
 
@@ -326,11 +504,11 @@
 
                 <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_ninety_day_income)}</td>
+                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_thirty_day_income)}</td>
+                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
 
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.last_seven_day_income)}</td>
+                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
 
                 <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
 
@@ -344,143 +522,178 @@
 
                 <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
 
-            `;
+                `;
 
-            tableBody.appendChild(tr);
+                tableBody.appendChild(tr);
 
-        });
-
-    }
-
-
-
-    function formatMailgunConnected(isConnected) {
-
-        if (isConnected) {
-
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
-
-        } else {
-
-            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
+            });
 
         }
 
-    }
 
 
+        function formatMailgunConnected(isConnected) {
 
-    function formatIncome(income) {
+            if (isConnected) {
 
-        if (isNaN(parseFloat(income))) {
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
 
-            return `<span class="text-gray-500">$0</span>`;
+            } else {
 
-        } else if (parseFloat(income) === 0) {
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
 
-            return `<span class="text-gray-500">$${parseFloat(income).toLocaleString()}</span>`;
-
-        } else {
-
-            return `<strong>$${parseFloat(income).toLocaleString()}</strong>`;
+            }
 
         }
 
-    }
 
 
+        function formatIncome(income) {
 
-    function formatFirstTransaction(hasTransaction) {
+            if (isNaN(parseFloat(income))) {
 
-        if (hasTransaction) {
+                return `<span class="text-gray-500">$0</span>`;
 
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
+            } else if (parseFloat(income) === 0) {
 
-        } else {
+                return `<span class="text-gray-500">$${parseFloat(income).toLocaleString()}</span>`;
 
-            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
+            } else {
 
-        }
+                return `<strong>$${parseFloat(income).toLocaleString()}</strong>`;
 
-    }
-
-
-
-    function formatHasCalendar(totalCalendars) {
-
-        if (totalCalendars > 0) {
-
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Calendar</span>`;
-
-        } else {
-
-            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Calendar</span>`;
+            }
 
         }
 
-    }
 
 
+        function formatFirstTransaction(hasTransaction) {
 
-    function formatHasProduct(totalProducts) {
+            if (hasTransaction) {
 
-        if (totalProducts > 0) {
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
 
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Product</span>`;
+            } else {
 
-        } else {
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
 
-            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Product</span>`;
+            }
 
         }
 
-    }
+
+
+        function formatHasCalendar(totalCalendars) {
+
+            if (totalCalendars > 0) {
+
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Calendar</span>`;
+
+            } else {
+
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Calendar</span>`;
+
+            }
+
+        }
 
 
 
-    function updateCards(users) {
+        function formatHasProduct(totalProducts) {
 
-        const totalUsers = users.length;
+            if (totalProducts > 0) {
 
-        const mailgunConnectedCount = users.filter(user => user.mailgun_connected).length;
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Product</span>`;
 
-        const firstTransactionCount = users.filter(user => user.has_had_first_transaction).length
-        const mailgunPercentage = (mailgunConnectedCount / totalUsers * 100).toFixed(2);
+            } else {
 
-        const transactionPercentage = (firstTransactionCount / totalUsers * 100).toFixed(2);
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Product</span>`;
 
+            }
 
-
-        document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
-
-        document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
+        }
 
 
 
-        document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
+        function updateCards(users) {
 
-        document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
-
-
-
-        // Calculate average time to revenue
-
-        const profitableUsers = users.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
-
-        const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
-
-        const averageTimeToRevenue = (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+            const filteredUsers = getFilteredUsers(users);
 
 
 
-        document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
+            const totalUsers = filteredUsers.length;
 
-    }
+            const mailgunConnectedCount = filteredUsers.filter(user => user.mailgun_connected).length;
 
-</script>
+            const firstTransactionCount = filteredUsers.filter(user => user.has_had_first_transaction).length;
 
 
+
+            const mailgunPercentage = (mailgunConnectedCount / totalUsers * 100).toFixed(2);
+
+            const transactionPercentage = (firstTransactionCount / totalUsers * 100).toFixed(2);
+
+
+
+            document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
+
+            document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
+
+
+
+            document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
+
+            document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
+
+
+
+            // Calculate average time to revenue
+
+            const profitableUsers = filteredUsers.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
+
+            const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
+
+            const averageTimeToRevenue = totalProfitableTime ? (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24) : 0; // Convert milliseconds to days
+
+
+
+            document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
+
+        }
+
+
+
+        function getFilteredUsers(users) {
+
+            const filterCalendar = document.getElementById('filterCalendar').value;
+
+            const filterProduct = document.getElementById('filterProduct').value;
+
+            const filterFirstTransaction = document.getElementById('filterFirstTransaction').value;
+
+            const filterMailgun = document.getElementById('filterMailgun').value;
+
+
+
+            return users.filter(user => {
+
+                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
+
+                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
+
+                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
+
+                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
+
+            });
+
+        }
+
+    </script>
 
 </body>
+
+
 
 </html>
