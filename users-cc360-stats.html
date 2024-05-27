@@ -1,6 +1,12 @@
+
+
+
+
 <!DOCTYPE html>
 
 <html lang="en">
+
+
 
 <head>
 
@@ -15,6 +21,8 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
+
+
 
 <body>
 
@@ -41,6 +49,8 @@
             <button id="fetchData" class="w-full sm:w-auto ml-0 sm:ml-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Fetch Data</button>
 
         </div>
+
+
 
         <div class="flex flex-col sm:flex-row justify-between items-center py-4 space-y-4 sm:space-y-0 sm:space-x-4">
 
@@ -74,6 +84,8 @@
 
         </div>
 
+
+
         <div class="flex items-center justify-between py-4">
 
             <div class="relative inline-block text-left">
@@ -94,7 +106,7 @@
 
                 </div>
 
-                <div class="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="sortMenuButton" tabindex="-1" style="display: none;" id="sortDropdown">
+                <div class="absolute left-0 z-10 mt-2 w-40 origin-top-left rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="sortMenuButton" tabindex="-1" style="display: none;">
 
                     <div class="py-1" role="none">
 
@@ -112,223 +124,7 @@
 
         </div>
 
-        <!-- Desktop Filters -->
 
-        <div class="hidden sm:flex sm:items-baseline sm:space-x-8 justify-end">
-
-            <div class="relative inline-block text-left">
-
-                <div>
-
-                    <button type="button" class="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900" aria-expanded="false" id="filterCalendarButton">
-
-                        <span>Calendar</span>
-
-                        <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-
-                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-
-                        </svg>
-
-                    </button>
-
-                </div>
-
-                <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" style="display: none;" id="filterCalendarDropdown">
-
-                    <form class="space-y-4">
-
-                        <div class="flex items-center">
-
-                            <input id="filterCalendarAllDesktop" name="filterCalendar" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-
-                            <label for="filterCalendarAllDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">All</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterCalendarTrueDesktop" name="filterCalendar" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterCalendarTrueDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">True</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterCalendarFalseDesktop" name="filterCalendar" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterCalendarFalseDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">False</label>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-            <!-- Repeat similar structure for Product, First Transaction, Mailgun Connected -->
-
-            <div class="relative inline-block text-left">
-
-                <div>
-
-                    <button type="button" class="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900" aria-expanded="false" id="filterProductButton">
-
-                        <span>Product</span>
-
-                        <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-
-                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-
-                        </svg>
-
-                    </button>
-
-                </div>
-
-                <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" style="display: none;" id="filterProductDropdown">
-
-                    <form class="space-y-4">
-
-                        <div class="flex items-center">
-
-                            <input id="filterProductAllDesktop" name="filterProduct" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-
-                            <label for="filterProductAllDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">All</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterProductTrueDesktop" name="filterProduct" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterProductTrueDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">True</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterProductFalseDesktop" name="filterProduct" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterProductFalseDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">False</label>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-            <div class="relative inline-block text-left">
-
-                <div>
-
-                    <button type="button" class="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900" aria-expanded="false" id="filterFirstTransactionButton">
-
-                        <span>First Transaction</span>
-
-                        <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-
-                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-
-                        </svg>
-
-                    </button>
-
-                </div>
-
-                <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" style="display: none;" id="filterFirstTransactionDropdown">
-
-                    <form class="space-y-4">
-
-                        <div class="flex items-center">
-
-                            <input id="filterFirstTransactionAllDesktop" name="filterFirstTransaction" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-
-                            <label for="filterFirstTransactionAllDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">All</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterFirstTransactionTrueDesktop" name="filterFirstTransaction" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterFirstTransactionTrueDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">True</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterFirstTransactionFalseDesktop" name="filterFirstTransaction" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterFirstTransactionFalseDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">False</label>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-            <div class="relative inline-block text-left">
-
-                <div>
-
-                    <button type="button" class="group inline-flex items-center justify-center text-sm font-medium text-gray-700 hover:text-gray-900" aria-expanded="false" id="filterMailgunButton">
-
-                        <span>Mailgun Connected</span>
-
-                        <svg class="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-
-                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-
-                        </svg>
-
-                    </button>
-
-                </div>
-
-                <div class="absolute right-0 z-10 mt-2 origin-top-right rounded-md bg-white p-4 shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none" style="display: none;" id="filterMailgunDropdown">
-
-                    <form class="space-y-4">
-
-                        <div class="flex items-center">
-
-                            <input id="filterMailgunAllDesktop" name="filterMailgun" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
-
-                            <label for="filterMailgunAllDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">All</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterMailgunTrueDesktop" name="filterMailgun" value="true" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterMailgunTrueDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">True</label>
-
-                        </div>
-
-                        <div class="flex items-center">
-
-                            <input id="filterMailgunFalseDesktop" name="filterMailgun" value="false" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-
-                            <label for="filterMailgunFalseDesktop" class="ml-3 whitespace-nowrap pr-6 text-sm font-medium text-gray-900">False</label>
-
-                        </div>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Mobile Filters -->
 
         <div class="relative z-40 sm:hidden" role="dialog" id="filterPanel" aria-modal="true" style="display: none;">
 
@@ -362,7 +158,7 @@
 
                             <h3 class="-mx-2 -my-3 flow-root">
 
-                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400 filter-section-toggle" aria-controls="filter-section-0" aria-expanded="false">
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-0" aria-expanded="false">
 
                                     <span class="font-medium text-gray-900">Calendar</span>
 
@@ -380,7 +176,7 @@
 
                             </h3>
 
-                            <div class="pt-6 filter-section" id="filter-section-0">
+                            <div class="pt-6" id="filter-section-0">
 
                                 <div class="space-y-6">
 
@@ -414,13 +210,11 @@
 
                         </div>
 
-                        <!-- Repeat similar structure for Product, First Transaction, Mailgun Connected -->
-
                         <div class="border-t border-gray-200 px-4 py-6">
 
                             <h3 class="-mx-2 -my-3 flow-root">
 
-                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400 filter-section-toggle" aria-controls="filter-section-1" aria-expanded="false">
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-1" aria-expanded="false">
 
                                     <span class="font-medium text-gray-900">Product</span>
 
@@ -438,7 +232,7 @@
 
                             </h3>
 
-                            <div class="pt-6 filter-section" id="filter-section-1">
+                            <div class="pt-6" id="filter-section-1">
 
                                 <div class="space-y-6">
 
@@ -476,7 +270,7 @@
 
                             <h3 class="-mx-2 -my-3 flow-root">
 
-                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400 filter-section-toggle" aria-controls="filter-section-2" aria-expanded="false">
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-2" aria-expanded="false">
 
                                     <span class="font-medium text-gray-900">First Transaction</span>
 
@@ -494,7 +288,7 @@
 
                             </h3>
 
-                            <div class="pt-6 filter-section" id="filter-section-2">
+                            <div class="pt-6" id="filter-section-2">
 
                                 <div class="space-y-6">
 
@@ -532,7 +326,7 @@
 
                             <h3 class="-mx-2 -my-3 flow-root">
 
-                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400 filter-section-toggle" aria-controls="filter-section-3" aria-expanded="false">
+                                <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-3" aria-expanded="false">
 
                                     <span class="font-medium text-gray-900">Mailgun Connected</span>
 
@@ -550,7 +344,7 @@
 
                             </h3>
 
-                            <div class="pt-6 filter-section" id="filter-section-3">
+                            <div class="pt-6" id="filter-section-3">
 
                                 <div class="space-y-6">
 
@@ -592,6 +386,8 @@
 
         </div>
 
+
+
         <div class="mt-8 flow-root">
 
             <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -599,13 +395,14 @@
                 <div class="inline-block min-w-full py-2 align-middle">
 
                     <table class="min-w-full border-separate border-spacing-0">
+
                         <thead>
 
                             <tr>
 
                                 <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Location Name</th>
 
-                                                               <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncomeAllTime">All Time $</th>
+                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncomeAllTime">All Time $</th>
 
                                 <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome90Days">90D $</th>
 
@@ -647,596 +444,436 @@
 
 
 
-<script>
+    <script>
 
-    let users = [];
+        let users = [];
 
-    let sortField = null;
+        let sortField = null;
 
-    let sortDirection = 1; // 1: ascending, -1: descending
-
-
-
-    document.getElementById('fetchData').addEventListener('click', function () {
-
-        const startDate = document.getElementById('startDate').value;
-
-        const endDate = document.getElementById('endDate').value;
+        let sortDirection = 1; // 1: ascending, -1: descending
 
 
 
-        if (!startDate || !endDate) {
+        document.getElementById('fetchData').addEventListener('click', function () {
 
-            alert('Please select both start and end dates.');
+            const startDate = document.getElementById('startDate').value;
 
-            return;
-
-        }
+            const endDate = document.getElementById('endDate').value;
 
 
 
-        axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
+            if (!startDate || !endDate) {
 
-            startDate: startDate,
+                alert('Please select both start and end dates.');
 
-            endDate: endDate
-
-        }, {
-
-            headers: {
-
-                'Content-Type': 'application/json'
+                return;
 
             }
 
-        })
 
-        .then(function (response) {
 
-            users = response.data.map(user => ({
+            axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
 
-                ...user,
+                startDate: startDate,
 
-                mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
+                endDate: endDate
 
-                has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
+            }, {
 
-            }));
+                headers: {
+
+                    'Content-Type': 'application/json'
+
+                }
+
+            })
+
+                .then(function (response) {
+
+                    users = response.data.map(user => ({
+
+                        ...user,
+
+                        mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
+
+                        has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
+
+                    }));
+
+                    renderTable(users);
+
+                    updateCards(users);
+
+                })
+
+                .catch(function (error) {
+
+                    console.error('Error fetching users:', error);
+
+                });
+
+        });
+
+
+
+        document.querySelectorAll('[id^="sort"]').forEach(element => {
+
+            element.addEventListener('click', function () {
+
+                let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
+
+                // Adjust field names based on actual data properties
+
+                switch (field) {
+
+                    case 'income_30_days':
+
+                        field = 'last_thirty_day_income';
+
+                        break;
+
+                    case 'income_90_days':
+
+                        field = 'last_ninety_day_income';
+
+                        break;
+
+                    case 'income_7_days':
+
+                        field = 'last_seven_day_income';
+
+                        break;
+
+                    case 'income_all_time':
+
+                        field = 'income_all_time';
+
+                        break;
+
+                }
+
+
+
+                if (sortField === field) {
+
+                    sortDirection *= -1; // Toggle the direction
+
+                } else {
+
+                    sortField = field;
+
+                    sortDirection = -1; // Default to descending for all fields initially
+
+                }
+
+
+
+                users.sort((a, b) => {
+
+                    let valA = parseFloat(a[field]);
+
+                    let valB = parseFloat(b[field]);
+
+
+
+                    if (isNaN(valA) || isNaN(valB)) {
+
+                        // Fallback for non-numeric or missing data
+
+                        return 0; // or handle differently as per requirement
+
+                    } else {
+
+                        // Numeric sorting
+
+                        return (valA < valB ? -1 : 1) * sortDirection;
+
+                    }
+
+                });
+
+
+
+                renderTable(users);
+
+            });
+
+        });
+
+
+
+        document.getElementById('filterButton').addEventListener('click', function () {
+
+            document.getElementById('filterPanel').style.display = 'block';
+
+        });
+
+
+
+        document.getElementById('closeFilterPanel').addEventListener('click', function () {
+
+            document.getElementById('filterPanel').style.display = 'none';
 
             renderTable(users);
 
             updateCards(users);
 
-        })
+        });
 
-        .catch(function (error) {
 
-            console.error('Error fetching users:', error);
+
+        document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"]').forEach(element => {
+
+            element.addEventListener('change', function () {
+
+                renderTable(users);
+
+                updateCards(users);
+
+            });
 
         });
 
-    });
+
+
+        function renderTable(users) {
+
+            const tableBody = document.getElementById('usersTable');
+
+            tableBody.innerHTML = ''; // Clear existing rows
 
 
 
-    // Toggle Sort Dropdown
+            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
 
-    document.getElementById('sortMenuButton').addEventListener('click', function () {
+            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
 
-        const sortDropdown = document.getElementById('sortDropdown');
+            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
 
-        sortDropdown.style.display = sortDropdown.style.display === 'none' ? 'block' : 'none';
-
-    });
+            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
 
 
 
-    // Close Sort Dropdown when clicking outside
+            const filteredUsers = users.filter(user => {
 
-    document.addEventListener('click', function (event) {
+                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
 
-        const sortMenuButton = document.getElementById('sortMenuButton');
+                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
 
-        const sortDropdown = document.getElementById('sortDropdown');
+                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
 
-        if (!sortMenuButton.contains(event.target) && !sortDropdown.contains(event.target)) {
-
-            sortDropdown.style.display = 'none';
-
-        }
-
-    });
-
-
-
-    document.querySelectorAll('#sortDropdown a').forEach(element => {
-
-        element.addEventListener('click', function () {
-
-            let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
-
-            // Adjust field names based on actual data properties
-
-            switch (field) {
-
-                case 'income_all_time':
-
-                    field = 'income_all_time';
-
-                    break;
-
-                case 'timestamp':
-
-                    field = 'relative_created_time';
-
-                    break;
-
-            }
-
-
-
-            if (sortField === field) {
-
-                sortDirection *= -1; // Toggle the direction
-
-            } else {
-
-                sortField = field;
-
-                sortDirection = -1; // Default to descending for all fields initially
-
-            }
-
-
-
-            users.sort((a, b) => {
-
-                let valA = field === 'relative_created_time' ? new Date(a[field]).getTime() : parseFloat(a[field]);
-
-                let valB = field === 'relative_created_time' ? new Date(b[field]).getTime() : parseFloat(b[field]);
-
-
-
-                if (isNaN(valA) || isNaN(valB)) {
-
-                    // Fallback for non-numeric or missing data
-
-                    return 0; // or handle differently as per requirement
-
-                } else {
-
-                    // Numeric or date sorting
-
-                    return (valA < valB ? -1 : 1) * sortDirection;
-
-                }
+                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
 
             });
 
 
 
-            renderTable(users);
+            filteredUsers.forEach(user => {
 
-            document.getElementById('sortDropdown').style.display = 'none'; // Close the dropdown after selection
+                const tr = document.createElement('tr');
 
-        });
+                tr.innerHTML = `
 
-    });
+                    <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
 
+                        <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
 
+                            ${user.location_name}
 
-    // Toggle filter dropdowns
+                        </a>
 
-    document.getElementById('filterCalendarButton').addEventListener('click', function () {
+                    </td>
 
-        const dropdown = document.getElementById('filterCalendarDropdown');
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
 
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
 
-    });
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
 
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
 
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
 
-    document.getElementById('filterProductButton').addEventListener('click', function () {
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
 
-        const dropdown = document.getElementById('filterProductDropdown');
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
 
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
 
-    });
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
 
+                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
 
+                `;
 
-    document.getElementById('filterFirstTransactionButton').addEventListener('click', function () {
+                tableBody.appendChild(tr);
 
-        const dropdown = document.getElementById('filterFirstTransactionDropdown');
-
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-
-    });
-
-
-
-    document.getElementById('filterMailgunButton').addEventListener('click', function () {
-
-        const dropdown = document.getElementById('filterMailgunDropdown');
-
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-
-    });
-
-
-
-    // Close filter dropdowns when clicking outside
-
-    document.addEventListener('click', function (event) {
-
-        const calendarButton = document.getElementById('filterCalendarButton');
-
-        const calendarDropdown = document.getElementById('filterCalendarDropdown');
-
-        if (!calendarButton.contains(event.target) && !calendarDropdown.contains(event.target)) {
-
-            calendarDropdown.style.display = 'none';
+            });
 
         }
 
 
 
-        const productButton = document.getElementById('filterProductButton');
+        function formatMailgunConnected(isConnected) {
 
-        const productDropdown = document.getElementById('filterProductDropdown');
+            if (isConnected) {
 
-        if (!productButton.contains(event.target) && !productDropdown.contains(event.target)) {
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
 
-            productDropdown.style.display = 'none';
+            } else {
 
-        }
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
 
-
-
-        const firstTransactionButton = document.getElementById('filterFirstTransactionButton');
-
-        const firstTransactionDropdown = document.getElementById('filterFirstTransactionDropdown');
-
-        if (!firstTransactionButton.contains(event.target) && !firstTransactionDropdown.contains(event.target)) {
-
-            firstTransactionDropdown.style.display = 'none';
+            }
 
         }
 
 
 
-        const mailgunButton = document.getElementById('filterMailgunButton');
+        function formatIncome(income) {
 
-        const mailgunDropdown = document.getElementById('filterMailgunDropdown');
+            if (isNaN(parseFloat(income))) {
 
-        if (!mailgunButton.contains(event.target) && !mailgunDropdown.contains(event.target)) {
+                return `<span class="text-gray-500">$0</span>`;
 
-            mailgunDropdown.style.display = 'none';
+            } else if (parseFloat(income) === 0) {
+
+                return `<span class="text-gray-500">$${parseFloat(income).toLocaleString()}</span>`;
+
+            } else {
+
+                return `<strong>$${parseFloat(income).toLocaleString()}</strong>`;
+
+            }
 
         }
 
-    });
 
 
+        function formatFirstTransaction(hasTransaction) {
 
-    document.getElementById('filterButton').addEventListener('click', function () {
+            if (hasTransaction) {
 
-        document.getElementById('filterPanel').style.display = 'block';
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
 
-    });
+            } else {
 
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
 
-
-    document.getElementById('closeFilterPanel').addEventListener('click', function () {
-
-        document.getElementById('filterPanel').style.display = 'none';
-
-        renderTable(users);
-
-        updateCards(users);
-
-    });
-
-
-
-    document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"]').forEach(element => {
-
-        element.addEventListener('change', function () {
-
-            renderTable(users);
-
-            updateCards(users);
-
-        });
-
-    });
-
-
-
-    function renderTable(users) {
-
-        const tableBody = document.getElementById('usersTable');
-
-        tableBody.innerHTML = ''; // Clear existing rows
-
-
-
-        const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
-
-        const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
-
-        const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
-
-        const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
-
-
-
-        const filteredUsers = users.filter(user => {
-
-            return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
-
-                (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
-
-                (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
-
-                (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
-
-        });
-
-
-
-        filteredUsers.forEach(user => {
-
-            const tr = document.createElement('tr');
-
-            tr.innerHTML = `
-
-                <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
-
-                    <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
-
-                        ${user.location_name}
-
-                    </a>
-
-                </td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
-
-                <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
-
-            `;
-
-            tableBody.appendChild(tr);
-
-        });
-
-    }
-
-
-
-    function formatMailgunConnected(isConnected) {
-
-        if (isConnected) {
-
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
-
-        } else {
-
-            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
+            }
 
         }
 
-    }
 
 
+        function formatHasCalendar(totalCalendars) {
 
-    function formatIncome(income) {
+            if (totalCalendars > 0) {
 
-        if (isNaN(parseFloat(income))) {
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Calendar</span>`;
 
-            return `<span class="text-gray-500">$0</span>`;
+            } else {
 
-        } else if (parseFloat(income) === 0) {
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Calendar</span>`;
 
-            return `<span class="text-gray-500">$${parseFloat(income).toLocaleString()}</span>`;
-
-        } else {
-
-            return `<strong>$${parseFloat(income).toLocaleString()}</strong>`;
+            }
 
         }
 
-    }
 
 
+        function formatHasProduct(totalProducts) {
 
-    function formatFirstTransaction(hasTransaction) {
+            if (totalProducts > 0) {
 
-        if (hasTransaction) {
+                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Product</span>`;
 
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
+            } else {
 
-        } else {
+                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Product</span>`;
 
-            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
-
-        }
-
-    }
-
-
-
-    function formatHasCalendar(totalCalendars) {
-
-        if (totalCalendars > 0) {
-
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Calendar</span>`;
-
-        } else {
-
-            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Calendar</span>`;
+            }
 
         }
 
-    }
+
+
+        function updateCards(users) {
+
+            const filteredUsers = getFilteredUsers(users);
+
+            const totalUsers = filteredUsers.length;
+
+            const mailgunConnectedCount = filteredUsers.filter(user => user.mailgun_connected).length;
+
+            const firstTransactionCount = filteredUsers.filter(user => user.has_had_first_transaction).length;
 
 
 
-    function formatHasProduct(totalProducts) {
+            const mailgunPercentage = (mailgunConnectedCount / totalUsers * 100).toFixed(2);
 
-        if (totalProducts > 0) {
+            const transactionPercentage = (firstTransactionCount / totalUsers * 100).toFixed(2);
 
-            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Product</span>`;
 
-        } else {
 
-            return            `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Product</span>`;
+            document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
+
+            document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
+
+
+
+            document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
+
+            document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
+
+
+
+            // Calculate average time to revenue
+
+            const profitableUsers = filteredUsers.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
+
+            const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
+
+            const averageTimeToRevenue = totalProfitableTime ? (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24) : 0; // Convert milliseconds to days
+
+
+
+            document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
 
         }
 
-    }
 
 
+        function getFilteredUsers(users) {
 
-    function updateCards(users) {
+            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
 
-        const filteredUsers = getFilteredUsers(users);
+            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
 
-        const totalUsers = filteredUsers.length;
+            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
 
-        const mailgunConnectedCount = filteredUsers.filter(user => user.mailgun_connected).length;
+            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
 
-        const firstTransactionCount = filteredUsers.filter(user => user.has_had_first_transaction).length;
 
 
+            return users.filter(user => {
 
-        const mailgunPercentage = (mailgunConnectedCount / totalUsers * 100).toFixed(2);
+                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
 
-        const transactionPercentage = (firstTransactionCount / totalUsers * 100).toFixed(2);
+                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
 
+                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
 
+                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
 
-        document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
+            });
 
-        document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
+        }
 
-
-
-        document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
-
-        document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
-
-
-
-        // Calculate average time to revenue
-
-        const profitableUsers = filteredUsers.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
-
-        const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
-
-        const averageTimeToRevenue = totalProfitableTime ? (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24) : 0; // Convert milliseconds to days
-
-
-
-        document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
-
-    }
-
-
-
-    function getFilteredUsers(users) {
-
-        const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
-
-        const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
-
-        const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
-
-        const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
-
-
-
-        return users.filter(user => {
-
-            return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
-
-                (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
-
-                (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
-
-                (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
-
-        });
-
-    }
-
-
-
-    // Mobile filter toggles
-
-    document.querySelectorAll('.filter-section-toggle').forEach(button => {
-
-        button.addEventListener('click', function () {
-
-            const sectionId = this.getAttribute('aria-controls');
-
-            const section = document.getElementById(sectionId);
-
-            section.style.display = section.style.display === 'none' ? 'block' : 'none';
-
-        });
-
-    });
-
-
-
-    // Apply mobile filters
-
-    document.querySelectorAll('#filterPanel input[type="radio"]').forEach(input => {
-
-        input.addEventListener('change', function () {
-
-            renderTable(users);
-
-            updateCards(users);
-
-        });
-
-    });
-
-
-
-    // Initialize mobile filter sections to be hidden
-
-    document.querySelectorAll('#filterPanel .filter-section').forEach(section => {
-
-        section.style.display = 'none';
-
-    });
-
-
-
-</script>
+    </script>
 
 </body>
+
+
 
 </html>
