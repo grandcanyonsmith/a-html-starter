@@ -173,16 +173,18 @@
         .then(function (response) {
 
             console.log("Sample data:", response.data[0]); // Log the first data object
-            console.log(response.data)
+
             users = response.data.map(user => ({
 
                 ...user,
 
-                mailgun_connected: user.mailgun_connected === "true",
+                mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
 
-                has_had_first_transaction: user.has_had_first_transaction === "true"
+                has_had_first_transaction: user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
 
             }));
+
+            console.log("Processed users data:", users); // Debug: Log processed users data
 
             renderTable(users);
 
@@ -391,6 +393,14 @@
         const mailgunConnectedCount = users.filter(user => user.mailgun_connected).length;
 
         const firstTransactionCount = users.filter(user => user.has_had_first_transaction).length;
+
+
+
+        console.log("Total users:", totalUsers); // Debug: Log total users
+
+        console.log("Mailgun connected count:", mailgunConnectedCount); // Debug: Log mailgun connected count
+
+        console.log("First transaction count:", firstTransactionCount); // Debug: Log first transaction count
 
 
 
