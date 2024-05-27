@@ -46,7 +46,7 @@
 
         <div class="flex justify-between items-center py-4">
 
-            <div class="bg-white shadow rounded-lg p-4 w-1/2 mr-2">
+            <div class="bg-white shadow rounded-lg p-4 w-1/3 mr-2">
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">MailGun Connected</h3>
 
@@ -56,13 +56,21 @@
 
             </div>
 
-            <div class="bg-white shadow rounded-lg p-4 w-1/2 ml-2">
+            <div class="bg-white shadow rounded-lg p-4 w-1/3 mr-2">
 
                 <h3 class="text-lg leading-6 font-medium text-gray-900">First Transaction Completed</h3>
 
                 <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="transactionPercentage">0%</div>
 
                 <div class="text-sm text-gray-500" id="transactionCount">0 of 0</div>
+
+            </div>
+
+            <div class="bg-white shadow rounded-lg p-4 w-1/3 ml-2">
+
+                <h3 class="text-lg leading-6 font-medium text-gray-900">Average Time to Revenue</h3>
+
+                <div class="mt-2 flex items-baseline text-2xl font-semibold text-indigo-600" id="averageTimeToRevenue">0 days</div>
 
             </div>
 
@@ -396,14 +404,6 @@
 
 
 
-        console.log("Total users:", totalUsers); // Debug: Log total users
-
-        console.log("Mailgun connected count:", mailgunConnectedCount); // Debug: Log mailgun connected count
-
-        console.log("First transaction count:", firstTransactionCount); // Debug: Log first transaction count
-
-
-
         const mailgunPercentage = (mailgunConnectedCount / totalUsers * 100).toFixed(2);
 
         const transactionPercentage = (firstTransactionCount / totalUsers * 100).toFixed(2);
@@ -419,6 +419,20 @@
         document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
 
         document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
+
+
+
+        // Calculate average time to revenue
+
+        const profitableUsers = users.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
+
+        const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
+
+        const averageTimeToRevenue = (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24); // Convert milliseconds to days
+
+
+
+        document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
 
     }
 
