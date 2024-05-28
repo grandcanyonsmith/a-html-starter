@@ -377,6 +377,85 @@
                             </div>
 
                         </div>
+<div class="border-t border-gray-200 px-4 py-6">
+
+    <h3 class="-mx-2 -my-3 flow-root">
+
+        <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-4" aria-expanded="false">
+
+            <span class="font-medium text-gray-900">Status</span>
+
+            <span class="ml-6 flex items-center">
+
+                <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+
+                </svg>
+
+            </span>
+
+        </button>
+
+    </h3>
+
+    <div class="pt-6" id="filter-section-4">
+
+        <div class="space-y-6">
+
+            <div class="flex items-center">
+
+                <input id="filterStatusAll" name="filterStatus" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+
+                <label for="filterStatusAll" class="ml-3 text-sm text-gray-500">All</label>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input id="filterStatusActive" name="filterStatus" value="active" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                <label for="filterStatusActive" class="ml-3 text-sm text-gray-500">Active</label>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input id="filterStatusTrialing" name="filterStatus" value="trialing" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                <label for="filterStatusTrialing" class="ml-3 text-sm text-gray-500">Trialing</label>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input id="filterStatusPastDue" name="filterStatus" value="past_due" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                <label for="filterStatusPastDue" class="ml-3 text-sm text-gray-500">Past Due</label>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input id="filterStatusCanceled" name="filterStatus" value="canceled" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                <label for="filterStatusCanceled" class="ml-3 text-sm text-gray-500">Canceled</label>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input id="filterStatusUnknown" name="filterStatus" value="Unknown" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                <label for="filterStatusUnknown" class="ml-3 text-sm text-gray-500">Unknown</label>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
                     </form>
 
@@ -396,35 +475,37 @@
 
                     <table class="min-w-full border-separate border-spacing-0">
 
-                        <thead>
+<thead>
 
-                            <tr>
+    <tr>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Location Name</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Location Name</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncomeAllTime">All Time $</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncomeAllTime">All Time $</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome90Days">90D $</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome90Days">90D $</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome30Days">30D $</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome30Days">30D $</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome7Days">7D $</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer hidden sm:table-cell" id="sortIncome7Days">7D $</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Calendars</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Calendars</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Products</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Products</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Created Time</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Created Time</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Time to Revenue</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Relative Time to Revenue</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortFirstTransaction">First Transaction</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortFirstTransaction">First Transaction</th>
 
-                                <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Mailgun Connected</th>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Mailgun Connected</th>
 
-                            </tr>
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Status</th>
 
-                        </thead>
+    </tr>
+
+</thead>
 
                         <tbody id="usersTable">
 
@@ -514,7 +595,27 @@
 
         });
 
+document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"], input[name="filterStatus"]').forEach(element => {
 
+    element.addEventListener('change', function () {
+
+        renderTable(users);
+
+        updateCards(users);
+
+    });
+
+});
+
+document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"], input[name="filterStatus"]').forEach(element => {
+
+    element.addEventListener('change', function () {
+
+        renderTable(users);
+
+    });
+
+});
 
         document.querySelectorAll('[id^="sort"]').forEach(element => {
 
@@ -635,82 +736,124 @@
         });
 
 
+function formatAccountStatus(status) {
 
-        function renderTable(users) {
+    switch (status) {
 
-            const tableBody = document.getElementById('usersTable');
+        case 'active':
 
-            tableBody.innerHTML = ''; // Clear existing rows
+            return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Active</span>`;
 
+        case 'trialing':
 
+            return `<span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-600/20">Trialing</span>`;
 
-            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
+        case 'past_due':
 
-            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
+            return `<span class="inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20">Past Due</span>`;
 
-            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
+        case 'canceled':
 
-            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
+            return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">Canceled</span>`;
 
+        default:
 
+            return `<span class="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs font-medium text-gray-700 ring-1 ring-inset ring-gray-600/20">Unknown</span>`;
 
-            const filteredUsers = users.filter(user => {
+    }
 
-                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
-
-                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
-
-                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
-
-                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
-
-            });
+}
 
 
+function renderTable(users) {
 
-            filteredUsers.forEach(user => {
+    const tableBody = document.getElementById('usersTable');
 
-                const tr = document.createElement('tr');
+    tableBody.innerHTML = ''; // Clear existing rows
 
-                tr.innerHTML = `
 
-                    <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
 
-                        <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
+    const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
 
-                            ${user.location_name}
+    const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
 
-                        </a>
+    const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
 
-                    </td>
+    const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
+    const filterStatus = document.querySelector('input[name="filterStatus"]:checked').value;
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
+    const filteredUsers = users.filter(user => {
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
+        return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
+            (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
+            (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
+            (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
+            (filterStatus === 'all' || user.account_status === filterStatus);
 
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
+    });
 
-                `;
 
-                tableBody.appendChild(tr);
 
-            });
+    filteredUsers.forEach(user => {
 
-        }
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+
+            <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
+
+                <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
+
+                    ${user.location_name}
+
+                </a>
+
+            </td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
+
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatAccountStatus(user.account_status)}</td>
+
+        `;
+
+        tableBody.appendChild(tr);
+
+    });
+
+
+
+    // Update the cards with the filtered users
+
+    updateCards(filteredUsers);
+
+}
+
+
 
 
 
@@ -798,49 +941,49 @@
 
 
 
-        function updateCards(users) {
+function updateCards(filteredUsers) {
 
-            const filteredUsers = getFilteredUsers(users);
-
-            const totalUsers = filteredUsers.length;
-
-            const mailgunConnectedCount = filteredUsers.filter(user => user.mailgun_connected).length;
-
-            const firstTransactionCount = filteredUsers.filter(user => user.has_had_first_transaction).length;
+    const totalUsers = filteredUsers.length;
 
 
 
-            const mailgunPercentage = (mailgunConnectedCount / totalUsers * 100).toFixed(2);
+    const mailgunConnectedCount = filteredUsers.filter(user => user.mailgun_connected).length;
 
-            const transactionPercentage = (firstTransactionCount / totalUsers * 100).toFixed(2);
-
-
-
-            document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
-
-            document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
+    const firstTransactionCount = filteredUsers.filter(user => user.has_had_first_transaction).length;
 
 
 
-            document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
+    const mailgunPercentage = totalUsers ? (mailgunConnectedCount / totalUsers * 100).toFixed(2) : 0;
 
-            document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
-
-
-
-            // Calculate average time to revenue
-
-            const profitableUsers = filteredUsers.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
-
-            const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
-
-            const averageTimeToRevenue = totalProfitableTime ? (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24) : 0; // Convert milliseconds to days
+    const transactionPercentage = totalUsers ? (firstTransactionCount / totalUsers * 100).toFixed(2) : 0;
 
 
 
-            document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
+    document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
 
-        }
+    document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
+
+
+
+    document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
+
+    document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
+
+
+
+    // Calculate average time to revenue
+
+    const profitableUsers = filteredUsers.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
+
+    const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
+
+    const averageTimeToRevenue = totalProfitableTime ? (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24) : 0; // Convert milliseconds to days
+
+
+
+    document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
+
+}
 
 
 
@@ -877,3 +1020,4 @@
 
 
 </html>
+
