@@ -527,73 +527,75 @@
 
     <script>
 
-        let users = [];
+let users = [];
 
-        let sortField = null;
+let sortField = null;
 
-        let sortDirection = 1; // 1: ascending, -1: descending
-
-
-
-        document.getElementById('fetchData').addEventListener('click', function () {
-
-            const startDate = document.getElementById('startDate').value;
-
-            const endDate = document.getElementById('endDate').value;
+let sortDirection = 1; // 1: ascending, -1: descending
 
 
 
-            if (!startDate || !endDate) {
+document.getElementById('fetchData').addEventListener('click', function () {
 
-                alert('Please select both start and end dates.');
+    const startDate = document.getElementById('startDate').value;
 
-                return;
-
-            }
+    const endDate = document.getElementById('endDate').value;
 
 
 
-            axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
+    if (!startDate || !endDate) {
 
-                startDate: startDate,
+        alert('Please select both start and end dates.');
 
-                endDate: endDate
+        return;
 
-            }, {
+    }
 
-                headers: {
 
-                    'Content-Type': 'application/json'
 
-                }
+    axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
 
-            })
+        startDate: startDate,
 
-                .then(function (response) {
+        endDate: endDate
 
-                    users = response.data.map(user => ({
+    }, {
 
-                        ...user,
+        headers: {
 
-                        mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
+            'Content-Type': 'application/json'
 
-                        has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
+        }
 
-                    }));
+    })
 
-                    renderTable(users);
+    .then(function (response) {
 
-                    updateCards(users);
+        users = response.data.map(user => ({
 
-                })
+            ...user,
 
-                .catch(function (error) {
+            mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
 
-                    console.error('Error fetching users:', error);
+            has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
 
-                });
+        }));
 
-        });
+        renderTable(users);
+
+        updateCards(users);
+
+    })
+
+    .catch(function (error) {
+
+        console.error('Error fetching users:', error);
+
+    });
+
+});
+
+
 
 document.getElementById('filterStatusAll').addEventListener('change', function () {
 
@@ -606,6 +608,8 @@ document.getElementById('filterStatusAll').addEventListener('change', function (
     });
 
     renderTable(users);
+
+    updateCards(getFilteredUsers(users)); // Update cards after changing status filters
 
 });
 
@@ -635,9 +639,12 @@ document.querySelectorAll('input[name="filterStatus"]').forEach(element => {
 
         renderTable(users);
 
+        updateCards(getFilteredUsers(users)); // Update cards after changing status filters
+
     });
 
 });
+
 
 
 document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"], input[name="filterStatus"]').forEach(element => {
@@ -652,9 +659,85 @@ document.querySelectorAll('input[name="filterCalendar"], input[name="filterProdu
 
 });
 
-document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"], input[name="filterStatus"]').forEach(element => {
 
-    element.addEventListener('change', function () {
+
+document.querySelectorAll('[id^="sort"]').forEach(element => {
+
+    element.addEventListener('click', function () {
+
+        let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
+
+        // Adjust field names based on actual data properties
+
+        switch (field) {
+
+            case 'income_30_days':
+
+                field = 'last_thirty_day_income';
+
+                break;
+
+            case 'income_90_days':
+
+                field = 'last_ninety_day_income';
+
+                break;
+
+            case 'income_7_days':
+
+                field = 'last_seven_day_income';
+
+                break;
+
+            case 'income_all_time':
+
+                field = 'income_all_time';
+
+                break;
+
+        }
+
+
+
+        if (sortField === field) {
+
+            sortDirection *= -1; // Toggle the direction
+
+        } else {
+
+            sortField = field;
+
+            sortDirection = -1; // Default to descending for all fields initially
+
+        }
+
+
+
+        users.sort((a, b) => {
+
+            let valA = parseFloat(a[field]);
+
+            let valB = parseFloat(b[field]);
+
+
+
+            if (isNaN(valA) || isNaN(valB)) {
+
+                // Fallback for non-numeric or missing data
+
+                return 0; // or handle differently as per requirement
+
+            } else {
+
+                // Numeric sorting
+
+                return (valA < valB ? -1 : 1) * sortDirection;
+
+            }
+
+        });
+
+
 
         renderTable(users);
 
@@ -662,123 +745,26 @@ document.querySelectorAll('input[name="filterCalendar"], input[name="filterProdu
 
 });
 
-        document.querySelectorAll('[id^="sort"]').forEach(element => {
 
-            element.addEventListener('click', function () {
 
-                let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
+document.getElementById('filterButton').addEventListener('click', function () {
 
-                // Adjust field names based on actual data properties
+    document.getElementById('filterPanel').style.display = 'block';
 
-                switch (field) {
+});
 
-                    case 'income_30_days':
 
-                        field = 'last_thirty_day_income';
 
-                        break;
+document.getElementById('closeFilterPanel').addEventListener('click', function () {
 
-                    case 'income_90_days':
+    document.getElementById('filterPanel').style.display = 'none';
 
-                        field = 'last_ninety_day_income';
+    const filteredUsers = getFilteredUsers(users);
 
-                        break;
+    updateCards(filteredUsers);
 
-                    case 'income_7_days':
+});
 
-                        field = 'last_seven_day_income';
-
-                        break;
-
-                    case 'income_all_time':
-
-                        field = 'income_all_time';
-
-                        break;
-
-                }
-
-
-
-                if (sortField === field) {
-
-                    sortDirection *= -1; // Toggle the direction
-
-                } else {
-
-                    sortField = field;
-
-                    sortDirection = -1; // Default to descending for all fields initially
-
-                }
-
-
-
-                users.sort((a, b) => {
-
-                    let valA = parseFloat(a[field]);
-
-                    let valB = parseFloat(b[field]);
-
-
-
-                    if (isNaN(valA) || isNaN(valB)) {
-
-                        // Fallback for non-numeric or missing data
-
-                        return 0; // or handle differently as per requirement
-
-                    } else {
-
-                        // Numeric sorting
-
-                        return (valA < valB ? -1 : 1) * sortDirection;
-
-                    }
-
-                });
-
-
-
-                renderTable(users);
-
-            });
-
-        });
-
-
-
-        document.getElementById('filterButton').addEventListener('click', function () {
-
-            document.getElementById('filterPanel').style.display = 'block';
-
-        });
-
-
-
-        document.getElementById('closeFilterPanel').addEventListener('click', function () {
-
-            document.getElementById('filterPanel').style.display = 'none';
-
-            renderTable(users);
-
-            updateCards(users);
-
-        });
-
-
-
-        document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"]').forEach(element => {
-
-            element.addEventListener('change', function () {
-
-                renderTable(users);
-
-                updateCards(users);
-
-            });
-
-        });
 
 
 function formatAccountStatus(status) {
@@ -808,6 +794,7 @@ function formatAccountStatus(status) {
     }
 
 }
+
 
 
 function renderTable(users) {
@@ -904,88 +891,87 @@ function renderTable(users) {
 
 
 
+function formatMailgunConnected(isConnected) {
 
-        function formatMailgunConnected(isConnected) {
+    if (isConnected) {
 
-            if (isConnected) {
+        return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
 
-                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
+    } else {
 
-            } else {
+        return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
 
-                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
+    }
 
-            }
-
-        }
-
-
-
-        function formatIncome(income) {
-
-            if (isNaN(parseFloat(income))) {
-
-                return `<span class="text-gray-500">$0</span>`;
-
-            } else if (parseFloat(income) === 0) {
-
-                return `<span class="text-gray-500">$${parseFloat(income).toLocaleString()}</span>`;
-
-            } else {
-
-                return `<strong>$${parseFloat(income).toLocaleString()}</strong>`;
-
-            }
-
-        }
+}
 
 
 
-        function formatFirstTransaction(hasTransaction) {
+function formatIncome(income) {
 
-            if (hasTransaction) {
+    if (isNaN(parseFloat(income))) {
 
-                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
+        return `<span class="text-gray-500">$0</span>`;
 
-            } else {
+    } else if (parseFloat(income) === 0) {
 
-                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
+        return `<span class="text-gray-500">$${parseFloat(income).toLocaleString()}</span>`;
 
-            }
+    } else {
 
-        }
+        return `<strong>$${parseFloat(income).toLocaleString()}</strong>`;
 
+    }
 
-
-        function formatHasCalendar(totalCalendars) {
-
-            if (totalCalendars > 0) {
-
-                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Calendar</span>`;
-
-            } else {
-
-                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Calendar</span>`;
-
-            }
-
-        }
+}
 
 
 
-        function formatHasProduct(totalProducts) {
+function formatFirstTransaction(hasTransaction) {
 
-            if (totalProducts > 0) {
+    if (hasTransaction) {
 
-                return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Product</span>`;
+        return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
 
-            } else {
+    } else {
 
-                return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Product</span>`;
+        return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
 
-            }
+    }
 
-        }
+}
+
+
+
+function formatHasCalendar(totalCalendars) {
+
+    if (totalCalendars > 0) {
+
+        return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Calendar</span>`;
+
+    } else {
+
+        return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Calendar</span>`;
+
+    }
+
+}
+
+
+
+function formatHasProduct(totalProducts) {
+
+    if (totalProducts > 0) {
+
+        return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Has Product</span>`;
+
+    } else {
+
+        return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No Product</span>`;
+
+    }
+
+}
 
 
 
@@ -1035,31 +1021,39 @@ function updateCards(filteredUsers) {
 
 
 
-        function getFilteredUsers(users) {
+function getFilteredUsers(users) {
 
-            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
+    const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
 
-            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
+    const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
 
-            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
+    const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
 
-            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
+    const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
 
 
 
-            return users.filter(user => {
+    const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
 
-                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
 
-                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
 
-                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
+    return users.filter(user => {
 
-                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected));
+        const statusMatch = selectedStatuses.includes('all') || selectedStatuses.includes(user.account_status);
 
-            });
+        return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
 
-        }
+            (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
+
+            (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
+
+            (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
+
+            statusMatch;
+
+    });
+
+}
 
     </script>
 
@@ -1068,5 +1062,3 @@ function updateCards(filteredUsers) {
 
 
 </html>
-
-
