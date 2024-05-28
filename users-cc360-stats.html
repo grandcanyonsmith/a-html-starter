@@ -405,7 +405,7 @@
 
             <div class="flex items-center">
 
-                <input id="filterStatusAll" name="filterStatus" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+                <input id="filterStatusAll" name="filterStatus" value="all" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
 
                 <label for="filterStatusAll" class="ml-3 text-sm text-gray-500">All</label>
 
@@ -413,7 +413,7 @@
 
             <div class="flex items-center">
 
-                <input id="filterStatusActive" name="filterStatus" value="active" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <input id="filterStatusActive" name="filterStatus" value="active" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
 
                 <label for="filterStatusActive" class="ml-3 text-sm text-gray-500">Active</label>
 
@@ -421,7 +421,7 @@
 
             <div class="flex items-center">
 
-                <input id="filterStatusTrialing" name="filterStatus" value="trialing" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <input id="filterStatusTrialing" name="filterStatus" value="trialing" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
 
                 <label for="filterStatusTrialing" class="ml-3 text-sm text-gray-500">Trialing</label>
 
@@ -429,7 +429,7 @@
 
             <div class="flex items-center">
 
-                <input id="filterStatusPastDue" name="filterStatus" value="past_due" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <input id="filterStatusPastDue" name="filterStatus" value="past_due" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
 
                 <label for="filterStatusPastDue" class="ml-3 text-sm text-gray-500">Past Due</label>
 
@@ -437,7 +437,7 @@
 
             <div class="flex items-center">
 
-                <input id="filterStatusCanceled" name="filterStatus" value="canceled" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <input id="filterStatusCanceled" name="filterStatus" value="canceled" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
 
                 <label for="filterStatusCanceled" class="ml-3 text-sm text-gray-500">Canceled</label>
 
@@ -445,7 +445,7 @@
 
             <div class="flex items-center">
 
-                <input id="filterStatusUnknown" name="filterStatus" value="Unknown" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <input id="filterStatusUnknown" name="filterStatus" value="Unknown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
 
                 <label for="filterStatusUnknown" class="ml-3 text-sm text-gray-500">Unknown</label>
 
@@ -594,6 +594,51 @@
                 });
 
         });
+
+document.getElementById('filterStatusAll').addEventListener('change', function () {
+
+    const isChecked = this.checked;
+
+    document.querySelectorAll('input[name="filterStatus"]').forEach(checkbox => {
+
+        checkbox.checked = isChecked;
+
+    });
+
+    renderTable(users);
+
+});
+
+
+
+document.querySelectorAll('input[name="filterStatus"]').forEach(element => {
+
+    element.addEventListener('change', function () {
+
+        // If any checkbox other than "All" is unchecked, uncheck "All"
+
+        if (!this.checked && this.value !== 'all') {
+
+            document.getElementById('filterStatusAll').checked = false;
+
+        }
+
+        // If all checkboxes except "All" are checked, check "All"
+
+        const allChecked = Array.from(document.querySelectorAll('input[name="filterStatus"]')).every(checkbox => checkbox.checked || checkbox.value === 'all');
+
+        if (allChecked) {
+
+            document.getElementById('filterStatusAll').checked = true;
+
+        }
+
+        renderTable(users);
+
+    });
+
+});
+
 
 document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"], input[name="filterStatus"]').forEach(element => {
 
@@ -781,11 +826,15 @@ function renderTable(users) {
 
     const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
 
-    const filterStatus = document.querySelector('input[name="filterStatus"]:checked').value;
+
+
+    const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
 
 
 
     const filteredUsers = users.filter(user => {
+
+        const statusMatch = selectedStatuses.includes('all') || selectedStatuses.includes(user.account_status);
 
         return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
 
@@ -795,7 +844,7 @@ function renderTable(users) {
 
             (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
 
-            (filterStatus === 'all' || user.account_status === filterStatus);
+            statusMatch;
 
     });
 
@@ -852,7 +901,6 @@ function renderTable(users) {
     updateCards(filteredUsers);
 
 }
-
 
 
 
@@ -1020,4 +1068,5 @@ function updateCards(filteredUsers) {
 
 
 </html>
+
 
