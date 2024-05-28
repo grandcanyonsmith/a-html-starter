@@ -456,6 +456,61 @@
     </div>
 
 </div>
+ <div class="border-t border-gray-200 px-4 py-6">
+
+    <h3 class="-mx-2 -my-3 flow-root">
+
+        <button type="button" class="flex w-full items-center justify-between bg-white px-2 py-3 text-sm text-gray-400" aria-controls="filter-section-5" aria-expanded="false">
+
+            <span class="font-medium text-gray-900">Payment Processor Integration</span>
+
+            <span class="ml-6 flex items-center">
+
+                <svg class="rotate-0 h-5 w-5 transform" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+
+                    <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+
+                </svg>
+
+            </span>
+
+        </button>
+
+    </h3>
+
+    <div class="pt-6" id="filter-section-5">
+
+        <div class="space-y-6">
+
+            <div class="flex items-center">
+
+                <input id="filterPaymentProcessorAll" name="filterPaymentProcessor" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+
+                <label for="filterPaymentProcessorAll" class="ml-3 text-sm text-gray-500">All</label>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input id="filterPaymentProcessorTrue" name="filterPaymentProcessor" value="True" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                <label for="filterPaymentProcessorTrue" class="ml-3 text-sm text-gray-500">True</label>
+
+            </div>
+
+            <div class="flex items-center">
+
+                <input id="filterPaymentProcessorFalse" name="filterPaymentProcessor" value="False" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+
+                <label for="filterPaymentProcessorFalse" class="ml-3 text-sm text-gray-500">False</label>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
                     </form>
 
@@ -479,6 +534,8 @@
 
     <tr>
 
+        <!-- Existing column headers -->
+
         <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8">Location Name</th>
 
         <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortIncomeAllTime">All Time $</th>
@@ -500,6 +557,8 @@
         <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter cursor-pointer" id="sortFirstTransaction">First Transaction</th>
 
         <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Mailgun Connected</th>
+
+        <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Payment Processor</th> <!-- New column header -->
 
         <th scope="col" class="sticky top-0 z-10 border-b border-gray-300 bg-white bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter">Status</th>
 
@@ -577,7 +636,9 @@ document.getElementById('fetchData').addEventListener('click', function () {
 
             mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
 
-            has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true
+            has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true,
+
+            payment_processor_integration: user.payment_processor_integration === "True" || user.payment_processor_integration === true // New field
 
         }));
 
@@ -619,15 +680,11 @@ document.querySelectorAll('input[name="filterStatus"]').forEach(element => {
 
     element.addEventListener('change', function () {
 
-        // If any checkbox other than "All" is unchecked, uncheck "All"
-
         if (!this.checked && this.value !== 'all') {
 
             document.getElementById('filterStatusAll').checked = false;
 
         }
-
-        // If all checkboxes except "All" are checked, check "All"
 
         const allChecked = Array.from(document.querySelectorAll('input[name="filterStatus"]')).every(checkbox => checkbox.checked || checkbox.value === 'all');
 
@@ -666,8 +723,6 @@ document.querySelectorAll('[id^="sort"]').forEach(element => {
     element.addEventListener('click', function () {
 
         let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
-
-        // Adjust field names based on actual data properties
 
         switch (field) {
 
@@ -723,15 +778,11 @@ document.querySelectorAll('[id^="sort"]').forEach(element => {
 
             if (isNaN(valA) || isNaN(valB)) {
 
-                // Fallback for non-numeric or missing data
-
-                return 0; // or handle differently as per requirement
+                return 0; // Fallback for non-numeric or missing data
 
             } else {
 
-                // Numeric sorting
-
-                return (valA < valB ? -1 : 1) * sortDirection;
+                return (valA < valB ? -1 : 1) * sortDirection; // Numeric sorting
 
             }
 
@@ -797,6 +848,20 @@ function formatAccountStatus(status) {
 
 
 
+  document.querySelectorAll('input[name="filterPaymentProcessor"]').forEach(element => {
+
+    element.addEventListener('change', function () {
+
+        renderTable(users);
+
+        updateCards(users);
+
+    });
+
+});
+
+
+
 function renderTable(users) {
 
     const tableBody = document.getElementById('usersTable');
@@ -812,6 +877,8 @@ function renderTable(users) {
     const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
 
     const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
+
+    const filterPaymentProcessor = document.querySelector('input[name="filterPaymentProcessor"]:checked').value;
 
 
 
@@ -830,6 +897,8 @@ function renderTable(users) {
             (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
 
             (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
+
+            (filterPaymentProcessor === 'all' || (filterPaymentProcessor === 'True' && user.payment_processor_integration) || (filterPaymentProcessor === 'False' && !user.payment_processor_integration)) &&
 
             statusMatch;
 
@@ -873,6 +942,8 @@ function renderTable(users) {
 
             <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
 
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatPaymentProcessor(user.payment_processor_integration)}</td> <!-- New column -->
+
             <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatAccountStatus(user.account_status)}</td>
 
         `;
@@ -886,6 +957,46 @@ function renderTable(users) {
     // Update the cards with the filtered users
 
     updateCards(filteredUsers);
+
+}
+
+
+
+function getFilteredUsers(users) {
+
+    const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
+
+    const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
+
+    const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
+
+    const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
+
+    const filterPaymentProcessor = document.querySelector('input[name="filterPaymentProcessor"]:checked').value;
+
+
+
+    const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
+
+
+
+    return users.filter(user => {
+
+        const statusMatch = selectedStatuses.includes('all') || selectedStatuses.includes(user.account_status);
+
+        return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
+
+            (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
+
+            (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
+
+            (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
+
+            (filterPaymentProcessor === 'all' || (filterPaymentProcessor === 'True' && user.payment_processor_integration) || (filterPaymentProcessor === 'False' && !user.payment_processor_integration)) &&
+
+            statusMatch;
+
+    });
 
 }
 
@@ -975,6 +1086,22 @@ function formatHasProduct(totalProducts) {
 
 
 
+function formatPaymentProcessor(isIntegrated) {
+
+    if (isIntegrated) {
+
+        return `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">Yes</span>`;
+
+    } else {
+
+        return `<span class="inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20">No</span>`;
+
+    }
+
+}
+
+
+
 function updateCards(filteredUsers) {
 
     const totalUsers = filteredUsers.length;
@@ -1021,39 +1148,6 @@ function updateCards(filteredUsers) {
 
 
 
-function getFilteredUsers(users) {
-
-    const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
-
-    const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
-
-    const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
-
-    const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
-
-
-
-    const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
-
-
-
-    return users.filter(user => {
-
-        const statusMatch = selectedStatuses.includes('all') || selectedStatuses.includes(user.account_status);
-
-        return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
-
-            (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
-
-            (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
-
-            (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
-
-            statusMatch;
-
-    });
-
-}
 
     </script>
 
