@@ -129,6 +129,8 @@
     document.addEventListener('DOMContentLoaded', async function () {
       const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
       const funnelsUrl = 'https://hlqcht2ceojjdd5u3zvta4al540ckupu.lambda-url.us-west-2.on.aws/';
+      const initialPostUrl = 'https://yvkjbe775fpg62xiqqb7hjq3je0ujbir.lambda-url.us-west-2.on.aws/';
+      const finalPostUrl = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
       let locations = [];
       let funnels = [];
 
@@ -145,7 +147,7 @@
         } else {
           console.error('Failed to fetch locations');
         }
-
+console.log(locationsResponse,'locationsResponse');
         // Fetch funnels
         const funnelsResponse = await fetch(funnelsUrl, {
           method: 'POST',
@@ -238,7 +240,6 @@
 
         submitButton.textContent = 'Submitting...';
 
-        const postUrl = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
         const data = {
           locationId: locationIdInput.value,
           courseDescription: document.getElementById('courseDescription').value,
@@ -246,24 +247,44 @@
         };
 
         try {
-          const response = await fetch(postUrl, {
+          // First POST request to the initial Lambda function
+          const initialResponse = await fetch(initialPostUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify({
+              location_id: data.locationId,
+              funnel_name: data.funnelName
+            })
           });
 
-          responseContainer.classList.remove('hidden');
+          if (initialResponse.ok) {
+            // Proceed with the final POST request
+            const finalResponse = await fetch(finalPostUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(data)
+            });
 
-          if (response.ok) {
-            const jsonResponse = await response.json();
-            responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
-            responseContainer.classList.add('bg-green-100');
-            breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
+            responseContainer.classList.remove('hidden');
+
+            if (finalResponse.ok) {
+              const jsonResponse = await finalResponse.json();
+              responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
+              responseContainer.classList.add('bg-green-100');
+              breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
+            } else {
+              const errorMessage = await finalResponse.text();
+              responseContainer.textContent = `Error: ${finalResponse.status} - ${errorMessage}`;
+              responseContainer.classList.add('bg-red-100');
+              breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
+            }
           } else {
-            const errorMessage = await response.text();
-            responseContainer.textContent = `Error: ${response.status} - ${errorMessage}`;
+            const errorMessage = await initialResponse.text();
+            responseContainer.textContent = `Error: ${initialResponse.status} - ${errorMessage}`;
             responseContainer.classList.add('bg-red-100');
             breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
           }
