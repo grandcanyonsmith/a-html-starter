@@ -98,6 +98,11 @@
         <input type="text" id="locationId" name="locationId" class="mt-1 p-2 border border-gray-300 rounded w-full" required readonly>
       </div>
 
+      <div>
+        <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+        <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 p-2 border border-gray-300 rounded w-full">
+      </div>
+
       <div class="relative inline-block text-left">
         <div>
           <label for="funnelName" class="block text-sm font-medium text-gray-700">Funnel Name</label>
@@ -243,7 +248,8 @@ console.log(locationsResponse,'locationsResponse');
         const data = {
           locationId: locationIdInput.value,
           courseDescription: document.getElementById('courseDescription').value,
-          funnelName: funnelDropdownButton.querySelector('span').textContent
+          funnelName: funnelDropdownButton.querySelector('span').textContent,
+          phoneNumber: document.getElementById('phoneNumber').value || null // Optional phone number
         };
 
         try {
