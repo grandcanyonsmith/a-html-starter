@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Text Submission</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="api-key.js"></script>
 </head>
 <body class="bg-gray-100 p-6">
     <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-lg">
@@ -41,7 +40,6 @@
         <div id="delete-modal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
                 <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
@@ -64,8 +62,6 @@
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const apiKey = window.OPENAI_API_KEY;
-
     document.getElementById('submitButton').addEventListener('click', async function() {
         const inputText = document.getElementById('inputText').value;
         const responseContainer = document.getElementById('responseContainer');
@@ -75,142 +71,42 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled = true;
 
         try {
-            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+            console.log('Sending request with inputText:', inputText);
+            const response = await fetch('https://r2fptjdcyc6fuy7qxisrfolx3e0nawtk.lambda-url.us-west-2.on.aws/', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: 'gpt-4o-2024-05-13',
-                    messages: [
-                        {
-                            role: 'system',
-                            content: "You are an expert at naming variables. Please review the website copy above and rewrite the website copy but in key value pairs where the keys explain what the text is. Ensure that there are no nested arrays or dictionaries. and that the values are strings not lists"
-                        },
-                        {
-                            role: 'user',
-                            content: `EXAMPLE OUTPUT: {
-                                "get_this_amazing_outcome_without_this_painful_thing": "Avoid these 5 interior photography & editing mistakes and build a 6-figure business",
-                                "headline_to_establish_credibility_and_summarize_course": "The top-rated online course for Architectural & Interior Photography",
-                                "painpoint_without_course_1": "Difficulty in finding clients",
-                                "painpoint_without_course_2": "Uncertainty in lighting the scene",
-                                "painpoint_without_course_3": "Your edits appear flat or muddy",
-                                "painpoint_without_course_4": "You don't know what gear to buy",
-                                "painpoint_without_course_5": "Not sure how to scale to 6 figures",
-                                "painpoint_without_course_6": "You're not getting repeat clients",
-                                "realized_desire_after_course_completion_1": "Use our marketing framework to have consistent new leads",
-                                "realized_desire_after_course_completion_2": "Nail your shot with confidence every time",
-                                "realized_desire_after_course_completion_3": "Cinematic, crystal clear shots that pop",
-                                "realized_desire_after_course_completion_4": "Get all the best gear for under $1,000",
-                                "realized_desire_after_course_completion_5": "Discover how to upsell & license multiple 5-figure clients",
-                                "realized_desire_after_course_completion_6": "Become the GO TO Photographer",
-                                "what_you_will_learn_in_the_course": "Learn to Frame, Light & Edit Interior Photos That SELL!",
-                                "why_you_need_this_preheadline": "WHY THIS Training is Essential",
-                                "included_in_course_header": "Breakdown of Course Content",
-                                "testimonial_text_1": "As a busy property photographer in the U.K., this course has been invaluable. Brad's expertise and clear instructions have significantly improved the quality of my work. I'd recommend it to anyone looking to enhance their photography skills.",
-                                "testimonial_name_1": "Peter Hawley",
-                                "testimonial_text_2": "As a real estate agent, I've always struggled with getting the right photos for my listings. This course has been a game changer for me. I can't recommend this course enough for anyone in the real estate industry.",
-                                "testimonial_name_2": "Sophia Martinez",
-                                "testimonial_text_3": "I'm a freelance photographer and this course has helped me improve my property photography and opened up a new revenue stream for me. Brad's teaching style is easy to follow and the course is packed with practical tips. Highly recommended for any photographer looking to expand their skill set.",
-                                "testimonial_name_3": "Liam Thompson",
-                                "course_offer_headline": "Master Architectural & Interiors Photography",
-                                "course_offer_description": "Elevate your images and photography business with our step-by-step video course",
-                                "included_in_offer_1": "Instant Access to stream 30+ video lessons",
-                                "included_in_offer_2": "Links to Recommended Gear + Discount Codes",
-                                "included_in_offer_3": "Private Community access to learn & grow together",
-                                "included_in_offer_4": "Access to FUTURE TRAINING within this course",
-                                "who_is_this_course_for": "This course is for any Photographer who wants to improve their Architectural & Interior Photos",
-                                "made_for_1": "REAL ESTATE PHOTOGRAPHERS",
-                                "made_for_2": "INTERIOR DESIGN PHOTOGRAPHERS",
-                                "made_for_3": "TRAVEL PHOTOGRAPHERS LOOKING TO WORK WITH HOTELS",
-                                "made_for_4": "ARCHITECTURAL PHOTOGRAPHERS",
-                                "made_for_5": "COMMERCIAL PHOTOGRAPHERS",
-                                "made_for_6": "RESTAURANT PHOTOGRAPHER",
-                                "made_for_7": "HOSPITAL PHOTOGRAPHERS",
-                                "made_for_8": "AIRBNB PHOTOGRAPHERS",
-                                "faq_answer_1": "Yes! Our marketing & business trainings will give you an inside look at how I have been able to do $200K a year as a solo shooter providing services to Hospitality, Commercial & Residential Property industries.",
-                                "faq_answer_2": "This course is for Photographers who are looking to generate a full time income shooting Architectural & Interior Photography. You should already have the basic understanding of camera settings such as ISO, Aperture, Shutter Speed, White Balance. We may do a beginner photography course in the future but this course is for intermediate to advanced photographers.",
-                                "faq_answer_3": "What sets this course apart is the lack of gatekeeping and fluff when it comes to how to actually run a photography business. I am going to be opening up my backend. Showing how I bid some of my largest jobs, how I get clients and other ways to make additional income with different types of licensing.",
-                                "faq_title_1": "Do you teach marketing?",
-                                "faq_title_2": "What level of photography do I need to be at to take this course?",
-                                "faq_title_3": "What makes this course different from others?",
-                                "instructor_achievement_1": "Recognized as one of the top architectural photographers in the country.",
-                                "instructor_achievement_2": "His work has been featured in numerous high-profile publications.",
-                                "instructor_achievement_3": "Successfully mentored over 1,000 students.",
-                                "instructor_achievement_4": "Won several awards for his stunning photography.",
-                                "instructor_achievement_5": "Created a course that has been rated 5 stars by its users.",
-                                "instructor_achievement_6": "Built a thriving online community of photographers.",
-                                "instructor_epiphany": "Realized that many aspiring photographers were making the same mistakes he once did. He saw a gap in the market for a comprehensive course that not only taught the technical aspects of photography but also the business side of things. This led him to create the #1 online course for learning architectural and interior photography.",
-                                "instructor_results_text": "His students have gone on to launch successful careers in the industry, with many of them earning six-figure incomes. His course has been praised for its practical approach and in-depth content.",
-                                "introduction_to_instructor": "A seasoned professional in the field of architectural and interior photography. With over 15 years of experience, he has honed his skills and developed a keen eye for capturing the essence of a space. His passion for photography began at a young age and has since grown into a successful career.",
-                                "hero_text_promise_in_short_timeframe": "10X The Quality Of Your Videos In Just 10 Days!",
-                                "business_short_name": "Real Estate Photography Pro",
-                                "course_module_1": "CAMERA EQUIPMENT",
-                                "course_module_2": "CAMERA SETTINGS",
-                                "course_module_3": "LIGHTING 101",
-                                "course_module_4": "COMPOSITION",
-                                "course_module_5": "CAMERA ANGLES",
-                                "course_module_6": "CAMERA MOVEMENTS",
-                                "course_module_7": "FOCAL LENGTH",
-                                "course_module_8": "AUDIO",
-                                "course_module_summary_1": "What gear do I buy? What's the best camera for a beginner and why?",
-                                "course_module_summary_2": "How to dial your camera settings in ANY scenario to achieve that coveted cinematic look.",
-                                "course_module_summary_3": "How do I get my footage to POP off the screen with artificial and natural lighting techniques?",
-                                "course_module_summary_4": "How do I compose an image to reach its peak aesthetic potential with composition hacks?",
-                                "course_module_summary_5": "How I use the 'Rule of 5' to achieve maximum engagement & fluidity in my edits?",
-                                "course_module_summary_6": "My personal favorite gimbal, handheld, & tripod movements I use daily.",
-                                "course_module_summary_7": "How and when to use any given camera lens by understanding how focal length affects your image.",
-                                "course_module_summary_8": "How I bring my edits to life with immersive sound design and music.",
-                                "course_module_img_1": "Professional photography equipment arranged on a wooden surface, featuring a prominent Canon camera with a red-ringed L-series lens attached, indicating high quality. Various camera bodies and a range of lenses with different sizes and functions are scattered behind it, some with caps on. In the foreground, a monopod is laid across, suggesting mobility and the need for stabilization in active shooting scenarios. The collection implies the gear is for a professional or enthusiast photographer with a preference for Canon brand and a requirement for diverse shooting conditions.",
-                                "course_module_img_2": "Split-screen image demonstrating different camera shutter speeds. On the left, a motion-blurred hand is shown, labeled '1/50 SHUTTER', illustrating a slower shutter speed that captures movement, commonly used for a cinematic look. On the right, the same hand is sharply in focus, labeled '1/1000 SHUTTER', showing the effect of a fast shutter speed that freezes motion. Both images share a background with geometric shapes and a model on a table, indicating a tutorial setup.",
-                                "course_module_img_3": "Instructional image showing a man's face divided into quadrants to demonstrate lighting effects. The left side of his face is underlit, creating shadows, with 'DARK' labeled on the upper and lower sections, while the right side is brightly lit, with 'BRIGHT' labeled on the corresponding sections, emphasizing the contrast. The technique highlights the impact of lighting on mood and character portrayal in visual media. The background is a subtle blue, focusing attention on the lighting on the subject's face.",
-                                "course_module_img_4": "Photographic composition tutorial image featuring a wooden pier extending into the sea, with the rule of thirds grid overlaid. The horizon coincides with the top third line, and the pier aligns with the left vertical line, guiding the eye to the vanishing point. The time is sunrise or sunset, indicated by the warm orange glow on the horizon against a blue sky. Red overlays highlight the horizon and the left vertical third, emphasizing these compositional lines. The image is likely part of an educational series on the principles of composition.",
-                                "course_module_img_5": "Collage of nine film and photography shot types featuring a man in various frames for educational purposes. 'LONG' shows a man in full-body view; 'MEDIUM' presents a waist-up shot; 'COWBOY' captures him from the thighs up; 'LOW' from a low angle; 'HIGH' from above; 'TIGHT' is a close-up of his face; 'DETAIL' zooms in on his eye; 'DUTCH' tilts the angle for dramatic effect; and 'POV' mimics the man's point of view. Text overlays such as 'Effective Communication' and 'Mastering Net Play with Effective Volleys' suggest a metaphorical or instructional usage beyond film technique.",
-                                "course_module_img_6": "Image of a man outdoors, looking upwards with concentration as he handles a piece of equipment, possibly a camera or tool, above his head. He wears a casual grey tank top, a black headband, and has a focused expression. The background is blurred but shows tropical trees and a sunny sky, indicating a warm, bright day. Text overlaid on the image, 'Leadership Skills' and 'Developing Quick and Agile Footwork,' suggests the image might be used metaphorically in a leadership or agility training context.",
-                                "course_module_img_7": "Audio recording equipment spread out on a wooden surface. Central to the composition is a 'RODE' branded microphone with its distinct windshield, indicating a setup for high-quality sound capture. Adjacent to it are professional Sennheiser headphones, commonly used for precise audio monitoring. Various audio interfaces, cables, and another microphone with a cylindrical shape can also be seen, suggesting a complex and professional audio setup. The inclusion of the text 'Time Management' and 'Strategies for Singles and Doubles Matches' in the image may imply a thematic connection to efficiency in handling audio equipment for production tasks, though these elements seem unrelated to the actual items displayed.",
-                                "course_module_img_8": "Close-up of a video editor's hands working on a professional mixing console with illuminated LED buttons and sliders, and a computer mouse on a desk. The background is a softly blurred computer monitor displaying a video editing software interface, indicative of a complex editing process. The focus on the hands and the equipment foregrounds the meticulous task of video editing. Overlay text 'Success Mindset' and 'Mental Exercises to Boost On-Court Performance' suggest the image may be used in a context emphasizing the mental focus and precision required for both video editing and sports performance.",
-                                "upsell_modules_1": "Our entire Equipment & Gear Module (17 Videos)",
-                                "course_emoji": "🎥"
-                            }`
-                        },
-{
-                                    role: 'user',
-                                    content: inputText
-                                }
-                    ]
+                    inputText: inputText
                 })
             });
 
-            const data = await response.json();
-            const resultText = data.choices[0].message.content;
-            console.log(resultText,'resultText');
+            const text = await response.text();
+            console.log('Received response:', text);
 
-            // Extract JSON content from the response text
-            let jsonString = '';
-            const jsonStart = resultText.indexOf('```json');
-            const jsonEnd = resultText.indexOf('```', jsonStart + 6);
-            if (jsonStart !== -1 && jsonEnd !== -1) {
-                jsonString = resultText.substring(jsonStart + 6, jsonEnd).trim();
+            if (response.ok) {
+                responseContainer.innerHTML = `<pre class="whitespace-pre-wrap">${text}</pre>`;
+
+                // Parse the jsonString to JSON
+                let keyValueData;
+                try {
+                    keyValueData = JSON.parse(text);
+                    console.log('Parsed JSON data:', keyValueData);
+                } catch (parseError) {
+                    console.error('JSON Parse error:', parseError);
+                    responseContainer.innerHTML = `<p class="text-red-500">Error parsing JSON: ${parseError.message}</p>`;
+                    return;
+                }
+
+                // Populate the key-value pairs in the table
+                renderTable(keyValueData);
             } else {
-                jsonString = resultText;
+                console.error('Error response from server:', text);
+                responseContainer.innerHTML = `<p class="text-red-500">Error: ${text}</p>`;
             }
-
-            responseContainer.innerHTML = `<pre class="whitespace-pre-wrap">${jsonString}</pre>`;
-
-            // Parse the jsonString to JSON
-            let keyValueData;
-            try {
-                keyValueData = JSON.parse(jsonString);
-            } catch (parseError) {
-                console.error('JSON Parse error:', parseError);
-                responseContainer.innerHTML = `<p class="text-red-500">Error parsing JSON: ${parseError.message}</p>`;
-                return;
-            }
-
-            // Populate the key-value pairs in the table
-            renderTable(keyValueData);
         } catch (error) {
+            console.error('Fetch error:', error);
             responseContainer.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
         } finally {
             submitButton.textContent = 'Submit';
@@ -248,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function addRow() {
+        console.log('Adding a new row');
         const tableBody = document.getElementById('key-value-table');
         const newRow = createTableRow();
         tableBody.appendChild(newRow);
@@ -263,16 +160,19 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.classList.remove('hidden');
         
         document.getElementById('confirm-delete').onclick = function() {
+            console.log(`Deleting row with key: ${keyInput} and value: ${valueInput}`);
             row.remove();
             modal.classList.add('hidden');
         };
 
         document.getElementById('cancel-delete').onclick = function() {
+            console.log('Delete action cancelled');
             modal.classList.add('hidden');
         };
     }
 
     function handleSubmit() {
+        console.log('Submitting key-value pairs');
         const rows = document.querySelectorAll('#key-value-table tr');
         const data = {};
         let hasError = false;
@@ -290,15 +190,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (hasError) {
+            console.error('Validation error: Please fill in all key-value pairs.');
             alert('Please fill in all key-value pairs.');
             return;
         }
+
+        const templateName = document.getElementById('template-name').value;
+        data['template_name'] = templateName;
 
         const submitButton = document.getElementById('submit');
         submitButton.textContent = 'Submitting...';
         submitButton.disabled = true;
 
-        fetch('http://localhost:5000', {
+        console.log('Sending data to server:', data);
+        fetch('YOUR_LAMBDA_ENDPOINT_FOR_DYNAMODB', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -307,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (response.ok) {
+                console.log('Data submitted successfully');
                 alert('Data submitted successfully!');
             } else {
                 throw new Error('Network response was not ok.');
@@ -331,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Initial render with empty data
-    renderTable({});
+    renderTable([]);
 });
     </script>
 </body>
