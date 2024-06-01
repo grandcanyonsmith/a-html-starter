@@ -3,242 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Submission</title>
+    <title>Submit Text</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/1.0.6/outline/heroicons-outline.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 p-6">
-    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded shadow-md w-full max-w-2xl">
         <h1 class="text-2xl font-bold mb-4">Submit Text</h1>
-        <textarea id="inputText" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4" placeholder="Write your text here..."></textarea>
-        <button id="submitButton" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</button>
-        <div id="responseContainer" class="mt-4 p-4 border border-gray-300 rounded bg-gray-50"></div>
-    </div>
-
-    <div class="container mx-auto mt-10">
-        <div class="mb-4">
-            <label for="template-name" class="block text-sm font-medium text-gray-700">Template Name</label>
-            <input type="text" id="template-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-        </div>
-        <table class="min-w-full bg-white shadow-md rounded-lg">
-            <thead>
-                <tr>
-                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Key</th>
-                    <th class="px-6 py-3 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Value</th>
-                    <th class="px-6 py-3 border-b-2 border-gray-300"></th>
-                </tr>
-            </thead>
-            <tbody id="key-value-table">
-                <!-- Dynamic rows will be inserted here -->
-            </tbody>
-        </table>
-        <div class="mt-4 flex space-x-2">
-            <button id="add-row" class="bg-green-500 text-white px-3 py-2 rounded-md shadow hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">+</button>
-            <button id="submit" class="bg-blue-500 text-white px-3 py-2 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Submit</button>
-        </div>
-        
-        <!-- Modal -->
-        <div id="delete-modal" class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-                <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">Delete Key-Value Pair</h3>
-                                <div class="mt-2">
-                                    <p class="text-sm text-gray-500" id="modal-text"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" id="confirm-delete" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm">Delete</button>
-                        <button type="button" id="cancel-delete" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm">Cancel</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <form id="textForm">
+            <textarea id="inputText" class="w-full p-2 border border-gray-300 rounded mb-4" rows="5" placeholder="Enter your text here..."></textarea>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+        </form>
+        <textarea id="tableName" class="w-full p-2 border border-gray-300 rounded mb-4" rows="1" placeholder="Enter table name..."></textarea>
+        <div id="responseTable" class="mt-6"></div>
     </div>
 
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('submitButton').addEventListener('click', async function() {
-        const inputText = document.getElementById('inputText').value;
-        const responseContainer = document.getElementById('responseContainer');
-        const submitButton = document.getElementById('submitButton');
+        document.getElementById('textForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const inputText = document.getElementById('inputText').value;
+            const submitButton = event.target.querySelector('button[type="submit"]');
+            submitButton.textContent = 'Submitting...';
+            submitButton.disabled = true;
 
-        submitButton.textContent = 'Submitting...';
-        submitButton.disabled = true;
+            try {
+                const response = await fetch('https://r2fptjdcyc6fuy7qxisrfolx3e0nawtk.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ inputText: inputText })
+                });
 
-        try {
-            console.log('Sending request with inputText:', inputText);
-            const response = await fetch('https://r2fptjdcyc6fuy7qxisrfolx3e0nawtk.lambda-url.us-west-2.on.aws/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    inputText: inputText
-                })
-            });
+                const responseText = await response.text();
+                const cleanedResponseText = responseText.trim().replace(/^n/, '');
+                const data = JSON.parse(cleanedResponseText);
 
-            const text = await response.text();
-            console.log('Received response:', text);
+                renderTable(data);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('responseTable').innerHTML = '<p class="text-red-500">An error occurred while processing your request.</p>';
+            } finally {
+                submitButton.textContent = 'Submit';
+                submitButton.disabled = false;
+            }
+        });
 
-            if (response.ok) {
-                responseContainer.innerHTML = `<pre class="whitespace-pre-wrap">${text}</pre>`;
+        function renderTable(data) {
+            const tableContainer = document.getElementById('responseTable');
+            tableContainer.innerHTML = '';
 
-                // Parse the jsonString to JSON
-                let keyValueData;
-                try {
-                    keyValueData = JSON.parse(text);
-                    console.log('Parsed JSON data:', keyValueData);
-                } catch (parseError) {
-                    console.error('JSON Parse error:', parseError);
-                    responseContainer.innerHTML = `<p class="text-red-500">Error parsing JSON: ${parseError.message}</p>`;
-                    return;
+            const tableName = document.getElementById('tableName').value;
+            if (tableName) {
+                const tableNameElement = document.createElement('h2');
+                tableNameElement.classList.add('text-xl', 'font-bold', 'mb-4');
+                tableNameElement.textContent = tableName;
+                tableContainer.appendChild(tableNameElement);
+            }
+
+            const table = document.createElement('table');
+            table.classList.add('min-w-full', 'bg-white', 'border', 'border-gray-300');
+
+            const thead = document.createElement('thead');
+            thead.innerHTML = `
+                <tr>
+                    <th class="px-4 py-2 border">Key</th>
+                    <th class="px-4 py-2 border">Value</th>
+                    <th class="px-4 py-2 border">Actions</th>
+                </tr>
+            `;
+            table.appendChild(thead);
+
+            const tbody = document.createElement('tbody');
+            data.forEach(dict => {
+                for (const [key, value] of Object.entries(dict)) {
+                    const row = createRow(key, value);
+                    tbody.appendChild(row);
                 }
+            });
+            table.appendChild(tbody);
+            tableContainer.appendChild(table);
 
-                // Populate the key-value pairs in the table
-                renderTable(keyValueData);
-            } else {
-                console.error('Error response from server:', text);
-                responseContainer.innerHTML = `<p class="text-red-500">Error: ${text}</p>`;
-            }
-        } catch (error) {
-            console.error('Fetch error:', error);
-            responseContainer.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
-        } finally {
-            submitButton.textContent = 'Submit';
-            submitButton.disabled = false;
-        }
-    });
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('flex', 'space-x-4', 'mt-4');
 
-    function renderTable(keyValueData) {
-        const tableBody = document.getElementById('key-value-table');
-        tableBody.innerHTML = '';
-        for (const [key, value] of Object.entries(keyValueData)) {
-            const row = createTableRow(key, value);
-            tableBody.appendChild(row);
-        }
-    }
+            const addButton = document.createElement('button');
+            addButton.innerHTML = '<i class="heroicons-outline heroicons-outline-plus"></i> Add Row';
+            addButton.classList.add('bg-green-500', 'text-white', 'px-4', 'py-2', 'rounded', 'flex', 'items-center', 'space-x-2');
+            addButton.addEventListener('click', () => {
+                const newRow = createRow('', '');
+                tbody.appendChild(newRow);
+            });
+            buttonContainer.appendChild(addButton);
 
-    function createTableRow(key = '', value = '') {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <input type="text" value="${key}" class="key-input w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                <input type="text" value="${value}" class="value-input w-full px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
-            </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button class="delete-row text-red-600 hover:text-red-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </td>
-        `;
-        return row;
-    }
+            const saveButton = document.createElement('button');
+            saveButton.textContent = 'Save';
+            saveButton.classList.add('bg-blue-500', 'text-white', 'px-4', 'py-2', 'rounded', 'flex', 'items-center', 'space-x-2');
+            saveButton.addEventListener('click', async () => {
+                const rows = tbody.querySelectorAll('tr');
+                const keyValuePairs = [];
+                rows.forEach(row => {
+                    const key = row.querySelector('input[type="text"]').value;
+                    const value = row.querySelectorAll('input[type="text"]')[1].value;
+                    keyValuePairs.push({ custom_field: key, custom_value: value });
+                });
 
-    function addRow() {
-        console.log('Adding a new row');
-        const tableBody = document.getElementById('key-value-table');
-        const newRow = createTableRow();
-        tableBody.appendChild(newRow);
-    }
+                const funnelName = document.getElementById('tableName').value;
 
-    function handleDeleteRow(event) {
-        const row = event.target.closest('tr');
-        const keyInput = row.querySelector('.key-input').value;
-        const valueInput = row.querySelector('.value-input').value;
-        const modal = document.getElementById('delete-modal');
-        const modalText = document.getElementById('modal-text');
-        modalText.textContent = `Are you sure you want to delete ${keyInput}: ${valueInput}?`;
-        modal.classList.remove('hidden');
-        
-        document.getElementById('confirm-delete').onclick = function() {
-            console.log(`Deleting row with key: ${keyInput} and value: ${valueInput}`);
-            row.remove();
-            modal.classList.add('hidden');
-        };
+                try {
+                    const response = await fetch('https://gnfcbq2yyvwmq27ji52lezrkzi0mnqwz.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ funnel_name: funnelName, keyValuePairs: keyValuePairs })
+                    });
 
-        document.getElementById('cancel-delete').onclick = function() {
-            console.log('Delete action cancelled');
-            modal.classList.add('hidden');
-        };
-    }
+                    if (response.ok) {
+                        alert('Data saved successfully!');
+                    } else {
+                        alert('Failed to save data.');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while saving data.');
+                }
+            });
+            buttonContainer.appendChild(saveButton);
 
-    function handleSubmit() {
-        console.log('Submitting key-value pairs');
-        const rows = document.querySelectorAll('#key-value-table tr');
-        const data = {};
-        let hasError = false;
-
-        rows.forEach(row => {
-            const key = row.querySelector('.key-input').value;
-            const value = row.querySelector('.value-input').value;
-            if (key && value) {
-                data[key] = value;
-            } else {
-                hasError = true;
-                row.querySelector('.key-input').classList.add('border-red-500');
-                row.querySelector('.value-input').classList.add('border-red-500');
-            }
-        });
-
-        if (hasError) {
-            console.error('Validation error: Please fill in all key-value pairs.');
-            alert('Please fill in all key-value pairs.');
-            return;
+            tableContainer.appendChild(buttonContainer);
         }
 
-        const templateName = document.getElementById('template-name').value;
-        data['template_name'] = templateName;
+        function createRow(key, value) {
+            const row = document.createElement('tr');
 
-        const submitButton = document.getElementById('submit');
-        submitButton.textContent = 'Submitting...';
-        submitButton.disabled = true;
+            const keyCell = document.createElement('td');
+            keyCell.classList.add('px-4', 'py-2', 'border');
+            const keyInput = document.createElement('input');
+            keyInput.type = 'text';
+            keyInput.value = key;
+            keyInput.classList.add('w-full', 'p-2', 'border', 'border-gray-300', 'rounded');
+            keyCell.appendChild(keyInput);
 
-        console.log('Sending data to server:', data);
-        fetch('YOUR_LAMBDA_ENDPOINT_FOR_DYNAMODB', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('Data submitted successfully');
-                alert('Data submitted successfully!');
-            } else {
-                throw new Error('Network response was not ok.');
-            }
-        })
-        .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-            alert('Failed to submit data. Please try again.');
-        })
-        .finally(() => {
-            submitButton.textContent = 'Submit';
-            submitButton.disabled = false;
-        });
-    }
+            const valueCell = document.createElement('td');
+            valueCell.classList.add('px-4', 'py-2', 'border');
+            const valueInput = document.createElement('input');
+            valueInput.type = 'text';
+            valueInput.value = value;
+            valueInput.classList.add('w-full', 'p-2', 'border', 'border-gray-300', 'rounded');
+            valueCell.appendChild(valueInput);
 
-    document.getElementById('add-row').addEventListener('click', addRow);
-    document.getElementById('submit').addEventListener('click', handleSubmit);
-    document.getElementById('key-value-table').addEventListener('click', function(event) {
-        if (event.target.closest('.delete-row')) {
-            handleDeleteRow(event);
+            const actionsCell = document.createElement('td');
+            actionsCell.classList.add('px-4', 'py-2', 'border');
+            const deleteButton = document.createElement('button');
+            deleteButton.innerHTML = '<i class="heroicons-outline heroicons-outline-trash"></i>';
+            deleteButton.classList.add('bg-red-500', 'text-white', 'px-4', 'py-2', 'rounded', 'flex', 'items-center', 'space-x-2');
+            deleteButton.addEventListener('click', () => {
+                row.remove();
+            });
+            actionsCell.appendChild(deleteButton);
+
+            row.appendChild(keyCell);
+            row.appendChild(valueCell);
+            row.appendChild(actionsCell);
+
+            return row;
         }
-    });
-
-    // Initial render with empty data
-    renderTable([]);
-});
     </script>
 </body>
 </html>
