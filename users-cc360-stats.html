@@ -324,37 +324,40 @@
         let sortField = null;
         let sortDirection = 1; // 1: ascending, -1: descending
 
-        document.getElementById('fetchData').addEventListener('click', function () {
-            const startDate = document.getElementById('startDate').value;
-            const endDate = document.getElementById('endDate').value;
+document.getElementById('fetchData').addEventListener('click', function () {
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
 
-            if (!startDate || !endDate) {
-                alert('Please select both start and end dates.');
-                return;
-            }
+    if (!startDate || !endDate) {
+        alert('Please select both start and end dates.');
+        return;
+    }
 
-            axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
-                startDate: startDate,
-                endDate: endDate
-            }, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(function (response) {
-                users = response.data.map(user => ({
-                    ...user,
-                    mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
-                    has_had_first_transaction: user.income_all_time > 0 || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true,
-                    payment_processor_integration: user.payment_processor_integration === "True" || user.payment_processor_integration === true // New field
-                }));
-                renderTable(users);
-                updateCards(users);
-            })
-            .catch(function (error) {
-                console.error('Error fetching users:', error);
-            });
+    axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
+        startDate: startDate,
+        endDate: endDate
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(function (response) {
+        users = response.data.map(user => {
+            const hasIncome = parseFloat(user.income_all_time) > 0 || parseFloat(user.last_seven_day_income) > 0 || parseFloat(user.last_thirty_day_income) > 0 || parseFloat(user.last_ninety_day_income) > 0;
+            return {
+                ...user,
+                mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
+                has_had_first_transaction: hasIncome || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true,
+                payment_processor_integration: user.payment_processor_integration === "True" || user.payment_processor_integration === true // New field
+            };
         });
+        renderTable(users);
+        updateCards(users);
+    })
+    .catch(function (error) {
+        console.error('Error fetching users:', error);
+    });
+});
 
         document.getElementById('filterStatusAll').addEventListener('change', function () {
             const isChecked = this.checked;
