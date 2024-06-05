@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Bank Account Info</title>
+</head>
+<body>
+    <div class="container mx-auto p-6">
+        <div class="max-w-lg mx-auto bg-white shadow-md rounded p-6">
+            <h2 class="text-2xl font-bold mb-4">Enter Bank Account Info</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="accountNumber" class="block text-sm font-medium text-gray-700">Account Number</label>
+                    <input type="text" id="accountNumber" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="accountType" class="block text-sm font-medium text-gray-700">Account Type</label>
+                    <select id="accountType" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                        <option>Consumer Checking</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="routingNumber" class="block text-sm font-medium text-gray-700">Routing Number</label>
+                    <input type="text" id="routingNumber" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="accountholderPhoneNumber" class="block text-sm font-medium text-gray-700">Accountholder Phone Number</label>
+                    <input type="text" id="accountholderPhoneNumber" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="accountholderFullName" class="block text-sm font-medium text-gray-700">Accountholder Full Name</label>
+                    <input type="text" id="accountholderFullName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save</button>
+            </form>
+        </div>
+
+        <div class="max-w-lg mx-auto bg-white shadow-md rounded p-6 mt-6">
+            <h2 class="text-2xl font-bold mb-4">Personal Details</h2>
+            <form>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700">Contractor Type *</label>
+                    <div class="mt-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="contractorType" value="Individual" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2">Individual - files taxes using a Social Security number (most common).</span>
+                        </label>
+                    </div>
+                    <div class="mt-2">
+                        <label class="inline-flex items-center">
+                            <input type="radio" name="contractorType" value="Business" class="form-radio h-5 w-5 text-indigo-600">
+                            <span class="ml-2">Business - files taxes using an Employer Identification Number (EIN).</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="businessName" class="block text-sm font-medium text-gray-700">Business Name</label>
+                    <input type="text" id="businessName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="displayName" class="block text-sm font-medium text-gray-700">Display Name</label>
+                    <input type="text" id="displayName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="ein" class="block text-sm font-medium text-gray-700">Employer Identification Number</label>
+                    <input type="text" id="ein" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" id="email" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="mb-4">
+                    <label for="address" class="block text-sm font-medium text-gray-700">Address</label>
+                    <input type="text" id="address" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                </div>
+                <div class="flex mb-4">
+                    <div class="mr-4 w-1/2">
+                        <label for="city" class="block text-sm font-medium text-gray-700">City</label>
+                        <input type="text" id="city" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                    <div class="mr-4 w-1/4">
+                        <label for="state" class="block text-sm font-medium text-gray-700">State</label>
+                        <select id="state" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                            <option>AK</option>
+                        </select>
+                    </div>
+                    <div class="w-1/4">
+                        <label for="zip" class="block text-sm font-medium text-gray-700">ZIP Code</label>
+                        <input type="text" id="zip" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    </div>
+                </div>
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Save</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
