@@ -173,9 +173,24 @@
             document.getElementById('end-date').valueAsDate = today;
             displayTotalCommission();
         });
+
+        function navigateTo(url) {
+            window.location.href = url;
+        }
     </script>
 </head>
 <body class="bg-gray-900">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex space-x-4">
+                <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/users-cc360-stats.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Customer Success</a>
+                <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/levi-commission-tracker.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sales</a>
+                <a href="#" class="text-white border-b-2 border-white px-3 py-2 rounded-md text-sm font-medium">Levi Tracker</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="bg-gray-900 py-24 sm:py-32">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="mx-auto max-w-2xl lg:max-w-none">
