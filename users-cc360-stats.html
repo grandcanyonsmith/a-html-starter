@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +6,24 @@
     <title>Users List</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function navigateTo(url) {
+            window.location.href = url;
+        }
+    </script>
 </head>
-<body>
+<body class="bg-gray-200">
+    <!-- Navbar -->
+    <nav class="bg-gray-800 p-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex space-x-4">
+                <a href="#" class="text-white border-b-2 border-white px-3 py-2 rounded-md text-sm font-medium">Customer Success</a>
+                <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/cc360-revenue-stats.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sales</a>
+                <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/levi-commission-tracker.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Levi Tracker</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row justify-between items-center py-4">
             <div class="w-full sm:w-auto mb-4 sm:mb-0">
@@ -173,7 +188,7 @@
                             <div class="pt-6" id="filter-section-2">
                                 <div class="space-y-6">
                                     <div class="flex items-center">
-                                        <input id="filterFirstTransactionAll" name="filterFirstTransaction" value="all" type="radio" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+                                        <input id="filterFirstTransactionAll" name="filterFirstTransaction" value="all" type="radio"                                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
                                         <label for="filterFirstTransactionAll" class="ml-3 text-sm text-gray-500">All</label>
                                     </div>
                                     <div class="flex items-center">
@@ -249,7 +264,7 @@
                                         <label for="filterStatusCanceled" class="ml-3 text-sm text-gray-500">Canceled</label>
                                     </div>
                                     <div class="flex items-center">
-                                        <input id="filterStatusUnknown" name="filterStatus" value="Unknown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" checked>
+                                        <input id="filterStatusUnknown" name="filterStatus" value="Unknown" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
                                         <label for="filterStatusUnknown" class="ml-3 text-sm text-gray-500">Unknown</label>
                                     </div>
                                 </div>
@@ -324,40 +339,40 @@
         let sortField = null;
         let sortDirection = 1; // 1: ascending, -1: descending
 
-document.getElementById('fetchData').addEventListener('click', function () {
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
+        document.getElementById('fetchData').addEventListener('click', function () {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
 
-    if (!startDate || !endDate) {
-        alert('Please select both start and end dates.');
-        return;
-    }
+            if (!startDate || !endDate) {
+                alert('Please select both start and end dates.');
+                return;
+            }
 
-    axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
-        startDate: startDate,
-        endDate: endDate
-    }, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(function (response) {
-        users = response.data.map(user => {
-            const hasIncome = parseFloat(user.income_all_time) > 0 || parseFloat(user.last_seven_day_income) > 0 || parseFloat(user.last_thirty_day_income) > 0 || parseFloat(user.last_ninety_day_income) > 0;
-            return {
-                ...user,
-                mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
-                has_had_first_transaction: hasIncome || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true,
-                payment_processor_integration: user.payment_processor_integration === "True" || user.payment_processor_integration === true // New field
-            };
+            axios.post('https://rozduvvh2or5rxgucec3rfdp5e0hupbk.lambda-url.us-west-2.on.aws/', {
+                startDate: startDate,
+                endDate: endDate
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(function (response) {
+                users = response.data.map(user => {
+                    const hasIncome = parseFloat(user.income_all_time) > 0 || parseFloat(user.last_seven_day_income) > 0 || parseFloat(user.last_thirty_day_income) > 0 || parseFloat(user.last_ninety_day_income) > 0;
+                    return {
+                        ...user,
+                        mailgun_connected: user.mailgun_connected === "true" || user.mailgun_connected === true,
+                        has_had_first_transaction: hasIncome || user.has_had_first_transaction === "true" || user.has_had_first_transaction === true,
+                        payment_processor_integration: user.payment_processor_integration === "True" || user.payment_processor_integration === true // New field
+                    };
+                });
+                renderTable(users);
+                updateCards(users);
+            })
+            .catch(function (error) {
+                console.error('Error fetching users:', error);
+            });
         });
-        renderTable(users);
-        updateCards(users);
-    })
-    .catch(function (error) {
-        console.error('Error fetching users:', error);
-    });
-});
 
         document.getElementById('filterStatusAll').addEventListener('change', function () {
             const isChecked = this.checked;
@@ -391,7 +406,7 @@ document.getElementById('fetchData').addEventListener('click', function () {
 
         document.querySelectorAll('[id^="sort"]').forEach(element => {
             element.addEventListener('click', function () {
-                                let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
+                let field = this.id.replace('sort', '').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, ''); // Convert camelCase to snake_case
                 switch (field) {
                     case 'income_30_days':
                         field = 'last_thirty_day_income';
@@ -636,6 +651,16 @@ document.getElementById('fetchData').addEventListener('click', function () {
             document.getElementById('trialingPercentage').innerText = `${trialingPercentage}%`;
             document.getElementById('trialingCount').innerText = `${trialingCount} of ${totalUsers}`;
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const priorDate = new Date().setDate(today.getDate() - 30);
+            document.getElementById('startDate').valueAsDate = new Date(priorDate);
+            document.getElementById('endDate').valueAsDate = today;
+
+            // Uncheck the "Unknown" status by default
+            document.getElementById('filterStatusUnknown').checked = false;
+        });
     </script>
 </body>
 </html>
