@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+<h3>Welcome to the real-time HTML editor!</h3>
+<p>Type HTML in the textarea above, and it will magically appear in the frame below.</p><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -18,7 +19,7 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex space-x-4">
                 <a href="#" class="text-white border-b-2 border-white px-3 py-2 rounded-md text-sm font-medium">Customer Success</a>
-                <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/cc360-revenue-stats.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sales</a>
+                <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/levi-commission-tracker.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sales</a>
                 <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/levi-commission-tracker.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Levi Tracker</a>
             </div>
         </div>
@@ -374,28 +375,116 @@
             });
         });
 
-        document.getElementById('filterStatusAll').addEventListener('change', function () {
-            const isChecked = this.checked;
-            document.querySelectorAll('input[name="filterStatus"]').forEach(checkbox => {
-                checkbox.checked = isChecked;
-            });
-            renderTable(users);
-            updateCards(getFilteredUsers(users)); // Update cards after changing status filters
-        });
+document.getElementById('filterStatusAll').addEventListener('change', function () {
+    const isChecked = this.checked;
+    document.getElementById('filterStatusActive').checked = isChecked;
+    document.getElementById('filterStatusTrialing').checked = isChecked;
+    document.getElementById('filterStatusPastDue').checked = isChecked;
+    document.getElementById('filterStatusCanceled').checked = isChecked;
+    document.getElementById('filterStatusUnknown').checked = false; // Always uncheck "Unknown"
+    renderTable(users);
+    updateCards(getFilteredUsers(users)); // Update cards after changing status filters
+});
 
-        document.querySelectorAll('input[name="filterStatus"]').forEach(element => {
-            element.addEventListener('change', function () {
-                if (!this.checked && this.value !== 'all') {
-                    document.getElementById('filterStatusAll').checked = false;
-                }
-                const allChecked = Array.from(document.querySelectorAll('input[name="filterStatus"]')).every(checkbox => checkbox.checked || checkbox.value === 'all');
-                if (allChecked) {
-                    document.getElementById('filterStatusAll').checked = true;
-                }
-                renderTable(users);
-                updateCards(getFilteredUsers(users)); // Update cards after changing status filters
-            });
-        });
+document.querySelectorAll('input[name="filterStatus"]').forEach(element => {
+    element.addEventListener('change', function () {
+        if (!this.checked && this.value !== 'all') {
+            document.getElementById('filterStatusAll').checked = false;
+        }
+        const allChecked = Array.from(document.querySelectorAll('input[name="filterStatus"]')).every(checkbox => checkbox.checked || checkbox.value === 'all');
+        if (allChecked) {
+            document.getElementById('filterStatusAll').checked = true;
+        }
+        renderTable(users);
+        updateCards(getFilteredUsers(users)); // Update cards after changing status filters
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date();
+    const priorDate = new Date().setDate(today.getDate() - 30);
+    document.getElementById('startDate').valueAsDate = new Date(priorDate);
+    document.getElementById('endDate').valueAsDate = today;
+
+    // Uncheck the "Unknown" status by default
+    document.getElementById('filterStatusUnknown').checked = false;
+    document.getElementById('filterStatusActive').checked = true;
+    document.getElementById('filterStatusTrialing').checked = true;
+    document.getElementById('filterStatusPastDue').checked = true;
+    document.getElementById('filterStatusCanceled').checked = true;
+    document.getElementById('filterStatusAll').checked = false; // Ensure "All" is not checked by default
+});
+
+function renderTable(users) {
+    const tableBody = document.getElementById('usersTable');
+    tableBody.innerHTML = ''; // Clear existing rows
+
+    const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
+    const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
+    const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
+    const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
+    const filterPaymentProcessor = document.querySelector('input[name="filterPaymentProcessor"]:checked').value;
+
+    const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
+
+    const filteredUsers = users.filter(user => {
+        const statusMatch = selectedStatuses.includes(user.account_status);
+        return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
+            (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
+            (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
+            (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
+            (filterPaymentProcessor === 'all' || (filterPaymentProcessor === 'True' && user.payment_processor_integration) || (filterPaymentProcessor === 'False' && !user.payment_processor_integration)) &&
+            statusMatch;
+    });
+
+    filteredUsers.forEach(user => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
+                <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
+                    ${user.location_name}
+                </a>
+            </td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatPaymentProcessor(user.payment_processor_integration)}</td> <!-- New column -->
+            <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatAccountStatus(user.account_status)}</td>
+        `;
+        tableBody.appendChild(tr);
+    });
+
+    // Update the cards with the filtered users
+    updateCards(filteredUsers);
+}
+
+function getFilteredUsers(users) {
+    const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
+    const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
+    const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
+    const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
+    const filterPaymentProcessor = document.querySelector('input[name="filterPaymentProcessor"]:checked').value;
+
+    const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
+
+    return users.filter(user => {
+        const statusMatch = selectedStatuses.includes(user.account_status);
+        return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
+            (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
+            (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
+            (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
+            (filterPaymentProcessor === 'all' || (filterPaymentProcessor === 'True' && user.payment_processor_integration) || (filterPaymentProcessor === 'False' && !user.payment_processor_integration)) &&
+            statusMatch;
+    });
+}
+
 
         document.querySelectorAll('input[name="filterCalendar"], input[name="filterProduct"], input[name="filterFirstTransaction"], input[name="filterMailgun"], input[name="filterStatus"]').forEach(element => {
             element.addEventListener('change', function () {
@@ -476,75 +565,7 @@
             });
         });
 
-        function renderTable(users) {
-            const tableBody = document.getElementById('usersTable');
-            tableBody.innerHTML = ''; // Clear existing rows
 
-            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
-            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
-            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
-            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
-            const filterPaymentProcessor = document.querySelector('input[name="filterPaymentProcessor"]:checked').value;
-
-            const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
-
-            const filteredUsers = users.filter(user => {
-                const statusMatch = selectedStatuses.includes('all') || selectedStatuses.includes(user.account_status);
-                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
-                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
-                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
-                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
-                    (filterPaymentProcessor === 'all' || (filterPaymentProcessor === 'True' && user.payment_processor_integration) || (filterPaymentProcessor === 'False' && !user.payment_processor_integration)) &&
-                    statusMatch;
-            });
-
-            filteredUsers.forEach(user => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="whitespace-nowrap border-b border-gray-200 py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 text-xs sm:text-sm">
-                        <a href="https://app.coursecreator360.com/v2/location/${user.location_id}/dashboard" class="text-indigo-600 hover:text-indigo-900">
-                            ${user.location_name}
-                        </a>
-                    </td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">${formatIncome(user.income_all_time)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_ninety_day_income)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_thirty_day_income)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900 hidden sm:table-cell">${formatIncome(user.last_seven_day_income)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasCalendar(user.total_calendars)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatHasProduct(user.total_products)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_created_time}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${user.relative_time_to_revenue || 'N/A'}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatFirstTransaction(user.has_had_first_transaction)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatMailgunConnected(user.mailgun_connected)}</td>
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatPaymentProcessor(user.payment_processor_integration)}</td> <!-- New column -->
-                    <td class="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">${formatAccountStatus(user.account_status)}</td>
-                `;
-                tableBody.appendChild(tr);
-            });
-
-            // Update the cards with the filtered users
-            updateCards(filteredUsers);
-        }
-
-        function getFilteredUsers(users) {
-            const filterCalendar = document.querySelector('input[name="filterCalendar"]:checked').value;
-            const filterProduct = document.querySelector('input[name="filterProduct"]:checked').value;
-            const filterFirstTransaction = document.querySelector('input[name="filterFirstTransaction"]:checked').value;
-            const filterMailgun = document.querySelector('input[name="filterMailgun"]:checked').value;
-            const filterPaymentProcessor = document.querySelector('input[name="filterPaymentProcessor"]:checked').value;
-
-            const selectedStatuses = Array.from(document.querySelectorAll('input[name="filterStatus"]:checked')).map(checkbox => checkbox.value);
-
-            return users.filter(user => {
-                const statusMatch = selectedStatuses.includes('all') || selectedStatuses.includes(user.account_status);
-                return (filterCalendar === 'all' || (filterCalendar === 'true' && user.total_calendars > 0) || (filterCalendar === 'false' && user.total_calendars === 0)) &&
-                    (filterProduct === 'all' || (filterProduct === 'true' && user.total_products > 0) || (filterProduct === 'false' && user.total_products === 0)) &&
-                    (filterFirstTransaction === 'all' || (filterFirstTransaction === 'true' && user.has_had_first_transaction) || (filterFirstTransaction === 'false' && !user.has_had_first_transaction)) &&
-                    (filterMailgun === 'all' || (filterMailgun === 'true' && user.mailgun_connected) || (filterMailgun === 'false' && !user.mailgun_connected)) &&
-                    (filterPaymentProcessor === 'all' || (filterPaymentProcessor === 'True' && user.payment_processor_integration) || (filterPaymentProcessor === 'False' && !user.payment_processor_integration)) &&
-                    statusMatch;
-            });
-        }
 
         function formatMailgunConnected(isConnected) {
             if (isConnected) {
@@ -596,71 +617,73 @@
             }
         }
 
-        function updateCards(filteredUsers) {
-            const totalUsers = filteredUsers.length;
+function updateCards(filteredUsers) {
+    // Exclude users with "Unknown" status
+    const filteredWithoutUnknown = filteredUsers.filter(user => user.account_status !== 'Unknown');
 
-            const mailgunConnectedCount = filteredUsers.filter(user => user.mailgun_connected).length;
-            const firstTransactionCount = filteredUsers.filter(user => user.has_had_first_transaction).length;
-            const paymentProcessorCount = filteredUsers.filter(user => user.payment_processor_integration).length; // New line
+    const totalUsers = filteredWithoutUnknown.length;
 
-            const mailgunPercentage = totalUsers ? (mailgunConnectedCount / totalUsers * 100).toFixed(2) : 0;
-            const transactionPercentage = totalUsers ? (firstTransactionCount / totalUsers * 100).toFixed(2) : 0;
-            const paymentProcessorPercentage = totalUsers ? (paymentProcessorCount / totalUsers * 100).toFixed(2) : 0; // New line
+    const mailgunConnectedCount = filteredWithoutUnknown.filter(user => user.mailgun_connected).length;
+    const firstTransactionCount = filteredWithoutUnknown.filter(user => user.has_had_first_transaction).length;
+    const paymentProcessorCount = filteredWithoutUnknown.filter(user => user.payment_processor_integration).length;
 
-            document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
-            document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
+    const mailgunPercentage = totalUsers ? (mailgunConnectedCount / totalUsers * 100).toFixed(2) : 0;
+    const transactionPercentage = totalUsers ? (firstTransactionCount / totalUsers * 100).toFixed(2) : 0;
+    const paymentProcessorPercentage = totalUsers ? (paymentProcessorCount / totalUsers * 100).toFixed(2) : 0;
 
-            document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
-            document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
+    document.getElementById('mailgunPercentage').innerText = `${mailgunPercentage}%`;
+    document.getElementById('mailgunCount').innerText = `${mailgunConnectedCount} of ${totalUsers}`;
 
-            document.getElementById('paymentProcessorPercentage').innerText = `${paymentProcessorPercentage}%`; // New line
-            document.getElementById('paymentProcessorCount').innerText = `${paymentProcessorCount} of ${totalUsers}`; // New line
+    document.getElementById('transactionPercentage').innerText = `${transactionPercentage}%`;
+    document.getElementById('transactionCount').innerText = `${firstTransactionCount} of ${totalUsers}`;
 
-            // Calculate average time to revenue
-            const profitableUsers = filteredUsers.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
-            const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
-            const averageTimeToRevenue = totalProfitableTime ? (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24) : 0; // Convert milliseconds to days
+    document.getElementById('paymentProcessorPercentage').innerText = `${paymentProcessorPercentage}%`;
+    document.getElementById('paymentProcessorCount').innerText = `${paymentProcessorCount} of ${totalUsers}`;
 
-            document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
+    // Calculate average time to revenue
+    const profitableUsers = filteredWithoutUnknown.filter(user => user.has_had_first_transaction && user.time_to_become_profitable);
+    const totalProfitableTime = profitableUsers.reduce((sum, user) => sum + user.time_to_become_profitable, 0);
+    const averageTimeToRevenue = totalProfitableTime ? (totalProfitableTime / profitableUsers.length) / (1000 * 60 * 60 * 24) : 0; // Convert milliseconds to days
 
-            // New card updates
-            const activeCount = filteredUsers.filter(user => user.account_status === 'active').length;
-            const canceledCount = filteredUsers.filter(user => user.account_status === 'canceled').length;
-            const unknownCount = filteredUsers.filter(user => user.account_status === 'Unknown').length;
-            const pastDueCount = filteredUsers.filter(user => user.account_status === 'past_due').length;
-            const trialingCount = filteredUsers.filter(user => user.account_status === 'trialing').length;
+    document.getElementById('averageTimeToRevenue').innerText = `${averageTimeToRevenue.toFixed(2)} days`;
 
-            const activePercentage = totalUsers ? (activeCount / totalUsers * 100).toFixed(2) : 0;
-            const canceledPercentage = totalUsers ? (canceledCount / totalUsers * 100).toFixed(2) : 0;
-            const unknownPercentage = totalUsers ? (unknownCount / totalUsers * 100).toFixed(2) : 0;
-            const pastDuePercentage = totalUsers ? (pastDueCount / totalUsers * 100).toFixed(2) : 0;
-            const trialingPercentage = totalUsers ? (trialingCount / totalUsers * 100).toFixed(2) : 0;
+    // New card updates
+    const activeCount = filteredWithoutUnknown.filter(user => user.account_status === 'active').length;
+    const canceledCount = filteredWithoutUnknown.filter(user => user.account_status === 'canceled').length;
+    const pastDueCount = filteredWithoutUnknown.filter(user => user.account_status === 'past_due').length;
+    const trialingCount = filteredWithoutUnknown.filter(user => user.account_status === 'trialing').length;
 
-            document.getElementById('activePercentage').innerText = `${activePercentage}%`;
-            document.getElementById('activeCount').innerText = `${activeCount} of ${totalUsers}`;
+    const activePercentage = totalUsers ? (activeCount / totalUsers * 100).toFixed(2) : 0;
+    const canceledPercentage = totalUsers ? (canceledCount / totalUsers * 100).toFixed(2) : 0;
+    const pastDuePercentage = totalUsers ? (pastDueCount / totalUsers * 100).toFixed(2) : 0;
+    const trialingPercentage = totalUsers ? (trialingCount / totalUsers * 100).toFixed(2) : 0;
 
-            document.getElementById('canceledPercentage').innerText = `${canceledPercentage}%`;
-            document.getElementById('canceledCount').innerText = `${canceledCount} of ${totalUsers}`;
+    document.getElementById('activePercentage').innerText = `${activePercentage}%`;
+    document.getElementById('activeCount').innerText = `${activeCount} of ${totalUsers}`;
 
-            document.getElementById('unknownPercentage').innerText = `${unknownPercentage}%`;
-            document.getElementById('unknownCount').innerText = `${unknownCount} of ${totalUsers}`;
+    document.getElementById('canceledPercentage').innerText = `${canceledPercentage}%`;
+    document.getElementById('canceledCount').innerText = `${canceledCount} of ${totalUsers}`;
 
-            document.getElementById('pastDuePercentage').innerText = `${pastDuePercentage}%`;
-            document.getElementById('pastDueCount').innerText = `${pastDueCount} of ${totalUsers}`;
+    document.getElementById('pastDuePercentage').innerText = `${pastDuePercentage}%`;
+    document.getElementById('pastDueCount').innerText = `${pastDueCount} of ${totalUsers}`;
 
-            document.getElementById('trialingPercentage').innerText = `${trialingPercentage}%`;
-            document.getElementById('trialingCount').innerText = `${trialingCount} of ${totalUsers}`;
-        }
+    document.getElementById('trialingPercentage').innerText = `${trialingPercentage}%`;
+    document.getElementById('trialingCount').innerText = `${trialingCount} of ${totalUsers}`;
+}
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const today = new Date();
-            const priorDate = new Date().setDate(today.getDate() - 30);
-            document.getElementById('startDate').valueAsDate = new Date(priorDate);
-            document.getElementById('endDate').valueAsDate = today;
+document.addEventListener('DOMContentLoaded', () => {
+    const today = new Date();
+    const priorDate = new Date().setDate(today.getDate() - 30);
+    document.getElementById('startDate').valueAsDate = new Date(priorDate);
+    document.getElementById('endDate').valueAsDate = today;
 
-            // Uncheck the "Unknown" status by default
-            document.getElementById('filterStatusUnknown').checked = false;
-        });
+    // Uncheck the "Unknown" status by default
+    document.getElementById('filterStatusUnknown').checked = false;
+    document.getElementById('filterStatusActive').checked = true;
+    document.getElementById('filterStatusTrialing').checked = true;
+    document.getElementById('filterStatusPastDue').checked = true;
+    document.getElementById('filterStatusCanceled').checked = true;
+});
     </script>
 </body>
 </html>
