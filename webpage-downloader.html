@@ -26,6 +26,10 @@
                 <label for="url" class="block text-gray-700">URL</label>
                 <input type="url" id="url" name="url" class="mt-1 p-2 w-full border rounded" required>
             </div>
+            <div class="mb-4">
+                <label for="add_expiration" class="block text-gray-700">Add a 24-hour expiration to this page?</label>
+                <input type="checkbox" id="add_expiration" name="add_expiration" class="mt-1">
+            </div>
             <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded">Submit</button>
         </form>
         <div id="responseMessage" class="mt-4 text-center"></div>
@@ -40,12 +44,14 @@
             const customer_name = document.getElementById('customer_name').value;
             const customer_phone_number = document.getElementById('customer_phone_number').value;
             const url = document.getElementById('url').value;
+            const add_expiration = document.getElementById('add_expiration').checked;
 
             const data = {
                 phone_number: phone_number,
                 customer_name: customer_name,
                 customer_phone_number: customer_phone_number,
-                url: url
+                url: url,
+                add_expiration: add_expiration
             };
 
             try {
