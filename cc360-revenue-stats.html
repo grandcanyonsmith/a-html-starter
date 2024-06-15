@@ -100,9 +100,11 @@
                         <col class="lg:w-4/12">
                         <col class="lg:w-4/12">
                         <col class="lg:w-4/12">
+                        <col class="lg:w-4/12">
                     </colgroup>
                     <thead class="border-b border-white/10 text-sm leading-6 text-white">
                         <tr>
+                            <th scope="col" class="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">Sale Date</th>
                             <th scope="col" class="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">Email</th>
                             <th scope="col" class="py-2 pl-0 pr-8 font-semibold sm:table-cell">Product Name</th>
                             <th scope="col" class="py-2 pl-0 pr-4 text-right font-semibold sm:pr-8 sm:text-left lg:pr-20">Price</th>
@@ -120,6 +122,11 @@
     <script>
         function formatCurrency(value) {
             return `$${value.toLocaleString()}`;
+        }
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toDateString() + ' ' + date.toTimeString().split(' ')[0].slice(0, 5);
         }
 
         function calculateWorkdays(startDate, endDate) {
@@ -183,8 +190,13 @@
                     groupedTableBody.appendChild(row);
                 }
 
-                item.Emails.forEach(email => {
+                item.Emails.forEach((email, index) => {
                     const row = document.createElement('tr');
+                    const saleDateTd = document.createElement('td');
+                    saleDateTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+                    saleDateTd.textContent = formatDate(item["Sale Dates"][index]);
+                    row.appendChild(saleDateTd);
+
                     const emailTd = document.createElement('td');
                     emailTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
                     emailTd.textContent = email;
@@ -209,12 +221,17 @@
                 });
             });
 
-            // Sort detailedTableBody rows to have "Demo Completed" at the top
+            // Sort detailedTableBody rows to have "Demo Completed" at the top and by Sale Date
             const rows = Array.from(detailedTableBody.querySelectorAll('tr'));
             rows.sort((a, b) => {
-                const aDemoCompleted = a.children[3].textContent === 'Yes' ? 1 : 0;
-                const bDemoCompleted = b.children[3].textContent === 'Yes' ? 1 : 0;
-                return bDemoCompleted - aDemoCompleted;
+                const aDemoCompleted = a.children[4].textContent === 'Yes' ? 1 : 0;
+                const bDemoCompleted = b.children[4].textContent === 'Yes' ? 1 : 0;
+                if (aDemoCompleted !== bDemoCompleted) {
+                    return bDemoCompleted - aDemoCompleted;
+                }
+                const aDate = new Date(a.children[0].textContent);
+                const bDate = new Date(b.children[0].textContent);
+                return aDate - bDate;
             });
             rows.forEach(row => detailedTableBody.appendChild(row));
 
