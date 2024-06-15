@@ -101,6 +101,7 @@
                         <col class="lg:w-4/12">
                         <col class="lg:w-4/12">
                         <col class="lg:w-4/12">
+                        <col class="lg:w-4/12">
                     </colgroup>
                     <thead class="border-b border-white/10 text-sm leading-6 text-white">
                         <tr>
@@ -109,6 +110,7 @@
                             <th scope="col" class="py-2 pl-0 pr-8 font-semibold sm:table-cell">Product Name</th>
                             <th scope="col" class="py-2 pl-0 pr-4 text-right font-semibold sm:pr-8 sm:text-left lg:pr-20">Price</th>
                             <th scope="col" class="py-2 pl-0 pr-8 font-semibold md:table-cell lg:pr-20">Demo Completed</th>
+                            <th scope="col" class="py-2 pl-0 pr-8 font-semibold md:table-cell lg:pr-20">Source</th>
                         </tr>
                     </thead>
                     <tbody id="detailed-table-body" class="divide-y divide-white/5 text-white">
@@ -216,6 +218,11 @@
                     demoCompletedTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
                     demoCompletedTd.textContent = item["Demo Completed"];
                     row.appendChild(demoCompletedTd);
+
+                    const sourceTd = document.createElement('td');
+                    sourceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+                    sourceTd.textContent = item["Sources"][index];
+                    row.appendChild(sourceTd);
 
                     detailedTableBody.appendChild(row);
                 });
