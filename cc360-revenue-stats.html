@@ -61,6 +61,10 @@
 
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-3xl">
+            <div id="source-counts" class="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
+                <!-- Source count cards will be inserted here -->
+            </div>
+
             <div class="flex justify-end mb-4">
                 <label for="start_date" class="text-white mr-2">Start Date:</label>
                 <input type="date" id="start_date" class="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 mr-4">
@@ -161,8 +165,10 @@
 
             const groupedTableBody = document.getElementById('grouped-table-body');
             const detailedTableBody = document.getElementById('detailed-table-body');
+            const sourceCountsContainer = document.getElementById('source-counts');
             groupedTableBody.innerHTML = '';
             detailedTableBody.innerHTML = '';
+            sourceCountsContainer.innerHTML = '';
 
             let totalRevenue = 0;
             let totalSalesAmount = 0;
@@ -170,6 +176,8 @@
             let demoCompletedSalesAmount = 0;
             let noDemoCompletedRevenue = 0;
             let noDemoCompletedSalesAmount = 0;
+
+            const sourceCounts = {};
 
             data.forEach(item => {
                 if (item["Product Name"] === "Demo Completed Totals") {
@@ -225,7 +233,23 @@
                     row.appendChild(sourceTd);
 
                     detailedTableBody.appendChild(row);
+
+                    // Count sources, only the first occurrence
+                    const source = item["Sources"][index];
+                    if (!sourceCounts[email]) {
+                        sourceCounts[email] = source;
+                    }
                 });
+            });
+
+            // Aggregate source counts
+            const aggregatedSourceCounts = {};
+            Object.values(sourceCounts).forEach(source => {
+                if (aggregatedSourceCounts[source]) {
+                    aggregatedSourceCounts[source]++;
+                } else {
+                    aggregatedSourceCounts[source] = 1;
+                }
             });
 
             // Sort detailedTableBody rows to have "Demo Completed" at the top and by Sale Date
@@ -254,6 +278,21 @@
             document.getElementById('no-demo-completed-sales-amount').textContent = `Sales Amount: ${noDemoCompletedSalesAmount}`;
             document.getElementById('avg-daily-mrr').textContent = formatCurrency(avgDailyMRR);
             document.getElementById('mrr-trajectory').textContent = formatCurrency(mrrTrajectory);
+
+            // Create source count cards
+            Object.keys(aggregatedSourceCounts).forEach(source => {
+                const card = document.createElement('div');
+                card.classList.add('flex', 'flex-col', 'bg-white/5', 'p-8', 'rounded-lg', 'shadow-lg', 'text-center');
+                const sourceName = document.createElement('dt');
+                sourceName.classList.add('text-sm', 'font-semibold', 'leading-6', 'text-gray-300');
+                sourceName.textContent = source;
+                const sourceCount = document.createElement('dd');
+                sourceCount.classList.add('order-first', 'text-3xl', 'font-semibold', 'tracking-tight', 'text-white');
+                sourceCount.textContent = aggregatedSourceCounts[source];
+                card.appendChild(sourceCount);
+                card.appendChild(sourceName);
+                sourceCountsContainer.appendChild(card);
+            });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
