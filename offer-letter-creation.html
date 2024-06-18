@@ -3,71 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Offer Letter</title>
+    <title>Job Offer Survey</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100 p-8">
     <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-lg">
-        <h1 class="text-2xl font-bold mb-4">Job Offer Letter</h1>
+        <h1 class="text-2xl font-bold mb-4">Job Offer Survey</h1>
         
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">1. Company Information</h2>
-            <p><strong>Company Name:</strong> <span id="company-name"></span></p>
-            <p><strong>Address:</strong> <span id="company-address"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">2. Candidate Information</h2>
-            <p><strong>Candidate Name:</strong> <span id="candidate-name"></span></p>
-            <p><strong>Address:</strong> <span id="candidate-address"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">3. Position Details</h2>
-            <p><strong>Job Title:</strong> <span id="job-title"></span></p>
-            <p><strong>Supervisor:</strong> <span id="supervisor-name"></span>, <span id="supervisor-title"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">4. Start Date</h2>
-            <p><strong>Expected Start Date:</strong> <span id="start-date"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">5. Salary and Compensation</h2>
-            <p><strong>Starting Salary:</strong> <span id="starting-salary"></span></p>
-            <p><strong>Payment Frequency:</strong> <span id="payment-frequency"></span></p>
-            <p><strong>Commission Structure:</strong> <span id="commission-structure"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">6. Equity and Benefits</h2>
-            <p><strong>Equity Offered:</strong> <span id="equity-offered"></span></p>
-            <p><strong>Future Equity Discussion:</strong> <span id="future-equity-discussion"></span></p>
-            <p><strong>Additional Benefits:</strong> <span id="additional-benefits"></span></p>
-            <p><strong>Additional Compensation for Expenses:</strong> <span id="additional-compensation"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">7. Job Responsibilities</h2>
-            <p><strong>Primary Responsibilities:</strong> <span id="job-responsibilities"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">8. Employment Terms</h2>
-            <p><strong>At-Will Employment:</strong> <span id="at-will-employment"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">9. Confidentiality and Non-Compete Agreements</h2>
-            <p><strong>Agreements:</strong> <span id="agreements"></span></p>
-        </section>
-        
-        <section class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">10. Acceptance Instructions</h2>
-            <p><strong>Acceptance Deadline:</strong> <span id="acceptance-deadline"></span></p>
-            <p><strong>Contact for Questions:</strong> <span id="contact-person"></span></p>
-        </section>
+        <form action="#" method="POST">
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">1. Company Information</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Company Name:</span>
+                    <input type="text" name="company-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Address:</span>
+                    <input type="text" name="company-address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">2. Candidate Information</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Candidate Name:</span>
+                    <input type="text" name="candidate-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Address:</span>
+                    <input type="text" name="candidate-address" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">3. Position Details</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Job Title:</span>
+                    <input type="text" name="job-title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Supervisor Name:</span>
+                    <input type="text" name="supervisor-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Supervisor Title:</span>
+                    <input type="text" name="supervisor-title" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">4. Start Date</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Expected Start Date:</span>
+                    <input type="date" name="start-date" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">5. Salary and Compensation</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Starting Salary:</span>
+                    <input type="text" name="starting-salary" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Payment Frequency:</span>
+                    <input type="text" name="payment-frequency" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Commission Structure:</span>
+                    <input type="text" name="commission-structure" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">6. Equity and Benefits</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Equity Offered:</span>
+                    <input type="text" name="equity-offered" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Future Equity Discussion:</span>
+                    <input type="text" name="future-equity-discussion" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Additional Benefits:</span>
+                    <input type="text" name="additional-benefits" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Additional Compensation for Expenses:</span>
+                    <input type="text" name="additional-compensation" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">7. Job Responsibilities</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Primary Responsibilities:</span>
+                    <textarea name="job-responsibilities" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">8. Employment Terms</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">At-Will Employment:</span>
+                    <input type="text" name="at-will-employment" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">9. Confidentiality and Non-Compete Agreements</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Agreements:</span>
+                    <textarea name="agreements" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+                </label>
+            </section>
+            
+            <section class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">10. Acceptance Instructions</h2>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Acceptance Deadline:</span>
+                    <input type="date" name="acceptance-deadline" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+                <label class="block mb-2">
+                    <span class="text-gray-700">Contact for Questions:</span>
+                    <input type="text" name="contact-person" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                </label>
+            </section>
+            
+            <div class="flex justify-end">
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">Submit</button>
+            </div>
+        </form>
     </div>
 </body>
 </html>
