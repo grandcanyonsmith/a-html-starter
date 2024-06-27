@@ -184,3 +184,60 @@
         });
     });</script></body>
 </html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporary Website URL Checker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4">Check Temporary Website URL</h1>
+        <form id="urlForm" class="space-y-4">
+            <div>
+                <label for="temporaryWebsiteUrl" class="block text-sm font-medium text-gray-700">Temporary Website URL</label>
+                <input type="text" id="temporaryWebsiteUrl" name="temporaryWebsiteUrl" class="mt-1 block w-full p-2 border border-gray-300 rounded-md" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">Check Expiry</button>
+        </form>
+        <div id="result" class="mt-4 hidden">
+            <h2 class="text-xl font-semibold">Time Remaining:</h2>
+            <p id="timeRemaining" class="text-lg"></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('urlForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            console.log('Form submitted');
+
+            const temporaryWebsiteUrl = document.getElementById('temporaryWebsiteUrl').value;
+            console.log('Temporary Website URL:', temporaryWebsiteUrl);
+
+            const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ temporary_website_url: temporaryWebsiteUrl })
+            });
+
+            const data = await response.json();
+            console.log('Response data:', data);
+
+            if (response.status === 200) {
+                const { hours, minutes, seconds } = data;
+                document.getElementById('timeRemaining').textContent = `${hours} hours, ${minutes} minutes, ${seconds} seconds`;
+                document.getElementById('result').classList.remove('hidden');
+            } else {
+                document.getElementById('timeRemaining').textContent = data.message || 'An error occurred';
+                document.getElementById('result').classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
