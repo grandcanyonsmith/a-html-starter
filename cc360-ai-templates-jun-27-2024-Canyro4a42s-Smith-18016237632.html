@@ -184,15 +184,14 @@
     redirectLink.id = 'signup-button';
     redirectLink.className = 'bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-700';
     redirectLink.textContent = 'Sign Up';
-    redirectLink.onclick = function() {
-        window.location.href = 'https://www.coursecreator360.com/cc360147';
-    };
 
     // Append elements
     expirationMessage.appendChild(expirationText);
     expirationMessage.appendChild(redirectLink);
     document.body.appendChild(banner);
     document.body.appendChild(expirationMessage);
+
+    let redirectUrl = '';
 
     async function checkExpiry(url) {
         const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
@@ -205,8 +204,11 @@
 
         const data = await response.json();
         if (response.status === 200) {
-            const { hours, minutes, seconds } = data;
+            const { hours, minutes, seconds, customer_name, email } = data;
             const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
+            const currentUrl = window.location.href;
+            redirectUrl = `https://www.coursecreator360.com/cc360147?firstName=${firstName}&lastName=${lastName}&email=${email}&plan=premium&temporary_website_url=${currentUrl}`;
             startCountdown(totalSeconds);
         } else {
             console.error('Error fetching expiry time:', data.message || 'An error occurred');
@@ -232,6 +234,7 @@
                 document.body.innerHTML = '';
                 document.body.appendChild(expirationMessage);
                 expirationMessage.style.display = 'flex';
+                window.location.href = redirectUrl;
             }
         }, 1000);
     }
@@ -241,7 +244,7 @@
         await checkExpiry(temporaryWebsiteUrl);
 
         document.getElementById('signup-button').onclick = function() {
-            window.location.href = 'https://www.coursecreator360.com/cc360147';
+            window.location.href = redirectUrl;
         };
     });
 
@@ -254,5 +257,4 @@
         }
     };
 })();
-</script></body>
-</html>
+</script>
