@@ -286,7 +286,7 @@
                     if (response.status === 200) {
                         const { customer_name, email } = data;
                         const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
-                        const redirectUrl = `https://www.coursecreator360.com/cc360147?firstName=${firstName}&lastName=${lastName}&email=${email}&plan=premium&temporary_website_url=${currentUrl}`;
+                        const redirectUrl = `https://www.coursecreator360.com/ai-template-free-website-sign-up-to-save?firstName=${firstName}&lastName=${lastName}&email=${email}&plan=premium&temporary_website_url=${currentUrl}`;
                         window.location.href = redirectUrl;
                     } else {
                         console.error('Error fetching customer data:', data.message || 'An error occurred');
