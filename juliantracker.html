@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +9,9 @@
     .completed {
       text-decoration: line-through;
       color: gray;
+    }
+    .active-tab {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -54,16 +56,21 @@
 
       <nav class="mb-4">
         <ul class="flex space-x-4">
-          <li><a href="#" class="text-blue-600">Home</a></li>
-          <li><a href="#" class="text-gray-600">My Habits</a></li>
-          <li><a href="#" class="text-gray-600">Stats</a></li>
-          <li><a href="#" class="text-gray-600">Settings</a></li>
-          <li><a href="#" class="text-gray-600">Help/Support</a></li>
+          <li><a href="#" class="text-blue-600 tab-link active-tab" data-tab="home">Home</a></li>
+          <li><a href="#" class="text-gray-600 tab-link" data-tab="my-habits">My Habits</a></li>
+          <li><a href="#" class="text-gray-600 tab-link" data-tab="stats">Stats</a></li>
+          <li><a href="#" class="text-gray-600 tab-link" data-tab="settings">Settings</a></li>
+          <li><a href="#" class="text-gray-600 tab-link" data-tab="help">Help/Support</a></li>
         </ul>
       </nav>
 
-      <!-- Habit Tracker Modules -->
-      <section>
+      <!-- Content Sections -->
+      <section id="home" class="tab-content">
+        <h3 class="text-xl font-bold mb-4">Welcome to the Habit Tracker</h3>
+        <p>Track your habits and improve your life!</p>
+      </section>
+
+      <section id="my-habits" class="tab-content hidden">
         <h3 class="text-xl font-bold mb-4">Habit Tracker</h3>
         <div class="mb-4">
           <h4 class="text-lg font-bold">Basic To-Do List Style Habit Tracker</h4>
@@ -76,6 +83,24 @@
           </ul>
         </div>
       </section>
+
+      <section id="stats" class="tab-content hidden">
+        <h3 class="text-xl font-bold mb-4">Stats</h3>
+        <p>Here you can see your habit tracking statistics.</p>
+        <!-- Add stats content here -->
+      </section>
+
+      <section id="settings" class="tab-content hidden">
+        <h3 class="text-xl font-bold mb-4">Settings</h3>
+        <p>Manage your account settings here.</p>
+        <!-- Add settings content here -->
+      </section>
+
+      <section id="help" class="tab-content hidden">
+        <h3 class="text-xl font-bold mb-4">Help/Support</h3>
+        <p>Need help? Contact our support team.</p>
+        <!-- Add help/support content here -->
+      </section>
     </div>
   </div>
 
@@ -85,12 +110,33 @@
     let habits = [];
 
     document.addEventListener('DOMContentLoaded', () => {
-      userEmail = prompt('Please enter your email:');
+      const urlParams = new URLSearchParams(window.location.search);
+      userEmail = urlParams.get('email') || prompt('Please enter your email:');
       if (userEmail) {
         document.getElementById('user-email').textContent = userEmail;
+        window.history.replaceState({}, '', `?email=${userEmail}`);
         getAllHabits();
       }
+
+      document.querySelectorAll('.tab-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          switchTab(e.target.dataset.tab);
+        });
+      });
     });
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(tabId).classList.remove('hidden');
+
+      document.querySelectorAll('.tab-link').forEach(link => {
+        link.classList.remove('active-tab');
+      });
+      document.querySelector(`.tab-link[data-tab="${tabId}"]`).classList.add('active-tab');
+    }
 
     async function addHabit() {
       const habitInput = document.getElementById('new-habit');
