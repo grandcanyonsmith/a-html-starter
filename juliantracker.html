@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habit Tracker</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .completed {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+  <!-- Homepage -->
+  <header class="bg-blue-600 text-white p-4">
+    <div class="container mx-auto">
+      <h1 class="text-3xl font-bold">Habit Tracker</h1>
+      <p class="mt-2">Track your habits and improve your life!</p>
+    </div>
+  </header>
+
+  <main class="container mx-auto mt-8">
+    <section class="bg-white p-6 rounded shadow-md">
+      <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+      <p>Welcome to our habit tracker. Here you can track your daily habits, see your progress, and stay motivated.</p>
+      <p class="mt-2">Benefits of using a habit tracker:</p>
+      <ul class="list-disc list-inside mt-2">
+        <li>Stay organized</li>
+        <li>Track your progress</li>
+        <li>Build new habits</li>
+      </ul>
+      <p class="mt-2">Steps to get started:</p>
+      <ol class="list-decimal list-inside mt-2">
+        <li>Create an account</li>
+        <li>Add your habits</li>
+        <li>Track your progress daily</li>
+      </ol>
+    </section>
+  </main>
+
+  <!-- User Dashboard -->
+  <div class="container mx-auto mt-8">
+    <div class="bg-white p-6 rounded shadow-md">
+      <div class="flex items-center mb-4">
+        <img src="https://via.placeholder.com/50" alt="Profile Picture" class="rounded-full mr-4">
+        <div>
+          <h2 class="text-xl font-bold" id="user-email"></h2>
+        </div>
+      </div>
+
+      <nav class="mb-4">
+        <ul class="flex space-x-4">
+          <li><a href="#" class="text-blue-600">Home</a></li>
+          <li><a href="#" class="text-gray-600">My Habits</a></li>
+          <li><a href="#" class="text-gray-600">Stats</a></li>
+          <li><a href="#" class="text-gray-600">Settings</a></li>
+          <li><a href="#" class="text-gray-600">Help/Support</a></li>
+        </ul>
+      </nav>
+
+      <!-- Habit Tracker Modules -->
+      <section>
+        <h3 class="text-xl font-bold mb-4">Habit Tracker</h3>
+        <div class="mb-4">
+          <h4 class="text-lg font-bold">Basic To-Do List Style Habit Tracker</h4>
+          <div class="mt-4">
+            <input type="text" id="new-habit" class="border p-2 rounded w-full" placeholder="Enter a new habit">
+            <button onclick="addHabit()" class="bg-blue-600 text-white px-4 py-2 rounded mt-2">Add Habit</button>
+          </div>
+          <ul id="habit-list" class="list-disc list-inside mt-4">
+            <!-- Habits will be dynamically added here -->
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const lambdaUrl = 'https://amk72w7spjzi6ovsj7tmfexqy40zplsi.lambda-url.us-west-2.on.aws/';
+    let userEmail = '';
+    let habits = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      userEmail = prompt('Please enter your email:');
+      if (userEmail) {
+        document.getElementById('user-email').textContent = userEmail;
+        getAllHabits();
+      }
+    });
+
+    async function addHabit() {
+      const habitInput = document.getElementById('new-habit');
+      const habitText = habitInput.value.trim();
+      if (habitText) {
+        const response = await fetch(lambdaUrl, {
+          method: 'POST',
+          body: JSON.stringify({ request_type: 'create_habit', email: userEmail, habit: habitText }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        console.log(data);
+        habitInput.value = '';
+        getAllHabits();
+      }
+    }
+
+    async function toggleHabit(habitId) {
+      const date = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+      const response = await fetch(lambdaUrl, {
+        method: 'POST',
+        body: JSON.stringify({ request_type: 'log_habit', email: userEmail, habit_id: habitId, date: date }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+      console.log(data);
+      getAllHabits();
+    }
+
+    async function getAllHabits() {
+      const response = await fetch(lambdaUrl, {
+        method: 'POST',
+        body: JSON.stringify({ request_type: 'get_all_habits', email: userEmail }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+      console.log(data);
+      habits = data;
+      renderHabits();
+    }
+
+    function renderHabits() {
+      const habitList = document.getElementById('habit-list');
+      habitList.innerHTML = '';
+      habits.forEach(habit => {
+        const habitItem = document.createElement('li');
+        habitItem.className = `cursor-pointer ${habit.completed ? 'completed' : ''}`;
+        habitItem.textContent = habit.habit;
+        habitItem.onclick = () => toggleHabit(habit.id);
+        habitList.appendChild(habitItem);
+      });
+    }
+  </script>
+
+</body>
+</html>
