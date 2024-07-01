@@ -78,6 +78,9 @@
             <input type="text" id="new-habit" class="border p-2 rounded w-full" placeholder="Enter a new habit">
             <button onclick="addHabit()" class="bg-blue-600 text-white px-4 py-2 rounded mt-2">Add Habit</button>
           </div>
+          <div class="mt-4">
+            <input type="date" id="habit-date" class="border p-2 rounded w-full" value="">
+          </div>
           <ul id="habit-list" class="list-disc list-inside mt-4">
             <!-- Habits will be dynamically added here -->
           </ul>
@@ -86,8 +89,12 @@
 
       <section id="stats" class="tab-content hidden">
         <h3 class="text-xl font-bold mb-4">Stats</h3>
-        <p>Here you can see your habit tracking statistics.</p>
-        <!-- Add stats content here -->
+        <div class="mb-4">
+          <input type="date" id="stats-date" class="border p-2 rounded w-full" value="">
+        </div>
+        <ul id="stats-list" class="list-disc list-inside mt-4">
+          <!-- Stats will be dynamically added here -->
+        </ul>
       </section>
 
       <section id="settings" class="tab-content hidden">
@@ -124,6 +131,14 @@
           switchTab(e.target.dataset.tab);
         });
       });
+
+      document.getElementById('habit-date').addEventListener('change', () => {
+        renderHabits();
+      });
+
+      document.getElementById('stats-date').addEventListener('change', () => {
+        renderStats();
+      });
     });
 
     function switchTab(tabId) {
@@ -136,6 +151,10 @@
         link.classList.remove('active-tab');
       });
       document.querySelector(`.tab-link[data-tab="${tabId}"]`).classList.add('active-tab');
+
+      if (tabId === 'stats') {
+        renderStats();
+      }
     }
 
     async function addHabit() {
@@ -154,8 +173,7 @@
       }
     }
 
-    async function toggleHabit(habitId) {
-      const date = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+    async function toggleHabit(habitId, date) {
       const response = await fetch(lambdaUrl, {
         method: 'POST',
         body: JSON.stringify({ request_type: 'log_habit', email: userEmail, habit_id: habitId, date: date }),
@@ -181,12 +199,37 @@
     function renderHabits() {
       const habitList = document.getElementById('habit-list');
       habitList.innerHTML = '';
+      const selectedDate = document.getElementById('habit-date').value || new Date().toISOString().split('T')[0];
       habits.forEach(habit => {
         const habitItem = document.createElement('li');
         habitItem.className = `cursor-pointer ${habit.completed ? 'completed' : ''}`;
         habitItem.textContent = habit.habit;
-        habitItem.onclick = () => toggleHabit(habit.id);
+        habitItem.onclick = () => toggleHabit(habit.id, selectedDate);
         habitList.appendChild(habitItem);
+      });
+    }
+
+    async function renderStats() {
+      const statsList = document.getElementById('stats-list');
+      statsList.innerHTML = '';
+      const selectedDate = document.getElementById('stats-date').value || new Date().toISOString().split('T')[0];
+      const response = await fetch(lambdaUrl, {
+        method: 'POST',
+        body: JSON.stringify({ request_type: 'get_habits_by_date', email: userEmail, date: selectedDate }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+      console.log(data);
+      data.forEach(habit => {
+        const habitItem = document.createElement('li');
+        habitItem.className = `cursor-pointer ${habit.completed ? 'completed' : ''}`;
+        habitItem.textContent = habit.habit;
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = habit.completed;
+        checkbox.onclick = () => toggleHabit(habit.id, selectedDate);
+        habitItem.prepend(checkbox);
+        statsList.appendChild(habitItem);
       });
     }
   </script>
