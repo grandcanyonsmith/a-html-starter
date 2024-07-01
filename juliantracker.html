@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Habit Tracker</title>
+  <title>Julian Brass Habit Tracker</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     .completed {
@@ -17,14 +18,19 @@
 </head>
 <body class="bg-gray-100">
 
-  <!-- Homepage -->
-  <header class="bg-blue-600 text-white p-4">
-    <div class="container mx-auto">
-      <h1 class="text-3xl font-bold">Habit Tracker</h1>
-      <p class="mt-2">Track your habits and improve your life!</p>
+  <!-- Navbar -->
+  <nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="flex h-16 justify-between items-center">
+        <div class="flex-1 flex justify-center items-center">
+          <h1 class="text-white text-xl font-bold">Julian Brass Habit Tracker</h1>
+        </div>
+        <div class="flex items-center">
+          <button id="logout-button" onclick="logout()" class="hidden bg-red-600 text-white px-3 py-2 rounded">Logout</button>
+        </div>
+      </div>
     </div>
-  </header>
-
+  </nav>
   <main class="container mx-auto mt-8">
     <section class="bg-white p-6 rounded shadow-md">
       <h2 class="text-2xl font-bold mb-4">Introduction</h2>
@@ -43,12 +49,19 @@
       </ol>
     </section>
   </main>
+  <!-- Email Input Section -->
+  <div class="container mx-auto mt-8" id="email-section">
+    <div class="bg-white p-6 rounded shadow-md">
+      <h3 class="text-xl font-bold mb-4">Enter Your Email</h3>
+      <input type="email" id="user-email-input" class="border p-2 rounded w-full" placeholder="Enter your email">
+      <button onclick="setEmail()" class="bg-blue-600 text-white px-4 py-2 rounded mt-2">Submit</button>
+    </div>
+  </div>
 
   <!-- User Dashboard -->
-  <div class="container mx-auto mt-8">
+  <div class="container mx-auto mt-8 hidden" id="dashboard">
     <div class="bg-white p-6 rounded shadow-md">
       <div class="flex items-center mb-4">
-        <img src="https://via.placeholder.com/50" alt="Profile Picture" class="rounded-full mr-4">
         <div>
           <h2 class="text-xl font-bold" id="user-email"></h2>
         </div>
@@ -56,30 +69,18 @@
 
       <nav class="mb-4">
         <ul class="flex space-x-4">
-          <li><a href="#" class="text-blue-600 tab-link active-tab" data-tab="home">Home</a></li>
-          <li><a href="#" class="text-gray-600 tab-link" data-tab="my-habits">My Habits</a></li>
+          <li><a href="#" class="text-blue-600 tab-link active-tab" data-tab="my-habits">My Habits</a></li>
           <li><a href="#" class="text-gray-600 tab-link" data-tab="stats">Stats</a></li>
-          <li><a href="#" class="text-gray-600 tab-link" data-tab="settings">Settings</a></li>
-          <li><a href="#" class="text-gray-600 tab-link" data-tab="help">Help/Support</a></li>
         </ul>
       </nav>
 
       <!-- Content Sections -->
-      <section id="home" class="tab-content">
-        <h3 class="text-xl font-bold mb-4">Welcome to the Habit Tracker</h3>
-        <p>Track your habits and improve your life!</p>
-      </section>
-
-      <section id="my-habits" class="tab-content hidden">
-        <h3 class="text-xl font-bold mb-4">Habit Tracker</h3>
+      <section id="my-habits" class="tab-content">
+        <h3 class="text-xl font-bold mb-4">Julian Brass Habit Tracker</h3>
         <div class="mb-4">
           <h4 class="text-lg font-bold">Basic To-Do List Style Habit Tracker</h4>
           <div class="mt-4">
-            <input type="text" id="new-habit" class="border p-2 rounded w-full" placeholder="Enter a new habit">
-            <button onclick="addHabit()" class="bg-blue-600 text-white px-4 py-2 rounded mt-2">Add Habit</button>
-          </div>
-          <div class="mt-4">
-            <input type="date" id="habit-date" class="border p-2 rounded w-full" value="">
+            <button onclick="openAddHabitModal()" class="bg-blue-600 text-white px-4 py-2 rounded">Add Habit</button>
           </div>
           <fieldset class="mt-4">
             <legend class="text-base font-semibold leading-6 text-gray-900">Habits</legend>
@@ -108,18 +109,29 @@
           </div>
         </fieldset>
       </section>
+    </div>
+  </div>
 
-      <section id="settings" class="tab-content hidden">
-        <h3 class="text-xl font-bold mb-4">Settings</h3>
-        <p>Manage your account settings here.</p>
-        <!-- Add settings content here -->
-      </section>
-
-      <section id="help" class="tab-content hidden">
-        <h3 class="text-xl font-bold mb-4">Help/Support</h3>
-        <p>Need help? Contact our support team.</p>
-        <!-- Add help/support content here -->
-      </section>
+  <!-- Add Habit Modal -->
+  <div id="add-habit-modal" class="hidden fixed inset-0 z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+    <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div class="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+          <div class="sm:flex sm:items-start">
+            <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+              <h3 class="text-base font-semibold leading-6 text-gray-900" id="modal-title">Enter a Habit</h3>
+              <div class="mt-2">
+                <input type="text" id="new-habit-modal-input" class="border p-2 rounded w-full" placeholder="Enter a new habit">
+              </div>
+            </div>
+          </div>
+          <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+            <button type="button" onclick="addHabitFromModal()" class="inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto">Submit</button>
+            <button type="button" onclick="closeAddHabitModal()" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Cancel</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -158,23 +170,11 @@
     let habitToDelete = null;
 
     document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      userEmail = urlParams.get('email') || prompt('Please enter your email:');
-      if (userEmail) {
-        document.getElementById('user-email').textContent = userEmail;
-        window.history.replaceState({}, '', `?email=${userEmail}`);
-        getAllHabits();
-      }
-
       document.querySelectorAll('.tab-link').forEach(link => {
         link.addEventListener('click', (e) => {
           e.preventDefault();
           switchTab(e.target.dataset.tab);
         });
-      });
-
-      document.getElementById('habit-date').addEventListener('change', () => {
-        renderHabits();
       });
 
       document.getElementById('stats-date').addEventListener('change', () => {
@@ -187,25 +187,27 @@
 
       // Load today's date automatically
       const today = new Date().toISOString().split('T')[0];
-      document.getElementById('habit-date').value = today;
       document.getElementById('stats-date').value = today;
       renderStats();
     });
 
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(section => {
-        section.classList.add('hidden');
-      });
-      document.getElementById(tabId).classList.remove('hidden');
-
-      document.querySelectorAll('.tab-link').forEach(link => {
-        link.classList.remove('active-tab');
-      });
-      document.querySelector(`.tab-link[data-tab="${tabId}"]`).classList.add('active-tab');
-
-      if (tabId === 'stats') {
-        renderStats();
+    function setEmail() {
+      userEmail = document.getElementById('user-email-input').value.trim();
+      if (userEmail) {
+        document.getElementById('user-email').textContent = userEmail;
+        document.getElementById('email-section').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('logout-button').classList.remove('hidden');
+        getAllHabits();
       }
+    }
+
+    function logout() {
+      userEmail = '';
+      document.getElementById('user-email').textContent = '';
+      document.getElementById('email-section').classList.remove('hidden');
+      document.getElementById('dashboard').classList.add('hidden');
+      document.getElementById('logout-button').classList.add('hidden');
     }
 
     async function addHabit() {
@@ -224,6 +226,23 @@
       }
     }
 
+    async function addHabitFromModal() {
+      const habitInput = document.getElementById('new-habit-modal-input');
+      const habitText = habitInput.value.trim();
+      if (habitText) {
+        const response = await fetch(lambdaUrl, {
+          method: 'POST',
+          body: JSON.stringify({ request_type: 'create_habit', email: userEmail, habit: habitText }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        console.log(data);
+        habitInput.value = '';
+        closeAddHabitModal();
+        getAllHabits();
+      }
+    }
+
     async function toggleHabit(habitId, date) {
       const response = await fetch(lambdaUrl, {
         method: 'POST',
@@ -232,7 +251,7 @@
       });
       const data = await response.json();
       console.log(data);
-      getAllHabits();
+      renderStats();
     }
 
     async function deleteHabit(habitId) {
@@ -273,16 +292,12 @@
     function renderHabits() {
       const habitList = document.getElementById('habit-list');
       habitList.innerHTML = '';
-      const selectedDate = document.getElementById('habit-date').value || new Date().toISOString().split('T')[0];
       habits.forEach(habit => {
         const habitItem = document.createElement('div');
         habitItem.className = 'relative flex items-start py-4';
         habitItem.innerHTML = `
           <div class="min-w-0 flex-1 text-sm leading-6">
             <label for="habit-${habit.habit_id}" class="select-none font-medium text-gray-900">${habit.habit}</label>
-          </div>
-          <div class="ml-3 flex h-6 items-center">
-            <input id="habit-${habit.habit_id}" name="habit-${habit.habit_id}" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" ${habit.date === selectedDate ? 'checked' : ''} onclick="toggleHabit('${habit.habit_id}', '${selectedDate}')">
           </div>
           <div class="ml-3 flex h-6 items-center">
             <button onclick="openModal('${habit.habit_id}')" class="text-red-600 hover:text-red-800">
@@ -307,6 +322,7 @@
 
       document.getElementById('stats-summary').textContent = `${completedHabits} of ${totalHabits} habits completed`;
       document.getElementById('stats-progress').style.width = `${completionRate}%`;
+
       habits.forEach(habit => {
         const habitItem = document.createElement('div');
         habitItem.className = 'relative flex items-start py-4';
@@ -321,7 +337,21 @@
         statsList.appendChild(habitItem);
       });
     }
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(section => {
+        section.classList.add('hidden');
+      });
+      document.getElementById(tabId).classList.remove('hidden');
 
+      document.querySelectorAll('.tab-link').forEach(link => {
+        link.classList.remove('active-tab');
+      });
+      document.querySelector(`.tab-link[data-tab="${tabId}"]`).classList.add('active-tab');
+
+      if (tabId === 'stats') {
+        renderStats();
+      }
+    }
     function openModal(habitId) {
       habitToDelete = habitId;
       document.getElementById('delete-modal').classList.remove('hidden');
@@ -330,6 +360,14 @@
     function closeModal() {
       habitToDelete = null;
       document.getElementById('delete-modal').classList.add('hidden');
+    }
+
+    function openAddHabitModal() {
+      document.getElementById('add-habit-modal').classList.remove('hidden');
+    }
+
+    function closeAddHabitModal() {
+      document.getElementById('add-habit-modal').classList.add('hidden');
     }
 
     function changeDate(offset) {
