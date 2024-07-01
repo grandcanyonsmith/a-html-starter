@@ -196,15 +196,26 @@
       renderHabits();
     }
 
+    async function getHabitsByDate(date) {
+      const response = await fetch(lambdaUrl, {
+        method: 'POST',
+        body: JSON.stringify({ request_type: 'get_habits_by_date', email: userEmail, date: date }),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      const data = await response.json();
+      console.log(data);
+      return data;
+    }
+
     function renderHabits() {
       const habitList = document.getElementById('habit-list');
       habitList.innerHTML = '';
       const selectedDate = document.getElementById('habit-date').value || new Date().toISOString().split('T')[0];
       habits.forEach(habit => {
         const habitItem = document.createElement('li');
-        habitItem.className = `cursor-pointer ${habit.completed ? 'completed' : ''}`;
+        habitItem.className = `cursor-pointer ${habit.date === selectedDate ? 'completed' : ''}`;
         habitItem.textContent = habit.habit;
-        habitItem.onclick = () => toggleHabit(habit.id, selectedDate);
+        habitItem.onclick = () => toggleHabit(habit.habit_id, selectedDate);
         habitList.appendChild(habitItem);
       });
     }
@@ -213,26 +224,20 @@
       const statsList = document.getElementById('stats-list');
       statsList.innerHTML = '';
       const selectedDate = document.getElementById('stats-date').value || new Date().toISOString().split('T')[0];
-      const response = await fetch(lambdaUrl, {
-        method: 'POST',
-        body: JSON.stringify({ request_type: 'get_habits_by_date', email: userEmail, date: selectedDate }),
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const data = await response.json();
-      console.log(data);
-      data.forEach(habit => {
+      const habitsByDate = await getHabitsByDate(selectedDate);
+      habitsByDate.forEach(habit => {
         const habitItem = document.createElement('li');
-        habitItem.className = `cursor-pointer ${habit.completed ? 'completed' : ''}`;
+        habitItem.className = `cursor-pointer ${habit.date === selectedDate ? 'completed' : ''}`;
         habitItem.textContent = habit.habit;
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.checked = habit.completed;
-        checkbox.onclick = () => toggleHabit(habit.id, selectedDate);
+        checkbox.checked = habit.date === selectedDate;
+        checkbox.onclick = () => toggleHabit(habit.habit_id, selectedDate);
         habitItem.prepend(checkbox);
         statsList.appendChild(habitItem);
       });
     }
-  </script>
+</script>
 
 </body>
 </html>
