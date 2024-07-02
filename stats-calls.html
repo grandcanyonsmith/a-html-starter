@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Table</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .red-text { color: red; }
+        .green-text { color: green; }
+    </style>
+</head>
+<body class="bg-gray-100 p-6">
+
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-center">Closed vs Not Closed Data</h1>
+        
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white border border-gray-300">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b">Date Range</th>
+                        <th class="py-2 px-4 border-b">Total Who Showed Up</th>
+                        <th class="py-2 px-4 border-b">Closed</th>
+                        <th class="py-2 px-4 border-b">Not Closed</th>
+                        <th class="py-2 px-4 border-b">% Closed</th>
+                        <th class="py-2 px-4 border-b">% Not Closed</th>
+                        <th class="py-2 px-4 border-b">Average Commission per Call</th>
+                        <th class="py-2 px-4 border-b">Average Number of Calls per Day</th>
+                        <th class="py-2 px-4 border-b">Total Commission Made</th>
+                        <th class="py-2 px-4 border-b">Show Up Rate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="bg-gray-50">
+                        <td class="py-2 px-4 border-b">April 30, 2024 - May 9, 2024</td>
+                        <td class="py-2 px-4 border-b">26</td>
+                        <td class="py-2 px-4 border-b">15</td>
+                        <td class="py-2 px-4 border-b">11</td>
+                        <td class="py-2 px-4 border-b green-text">58%</td>
+                        <td class="py-2 px-4 border-b green-text">42%</td>
+                        <td class="py-2 px-4 border-b green-text">$109</td>
+                        <td class="py-2 px-4 border-b">3.3 calls/day</td>
+                        <td class="py-2 px-4 border-b">$3,608</td>
+                        <td class="py-2 px-4 border-b">79%</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">May 9, 2024 - May 27, 2024</td>
+                        <td class="py-2 px-4 border-b">29</td>
+                        <td class="py-2 px-4 border-b">9</td>
+                        <td class="py-2 px-4 border-b">20</td>
+                        <td class="py-2 px-4 border-b red-text">31%</td>
+                        <td class="py-2 px-4 border-b red-text">69%</td>
+                        <td class="py-2 px-4 border-b red-text">$39</td>
+                        <td class="py-2 px-4 border-b">2.2 calls/day</td>
+                        <td class="py-2 px-4 border-b">$1,623</td>
+                        <td class="py-2 px-4 border-b">69%</td>
+                    </tr>
+                    <tr class="bg-gray-50">
+                        <td class="py-2 px-4 border-b">May 31, 2024 - June 16, 2024</td>
+                        <td class="py-2 px-4 border-b">38</td>
+                        <td class="py-2 px-4 border-b">26</td>
+                        <td class="py-2 px-4 border-b">12</td>
+                        <td class="py-2 px-4 border-b green-text">68%</td>
+                        <td class="py-2 px-4 border-b green-text">32%</td>
+                        <td class="py-2 px-4 border-b green-text">$124</td>
+                        <td class="py-2 px-4 border-b">2.8 calls/day</td>
+                        <td class="py-2 px-4 border-b">$6,178</td>
+                        <td class="py-2 px-4 border-b">79%</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">June 24, 2024 - July 1, 2024</td>
+                        <td class="py-2 px-4 border-b">22</td>
+                        <td class="py-2 px-4 border-b">5</td>
+                        <td class="py-2 px-4 border-b">17</td>
+                        <td class="py-2 px-4 border-b red-text">23%</td>
+                        <td class="py-2 px-4 border-b red-text">77%</td>
+                        <td class="py-2 px-4 border-b red-text">$32</td>
+                        <td class="py-2 px-4 border-b">3.5 calls/day</td>
+                        <td class="py-2 px-4 border-b">$885</td>
+                        <td class="py-2 px-4 border-b">79%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
