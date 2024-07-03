@@ -84,6 +84,11 @@
                 <pre id="responseText" class="mt-2 text-sm text-white hidden dracula"></pre>
                 <button id="toggleViewButton" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md">View HTML Code</button>
                 <button id="copyHtmlButton" class="mt-2 bg-green-500 text-white py-2 px-4 rounded-md">Copy HTML Code</button>
+                <button id="rewriteHtmlButton" class="mt-2 bg-yellow-500 text-white py-2 px-4 rounded-md">Rewrite HTML</button>
+                <div id="userRequestContainer" class="mt-4">
+                    <label for="rewriteUserRequest" class="block text-gray-700 font-bold mb-2">User Request:</label>
+                    <textarea id="rewriteUserRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4"></textarea>
+                </div>
             </div>
         </div>
     </div>
@@ -286,6 +291,50 @@
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
             });
+        });
+
+        document.getElementById('rewriteHtmlButton').addEventListener('click', async () => {
+            const functionCode = document.getElementById('functionCode').value;
+            const functionUrl = document.getElementById('functionUrl').value;
+            const existingCode = document.getElementById('responseText').textContent;
+            const userRequest = document.getElementById('rewriteUserRequest').value;
+            const rewriteHtmlButton = document.getElementById('rewriteHtmlButton');
+
+            if (!userRequest || !existingCode) {
+                alert('Please ensure both user request and existing code are provided.');
+                return;
+            }
+
+            rewriteHtmlButton.textContent = 'Rewriting HTML...';
+            rewriteHtmlButton.disabled = true;
+
+            try {
+                const response = await fetch('https://ogtssgluvpfo4m4ecy35nttj3i0ferax.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        functionCode: functionCode,
+                        functionUrl: functionUrl,
+                        existingCode: existingCode,
+                        userRequest: userRequest
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                renderedHtml.innerHTML = data;
+                responseText.textContent = data;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                rewriteHtmlButton.textContent = 'Rewrite HTML';
+                rewriteHtmlButton.disabled = false;
+            }
         });
     </script>
 </body>
