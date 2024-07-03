@@ -15,7 +15,7 @@
             border-radius: 0.25rem;
             font-family: 'Courier New', Courier, monospace;
             overflow-x: auto;
-            white-space: pre-wrap; /* To preserve formatting */
+            white-space: pre-wrap;
         }
 
         .dracula .keyword {
@@ -89,6 +89,7 @@
                     <label for="rewriteUserRequest" class="block text-gray-700 font-bold mb-2">User Request:</label>
                     <textarea id="rewriteUserRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4"></textarea>
                 </div>
+                <iframe id="previewIframe" class="w-full h-64 border border-gray-300 rounded mt-4"></iframe>
             </div>
         </div>
     </div>
@@ -237,6 +238,7 @@
             const frontendResponseContainer = document.getElementById('frontendResponseContainer');
             const renderedHtml = document.getElementById('renderedHtml');
             const responseText = document.getElementById('responseText');
+            const previewIframe = document.getElementById('previewIframe');
 
             createFrontendButton.textContent = 'Creating Frontend...';
             createFrontendButton.disabled = true;
@@ -260,6 +262,9 @@
                 renderedHtml.innerHTML = responseHtml;
                 responseText.textContent = responseHtml;
                 frontendResponseContainer.classList.remove('hidden');
+
+                // Inject the HTML content into the iframe
+                previewIframe.srcdoc = responseHtml;
             } catch (error) {
                 alert('Error: ' + error.message);
             } finally {
@@ -299,6 +304,7 @@
             const existingCode = document.getElementById('responseText').textContent;
             const userRequest = document.getElementById('rewriteUserRequest').value;
             const rewriteHtmlButton = document.getElementById('rewriteHtmlButton');
+            const previewIframe = document.getElementById('previewIframe');
 
             if (!userRequest || !existingCode) {
                 alert('Please ensure both user request and existing code are provided.');
@@ -329,6 +335,9 @@
                 const data = await response.json();
                 renderedHtml.innerHTML = data;
                 responseText.textContent = data;
+
+                // Inject the updated HTML content into the iframe
+                previewIframe.srcdoc = data;
             } catch (error) {
                 alert('Error: ' + error.message);
             } finally {
