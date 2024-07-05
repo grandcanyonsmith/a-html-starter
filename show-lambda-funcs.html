@@ -93,6 +93,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
+                            <button class="view-logs-button bg-yellow-500 text-white px-2 py-1 rounded" data-function-arn="${func.FunctionArn}">View Logs</button>
                         </div>
                         <div class="hidden mt-2 p-4 bg-gray-100 rounded" id="code-${func.FunctionName}">
                             ${codeFilesContent}
@@ -101,6 +102,11 @@
                                 <button class="update-button bg-blue-500 text-white px-4 py-2 rounded" data-function-arn="${func.FunctionArn}">Update</button>
                                 <button class="rewrite-button bg-green-500 text-white px-4 py-2 rounded" data-function-name="${func.FunctionName}">Rewrite Code</button>
                             </div>
+                        </div>
+                        <div class="hidden mt-2 p-4 bg-gray-100 rounded" id="logs-${func.FunctionName}">
+                            <h3 class="text-lg font-semibold">Log Streams</h3>
+                            <div id="logStreams-${func.FunctionName}" class="mt-2"></div>
+                            <div id="logEvents-${func.FunctionName}" class="mt-2"></div>
                         </div>
                     `;
                     funcElement.querySelector('h2').addEventListener('click', () => {
@@ -289,6 +295,86 @@
                         }
                     });
                 });
+
+                // Add event listeners for view logs buttons
+                document.querySelectorAll('.view-logs-button').forEach(button => {
+                    button.addEventListener('click', async (event) => {
+                        const functionArn = event.currentTarget.getAttribute('data-function-arn');
+                        const functionName = functionArn.split(':').pop();
+                        const logsDiv = document.getElementById(`logs-${functionName}`);
+                        const logStreamsContainer = document.getElementById(`logStreams-${functionName}`);
+                        const logEventsContainer = document.getElementById(`logEvents-${functionName}`);
+
+                        if (logsDiv.classList.contains('hidden')) {
+                            logsDiv.classList.remove('hidden');
+                            logsDiv.classList.add('block');
+                        } else {
+                            logsDiv.classList.remove('block');
+                            logsDiv.classList.add('hidden');
+                            return;
+                        }
+
+                        try {
+                            const response = await fetch('https://dk4wzehdht64hx5gsye2njddzq0oxwow.lambda-url.us-west-2.on.aws/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ requestType: 'fetchLogStreams', functionArn: functionArn })
+                            });
+
+                            if (response.ok) {
+                                const logStreams = await response.json();
+                                console.log('Log Streams:', logStreams);
+
+                                logStreamsContainer.innerHTML = '';
+
+                                logStreams.forEach(stream => {
+                                    const streamElement = document.createElement('div');
+                                    streamElement.className = 'bg-gray-100 p-2 mb-2 rounded cursor-pointer hover:bg-gray-200';
+                                    streamElement.textContent = `Log Stream Name: ${stream.logStreamName}, Last Event Time: ${new Date(stream.lastEventTimestamp).toLocaleString()}`;
+                                    streamElement.addEventListener('click', () => fetchLogEvents(functionArn, stream.logStreamName, logEventsContainer));
+                                    logStreamsContainer.appendChild(streamElement);
+                                });
+                            } else {
+                                console.error('Failed to fetch log streams');
+                            }
+                        } catch (error) {
+                            console.error('Error fetching log streams:', error);
+                        }
+                    });
+                });
+
+                async function fetchLogEvents(logGroupName, logStreamName, logEventsContainer) {
+                    console.log('Fetching log events for:', logStreamName);
+                    try {
+                        const response = await fetch('https://dk4wzehdht64hx5gsye2njddzq0oxwow.lambda-url.us-west-2.on.aws/', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ requestType: 'fetchLogs', logGroupName: `/aws/lambda/${logGroupName.split(':').pop()}`, logStreamName: logStreamName })
+                        });
+
+                        if (response.ok) {
+                            const logEvents = await response.json();
+                            console.log('Log Events:', logEvents);
+
+                            logEventsContainer.innerHTML = '';
+
+                            logEvents.forEach(event => {
+                                const eventElement = document.createElement('div');
+                                eventElement.className = 'bg-gray-100 p-2 mb-2 rounded';
+                                eventElement.textContent = `Timestamp: ${new Date(event.timestamp).toLocaleString()}, Message: ${event.message}`;
+                                logEventsContainer.appendChild(eventElement);
+                            });
+                        } else {
+                            console.error('Failed to fetch log events');
+                        }
+                    } catch (error) {
+                        console.error('Error fetching log events:', error);
+                    }
+                }
 
             } catch (error) {
                 console.error('Error fetching Lambda functions:', error);
