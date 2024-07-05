@@ -7,9 +7,18 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js">
     <style>
         .CodeMirror {
             height: auto;
+        }
+        .log-event {
+            background-color: #1e1e1e;
+            color: #dcdcdc;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -54,6 +63,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Page loaded, fetching Lambda functions');
@@ -80,8 +90,11 @@
                         codeFilesContent += `<h3 class="text-lg font-semibold">${fileName}</h3><textarea id="code-${func.FunctionName}-${fileName}" class="code-editor">${fileContent}</textarea>`;
                     }
 
+                    const lastModifiedRelative = moment(func.LastModified).fromNow();
+
                     funcElement.innerHTML = `
                         <h2 class="text-xl font-bold cursor-pointer">${func.FunctionName}</h2>
+                        <p class="text-sm text-gray-500">Last Modified: ${lastModifiedRelative}</p>
                         <div class="absolute top-4 right-4 flex space-x-2">
                             <button class="edit-button" data-function-name="${func.FunctionName}">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,9 +106,9 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
-                            <button class="view-logs-button bg-yellow-500 text-white px-2 py-1 rounded" data-function-arn="${func.FunctionArn}">View Logs</button>
                         </div>
-                        <div class="hidden mt-2 p-4 bg-gray-100 rounded" id="code-${func.FunctionName}">
+                        <button class="view-logs-button bg-yellow-500 text-white px-2 py-1 rounded mt-2" data-function-arn="${func.FunctionArn}">View Logs</button>
+                        <div class="hidden mt-2 p-4 bg-gray-100 rounded code-container" id="code-${func.FunctionName}">
                             ${codeFilesContent}
                             <textarea id="userRequest-${func.FunctionName}" class="mt-2 p-2 w-full border rounded" placeholder="User Request"></textarea>
                             <div class="flex space-x-2 mt-2">
@@ -103,7 +116,7 @@
                                 <button class="rewrite-button bg-green-500 text-white px-4 py-2 rounded" data-function-name="${func.FunctionName}">Rewrite Code</button>
                             </div>
                         </div>
-                        <div class="hidden mt-2 p-4 bg-gray-100 rounded" id="logs-${func.FunctionName}">
+                        <div class="hidden mt-2 p-4 bg-gray-100 rounded logs-container" id="logs-${func.FunctionName}">
                             <nav class="flex mb-4" aria-label="Breadcrumb">
                                 <ol role="list" class="flex items-center space-x-4">
                                     <li>
@@ -130,17 +143,8 @@
                             <div id="logEvents-${func.FunctionName}" class="mt-2 hidden"></div>
                         </div>
                     `;
-                    funcElement.querySelector('h2').addEventListener('click', () => {
-                        const codeDiv = document.getElementById(`code-${func.FunctionName}`);
-                        if (codeDiv.classList.contains('hidden')) {
-                            codeDiv.classList.remove('hidden');
-                            codeDiv.classList.add('block');
-                        } else {
-                            codeDiv.classList.remove('block');
-                            codeDiv.classList.add('hidden');
-                        }
-                        console.log(`Toggled visibility for ${func.FunctionName}`);
-                    });
+                    funcElement.querySelector('h2').addEventListener('click', () => toggleCodeContainer(func.FunctionName));
+                    funcElement.querySelector('.edit-button').addEventListener('click', () => toggleCodeContainer(func.FunctionName));
 
                     functionList.appendChild(funcElement);
                 });
@@ -160,21 +164,6 @@
                             console.error(`Textarea not found for ${func.FunctionName}-${fileName}`);
                         }
                     }
-                });
-
-                // Add event listeners for edit buttons
-                document.querySelectorAll('.edit-button').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const functionName = event.currentTarget.getAttribute('data-function-name');
-                        const codeDiv = document.getElementById(`code-${functionName}`);
-                        if (codeDiv.classList.contains('hidden')) {
-                            codeDiv.classList.remove('hidden');
-                            codeDiv.classList.add('block');
-                        } else {
-                            codeDiv.classList.remove('block');
-                            codeDiv.classList.add('hidden');
-                        }
-                    });
                 });
 
                 // Add event listeners for delete buttons
@@ -325,7 +314,6 @@
                         const logsDiv = document.getElementById(`logs-${functionName}`);
                         const logStreamsContainer = document.getElementById(`logStreams-${functionName}`);
                         const logEventsContainer = document.getElementById(`logEvents-${functionName}`);
-
                         if (logsDiv.classList.contains('hidden')) {
                             logsDiv.classList.remove('hidden');
                             logsDiv.classList.add('block');
@@ -404,7 +392,7 @@
                                                         ${logEvents.map(event => `
                                                             <tr class="even:bg-gray-50">
                                                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-3">${new Date(event.timestamp).toLocaleString()}</td>
-                                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${event.message}</td>
+                                                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 log-event">${event.message}</td>
                                                             </tr>
                                                         `).join('')}
                                                     </tbody>
@@ -450,6 +438,17 @@
                 functionList.innerHTML = '<p class="text-red-500">Error fetching Lambda functions. Please try again later.</p>';
             }
         });
+
+        function toggleCodeContainer(functionName) {
+            const codeDiv = document.getElementById(`code-${functionName}`);
+            if (codeDiv.classList.contains('hidden')) {
+                codeDiv.classList.remove('hidden');
+                codeDiv.classList.add('block');
+            } else {
+                codeDiv.classList.remove('block');
+                codeDiv.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
