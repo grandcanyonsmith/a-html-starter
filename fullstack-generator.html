@@ -33,10 +33,33 @@
         .dracula .function {
             color: #50fa7b;
         }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar a.active {
+            border-bottom: 2px solid #4a90e2;
+            color: #4a90e2;
+        }
     </style>
 </head>
 
 <body class="bg-gray-100">
+    <div class="navbar">
+        <a href="#" class="active">Create Full Stack</a>
+        <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html">Lambda Functions</a>
+    </div>
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lambda Function Generator</h1>
         <div class="bg-white p-6 rounded shadow-md">
@@ -81,8 +104,7 @@
         <div id="frontendResponseContainer" class="mt-6 hidden">
             <h2 class="text-xl font-bold mb-2">Frontend Response:</h2>
             <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md">
-                <div id="renderedHtml" class="mt-2 text-sm text-gray-800"></div>
-                <pre id="responseText" class="mt-2 text-sm text-white hidden dracula"></pre>
+                <pre id="responseText" class="mt-2 text-sm text-white dracula"></pre>
                 <button id="toggleViewButton" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md">View HTML Code</button>
                 <button id="copyHtmlButton" class="mt-2 bg-green-500 text-white py-2 px-4 rounded-md">Copy HTML Code</button>
                 <button id="rewriteHtmlButton" class="mt-2 bg-yellow-500 text-white py-2 px-4 rounded-md">Rewrite HTML</button>
@@ -275,7 +297,6 @@
             const functionUrl = document.getElementById('functionUrl').value;
             const createFrontendButton = document.getElementById('createFrontendButton');
             const frontendResponseContainer = document.getElementById('frontendResponseContainer');
-            const renderedHtml = document.getElementById('renderedHtml');
             const responseText = document.getElementById('responseText');
             const previewIframe = document.getElementById('previewIframe');
 
@@ -298,7 +319,6 @@
                 const data = await response.json();
                 const responseHtml = data;
 
-                renderedHtml.innerHTML = responseHtml;
                 responseText.textContent = responseHtml;
                 frontendResponseContainer.classList.remove('hidden');
 
@@ -313,18 +333,15 @@
         });
 
         document.getElementById('toggleViewButton').addEventListener('click', function () {
-            const renderedHtml = document.getElementById('renderedHtml');
             const responseText = document.getElementById('responseText');
             const toggleViewButton = document.getElementById('toggleViewButton');
 
-            if (renderedHtml.classList.contains('hidden')) {
-                renderedHtml.classList.remove('hidden');
-                responseText.classList.add('hidden');
-                toggleViewButton.textContent = 'View HTML Code';
-            } else {
-                renderedHtml.classList.add('hidden');
+            if (responseText.classList.contains('hidden')) {
                 responseText.classList.remove('hidden');
                 toggleViewButton.textContent = 'View Rendered HTML';
+            } else {
+                responseText.classList.add('hidden');
+                toggleViewButton.textContent = 'View HTML Code';
             }
         });
 
@@ -372,7 +389,6 @@
                 }
 
                 const data = await response.json();
-                renderedHtml.innerHTML = data;
                 responseText.textContent = data;
 
                 // Inject the updated HTML content into the iframe
