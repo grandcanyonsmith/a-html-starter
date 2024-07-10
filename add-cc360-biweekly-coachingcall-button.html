@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Google Calendar Event</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .notification-enter {
+      transform: translateY(2rem);
+      opacity: 0;
+    }
+    .notification-enter-active {
+      transition: transform 300ms ease-out, opacity 300ms ease-out;
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .notification-leave {
+      opacity: 1;
+    }
+    .notification-leave-active {
+      transition: opacity 100ms ease-in;
+      opacity: 0;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=CC360%20Group%20Coaching%20Call%20%2B%20Q%26A&dates=20240719T150000Z/20240719T163000Z&details=An%20exclusive%20group%20coaching%20call%20included%20with%20your%20Course%20Creator%20360%20subscription.%20Contains%20a%2020-minute%20coaching%20session%20followed%20by%20over%20an%20hour%20answering%20your%20questions%20live%20by%20Stockton%20Walbeck%20and%20other%20guest%20coaches.&location=https%3A%2F%2Fus06web.zoom.us%2Fj%2F88295915745&recur=RRULE%3AFREQ%3DWEEKLY%3BINTERVAL%3D2%3BBYDAY%3DFR&sf=true&output=xml" target="_blank" class="bg-red-500 text-white font-bold py-2 px-4 rounded" id="add-to-calendar">Add to Google Calendar</a>
+
+  <!-- Global notification live region -->
+  <div aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
+    <div class="flex w-full flex-col items-center space-y-4 sm:items-end" id="notification-container">
+      <!-- Notification panel will be dynamically inserted here -->
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('add-to-calendar').addEventListener('click', function(event) {
+      event.preventDefault();
+      // Open the Google Calendar link in a new tab
+      window.open(this.href, '_blank');
+
+      // Create the notification element
+      const notification = document.createElement('div');
+      notification.className = 'pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 notification-enter';
+      notification.innerHTML = `
+        <div class="p-4">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div class="ml-3 w-0 flex-1 pt-0.5">
+              <p class="text-sm font-medium text-gray-900">Event successfully added to calendar!</p>
+            </div>
+            <div class="ml-4 flex flex-shrink-0">
+              <button type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" onclick="closeNotification(this)">
+                <span class="sr-only">Close</span>
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Append the notification to the container
+      const container = document.getElementById('notification-container');
+      container.appendChild(notification);
+
+      // Trigger the enter animation
+      requestAnimationFrame(() => {
+        notification.classList.remove('notification-enter');
+        notification.classList.add('notification-enter-active');
+      });
+
+      // Automatically remove the notification after 20 seconds
+      const timeoutId = setTimeout(() => {
+        closeNotification(notification);
+      }, 20000);
+
+      // Store the timeout ID in the notification element
+      notification.dataset.timeoutId = timeoutId;
+    });
+
+    function closeNotification(element) {
+      const notification = element.closest('div.pointer-events-auto');
+      clearTimeout(notification.dataset.timeoutId);
+      notification.classList.remove('notification-enter-active');
+      notification.classList.add('notification-leave');
+      notification.classList.add('notification-leave-active');
+      notification.addEventListener('transitionend', () => {
+        notification.remove();
+      });
+    }
+  </script>
+</body>
+</html>
