@@ -12,6 +12,10 @@
             padding: 1rem;
             background-color: #f8f8f8;
             border-bottom: 1px solid #e5e5e5;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
         }
 
         .navbar a {
@@ -24,15 +28,19 @@
             border-bottom: 2px solid #4a90e2;
             color: #4a90e2;
         }
+
+        .content {
+            margin-top: 4rem; /* Adjust this value if needed */
+        }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="navbar">
-        <a href="#" class="">Create Full Stack</a>
+        <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="">Create Full Stack</a>
         <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html">Lambda Functions</a>
         <a href="lookup-lambda-functions-in-webpage-url.html" class="active">Lookup Lambdas</a>
     </div>
-    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <div class="content bg-white p-8 rounded shadow-md w-full max-w-md">
         <h1 class="text-2xl font-bold mb-4">Fetch Lambda Functions</h1>
         <form id="urlForm">
             <div class="mb-4">
