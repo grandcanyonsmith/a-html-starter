@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fetch Leads</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom styles for sticky headers */
+        th {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="px-4 sm:px-6 lg:px-8 w-full max-w-4xl">
@@ -18,23 +27,48 @@
             </div>
         </div>
         <div class="mt-8 flow-root">
-            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-                <div class="inline-block min-w-full py-2 align-middle">
+            <div class="overflow-x-auto overflow-y-auto max-h-96">
+                <div class="inline-block min-w-full align-middle">
                     <table class="min-w-full divide-y divide-gray-300">
                         <thead>
                             <tr>
-                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Course Description</th>
+                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8">Customer Name</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone Number</th>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Course Description</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Created At</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Customer Name</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Email</th>
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Expires At</th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Phone Number</th>
                             </tr>
                         </thead>
                         <tbody id="leadsTableBody" class="divide-y divide-gray-200 bg-white">
                             <!-- Leads will be displayed here -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="leadModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modalTitle">Lead Details</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500" id="modalContent"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" onclick="closeModal()">Close</button>
                 </div>
             </div>
         </div>
@@ -74,12 +108,12 @@
                     row.className = 'bg-gray-200';
 
                     row.innerHTML = `
-                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">${lead.course_description ? lead.course_description.substring(0, 20) + '...' : ''}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${lead.created_at_timestamp || ''}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${lead.customer_name ? lead.customer_name.substring(0, 20) + '...' : ''}</td>
+                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">${lead.customer_name || ''}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><a href="#" class="text-indigo-600 hover:text-indigo-900" onclick="showLeadDetails(${JSON.stringify(lead).replace(/"/g, '&quot;')})">${lead.phone_number || ''}</a></td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${lead.course_description ? lead.course_description.substring(0, 20) + '...' : ''}</td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${formatTimestamp(lead.created_at_timestamp) || ''}</td>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${lead.email ? lead.email.substring(0, 20) + '...' : ''}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${lead.expires_at_timestamp || ''}</td>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><a href="#" class="text-indigo-600 hover:text-indigo-900" onclick="showPhoneNumber('${lead.phone_number}')">Show</a></td>
+                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">${formatTimestamp(lead.expires_at_timestamp) || ''}</td>
                     `;
 
                     leadsTableBody.appendChild(row);
@@ -89,8 +123,34 @@
             }
         }
 
-        function showPhoneNumber(phoneNumber) {
-            alert(`Phone Number: ${phoneNumber}`);
+        function formatTimestamp(timestamp) {
+            if (!timestamp) return '';
+            const date = new Date(timestamp);
+            const options = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true };
+            return date.toLocaleDateString('en-US', options).replace(',', '').replace(' at', ',');
+        }
+
+        function showLeadDetails(lead) {
+            const modal = document.getElementById('leadModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <strong>Customer Name:</strong> ${lead.customer_name || ''}<br>
+                <strong>Phone Number:</strong> ${lead.phone_number || ''}<br>
+                <strong>Course Description:</strong> ${lead.course_description || ''}<br>
+                <strong>Created At:</strong> ${formatTimestamp(lead.created_at_timestamp) || ''}<br>
+                <strong>Email:</strong> ${lead.email || ''}<br>
+                <strong>Expires At:</strong> ${formatTimestamp(lead.expires_at_timestamp) || ''}<br>
+                <strong>Temporary Website URL:</strong> <a href="${lead.temporary_website_url}" target="_blank">${lead.temporary_website_url}</a><br>
+                <strong>Location ID:</strong> ${lead.location_id || ''}<br>
+                <strong>Opt-in:</strong> ${lead.optin_in ? 'Yes' : 'No'}<br>
+                <strong>Opt-in Time:</strong> ${lead.optin_time || ''}
+            `;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('leadModal');
+            modal.classList.add('hidden');
         }
 
         // Fetch leads when the page loads
