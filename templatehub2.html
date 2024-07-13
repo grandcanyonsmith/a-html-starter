@@ -21,7 +21,7 @@
             title: "Coach",
             subtitle: "Fitness Training Template",
             description: "A fitness & training program template to attract new clients.",
-            link: "https://html-starter-coral.vercel.app/templatehub-details-ui.html",
+            link: "https://html-starter-coral.vercel.app/templatehub-ui-2.html",
             images: [
                 "https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/preview-03.png.png",
                 "https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/preview-01.png.png",
@@ -113,7 +113,10 @@
     });
 
     function handleClick(event, title) {
-        if (title === 'Empower') {
+        if (title === 'Coach') {
+            event.preventDefault();
+            window.location.href = 'https://html-starter-coral.vercel.app/templatehub-ui-2.html';
+        } else if (title === 'Empower') {
             event.preventDefault();
             window.location.href = 'https://html-starter-coral.vercel.app/templatehub-details-ui.html';
         }
