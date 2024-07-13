@@ -6,8 +6,8 @@
     <title>Website Content Extractor</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-    <div class="bg-white p-8 rounded shadow-md w-full max-w-lg">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-6 rounded shadow-md w-full max-w-lg">
         <h1 class="text-2xl font-bold mb-4">Website Content Extractor</h1>
         <form id="extractForm" class="space-y-4">
             <div>
@@ -108,7 +108,7 @@
                             const img = document.createElement('img');
                             img.src = logoUrl;
                             img.alt = 'Logo';
-                            img.className = 'max-w-full h-auto';
+                            img.className = 'max-w-full h-16'; // Adjusted height for smaller logos
                             logoContainer.appendChild(img);
                         });
                     } else {
