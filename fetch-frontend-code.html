@@ -155,7 +155,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         let fetchedContent = '';
-        let allLambdaFunctions = {};
+        let allLambdaFunctions = [];
 
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Page loaded, fetching all Lambda functions');
@@ -288,9 +288,10 @@
 
                         // Display code for each Lambda function
                         const codeContainer = document.createElement('div');
-                        codeContainer.className = 'hidden mt-2 p-4 bg-gray-100 rounded code-container';
+                        codeContainer.className = 'mt-4 p-4 bg-gray-100 rounded code-container';
                         codeContainer.id = `code-${name}`;
                         codeContainer.innerHTML = `
+                            <h3 class="text-lg font-semibold mb-2">${name} Code</h3>
                             <textarea id="code-${name}-content" class="code-editor">${codeFile}</textarea>
                             <textarea id="userRequest-${name}" class="mt-2 p-2 w-full border rounded" placeholder="User Request"></textarea>
                             <div class="flex space-x-2 mt-2">
@@ -311,8 +312,6 @@
                         const logStreamsContainer = document.createElement('div');
                         logStreamsContainer.id = `logStreams-${name}`;
                         logStreamsContainer.className = 'mt-2';
-
-
                         const logEventsContainer = document.createElement('div');
                         logEventsContainer.id = `logEvents-${name}`;
                         logEventsContainer.className = 'mt-2 hidden';
