@@ -101,7 +101,68 @@
   <div class="bg-white p-8 rounded shadow-md w-full max-w-md mt-8">
     <h1 class="text-2xl font-bold mb-6">AI Template Builder</h1>
 
-    <form id="postForm" class="space-y-4">
+    <!-- Website Content Extractor Form -->
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-lg overflow-y-auto max-h-screen">
+      <h1 class="text-2xl font-bold mb-4">Website Content Extractor</h1>
+      <form id="extractForm" class="space-y-4">
+        <div>
+          <label for="url" class="block text-sm font-medium text-gray-700">Website URL</label>
+          <input type="url" id="url" name="url" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+        </div>
+        <button type="submit" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Extract Content</button>
+      </form>
+      <div id="loading" class="mt-6 hidden text-center text-gray-500">Extracting...</div>
+      <div id="result" class="mt-6 hidden">
+        <h2 class="text-xl font-semibold">Extracted Content</h2>
+        <div id="logo" class="mt-4">
+          <h3 class="text-lg font-medium">Website Logos</h3>
+          <div id="logoContainer" class="flex overflow-x-auto gap-4 mt-4"></div>
+        </div>
+        <div id="selectedLogoContainer" class="mt-4 hidden">
+          <h3 class="text-lg font-medium">Selected Logo URL</h3>
+          <textarea id="selectedLogoUrl" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" readonly></textarea>
+        </div>
+        <div id="textContent" class="mt-4 max-h-64 overflow-y-auto">
+          <h3 class="text-lg font-medium">Website Text</h3>
+          <p id="textCount" class="text-sm text-gray-500"></p>
+          <p id="textContentBody"></p>
+        </div>
+        <div id="profileImages" class="mt-4">
+          <h3 class="text-lg font-medium">Profile Images</h3>
+          <div id="resultsContainer" class="flex overflow-x-auto gap-4 mt-4"></div>
+        </div>
+        <div id="selectedImageContainer" class="mt-6 hidden">
+          <h3 class="text-xl font-semibold">Selected Profile Image URL</h3>
+          <textarea id="selectedImageUrl" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" readonly></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
+      <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
+        <div id="notification" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden">
+          <div class="p-4">
+            <div class="flex items-start">
+              <div id="notificationIcon" class="flex-shrink-0"></div>
+              <div class="ml-3 w-0 flex-1 pt-0.5">
+                <p id="notificationTitle" class="text-sm font-medium text-gray-900"></p>
+                <p id="notificationMessage" class="mt-1 text-sm text-gray-500"></p>
+              </div>
+              <div class="ml-4 flex flex-shrink-0">
+                <button type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2" onclick="closeNotification()">
+                  <span class="sr-only">Close</span>
+                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form id="postForm" class="space-y-4 mt-8">
       <div>
         <label for="courseDescription" class="block text-sm font-medium text-gray-700">Course Description</label>
         <input type="text" id="courseDescription" name="courseDescription" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
@@ -179,7 +240,7 @@
         } else {
           console.error('Failed to fetch locations');
         }
-console.log(locationsResponse,'locationsResponse');
+        console.log(locationsResponse, 'locationsResponse');
         // Fetch funnels
         const funnelsResponse = await fetch(funnelsUrl, {
           method: 'POST',
@@ -348,6 +409,157 @@ console.log(locationsResponse,'locationsResponse');
       const mobileMenu = document.getElementById('mobileMenu');
       mobileMenu.classList.toggle('hidden');
     });
+
+    document.getElementById('extractForm').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      console.log('Form submitted');
+
+      const url = document.getElementById('url').value;
+      console.log('URL:', url);
+
+      const loadingDiv = document.getElementById('loading');
+      const resultDiv = document.getElementById('result');
+      const logoContainer = document.getElementById('logoContainer');
+      const textContentBody = document.getElementById('textContentBody');
+      const textCount = document.getElementById('textCount');
+      const notificationDiv = document.getElementById('notification');
+      const notificationIcon = document.getElementById('notificationIcon');
+      const notificationTitle = document.getElementById('notificationTitle');
+      const notificationMessage = document.getElementById('notificationMessage');
+      const selectedLogoContainer = document.getElementById('selectedLogoContainer');
+      const selectedLogoUrl = document.getElementById('selectedLogoUrl');
+      const resultsContainer = document.getElementById('resultsContainer');
+      const selectedImageContainer = document.getElementById('selectedImageContainer');
+      const selectedImageUrl = document.getElementById('selectedImageUrl');
+
+      loadingDiv.classList.remove('hidden');
+      resultDiv.classList.add('hidden');
+      logoContainer.innerHTML = '';
+      textContentBody.innerHTML = '';
+      textCount.textContent = '';
+      selectedLogoContainer.classList.add('hidden');
+      resultsContainer.innerHTML = '';
+      selectedImageContainer.classList.add('hidden');
+
+      try {
+        const [response1, response2] = await Promise.all([
+          fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ website_url: url })
+          }),
+          fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ url })
+          })
+        ]);
+
+        const results1 = await response1.json();
+        const results2 = await response2.json();
+        console.log('API Response 1:', results1);
+        console.log('API Response 2:', results2);
+
+        loadingDiv.classList.add('hidden');
+        resultDiv.classList.remove('hidden');
+
+        // Handle profile images
+        if (results1.length === 0) {
+          resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
+        } else {
+          results1.forEach(result => {
+            const resultElement = document.createElement('div');
+            resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+            resultElement.style.minWidth = '150px';
+            resultElement.style.minHeight = '150px';
+            resultElement.addEventListener('click', () => {
+              console.log('Image selected:', result.image_url);
+              selectedImageUrl.value = result.image_url;
+              selectedImageContainer.classList.remove('hidden');
+              document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
+              resultElement.classList.add('border-red-500');
+            });
+
+            const imageElement = document.createElement('img');
+            imageElement.src = result.image_url;
+            imageElement.alt = 'Profile Image';
+            imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
+
+            resultElement.appendChild(imageElement);
+            resultsContainer.appendChild(resultElement);
+          });
+        }
+
+        // Handle website content
+        if (results2.error) {
+          logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
+          textContentBody.innerHTML = '';
+          notificationIcon.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+          </svg>`;
+          notificationTitle.textContent = 'Extraction Unsuccessful';
+          notificationMessage.textContent = `Failed to extract content from ${url}`;
+        } else {
+          if (results2.logo_urls && results2.logo_urls.length > 0) {
+            results2.logo_urls.forEach(logoUrl => {
+              const resultElement = document.createElement('div');
+              resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+              resultElement.style.minWidth = '150px';
+              resultElement.style.minHeight = '150px';
+              resultElement.addEventListener('click', () => {
+                selectedLogoUrl.value = logoUrl;
+                selectedLogoContainer.classList.remove('hidden');
+                document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
+                resultElement.classList.add('border-red-500');
+              });
+
+              const img = document.createElement('img');
+              img.src = logoUrl;
+              img.alt = 'Logo';
+              img.className = 'w-full h-full object-cover mb-2 rounded';
+
+              resultElement.appendChild(img);
+              logoContainer.appendChild(resultElement);
+            });
+          } else {
+            logoContainer.innerHTML = '<p>No logos found</p>';
+          }
+
+          if (results2.website_text) {
+            textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
+            textCount.textContent = `Character count: ${results2.website_text.length}`;
+          } else {
+            textContentBody.innerHTML = '<p>No text content found</p>';
+            textCount.textContent = 'Character count: 0';
+          }
+
+          notificationIcon.innerHTML = `<svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>`;
+          notificationTitle.textContent = 'Extraction Successful';
+          notificationMessage.textContent = `Successfully extracted logo and website text from ${url}`;
+        }
+
+        notificationDiv.classList.remove('hidden');
+      } catch (error) {
+        console.error('Error:', error);
+        loadingDiv.classList.add('hidden');
+        notificationIcon.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+        </svg>`;
+        notificationTitle.textContent = 'Extraction Unsuccessful';
+        notificationMessage.textContent = `An error occurred while extracting content from ${url}`;
+        notificationDiv.classList.remove('hidden');
+      }
+    });
+
+    function closeNotification() {
+      document.getElementById('notification').classList.add('hidden');
+    }
   </script>
 </body>
 
