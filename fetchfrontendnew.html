@@ -110,6 +110,7 @@
         .chevron {
             font-size: 1.25rem;
             transition: transform 0.3s;
+            margin-right: 0.5rem;
         }
 
         .chevron.up {
@@ -124,6 +125,36 @@
 
         .function-details.active {
             display: block;
+        }
+
+        .log-streams-container {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 640px) {
+            .navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .navbar a {
+                padding: 0.5rem 0;
+            }
+
+            .content {
+                margin-top: 6rem;
+            }
+
+            .function-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .chevron {
+                margin-right: 0;
+                margin-bottom: 0.5rem;
+            }
         }
     </style>
 </head>
@@ -273,11 +304,11 @@
                         const functionItem = document.createElement('div');
                         functionItem.className = 'function-item';
                         functionItem.innerHTML = `
+                            <div class="chevron">▼</div>
                             <div>
                                 <div class="function-name">${name}</div>
                                 <div class="function-url">${url}</div>
                             </div>
-                            <div class="chevron">▼</div>
                         `;
                         lambdaFunctionsDiv.appendChild(functionItem);
 
@@ -406,7 +437,7 @@
                                     logStreams.forEach(stream => {
                                         const streamElement = document.createElement('div');
                                         streamElement.className = 'bg-gray-100 p-2 mb-2 rounded cursor-pointer hover:bg-gray-200';
-                                        streamElement.textContent = `Log Stream Name: ${stream.logStreamName}, Last Event Time: ${new Date(stream.lastEventTimestamp).toLocaleString()}`;
+                                        streamElement.textContent = `Last Event Time: ${new Date(stream.lastEventTimestamp).toLocaleString()}`;
                                         streamElement.addEventListener('click', () => fetchLogEvents(functionArn, stream.logStreamName, logEventsContainer));
                                         logStreamsContainer.appendChild(streamElement);
                                     });
