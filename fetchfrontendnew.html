@@ -155,6 +155,13 @@
             <div id="codeContent" class="hidden">
                 <pre id="codeBox" class="code-box line-numbers" contenteditable="true"></pre>
             </div>
+            <div class="mt-4">
+                <textarea id="frontendUserRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4" placeholder="User Request"></textarea>
+                <div class="flex space-x-2">
+                    <button id="updateFrontendButton" class="bg-blue-500 text-white px-4 py-2 rounded">Update</button>
+                    <button id="rewriteFrontendButton" class="bg-yellow-500 text-white px-4 py-2 rounded">Rewrite HTML</button>
+                </div>
+            </div>
             <h2 class="text-xl font-bold mb-2">Backend:</h2>
             <div id="lambdaFunctions" class="mt-6"></div>
         </div>
@@ -368,7 +375,12 @@
                                     throw new Error('Network response was not ok');
                                 }
                                 const data = await response.json();
-                                codeEditor.setValue(data.updatedCode);
+                                console.log('Rewrite response:', data);
+                                if (data.updatedCode) {
+                                    codeEditor.setValue(data.updatedCode);
+                                } else {
+                                    console.error('No updatedCode in response');
+                                }
                             } catch (error) {
                                 alert('Error: ' + error.message);
                             } finally {
@@ -409,7 +421,6 @@
                 } else {
                     lambdaFunctionsDiv.textContent = 'No Lambda functions found.';
                 }
-
                 resultDiv.classList.remove('hidden');
             } catch (error) {
                 console.error('Error fetching content:', error);
@@ -418,6 +429,7 @@
                 resultDiv.classList.remove('hidden');
             }
         });
+
         async function fetchLogEvents(functionArn, logStreamName, logEventsContainer) {
             console.log('Fetching log events for:', logStreamName);
             try {
@@ -485,6 +497,71 @@
             document.getElementById('codeBox').textContent = fetchedContent;
             this.classList.add('active');
             document.getElementById('toggleRendered').classList.remove('active');
+        });
+
+        document.getElementById('updateFrontendButton').addEventListener('click', async function() {
+            const userRequest = document.getElementById('frontendUserRequest').value;
+            const updatedCode = document.getElementById('codeBox').textContent;
+            if (!userRequest || !updatedCode) {
+                alert('Please ensure both user request and updated code are provided.');
+                return;
+            }
+            this.textContent = 'Updating...';
+            this.disabled = true;
+            try {
+                const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userRequest: userRequest, updatedCode: updatedCode })
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                document.getElementById('codeBox').textContent = data.updatedCode;
+                document.getElementById('contentFrame').srcdoc = data.updatedCode;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                this.textContent = 'Update';
+                this.disabled = false;
+            }
+        });
+
+        document.getElementById('rewriteFrontendButton').addEventListener('click', async function() {
+            const userRequest = document.getElementById('frontendUserRequest').value;
+            const existingCode = document.getElementById('codeBox').textContent;
+            if (!userRequest || !existingCode) {
+                alert('Please ensure both user request and existing code are provided.');
+                return;
+            }
+            this.textContent = 'Rewriting...';
+            this.disabled = true;
+            try {
+                const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userRequest: userRequest, existingCode: existingCode })
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log('Rewrite response:', data);
+                if (data) {
+                    document.getElementById('codeBox').textContent = '';
+                    document.getElementById('codeBox').textContent = data
+                    document.getElementById('contentFrame').srcdoc = '';
+                    document.getElementById('contentFrame').srcdoc = data
+                } else {
+                    console.error('No updatedCode in response');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                this.textContent = 'Rewrite HTML';
+                this.disabled = false;
+            }
         });
 
         function copyToClipboard(text) {
