@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,16 +17,13 @@
       position: absolute;
       background-color: #fff;
     }
-
     #autocompleteList div {
       padding: 10px;
       cursor: pointer;
     }
-
     #autocompleteList div:hover {
       background-color: #e9e9e9;
     }
-
     /* Custom styles for funnel name tags */
     .funnel-tag {
       display: inline-flex;
@@ -37,31 +33,26 @@
       font-size: 0.75rem;
       font-weight: 500;
     }
-
     .funnel-green {
       background-color: #d1fae5;
       color: #065f46;
       border: 1px solid rgba(5, 150, 105, 0.2);
     }
-
     .funnel-yellow {
       background-color: #fef08a;
       color: #92400e;
       border: 1px solid rgba(146, 64, 14, 0.2);
     }
-
     .funnel-red {
       background-color: #fee2e2;
       color: #b91c1c;
       border: 1px solid rgba(185, 28, 28, 0.2);
     }
-
     .funnel-blue {
       background-color: #dbeafe;
       color: #1e3a8a;
       border: 1px solid rgba(30, 58, 138, 0.2);
     }
-
     .funnel-purple {
       background-color: #ddd6fe;
       color: #3730a3;
@@ -69,7 +60,6 @@
     }
   </style>
 </head>
-
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen pt-16">
   <!-- Navigation Bar -->
   <nav class="bg-white shadow-md w-full fixed top-0 z-50">
@@ -97,10 +87,8 @@
       </div>
     </div>
   </nav>
-
   <div class="bg-white p-8 rounded shadow-md w-full max-w-md mt-8">
     <h1 class="text-2xl font-bold mb-6">AI Template Builder</h1>
-
     <!-- Website Content Extractor Form -->
     <div class="bg-white p-8 rounded shadow-md w-full max-w-lg overflow-y-auto max-h-screen">
       <h1 class="text-2xl font-bold mb-4">Website Content Extractor</h1>
@@ -137,7 +125,6 @@
         </div>
       </div>
     </div>
-
     <div aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
       <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
         <div id="notification" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden">
@@ -161,13 +148,11 @@
         </div>
       </div>
     </div>
-
     <form id="postForm" class="space-y-4 mt-8">
       <div>
         <label for="courseDescription" class="block text-sm font-medium text-gray-700">Course Description</label>
         <input type="text" id="courseDescription" name="courseDescription" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
       </div>
-
       <div class="relative mt-10 xl:mt-0">
         <h3 class="text-sm font-semibold leading-6 text-gray-900">Search Location</h3>
         <p class="mt-2 text-sm leading-6 text-gray-600">Type to search for the location name.</p>
@@ -180,17 +165,14 @@
           <div id="autocompleteList" class="hidden"></div>
         </div>
       </div>
-
       <div>
         <label for="locationId" class="block text-sm font-medium text-gray-700">Location ID</label>
         <input type="text" id="locationId" name="locationId" class="mt-1 p-2 border border-gray-300 rounded w-full" required readonly>
       </div>
-
       <div>
         <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
         <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 p-2 border border-gray-300 rounded w-full">
       </div>
-
       <div class="relative inline-block text-left">
         <div>
           <label for="funnelName" class="block text-sm font-medium text-gray-700">Funnel Name</label>
@@ -210,14 +192,21 @@
           </div>
         </div>
       </div>
-
+      <!-- New textarea for logo_url -->
+      <div>
+        <label for="logoUrl" class="block text-sm font-medium text-gray-700">Logo URL (Optional)</label>
+        <textarea id="logoUrl" name="logoUrl" class="mt-1 p-2 border border-gray-300 rounded w-full"></textarea>
+      </div>
+      <!-- New textarea for profile_url -->
+      <div>
+        <label for="profileUrl" class="block text-sm font-medium text-gray-700">Profile URL (Optional)</label>
+        <textarea id="profileUrl" name="profileUrl" class="mt-1 p-2 border border-gray-300 rounded w-full"></textarea>
+      </div>
       <button type="submit" id="submitButton" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button>
     </form>
-
     <div id="responseContainer" class="mt-6 hidden bg-gray-100 p-4 rounded"></div>
     <div id="breadcrumbs" class="mt-4 hidden space-x-2"></div>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
       const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
@@ -226,14 +215,11 @@
       const finalPostUrl = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
       let locations = [];
       let funnels = [];
-
       try {
         // Fetch locations
         const locationsResponse = await fetch(locationsUrl, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          }
+          headers: { 'Content-Type': 'application/json' }
         });
         if (locationsResponse.ok) {
           locations = await locationsResponse.json();
@@ -244,9 +230,7 @@
         // Fetch funnels
         const funnelsResponse = await fetch(funnelsUrl, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ key1: 'value1' }) // Example event data
         });
         if (funnelsResponse.ok) {
@@ -257,21 +241,16 @@
       } catch (error) {
         console.error('Error:', error);
       }
-
       // Populate autocomplete for locations
       const locationSearch = document.getElementById('locationSearch');
       const autocompleteList = document.getElementById('autocompleteList');
       const locationIdInput = document.getElementById('locationId');
       const clearSearchButton = document.getElementById('clearSearch');
-
       locationSearch.addEventListener('input', function () {
         const value = this.value;
         autocompleteList.innerHTML = '';
         if (value) {
-          const filteredLocations = locations.filter(location =>
-            location.location_name.toLowerCase().includes(value.toLowerCase())
-          );
-
+          const filteredLocations = locations.filter(location => location.location_name.toLowerCase().includes(value.toLowerCase()));
           filteredLocations.forEach(location => {
             const item = document.createElement('div');
             item.textContent = location.location_name;
@@ -283,13 +262,11 @@
             };
             autocompleteList.appendChild(item);
           });
-
           autocompleteList.classList.remove('hidden');
         } else {
           autocompleteList.classList.add('hidden');
         }
       });
-
       // Clear search input
       clearSearchButton.addEventListener('click', function () {
         locationSearch.value = '';
@@ -298,13 +275,12 @@
         autocompleteList.classList.add('hidden');
         locationIdInput.value = '';
       });
-
       // Populate funnel name dropdown
       const funnelDropdownButton = document.getElementById('funnelDropdownButton');
       const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
+
       const funnelOptionsContainer = document.getElementById('funnelOptions');
       const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
-
       funnels.forEach((funnel, index) => {
         const item = document.createElement('a');
         item.href = "#";
@@ -318,7 +294,6 @@
         };
         funnelOptionsContainer.appendChild(item);
       });
-
       funnelDropdownButton.addEventListener('click', function () {
         funnelDropdownMenu.classList.toggle('hidden');
       });
@@ -326,45 +301,37 @@
       // Form submission handler
       document.getElementById('postForm').addEventListener('submit', async function (event) {
         event.preventDefault();
-
         const submitButton = document.getElementById('submitButton');
         const breadcrumbs = document.getElementById('breadcrumbs');
         const responseContainer = document.getElementById('responseContainer');
-
         submitButton.textContent = 'Submitting...';
 
         const data = {
           locationId: locationIdInput.value,
           courseDescription: document.getElementById('courseDescription').value,
           funnelName: funnelDropdownButton.querySelector('span').textContent,
-          phoneNumber: document.getElementById('phoneNumber').value || null // Optional phone number
+          phoneNumber: document.getElementById('phoneNumber').value || null, // Optional phone number
+          logo_url: document.getElementById('logoUrl').value || null, // Optional logo URL
+          profile_url: document.getElementById('profileUrl').value || null // Optional profile URL
         };
 
         try {
           // First POST request to the initial Lambda function
           const initialResponse = await fetch(initialPostUrl, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              location_id: data.locationId,
-              funnel_name: data.funnelName
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ location_id: data.locationId, funnel_name: data.funnelName })
           });
 
           if (initialResponse.ok) {
             // Proceed with the final POST request
             const finalResponse = await fetch(finalPostUrl, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
+              headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(data)
             });
 
             responseContainer.classList.remove('hidden');
-
             if (finalResponse.ok) {
               const jsonResponse = await finalResponse.json();
               responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
@@ -393,174 +360,154 @@
           breadcrumbs.classList.remove('hidden');
         }
       });
-    });
 
-    document.getElementById('cloneWebsite').addEventListener('click', function(event) {
-      event.preventDefault();
-      window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
-    });
+      document.getElementById('cloneWebsite').addEventListener('click', function(event) {
+        event.preventDefault();
+        window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
+      });
 
-    document.getElementById('cloneWebsiteMobile').addEventListener('click', function(event) {
-      event.preventDefault();
-      window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
-    });
+      document.getElementById('cloneWebsiteMobile').addEventListener('click', function(event) {
+        event.preventDefault();
+        window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
+      });
 
-    document.getElementById('mobileMenuButton').addEventListener('click', function() {
-      const mobileMenu = document.getElementById('mobileMenu');
-      mobileMenu.classList.toggle('hidden');
-    });
+      document.getElementById('mobileMenuButton').addEventListener('click', function() {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.classList.toggle('hidden');
+      });
 
-    document.getElementById('extractForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      console.log('Form submitted');
-
-      const url = document.getElementById('url').value;
-      console.log('URL:', url);
-
-      const loadingDiv = document.getElementById('loading');
-      const resultDiv = document.getElementById('result');
-      const logoContainer = document.getElementById('logoContainer');
-      const textContentBody = document.getElementById('textContentBody');
-      const textCount = document.getElementById('textCount');
-      const notificationDiv = document.getElementById('notification');
-      const notificationIcon = document.getElementById('notificationIcon');
-      const notificationTitle = document.getElementById('notificationTitle');
-      const notificationMessage = document.getElementById('notificationMessage');
-      const selectedLogoContainer = document.getElementById('selectedLogoContainer');
-      const selectedLogoUrl = document.getElementById('selectedLogoUrl');
-      const resultsContainer = document.getElementById('resultsContainer');
-      const selectedImageContainer = document.getElementById('selectedImageContainer');
-      const selectedImageUrl = document.getElementById('selectedImageUrl');
-
-      loadingDiv.classList.remove('hidden');
-      resultDiv.classList.add('hidden');
-      logoContainer.innerHTML = '';
-      textContentBody.innerHTML = '';
-      textCount.textContent = '';
-      selectedLogoContainer.classList.add('hidden');
-      resultsContainer.innerHTML = '';
-      selectedImageContainer.classList.add('hidden');
-
-      try {
-        const [response1, response2] = await Promise.all([
-          fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ website_url: url })
-          }),
-          fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url })
-          })
-        ]);
-
-        const results1 = await response1.json();
-        const results2 = await response2.json();
-        console.log('API Response 1:', results1);
-        console.log('API Response 2:', results2);
-
-        loadingDiv.classList.add('hidden');
-        resultDiv.classList.remove('hidden');
-
-        // Handle profile images
-        if (results1.length === 0) {
-          resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
-        } else {
-          results1.forEach(result => {
-            const resultElement = document.createElement('div');
-            resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
-            resultElement.style.minWidth = '150px';
-            resultElement.style.minHeight = '150px';
-            resultElement.addEventListener('click', () => {
-              console.log('Image selected:', result.image_url);
-              selectedImageUrl.value = result.image_url;
-              selectedImageContainer.classList.remove('hidden');
-              document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
-              resultElement.classList.add('border-red-500');
-            });
-
-            const imageElement = document.createElement('img');
-            imageElement.src = result.image_url;
-            imageElement.alt = 'Profile Image';
-            imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
-
-            resultElement.appendChild(imageElement);
-            resultsContainer.appendChild(resultElement);
-          });
-        }
-
-        // Handle website content
-        if (results2.error) {
-          logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
-          textContentBody.innerHTML = '';
-          notificationIcon.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-          </svg>`;
-          notificationTitle.textContent = 'Extraction Unsuccessful';
-          notificationMessage.textContent = `Failed to extract content from ${url}`;
-        } else {
-          if (results2.logo_urls && results2.logo_urls.length > 0) {
-            results2.logo_urls.forEach(logoUrl => {
+      document.getElementById('extractForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        console.log('Form submitted');
+        const url = document.getElementById('url').value;
+        console.log('URL:', url);
+        const loadingDiv = document.getElementById('loading');
+        const resultDiv = document.getElementById('result');
+        const logoContainer = document.getElementById('logoContainer');
+        const textContentBody = document.getElementById('textContentBody');
+        const textCount = document.getElementById('textCount');
+        const notificationDiv = document.getElementById('notification');
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationTitle = document.getElementById('notificationTitle');
+        const notificationMessage = document.getElementById('notificationMessage');
+        const selectedLogoContainer = document.getElementById('selectedLogoContainer');
+        const selectedLogoUrl = document.getElementById('selectedLogoUrl');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const selectedImageContainer = document.getElementById('selectedImageContainer');
+        const selectedImageUrl = document.getElementById('selectedImageUrl');
+        loadingDiv.classList.remove('hidden');
+        resultDiv.classList.add('hidden');
+        logoContainer.innerHTML = '';
+        textContentBody.innerHTML = '';
+        textCount.textContent = '';
+        selectedLogoContainer.classList.add('hidden');
+        resultsContainer.innerHTML = '';
+        selectedImageContainer.classList.add('hidden');
+        try {
+          const [response1, response2] = await Promise.all([
+            fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ website_url: url })
+            }),
+            fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ url })
+            })
+          ]);
+          const results1 = await response1.json();
+          const results2 = await response2.json();
+          console.log('API Response 1:', results1);
+          console.log('API Response 2:', results2);
+          loadingDiv.classList.add('hidden');
+          resultDiv.classList.remove('hidden');
+          // Handle profile images
+          if (results1.length === 0) {
+            resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
+          } else {
+            results1.forEach(result => {
               const resultElement = document.createElement('div');
               resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
               resultElement.style.minWidth = '150px';
               resultElement.style.minHeight = '150px';
               resultElement.addEventListener('click', () => {
-                selectedLogoUrl.value = logoUrl;
-                selectedLogoContainer.classList.remove('hidden');
-                document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
+                console.log('Image selected:', result.image_url);
+                selectedImageUrl.value = result.image_url;
+                selectedImageContainer.classList.remove('hidden');
+                document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
                 resultElement.classList.add('border-red-500');
               });
-
-              const img = document.createElement('img');
-              img.src = logoUrl;
-              img.alt = 'Logo';
-              img.className = 'w-full h-full object-cover mb-2 rounded';
-
-              resultElement.appendChild(img);
-              logoContainer.appendChild(resultElement);
+              const imageElement = document.createElement('img');
+              imageElement.src = result.image_url;
+              imageElement.alt = 'Profile Image';
+              imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
+              resultElement.appendChild(imageElement);
+              resultsContainer.appendChild(resultElement);
             });
-          } else {
-            logoContainer.innerHTML = '<p>No logos found</p>';
           }
-
-          if (results2.website_text) {
-            textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
-            textCount.textContent = `Character count: ${results2.website_text.length}`;
+          // Handle website content
+          if (results2.error) {
+            logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
+            textContentBody.innerHTML = '';
+            notificationIcon.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+            </svg>`;
+            notificationTitle.textContent = 'Extraction Unsuccessful';
+            notificationMessage.textContent = `Failed to extract content from ${url}`;
           } else {
-            textContentBody.innerHTML = '<p>No text content found</p>';
-            textCount.textContent = 'Character count: 0';
+            if (results2.logo_urls && results2.logo_urls.length > 0) {
+              results2.logo_urls.forEach(logoUrl => {
+                const resultElement = document.createElement('div');
+                resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+                resultElement.style.minWidth = '150px';
+                resultElement.style.minHeight = '150px';
+                resultElement.addEventListener('click', () => {
+                  selectedLogoUrl.value = logoUrl;
+                  selectedLogoContainer.classList.remove('hidden');
+                  document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
+                  resultElement.classList.add('border-red-500');
+                });
+                const img = document.createElement('img');
+                img.src = logoUrl;
+                img.alt = 'Logo';
+                img.className = 'w-full h-full object-cover mb-2 rounded';
+                resultElement.appendChild(img);
+                logoContainer.appendChild(resultElement);
+              });
+            } else {
+              logoContainer.innerHTML = '<p>No logos found</p>';
+            }
+            if (results2.website_text) {
+              textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
+              textCount.textContent = `Character count: ${results2.website_text.length}`;
+            } else {
+              textContentBody.innerHTML = '<p>No text content found</p>';
+              textCount.textContent = 'Character count: 0';
+            }
+            notificationIcon.innerHTML = `<svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>`;
+            notificationTitle.textContent = 'Extraction Successful';
+            notificationMessage.textContent = `Successfully extracted logo and website text from ${url}`;
           }
-
-          notificationIcon.innerHTML = `<svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          notificationDiv.classList.remove('hidden');
+        } catch (error) {
+          console.error('Error:', error);
+          loadingDiv.classList.add('hidden');
+          notificationIcon.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
           </svg>`;
-          notificationTitle.textContent = 'Extraction Successful';
-          notificationMessage.textContent = `Successfully extracted logo and website text from ${url}`;
+          notificationTitle.textContent = 'Extraction Unsuccessful';
+          notificationMessage.textContent = `An error occurred while extracting content from ${url}`;
+          notificationDiv.classList.remove('hidden');
         }
+      });
 
-        notificationDiv.classList.remove('hidden');
-      } catch (error) {
-        console.error('Error:', error);
-        loadingDiv.classList.add('hidden');
-        notificationIcon.innerHTML = `<svg class="h-6 w-6 text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-        </svg>`;
-        notificationTitle.textContent = 'Extraction Unsuccessful';
-        notificationMessage.textContent = `An error occurred while extracting content from ${url}`;
-        notificationDiv.classList.remove('hidden');
+      function closeNotification() {
+        document.getElementById('notification').classList.add('hidden');
       }
     });
-
-    function closeNotification() {
-      document.getElementById('notification').classList.add('hidden');
-    }
   </script>
 </body>
-
 </html>
