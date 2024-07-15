@@ -222,154 +222,180 @@
     <div id="breadcrumbs" class="mt-4 hidden space-x-2"></div>
   </div>
   <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-      const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
-      const funnelsUrl = 'https://hlqcht2ceojjdd5u3zvta4al540ckupu.lambda-url.us-west-2.on.aws/';
-      const initialPostUrl = 'https://yvkjbe775fpg62xiqqb7hjq3je0ujbir.lambda-url.us-west-2.on.aws/';
-      const finalPostUrlExisting = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
-      const finalPostUrlNonExisting = 'https://wef7kxfivzi4psft4v54w2rcpy0noksq.lambda-url.us-west-2.on.aws/';
-      let locations = [];
-      let funnels = ['gusten-sun-landing-page-light', 'prelauch-optin-sequence'];
-      try {
-        // Fetch locations
-        const locationsResponse = await fetch(locationsUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-        if (locationsResponse.ok) {
-          locations = await locationsResponse.json();
-        } else {
-          console.error('Failed to fetch locations');
-        }
-        console.log(locationsResponse, 'locationsResponse');
-      } catch (error) {
-        console.error('Error:', error);
+  document.addEventListener('DOMContentLoaded', async function () {
+    const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
+    const funnelsUrl = 'https://hlqcht2ceojjdd5u3zvta4al540ckupu.lambda-url.us-west-2.on.aws/';
+    const finalPostUrlExisting = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
+    const finalPostUrlNonExisting = 'https://wef7kxfivzi4psft4v54w2rcpy0noksq.lambda-url.us-west-2.on.aws/';
+    let locations = [];
+    let funnels = ['gusten-sun-landing-page-light', 'prelauch-optin-sequence'];
+
+    try {
+      // Fetch locations
+      const locationsResponse = await fetch(locationsUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (locationsResponse.ok) {
+        locations = await locationsResponse.json();
+      } else {
+        console.error('Failed to fetch locations');
       }
-      // Populate autocomplete for locations
-      const locationSearch = document.getElementById('locationSearch');
-      const autocompleteList = document.getElementById('autocompleteList');
-      const locationIdInput = document.getElementById('locationId');
-      const clearSearchButton = document.getElementById('clearSearch');
-      locationSearch.addEventListener('input', function () {
-        const value = this.value;
-        autocompleteList.innerHTML = '';
-        if (value) {
-          const filteredLocations = locations.filter(location => location.location_name.toLowerCase().includes(value.toLowerCase()));
-          filteredLocations.forEach(location => {
-            const item = document.createElement('div');
-            item.textContent = location.location_name;
-            item.onclick = function () {
-              locationSearch.value = location.location_name;
-              locationIdInput.value = location.location_id;
-              autocompleteList.innerHTML = '';
-              autocompleteList.classList.add('hidden');
-            };
-            autocompleteList.appendChild(item);
-          });
-          autocompleteList.classList.remove('hidden');
-        } else {
-          autocompleteList.classList.add('hidden');
-        }
-      });
-      // Clear search input
-      clearSearchButton.addEventListener('click', function () {
-        locationSearch.value = '';
-        locationSearch.focus();
-        autocompleteList.innerHTML = '';
+      console.log(locationsResponse, 'locationsResponse');
+    } catch (error) {
+      console.error('Error:', error);
+    }
+
+    // Populate autocomplete for locations
+    const locationSearch = document.getElementById('locationSearch');
+    const autocompleteList = document.getElementById('autocompleteList');
+    const locationIdInput = document.getElementById('locationId');
+    const clearSearchButton = document.getElementById('clearSearch');
+    locationSearch.addEventListener('input', function () {
+      const value = this.value;
+      autocompleteList.innerHTML = '';
+      if (value) {
+        const filteredLocations = locations.filter(location => location.location_name.toLowerCase().includes(value.toLowerCase()));
+        filteredLocations.forEach(location => {
+          const item = document.createElement('div');
+          item.textContent = location.location_name;
+          item.onclick = function () {
+            locationSearch.value = location.location_name;
+            locationIdInput.value = location.location_id;
+            autocompleteList.innerHTML = '';
+            autocompleteList.classList.add('hidden');
+          };
+          autocompleteList.appendChild(item);
+        });
+        autocompleteList.classList.remove('hidden');
+      } else {
         autocompleteList.classList.add('hidden');
-        locationIdInput.value = '';
-      });
-      // Populate funnel name dropdown
-      const funnelDropdownButton = document.getElementById('funnelDropdownButton');
-      const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
-      const funnelOptionsContainer = document.getElementById('funnelOptions');
-      const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
-      funnels.forEach((funnel, index) => {
-        const item = document.createElement('a');
-        item.href = "#";
-        item.className = `text-gray-700 block px-4 py-2 text-sm funnel-tag ${funnelColors[index % funnelColors.length]}`;
-        item.role = "menuitem";
-        item.tabIndex = -1;
-        item.textContent = funnel;
-        item.onclick = function () {
-          funnelDropdownButton.querySelector('span').textContent = funnel;
-          funnelDropdownMenu.classList.add('hidden');
+      }
+    });
+
+    // Clear search input
+    clearSearchButton.addEventListener('click', function () {
+      locationSearch.value = '';
+      locationSearch.focus();
+      autocompleteList.innerHTML = '';
+      autocompleteList.classList.add('hidden');
+      locationIdInput.value = '';
+    });
+
+    // Populate funnel name dropdown
+    const funnelDropdownButton = document.getElementById('funnelDropdownButton');
+    const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
+    const funnelOptionsContainer = document.getElementById('funnelOptions');
+    const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
+    funnels.forEach((funnel, index) => {
+      const item = document.createElement('a');
+      item.href = "#";
+      item.className = `text-gray-700 block px-4 py-2 text-sm funnel-tag ${funnelColors[index % funnelColors.length]}`;
+      item.role = "menuitem";
+      item.tabIndex = -1;
+      item.textContent = funnel;
+      item.onclick = function () {
+        funnelDropdownButton.querySelector('span').textContent = funnel;
+        funnelDropdownMenu.classList.add('hidden');
+      };
+      funnelOptionsContainer.appendChild(item);
+    });
+    funnelDropdownButton.addEventListener('click', function () {
+      funnelDropdownMenu.classList.toggle('hidden');
+    });
+
+    // Show/hide existing account fields based on account type selection
+    const accountTypeSelect = document.getElementById('accountType');
+    const existingAccountFields = document.getElementById('existingAccountFields');
+    accountTypeSelect.addEventListener('change', function () {
+      if (this.value === 'existing') {
+        existingAccountFields.classList.remove('hidden');
+      } else {
+        existingAccountFields.classList.add('hidden');
+      }
+    });
+
+    // Form submission handler
+    document.getElementById('postForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const submitButton = document.getElementById('submitButton');
+      const breadcrumbs = document.getElementById('breadcrumbs');
+      const responseContainer = document.getElementById('responseContainer');
+      submitButton.textContent = 'Submitting...';
+
+      const data = {
+        customer_name: document.getElementById('customerName').value,
+        course_description: document.getElementById('courseDescription').value,
+        phone_number: document.getElementById('phoneNumber').value || null, // Optional phone number
+        logo_url: document.getElementById('logoUrl').value || 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png', // Optional logo URL
+        profile_url: document.getElementById('profileUrl').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/2048px-Missing_avatar.svg.png', // Optional profile URL
+        funnel_name: funnelDropdownButton.querySelector('span').textContent
+      };
+
+      const accountType = accountTypeSelect.value;
+      let postUrl = '';
+      let payload = {};
+
+      if (accountType === 'existing') {
+        data.location_id = locationIdInput.value;
+        postUrl = finalPostUrlExisting;
+        payload = {
+          locationId: data.location_id,
+          courseDescription: data.course_description,
+          phoneNumber: data.phone_number,
+          profile_url: data.profile_url,
+          logo_url: data.logo_url,
+          funnelName: data.funnel_name
         };
-        funnelOptionsContainer.appendChild(item);
-      });
-      funnelDropdownButton.addEventListener('click', function () {
-        funnelDropdownMenu.classList.toggle('hidden');
-      });
-
-      // Show/hide existing account fields based on account type selection
-      const accountTypeSelect = document.getElementById('accountType');
-      const existingAccountFields = document.getElementById('existingAccountFields');
-      accountTypeSelect.addEventListener('change', function () {
-        if (this.value === 'existing') {
-          existingAccountFields.classList.remove('hidden');
-        } else {
-          existingAccountFields.classList.add('hidden');
-        }
-      });
-
-      // Form submission handler
-      document.getElementById('postForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const submitButton = document.getElementById('submitButton');
-        const breadcrumbs = document.getElementById('breadcrumbs');
-        const responseContainer = document.getElementById('responseContainer');
-        submitButton.textContent = 'Submitting...';
-
-        const data = {
-          customer_name: document.getElementById('customerName').value,
-          course_description: document.getElementById('courseDescription').value,
-          phone_number: document.getElementById('phoneNumber').value || null, // Optional phone number
-          logo_url: document.getElementById('logoUrl').value || null, // Optional logo URL
-          profile_url: document.getElementById('profileUrl').value || null, // Optional profile URL
-          funnel_name: funnelDropdownButton.querySelector('span').textContent
+      } else {
+        postUrl = finalPostUrlNonExisting;
+        payload = {
+          phone_number: data.phone_number,
+          course_description: data.course_description,
+          funnel_name: "gusten-sun-landing-page-light",
+          customer_name: data.customer_name
         };
-
-        const accountType = accountTypeSelect.value;
-        let postUrl = '';
-
-        if (accountType === 'existing') {
-          data.location_id = locationIdInput.value;
-          postUrl = finalPostUrlExisting;
-        } else {
-          postUrl = finalPostUrlNonExisting;
+        if (data.logo_url) {
+          payload.logo_url = data.logo_url;
         }
+        if (data.profile_url) {
+          payload.profile_url = data.profile_url;
+        }
+      }
 
-        try {
-          // POST request to the appropriate Lambda function
-          const response = await fetch(postUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-          });
+      console.log('Payload:', payload);
 
-          responseContainer.classList.remove('hidden');
-          if (response.ok) {
-            const jsonResponse = await response.json();
-            responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
-            responseContainer.classList.add('bg-green-100');
-            breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
-          } else {
-            const errorMessage = await response.text();
-            responseContainer.textContent = `Error: ${response.status} - ${errorMessage}`;
-            responseContainer.classList.add('bg-red-100');
-            breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          responseContainer.textContent = `Request Failed: ${error.message}`;
-          responseContainer.classList.remove('hidden');
+      try {
+        // POST request to the appropriate Lambda function
+        const response = await fetch(postUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        responseContainer.classList.remove('hidden');
+        if (response.ok) {
+          const jsonResponse = await response.json();
+          responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
+          responseContainer.classList.add('bg-green-100');
+          breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
+        } else {
+          const errorMessage = await response.text();
+          responseContainer.textContent = `Error: ${response.status} - ${errorMessage}`;
           responseContainer.classList.add('bg-red-100');
           breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
-        } finally {
-          submitButton.textContent = 'Submit';
-          breadcrumbs.classList.remove('hidden');
         }
-      });
+      } catch (error) {
+        console.error('Error:', error);
+        responseContainer.textContent = `Request Failed: ${error.message}`;
+        responseContainer.classList.remove('hidden');
+        responseContainer.classList.add('bg-red-100');
+        breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
+      } finally {
+        submitButton.textContent = 'Submit';
+        breadcrumbs.classList.remove('hidden');
+      }
+    });
 
       document.getElementById('cloneWebsite').addEventListener('click', function(event) {
         event.preventDefault();
