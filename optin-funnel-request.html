@@ -1,506 +1,497 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>POST Request Example</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
-  <style>
-    /* Styles for Autocomplete List */
-    #autocompleteList {
-      border: 1px solid #d4d4d4;
-      border-bottom: none;
-      border-top: none;
-      z-index: 99;
-      overflow: auto;
-      max-height: 150px;
-      position: absolute;
-      background-color: #fff;
-    }
-    #autocompleteList div {
-      padding: 10px;
-      cursor: pointer;
-    }
-    #autocompleteList div:hover {
-      background-color: #e9e9e9;
-    }
-    /* Custom styles for funnel name tags */
-    .funnel-tag {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 9999px;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    .funnel-green {
-      background-color: #d1fae5;
-      color: #065f46;
-      border: 1px solid rgba(5, 150, 105, 0.2);
-    }
-    .funnel-yellow {
-      background-color: #fef08a;
-      color: #92400e;
-      border: 1px solid rgba(146, 64, 14, 0.2);
-    }
-    .funnel-red {
-      background-color: #fee2e2;
-      color: #b91c1c;
-      border: 1px solid rgba(185, 28, 28, 0.2);
-    }
-    .funnel-blue {
-      background-color: #dbeafe;
-      color: #1e3a8a;
-      border: 1px solid rgba(30, 58, 138, 0.2);
-    }
-    .funnel-purple {
-      background-color: #ddd6fe;
-      color: #3730a3;
-      border: 1px solid rgba(55, 48, 163, 0.2);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST Request Example</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Styles for Autocomplete List */
+        #autocompleteList {
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            overflow: auto;
+            max-height: 150px;
+            position: absolute;
+            background-color: #fff;
+        }
+
+        #autocompleteList div {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        #autocompleteList div:hover {
+            background-color: #e9e9e9;
+        }
+
+        /* Custom styles for funnel name tags */
+        .funnel-tag {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .funnel-green {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid rgba(5, 150, 105, 0.2);
+        }
+
+        .funnel-yellow {
+            background-color: #fef08a;
+            color: #92400e;
+            border: 1px solid rgba(146, 64, 14, 0.2);
+        }
+
+        .funnel-red {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid rgba(185, 28, 28, 0.2);
+        }
+
+        .funnel-blue {
+            background-color: #dbeafe;
+            color: #1e3a8a;
+            border: 1px solid rgba(30, 58, 138, 0.2);
+        }
+
+        .funnel-purple {
+            background-color: #ddd6fe;
+            color: #3730a3;
+            border: 1px solid rgba(55, 48, 163, 0.2);
+        }
+    </style>
 </head>
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen pt-16">
-  <!-- Navigation Bar -->
-  <nav class="bg-white shadow-md w-full fixed top-0 z-50">
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-md w-full fixed top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between h-16">
-        <div class="flex">
-          <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
-            <a href="#" class="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium underline">Submit AI buildout</a>
-            <a href="#" id="cloneWebsite" class="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium">Clone Website</a>
-          </div>
+        <div class="flex justify-between h-16">
+            <div class="flex">
+                <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
+                    <a href="#" class="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium underline">Submit AI buildout</a>
+                    <a href="#" id="cloneWebsite" class="text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 border-transparent text-sm font-medium">Clone Website</a>
+                </div>
+            </div>
+            <div class="sm:hidden flex items-center">
+                <button id="mobileMenuButton" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
+                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="sm:hidden flex items-center">
-          <button id="mobileMenuButton" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700">
-            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          </button>
-        </div>
-      </div>
     </div>
     <div id="mobileMenu" class="sm:hidden hidden">
-      <div class="pt-2 pb-3 space-y-1">
-        <a href="#" class="block pl-3 pr-4 py-2 border-l-4 border-indigo-500 text-base font-medium text-indigo-700 bg-indigo-50 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700">Submit AI buildout</a>
-        <a href="#" id="cloneWebsiteMobile" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Clone Website</a>
-      </div>
+        <div class="pt-2 pb-3 space-y-1">
+            <a href="#" class="block pl-3 pr-4 py-2 border-l-4 border-indigo-500 text-base font-medium text-indigo-700 bg-indigo-50 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100 focus:border-indigo-700">Submit AI buildout</a>
+            <a href="#" id="cloneWebsiteMobile" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Clone Website</a>
+        </div>
     </div>
-  </nav>
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-md mt-8">
+</nav>
+<div class="bg-white p-8 rounded shadow-md w-full max-w-md mt-8">
     <h1 class="text-2xl font-bold mb-6">AI Template Builder</h1>
     <form id="mainForm" class="space-y-4">
-      <div>
-        <label for="accountType" class="block text-sm font-medium text-gray-700">Is this for an existing account or a non-existing account?</label>
-        <select id="accountType" name="accountType" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
-          <option value="">Select an option</option>
-          <option value="existing">Existing Account</option>
-          <option value="non-existing">Non-Existing Account</option>
-        </select>
-      </div>
-      <div>
-        <label for="hasWebsite" class="block text-sm font-medium text-gray-700">Does the user have an existing website?</label>
-        <select id="hasWebsite" name="hasWebsite" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
-          <option value="">Select an option</option>
-          <option value="yes">Yes</option>
-          <option value="no">No</option>
-        </select>
-      </div>
-      <div id="websiteExtractor" class="hidden">
-        <h2 class="text-xl font-semibold">Website Content Extractor</h2>
         <div>
-          <label for="url" class="block text-sm font-medium text-gray-700">Website URL</label>
-          <input type="url" id="url" name="url" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
-        </div>
-        <button type="button" id="extractButton" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Extract Content</button>
-        <div id="loading" class="mt-6 hidden text-center text-gray-500">Extracting...</div>
-        <div id="result" class="mt-6 hidden">
-          <h3 class="text-lg font-medium">Website Logos</h3>
-          <div id="logoContainer" class="flex overflow-x-auto gap-4 mt-4"></div>
-          <div id="selectedLogoContainer" class="mt-4 hidden">
-            <h3 class="text-lg font-medium">Selected Logo URL</h3>
-            <textarea id="selectedLogoUrl" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" readonly></textarea>
-          </div>
-          <div id="textContent" class="mt-4 max-h-64 overflow-y-auto">
-            <h3 class="text-lg font-medium">Website Text</h3>
-            <p id="textCount" class="text-sm text-gray-500"></p>
-            <p id="textContentBody"></p>
-          </div>
-          <div id="profileImages" class="mt-4">
-            <h3 class="text-lg font-medium">Profile Images</h3>
-            <div id="resultsContainer" class="flex overflow-x-auto gap-4 mt-4"></div>
-          </div>
-          <div id="selectedImageContainer" class="mt-6 hidden">
-            <h3 class="text-xl font-semibold">Selected Profile Image URL</h3>
-            <textarea id="selectedImageUrl" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" readonly></textarea>
-          </div>
-        </div>
-      </div>
-      <div id="existingAccountFields" class="hidden">
-        <div class="relative mt-10 xl:mt-0">
-          <h3 class="text-sm font-semibold leading-6 text-gray-900">Search Location</h3>
-          <p class="mt-2 text-sm leading-6 text-gray-600">Type to search for the location name.</p>
-          <div class="mt-6 sm:flex sm:max-w-md relative">
-            <label for="locationSearch" class="sr-only">Location Name</label>
-            <input type="text" id="locationSearch" name="locationSearch" class="w-full min-w-0 appearance-none rounded-md border-0 bg-white px-3 py-1.5 text-base text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:w-64 sm:text-sm sm:leading-6 xl:w-full" placeholder="Enter location name">
-            <button type="button" id="clearSearch" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none">
-              &times;
-            </button>
-            <div id="autocompleteList" class="hidden"></div>
-          </div>
+            <label for="accountType" class="block text-sm font-medium text-gray-700">Is this for an existing account or a non-existing account?</label>
+            <select id="accountType" name="accountType" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
+                <option value="">Select an option</option>
+                <option value="existing">Existing Account</option>
+                <option value="non-existing">Non-Existing Account</option>
+            </select>
         </div>
         <div>
-          <label for="locationId" class="block text-sm font-medium text-gray-700">Location ID</label>
-          <input type="text" id="locationId" name="locationId" class="mt-1 p-2 border border-gray-300 rounded w-full" required readonly>
+            <label for="hasWebsite" class="block text-sm font-medium text-gray-700">Does the user have an existing website?</label>
+            <select id="hasWebsite" name="hasWebsite" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
+                <option value="">Select an option</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
         </div>
-      </div>
-      <div>
-        <label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name</label>
-        <input type="text" id="customerName" name="customerName" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
-      </div>
-      <div>
-        <label for="courseDescription" class="block text-sm font-medium text-gray-700">Course Description</label>
-        <input type="text" id="courseDescription" name="courseDescription" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
-      </div>
-      <div>
-        <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
-        <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 p-2 border border-gray-300 rounded w-full">
-      </div>
-      <div class="relative inline-block text-left">
+        <div id="websiteExtractor" class="hidden">
+            <h2 class="text-xl font-semibold">Website Content Extractor</h2>
+            <div>
+                <label for="url" class="block text-sm font-medium text-gray-700">Website URL</label>
+                <input type="url" id="url" name="url" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+            </div>
+            <button type="button" id="extractButton" class="w-full bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Extract Content</button>
+            <div id="loading" class="mt-6 hidden text-center text-gray-500">Extracting...</div>
+            <div id="result" class="mt-6 hidden">
+                <h3 class="text-lg font-medium">Website Logos</h3>
+                <div id="logoContainer" class="flex overflow-x-auto gap-4 mt-4"></div>
+                <div id="selectedLogoContainer" class="mt-4 hidden">
+                    <h3 class="text-lg font-medium">Selected Logo URL</h3>
+                    <textarea id="selectedLogoUrl" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"></textarea>
+                </div>
+                <div id="textContent" class="mt-4 max-h-64 overflow-y-auto">
+                    <h3 class="text-lg font-medium">Website Text</h3>
+                    <p id="textCount" class="text-sm text-gray-500"></p>
+                    <p id="textContentBody"></p>
+                </div>
+                <div id="profileImages" class="mt-4">
+                    <h3 class="text-lg font-medium">Profile Images</h3>
+                    <div id="resultsContainer" class="flex overflow-x-auto gap-4 mt-4"></div>
+                </div>
+                <div id="selectedImageContainer" class="mt-6 hidden">
+                    <h3 class="text-xl font-semibold">Selected Profile Image URL</h3>
+                    <textarea id="selectedImageUrl" class="mt-2 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"></textarea>
+                </div>
+            </div>
+        </div>
+        <div id="existingAccountFields" class="hidden">
+            <div class="relative mt-10 xl:mt-0">
+                <h3 class="text-sm font-semibold leading-6 text-gray-900">Search Location</h3>
+                <p class="mt-2 text-sm leading-6 text-gray-600">Type to search for the location name.</p>
+                <div class="mt-6 sm:flex sm:max-w-md relative">
+                    <label for="locationSearch" class="sr-only">Location Name</label>
+                    <input type="text" id="locationSearch" name="locationSearch" class="w-full min-w-0 appearance-none rounded-md border-0 bg-white px-3 py-1.5 text-base text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:w-64 sm:text-sm sm:leading-6 xl:w-full" placeholder="Enter location name">
+                    <button type="button" id="clearSearch" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 focus:outline-none">
+                        &times;
+                    </button>
+                    <div id="autocompleteList" class="hidden"></div>
+                </div>
+            </div>
+            <div>
+                <label for="locationId" class="block text-sm font-medium text-gray-700">Location ID</label>
+                <input type="text" id="locationId" name="locationId" class="mt-1 p-2 border border-gray-300 rounded w-full" required readonly>
+            </div>
+        </div>
         <div>
-          <label for="funnelName" class="block text-sm font-medium text-gray-700">Funnel Name</label>
-          <div class="mt-1">
-            <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="funnelDropdownButton" aria-expanded="true" aria-haspopup="true">
-              <span>Select a funnel</span>
-              <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-              </svg>
-            </button>
-          </div>
+            <label for="customerName" class="block text-sm font-medium text-gray-700">Customer Name</label>
+            <input type="text" id="customerName" name="customerName" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
         </div>
-        <!-- Dropdown menu -->
-        <div id="funnelDropdownMenu" class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="funnelDropdownButton" tabindex="-1">
-          <div class="py-1" role="none" id="funnelOptions">
-            <!-- Funnel options will be appended here -->
-          </div>
-        </div>
-      </div>
-      <div id="optionalFields">
-        <!-- New textarea for logo_url -->
         <div>
-          <label for="logoUrl" class="block text-sm font-medium text-gray-700">Logo URL (Optional)</label>
-          <textarea id="logoUrl" name="logoUrl" class="mt-1 p-2 border border-gray-300 rounded w-full"></textarea>
+            <label for="courseDescription" class="block text-sm font-medium text-gray-700">Course Description</label>
+            <input type="text" id="courseDescription" name="courseDescription" class="mt-1 p-2 border border-gray-300 rounded w-full" required>
         </div>
-        <!-- New textarea for profile_url -->
         <div>
-          <label for="profileUrl" class="block text-sm font-medium text-gray-700">Profile URL (Optional)</label>
-          <textarea id="profileUrl" name="profileUrl" class="mt-1 p-2 border border-gray-300 rounded w-full"></textarea>
+            <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Phone Number (Optional)</label>
+            <input type="tel" id="phoneNumber" name="phoneNumber" class="mt-1 p-2 border border-gray-300 rounded w-full">
         </div>
-      </div>
-      <button type="submit" id="submitButton" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button>
+        <div class="relative inline-block text-left">
+            <div>
+                <label for="funnelName" class="block text-sm font-medium text-gray-700">Funnel Name</label>
+                <div class="mt-1">
+                    <button type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50" id="funnelDropdownButton" aria-expanded="true" aria-haspopup="true">
+                        <span>Select a funnel</span>
+                        <svg class="-mr-1 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Dropdown menu -->
+            <div id="funnelDropdownMenu" class="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="funnelDropdownButton" tabindex="-1">
+                <div class="py-1" role="none" id="funnelOptions">
+                    <!-- Funnel options will be appended here -->
+                </div>
+            </div>
+        </div>
+        <div id="optionalFields">
+            <!-- New textarea for logo_url -->
+            <div>
+                <label for="logoUrl" class="block text-sm font-medium text-gray-700">Logo URL (Optional)</label>
+                <textarea id="logoUrl" name="logoUrl" class="mt-1 p-2 border border-gray-300 rounded w-full"></textarea>
+            </div>
+            <!-- New textarea for profile_url -->
+            <div>
+                <label for="profileUrl" class="block text-sm font-medium text-gray-700">Profile URL (Optional)</label>
+                <textarea id="profileUrl" name="profileUrl" class="mt-1 p-2 border border-gray-300 rounded w-full"></textarea>
+            </div>
+        </div>
+        <button type="submit" id="submitButton" class="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">Submit</button>
     </form>
     <div id="responseContainer" class="mt-6 hidden bg-gray-100 p-4 rounded"></div>
     <div id="breadcrumbs" class="mt-4 hidden space-x-2"></div>
-  </div>
-  <script>
+</div>
+<script>
     document.addEventListener('DOMContentLoaded', async function () {
-      const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
-      const funnelsUrl = 'https://hlqcht2ceojjdd5u3zvta4al540ckupu.lambda-url.us-west-2.on.aws/';
-      const finalPostUrlExisting = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
-      const finalPostUrlNonExisting = 'https://wef7kxfivzi4psft4v54w2rcpy0noksq.lambda-url.us-west-2.on.aws/';
-      let locations = [];
-      let funnels = ['gusten-sun-landing-page-light', 'prelauch-optin-sequence'];
-
-      try {
-        const locationsResponse = await fetch(locationsUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        });
-        if (locationsResponse.ok) {
-          locations = await locationsResponse.json();
-        } else {
-          console.error('Failed to fetch locations');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-
-      const locationSearch = document.getElementById('locationSearch');
-      const autocompleteList = document.getElementById('autocompleteList');
-      const locationIdInput = document.getElementById('locationId');
-      const clearSearchButton = document.getElementById('clearSearch');
-      locationSearch.addEventListener('input', function () {
-        const value = this.value;
-        autocompleteList.innerHTML = '';
-        if (value) {
-          const filteredLocations = locations.filter(location => location.location_name.toLowerCase().includes(value.toLowerCase()));
-          filteredLocations.forEach(location => {
-            const item = document.createElement('div');
-            item.textContent = location.location_name;
-            item.onclick = function () {
-              locationSearch.value = location.location_name;
-              locationIdInput.value = location.location_id;
-              autocompleteList.innerHTML = '';
-              autocompleteList.classList.add('hidden');
-            };
-            autocompleteList.appendChild(item);
-          });
-          autocompleteList.classList.remove('hidden');
-        } else {
-          autocompleteList.classList.add('hidden');
-        }
-      });
-
-      clearSearchButton.addEventListener('click', function () {
-        locationSearch.value = '';
-        locationSearch.focus();
-        autocompleteList.innerHTML = '';
-        autocompleteList.classList.add('hidden');
-        locationIdInput.value = '';
-      });
-
-      const funnelDropdownButton = document.getElementById('funnelDropdownButton');
-      const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
-      const funnelOptionsContainer = document.getElementById('funnelOptions');
-      const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
-      funnels.forEach((funnel, index) => {
-        const item = document.createElement('a');
-        item.href = "#";
-        item.className = `text-gray-700 block px-4 py-2 text-sm funnel-tag ${funnelColors[index % funnelColors.length]}`;
-        item.role = "menuitem";
-        item.tabIndex = -1;
-        item.textContent = funnel;
-        item.onclick = function () {
-          funnelDropdownButton.querySelector('span').textContent = funnel;
-          funnelDropdownMenu.classList.add('hidden');
-        };
-        funnelOptionsContainer.appendChild(item);
-      });
-      funnelDropdownButton.addEventListener('click', function () {
-        funnelDropdownMenu.classList.toggle('hidden');
-      });
-
-      const accountTypeSelect = document.getElementById('accountType');
-      const hasWebsiteSelect = document.getElementById('hasWebsite');
-      const websiteExtractor = document.getElementById('websiteExtractor');
-      const existingAccountFields = document.getElementById('existingAccountFields');
-      const optionalFields = document.getElementById('optionalFields');
-      accountTypeSelect.addEventListener('change', function () {
-        if (this.value === 'existing') {
-          existingAccountFields.classList.remove('hidden');
-        } else {
-          existingAccountFields.classList.add('hidden');
-        }
-      });
-
-      hasWebsiteSelect.addEventListener('change', function () {
-        if (this.value === 'yes') {
-          websiteExtractor.classList.remove('hidden');
-          optionalFields.classList.add('hidden');
-        } else {
-          websiteExtractor.classList.add('hidden');
-          optionalFields.classList.remove('hidden');
-        }
-      });
-
-      document.getElementById('extractButton').addEventListener('click', async function () {
-        const url = document.getElementById('url').value;
-        const loadingDiv = document.getElementById('loading');
-        const resultDiv = document.getElementById('result');
-        const logoContainer = document.getElementById('logoContainer');
-        const textContentBody = document.getElementById('textContentBody');
-        const textCount = document.getElementById('textCount');
-        const selectedLogoContainer = document.getElementById('selectedLogoContainer');
-        const selectedLogoUrl = document.getElementById('selectedLogoUrl');
-        const resultsContainer = document.getElementById('resultsContainer');
-        const selectedImageContainer = document.getElementById('selectedImageContainer');
-        const selectedImageUrl = document.getElementById('selectedImageUrl');
-        loadingDiv.classList.remove('hidden');
-        resultDiv.classList.add('hidden');
-        logoContainer.innerHTML = '';
-        textContentBody.innerHTML = '';
-        textCount.textContent = '';
-        selectedLogoContainer.classList.add('hidden');
-        resultsContainer.innerHTML = '';
-        selectedImageContainer.classList.add('hidden');
-
+        const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
+        const funnelsUrl = 'https://hlqcht2ceojjdd5u3zvta4al540ckupu.lambda-url.us-west-2.on.aws/';
+        const finalPostUrlExisting = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
+        const finalPostUrlNonExisting = 'https://wef7kxfivzi4psft4v54w2rcpy0noksq.lambda-url.us-west-2.on.aws/';
+        let locations = [];
+        let funnels = ['gusten-sun-landing-page-light', 'prelauch-optin-sequence'];
         try {
-          const [response1, response2] = await Promise.all([
-            fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ website_url: url })
-            }),
-            fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ url })
-            })
-          ]);
-          const results1 = await response1.json();
-          const results2 = await response2.json();
-          loadingDiv.classList.add('hidden');
-          resultDiv.classList.remove('hidden');
-
-          if (results1.length === 0) {
-            resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
-          } else {
-            results1.forEach(result => {
-              const resultElement = document.createElement('div');
-              resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
-              resultElement.style.minWidth = '150px';
-              resultElement.style.minHeight = '150px';
-              resultElement.addEventListener('click', () => {
-                selectedImageUrl.value = result.image_url;
-                document.getElementById('profileUrl').value = result.image_url;
-                selectedImageContainer.classList.remove('hidden');
-                document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
-                resultElement.classList.add('border-red-500');
-              });
-              const imageElement = document.createElement('img');
-              imageElement.src = result.image_url;
-              imageElement.alt = 'Profile Image';
-              imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
-              resultElement.appendChild(imageElement);
-              resultsContainer.appendChild(resultElement);
-            });
-          }
-
-          if (results2.error) {
-            logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
-            textContentBody.innerHTML = '';
-          } else {
-            if (results2.logo_urls && results2.logo_urls.length > 0) {
-              results2.logo_urls.forEach(logoUrl => {
-                const resultElement = document.createElement('div');
-                resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
-                resultElement.style.minWidth = '150px';
-                resultElement.style.minHeight = '150px';
-                resultElement.addEventListener('click', () => {
-                  selectedLogoUrl.value = logoUrl;
-                  document.getElementById('logoUrl').value = logoUrl;
-                  selectedLogoContainer.classList.remove('hidden');
-                  document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
-                  resultElement.classList.add('border-red-500');
+            const locationsResponse = await fetch(locationsUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+            if (locationsResponse.ok) {
+                locations = await locationsResponse.json();
+            } else {
+                console.error('Failed to fetch locations');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+        const locationSearch = document.getElementById('locationSearch');
+        const autocompleteList = document.getElementById('autocompleteList');
+        const locationIdInput = document.getElementById('locationId');
+        const clearSearchButton = document.getElementById('clearSearch');
+        locationSearch.addEventListener('input', function () {
+            const value = this.value;
+            autocompleteList.innerHTML = '';
+            if (value) {
+                const filteredLocations = locations.filter(location => location.location_name.toLowerCase().includes(value.toLowerCase()));
+                filteredLocations.forEach(location => {
+                    const item = document.createElement('div');
+                    item.textContent = location.location_name;
+                    item.onclick = function () {
+                        locationSearch.value = location.location_name;
+                        locationIdInput.value = location.location_id;
+                        autocompleteList.innerHTML = '';
+                        autocompleteList.classList.add('hidden');
+                    };
+                    autocompleteList.appendChild(item);
                 });
-                const img = document.createElement('img');
-                img.src = logoUrl;
-                img.alt = 'Logo';
-                img.className = 'w-full h-full object-cover mb-2 rounded';
-                resultElement.appendChild(img);
-                logoContainer.appendChild(resultElement);
-              });
+                autocompleteList.classList.remove('hidden');
             } else {
-              logoContainer.innerHTML = '<p>No logos found</p>';
+                autocompleteList.classList.add('hidden');
             }
-            if (results2.website_text) {
-              textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
-              textCount.textContent = `Character count: ${results2.website_text.length}`;
-              document.getElementById('courseDescription').value = results2.website_text;
+        });
+        clearSearchButton.addEventListener('click', function () {
+            locationSearch.value = '';
+            locationSearch.focus();
+            autocompleteList.innerHTML = '';
+            autocompleteList.classList.add('hidden');
+            locationIdInput.value = '';
+        });
+        const funnelDropdownButton = document.getElementById('funnelDropdownButton');
+        const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
+        const funnelOptionsContainer = document.getElementById('funnelOptions');
+        const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
+        funnels.forEach((funnel, index) => {
+            const item = document.createElement('a');
+            item.href = "#";
+            item.className = `text-gray-700 block px-4 py-2 text-sm funnel-tag ${funnelColors[index % funnelColors.length]}`;
+            item.role = "menuitem";
+            item.tabIndex = -1;
+            item.textContent = funnel;
+            item.onclick = function () {
+                funnelDropdownButton.querySelector('span').textContent = funnel;
+                funnelDropdownMenu.classList.add('hidden');
+            };
+            funnelOptionsContainer.appendChild(item);
+        });
+        funnelDropdownButton.addEventListener('click', function () {
+            funnelDropdownMenu.classList.toggle('hidden');
+        });
+        const accountTypeSelect = document.getElementById('accountType');
+        const hasWebsiteSelect = document.getElementById('hasWebsite');
+        const websiteExtractor = document.getElementById('websiteExtractor');
+        const existingAccountFields = document.getElementById('existingAccountFields');
+        const optionalFields = document.getElementById('optionalFields');
+        accountTypeSelect.addEventListener('change', function () {
+            if (this.value === 'existing') {
+                existingAccountFields.classList.remove('hidden');
             } else {
-              textContentBody.innerHTML = '<p>No text content found</p>';
-              textCount.textContent = 'Character count: 0';
+                existingAccountFields.classList.add('hidden');
             }
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          loadingDiv.classList.add('hidden');
-        }
-      });
+        });
+        hasWebsiteSelect.addEventListener('change', function () {
+            if (this.value === 'yes') {
+                websiteExtractor.classList.remove('hidden');
+                optionalFields.classList.add('hidden');
+            } else {
+                websiteExtractor.classList.add('hidden');
+                optionalFields.classList.remove('hidden');
+            }
+        });
 
-      document.getElementById('mainForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const submitButton = document.getElementById('submitButton');
-        const breadcrumbs = document.getElementById('breadcrumbs');
-        const responseContainer = document.getElementById('responseContainer');
-        submitButton.textContent = 'Submitting...';
+        document.getElementById('extractButton').addEventListener('click', async function () {
+            const url = document.getElementById('url').value;
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            const logoContainer = document.getElementById('logoContainer');
+            const textContentBody = document.getElementById('textContentBody');
+            const textCount = document.getElementById('textCount');
+            const selectedLogoContainer = document.getElementById('selectedLogoContainer');
+            const selectedLogoUrl = document.getElementById('selectedLogoUrl');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const selectedImageContainer = document.getElementById('selectedImageContainer');
+            const selectedImageUrl = document.getElementById('selectedImageUrl');
+            loadingDiv.classList.remove('hidden');
+            resultDiv.classList.add('hidden');
+            logoContainer.innerHTML = '';
+            textContentBody.innerHTML = '';
+            textCount.textContent = '';
+            selectedLogoContainer.classList.add('hidden');
+            resultsContainer.innerHTML = '';
+            selectedImageContainer.classList.add('hidden');
+            try {
+                const [response1, response2] = await Promise.all([
+                    fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ website_url: url })
+                    }),
+                    fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url })
+                    })
+                ]);
+                const results1 = await response1.json();
+                const results2 = await response2.json();
+                loadingDiv.classList.add('hidden');
+                resultDiv.classList.remove('hidden');
+                if (results1.length === 0) {
+                    resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
+                } else {
+                    results1.forEach(result => {
+                        const resultElement = document.createElement('div');
+                        resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+                        resultElement.style.minWidth = '150px';
+                        resultElement.style.minHeight = '150px';
+                        resultElement.addEventListener('click', () => {
+                            selectedImageUrl.value = result.image_url;
+                            document.getElementById('profileUrl').value = result.image_url;
+                            selectedImageContainer.classList.remove('hidden');
+                            document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
+                            resultElement.classList.add('border-red-500');
+                        });
+                        const imageElement = document.createElement('img');
+                        imageElement.src = result.image_url;
+                        imageElement.alt = 'Profile Image';
+                        imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
+                        resultElement.appendChild(imageElement);
+                        resultsContainer.appendChild(resultElement);
+                    });
+                }
+                if (results2.error) {
+                    logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
+                    textContentBody.innerHTML = '';
+                } else {
+                    if (results2.logo_urls && results2.logo_urls.length > 0) {
+                        results2.logo_urls.forEach(logoUrl => {
+                            const resultElement = document.createElement('div');
+                            resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+                            resultElement.style.minWidth = '150px';
+                            resultElement.style.minHeight = '150px';
+                            resultElement.addEventListener('click', () => {
+                                selectedLogoUrl.value = logoUrl;
+                                document.getElementById('logoUrl').value = logoUrl;
+                                selectedLogoContainer.classList.remove('hidden');
+                                document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
+                                resultElement.classList.add('border-red-500');
+                            });
+                            const img = document.createElement('img');
+                            img.src = logoUrl;
+                            img.alt = 'Logo';
+                            img.className = 'w-full h-full object-cover mb-2 rounded';
+                            resultElement.appendChild(img);
+                            logoContainer.appendChild(resultElement);
+                        });
+                    } else {
+                        logoContainer.innerHTML = '<p>No logos found</p>';
+                    }
+                    if (results2.website_text) {
+                        textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
+                        textCount.textContent = `Character count: ${results2.website_text.length}`;
+                        document.getElementById('courseDescription').value = results2.website_text;
+                    } else {
+                        textContentBody.innerHTML = '<p>No text content found</p>';
+                        textCount.textContent = 'Character count: 0';
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                loadingDiv.classList.add('hidden');
+            }
+        });
 
-        const data = {
-          customer_name: document.getElementById('customerName').value,
-          course_description: document.getElementById('courseDescription').value,
-          phone_number: document.getElementById('phoneNumber').value || null,
-          logo_url: document.getElementById('logoUrl').value || 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png',
-          profile_url: document.getElementById('profileUrl').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/2048px-Missing_avatar.svg.png',
-          funnel_name: funnelDropdownButton.querySelector('span').textContent
-        };
+        document.getElementById('mainForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const submitButton = document.getElementById('submitButton');
+            const breadcrumbs = document.getElementById('breadcrumbs');
+            const responseContainer = document.getElementById('responseContainer');
+            submitButton.textContent = 'Submitting...';
+            const data = {
+                customer_name: document.getElementById('customerName').value,
+                course_description: document.getElementById('courseDescription').value,
+                phone_number: document.getElementById('phoneNumber').value || null,
+                logo_url: document.getElementById('logoUrl').value || 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png',
+                profile_url: document.getElementById('profileUrl').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/2048px-Missing_avatar.svg.png',
+                funnel_name: funnelDropdownButton.querySelector('span').textContent
+            };
+            const accountType = accountTypeSelect.value;
+            let postUrl = '';
+            let payload = {};
+            if (accountType === 'existing') {
+                data.location_id = locationIdInput.value;
+                postUrl = finalPostUrlExisting;
+                payload = {
+                    locationId: data.location_id,
+                    courseDescription: data.course_description,
+                    phoneNumber: data.phone_number,
+                    profile_url: data.profile_url,
+                    logo_url: data.logo_url,
+                    funnelName: data.funnel_name
+                };
+            } else {
+                postUrl = finalPostUrlNonExisting;
+                payload = {
+                    phone_number: data.phone_number,
+                    course_description: data.course_description,
+                    funnel_name: "gusten-sun-landing-page-light",
+                    customer_name: data.customer_name
+                };
+                if (data.logo_url) {
+                    payload.logo_url = data.logo_url;
+                }
+                if (data.profile_url) {
+                    payload.profile_url = data.profile_url;
+                }
+            }
+            try {
+                const response = await fetch(postUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                responseContainer.classList.remove('hidden');
+                if (response.ok) {
+                    const jsonResponse = await response.json();
+                    responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
+                    responseContainer.classList.add('bg-green-100');
+                    breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
+                } else {
+                    const errorMessage = await response.text();
+                    responseContainer.textContent = `Error: ${response.status} - ${errorMessage}`;
+                    responseContainer.classList.add('bg-red-100');
+                    breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                responseContainer.textContent = `Request Failed: ${error.message}`;
+                responseContainer.classList.remove('hidden');
+                responseContainer.classList.add('bg-red-100');
+                breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
+            } finally {
+                submitButton.textContent = 'Submit';
+                breadcrumbs.classList.remove('hidden');
+            }
+        });
 
-        const accountType = accountTypeSelect.value;
-        let postUrl = '';
-        let payload = {};
+        document.getElementById('cloneWebsite').addEventListener('click', function (event) {
+            event.preventDefault();
+            window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
+        });
 
-        if (accountType === 'existing') {
-          data.location_id = locationIdInput.value;
-          postUrl = finalPostUrlExisting;
-          payload = {
-            locationId: data.location_id,
-            courseDescription: data.course_description,
-            phoneNumber: data.phone_number,
-            profile_url: data.profile_url,
-            logo_url: data.logo_url,
-            funnelName: data.funnel_name
-          };
-        } else {
-          postUrl = finalPostUrlNonExisting;
-          payload = {
-            phone_number: data.phone_number,
-            course_description: data.course_description,
-            funnel_name: "gusten-sun-landing-page-light",
-            customer_name: data.customer_name
-          };
-          if (data.logo_url) {
-            payload.logo_url = data.logo_url;
-          }
-          if (data.profile_url) {
-            payload.profile_url = data.profile_url;
-          }
-        }
+        document.getElementById('cloneWebsiteMobile').addEventListener('click', function (event) {
+            event.preventDefault();
+            window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
+        });
 
-        try {
-          const response = await fetch(postUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-
-          responseContainer.classList.remove('hidden');
-          if (response.ok) {
-            const jsonResponse = await response.json();
-            responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
-            responseContainer.classList.add('bg-green-100');
-            breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
-          } else {
-            const errorMessage = await response.text();
-            responseContainer.textContent = `Error: ${response.status} - ${errorMessage}`;
-            responseContainer.classList.add('bg-red-100');
-            breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          responseContainer.textContent = `Request Failed: ${error.message}`;
-          responseContainer.classList.remove('hidden');
-          responseContainer.classList.add('bg-red-100');
-          breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
-        } finally {
-          submitButton.textContent = 'Submit';
-          breadcrumbs.classList.remove('hidden');
-        }
-      });
-
-      document.getElementById('cloneWebsite').addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
-      });
-
-      document.getElementById('cloneWebsiteMobile').addEventListener('click', function(event) {
-        event.preventDefault();
-        window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
-      });
-
-      document.getElementById('mobileMenuButton').addEventListener('click', function() {
-        const mobileMenu = document.getElementById('mobileMenu');
-        mobileMenu.classList.toggle('hidden');
-      });
+        document.getElementById('mobileMenuButton').addEventListener('click', function () {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.classList.toggle('hidden');
+        });
     });
-  </script>
+</script>
 </body>
 </html>
