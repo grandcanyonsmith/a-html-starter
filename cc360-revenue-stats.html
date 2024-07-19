@@ -297,44 +297,55 @@ async function fetchSalesData() {
     });
 
     // Sort detailedTableBody rows by date, with the most recent at the top
-    const sortedData = data.filter(item => item["Product Name"] !== "All Totals" && item["Product Name"] !== "Demo Completed Totals" && item["Product Name"] !== "No Demo Completed Totals")
-                           .sort((a, b) => new Date(b["Sale Dates"][0]) - new Date(a["Sale Dates"][0]));
+    const detailedData = [];
+    data.forEach(item => {
+        if (item["Product Name"] !== "All Totals" && item["Product Name"] !== "Demo Completed Totals" && item["Product Name"] !== "No Demo Completed Totals") {
+            item.Emails.forEach((email, index) => {
+                detailedData.push({
+                    email: email,
+                    productName: item["Product Name"],
+                    price: item["Price"],
+                    saleDate: new Date(item["Sale Dates"][index]),
+                    source: filterTags(item["Sources"][index].split(', '))
+                });
+            });
+        }
+    });
 
-    sortedData.forEach(item => {
-        item.Emails.forEach((email, index) => {
-            const row = document.createElement('tr');
-            const emailTd = document.createElement('td');
-            emailTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-            emailTd.innerHTML = `${email} <span class="text-xs text-gray-400">${formatDate(item["Sale Dates"][index])}</span>`;
-            row.appendChild(emailTd);
+    detailedData.sort((a, b) => b.saleDate - a.saleDate);
 
-            const productNameTd = document.createElement('td');
-            productNameTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-            const badge = document.createElement('span');
-            badge.classList.add('inline-flex', 'items-center', 'rounded-md', 'px-2', 'py-1', 'text-xs', 'font-medium', 'ring-1', 'ring-inset');
-            badge.classList.add(...getBadgeClass(item["Product Name"]).split(' '));
-            badge.textContent = item["Product Name"];
-            productNameTd.appendChild(badge);
-            row.appendChild(productNameTd);
+    detailedData.forEach(item => {
+        const row = document.createElement('tr');
+        const emailTd = document.createElement('td');
+        emailTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+        emailTd.innerHTML = `${item.email} <span class="text-xs text-gray-400">${formatDate(item.saleDate)}</span>`;
+        row.appendChild(emailTd);
 
-            const priceTd = document.createElement('td');
-            priceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-            priceTd.textContent = formatCurrency(item["Price"]);
-            row.appendChild(priceTd);
+        const productNameTd = document.createElement('td');
+        productNameTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+        const badge = document.createElement('span');
+        badge.classList.add('inline-flex', 'items-center', 'rounded-md', 'px-2', 'py-1', 'text-xs', 'font-medium', 'ring-1', 'ring-inset');
+        badge.classList.add(...getBadgeClass(item.productName).split(' '));
+        badge.textContent = item.productName;
+        productNameTd.appendChild(badge);
+        row.appendChild(productNameTd);
 
-            const sourceTd = document.createElement('td');
-            sourceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-            sourceTd.textContent = filterTags(item["Sources"][index].split(', '));
-            row.appendChild(sourceTd);
+        const priceTd = document.createElement('td');
+        priceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+        priceTd.textContent = formatCurrency(item.price);
+        row.appendChild(priceTd);
 
-            detailedTableBody.appendChild(row);
+        const sourceTd = document.createElement('td');
+        sourceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+        sourceTd.textContent = item.source;
+        row.appendChild(sourceTd);
 
-            // Count sources, only the first occurrence
-            const source = filterTags(item["Sources"][index].split(', '));
-            if (!sourceCounts[email]) {
-                sourceCounts[email] = source;
-            }
-        });
+        detailedTableBody.appendChild(row);
+
+        // Count sources, only the first occurrence
+        if (!sourceCounts[item.email]) {
+            sourceCounts[item.email] = item.source;
+        }
     });
 
     // Aggregate source counts
