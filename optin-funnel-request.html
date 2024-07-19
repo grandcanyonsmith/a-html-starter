@@ -286,10 +286,12 @@
             autocompleteList.classList.add('hidden');
             locationIdInput.value = '';
         });
+
         const funnelDropdownButton = document.getElementById('funnelDropdownButton');
         const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
         const funnelOptionsContainer = document.getElementById('funnelOptions');
         const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
+
         funnels.forEach((funnel, index) => {
             const item = document.createElement('a');
             item.href = "#";
@@ -303,14 +305,17 @@
             };
             funnelOptionsContainer.appendChild(item);
         });
+
         funnelDropdownButton.addEventListener('click', function () {
             funnelDropdownMenu.classList.toggle('hidden');
         });
+
         const accountTypeSelect = document.getElementById('accountType');
         const hasWebsiteSelect = document.getElementById('hasWebsite');
         const websiteExtractor = document.getElementById('websiteExtractor');
         const existingAccountFields = document.getElementById('existingAccountFields');
         const optionalFields = document.getElementById('optionalFields');
+
         accountTypeSelect.addEventListener('change', function () {
             if (this.value === 'existing') {
                 existingAccountFields.classList.remove('hidden');
@@ -318,6 +323,7 @@
                 existingAccountFields.classList.add('hidden');
             }
         });
+
         hasWebsiteSelect.addEventListener('change', function () {
             if (this.value === 'yes') {
                 websiteExtractor.classList.remove('hidden');
@@ -328,213 +334,200 @@
             }
         });
 
+        document.getElementById('extractButton').addEventListener('click', async function () {
+            const url = document.getElementById('url').value;
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            const logoContainer = document.getElementById('logoContainer');
+            const textContentBody = document.getElementById('textContentBody');
+            const textCount = document.getElementById('textCount');
+            const selectedLogoContainer = document.getElementById('selectedLogoContainer');
+            const selectedLogoUrl = document.getElementById('selectedLogoUrl');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const selectedImageContainer = document.getElementById('selectedImageContainer');
+            const selectedImageUrl = document.getElementById('selectedImageUrl');
+            const colorResultDiv = document.getElementById('colorResult');
+            const closestColorsResultDiv = document.getElementById('closestColorsResult');
+            const primaryColorDiv = document.getElementById('primaryColor');
+            const secondaryColorDiv = document.getElementById('secondaryColor');
+            const tertiaryColorDiv = document.getElementById('tertiaryColor');
+            const primaryColorHex = document.getElementById('primaryColorHex');
+            const secondaryColorHex = document.getElementById('secondaryColorHex');
+            const tertiaryColorHex = document.getElementById('tertiaryColorHex');
+            const closestPrimaryColorDiv = document.getElementById('closestPrimaryColor');
+            const closestSecondaryColorDiv = document.getElementById('closestSecondaryColor');
+            const closestTertiaryColorDiv = document.getElementById('closestTertiaryColor');
+            const closestPrimaryColorHex = document.getElementById('closestPrimaryColorHex');
+            const closestSecondaryColorHex = document.getElementById('closestSecondaryColorHex');
+            const closestTertiaryColorHex = document.getElementById('closestTertiaryColorHex');
 
-
-
-
-
-
-document.getElementById('extractButton').addEventListener('click', async function () {
-    const url = document.getElementById('url').value;
-    const loadingDiv = document.getElementById('loading');
-    const resultDiv = document.getElementById('result');
-    const logoContainer = document.getElementById('logoContainer');
-    const textContentBody = document.getElementById('textContentBody');
-    const textCount = document.getElementById('textCount');
-    const selectedLogoContainer = document.getElementById('selectedLogoContainer');
-    const selectedLogoUrl = document.getElementById('selectedLogoUrl');
-    const resultsContainer = document.getElementById('resultsContainer');
-    const selectedImageContainer = document.getElementById('selectedImageContainer');
-    const selectedImageUrl = document.getElementById('selectedImageUrl');
-    const colorResultDiv = document.getElementById('colorResult');
-    const closestColorsResultDiv = document.getElementById('closestColorsResult');
-    const primaryColorDiv = document.getElementById('primaryColor');
-    const secondaryColorDiv = document.getElementById('secondaryColor');
-    const tertiaryColorDiv = document.getElementById('tertiaryColor');
-    const primaryColorHex = document.getElementById('primaryColorHex');
-    const secondaryColorHex = document.getElementById('secondaryColorHex');
-    const tertiaryColorHex = document.getElementById('tertiaryColorHex');
-    const closestPrimaryColorDiv = document.getElementById('closestPrimaryColor');
-    const closestSecondaryColorDiv = document.getElementById('closestSecondaryColor');
-    const closestTertiaryColorDiv = document.getElementById('closestTertiaryColor');
-    const closestPrimaryColorHex = document.getElementById('closestPrimaryColorHex');
-    const closestSecondaryColorHex = document.getElementById('closestSecondaryColorHex');
-    const closestTertiaryColorHex = document.getElementById('closestTertiaryColorHex');
-
-    loadingDiv.classList.remove('hidden');
-    resultDiv.classList.add('hidden');
-    logoContainer.innerHTML = '';
-    textContentBody.innerHTML = '';
-    textCount.textContent = '';
-    selectedLogoContainer.classList.add('hidden');
-    resultsContainer.innerHTML = '';
-    selectedImageContainer.classList.add('hidden');
-    colorResultDiv.classList.add('hidden');
-    closestColorsResultDiv.classList.add('hidden');
-
-    try {
-        const [response1, response2] = await Promise.all([
-            fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ website_url: url })
-            }),
-            fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ url })
-            })
-        ]);
-        const results1 = await response1.json();
-        const results2 = await response2.json();
-        loadingDiv.classList.add('hidden');
-        resultDiv.classList.remove('hidden');
-        if (results1.length === 0) {
-            resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
-        } else {
-            results1.forEach(result => {
-                const resultElement = document.createElement('div');
-                resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
-                resultElement.style.minWidth = '150px';
-                resultElement.style.minHeight = '150px';
-                resultElement.addEventListener('click', () => {
-                    selectedImageUrl.value = result.image_url;
-                    document.getElementById('profileUrl').value = result.image_url;
-                    selectedImageContainer.classList.remove('hidden');
-                    document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
-                    resultElement.classList.add('border-red-500');
-                });
-                const imageElement = document.createElement('img');
-                imageElement.src = result.image_url;
-                imageElement.alt = 'Profile Image';
-                imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
-                resultElement.appendChild(imageElement);
-                resultsContainer.appendChild(resultElement);
-            });
-        }
-        if (results2.error) {
-            logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
+            loadingDiv.classList.remove('hidden');
+            resultDiv.classList.add('hidden');
+            logoContainer.innerHTML = '';
             textContentBody.innerHTML = '';
-        } else {
-            if (results2.logo_urls && results2.logo_urls.length > 0) {
-                results2.logo_urls.forEach(logoUrl => {
-                    const resultElement = document.createElement('div');
-                    resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
-                    resultElement.style.minWidth = '150px';
-                    resultElement.style.minHeight = '150px';
-                    resultElement.addEventListener('click', () => {
-                        selectedLogoUrl.value = logoUrl;
-                        document.getElementById('logoUrl').value = logoUrl;
-                        selectedLogoContainer.classList.remove('hidden');
-                        document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
-                        resultElement.classList.add('border-red-500');
+            textCount.textContent = '';
+            selectedLogoContainer.classList.add('hidden');
+            resultsContainer.innerHTML = '';
+            selectedImageContainer.classList.add('hidden');
+            colorResultDiv.classList.add('hidden');
+            closestColorsResultDiv.classList.add('hidden');
+
+            try {
+                const [response1, response2] = await Promise.all([
+                    fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ website_url: url })
+                    }),
+                    fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url })
+                    })
+                ]);
+                const results1 = await response1.json();
+                const results2 = await response2.json();
+                loadingDiv.classList.add('hidden');
+                resultDiv.classList.remove('hidden');
+                if (results1.length === 0) {
+                    resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
+                } else {
+                    results1.forEach(result => {
+                        const resultElement = document.createElement('div');
+                        resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+                        resultElement.style.minWidth = '150px';
+                        resultElement.style.minHeight = '150px';
+                        resultElement.addEventListener('click', () => {
+                            selectedImageUrl.value = result.image_url;
+                            document.getElementById('profileUrl').value = result.image_url;
+                            selectedImageContainer.classList.remove('hidden');
+                            document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
+                            resultElement.classList.add('border-red-500');
+                        });
+                        const imageElement = document.createElement('img');
+                        imageElement.src = result.image_url;
+                        imageElement.alt = 'Profile Image';
+                        imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
+                        resultElement.appendChild(imageElement);
+                        resultsContainer.appendChild(resultElement);
                     });
-                    const img = document.createElement('img');
-                    img.src = logoUrl;
-                    img.alt = 'Logo';
-                    img.className = 'w-full h-full object-cover mb-2 rounded';
-                    resultElement.appendChild(img);
-                    logoContainer.appendChild(resultElement);
+                }
+                if (results2.error) {
+                    logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
+                    textContentBody.innerHTML = '';
+                } else {
+                    if (results2.logo_urls && results2.logo_urls.length > 0) {
+                        results2.logo_urls.forEach(logoUrl => {
+                            const resultElement = document.createElement('div');
+                            resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+                            resultElement.style.minWidth = '150px';
+                            resultElement.style.minHeight = '150px';
+                            resultElement.addEventListener('click', () => {
+                                selectedLogoUrl.value = logoUrl;
+                                document.getElementById('logoUrl').value = logoUrl;
+                                selectedLogoContainer.classList.remove('hidden');
+                                document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
+                                resultElement.classList.add('border-red-500');
+                            });
+                            const img = document.createElement('img');
+                            img.src = logoUrl;
+                            img.alt = 'Logo';
+                            img.className = 'w-full h-full object-cover mb-2 rounded';
+                            resultElement.appendChild(img);
+                            logoContainer.appendChild(resultElement);
+                        });
+                    } else {
+                        logoContainer.innerHTML = '<p>No logos found</p>';
+                    }
+                    if (results2.website_text) {
+                        textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
+                        textCount.textContent = `Character count: ${results2.website_text.length}`;
+                        document.getElementById('courseDescription').value = results2.website_text;
+                    } else {
+                        textContentBody.innerHTML = '<p>No text content found</p>';
+                        textCount.textContent = 'Character count: 0';
+                    }
+                }
+
+                // Extract colors from the website URL
+                extractColors(url, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv);
+
+            } catch (error) {
+                console.error('Error:', error);
+                loadingDiv.classList.add('hidden');
+            }
+        });
+
+        async function extractColors(websiteUrl, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv) {
+            try {
+                const response = await fetch('https://dr7hues63glbxd4luplyv2hmzq0hxabc.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url: websiteUrl })
                 });
-            } else {
-                logoContainer.innerHTML = '<p>No logos found</p>';
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                const primaryColor = data.primary_color;
+                const secondaryColor = data.secondary_color;
+                const tertiaryColor = data.tertiary_color;
+
+                primaryColorDiv.style.backgroundColor = primaryColor;
+                secondaryColorDiv.style.backgroundColor = secondaryColor;
+                tertiaryColorDiv.style.backgroundColor = tertiaryColor;
+
+                primaryColorHex.textContent = primaryColor;
+                secondaryColorHex.textContent = secondaryColor;
+                tertiaryColorHex.textContent = tertiaryColor;
+
+                colorResultDiv.classList.remove('hidden');
+
+                // Send colors to the second lambda function
+                const closestColorsResponse = await fetch('https://tm3oghwz3fpkfvgmh7inwosqre0wazza.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        primary_color: primaryColor,
+                        secondary_color: secondaryColor,
+                        tertiary_color: tertiaryColor
+                    })
+                });
+
+                const closestColorsData = await closestColorsResponse.json();
+
+                if (closestColorsData && closestColorsData[0] && closestColorsData[0].closest_colors) {
+                    const { primary_color, secondary_color, tertiary_color } = closestColorsData[0].closest_colors;
+
+                    // Remove any existing Tailwind color classes
+                    closestPrimaryColorDiv.className = 'w-16 h-16 rounded';
+                    closestSecondaryColorDiv.className = 'w-16 h-16 rounded';
+                    closestTertiaryColorDiv.className = 'w-16 h-16 rounded';
+
+                    // Add the new Tailwind color classes
+                    closestPrimaryColorDiv.classList.add(`bg-${primary_color}`);
+                    closestSecondaryColorDiv.classList.add(`bg-${secondary_color}`);
+                    closestTertiaryColorDiv.classList.add(`bg-${tertiary_color}`);
+
+                    closestPrimaryColorHex.textContent = primary_color;
+                    closestSecondaryColorHex.textContent = secondary_color;
+                    closestTertiaryColorHex.textContent = tertiary_color;
+
+                    closestColorsResultDiv.classList.remove('hidden');
+                } else {
+                    closestColorsResultDiv.innerText = 'No valid colors found.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to extract colors. Please try again.');
             }
-            if (results2.website_text) {
-                textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
-                textCount.textContent = `Character count: ${results2.website_text.length}`;
-                document.getElementById('courseDescription').value = results2.website_text;
-            } else {
-                textContentBody.innerHTML = '<p>No text content found</p>';
-                textCount.textContent = 'Character count: 0';
-            }
         }
-
-        // Extract colors from the website URL
-        extractColors(url, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv);
-
-    } catch (error) {
-        console.error('Error:', error);
-        loadingDiv.classList.add('hidden');
-    }
-});
-
-async function extractColors(websiteUrl, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv) {
-    try {
-        const response = await fetch('https://dr7hues63glbxd4luplyv2hmzq0hxabc.lambda-url.us-west-2.on.aws/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ url: websiteUrl })
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        const primaryColor = data.primary_color;
-        const secondaryColor = data.secondary_color;
-        const tertiaryColor = data.tertiary_color;
-
-        primaryColorDiv.style.backgroundColor = primaryColor;
-        secondaryColorDiv.style.backgroundColor = secondaryColor;
-        tertiaryColorDiv.style.backgroundColor = tertiaryColor;
-
-        primaryColorHex.textContent = primaryColor;
-        secondaryColorHex.textContent = secondaryColor;
-        tertiaryColorHex.textContent = tertiaryColor;
-
-        colorResultDiv.classList.remove('hidden');
-
-        // Send colors to the second lambda function
-        const closestColorsResponse = await fetch('https://tm3oghwz3fpkfvgmh7inwosqre0wazza.lambda-url.us-west-2.on.aws/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                primary_color: primaryColor,
-                secondary_color: secondaryColor,
-                tertiary_color: tertiaryColor
-            })
-        });
-
-        const closestColorsData = await closestColorsResponse.json();
-
-        if (closestColorsData && closestColorsData[0] && closestColorsData[0].closest_colors) {
-            const { primary_color, secondary_color, tertiary_color } = closestColorsData[0].closest_colors;
-
-            // Remove any existing Tailwind color classes
-            closestPrimaryColorDiv.className = 'w-16 h-16 rounded';
-            closestSecondaryColorDiv.className = 'w-16 h-16 rounded';
-            closestTertiaryColorDiv.className = 'w-16 h-16 rounded';
-
-            // Add the new Tailwind color classes
-            closestPrimaryColorDiv.classList.add(`bg-${primary_color}`);
-            closestSecondaryColorDiv.classList.add(`bg-${secondary_color}`);
-            closestTertiaryColorDiv.classList.add(`bg-${tertiary_color}`);
-
-            closestPrimaryColorHex.textContent = primary_color;
-            closestSecondaryColorHex.textContent = secondary_color;
-            closestTertiaryColorHex.textContent = tertiary_color;
-
-            closestColorsResultDiv.classList.remove('hidden');
-        } else {
-            closestColorsResultDiv.innerText = 'No valid colors found.';
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Failed to extract colors. Please try again.');
-    }
-}
-
-
-
-
-
-
-
 
         document.getElementById('mainForm').addEventListener('submit', async function (event) {
             event.preventDefault();
