@@ -237,386 +237,399 @@
     <div id="breadcrumbs" class="mt-4 hidden space-x-2"></div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-        const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
-        const funnelsUrl = 'https://hlqcht2ceojjdd5u3zvta4al540ckupu.lambda-url.us-west-2.on.aws/';
-        const finalPostUrlExisting = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
-        const finalPostUrlNonExisting = 'https://wef7kxfivzi4psft4v54w2rcpy0noksq.lambda-url.us-west-2.on.aws/';
-        let locations = [];
-        let funnels = ['gusten-sun-landing-page-light', 'prelauch-optin-sequence'];
-        try {
-            const locationsResponse = await fetch(locationsUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
-            if (locationsResponse.ok) {
-                locations = await locationsResponse.json();
-            } else {
-                console.error('Failed to fetch locations');
-            }
-        } catch (error) {
-            console.error('Error:', error);
+document.addEventListener('DOMContentLoaded', async function () {
+    const locationsUrl = 'https://fav6m76uqbgrm2ul5ay2e2x2xa0lwfbq.lambda-url.us-west-2.on.aws/';
+    const funnelsUrl = 'https://hlqcht2ceojjdd5u3zvta4al540ckupu.lambda-url.us-west-2.on.aws/';
+    const finalPostUrlExisting = 'https://by3ruwm7wd6vpoqbgmefvhk6ny0rxhqb.lambda-url.us-west-2.on.aws/';
+    const finalPostUrlNonExisting = 'https://wef7kxfivzi4psft4v54w2rcpy0noksq.lambda-url.us-west-2.on.aws/';
+    const additionalPostUrl = 'https://yvkjbe775fpg62xiqqb7hjq3je0ujbir.lambda-url.us-west-2.on.aws/';
+    let locations = [];
+    let funnels = ['gusten-sun-landing-page-light', 'prelauch-optin-sequence'];
+    try {
+        const locationsResponse = await fetch(locationsUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
+        if (locationsResponse.ok) {
+            locations = await locationsResponse.json();
+        } else {
+            console.error('Failed to fetch locations');
         }
-        const locationSearch = document.getElementById('locationSearch');
-        const autocompleteList = document.getElementById('autocompleteList');
-        const locationIdInput = document.getElementById('locationId');
-        const clearSearchButton = document.getElementById('clearSearch');
-        locationSearch.addEventListener('input', function () {
-            const value = this.value;
-            autocompleteList.innerHTML = '';
-            if (value) {
-                const filteredLocations = locations.filter(location => location.location_name.toLowerCase().includes(value.toLowerCase()));
-                filteredLocations.forEach(location => {
-                    const item = document.createElement('div');
-                    item.textContent = location.location_name;
-                    item.onclick = function () {
-                        locationSearch.value = location.location_name;
-                        locationIdInput.value = location.location_id;
-                        autocompleteList.innerHTML = '';
-                        autocompleteList.classList.add('hidden');
-                    };
-                    autocompleteList.appendChild(item);
-                });
-                autocompleteList.classList.remove('hidden');
-            } else {
-                autocompleteList.classList.add('hidden');
-            }
-        });
-        clearSearchButton.addEventListener('click', function () {
-            locationSearch.value = '';
-            locationSearch.focus();
-            autocompleteList.innerHTML = '';
+    } catch (error) {
+        console.error('Error:', error);
+    }
+    const locationSearch = document.getElementById('locationSearch');
+    const autocompleteList = document.getElementById('autocompleteList');
+    const locationIdInput = document.getElementById('locationId');
+    const clearSearchButton = document.getElementById('clearSearch');
+    locationSearch.addEventListener('input', function () {
+        const value = this.value;
+        autocompleteList.innerHTML = '';
+        if (value) {
+            const filteredLocations = locations.filter(location => location.location_name.toLowerCase().includes(value.toLowerCase()));
+            filteredLocations.forEach(location => {
+                const item = document.createElement('div');
+                item.textContent = location.location_name;
+                item.onclick = function () {
+                    locationSearch.value = location.location_name;
+                    locationIdInput.value = location.location_id;
+                    autocompleteList.innerHTML = '';
+                    autocompleteList.classList.add('hidden');
+                };
+                autocompleteList.appendChild(item);
+            });
+            autocompleteList.classList.remove('hidden');
+        } else {
             autocompleteList.classList.add('hidden');
-            locationIdInput.value = '';
-        });
+        }
+    });
+    clearSearchButton.addEventListener('click', function () {
+        locationSearch.value = '';
+        locationSearch.focus();
+        autocompleteList.innerHTML = '';
+        autocompleteList.classList.add('hidden');
+        locationIdInput.value = '';
+    });
 
-        const funnelDropdownButton = document.getElementById('funnelDropdownButton');
-        const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
-        const funnelOptionsContainer = document.getElementById('funnelOptions');
-        const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
+    const funnelDropdownButton = document.getElementById('funnelDropdownButton');
+    const funnelDropdownMenu = document.getElementById('funnelDropdownMenu');
+    const funnelOptionsContainer = document.getElementById('funnelOptions');
+    const funnelColors = ['funnel-green', 'funnel-yellow', 'funnel-red', 'funnel-blue', 'funnel-purple'];
 
-        funnels.forEach((funnel, index) => {
-            const item = document.createElement('a');
-            item.href = "#";
-            item.className = `text-gray-700 block px-4 py-2 text-sm funnel-tag ${funnelColors[index % funnelColors.length]}`;
-            item.role = "menuitem";
-            item.tabIndex = -1;
-            item.textContent = funnel;
-            item.onclick = function () {
-                funnelDropdownButton.querySelector('span').textContent = funnel;
-                funnelDropdownMenu.classList.add('hidden');
-            };
-            funnelOptionsContainer.appendChild(item);
-        });
+    funnels.forEach((funnel, index) => {
+        const item = document.createElement('a');
+        item.href = "#";
+        item.className = `text-gray-700 block px-4 py-2 text-sm funnel-tag ${funnelColors[index % funnelColors.length]}`;
+        item.role = "menuitem";
+        item.tabIndex = -1;
+        item.textContent = funnel;
+        item.onclick = function () {
+            funnelDropdownButton.querySelector('span').textContent = funnel;
+            funnelDropdownMenu.classList.add('hidden');
+        };
+        funnelOptionsContainer.appendChild(item);
+    });
 
-        funnelDropdownButton.addEventListener('click', function () {
-            funnelDropdownMenu.classList.toggle('hidden');
-        });
+    funnelDropdownButton.addEventListener('click', function () {
+        funnelDropdownMenu.classList.toggle('hidden');
+    });
 
-        const accountTypeSelect = document.getElementById('accountType');
-        const hasWebsiteSelect = document.getElementById('hasWebsite');
-        const websiteExtractor = document.getElementById('websiteExtractor');
-        const existingAccountFields = document.getElementById('existingAccountFields');
-        const optionalFields = document.getElementById('optionalFields');
+    const accountTypeSelect = document.getElementById('accountType');
+    const hasWebsiteSelect = document.getElementById('hasWebsite');
+    const websiteExtractor = document.getElementById('websiteExtractor');
+    const existingAccountFields = document.getElementById('existingAccountFields');
+    const optionalFields = document.getElementById('optionalFields');
 
-        accountTypeSelect.addEventListener('change', function () {
-            if (this.value === 'existing') {
-                existingAccountFields.classList.remove('hidden');
+    accountTypeSelect.addEventListener('change', function () {
+        if (this.value === 'existing') {
+            existingAccountFields.classList.remove('hidden');
+        } else {
+            existingAccountFields.classList.add('hidden');
+        }
+    });
+
+    hasWebsiteSelect.addEventListener('change', function () {
+        if (this.value === 'yes') {
+            websiteExtractor.classList.remove('hidden');
+            optionalFields.classList.add('hidden');
+        } else {
+            websiteExtractor.classList.add('hidden');
+            optionalFields.classList.remove('hidden');
+        }
+    });
+
+    document.getElementById('extractButton').addEventListener('click', async function () {
+        const url = document.getElementById('url').value;
+        const loadingDiv = document.getElementById('loading');
+        const resultDiv = document.getElementById('result');
+        const logoContainer = document.getElementById('logoContainer');
+        const textContentBody = document.getElementById('textContentBody');
+        const textCount = document.getElementById('textCount');
+        const selectedLogoContainer = document.getElementById('selectedLogoContainer');
+        const selectedLogoUrl = document.getElementById('selectedLogoUrl');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const selectedImageContainer = document.getElementById('selectedImageContainer');
+        const selectedImageUrl = document.getElementById('selectedImageUrl');
+        const colorResultDiv = document.getElementById('colorResult');
+        const closestColorsResultDiv = document.getElementById('closestColorsResult');
+        const primaryColorDiv = document.getElementById('primaryColor');
+        const secondaryColorDiv = document.getElementById('secondaryColor');
+        const tertiaryColorDiv = document.getElementById('tertiaryColor');
+        const primaryColorHex = document.getElementById('primaryColorHex');
+        const secondaryColorHex = document.getElementById('secondaryColorHex');
+        const tertiaryColorHex = document.getElementById('tertiaryColorHex');
+        const closestPrimaryColorDiv = document.getElementById('closestPrimaryColor');
+        const closestSecondaryColorDiv = document.getElementById('closestSecondaryColor');
+        const closestTertiaryColorDiv = document.getElementById('closestTertiaryColor');
+        const closestPrimaryColorHex = document.getElementById('closestPrimaryColorHex');
+        const closestSecondaryColorHex = document.getElementById('closestSecondaryColorHex');
+        const closestTertiaryColorHex = document.getElementById('closestTertiaryColorHex');
+
+        loadingDiv.classList.remove('hidden');
+        resultDiv.classList.add('hidden');
+        logoContainer.innerHTML = '';
+        textContentBody.innerHTML = '';
+        textCount.textContent = '';
+        selectedLogoContainer.classList.add('hidden');
+        resultsContainer.innerHTML = '';
+        selectedImageContainer.classList.add('hidden');
+        colorResultDiv.classList.add('hidden');
+        closestColorsResultDiv.classList.add('hidden');
+
+        try {
+            const [response1, response2] = await Promise.all([
+                fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ website_url: url })
+                }),
+                fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                })
+            ]);
+            const results1 = await response1.json();
+            const results2 = await response2.json();
+            loadingDiv.classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+            if (results1.length === 0) {
+                resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
             } else {
-                existingAccountFields.classList.add('hidden');
+                results1.forEach(result => {
+                    const resultElement = document.createElement('div');
+                    resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
+                    resultElement.style.minWidth = '150px';
+                    resultElement.style.minHeight = '150px';
+                    resultElement.addEventListener('click', () => {
+                        selectedImageUrl.value = result.image_url;
+                        document.getElementById('profileUrl').value = result.image_url;
+                        selectedImageContainer.classList.remove('hidden');
+                        document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
+                        resultElement.classList.add('border-red-500');
+                    });
+                    const imageElement = document.createElement('img');
+                    imageElement.src = result.image_url;
+                    imageElement.alt = 'Profile Image';
+                    imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
+                    resultElement.appendChild(imageElement);
+                    resultsContainer.appendChild(resultElement);
+                });
             }
-        });
-
-        hasWebsiteSelect.addEventListener('change', function () {
-            if (this.value === 'yes') {
-                websiteExtractor.classList.remove('hidden');
-                optionalFields.classList.add('hidden');
+            if (results2.error) {
+                logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
+                textContentBody.innerHTML = '';
             } else {
-                websiteExtractor.classList.add('hidden');
-                optionalFields.classList.remove('hidden');
-            }
-        });
-
-        document.getElementById('extractButton').addEventListener('click', async function () {
-            const url = document.getElementById('url').value;
-            const loadingDiv = document.getElementById('loading');
-            const resultDiv = document.getElementById('result');
-            const logoContainer = document.getElementById('logoContainer');
-            const textContentBody = document.getElementById('textContentBody');
-            const textCount = document.getElementById('textCount');
-            const selectedLogoContainer = document.getElementById('selectedLogoContainer');
-            const selectedLogoUrl = document.getElementById('selectedLogoUrl');
-            const resultsContainer = document.getElementById('resultsContainer');
-            const selectedImageContainer = document.getElementById('selectedImageContainer');
-            const selectedImageUrl = document.getElementById('selectedImageUrl');
-            const colorResultDiv = document.getElementById('colorResult');
-            const closestColorsResultDiv = document.getElementById('closestColorsResult');
-            const primaryColorDiv = document.getElementById('primaryColor');
-            const secondaryColorDiv = document.getElementById('secondaryColor');
-            const tertiaryColorDiv = document.getElementById('tertiaryColor');
-            const primaryColorHex = document.getElementById('primaryColorHex');
-            const secondaryColorHex = document.getElementById('secondaryColorHex');
-            const tertiaryColorHex = document.getElementById('tertiaryColorHex');
-            const closestPrimaryColorDiv = document.getElementById('closestPrimaryColor');
-            const closestSecondaryColorDiv = document.getElementById('closestSecondaryColor');
-            const closestTertiaryColorDiv = document.getElementById('closestTertiaryColor');
-            const closestPrimaryColorHex = document.getElementById('closestPrimaryColorHex');
-            const closestSecondaryColorHex = document.getElementById('closestSecondaryColorHex');
-            const closestTertiaryColorHex = document.getElementById('closestTertiaryColorHex');
-
-            loadingDiv.classList.remove('hidden');
-            resultDiv.classList.add('hidden');
-            logoContainer.innerHTML = '';
-            textContentBody.innerHTML = '';
-            textCount.textContent = '';
-            selectedLogoContainer.classList.add('hidden');
-            resultsContainer.innerHTML = '';
-            selectedImageContainer.classList.add('hidden');
-            colorResultDiv.classList.add('hidden');
-            closestColorsResultDiv.classList.add('hidden');
-
-            try {
-                const [response1, response2] = await Promise.all([
-                    fetch('https://jqx2v77jyf3obgvxjco4qaelhy0cxeuy.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ website_url: url })
-                    }),
-                    fetch('https://wyegcmnzbrlqhmbrzefdhs6e6i0ierpc.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url })
-                    })
-                ]);
-                const results1 = await response1.json();
-                const results2 = await response2.json();
-                loadingDiv.classList.add('hidden');
-                resultDiv.classList.remove('hidden');
-                if (results1.length === 0) {
-                    resultsContainer.innerHTML = '<p class="text-red-500">No profile image found on page.</p>';
-                } else {
-                    results1.forEach(result => {
+                if (results2.logo_urls && results2.logo_urls.length > 0) {
+                    results2.logo_urls.forEach(logoUrl => {
                         const resultElement = document.createElement('div');
                         resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
                         resultElement.style.minWidth = '150px';
                         resultElement.style.minHeight = '150px';
                         resultElement.addEventListener('click', () => {
-                            selectedImageUrl.value = result.image_url;
-                            document.getElementById('profileUrl').value = result.image_url;
-                            selectedImageContainer.classList.remove('hidden');
-                            document.querySelectorAll('#resultsContainer div').forEach(div => div.classList.remove('border-red-500'));
+                            selectedLogoUrl.value = logoUrl;
+                            document.getElementById('logoUrl').value = logoUrl;
+                            selectedLogoContainer.classList.remove('hidden');
+                            document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
                             resultElement.classList.add('border-red-500');
                         });
-                        const imageElement = document.createElement('img');
-                        imageElement.src = result.image_url;
-                        imageElement.alt = 'Profile Image';
-                        imageElement.classList.add('w-full', 'h-full', 'object-cover', 'mb-2', 'rounded');
-                        resultElement.appendChild(imageElement);
-                        resultsContainer.appendChild(resultElement);
+                        const img = document.createElement('img');
+                        img.src = logoUrl;
+                        img.alt = 'Logo';
+                        img.className = 'w-full h-full object-cover mb-2 rounded';
+                        resultElement.appendChild(img);
+                        logoContainer.appendChild(resultElement);
                     });
-                }
-                if (results2.error) {
-                    logoContainer.innerHTML = `<p class="text-red-500">Error: ${results2.error}</p>`;
-                    textContentBody.innerHTML = '';
                 } else {
-                    if (results2.logo_urls && results2.logo_urls.length > 0) {
-                        results2.logo_urls.forEach(logoUrl => {
-                            const resultElement = document.createElement('div');
-                            resultElement.classList.add('p-2', 'bg-gray-100', 'rounded', 'shadow', 'cursor-pointer', 'border', 'border-gray-300');
-                            resultElement.style.minWidth = '150px';
-                            resultElement.style.minHeight = '150px';
-                            resultElement.addEventListener('click', () => {
-                                selectedLogoUrl.value = logoUrl;
-                                document.getElementById('logoUrl').value = logoUrl;
-                                selectedLogoContainer.classList.remove('hidden');
-                                document.querySelectorAll('#logoContainer div').forEach(div => div.classList.remove('border-red-500'));
-                                resultElement.classList.add('border-red-500');
-                            });
-                            const img = document.createElement('img');
-                            img.src = logoUrl;
-                            img.alt = 'Logo';
-                            img.className = 'w-full h-full object-cover mb-2 rounded';
-                            resultElement.appendChild(img);
-                            logoContainer.appendChild(resultElement);
-                        });
-                    } else {
-                        logoContainer.innerHTML = '<p>No logos found</p>';
-                    }
-                    if (results2.website_text) {
-                        textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
-                        textCount.textContent = `Character count: ${results2.website_text.length}`;
-                        document.getElementById('courseDescription').value = results2.website_text;
-                    } else {
-                        textContentBody.innerHTML = '<p>No text content found</p>';
-                        textCount.textContent = 'Character count: 0';
-                    }
+                    logoContainer.innerHTML = '<p>No logos found</p>';
                 }
-
-                // Extract colors from the website URL
-                extractColors(url, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv);
-
-            } catch (error) {
-                console.error('Error:', error);
-                loadingDiv.classList.add('hidden');
+                if (results2.website_text) {
+                    textContentBody.innerHTML = `<p>${results2.website_text}</p>`;
+                    textCount.textContent = `Character count: ${results2.website_text.length}`;
+                    document.getElementById('courseDescription').value = results2.website_text;
+                } else {
+                    textContentBody.innerHTML = '<p>No text content found</p>';
+                    textCount.textContent = 'Character count: 0';
+                }
             }
-        });
 
-        async function extractColors(websiteUrl, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv) {
-            try {
-                const response = await fetch('https://dr7hues63glbxd4luplyv2hmzq0hxabc.lambda-url.us-west-2.on.aws/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ url: websiteUrl })
-                });
+            // Extract colors from the website URL
+            extractColors(url, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv);
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+        } catch (error) {
+            console.error('Error:', error);
+            loadingDiv.classList.add('hidden');
+        }
+    });
 
-                const data = await response.json();
-                const primaryColor = data.primary_color;
-                const secondaryColor = data.secondary_color;
-                const tertiaryColor = data.tertiary_color;
+    async function extractColors(websiteUrl, primaryColorDiv, secondaryColorDiv, tertiaryColorDiv, primaryColorHex, secondaryColorHex, tertiaryColorHex, colorResultDiv, closestPrimaryColorDiv, closestSecondaryColorDiv, closestTertiaryColorDiv, closestPrimaryColorHex, closestSecondaryColorHex, closestTertiaryColorHex, closestColorsResultDiv) {
+        try {
+            const response = await fetch('https://dr7hues63glbxd4luplyv2hmzq0hxabc.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: websiteUrl })
+            });
 
-                primaryColorDiv.style.backgroundColor = primaryColor;
-                secondaryColorDiv.style.backgroundColor = secondaryColor;
-                tertiaryColorDiv.style.backgroundColor = tertiaryColor;
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
 
-                primaryColorHex.textContent = primaryColor;
-                secondaryColorHex.textContent = secondaryColor;
-                tertiaryColorHex.textContent = tertiaryColor;
+            const data = await response.json();
+            const primaryColor = data.primary_color;
+            const secondaryColor = data.secondary_color;
+            const tertiaryColor = data.tertiary_color;
 
-                colorResultDiv.classList.remove('hidden');
+            primaryColorDiv.style.backgroundColor = primaryColor;
+            secondaryColorDiv.style.backgroundColor = secondaryColor;
+            tertiaryColorDiv.style.backgroundColor = tertiaryColor;
 
-                // Send colors to the second lambda function
-                const closestColorsResponse = await fetch('https://tm3oghwz3fpkfvgmh7inwosqre0wazza.lambda-url.us-west-2.on.aws/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        primary_color: primaryColor,
-                        secondary_color: secondaryColor,
-                        tertiary_color: tertiaryColor
-                    })
-                });
+            primaryColorHex.textContent = primaryColor;
+            secondaryColorHex.textContent = secondaryColor;
+            tertiaryColorHex.textContent = tertiaryColor;
 
-                const closestColorsData = await closestColorsResponse.json();
+            colorResultDiv.classList.remove('hidden');
 
-                if (closestColorsData && closestColorsData[0] && closestColorsData[0].closest_colors) {
-                    const { primary_color, secondary_color, tertiary_color } = closestColorsData[0].closest_colors;
+            // Send colors to the second lambda function
+            const closestColorsResponse = await fetch('https://tm3oghwz3fpkfvgmh7inwosqre0wazza.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    primary_color: primaryColor,
+                    secondary_color: secondaryColor,
+                    tertiary_color: tertiaryColor
+                })
+            });
 
-                    // Remove any existing Tailwind color classes
-                    closestPrimaryColorDiv.className = 'w-16 h-16 rounded';
-                    closestSecondaryColorDiv.className = 'w-16 h-16 rounded';
-                    closestTertiaryColorDiv.className = 'w-16 h-16 rounded';
+            const closestColorsData = await closestColorsResponse.json();
 
-                    // Add the new Tailwind color classes
-                    closestPrimaryColorDiv.classList.add(`bg-${primary_color}`);
-                    closestSecondaryColorDiv.classList.add(`bg-${secondary_color}`);
-                    closestTertiaryColorDiv.classList.add(`bg-${tertiary_color}`);
+            if (closestColorsData && closestColorsData[0] && closestColorsData[0].closest_colors) {
+                const { primary_color, secondary_color, tertiary_color } = closestColorsData[0].closest_colors;
 
-                    closestPrimaryColorHex.textContent = primary_color;
-                    closestSecondaryColorHex.textContent = secondary_color;
-                    closestTertiaryColorHex.textContent = tertiary_color;
+                // Remove any existing Tailwind color classes
+                closestPrimaryColorDiv.className = 'w-16 h-16 rounded';
+                closestSecondaryColorDiv.className = 'w-16 h-16 rounded';
+                closestTertiaryColorDiv.className = 'w-16 h-16 rounded';
 
-                    closestColorsResultDiv.classList.remove('hidden');
-                } else {
-                    closestColorsResultDiv.innerText = 'No valid colors found.';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Failed to extract colors. Please try again.');
+                // Add the new Tailwind color classes
+                closestPrimaryColorDiv.classList.add(`bg-${primary_color}`);
+                closestSecondaryColorDiv.classList.add(`bg-${secondary_color}`);
+                closestTertiaryColorDiv.classList.add(`bg-${tertiary_color}`);
+
+                closestPrimaryColorHex.textContent = primary_color;
+                closestSecondaryColorHex.textContent = secondary_color;
+                closestTertiaryColorHex.textContent = tertiary_color;
+
+                closestColorsResultDiv.classList.remove('hidden');
+            } else {
+                closestColorsResultDiv.innerText = 'No valid colors found.';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to extract colors. Please try again.');
+        }
+    }
+
+    document.getElementById('mainForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const submitButton = document.getElementById('submitButton');
+        const breadcrumbs = document.getElementById('breadcrumbs');
+        const responseContainer = document.getElementById('responseContainer');
+        submitButton.textContent = 'Submitting...';
+        const data = {
+            customer_name: document.getElementById('customerName').value,
+            course_description: document.getElementById('courseDescription').value,
+            phone_number: document.getElementById('phoneNumber').value || null,
+            logo_url: document.getElementById('logoUrl').value || 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png',
+            profile_url: document.getElementById('profileUrl').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/2048px-Missing_avatar.svg.png',
+            funnel_name: funnelDropdownButton.querySelector('span').textContent
+        };
+        const accountType = accountTypeSelect.value;
+        let postUrl = '';
+        let payload = {};
+        if (accountType === 'existing') {
+            data.location_id = locationIdInput.value;
+            postUrl = finalPostUrlExisting;
+            payload = {
+                locationId: data.location_id,
+                courseDescription: data.course_description,
+                phoneNumber: data.phone_number,
+                profile_url: data.profile_url,
+                logo_url: data.logo_url,
+                funnelName: data.funnel_name
+            };
+        } else {
+            postUrl = finalPostUrlNonExisting;
+            payload = {
+                phone_number: data.phone_number,
+                course_description: data.course_description,
+                funnel_name: "gusten-sun-landing-page-light",
+                customer_name: data.customer_name
+            };
+            if (data.logo_url) {
+                payload.logo_url = data.logo_url;
+            }
+            if (data.profile_url) {
+                payload.profile_url = data.profile_url;
             }
         }
+        try {
+            const response = await fetch(postUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            responseContainer.classList.remove('hidden');
+            if (response.ok) {
+                const jsonResponse = await response.json();
+                responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
+                responseContainer.classList.add('bg-green-100');
+                breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
 
-        document.getElementById('mainForm').addEventListener('submit', async function (event) {
-            event.preventDefault();
-            const submitButton = document.getElementById('submitButton');
-            const breadcrumbs = document.getElementById('breadcrumbs');
-            const responseContainer = document.getElementById('responseContainer');
-            submitButton.textContent = 'Submitting...';
-            const data = {
-                customer_name: document.getElementById('customerName').value,
-                course_description: document.getElementById('courseDescription').value,
-                phone_number: document.getElementById('phoneNumber').value || null,
-                logo_url: document.getElementById('logoUrl').value || 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png',
-                profile_url: document.getElementById('profileUrl').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/2048px-Missing_avatar.svg.png',
-                funnel_name: funnelDropdownButton.querySelector('span').textContent
-            };
-            const accountType = accountTypeSelect.value;
-            let postUrl = '';
-            let payload = {};
-            if (accountType === 'existing') {
-                data.location_id = locationIdInput.value;
-                postUrl = finalPostUrlExisting;
-                payload = {
-                    locationId: data.location_id,
-                    courseDescription: data.course_description,
-                    phoneNumber: data.phone_number,
-                    profile_url: data.profile_url,
-                    logo_url: data.logo_url,
-                    funnelName: data.funnel_name
-                };
+                // Send additional POST request if account type is existing
+                if (accountType === 'existing') {
+                    const additionalPayload = {
+                        location_id: data.location_id,
+                        funnel_name: data.funnel_name
+                    };
+                    await fetch(additionalPostUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(additionalPayload)
+                    });
+                }
             } else {
-                postUrl = finalPostUrlNonExisting;
-                payload = {
-                    phone_number: data.phone_number,
-                    course_description: data.course_description,
-                    funnel_name: "gusten-sun-landing-page-light",
-                    customer_name: data.customer_name
-                };
-                if (data.logo_url) {
-                    payload.logo_url = data.logo_url;
-                }
-                if (data.profile_url) {
-                    payload.profile_url = data.profile_url;
-                }
-            }
-            try {
-                const response = await fetch(postUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                responseContainer.classList.remove('hidden');
-                if (response.ok) {
-                    const jsonResponse = await response.json();
-                    responseContainer.textContent = JSON.stringify(jsonResponse, null, 4);
-                    responseContainer.classList.add('bg-green-100');
-                    breadcrumbs.innerHTML = '<span class="bg-green-500 text-white px-3 py-1 rounded">Success</span>';
-                } else {
-                    const errorMessage = await response.text();
-                    responseContainer.textContent = `Error: ${response.status} - ${errorMessage}`;
-                    responseContainer.classList.add('bg-red-100');
-                    breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                responseContainer.textContent = `Request Failed: ${error.message}`;
-                responseContainer.classList.remove('hidden');
+                const errorMessage = await response.text();
+                responseContainer.textContent = `Error: ${response.status} - ${errorMessage}`;
                 responseContainer.classList.add('bg-red-100');
                 breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
-            } finally {
-                submitButton.textContent = 'Submit';
-                breadcrumbs.classList.remove('hidden');
             }
-        });
-
-        document.getElementById('cloneWebsite').addEventListener('click', function (event) {
-            event.preventDefault();
-            window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
-        });
-
-        document.getElementById('cloneWebsiteMobile').addEventListener('click', function (event) {
-            event.preventDefault();
-            window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
-        });
-
-        document.getElementById('mobileMenuButton').addEventListener('click', function () {
-            const mobileMenu = document.getElementById('mobileMenu');
-            mobileMenu.classList.toggle('hidden');
-        });
+        } catch (error) {
+            console.error('Error:', error);
+            responseContainer.textContent = `Request Failed: ${error.message}`;
+            responseContainer.classList.remove('hidden');
+            responseContainer.classList.add('bg-red-100');
+            breadcrumbs.innerHTML = '<span class="bg-red-500 text-white px-3 py-1 rounded">Failed</span>';
+        } finally {
+            submitButton.textContent = 'Submit';
+            breadcrumbs.classList.remove('hidden');
+        }
     });
+    document.getElementById('cloneWebsite').addEventListener('click', function (event) {
+        event.preventDefault();
+        window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
+    });
+
+    document.getElementById('cloneWebsiteMobile').addEventListener('click', function (event) {
+        event.preventDefault();
+        window.location.href = 'https://html-starter-coral.vercel.app/webpage-downloader.html';
+    });
+
+    document.getElementById('mobileMenuButton').addEventListener('click', function () {
+        const mobileMenu = document.getElementById('mobileMenu');
+        mobileMenu.classList.toggle('hidden');
+    });
+});
 </script>
 </body>
 </html>
