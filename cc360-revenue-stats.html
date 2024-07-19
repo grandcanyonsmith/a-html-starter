@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales Data Fetcher</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function navigateTo(url) {
             window.location.href = url;
@@ -146,6 +147,10 @@
                     </tbody>
                 </table>
             </div>
+
+            <div class="mt-8">
+                <canvas id="sourcePieChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -201,205 +206,259 @@
             return tags[0] || 'NA';
         }
 
-async function fetchSalesData() {
-    const fetchButton = document.getElementById('fetch-button');
-    fetchButton.textContent = 'Fetching...';
-    fetchButton.disabled = true;
+        async function fetchSalesData() {
+            const fetchButton = document.getElementById('fetch-button');
+            fetchButton.textContent = 'Fetching...';
+            fetchButton.disabled = true;
 
-    const startDate = new Date(document.getElementById('start_date').value);
-    const endDate = new Date(document.getElementById('end_date').value);
+            const startDate = new Date(document.getElementById('start_date').value);
+            const endDate = new Date(document.getElementById('end_date').value);
 
-    const response = await fetch('https://wse6p5xqvwvjqwjdzo5qphqkue0titsh.lambda-url.us-west-2.on.aws/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ start_date: startDate.toISOString().split('T')[0], end_date: endDate.toISOString().split('T')[0] })
-    });
+            const response = await fetch('https://wse6p5xqvwvjqwjdzo5qphqkue0titsh.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ start_date: startDate.toISOString().split('T')[0], end_date: endDate.toISOString().split('T')[0] })
+            });
 
-    const data = await response.json();
-    console.log('Response Data:', data);
+            const data = await response.json();
+            console.log('Response Data:', data);
 
-    const groupedTableBody = document.getElementById('grouped-table-body');
-    const detailedTableBody = document.getElementById('detailed-table-body');
-    const sourceCountsContainer = document.getElementById('source-counts');
-    groupedTableBody.innerHTML = '';
-    detailedTableBody.innerHTML = '';
-    sourceCountsContainer.innerHTML = '';
+            const groupedTableBody = document.getElementById('grouped-table-body');
+            const detailedTableBody = document.getElementById('detailed-table-body');
+            const sourceCountsContainer = document.getElementById('source-counts');
+            groupedTableBody.innerHTML = '';
+            detailedTableBody.innerHTML = '';
+            sourceCountsContainer.innerHTML = '';
 
-    let totalRevenue = 0;
-    let totalSalesAmount = 0;
-    let demoCompletedRevenue = 0;
-    let demoCompletedSalesAmount = 0;
-    let noDemoCompletedRevenue = 0;
-    let noDemoCompletedSalesAmount = 0;
+            let totalRevenue = 0;
+            let totalSalesAmount = 0;
+            let demoCompletedRevenue = 0;
+            let demoCompletedSalesAmount = 0;
+            let noDemoCompletedRevenue = 0;
+            let noDemoCompletedSalesAmount = 0;
 
-    const sourceCounts = {};
+            const sourceCounts = {};
 
-    // Combine rows with the same product names and calculate the average price if there are different prices
-    const combinedData = {};
-    data.forEach(item => {
-        const productName = item["Product Name"];
-        if (productName === "All Totals" || productName === "Demo Completed Totals" || productName === "No Demo Completed Totals") {
-            return; // Skip these items
-        }
-        if (!combinedData[productName]) {
-            combinedData[productName] = {
-                "Product Name": productName,
-                "Total Revenue": 0,
-                "Sales Amount": 0,
-                "Prices": []
-            };
-        }
-        combinedData[productName]["Total Revenue"] += item["Total_Revenue"];
-        combinedData[productName]["Sales Amount"] += item["Sales_Amount"];
-        combinedData[productName]["Prices"].push(item["Price"]);
+            // Combine rows with the same product names and calculate the average price if there are different prices
+            const combinedData = {};
+            data.forEach(item => {
+                const productName = item["Product Name"];
+                if (productName === "All Totals" || productName === "Demo Completed Totals" || productName === "No Demo Completed Totals") {
+                    return; // Skip these items
+                }
+                if (!combinedData[productName]) {
+                    combinedData[productName] = {
+                        "Product Name": productName,
+                        "Total Revenue": 0,
+                        "Sales Amount": 0,
+                        "Prices": []
+                    };
+                }
+                combinedData[productName]["Total Revenue"] += item["Total_Revenue"];
+                combinedData[productName]["Sales Amount"] += item["Sales_Amount"];
+                combinedData[productName]["Prices"].push(item["Price"]);
 
-        // Update total revenue and sales amount
-        totalRevenue += item["Total_Revenue"];
-        totalSalesAmount += item["Sales_Amount"];
+                // Update total revenue and sales amount
+                totalRevenue += item["Total_Revenue"];
+                totalSalesAmount += item["Sales_Amount"];
 
-        // Check if demo was completed
-        if (item["Demo Completed"] === "Yes") {
-            demoCompletedRevenue += item["Total_Revenue"];
-            demoCompletedSalesAmount += item["Sales_Amount"];
-        } else {
-            noDemoCompletedRevenue += item["Total_Revenue"];
-            noDemoCompletedSalesAmount += item["Sales_Amount"];
-        }
-    });
+                // Check if demo was completed
+                if (item["Demo Completed"] === "Yes") {
+                    demoCompletedRevenue += item["Total_Revenue"];
+                    demoCompletedSalesAmount += item["Sales_Amount"];
+                } else {
+                    noDemoCompletedRevenue += item["Total_Revenue"];
+                    noDemoCompletedSalesAmount += item["Sales_Amount"];
+                }
+            });
 
-    Object.values(combinedData).forEach(item => {
-        item["Price"] = item["Prices"].reduce((a, b) => a + b, 0) / item["Prices"].length;
-        delete item["Prices"];
-    });
+            Object.values(combinedData).forEach(item => {
+                item["Price"] = item["Prices"].reduce((a, b) => a + b, 0) / item["Prices"].length;
+                delete item["Prices"];
+            });
 
-    const combinedDataArray = Object.values(combinedData);
-    combinedDataArray.sort((a, b) => b["Total Revenue"] - a["Total Revenue"]);
+            const combinedDataArray = Object.values(combinedData);
+            combinedDataArray.sort((a, b) => b["Total Revenue"] - a["Total Revenue"]);
 
-    combinedDataArray.forEach(item => {
-        const row = document.createElement('tr');
-        ['Product Name', 'Price', 'Total Revenue', 'Sales Amount'].forEach(key => {
-            const td = document.createElement('td');
-            td.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-            if (key === 'Product Name') {
+            combinedDataArray.forEach(item => {
+                const row = document.createElement('tr');
+                ['Product Name', 'Price', 'Total Revenue', 'Sales Amount'].forEach(key => {
+                    const td = document.createElement('td');
+                    td.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+                    if (key === 'Product Name') {
+                        const badge = document.createElement('span');
+                        badge.classList.add('inline-flex', 'items-center', 'rounded-md', 'px-2', 'py-1', 'text-xs', 'font-medium', 'ring-1', 'ring-inset');
+                        badge.classList.add(...getBadgeClass(item[key]).split(' '));
+                        badge.textContent = item[key];
+                        td.appendChild(badge);
+                    } else {
+                        td.textContent = key === 'Total Revenue' || key === 'Price' ? formatCurrency(item[key]) : item[key];
+                    }
+                    row.appendChild(td);
+                });
+                groupedTableBody.appendChild(row);
+            });
+
+            // Sort detailedTableBody rows by date, with the most recent at the top
+            const detailedData = [];
+            data.forEach(item => {
+                if (item["Product Name"] !== "All Totals" && item["Product Name"] !== "Demo Completed Totals" && item["Product Name"] !== "No Demo Completed Totals") {
+                    item.Emails.forEach((email, index) => {
+                        detailedData.push({
+                            email: email,
+                            productName: item["Product Name"],
+                            price: item["Price"],
+                            saleDate: new Date(item["Sale Dates"][index]),
+                            source: filterTags(item["Sources"][index].split(', '))
+                        });
+                    });
+                }
+            });
+
+            detailedData.sort((a, b) => b.saleDate - a.saleDate);
+
+            detailedData.forEach(item => {
+                const row = document.createElement('tr');
+                const emailTd = document.createElement('td');
+                emailTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+                emailTd.innerHTML = `${item.email} <span class="text-xs text-gray-400">${formatDate(item.saleDate)}</span>`;
+                row.appendChild(emailTd);
+
+                const productNameTd = document.createElement('td');
+                productNameTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
                 const badge = document.createElement('span');
                 badge.classList.add('inline-flex', 'items-center', 'rounded-md', 'px-2', 'py-1', 'text-xs', 'font-medium', 'ring-1', 'ring-inset');
-                badge.classList.add(...getBadgeClass(item[key]).split(' '));
-                badge.textContent = item[key];
-                td.appendChild(badge);
-            } else {
-                td.textContent = key === 'Total Revenue' || key === 'Price' ? formatCurrency(item[key]) : item[key];
-            }
-            row.appendChild(td);
-        });
-        groupedTableBody.appendChild(row);
-    });
+                badge.classList.add(...getBadgeClass(item.productName).split(' '));
+                badge.textContent = item.productName;
+                productNameTd.appendChild(badge);
+                row.appendChild(productNameTd);
 
-    // Sort detailedTableBody rows by date, with the most recent at the top
-    const detailedData = [];
-    data.forEach(item => {
-        if (item["Product Name"] !== "All Totals" && item["Product Name"] !== "Demo Completed Totals" && item["Product Name"] !== "No Demo Completed Totals") {
-            item.Emails.forEach((email, index) => {
-                detailedData.push({
-                    email: email,
-                    productName: item["Product Name"],
-                    price: item["Price"],
-                    saleDate: new Date(item["Sale Dates"][index]),
-                    source: filterTags(item["Sources"][index].split(', '))
-                });
+                const priceTd = document.createElement('td');
+                priceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+                priceTd.textContent = formatCurrency(item.price);
+                row.appendChild(priceTd);
+
+                const sourceTd = document.createElement('td');
+                sourceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
+                sourceTd.textContent = item.source;
+                row.appendChild(sourceTd);
+
+                detailedTableBody.appendChild(row);
+
+                // Count sources, only the first occurrence
+                if (!sourceCounts[item.email]) {
+                    sourceCounts[item.email] = item.source;
+                }
             });
+
+            // Aggregate source counts
+            const aggregatedSourceCounts = {};
+            Object.values(sourceCounts).forEach(source => {
+                if (aggregatedSourceCounts[source]) {
+                    aggregatedSourceCounts[source]++;
+                } else {
+                    aggregatedSourceCounts[source] = 1;
+                }
+            });
+
+            // Calculate percentages
+            const totalSourceCount = Object.values(aggregatedSourceCounts).reduce((acc, count) => acc + count, 0);
+            const sourcePercentages = {};
+            Object.keys(aggregatedSourceCounts).forEach(source => {
+                sourcePercentages[source] = ((aggregatedSourceCounts[source] / totalSourceCount) * 100).toFixed(2);
+            });
+
+            const workdays = calculateWorkdays(startDate, endDate);
+            const avgDailyMRR = workdays > 0 ? totalRevenue / workdays : 0;
+            const mrrTrajectory = avgDailyMRR * 22; // Assuming 22 workdays in a month
+
+            document.getElementById('total-amount').textContent = formatCurrency(totalRevenue);
+            document.getElementById('total-sales-amount').textContent = `Sales Amount: ${totalSalesAmount}`;
+            document.getElementById('demo-completed-amount').textContent = formatCurrency(demoCompletedRevenue);
+            document.getElementById('demo-completed-sales-amount').textContent = `Sales Amount: ${demoCompletedSalesAmount}`;
+            document.getElementById('no-demo-completed-amount').textContent = formatCurrency(noDemoCompletedRevenue);
+            document.getElementById('no-demo-completed-sales-amount').textContent = `Sales Amount: ${noDemoCompletedSalesAmount}`;
+            document.getElementById('avg-daily-mrr').textContent = formatCurrency(avgDailyMRR);
+            document.getElementById('mrr-trajectory').textContent = formatCurrency(mrrTrajectory);
+
+            // Create source count cards
+            Object.keys(sourcePercentages).forEach(source => {
+                const card = document.createElement('div');
+                card.classList.add('flex', 'flex-col', 'bg-white/5', 'p-8', 'rounded-lg', 'shadow-lg', 'text-center');
+                const sourceName = document.createElement('dt');
+                sourceName.classList.add('text-sm', 'font-semibold', 'leading-6', 'text-gray-300');
+                sourceName.textContent = source;
+                const sourceCount = document.createElement('dd');
+                sourceCount.classList.add('order-first', 'text-3xl', 'font-semibold', 'tracking-tight', 'text-white');
+                sourceCount.textContent = `${sourcePercentages[source]}%`;
+                const sourceTotal = document.createElement('dd');
+                sourceTotal.classList.add('text-sm', 'font-semibold', 'leading-6', 'text-gray-300');
+                sourceTotal.textContent = `Total: ${aggregatedSourceCounts[source]}`;
+                card.appendChild(sourceCount);
+                card.appendChild(sourceTotal);
+                card.appendChild(sourceName);
+                sourceCountsContainer.appendChild(card);
+            });
+
+            // Render the pie chart
+            const ctx = document.getElementById('sourcePieChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(sourcePercentages),
+                    datasets: [{
+                        data: Object.values(aggregatedSourceCounts),
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(199, 199, 199, 0.2)',
+                            'rgba(83, 102, 255, 0.2)',
+                            'rgba(255, 159, 255, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(199, 199, 199, 1)',
+                            'rgba(83, 102, 255, 1)',
+                            'rgba(255, 159, 255, 1)',
+                            'rgba(255, 206, 86, 1)',
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    return `${label}: ${value} (${sourcePercentages[label]}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            fetchButton.textContent = 'Fetch Sales Data';
+            fetchButton.disabled = false;
         }
-    });
-
-    detailedData.sort((a, b) => b.saleDate - a.saleDate);
-
-    detailedData.forEach(item => {
-        const row = document.createElement('tr');
-        const emailTd = document.createElement('td');
-        emailTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-        emailTd.innerHTML = `${item.email} <span class="text-xs text-gray-400">${formatDate(item.saleDate)}</span>`;
-        row.appendChild(emailTd);
-
-        const productNameTd = document.createElement('td');
-        productNameTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-        const badge = document.createElement('span');
-        badge.classList.add('inline-flex', 'items-center', 'rounded-md', 'px-2', 'py-1', 'text-xs', 'font-medium', 'ring-1', 'ring-inset');
-        badge.classList.add(...getBadgeClass(item.productName).split(' '));
-        badge.textContent = item.productName;
-        productNameTd.appendChild(badge);
-        row.appendChild(productNameTd);
-
-        const priceTd = document.createElement('td');
-        priceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-        priceTd.textContent = formatCurrency(item.price);
-        row.appendChild(priceTd);
-
-        const sourceTd = document.createElement('td');
-        sourceTd.classList.add('px-4', 'py-2', 'border-b', 'border-gray-200');
-        sourceTd.textContent = item.source;
-        row.appendChild(sourceTd);
-
-        detailedTableBody.appendChild(row);
-
-        // Count sources, only the first occurrence
-        if (!sourceCounts[item.email]) {
-            sourceCounts[item.email] = item.source;
-        }
-    });
-
-    // Aggregate source counts
-    const aggregatedSourceCounts = {};
-    Object.values(sourceCounts).forEach(source => {
-        if (aggregatedSourceCounts[source]) {
-            aggregatedSourceCounts[source]++;
-        } else {
-            aggregatedSourceCounts[source] = 1;
-        }
-    });
-
-    // Calculate percentages
-    const totalSourceCount = Object.values(aggregatedSourceCounts).reduce((acc, count) => acc + count, 0);
-    const sourcePercentages = {};
-    Object.keys(aggregatedSourceCounts).forEach(source => {
-        sourcePercentages[source] = ((aggregatedSourceCounts[source] / totalSourceCount) * 100).toFixed(2);
-    });
-
-    const workdays = calculateWorkdays(startDate, endDate);
-    const avgDailyMRR = workdays > 0 ? totalRevenue / workdays : 0;
-    const mrrTrajectory = avgDailyMRR * 22; // Assuming 22 workdays in a month
-
-    document.getElementById('total-amount').textContent = formatCurrency(totalRevenue);
-    document.getElementById('total-sales-amount').textContent = `Sales Amount: ${totalSalesAmount}`;
-    document.getElementById('demo-completed-amount').textContent = formatCurrency(demoCompletedRevenue);
-    document.getElementById('demo-completed-sales-amount').textContent = `Sales Amount: ${demoCompletedSalesAmount}`;
-    document.getElementById('no-demo-completed-amount').textContent = formatCurrency(noDemoCompletedRevenue);
-    document.getElementById('no-demo-completed-sales-amount').textContent = `Sales Amount: ${noDemoCompletedSalesAmount}`;
-    document.getElementById('avg-daily-mrr').textContent = formatCurrency(avgDailyMRR);
-    document.getElementById('mrr-trajectory').textContent = formatCurrency(mrrTrajectory);
-
-    // Create source count cards
-    Object.keys(sourcePercentages).forEach(source => {
-        const card = document.createElement('div');
-        card.classList.add('flex', 'flex-col', 'bg-white/5', 'p-8', 'rounded-lg', 'shadow-lg', 'text-center');
-        const sourceName = document.createElement('dt');
-        sourceName.classList.add('text-sm', 'font-semibold', 'leading-6', 'text-gray-300');
-        sourceName.textContent = source;
-        const sourceCount = document.createElement('dd');
-        sourceCount.classList.add('order-first', 'text-3xl', 'font-semibold', 'tracking-tight', 'text-white');
-        sourceCount.textContent = `${sourcePercentages[source]}%`;
-        const sourceTotal = document.createElement('dd');
-        sourceTotal.classList.add('text-sm', 'font-semibold', 'leading-6', 'text-gray-300');
-        sourceTotal.textContent = `Total: ${aggregatedSourceCounts[source]}`;
-        card.appendChild(sourceCount);
-        card.appendChild(sourceTotal);
-        card.appendChild(sourceName);
-        sourceCountsContainer.appendChild(card);
-    });
-
-    fetchButton.textContent = 'Fetch Sales Data';
-    fetchButton.disabled = false;
-}
 
         document.addEventListener('DOMContentLoaded', () => {
             const today = new Date();
@@ -410,4 +469,3 @@ async function fetchSalesData() {
     </script>
 </body>
 </html>
-
