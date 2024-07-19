@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Transcription Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-6">Audio Transcription Service</h1>
+        <form id="transcriptionForm" class="bg-white p-6 rounded shadow-md">
+            <div class="mb-4">
+                <label for="audioUrl" class="block text-gray-700 font-bold mb-2">Enter Audio URL:</label>
+                <input type="url" id="audioUrl" name="audioUrl" class="w-full px-3 py-2 border rounded" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">Transcribe</button>
+        </form>
+        <div id="result" class="mt-6 p-4 bg-white rounded shadow-md hidden">
+            <h2 class="text-2xl font-bold mb-4">Transcription Result:</h2>
+            <pre id="transcriptionText" class="whitespace-pre-wrap"></pre>
+        </div>
+    </div>
+    <script>
+        document.getElementById('transcriptionForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const audioUrl = document.getElementById('audioUrl').value;
+            const resultDiv = document.getElementById('result');
+            const transcriptionText = document.getElementById('transcriptionText');
+
+            const data = {
+                audio_url: audioUrl
+            };
+
+            try {
+                const response = await fetch('https://4cqc2s2diprqys7bxzoikbxta40ljsnj.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const responseData = await response.json();
+                transcriptionText.textContent = responseData.transcription;
+                resultDiv.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while processing the transcription.');
+            }
+        });
+    </script>
+</body>
+</html>
