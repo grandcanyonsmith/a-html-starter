@@ -542,7 +542,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             phone_number: document.getElementById('phoneNumber').value || null,
             logo_url: document.getElementById('logoUrl').value || 'https://logosbynick.com/wp-content/uploads/2018/03/final-logo-example.png',
             profile_url: document.getElementById('profileUrl').value || 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Missing_avatar.svg/2048px-Missing_avatar.svg.png',
-            funnel_name: funnelDropdownButton.querySelector('span').textContent
+            funnel_name: funnelDropdownButton.querySelector('span').textContent,
+            url: document.getElementById('url').value
         };
         const accountType = accountTypeSelect.value;
         let postUrl = '';
@@ -556,7 +557,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 phoneNumber: data.phone_number,
                 profile_url: data.profile_url,
                 logo_url: data.logo_url,
-                funnelName: data.funnel_name
+                funnelName: data.funnel_name,
+                url: data.url
             };
         } else {
             postUrl = finalPostUrlNonExisting;
@@ -564,7 +566,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 phone_number: data.phone_number,
                 course_description: data.course_description,
                 funnel_name: "gusten-sun-landing-page-light",
-                customer_name: data.customer_name
+                customer_name: data.customer_name,
+                url: data.url
             };
             if (data.logo_url) {
                 payload.logo_url = data.logo_url;
