@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Scheme Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4">Color Scheme Generator</h1>
+        <form id="colorSchemeForm" class="space-y-4">
+            <div>
+                <label for="url" class="block text-sm font-medium text-gray-700">Website URL</label>
+                <input type="url" id="url" name="url" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <button type="submit" id="submitButton" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Generate Color Scheme</button>
+        </form>
+        <div id="result" class="mt-6 hidden">
+            <h2 class="text-xl font-semibold mb-2">Generated Color Scheme</h2>
+            <iframe id="colorSchemeIframe" class="w-full h-96 border border-gray-300 rounded-md"></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('colorSchemeForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            console.log('Form submitted');
+
+            const url = document.getElementById('url').value;
+            console.log('URL:', url);
+
+            const submitButton = document.getElementById('submitButton');
+            submitButton.textContent = 'Generating color scheme...';
+            submitButton.disabled = true;
+
+            try {
+                const response = await fetch('https://sedfyr7nmkxi73wyvnwsx373wi0xhihu.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ url })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                let colorScheme = JSON.parse(data.color_scheme);
+                console.log('Parsed color scheme:', colorScheme);
+
+                // Ensure "bg-" or "text-" is in front of the variables
+                for (let key in colorScheme) {
+                    if (key.includes('background') || key.includes('color')) {
+                        colorScheme[key] = 'bg-' + colorScheme[key];
+                    } else {
+                        colorScheme[key] = 'text-' + colorScheme[key];
+                    }
+                }
+                console.log('Modified color scheme:', colorScheme);
+
+                const iframeContent = `
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+                    </head>
+                    <body class="bg-gray-100 text-gray-900">
+                        <div class="container mx-auto p-8">
+                            <h1 class="text-4xl font-bold ${colorScheme.color}">Color Scheme Demo</h1>
+                            <p class="mt-4 ${colorScheme.italic_text_color} italic">This is italic text with the specified color.</p>
+                            <p class="mt-4 ${colorScheme.underline_text_color} underline">This is underlined text with the specified color.</p>
+                            <a href="#" class="mt-4 ${colorScheme.link_text_color}">This is a link with the specified color.</a>
+                            <div class="mt-4 ${colorScheme.icon_color}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                This is an icon with the specified color.
+                            </div>
+                            <button class="mt-4 ${colorScheme.buttons} text-white py-2 px-4 rounded hover:${colorScheme.button_hover}">Button</button>
+                            <div class="mt-4 p-4 ${colorScheme.dark_background_color} text-white">
+                                <p>This is a dark background section with the specified color.</p>
+                            </div>
+                            <div class="mt-4 p-4 ${colorScheme.light_background_color} text-gray-900">
+                                <p>This is a light background section with the specified color.</p>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `;
+
+                const iframe = document.getElementById('colorSchemeIframe');
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(iframeContent);
+                iframeDoc.close();
+
+                document.getElementById('result').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while generating the color scheme. Please try again.');
+            } finally {
+                submitButton.textContent = 'Generate Color Scheme';
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
