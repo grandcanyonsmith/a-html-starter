@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Table</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard: ' + text);
+            });
+        }
+    </script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="container mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Contact Information</h1>
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Name</th>
+                    <th class="py-2 px-4 border-b">Phone</th>
+                    <th class="py-2 px-4 border-b">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="py-2 px-4 border-b">Tom Malterre</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        360-393-2248
+                        <button onclick="copyToClipboard('360-393-2248')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Teach for the assisted for functional medicine. Nutrient Coach, teaching about nutrient supplements. Migraine relief. Teaching the process and foundations of functional nutrition. Functional Nutrition Academy. Teaching practitioners how to recommend supplements, covering essential but often overlooked concepts. Loves teaching, even general concepts.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Farhad Kazemi</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        813-857-8003
+                        <button onclick="copyToClipboard('813-857-8003')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Weight Loss course. “Lose weight the hard way”. Coaching course.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Ashley Musick</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        863-456-3227
+                        <button onclick="copyToClipboard('863-456-3227')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Takes young entrepreneurs from idea to profit.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Rob Rudolph</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        303-888-4724
+                        <button onclick="copyToClipboard('303-888-4724')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Milocommercialcapital.com.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Jude Reason</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        225-719-2787
+                        <button onclick="copyToClipboard('225-719-2787')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Healing betrayal trauma.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Shaun Guerrero</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        360-990-0637
+                        <button onclick="copyToClipboard('360-990-0637')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Real Estate certificate course led by an attorney.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Kathy Roberts</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        201-290-4549
+                        <button onclick="copyToClipboard('201-290-4549')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Tidy tutor. Talked to someone about the website. Has a call scheduled for Friday.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">George Collins</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        310-431-1421
+                        <button onclick="copyToClipboard('310-431-1421')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Animation. Needs 5 sites. 20 more for classes. Is scheduling a call.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Brad Berg</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        573-286-5625
+                        <button onclick="copyToClipboard('573-286-5625')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Christian coaching. Restructuring to get a positive mindset.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Dade Ronan</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        316-641-0373
+                        <button onclick="copyToClipboard('316-641-0373')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Inductive bible study seminar.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Yewande Smith</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        305-717-8252
+                        <button onclick="copyToClipboard('305-717-8252')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Non-profit organization for helping kids and scholarships for kids. Empowerment for education. Help kids with school supplies. Community empowerment. Empowering women. Building opportunities and communities in need.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Cyrano Williams</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        407-848-8797
+                        <button onclick="copyToClipboard('407-848-8797')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Learning PLR. Private label rights.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Maria Bolton</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        904-397-5869
+                        <button onclick="copyToClipboard('904-397-5869')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">How to navigate the profit for foreign people to come to the USA to visit. Travel document.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Joe Jonas</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        801-860-7331
+                        <button onclick="copyToClipboard('801-860-7331')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Mental health therapist. Change from a fixed mindset to growth mindset. Talk about anxiety and how to overcome those fears.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Karena</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        443-821-1685
+                        <button onclick="copyToClipboard('443-821-1685')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Starting an online publishing/author platform to get readers and create author content like covers.</td>
+                </tr>
+                <tr>
+                    <td class="py-2 px-4 border-b">Clifford Barnes</td>
+                    <td class="py-2 px-4 border-b flex items-center">
+                        330-506-6256
+                        <button onclick="copyToClipboard('330-506-6256')" class="ml-2 text-blue-500">
+                            📋
+                        </button>
+                    </td>
+                    <td class="py-2 px-4 border-b">Creating a course of my method of harmony development. At the end of the course, students will have a complete and expansive library of chords based on a concept I call note relativity.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
