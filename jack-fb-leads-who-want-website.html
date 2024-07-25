@@ -9,6 +9,20 @@
 <body class="bg-gray-100 p-6">
     <div class="container mx-auto">
         <h1 class="text-2xl font-bold mb-4">Contact Information</h1>
+        <h2 class="text-xl font-semibold mb-2">July 24th</h2>
+        <table class="min-w-full bg-white border border-gray-200 mb-6">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Name</th>
+                    <th class="py-2 px-4 border-b">Phone</th>
+                    <th class="py-2 px-4 border-b">Description</th>
+                </tr>
+            </thead>
+            <tbody id="contact-table-body-24">
+                <!-- Rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        <h2 class="text-xl font-semibold mb-2">July 25th</h2>
         <table class="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr>
@@ -17,7 +31,7 @@
                     <th class="py-2 px-4 border-b">Description</th>
                 </tr>
             </thead>
-            <tbody id="contact-table-body">
+            <tbody id="contact-table-body-25">
                 <!-- Rows will be inserted here by JavaScript -->
             </tbody>
         </table>
@@ -35,154 +49,159 @@
         const contacts = [
             {
                 name: "Tom Malterre",
-                phone: "360-393-2248",
+                phone: "3603932248",
                 description: "Teach for the assisted for functional medicine. Nutrient Coach, teaching about nutrient supplements. Migraine relief. Teaching the process and foundations of functional nutrition. Functional Nutrition Academy. Teaching practitioners how to recommend supplements, covering essential but often overlooked concepts. Loves teaching, even general concepts."
             },
             {
                 name: "Farhad Kazemi",
-                phone: "813-857-8003",
+                phone: "8138578003",
                 description: "Weight Loss course. “Lose weight the hard way”. Coaching course."
             },
             {
                 name: "Ashley Musick",
-                phone: "863-456-3227",
+                phone: "8634563227",
                 description: "Takes young entrepreneurs from idea to profit."
             },
             {
                 name: "Rob Rudolph",
-                phone: "303-888-4724",
+                phone: "3038884724",
                 description: "Milocommercialcapital.com."
             },
             {
                 name: "Jude Reason",
-                phone: "225-719-2787",
+                phone: "2257192787",
                 description: "Healing betrayal trauma."
             },
             {
                 name: "Shaun Guerrero",
-                phone: "360-990-0637",
+                phone: "3609900637",
                 description: "Real Estate certificate course led by an attorney."
             },
             {
                 name: "Kathy Roberts",
-                phone: "201-290-4549",
+                phone: "2012904549",
                 description: "Tidy tutor. Talked to someone about the website. Has a call scheduled for Friday."
             },
             {
                 name: "George Collins",
-                phone: "310-431-1421",
+                phone: "3104311421",
                 description: "Animation. Needs 5 sites. 20 more for classes. Is scheduling a call."
             },
             {
                 name: "Brad Berg",
-                phone: "573-286-5625",
+                phone: "5732865625",
                 description: "Christian coaching. Restructuring to get a positive mindset."
             },
             {
                 name: "Dade Ronan",
-                phone: "316-641-0373",
+                phone: "3166410373",
                 description: "Inductive bible study seminar."
             },
             {
                 name: "Yewande Smith",
-                phone: "305-717-8252",
+                phone: "3057178252",
                 description: "Non-profit organization for helping kids and scholarships for kids. Empowerment for education. Help kids with school supplies. Community empowerment. Empowering women. Building opportunities and communities in need."
             },
             {
                 name: "Cyrano Williams",
-                phone: "407-848-8797",
+                phone: "4078488797",
                 description: "Learning PLR. Private label rights."
             },
             {
                 name: "Maria Bolton",
-                phone: "904-397-5869",
+                phone: "9043975869",
                 description: "How to navigate the profit for foreign people to come to the USA to visit. Travel document."
             },
             {
                 name: "Joe Jonas",
-                phone: "801-860-7331",
+                phone: "8018607331",
                 description: "Mental health therapist. Change from a fixed mindset to growth mindset. Talk about anxiety and how to overcome those fears."
             },
             {
                 name: "Karena",
-                phone: "443-821-1685",
+                phone: "4438211685",
                 description: "Starting an online publishing/author platform to get readers and create author content like covers."
             },
             {
                 name: "Clifford Barnes",
-                phone: "330-506-6256",
+                phone: "3305066256",
                 description: "Creating a course of my method of harmony development. At the end of the course, students will have a complete and expansive library of chords based on a concept I call note relativity."
             },
             {
                 name: "Ashton Henry",
-                phone: "786-237-1904",
+                phone: "7862371904",
                 description: "Person credit. Business credit. Business funding."
             },
             {
                 name: "Rubbie Groves-Clay",
-                phone: "314-713-8195",
+                phone: "3147138195",
                 description: "Financial literacy."
             },
             {
                 name: "Nik Redd",
-                phone: "704-453-0011",
+                phone: "7044530011",
                 description: "Software to help parents going through custody court. Preparing for trial."
             },
             {
                 name: "Tia Martin",
-                phone: "773-818-9366",
+                phone: "7738189366",
                 description: "A course for required Notaries in the state of Illinois. What they need to know to become a notary in the state of Illinois."
             },
             {
                 name: "Trisha",
-                phone: "860-859-7193",
+                phone: "8608597193",
                 description: "Digital marketing. Developing a brand of clothing."
             },
             {
                 name: "Mary",
-                phone: "857-719-7200",
+                phone: "8577197200",
                 description: "Slogan is “True love waits and true love keeps”. Finding true love and keeping true love. Single people are not finding true love. Married people are not keeping true love. Scares youngsters into not wanting to get married. Mainstream is destroying everybody. You should love and care everyday in your relationship. Each individual has their own issues and trauma. Celebrities shouldn’t be the face of principle. Change is needed. 10 Commandments is the right way to follow. Everybody needs to love and turn to God. The needs more love and the love comes from God. Instagram: Victoriajutherapist. Detox Personality."
             },
             {
                 name: "Marc Harvey",
-                phone: "713-201-4013",
+                phone: "7132014013",
                 description: "Marcharveyairbrushclass.com. 4 part course."
             },
             {
                 name: "Cheryl Sain",
-                phone: "704-309-5067",
+                phone: "7043095067",
                 description: "For Real Estate agents. cherylsain.com."
             },
             {
                 name: "Tom Beaulieu",
-                phone: "310-567-7787",
+                phone: "3105677787",
                 description: "Courses on how to do a trademark."
             },
             {
                 name: "Jmi Pres",
-                phone: "559-478-1424",
+                phone: "5594781424",
                 description: "Capital Raising academy."
             },
             {
                 name: "Paul Bunn",
-                phone: "484-326-1067",
+                phone: "4843261067",
                 description: "highprobsale.com (existing website). thearbingergroup.com (likes this website's style)."
             },
             {
                 name: "Leslie Ortego",
-                phone: "985-276-7405",
+                phone: "9852767405",
                 description: "100,000k agent mastery. Real Estate agency."
             },
             {
                 name: "Teresa Ward",
-                phone: "843-530-8900",
+                phone: "8435308900",
                 description: "www.gatewaydreams.com. Biblical dream interpretation."
             }
         ];
 
-        const tableBody = document.getElementById('contact-table-body');
+        function formatDescription(description) {
+            return description.replace(/(\b(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}\b)/g, '<a href="https://www.$1" class="text-blue-500 underline" target="_blank">$1</a>');
+        }
 
-        contacts.forEach(contact => {
+        const tableBody24 = document.getElementById('contact-table-body-24');
+        const tableBody25 = document.getElementById('contact-table-body-25');
+
+        contacts.forEach((contact, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td class="py-2 px-4 border-b">${contact.name}</td>
@@ -192,9 +211,13 @@
                         📋
                     </button>
                 </td>
-                <td class="py-2 px-4 border-b">${contact.description}</td>
+                <td class="py-2 px-4 border-b">${formatDescription(contact.description)}</td>
             `;
-            tableBody.appendChild(row);
+            if (index <= 15) {
+                tableBody24.appendChild(row);
+            } else {
+                tableBody25.appendChild(row);
+            }
         });
     </script>
 </body>
