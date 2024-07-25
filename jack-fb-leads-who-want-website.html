@@ -9,7 +9,7 @@
 <body class="bg-gray-100 p-6">
     <div class="container mx-auto">
         <h1 class="text-2xl font-bold mb-4">Contact Information</h1>
-        <h2 class="text-xl font-semibold mb-2">July 24th</h2>
+        <h2 class="text-xl font-semibold mb-2">July 23rd</h2>
         <table class="min-w-full bg-white border border-gray-200 mb-6">
             <thead>
                 <tr>
@@ -18,7 +18,7 @@
                     <th class="py-2 px-4 border-b">Description</th>
                 </tr>
             </thead>
-            <tbody id="contact-table-body-24">
+            <tbody id="contact-table-body-23">
                 <!-- Rows will be inserted here by JavaScript -->
             </tbody>
         </table>
@@ -191,6 +191,31 @@
                 name: "Teresa Ward",
                 phone: "8435308900",
                 description: "www.gatewaydreams.com. Biblical dream interpretation."
+            },
+            {
+                name: "Eric Conley",
+                phone: "2392034233",
+                description: "Real estate investment coaching."
+            },
+            {
+                name: "Sam Soto",
+                phone: "7192317873",
+                description: "Offering prenatal classes. Specializing in fitness and nutrition by the trimesters. Side courses on gestational diabetes and birthing at high altitude."
+            },
+            {
+                name: "Dee Holmes",
+                phone: "2169721240",
+                description: "Has pages where products can be purchased that are separate from my courses, a business opportunities page. These are places where members will be able to access exclusive information and opportunities we share with them. They will also be able to 'apply' for those opportunities."
+            },
+            {
+                name: "Monique Henderson",
+                phone: "4847949637",
+                description: "Educational training website for paraeducators that has tests, completion certificates."
+            },
+            {
+                name: "Kat Bluma",
+                phone: "4809388528",
+                description: "Mysuccessstrategist.com."
             }
         ];
 
@@ -198,7 +223,7 @@
             return description.replace(/(\b(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}\b)/g, '<a href="https://www.$1" class="text-blue-500 underline" target="_blank">$1</a>');
         }
 
-        const tableBody24 = document.getElementById('contact-table-body-24');
+        const tableBody23 = document.getElementById('contact-table-body-23');
         const tableBody25 = document.getElementById('contact-table-body-25');
 
         contacts.forEach((contact, index) => {
@@ -214,7 +239,7 @@
                 <td class="py-2 px-4 border-b">${formatDescription(contact.description)}</td>
             `;
             if (index <= 15) {
-                tableBody24.appendChild(row);
+                tableBody23.appendChild(row);
             } else {
                 tableBody25.appendChild(row);
             }
