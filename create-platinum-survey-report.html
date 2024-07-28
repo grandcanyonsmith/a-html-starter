@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platinum Survey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h1 class="text-2xl font-bold mb-4">Platinum Survey</h1>
+        <form id="surveyForm" class="space-y-4">
+            <div>
+                <label for="platinum_customer_name" class="block text-sm font-medium text-gray-700">Platinum Customer Name</label>
+                <input type="text" id="platinum_customer_name" name="platinum_customer_name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+            <div>
+                <label for="survey_answers" class="block text-sm font-medium text-gray-700">Survey Answers</label>
+                <textarea id="survey_answers" name="survey_answers" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Submit</button>
+        </form>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            console.log('Form submitted');
+
+            const platinumCustomerName = document.getElementById('platinum_customer_name').value;
+            const surveyAnswers = document.getElementById('survey_answers').value;
+
+            const response = await fetch('https://bzgdluqdhzf73ra5owavsq777q0umrqc.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    platinum_customer_name: platinumCustomerName,
+                    survey_answers: surveyAnswers
+                })
+            });
+
+            const result = await response.json();
+            console.log('Response received:', result);
+
+            if (response.ok) {
+                document.getElementById('result').innerHTML = `<p class="text-green-600">Success! View your file <a href="${result.url}" class="text-blue-500 underline">here</a>.</p>`;
+            } else {
+                document.getElementById('result').innerHTML = `<p class="text-red-600">Error: ${result}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
