@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Strategy Session Questions</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-6">Strategy Session Questions</h1>
+        <form id="strategyForm" class="space-y-6">
+            <!-- General Business Information -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">General Business Information</h2>
+                <label class="block mb-2">1. Can you provide more details about your current business model and the primary revenue streams?</label>
+                <textarea name="businessOverview" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">2. What has been your revenue trend over the past six months?</label>
+                <textarea name="revenueTrend" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Goals -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Goals</h2>
+                <label class="block mb-2">3. What specific strategies do you have in mind to achieve $400,000/month in recurring revenue?</label>
+                <textarea name="revenueGoals" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">4. How do you plan to maintain or improve your 80% profit margins as you scale?</label>
+                <textarea name="profitMargins" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Obstacles -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Obstacles</h2>
+                <label class="block mb-2">5. What qualities and skills are you looking for in a sales rep?</label>
+                <textarea name="salesRepQualities" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">5. Have you tried any specific hiring or training strategies that haven’t worked?</label>
+                <textarea name="hiringChallenges" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Tracking System -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Tracking System</h2>
+                <label class="block mb-2">6. What specific metrics or KPIs do you want the external tracking system to monitor?</label>
+                <textarea name="trackingMetrics" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">6. Have you explored any external tracking systems besides QuickBooks?</label>
+                <textarea name="externalTrackingSystems" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Team Structure -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Team Structure</h2>
+                <label class="block mb-2">7. How do you currently manage and communicate with your team?</label>
+                <textarea name="teamManagement" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">7. Are there any areas where you feel your team needs additional support or training?</label>
+                <textarea name="teamSupport" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Target Market -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Target Market</h2>
+                <label class="block mb-2">8. What are the common pain points or challenges faced by your ideal customers?</label>
+                <textarea name="customerPainPoints" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">8. How do you differentiate your offer from competitors like Kajabi, Clickfunnels, and Skool?</label>
+                <textarea name="offerDifferentiation" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Offer and Product -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Offer and Product</h2>
+                <label class="block mb-2">9. Which of your current offers (free, low-ticket, mid-ticket, high-ticket, subscription) are performing the best?</label>
+                <textarea name="productPerformance" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">9. Are there any plans to introduce new products or services in the near future?</label>
+                <textarea name="newProducts" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Ads and Marketing -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Ads and Marketing</h2>
+                <label class="block mb-2">10. Can you elaborate on your current ads strategy and its effectiveness?</label>
+                <textarea name="adsStrategy" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">10. Which platforms have provided the best ROI for your ads?</label>
+                <textarea name="adsPlatforms" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Service Expectations -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Service Expectations</h2>
+                <label class="block mb-2">11. What specific areas do you want the coaching sessions to focus on?</label>
+                <textarea name="coachingFocus" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">11. What types of "done for you" buildouts are you referring to (e.g., funnels, email sequences)?</label>
+                <textarea name="buildouts" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Additional Help Needed -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Additional Help Needed</h2>
+                <label class="block mb-2">12. Are there any other areas where you feel you need additional support or expertise?</label>
+                <textarea name="additionalSupport" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Miscellaneous -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Miscellaneous</h2>
+                <label class="block mb-2">13. Are there any upcoming content creation projects you’re excited about or need assistance with?</label>
+                <textarea name="contentProjects" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">13. How do you currently manage and distribute your content?</label>
+                <textarea name="contentManagement" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">14. What specific challenges are you facing with traffic generation and lead conversion?</label>
+                <textarea name="trafficChallenges" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">14. Are there any specific training or tools you believe would improve these areas?</label>
+                <textarea name="trainingTools" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">15. How are your current funnels and landing pages performing?</label>
+                <textarea name="funnelsPerformance" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">15. Are there any backend automation or email sequence improvements you’re considering?</label>
+                <textarea name="backendImprovements" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <!-- Action Plan -->
+            <div>
+                <h2 class="text-xl font-semibold mb-4">Action Plan</h2>
+                <label class="block mb-2">16. What are your top three priorities for the next three months?</label>
+                <textarea name="topPriorities" class="w-full p-2 border rounded" rows="3"></textarea>
+                
+                <label class="block mt-4 mb-2">16. How do you envision the progress being tracked and measured?</label>
+                <textarea name="progressTracking" class="w-full p-2 border rounded" rows="3"></textarea>
+            </div>
+
+            <button id="submitButton" type="submit" class="w-full bg-blue-500 text-white p-2 rounded mt-6">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('strategyForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const submitButton = document.getElementById('submitButton');
+            submitButton.textContent = 'Submitting...';
+
+            const formData = new FormData(event.target);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+
+            try {
+                const response = await fetch('https://services.leadconnectorhq.com/hooks/c2DjRsOo4e13Od6ZTU6S/webhook-trigger/fbe8315b-e9d2-4bd7-a4c9-309bbb3619e2', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Form submitted successfully!');
+                } else {
+                    alert('Failed to submit the form.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the form.');
+            } finally {
+                submitButton.textContent = 'Submit';
+            }
+        });
+    </script>
+</body>
+</html>
