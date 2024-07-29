@@ -23,7 +23,7 @@
             </tbody>
         </table>
         <h2 class="text-xl font-semibold mb-2">July 25th</h2>
-        <table class="min-w-full bg-white border border-gray-200">
+        <table class="min-w-full bg-white border border-gray-200 mb-6">
             <thead>
                 <tr>
                     <th class="py-2 px-4 border-b">Name</th>
@@ -32,6 +32,32 @@
                 </tr>
             </thead>
             <tbody id="contact-table-body-25">
+                <!-- Rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        <h2 class="text-xl font-semibold mb-2">July 26th</h2>
+        <table class="min-w-full bg-white border border-gray-200 mb-6">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Name</th>
+                    <th class="py-2 px-4 border-b">Phone</th>
+                    <th class="py-2 px-4 border-b">Description</th>
+                </tr>
+            </thead>
+            <tbody id="contact-table-body-26">
+                <!-- Rows will be inserted here by JavaScript -->
+            </tbody>
+        </table>
+        <h2 class="text-xl font-semibold mb-2">July 29th</h2>
+        <table class="min-w-full bg-white border border-gray-200">
+            <thead>
+                <tr>
+                    <th class="py-2 px-4 border-b">Name</th>
+                    <th class="py-2 px-4 border-b">Phone</th>
+                    <th class="py-2 px-4 border-b">Description</th>
+                </tr>
+            </thead>
+            <tbody id="contact-table-body-29">
                 <!-- Rows will be inserted here by JavaScript -->
             </tbody>
         </table>
@@ -216,6 +242,121 @@
                 name: "Kat Bluma",
                 phone: "4809388528",
                 description: "Mysuccessstrategist.com."
+            },
+            {
+                name: "Dennis Calderon",
+                phone: "3105708904",
+                description: "Business and management."
+            },
+            {
+                name: "ASK ZENNI",
+                phone: "9196241468",
+                description: "Astrology and universal law course that helps people understand the correlation to self."
+            },
+            {
+                name: "Dom Woodring",
+                phone: "8044025125",
+                description: "Overcoming obstacles."
+            },
+            {
+                name: "Chelsea M Hedge",
+                phone: "7204365446",
+                description: "Helping women achieve financial independence after trauma."
+            },
+            {
+                name: "Renato Pazmino",
+                phone: "9292298602",
+                description: "Renatopazmino.com."
+            },
+            {
+                name: "Courtney",
+                phone: "3039566513",
+                description: "Business consultant. Business and marketing development. Course about building a business plan and marketing strategies."
+            },
+            {
+                name: "Jeremy Roadruck",
+                phone: "9373614579",
+                description: "Masculan Mastery."
+            },
+            {
+                name: "C.E. Coffey",
+                phone: "9035709730",
+                description: "To improve your leadership skills."
+            },
+            {
+                name: "Jerome Enders",
+                phone: "4783200520",
+                description: "Hip Hop and elements and how you learn it."
+            },
+            {
+                name: "Corey Sanders",
+                phone: "3134776771",
+                description: "Launch team for a church. Automatically capture lead for a launch team for administrator. Twlve2church."
+            },
+            {
+                name: "PRIMADONNA MAGAZINE",
+                phone: "4076940906",
+                description: "Becoming the woman that God has called you to be."
+            },
+            {
+                name: "Cliff",
+                phone: "5615043141",
+                description: "Fitness course."
+            },
+            {
+                name: "Bones Rodriguez",
+                phone: "9174507925",
+                description: "theonlinevendingmachine.com."
+            },
+            {
+                name: "John King",
+                phone: "3109369964",
+                description: "Teaching people sign painting. letterartacademy.com."
+            },
+            {
+                name: "Annmarie V Bhola",
+                phone: "9174768363",
+                description: "www.ebs.nyc. Property maintenance and manage course mainly for women or anyone who wants to understand the fundamentals and documents for their home."
+            },
+            {
+                name: "Sean",
+                phone: "(623) 305-2750",
+                description: "Here are some effective gestures and techniques to use in a virtual setting to create a persuasive and comfortable atmosphere."
+            },
+            {
+                name: "Detra Robinson",
+                phone: "8437900341",
+                description: "Learn how to start a 6 figure cleaning business in less than 30 days."
+            },
+            {
+                name: "Nicholas Zeller",
+                phone: "3037184664",
+                description: "Mens separation Divorce coaching. Post divorce recovery."
+            },
+            {
+                name: "Craig Levan",
+                phone: "6782228744",
+                description: "Nutrition for marathon runners."
+            },
+            {
+                name: "Ebony L Noir",
+                phone: "3464357835",
+                description: "Masterclass for Stewardship. Time, talent, treasure, temple."
+            },
+            {
+                name: "Doug Rifenburg",
+                phone: "7165234210",
+                description: "www.sportsbusinesscoach.com."
+            },
+            {
+                name: "Patrick Ard",
+                phone: "3309860748",
+                description: "Occupational health and safety site focused on lockout/tagout."
+            },
+            {
+                name: "ADU Wizard - Kitsap County",
+                phone: "8084638334",
+                description: "https://aduwizard.teachable.com/"
             }
         ];
 
@@ -225,6 +366,8 @@
 
         const tableBody23 = document.getElementById('contact-table-body-23');
         const tableBody25 = document.getElementById('contact-table-body-25');
+        const tableBody26 = document.getElementById('contact-table-body-26');
+        const tableBody29 = document.getElementById('contact-table-body-29');
 
         contacts.forEach((contact, index) => {
             const row = document.createElement('tr');
@@ -240,8 +383,12 @@
             `;
             if (index <= 15) {
                 tableBody23.appendChild(row);
-            } else {
+            } else if (index <= 31) {
                 tableBody25.appendChild(row);
+            } else if (index <= 47) {
+                tableBody26.appendChild(row);
+            } else {
+                tableBody29.appendChild(row);
             }
         });
     </script>
