@@ -90,6 +90,20 @@
         </div>
     </div>
 
+    <!-- New section for total MRR increase from each source -->
+    <div class="bg-gray-900 py-8">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="mx-auto max-w-2xl lg:max-w-none">
+                <div class="text-center">
+                    <h3 class="text-2xl font-bold tracking-tight text-white sm:text-3xl">Total MRR Increase from Each Source</h3>
+                </div>
+                <dl id="source-mrr-increase" class="mt-8 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-3">
+                    <!-- MRR increase cards will be inserted here -->
+                </dl>
+            </div>
+        </div>
+    </div>
+
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-3xl">
             <div id="source-counts" class="grid grid-cols-1 gap-4 sm:grid-cols-3 mb-8">
@@ -231,9 +245,11 @@
             const groupedTableBody = document.getElementById('grouped-table-body');
             const detailedTableBody = document.getElementById('detailed-table-body');
             const sourceCountsContainer = document.getElementById('source-counts');
+            const sourceMRRIncreaseContainer = document.getElementById('source-mrr-increase');
             groupedTableBody.innerHTML = '';
             detailedTableBody.innerHTML = '';
             sourceCountsContainer.innerHTML = '';
+            sourceMRRIncreaseContainer.innerHTML = '';
 
             let totalRevenue = 0;
             let totalSalesAmount = 0;
@@ -243,6 +259,7 @@
             let noDemoCompletedSalesAmount = 0;
 
             const sourceCounts = {};
+            const sourceMRRIncreases = {};
 
             // Combine rows with the same product names and calculate the average price if there are different prices
             const combinedData = {};
@@ -354,6 +371,12 @@
                 if (!sourceCounts[item.email]) {
                     sourceCounts[item.email] = item.source;
                 }
+
+                // Calculate MRR increase from each source
+                if (!sourceMRRIncreases[item.source]) {
+                    sourceMRRIncreases[item.source] = 0;
+                }
+                sourceMRRIncreases[item.source] += item.price;
             });
 
             // Aggregate source counts
@@ -403,6 +426,21 @@
                 card.appendChild(sourceTotal);
                 card.appendChild(sourceName);
                 sourceCountsContainer.appendChild(card);
+            });
+
+            // Create MRR increase cards
+            Object.keys(sourceMRRIncreases).forEach(source => {
+                const card = document.createElement('div');
+                card.classList.add('flex', 'flex-col', 'bg-white/5', 'p-8', 'rounded-lg', 'shadow-lg', 'text-center');
+                const sourceName = document.createElement('dt');
+                sourceName.classList.add('text-sm', 'font-semibold', 'leading-6', 'text-gray-300');
+                sourceName.textContent = source;
+                const sourceMRR = document.createElement('dd');
+                sourceMRR.classList.add('order-first', 'text-3xl', 'font-semibold', 'tracking-tight', 'text-white');
+                sourceMRR.textContent = formatCurrency(sourceMRRIncreases[source]);
+                card.appendChild(sourceMRR);
+                card.appendChild(sourceName);
+                sourceMRRIncreaseContainer.appendChild(card);
             });
 
             // Render the pie chart
