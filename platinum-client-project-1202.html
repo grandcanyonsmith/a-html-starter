@@ -15,111 +15,160 @@
             overflow: hidden;
         }
         .gantt_task_line {
-            background-color: #e3342f !important; /* Red color for task bars */
-            border-color: #e3342f !important; /* Red color for task borders */
-        }
-        .gantt_task_line.gantt_task_progress {
-            background-color: #000000 !important; /* Black color for progress bars */
-        }
-        .gantt_grid_head_cell, .gantt_grid_data {
-            background-color: #000000 !important; /* Black background for grid headers and data */
-            color: #ffffff !important; /* White text for grid headers and data */
-        }
-        .gantt_task_cell, .gantt_task_row {
-            background-color: #000000 !important; /* Black background for task cells and rows */
-        }
-        .gantt_task_scale .gantt_scale_cell, .gantt_task_scale .gantt_scale_cell:nth-child(2n) {
-            background-color: #000000 !important; /* Black background for scale cells */
-            color: #ffffff !important; /* White text for scale cells */
+            background-color: red !important;
         }
     </style>
 </head>
-<body class="bg-gray-900">
-    <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-4 text-white">Gantt Chart for Leadership Development and Marketing Strategy Implementation</h1>
-        <div id="gantt_here" class="w-full h-96 bg-gray-800 shadow-lg rounded-lg"></div>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4 h-full">
+        <h1 class="text-2xl font-bold mb-4">Gantt Chart for Project 12:02</h1>
+        <div id="gantt_here" class="w-full h-full bg-white shadow-lg rounded-lg"></div>
     </div>
     <script>
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
+        gantt.config.columns = [
+            { name: "text", label: "Task name", tree: true, width: '*', resize: true }
+        ];
+        gantt.config.grid_width = 400;
+        gantt.config.details_on_dblclick = false;
+        gantt.config.details_on_create = false;
+        gantt.config.autofit = true;
+        gantt.config.open_tree_initially = true;
+
+        gantt.templates.tooltip_text = function(start, end, task) {
+            var subtasks = {
+                3: "- Review the initial draft of the roadmap.<br>- Make necessary adjustments based on team feedback.<br>- Get final approval from all stakeholders.",
+                4: "- Export the email list from Kajabi.<br>- Clean and format the email list for import.<br>- Import the email list into Course Creator 360.",
+                5: "- Gather login credentials for all social media accounts.<br>- Connect each account to Course Creator 360.<br>- Update profiles and settings as needed.",
+                6: "- Draft pre-sale campaign emails and social media posts.<br>- Schedule the campaign launch.<br>- Monitor initial responses and engagement.",
+                7: "- Design the opt-in page.<br>- Integrate the opt-in form with the email marketing tool.<br>- Test the opt-in process to ensure it works smoothly.",
+                9: "- Select two videos for editing.<br>- Submit the videos to ContentBug.<br>- Review and approve the edited videos.",
+                10: "- Outline the course modules.<br>- Create and review the course content.<br>- Finalize the content and prepare it for upload.",
+                11: "- Draft the affiliate program details.<br>- Identify and invite potential affiliates.<br>- Provide affiliates with necessary resources and guidelines.",
+                12: "- Create promotional materials for the DISC assessment.<br>- Schedule email and social media campaigns.<br>- Monitor engagement and conversion rates.",
+                14: "- Finalize pre-sale campaign materials.<br>- Launch the campaign across all channels.<br>- Track and analyze initial results.",
+                15: "- Develop a social media content calendar.<br>- Start posting according to the calendar.<br>- Engage with followers and respond to comments.",
+                16: "- Create a landing page for the free DISC assessment offer.<br>- Promote the offer through email and social media.<br>- Track conversions and calculate ROI.",
+                17: "- Outline key content themes and topics.<br>- Schedule content for the next month.<br>- Assign content creation tasks to team members.",
+                19: "- Create promotional materials for the DISC assessment.<br>- Schedule and launch the promotion.<br>- Track engagement and sign-ups.",
+                20: "- Identify existing clients who may be interested in the affiliate program.<br>- Reach out to them with program details.<br>- Follow up and provide support as needed.",
+                21: "- Identify potential clients for strategy sessions.<br>- Schedule and conduct the sessions.<br>- Provide follow-up materials and support.",
+                22: "- Review pre-sale campaign metrics.<br>- Identify areas for improvement.<br>- Make necessary adjustments to the campaign.",
+                25: "- Review and finalize all course modules.<br>- Upload the content to the course platform.<br>- Test the course to ensure everything is working correctly.",
+                26: "- Create new promotional materials if needed.<br>- Schedule and launch additional promotions.<br>- Track engagement and conversions.",
+                27: "- Review affiliate program performance metrics.<br>- Gather feedback from affiliates.<br>- Make necessary adjustments to the program.",
+                28: "- Create marketing materials for the ULT course.<br>- Review and finalize the materials.<br>- Schedule the marketing campaign.",
+                30: "- Announce the official launch of the affiliate program.<br>- Provide affiliates with marketing materials and guidelines.<br>- Offer support and answer any questions.",
+                31: "- Review and update the social media content calendar.<br>- Post consistently according to the calendar.<br>- Engage with followers and respond to comments.",
+                32: "- Create promotional materials for the book.<br>- Schedule and launch the promotion.<br>- Track engagement and sign-ups.",
+                33: "- Identify new potential clients for strategy sessions.<br>- Schedule and conduct the sessions.<br>- Provide follow-up materials and support.",
+                35: "- Create ad campaigns for the DISC assessment and ULT course.<br>- Allocate the budget and launch the ads.<br>- Monitor initial performance.",
+                36: "- Review ad performance metrics.<br>- Identify areas for improvement.<br>- Make necessary adjustments to the ads.",
+                37: "- Create new lead magnets if needed.<br>- Promote the lead magnets through various channels.<br>- Track email list growth.",
+                38: "- Review affiliate program metrics.<br>- Gather feedback from affiliates.<br>- Make necessary adjustments to the program.",
+                40: "- Gather performance data for all strategies.<br>- Conduct a review meeting with the team.<br>- Identify key insights and areas for improvement.",
+                41: "- Review the performance data.<br>- Identify areas for improvement.<br>- Make necessary adjustments to the strategies.",
+                42: "- Create new promotional materials if needed.<br>- Schedule and launch additional promotions.<br>- Track engagement and conversions.",
+                43: "- Review the email list and identify potential leads.<br>- Create targeted email campaigns.<br>- Track conversions and follow up with leads.",
+                46: "- Review and finalize all launch materials.<br>- Conduct a final test of the course platform.<br>- Ensure all team members are prepared for the launch.",
+                47: "- Announce the soft launch to the waiting list and affiliates.<br>- Monitor initial feedback and performance.<br>- Make necessary adjustments based on feedback.",
+                48: "- Review ad performance metrics.<br>- Identify areas for improvement.<br>- Make necessary adjustments to the ads.",
+                49: "- Create new promotional materials if needed.<br>- Schedule and launch additional promotions.<br>- Track engagement and conversions.",
+                51: "- Announce the official launch of the ULT course.<br>- Monitor initial feedback and performance.<br>- Make necessary adjustments based on feedback.",
+                52: "- Create marketing materials for the full-scale campaign.<br>- Schedule and launch the campaign.<br>- Track engagement and conversions.",
+                53: "- Create new promotional materials if needed.<br>- Schedule and launch additional promotions.<br>- Track engagement and conversions.",
+                54: "- Identify new potential clients for strategy sessions.<br>- Schedule and conduct the sessions.<br>- Provide follow-up materials and support.",
+                56: "- Review launch performance metrics.<br>- Identify areas for improvement.<br>- Make necessary adjustments to the course and marketing strategies.",
+                57: "- Review ad performance metrics.<br>- Identify areas for improvement.<br>- Make necessary adjustments to the ads.",
+                58: "- Review the email list and identify potential leads.<br>- Create targeted email campaigns.<br>- Track conversions and follow up with leads.",
+                59: "- Gather performance data for all strategies.<br>- Conduct a review meeting with the team.<br>- Identify key insights and areas for improvement.",
+                61: "- Gather performance data for all strategies.<br>- Conduct a review meeting with the team.<br>- Identify key insights and areas for improvement.",
+                62: "- Review the performance data.<br>- Identify key successes and areas for improvement.<br>- Document the findings for future reference.",
+                63: "- Review the insights gained from the final review.<br>- Create a plan for the next quarter.<br>- Assign tasks and responsibilities to team members.",
+                64: "- Create new promotional materials if needed.<br>- Schedule and launch additional promotions.<br>- Track engagement and conversions."
+            };
+            return "<b>Task:</b> " + task.text + "<br/><b>Subtasks:</b><br/>" + (subtasks[task.id] || "No subtasks available");
+        };
+
         gantt.init("gantt_here");
 
         gantt.parse({
             data: [
-                {id: 1, text: "Month 1: Foundation and Initial Launch", start_date: "2023-08-01", duration: 31, progress: 0, open: true},
-                {id: 2, text: "Week 1: Strategy and Setup", start_date: "2023-08-01", duration: 7, parent: 1, progress: 0, open: true},
-                {id: 3, text: "Finalize and review the detailed roadmap and strategy", start_date: "2023-08-01", duration: 2, parent: 2, progress: 0, responsible: "Canyon"},
-                {id: 4, text: "Export email list from Kajabi and import into Course Creator 360", start_date: "2023-08-03", duration: 1, parent: 2, progress: 0, responsible: "Stephanie"},
-                {id: 5, text: "Connect and update all social media accounts within Course Creator 360", start_date: "2023-08-04", duration: 2, parent: 2, progress: 0, responsible: "Stephanie"},
-                {id: 6, text: "Begin pre-sale campaign for the Ultimate Leadership Transformation (ULT) course", start_date: "2023-08-06", duration: 3, parent: 2, progress: 0, responsible: "Rich, Canyon"},
-                {id: 7, text: "Set up a waiting list opt-in page for ULT course launch", start_date: "2023-08-09", duration: 1, parent: 2, progress: 0, responsible: "Canyon"},
+                {id: 1, text: "Month 1: Foundation and Initial Launch", start_date: "2024-08-01", duration: 31, progress: 0, open: true},
+                {id: 2, text: "Week 1: Strategy and Setup", start_date: "2024-08-01", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 3, text: "Finalize and review the detailed roadmap and strategy", start_date: "2024-08-01", duration: 2, parent: 2, progress: 0, responsible: "Canyon"},
+                {id: 4, text: "Export email list from Kajabi and import into Course Creator 360", start_date: "2024-08-03", duration: 1, parent: 2, progress: 0, responsible: "Stephanie"},
+                {id: 5, text: "Connect and update all social media accounts within Course Creator 360", start_date: "2024-08-04", duration: 2, parent: 2, progress: 0, responsible: "Stephanie"},
+                {id: 6, text: "Begin pre-sale campaign for the Ultimate Leadership Transformation (ULT) course", start_date: "2024-08-06", duration: 3, parent: 2, progress: 0, responsible: "Rich, Canyon"},
+                {id: 7, text: "Set up a waiting list opt-in page for ULT course launch", start_date: "2024-08-09", duration: 1, parent: 2, progress: 0, responsible: "Canyon"},
                 
-                {id: 8, text: "Week 2: Content Creation and Affiliate Program", start_date: "2023-08-10", duration: 7, parent: 1, progress: 0, open: true},
-                {id: 9, text: "Utilize ContentBug for video editing; submit two videos for free edits", start_date: "2023-08-10", duration: 1, parent: 8, progress: 0, responsible: "Rich"},
-                {id: 10, text: "Develop and finalize the content for the Ultimate Leadership Transformation course", start_date: "2023-08-11", duration: 14, parent: 8, progress: 0, responsible: "Rich"},
-                {id: 11, text: "Create an affiliate program campaign and invite potential affiliates", start_date: "2023-08-11", duration: 3, parent: 8, progress: 0, responsible: "Canyon"},
-                {id: 12, text: "Promote the DISC assessment as a low-barrier offer through email and social media", start_date: "2023-08-11", duration: 7, parent: 8, progress: 0, responsible: "Stephanie"},
+                {id: 8, text: "Week 2: Content Creation and Affiliate Program", start_date: "2024-08-10", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 9, text: "Utilize ContentBug for video editing; submit two videos for free edits", start_date: "2024-08-10", duration: 1, parent: 8, progress: 0, responsible: "Rich"},
+                {id: 10, text: "Develop and finalize the content for the Ultimate Leadership Transformation course", start_date: "2024-08-11", duration: 14, parent: 8, progress: 0, responsible: "Rich"},
+                {id: 11, text: "Create an affiliate program campaign and invite potential affiliates", start_date: "2024-08-11", duration: 3, parent: 8, progress: 0, responsible: "Canyon"},
+                {id: 12, text: "Promote the DISC assessment as a low-barrier offer through email and social media", start_date: "2024-08-11", duration: 7, parent: 8, progress: 0, responsible: "Stephanie"},
                 
-                {id: 13, text: "Week 3: Marketing and List Building", start_date: "2023-08-17", duration: 7, parent: 1, progress: 0, open: true},
-                {id: 14, text: "Launch the pre-sale campaign for the ULT course", start_date: "2023-08-17", duration: 1, parent: 13, progress: 0, responsible: "Canyon"},
-                {id: 15, text: "Implement organic growth strategies on social media; start posting consistently", start_date: "2023-08-17", duration: 7, parent: 13, progress: 0, responsible: "Stephanie"},
-                {id: 16, text: "Offer the DISC assessment for free to test conversion rates and ROI", start_date: "2023-08-17", duration: 7, parent: 13, progress: 0, responsible: "Rich"},
-                {id: 17, text: "Develop a content calendar for consistent posting and engagement", start_date: "2023-08-17", duration: 2, parent: 13, progress: 0, responsible: "Stephanie"},
+                {id: 13, text: "Week 3: Marketing and List Building", start_date: "2024-08-17", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 14, text: "Launch the pre-sale campaign for the ULT course", start_date: "2024-08-17", duration: 1, parent: 13, progress: 0, responsible: "Canyon"},
+                {id: 15, text: "Implement organic growth strategies on social media; start posting consistently", start_date: "2024-08-17", duration: 7, parent: 13, progress: 0, responsible: "Stephanie"},
+                {id: 16, text: "Offer the DISC assessment for free to test conversion rates and ROI", start_date: "2024-08-17", duration: 7, parent: 13, progress: 0, responsible: "Rich"},
+                {id: 17, text: "Develop a content calendar for consistent posting and engagement", start_date: "2024-08-17", duration: 2, parent: 13, progress: 0, responsible: "Stephanie"},
                 
-                {id: 18, text: "Week 4: Initial Sales Push", start_date: "2023-08-24", duration: 7, parent: 1, progress: 0, open: true},
-                {id: 19, text: "Begin promoting the DISC assessment and debrief sessions", start_date: "2023-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
-                {id: 20, text: "Start reaching out to existing clients for affiliate program participation", start_date: "2023-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
-                {id: 21, text: "Schedule and conduct strategy sessions with potential entrepreneur clients", start_date: "2023-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
-                {id: 22, text: "Monitor and analyze the performance of the pre-sale campaign and adjust as needed", start_date: "2023-08-24", duration: 2, parent: 18, progress: 0, responsible: "Canyon"},
+                {id: 18, text: "Week 4: Initial Sales Push", start_date: "2024-08-24", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 19, text: "Begin promoting the DISC assessment and debrief sessions", start_date: "2024-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
+                {id: 20, text: "Start reaching out to existing clients for affiliate program participation", start_date: "2024-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
+                {id: 21, text: "Schedule and conduct strategy sessions with potential entrepreneur clients", start_date: "2024-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
+                {id: 22, text: "Monitor and analyze the performance of the pre-sale campaign and adjust as needed", start_date: "2024-08-24", duration: 2, parent: 18, progress: 0, responsible: "Canyon"},
                 
-                {id: 23, text: "Month 2: Scaling and Optimization", start_date: "2023-09-01", duration: 30, progress: 0, open: true},
-                {id: 24, text: "Week 5: Content Finalization and Launch Prep", start_date: "2023-09-01", duration: 7, parent: 23, progress: 0, open: true},
-                {id: 25, text: "Finalize all content for the Ultimate Leadership Transformation course", start_date: "2023-09-01", duration: 7, parent: 24, progress: 0, responsible: "Rich"},
-                {id: 26, text: "Continue promoting the DISC assessment and debrief sessions", start_date: "2023-09-01", duration: 7, parent: 24, progress: 0, responsible: "Stephanie"},
-                {id: 27, text: "Optimize the affiliate program based on initial feedback and performance", start_date: "2023-09-01", duration: 3, parent: 24, progress: 0, responsible: "Canyon"},
-                {id: 28, text: "Prepare marketing materials for the ULT course launch", start_date: "2023-09-01", duration: 7, parent: 24, progress: 0, responsible: "Stephanie"},
+                {id: 23, text: "Month 2: Scaling and Optimization", start_date: "2024-09-01", duration: 30, progress: 0, open: true},
+                {id: 24, text: "Week 5: Content Finalization and Launch Prep", start_date: "2024-09-01", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 25, text: "Finalize all content for the Ultimate Leadership Transformation course", start_date: "2024-09-01", duration: 7, parent: 24, progress: 0, responsible: "Rich"},
+                {id: 26, text: "Continue promoting the DISC assessment and debrief sessions", start_date: "2024-09-01", duration: 7, parent: 24, progress: 0, responsible: "Stephanie"},
+                {id: 27, text: "Optimize the affiliate program based on initial feedback and performance", start_date: "2024-09-01", duration: 3, parent: 24, progress: 0, responsible: "Canyon"},
+                {id: 28, text: "Prepare marketing materials for the ULT course launch", start_date: "2024-09-01", duration: 7, parent: 24, progress: 0, responsible: "Stephanie"},
                 
-                {id: 29, text: "Week 6: Affiliate and Organic Growth", start_date: "2023-09-08", duration: 7, parent: 23, progress: 0, open: true},
-                {id: 30, text: "Launch the affiliate program officially and provide resources to affiliates", start_date: "2023-09-08", duration: 2, parent: 29, progress: 0, responsible: "Canyon"},
-                {id: 31, text: "Continue organic growth strategies on social media", start_date: "2023-09-08", duration: 7, parent: 29, progress: 0, responsible: "Stephanie"},
-                {id: 32, text: "Promote the newly published book as a lead magnet for strategy sessions", start_date: "2023-09-08", duration: 7, parent: 29, progress: 0, responsible: "Rich"},
-                {id: 33, text: "Schedule and conduct more strategy sessions with potential clients", start_date: "2023-09-08", duration: 7, parent: 29, progress: 0, responsible: "Rich"},
+                {id: 29, text: "Week 6: Affiliate and Organic Growth", start_date: "2024-09-08", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 30, text: "Launch the affiliate program officially and provide resources to affiliates", start_date: "2024-09-08", duration: 2, parent: 29, progress: 0, responsible: "Canyon"},
+                {id: 31, text: "Continue organic growth strategies on social media", start_date: "2024-09-08", duration: 7, parent: 29, progress: 0, responsible: "Stephanie"},
+                {id: 32, text: "Promote the newly published book as a lead magnet for strategy sessions", start_date: "2024-09-08", duration: 7, parent: 29, progress: 0, responsible: "Rich"},
+                {id: 33, text: "Schedule and conduct more strategy sessions with potential clients", start_date: "2024-09-08", duration: 7, parent: 29, progress: 0, responsible: "Rich"},
                 
-                {id: 34, text: "Week 7: Paid Advertising and List Building", start_date: "2023-09-15", duration: 7, parent: 23, progress: 0, open: true},
-                {id: 35, text: "Allocate $2,000 for ad spend; start running targeted ads for the DISC assessment and ULT course", start_date: "2023-09-15", duration: 2, parent: 34, progress: 0, responsible: "Canyon"},
-                {id: 36, text: "Monitor ad performance and optimize for better ROI", start_date: "2023-09-15", duration: 7, parent: 34, progress: 0, responsible: "Canyon"},
-                {id: 37, text: "Continue building the email list through lead magnets and organic growth", start_date: "2023-09-15", duration: 7, parent: 34, progress: 0, responsible: "Stephanie"},
-                {id: 38, text: "Analyze the performance of the affiliate program and make necessary adjustments", start_date: "2023-09-15", duration: 2, parent: 34, progress: 0, responsible: "Canyon"},
+                {id: 34, text: "Week 7: Paid Advertising and List Building", start_date: "2024-09-15", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 35, text: "Allocate $2,000 for ad spend; start running targeted ads for the DISC assessment and ULT course", start_date: "2024-09-15", duration: 2, parent: 34, progress: 0, responsible: "Canyon"},
+                {id: 36, text: "Monitor ad performance and optimize for better ROI", start_date: "2024-09-15", duration: 7, parent: 34, progress: 0, responsible: "Canyon"},
+                {id: 37, text: "Continue building the email list through lead magnets and organic growth", start_date: "2024-09-15", duration: 7, parent: 34, progress: 0, responsible: "Stephanie"},
+                {id: 38, text: "Analyze the performance of the affiliate program and make necessary adjustments", start_date: "2024-09-15", duration: 2, parent: 34, progress: 0, responsible: "Canyon"},
                 
-                {id: 39, text: "Week 8: Mid-Point Review and Adjustments", start_date: "2023-09-22", duration: 7, parent: 23, progress: 0, open: true},
-                {id: 40, text: "Conduct a mid-point review of all strategies and performance metrics", start_date: "2023-09-22", duration: 2, parent: 39, progress: 0, responsible: "Canyon, Rich"},
-                {id: 41, text: "Adjust marketing and sales strategies based on performance data", start_date: "2023-09-22", duration: 2, parent: 39, progress: 0, responsible: "Canyon, Stephanie"},
-                {id: 42, text: "Continue promoting the DISC assessment and ULT course", start_date: "2023-09-22", duration: 7, parent: 39, progress: 0, responsible: "Stephanie"},
-                {id: 43, text: "Focus on converting leads from the email list into paying customers", start_date: "2023-09-22", duration: 7, parent: 39, progress: 0, responsible: "Rich"},
+                {id: 39, text: "Week 8: Mid-Point Review and Adjustments", start_date: "2024-09-22", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 40, text: "Conduct a mid-point review of all strategies and performance metrics", start_date: "2024-09-22", duration: 2, parent: 39, progress: 0, responsible: "Canyon, Rich"},
+                {id: 41, text: "Adjust marketing and sales strategies based on performance data", start_date: "2024-09-22", duration: 2, parent: 39, progress: 0, responsible: "Canyon, Stephanie"},
+                {id: 42, text: "Continue promoting the DISC assessment and ULT course", start_date: "2024-09-22", duration: 7, parent: 39, progress: 0, responsible: "Stephanie"},
+                {id: 43, text: "Focus on converting leads from the email list into paying customers", start_date: "2024-09-22", duration: 7, parent: 39, progress: 0, responsible: "Rich"},
                 
-                {id: 44, text: "Month 3: Launch and Revenue Maximization", start_date: "2023-10-01", duration: 31, progress: 0, open: true},
-                {id: 45, text: "Week 9: Final Preparations and Soft Launch", start_date: "2023-10-01", duration: 7, parent: 44, progress: 0, open: true},
-                {id: 46, text: "Finalize all preparations for the Ultimate Leadership Transformation course launch", start_date: "2023-10-01", duration: 7, parent: 45, progress: 0, responsible: "Rich"},
-                {id: 47, text: "Conduct a soft launch of the ULT course to the waiting list and affiliates", start_date: "2023-10-01", duration: 2, parent: 45, progress: 0, responsible: "Canyon"},
-                {id: 48, text: "Continue running targeted ads and optimizing for better performance", start_date: "2023-10-01", duration: 7, parent: 45, progress: 0, responsible: "Canyon"},
-                {id: 49, text: "Promote the DISC assessment and debrief sessions heavily", start_date: "2023-10-01", duration: 7, parent: 45, progress: 0, responsible: "Stephanie"},
+                {id: 44, text: "Month 3: Launch and Revenue Maximization", start_date: "2024-10-01", duration: 31, progress: 0, open: true},
+                {id: 45, text: "Week 9: Final Preparations and Soft Launch", start_date: "2024-10-01", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 46, text: "Finalize all preparations for the Ultimate Leadership Transformation course launch", start_date: "2024-10-01", duration: 7, parent: 45, progress: 0, responsible: "Rich"},
+                {id: 47, text: "Conduct a soft launch of the ULT course to the waiting list and affiliates", start_date: "2024-10-01", duration: 2, parent: 45, progress: 0, responsible: "Canyon"},
+                {id: 48, text: "Continue running targeted ads and optimizing for better performance", start_date: "2024-10-01", duration: 7, parent: 45, progress: 0, responsible: "Canyon"},
+                {id: 49, text: "Promote the DISC assessment and debrief sessions heavily", start_date: "2024-10-01", duration: 7, parent: 45, progress: 0, responsible: "Stephanie"},
                 
-                {id: 50, text: "Week 10: Full Launch and Sales Push", start_date: "2023-10-08", duration: 7, parent: 44, progress: 0, open: true},
-                {id: 51, text: "Officially launch the Ultimate Leadership Transformation course", start_date: "2023-10-08", duration: 1, parent: 50, progress: 0, responsible: "Canyon"},
-                {id: 52, text: "Implement a full-scale marketing campaign for the ULT course", start_date: "2023-10-08", duration: 7, parent: 50, progress: 0, responsible: "Canyon, Stephanie"},
-                {id: 53, text: "Continue promoting the DISC assessment and debrief sessions", start_date: "2023-10-08", duration: 7, parent: 50, progress: 0, responsible: "Rich"},
-                {id: 54, text: "Schedule and conduct strategy sessions with new leads and potential clients", start_date: "2023-10-08", duration: 7, parent: 50, progress: 0, responsible: "Rich"},
+                {id: 50, text: "Week 10: Full Launch and Sales Push", start_date: "2024-10-08", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 51, text: "Officially launch the Ultimate Leadership Transformation course", start_date: "2024-10-08", duration: 1, parent: 50, progress: 0, responsible: "Canyon"},
+                {id: 52, text: "Implement a full-scale marketing campaign for the ULT course", start_date: "2024-10-08", duration: 7, parent: 50, progress: 0, responsible: "Canyon, Stephanie"},
+                {id: 53, text: "Continue promoting the DISC assessment and debrief sessions", start_date: "2024-10-08", duration: 7, parent: 50, progress: 0, responsible: "Rich"},
+                {id: 54, text: "Schedule and conduct strategy sessions with new leads and potential clients", start_date: "2024-10-08", duration: 7, parent: 50, progress: 0, responsible: "Rich"},
                 
-                {id: 55, text: "Week 11: Post-Launch Optimization", start_date: "2023-10-15", duration: 7, parent: 44, progress: 0, open: true},
-                {id: 56, text: "Monitor the performance of the ULT course launch and make necessary adjustments", start_date: "2023-10-15", duration: 2, parent: 55, progress: 0, responsible: "Canyon, Rich"},
-                {id: 57, text: "Continue running targeted ads and optimizing for better ROI", start_date: "2023-10-15", duration: 7, parent: 55, progress: 0, responsible: "Canyon"},
-                {id: 58, text: "Focus on converting leads from the email list into paying customers", start_date: "2023-10-15", duration: 7, parent: 55, progress: 0, responsible: "Stephanie"},
-                {id: 59, text: "Analyze the performance of all marketing and sales strategies", start_date: "2023-10-15", duration: 2, parent: 55, progress: 0, responsible: "Canyon"},
+                {id: 55, text: "Week 11: Post-Launch Optimization", start_date: "2024-10-15", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 56, text: "Monitor the performance of the ULT course launch and make necessary adjustments", start_date: "2024-10-15", duration: 2, parent: 55, progress: 0, responsible: "Canyon, Rich"},
+                {id: 57, text: "Continue running targeted ads and optimizing for better ROI", start_date: "2024-10-15", duration: 7, parent: 55, progress: 0, responsible: "Canyon"},
+                {id: 58, text: "Focus on converting leads from the email list into paying customers", start_date: "2024-10-15", duration: 7, parent: 55, progress: 0, responsible: "Stephanie"},
+                {id: 59, text: "Analyze the performance of all marketing and sales strategies", start_date: "2024-10-15", duration: 2, parent: 55, progress: 0, responsible: "Canyon"},
                 
-                {id: 60, text: "Week 12: Final Review and Future Planning", start_date: "2023-10-22", duration: 7, parent: 44, progress: 0, open: true},
-                {id: 61, text: "Conduct a final review of all strategies and performance metrics", start_date: "2023-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Rich"},
-                {id: 62, text: "Identify key successes and areas for improvement", start_date: "2023-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Stephanie"},
-                {id: 63, text: "Plan for the next quarter based on the insights gained", start_date: "2023-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Rich"},
-                {id: 64, text: "Continue promoting the DISC assessment and ULT course as ongoing revenue streams", start_date: "2023-10-22", duration: 7, parent: 60, progress: 0, responsible: "Stephanie"}
+                {id: 60, text: "Week 12: Final Review and Future Planning", start_date: "2024-10-22", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 61, text: "Conduct a final review of all strategies and performance metrics", start_date: "2024-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Rich"},
+                {id: 62, text: "Identify key successes and areas for improvement", start_date: "2024-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Stephanie"},
+                {id: 63, text: "Plan for the next quarter based on the insights gained", start_date: "2024-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Rich"},
+                {id: 64, text: "Continue promoting the DISC assessment and ULT course as ongoing revenue streams", start_date: "2024-10-22", duration: 7, parent: 60, progress: 0, responsible: "Stephanie"}
             ],
             links: [
                 {id: 1, source: 3, target: 4, type: "1"},
