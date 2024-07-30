@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gabriel - Platinum Strategy Implementation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.css">
+    <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=6.1.7"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        #gantt_here {
+            height: 75vh;
+        }
+        /* Custom styles to change blue to red */
+        .gantt_task_line, .gantt_task_line.gantt_task_progress {
+            background-color: #ef4444 !important; /* Tailwind's red-500 */
+        }
+        .gantt_task_line.gantt_task_progress {
+            opacity: 0.6;
+        }
+        .gantt_task_link .gantt_line_wrapper .gantt_line {
+            stroke: #ef4444 !important; /* Tailwind's red-500 */
+        }
+        .gantt_task_content {
+            display: flex;
+            flex-direction: column;
+        }
+        .gantt_task_content .responsible {
+            font-size: 0.75rem; /* Tailwind's text-xs */
+            color: #6b7280; /* Tailwind's gray-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl md:text-4xl font-bold mb-4 text-center">Rent Relax - Platinum Strategy - 3 month roadmap</h1>
+        <div id="gantt_here" class="w-full bg-white shadow-lg rounded-lg overflow-x-auto"></div>
+    </div>
+    <script>
+        gantt.config.xml_date = "%Y-%m-%d %H:%i";
+
+        // Custom task text template to include responsible person
+        gantt.templates.task_text = function(start, end, task) {
+            return `<div>${task.text}</div><div class="responsible">${task.responsible}</div>`;
+        };
+
+        // Remove start time and duration columns
+        gantt.config.columns = [
+            {name: "text", label: "Task name", tree: true, width: '*'}
+        ];
+
+        gantt.init("gantt_here");
+
+        gantt.parse({
+            data: [
+                {id: 1, text: "Optimize Current Process", start_date: "2023-07-29", duration: 9, progress: 0, open: true, responsible: "Gabriel"},
+                {id: 1.1, text: "Review Current Process", start_date: "2023-07-29", duration: 3, progress: 0, parent: 1, responsible: "Gabriel"},
+                {id: 1.2, text: "Identify Bottlenecks", start_date: "2023-08-01", duration: 3, progress: 0, parent: 1, responsible: "Gabriel"},
+                {id: 1.3, text: "Implement Improvements", start_date: "2023-08-04", duration: 3, progress: 0, parent: 1, responsible: "Gabriel"},
+                
+                {id: 2, text: "Develop Tracking System", start_date: "2023-08-07", duration: 8, progress: 0, open: true, responsible: "Mhariel"},
+                {id: 2.1, text: "Research Tracking Tools", start_date: "2023-08-07", duration: 2, progress: 0, parent: 2, responsible: "Mhariel"},
+                {id: 2.2, text: "Select Best Tool", start_date: "2023-08-09", duration: 2, progress: 0, parent: 2, responsible: "Mhariel"},
+                {id: 2.3, text: "Implement and Test", start_date: "2023-08-11", duration: 4, progress: 0, parent: 2, responsible: "Mhariel"},
+                
+                {id: 3, text: "Create Marketing Funnels", start_date: "2023-08-15", duration: 17, progress: 0, open: true, responsible: "Christian"},
+                {id: 3.1, text: "Design Funnel Pages", start_date: "2023-08-15", duration: 7, progress: 0, parent: 3, responsible: "Christian"},
+                {id: 3.2, text: "Develop Funnel Pages", start_date: "2023-08-22", duration: 5, progress: 0, parent: 3, responsible: "Christian"},
+                {id: 3.3, text: "Test and Optimize", start_date: "2023-08-27", duration: 5, progress: 0, parent: 3, responsible: "Christian"},
+                
+                {id: 4, text: "Launch Ad Campaigns", start_date: "2023-07-30", duration: 1, progress: 0, open: true, responsible: "Gabriel"},
+                {id: 4.1, text: "Create Ad Content", start_date: "2023-07-30", duration: 1, progress: 0, parent: 4, responsible: "Gabriel"},
+                {id: 4.2, text: "Set Up Ad Campaigns", start_date: "2023-07-30", duration: 1, progress: 0, parent: 4, responsible: "Gabriel"},
+                {id: 4.3, text: "Monitor and Adjust", start_date: "2023-07-30", duration: 1, progress: 0, parent: 4, responsible: "Gabriel"},
+                
+                {id: 5, text: "Follow-Up System for Leads", start_date: "2023-08-01", duration: 31, progress: 0, open: true, responsible: "Ron"},
+                {id: 5.1, text: "Develop Follow-Up Scripts", start_date: "2023-08-01", duration: 10, progress: 0, parent: 5, responsible: "Ron"},
+                {id: 5.2, text: "Implement Follow-Up System", start_date: "2023-08-11", duration: 10, progress: 0, parent: 5, responsible: "Ron"},
+                {id: 5.3, text: "Train Team on Follow-Up", start_date: "2023-08-21", duration: 10, progress: 0, parent: 5, responsible: "Ron"},
+                
+                {id: 6, text: "Launch Optimization Services", start_date: "2023-09-01", duration: 1, progress: 0, open: true, responsible: "Gabriel"},
+                {id: 6.1, text: "Prepare Launch Materials", start_date: "2023-08-30", duration: 1, progress: 0, parent: 6, responsible: "Gabriel"},
+                {id: 6.2, text: "Coordinate with Team", start_date: "2023-08-31", duration: 1, progress: 0, parent: 6, responsible: "Gabriel"},
+                {id: 6.3, text: "Launch Services", start_date: "2023-09-01", duration: 1, progress: 0, parent: 6, responsible: "Gabriel"},
+                
+                {id: 7, text: "Sales and Marketing Strategy", start_date: "2023-09-02", duration: 60, progress: 0, open: true, responsible: "Gabriel"},
+                {id: 7.1, text: "Develop Sales Strategy", start_date: "2023-09-02", duration: 20, progress: 0, parent: 7, responsible: "Gabriel"},
+                {id: 7.2, text: "Execute Marketing Campaigns", start_date: "2023-09-22", duration: 20, progress: 0, parent: 7, responsible: "Gabriel"},
+                {id: 7.3, text: "Analyze and Adjust", start_date: "2023-10-12", duration: 20, progress: 0, parent: 7, responsible: "Gabriel"},
+                
+                {id: 8, text: "Customer Feedback and Iteration", start_date: "2023-09-02", duration: 60, progress: 0, open: true, responsible: "Gabriel"},
+                {id: 8.1, text: "Collect Feedback", start_date: "2023-09-02", duration: 20, progress: 0, parent: 8, responsible: "Gabriel"},
+                {id: 8.2, text: "Analyze Feedback", start_date: "2023-09-22", duration: 20, progress: 0, parent: 8, responsible: "Gabriel"},
+                {id: 8.3, text: "Implement Changes", start_date: "2023-10-12", duration: 20, progress: 0, parent: 8, responsible: "Gabriel"}
+            ],
+            links: [
+                {id: 1, source: 1, target: 2, type: "1"},
+                {id: 2, source: 2, target: 3, type: "1"},
+                {id: 3, source: 3, target: 6, type: "1"},
+                {id: 4, source: 6, target: 7, type: "1"},
+                {id: 5, source: 7, target: 8, type: "1"}
+            ]
+        });
+    </script>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl md:text-4xl font-bold mb-4 text-center">Gabriel's Platinum Plan Deliverables</h1>
+        
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Month 1</h2>
+            <h3 class="text-lg md:text-xl font-bold mb-2">Optimize Current Process</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Review Current Process (1-on-1 with Stockton Walbeck)</li>
+                <li>Identify Bottlenecks (Done-for-you by full-time team)</li>
+                <li>Implement Improvements (Done-for-you by full-time team)</li>
+            </ul>
+
+            <h3 class="text-lg md:text-xl font-bold mb-2">Develop Tracking System</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Research Tracking Tools (Done-for-you by full-time team)</li>
+                <li>Select Best Tool (1-on-1 with Canyon Smith)</li>
+                <li>Implement and Test (Done-for-you by full-time team)</li>
+            </ul>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Month 2</h2>
+            <h3 class="text-lg md:text-xl font-bold mb-2">Create Marketing Funnels</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Design Funnel Pages (1-on-1 with Lova Kremer)</li>
+                <li>Develop Funnel Pages (Done-for-you by full-time team)</li>
+                <li>Test and Optimize Funnel Pages (Done-for-you by full-time team)</li>
+            </ul>
+
+            <h3 class="text-lg md:text-xl font-bold mb-2">Launch Ad Campaigns</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Create 2 Ad Campaigns (including script and video editing) (Done-for-you by full-time team)</li>
+                <li>Set Up Ad Campaigns on Facebook and Google (Done-for-you by full-time team)</li>
+                <li>Monitor and Adjust Campaigns (1-on-1 with Lova Kremer)</li>
+            </ul>
+        </div>
+
+        <div class="bg-white shadow-lg rounded-lg p-6 mb-6">
+            <h2 class="text-xl md:text-2xl font-bold mb-4">Month 3</h2>
+            <h3 class="text-lg md:text-xl font-bold mb-2">Follow-Up System for Leads</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Develop Follow-Up Scripts (1-on-1 with Linah Joudeh)</li>
+                <li>Implement Follow-Up System using CRM (Done-for-you by full-time team)</li>
+                <li>Train Team on Follow-Up Procedures (Done-for-you by full-time team)</li>
+            </ul>
+
+            <h3 class="text-lg md:text-xl font-bold mb-2">Launch Optimization Services</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Prepare Launch Materials (including landing pages, email sequences, and promotional videos) (Done-for-you by full-time team)</li>
+                <li>Coordinate with Team for Launch (1-on-1 with Stockton Walbeck)</li>
+                <li>Launch Services (Done-for-you by full-time team)</li>
+            </ul>
+
+            <h3 class="text-lg md:text-xl font-bold mb-2">Sales and Marketing Strategy</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Develop Comprehensive Sales Strategy (1-on-1 with Canyon Smith)</li>
+                <li>Execute Marketing Campaigns (including social media, email marketing, and content marketing) (Done-for-you by full-time team)</li>
+                <li>Analyze Campaign Performance and Adjust Strategies (Done-for-you by full-time team)</li>
+            </ul>
+
+            <h3 class="text-lg md:text-xl font-bold mb-2">Customer Feedback and Iteration</h3>
+            <ul class="list-disc list-inside mb-6">
+                <li>Collect Customer Feedback through Surveys and Interviews (Done-for-you by full-time team)</li>
+                <li>Analyze Feedback to Identify Areas for Improvement (1-on-1 with Linah Joudeh)</li>
+                <li>Implement Changes Based on Feedback (Done-for-you by full-time team)</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
