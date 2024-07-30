@@ -140,6 +140,12 @@
         let habitToDelete = null;
         let statsChart = null; // Reference to the Chart.js instance
 
+        const defaultHabits = [
+            { category: 'Fitness and Exercise', habits: ['Foundational Stretches', 'Rhomboid Work', 'Wall Angels', 'Foam Roller Work', '100’s', '10,000 Steps', 'Bonus: With Weighted Vest', 'Bonus: 20-45 Min Incline Walk', '3 Strength Training Days per Week', '2 Yoga/Pilates Practices per Week'] },
+            { category: 'Nutrition', habits: ['Intermittent Fasting', '4L of Water', 'Creatine', '1 Gram of Protein for Every Pound of Body Weight', 'Not Exceeding Daily Caloric Goal', 'Daily Supplements'] },
+            { category: 'Mental and Emotional Wellbeing', habits: ['Breath of Gratitude Every Morning', 'Meditate', 'I Love You to Your Partner and Family', 'Sex (minimum) Once a Week'] }
+        ];
+
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.tab-link').forEach(link => {
                 link.addEventListener('click', (e) => {
@@ -194,7 +200,7 @@
             });
             const data = await response.json();
             console.log(data);
-            habits = data;
+            habits = data.concat(defaultHabits.flatMap(category => category.habits.map(habit => ({ habit, category: category.category }))));
             renderHabits();
         }
 
@@ -329,6 +335,7 @@
                 }
             });
         }
+
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(section => {
                 section.classList.add('hidden');
