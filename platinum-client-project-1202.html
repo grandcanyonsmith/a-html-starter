@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gantt Chart for Leadership Development and Marketing Strategy Implementation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.css">
+    <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=6.1.7"></script>
+    <style>
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        .gantt_task_line {
+            background-color: #e3342f !important; /* Red color for task bars */
+            border-color: #e3342f !important; /* Red color for task borders */
+        }
+        .gantt_task_line.gantt_task_progress {
+            background-color: #000000 !important; /* Black color for progress bars */
+        }
+        .gantt_grid_head_cell, .gantt_grid_data {
+            background-color: #000000 !important; /* Black background for grid headers and data */
+            color: #ffffff !important; /* White text for grid headers and data */
+        }
+        .gantt_task_cell, .gantt_task_row {
+            background-color: #000000 !important; /* Black background for task cells and rows */
+        }
+        .gantt_task_scale .gantt_scale_cell, .gantt_task_scale .gantt_scale_cell:nth-child(2n) {
+            background-color: #000000 !important; /* Black background for scale cells */
+            color: #ffffff !important; /* White text for scale cells */
+        }
+    </style>
+</head>
+<body class="bg-gray-900">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4 text-white">Gantt Chart for Leadership Development and Marketing Strategy Implementation</h1>
+        <div id="gantt_here" class="w-full h-96 bg-gray-800 shadow-lg rounded-lg"></div>
+    </div>
+    <script>
+        gantt.config.xml_date = "%Y-%m-%d %H:%i";
+        gantt.init("gantt_here");
+
+        gantt.parse({
+            data: [
+                {id: 1, text: "Month 1: Foundation and Initial Launch", start_date: "2023-08-01", duration: 31, progress: 0, open: true},
+                {id: 2, text: "Week 1: Strategy and Setup", start_date: "2023-08-01", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 3, text: "Finalize and review the detailed roadmap and strategy", start_date: "2023-08-01", duration: 2, parent: 2, progress: 0, responsible: "Canyon"},
+                {id: 4, text: "Export email list from Kajabi and import into Course Creator 360", start_date: "2023-08-03", duration: 1, parent: 2, progress: 0, responsible: "Stephanie"},
+                {id: 5, text: "Connect and update all social media accounts within Course Creator 360", start_date: "2023-08-04", duration: 2, parent: 2, progress: 0, responsible: "Stephanie"},
+                {id: 6, text: "Begin pre-sale campaign for the Ultimate Leadership Transformation (ULT) course", start_date: "2023-08-06", duration: 3, parent: 2, progress: 0, responsible: "Rich, Canyon"},
+                {id: 7, text: "Set up a waiting list opt-in page for ULT course launch", start_date: "2023-08-09", duration: 1, parent: 2, progress: 0, responsible: "Canyon"},
+                
+                {id: 8, text: "Week 2: Content Creation and Affiliate Program", start_date: "2023-08-10", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 9, text: "Utilize ContentBug for video editing; submit two videos for free edits", start_date: "2023-08-10", duration: 1, parent: 8, progress: 0, responsible: "Rich"},
+                {id: 10, text: "Develop and finalize the content for the Ultimate Leadership Transformation course", start_date: "2023-08-11", duration: 14, parent: 8, progress: 0, responsible: "Rich"},
+                {id: 11, text: "Create an affiliate program campaign and invite potential affiliates", start_date: "2023-08-11", duration: 3, parent: 8, progress: 0, responsible: "Canyon"},
+                {id: 12, text: "Promote the DISC assessment as a low-barrier offer through email and social media", start_date: "2023-08-11", duration: 7, parent: 8, progress: 0, responsible: "Stephanie"},
+                
+                {id: 13, text: "Week 3: Marketing and List Building", start_date: "2023-08-17", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 14, text: "Launch the pre-sale campaign for the ULT course", start_date: "2023-08-17", duration: 1, parent: 13, progress: 0, responsible: "Canyon"},
+                {id: 15, text: "Implement organic growth strategies on social media; start posting consistently", start_date: "2023-08-17", duration: 7, parent: 13, progress: 0, responsible: "Stephanie"},
+                {id: 16, text: "Offer the DISC assessment for free to test conversion rates and ROI", start_date: "2023-08-17", duration: 7, parent: 13, progress: 0, responsible: "Rich"},
+                {id: 17, text: "Develop a content calendar for consistent posting and engagement", start_date: "2023-08-17", duration: 2, parent: 13, progress: 0, responsible: "Stephanie"},
+                
+                {id: 18, text: "Week 4: Initial Sales Push", start_date: "2023-08-24", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 19, text: "Begin promoting the DISC assessment and debrief sessions", start_date: "2023-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
+                {id: 20, text: "Start reaching out to existing clients for affiliate program participation", start_date: "2023-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
+                {id: 21, text: "Schedule and conduct strategy sessions with potential entrepreneur clients", start_date: "2023-08-24", duration: 7, parent: 18, progress: 0, responsible: "Rich"},
+                {id: 22, text: "Monitor and analyze the performance of the pre-sale campaign and adjust as needed", start_date: "2023-08-24", duration: 2, parent: 18, progress: 0, responsible: "Canyon"},
+                
+                {id: 23, text: "Month 2: Scaling and Optimization", start_date: "2023-09-01", duration: 30, progress: 0, open: true},
+                {id: 24, text: "Week 5: Content Finalization and Launch Prep", start_date: "2023-09-01", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 25, text: "Finalize all content for the Ultimate Leadership Transformation course", start_date: "2023-09-01", duration: 7, parent: 24, progress: 0, responsible: "Rich"},
+                {id: 26, text: "Continue promoting the DISC assessment and debrief sessions", start_date: "2023-09-01", duration: 7, parent: 24, progress: 0, responsible: "Stephanie"},
+                {id: 27, text: "Optimize the affiliate program based on initial feedback and performance", start_date: "2023-09-01", duration: 3, parent: 24, progress: 0, responsible: "Canyon"},
+                {id: 28, text: "Prepare marketing materials for the ULT course launch", start_date: "2023-09-01", duration: 7, parent: 24, progress: 0, responsible: "Stephanie"},
+                
+                {id: 29, text: "Week 6: Affiliate and Organic Growth", start_date: "2023-09-08", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 30, text: "Launch the affiliate program officially and provide resources to affiliates", start_date: "2023-09-08", duration: 2, parent: 29, progress: 0, responsible: "Canyon"},
+                {id: 31, text: "Continue organic growth strategies on social media", start_date: "2023-09-08", duration: 7, parent: 29, progress: 0, responsible: "Stephanie"},
+                {id: 32, text: "Promote the newly published book as a lead magnet for strategy sessions", start_date: "2023-09-08", duration: 7, parent: 29, progress: 0, responsible: "Rich"},
+                {id: 33, text: "Schedule and conduct more strategy sessions with potential clients", start_date: "2023-09-08", duration: 7, parent: 29, progress: 0, responsible: "Rich"},
+                
+                {id: 34, text: "Week 7: Paid Advertising and List Building", start_date: "2023-09-15", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 35, text: "Allocate $2,000 for ad spend; start running targeted ads for the DISC assessment and ULT course", start_date: "2023-09-15", duration: 2, parent: 34, progress: 0, responsible: "Canyon"},
+                {id: 36, text: "Monitor ad performance and optimize for better ROI", start_date: "2023-09-15", duration: 7, parent: 34, progress: 0, responsible: "Canyon"},
+                {id: 37, text: "Continue building the email list through lead magnets and organic growth", start_date: "2023-09-15", duration: 7, parent: 34, progress: 0, responsible: "Stephanie"},
+                {id: 38, text: "Analyze the performance of the affiliate program and make necessary adjustments", start_date: "2023-09-15", duration: 2, parent: 34, progress: 0, responsible: "Canyon"},
+                
+                {id: 39, text: "Week 8: Mid-Point Review and Adjustments", start_date: "2023-09-22", duration: 7, parent: 23, progress: 0, open: true},
+                {id: 40, text: "Conduct a mid-point review of all strategies and performance metrics", start_date: "2023-09-22", duration: 2, parent: 39, progress: 0, responsible: "Canyon, Rich"},
+                {id: 41, text: "Adjust marketing and sales strategies based on performance data", start_date: "2023-09-22", duration: 2, parent: 39, progress: 0, responsible: "Canyon, Stephanie"},
+                {id: 42, text: "Continue promoting the DISC assessment and ULT course", start_date: "2023-09-22", duration: 7, parent: 39, progress: 0, responsible: "Stephanie"},
+                {id: 43, text: "Focus on converting leads from the email list into paying customers", start_date: "2023-09-22", duration: 7, parent: 39, progress: 0, responsible: "Rich"},
+                
+                {id: 44, text: "Month 3: Launch and Revenue Maximization", start_date: "2023-10-01", duration: 31, progress: 0, open: true},
+                {id: 45, text: "Week 9: Final Preparations and Soft Launch", start_date: "2023-10-01", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 46, text: "Finalize all preparations for the Ultimate Leadership Transformation course launch", start_date: "2023-10-01", duration: 7, parent: 45, progress: 0, responsible: "Rich"},
+                {id: 47, text: "Conduct a soft launch of the ULT course to the waiting list and affiliates", start_date: "2023-10-01", duration: 2, parent: 45, progress: 0, responsible: "Canyon"},
+                {id: 48, text: "Continue running targeted ads and optimizing for better performance", start_date: "2023-10-01", duration: 7, parent: 45, progress: 0, responsible: "Canyon"},
+                {id: 49, text: "Promote the DISC assessment and debrief sessions heavily", start_date: "2023-10-01", duration: 7, parent: 45, progress: 0, responsible: "Stephanie"},
+                
+                {id: 50, text: "Week 10: Full Launch and Sales Push", start_date: "2023-10-08", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 51, text: "Officially launch the Ultimate Leadership Transformation course", start_date: "2023-10-08", duration: 1, parent: 50, progress: 0, responsible: "Canyon"},
+                {id: 52, text: "Implement a full-scale marketing campaign for the ULT course", start_date: "2023-10-08", duration: 7, parent: 50, progress: 0, responsible: "Canyon, Stephanie"},
+                {id: 53, text: "Continue promoting the DISC assessment and debrief sessions", start_date: "2023-10-08", duration: 7, parent: 50, progress: 0, responsible: "Rich"},
+                {id: 54, text: "Schedule and conduct strategy sessions with new leads and potential clients", start_date: "2023-10-08", duration: 7, parent: 50, progress: 0, responsible: "Rich"},
+                
+                {id: 55, text: "Week 11: Post-Launch Optimization", start_date: "2023-10-15", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 56, text: "Monitor the performance of the ULT course launch and make necessary adjustments", start_date: "2023-10-15", duration: 2, parent: 55, progress: 0, responsible: "Canyon, Rich"},
+                {id: 57, text: "Continue running targeted ads and optimizing for better ROI", start_date: "2023-10-15", duration: 7, parent: 55, progress: 0, responsible: "Canyon"},
+                {id: 58, text: "Focus on converting leads from the email list into paying customers", start_date: "2023-10-15", duration: 7, parent: 55, progress: 0, responsible: "Stephanie"},
+                {id: 59, text: "Analyze the performance of all marketing and sales strategies", start_date: "2023-10-15", duration: 2, parent: 55, progress: 0, responsible: "Canyon"},
+                
+                {id: 60, text: "Week 12: Final Review and Future Planning", start_date: "2023-10-22", duration: 7, parent: 44, progress: 0, open: true},
+                {id: 61, text: "Conduct a final review of all strategies and performance metrics", start_date: "2023-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Rich"},
+                {id: 62, text: "Identify key successes and areas for improvement", start_date: "2023-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Stephanie"},
+                {id: 63, text: "Plan for the next quarter based on the insights gained", start_date: "2023-10-22", duration: 2, parent: 60, progress: 0, responsible: "Canyon, Rich"},
+                {id: 64, text: "Continue promoting the DISC assessment and ULT course as ongoing revenue streams", start_date: "2023-10-22", duration: 7, parent: 60, progress: 0, responsible: "Stephanie"}
+            ],
+            links: [
+                {id: 1, source: 3, target: 4, type: "1"},
+                {id: 2, source: 4, target: 5, type: "1"},
+                {id: 3, source: 5, target: 6, type: "1"},
+                {id: 4, source: 6, target: 7, type: "1"},
+                {id: 5, source: 9, target: 10, type: "1"},
+                {id: 6, source: 10, target: 11, type: "1"},
+                {id: 7, source: 11, target: 12, type: "1"},
+                {id: 8, source: 14, target: 15, type: "1"},
+                {id: 9, source: 15, target: 16, type: "1"},
+                {id: 10, source: 16, target: 17, type: "1"},
+                {id: 11, source: 19, target: 20, type: "1"},
+                {id: 12, source: 20, target: 21, type: "1"},
+                {id: 13, source: 21, target: 22, type: "1"},
+                {id: 14, source: 25, target: 26, type: "1"},
+                {id: 15, source: 26, target: 27, type: "1"},
+                {id: 16, source: 27, target: 28, type: "1"},
+                {id: 17, source: 30, target: 31, type: "1"},
+                {id: 18, source: 31, target: 32, type: "1"},
+                {id: 19, source: 32, target: 33, type: "1"},
+                {id: 20, source: 35, target: 36, type: "1"},
+                {id: 21, source: 36, target: 37, type: "1"},
+                {id: 22, source: 37, target: 38, type: "1"},
+                {id: 23, source: 40, target: 41, type: "1"},
+                {id: 24, source: 41, target: 42, type: "1"},
+                {id: 25, source: 42, target: 43, type: "1"},
+                {id: 26, source: 46, target: 47, type: "1"},
+                {id: 27, source: 47, target: 48, type: "1"},
+                {id: 28, source: 48, target: 49, type: "1"},
+                {id: 29, source: 51, target: 52, type: "1"},
+                {id: 30, source: 52, target: 53, type: "1"},
+                {id: 31, source: 53, target: 54, type: "1"},
+                {id: 32, source: 56, target: 57, type: "1"},
+                {id: 33, source: 57, target: 58, type: "1"},
+                {id: 34, source: 58, target: 59, type: "1"},
+                {id: 35, source: 61, target: 62, type: "1"},
+                {id: 36, source: 62, target: 63, type: "1"},
+                {id: 37, source: 63, target: 64, type: "1"}
+            ]
+        });
+    </script>
+</body>
+</html>
