@@ -20,6 +20,7 @@
         .gantt-container {
             height: calc(100vh - 4rem);
             overflow-y: auto;
+            padding-bottom: 2rem;
         }
     </style>
 </head>
@@ -51,69 +52,69 @@
         gantt.parse({
             data: [
                 {id: 1, text: "Month 1: Foundation and Initial Launch", start_date: "2024-08-01", duration: 31, progress: 0, open: true},
-                {id: 2, text: "Lead Conversion Setup", start_date: "2024-08-01", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 2, text: "Week 1: Lead Conversion Setup", start_date: "2024-08-01", duration: 7, parent: 1, progress: 0, open: true},
                 {id: 3, text: "Implement CRM system", start_date: "2024-08-01", duration: 2, parent: 2, progress: 0, responsible: "Team"},
                 {id: 4, text: "Develop DM setter script", start_date: "2024-08-03", duration: 1, parent: 2, progress: 0, responsible: "Team"},
                 {id: 5, text: "Post job listings for sales person and DM setter", start_date: "2024-08-04", duration: 1, parent: 2, progress: 0, responsible: "Team"},
                 {id: 6, text: "Onboard and train new hires", start_date: "2024-08-05", duration: 3, parent: 2, progress: 0, responsible: "Team"},
 
-                {id: 7, text: "Product Development", start_date: "2024-08-08", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 7, text: "Week 2: Product Development", start_date: "2024-08-08", duration: 7, parent: 1, progress: 0, open: true},
                 {id: 8, text: "Review and refine low-ticket offers", start_date: "2024-08-08", duration: 3, parent: 7, progress: 0, responsible: "Team"},
                 {id: 9, text: "Create marketing materials for low-ticket offers", start_date: "2024-08-11", duration: 2, parent: 7, progress: 0, responsible: "Team"},
                 {id: 10, text: "Start developing subscription-based offer", start_date: "2024-08-13", duration: 2, parent: 7, progress: 0, responsible: "Team"},
 
-                {id: 11, text: "Marketing and Sales", start_date: "2024-08-15", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 11, text: "Week 3: Marketing and Sales", start_date: "2024-08-15", duration: 7, parent: 1, progress: 0, open: true},
                 {id: 12, text: "Launch pilot ad campaign on Facebook and Instagram", start_date: "2024-08-15", duration: 2, parent: 11, progress: 0, responsible: "Team"},
                 {id: 13, text: "Segment email list and send targeted campaigns", start_date: "2024-08-17", duration: 2, parent: 11, progress: 0, responsible: "Team"},
                 {id: 14, text: "Analyze ad campaign performance", start_date: "2024-08-19", duration: 2, parent: 11, progress: 0, responsible: "Team"},
 
-                {id: 15, text: "Skill Improvement", start_date: "2024-08-22", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 15, text: "Week 4: Skill Improvement", start_date: "2024-08-22", duration: 7, parent: 1, progress: 0, open: true},
                 {id: 16, text: "Enroll in market research course", start_date: "2024-08-22", duration: 3, parent: 15, progress: 0, responsible: "Team"},
                 {id: 17, text: "Learn email marketing strategies", start_date: "2024-08-25", duration: 2, parent: 15, progress: 0, responsible: "Team"},
 
-                {id: 18, text: "Content Strategy", start_date: "2024-08-28", duration: 7, parent: 1, progress: 0, open: true},
+                {id: 18, text: "Week 5: Content Strategy", start_date: "2024-08-28", duration: 7, parent: 1, progress: 0, open: true},
                 {id: 19, text: "Develop content calendar for Instagram and YouTube", start_date: "2024-08-28", duration: 2, parent: 18, progress: 0, responsible: "Team"},
                 {id: 20, text: "Post consistently and engage with audience", start_date: "2024-08-30", duration: 5, parent: 18, progress: 0, responsible: "Team"},
 
                 {id: 21, text: "Month 2: Scaling and Optimization", start_date: "2024-09-01", duration: 30, progress: 0, open: true},
-                {id: 22, text: "Lead Conversion Optimization", start_date: "2024-09-01", duration: 7, parent: 21, progress: 0, open: true},
+                {id: 22, text: "Week 6: Lead Conversion Optimization", start_date: "2024-09-01", duration: 7, parent: 21, progress: 0, open: true},
                 {id: 23, text: "Analyze lead conversion performance", start_date: "2024-09-01", duration: 2, parent: 22, progress: 0, responsible: "Team"},
                 {id: 24, text: "Train team on new strategies", start_date: "2024-09-03", duration: 2, parent: 22, progress: 0, responsible: "Team"},
 
-                {id: 25, text: "Product Development", start_date: "2024-09-06", duration: 7, parent: 21, progress: 0, open: true},
+                {id: 25, text: "Week 7: Product Development", start_date: "2024-09-06", duration: 7, parent: 21, progress: 0, open: true},
                 {id: 26, text: "Gather feedback from customers", start_date: "2024-09-06", duration: 2, parent: 25, progress: 0, responsible: "Team"},
                 {id: 27, text: "Refine existing products", start_date: "2024-09-08", duration: 3, parent: 25, progress: 0, responsible: "Team"},
 
-                {id: 28, text: "Marketing and Sales", start_date: "2024-09-11", duration: 7, parent: 21, progress: 0, open: true},
+                {id: 28, text: "Week 8: Marketing and Sales", start_date: "2024-09-11", duration: 7, parent: 21, progress: 0, open: true},
                 {id: 29, text: "Scale ad campaigns", start_date: "2024-09-11", duration: 2, parent: 28, progress: 0, responsible: "Team"},
                 {id: 30, text: "Continue targeted email campaigns", start_date: "2024-09-13", duration: 2, parent: 28, progress: 0, responsible: "Team"},
 
-                {id: 31, text: "Skill Improvement", start_date: "2024-09-16", duration: 7, parent: 21, progress: 0, open: true},
+                {id: 31, text: "Week 9: Skill Improvement", start_date: "2024-09-16", duration: 7, parent: 21, progress: 0, open: true},
                 {id: 32, text: "Apply market research knowledge", start_date: "2024-09-16", duration: 3, parent: 31, progress: 0, responsible: "Team"},
                 {id: 33, text: "Improve appointment setting skills", start_date: "2024-09-19", duration: 2, parent: 31, progress: 0, responsible: "Team"},
 
-                {id: 34, text: "Content Strategy", start_date: "2024-09-22", duration: 7, parent: 21, progress: 0, open: true},
+                {id: 34, text: "Week 10: Content Strategy", start_date: "2024-09-22", duration: 7, parent: 21, progress: 0, open: true},
                 {id: 35, text: "Analyze content performance", start_date: "2024-09-22", duration: 2, parent: 34, progress: 0, responsible: "Team"},
                 {id: 36, text: "Experiment with different content types", start_date: "2024-09-24", duration: 3, parent: 34, progress: 0, responsible: "Team"},
 
                 {id: 37, text: "Month 3: Launch and Revenue Maximization", start_date: "2024-10-01", duration: 31, progress: 0, open: true},
-                {id: 38, text: "Lead Conversion Optimization", start_date: "2024-10-01", duration: 7, parent: 37, progress: 0, open: true},
+                {id: 38, text: "Week 11: Lead Conversion Optimization", start_date: "2024-10-01", duration: 7, parent: 37, progress: 0, open: true},
                 {id: 39, text: "Optimize lead conversion process", start_date: "2024-10-01", duration: 2, parent: 38, progress: 0, responsible: "Team"},
                 {id: 40, text: "Ensure effective follow-up with leads", start_date: "2024-10-03", duration: 2, parent: 38, progress: 0, responsible: "Team"},
 
-                {id: 41, text: "Product Development", start_date: "2024-10-06", duration: 7, parent: 37, progress: 0, open: true},
+                {id: 41, text: "Week 12: Product Development", start_date: "2024-10-06", duration: 7, parent: 37, progress: 0, open: true},
                 {id: 42, text: "Finalize subscription-based offer", start_date: "2024-10-06", duration: 3, parent: 41, progress: 0, responsible: "Team"},
                 {id: 43, text: "Launch subscription-based offer", start_date: "2024-10-09", duration: 2, parent: 41, progress: 0, responsible: "Team"},
 
-                {id: 44, text: "Marketing and Sales", start_date: "2024-10-12", duration: 7, parent: 37, progress: 0, open: true},
+                {id: 44, text: "Week 13: Marketing and Sales", start_date: "2024-10-12", duration: 7, parent: 37, progress: 0, open: true},
                 {id: 45, text: "Optimize ad campaigns", start_date: "2024-10-12", duration: 2, parent: 44, progress: 0, responsible: "Team"},
                 {id: 46, text: "Continue targeted email campaigns", start_date: "2024-10-14", duration: 2, parent: 44, progress: 0, responsible: "Team"},
 
-                {id: 47, text: "Skill Improvement", start_date: "2024-10-17", duration: 7, parent: 37, progress: 0, open: true},
+                {id: 47, text: "Week 14: Skill Improvement", start_date: "2024-10-17", duration: 7, parent: 37, progress: 0, open: true},
                 {id: 48, text: "Focus on applying new skills", start_date: "2024-10-17", duration: 3, parent: 47, progress: 0, responsible: "Team"},
                 {id: 49, text: "Consider additional training", start_date: "2024-10-20", duration: 2, parent: 47, progress: 0, responsible: "Team"},
 
-                {id: 50, text: "Content Strategy", start_date: "2024-10-23", duration: 7, parent: 37, progress: 0, open: true},
+                {id: 50, text: "Week 15: Content Strategy", start_date: "2024-10-23", duration: 7, parent: 37, progress: 0, open: true},
                 {id: 51, text: "Continue posting high-quality content", start_date: "2024-10-23", duration: 3, parent: 50, progress: 0, responsible: "Team"},
                 {id: 52, text: "Engage with audience", start_date: "2024-10-26", duration: 2, parent: 50, progress: 0, responsible: "Team"}
             ],
