@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gantt Chart for 3-Month Action Plan</title>
+    <title>Gantt Chart for Sam 3-Month Action Plan</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.css">
     <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=6.1.7"></script>
@@ -17,12 +17,16 @@
         .gantt_task_line {
             background-color: red !important;
         }
+        .gantt-container {
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="container mx-auto p-4 h-full">
-        <h1 class="text-2xl font-bold mb-4">Gantt Chart for Sam 3-Month Action Plan</h1>
-        <div id="gantt_here" class="w-full h-full bg-white shadow-lg rounded-lg"></div>
+        <h1 class="text-2xl font-bold mb-4 text-center">Gantt Chart for Sam 3-Month Action Plan</h1>
+        <div id="gantt_here" class="w-full h-full bg-white shadow-lg rounded-lg gantt-container"></div>
     </div>
     <script>
         gantt.config.xml_date = "%Y-%m-%d %H:%i";
