@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="gantt-title-tag"></title> <!-- Title will be set dynamically -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.css">
+    <script src="https://docs.dhtmlx.com/gantt/codebase/dhtmlxgantt.js?v=6.1.7"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+        .gantt_task_line {
+            background-color: red !important;
+        }
+        .gantt-container {
+            height: calc(100vh - 4rem);
+            overflow-y: auto;
+            padding-bottom: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4 h-full">
+        <h1 id="gantt-title" class="text-2xl font-bold mb-4 text-center"></h1>
+        <div id="gantt_here" class="w-full h-full bg-white shadow-lg rounded-lg gantt-container"></div>
+    </div>
+
+  
+</body>
+</html>
