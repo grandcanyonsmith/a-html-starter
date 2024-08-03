@@ -9,153 +9,28 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
     <style>
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            padding: 1rem;
-            background-color: #f8f8f8;
-            border-bottom: 1px solid #e5e5e5;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 10;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            color: #333;
-            padding: 0.5rem 1rem;
-        }
-
-        .navbar a.active {
-            border-bottom: 2px solid #4a90e2;
-            color: #4a90e2;
-        }
-
-        .navbar a.underline {
-            text-decoration: underline;
-        }
-
-        .content {
-            margin-top: 4rem; /* Adjust this value if needed */
-        }
-
-        .toggle-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .toggle-buttons button {
-            background-color: #e5e5e5;
-            border: none;
-            padding: 0.5rem 1rem;
-            cursor: pointer;
-        }
-
-        .toggle-buttons button.active {
-            background-color: #4a90e2;
-            color: white;
-        }
-
-        .code-box {
-            background-color: #282a36;
-            color: #f8f8f2;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            overflow: auto;
-            white-space: pre-wrap;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .code-box[contenteditable="true"] {
-            outline: none;
-        }
-
-        .line-numbers {
-            counter-reset: line;
-        }
-
-        .line-numbers > div {
-            counter-increment: line;
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .line-numbers > div::before {
-            content: counter(line);
-            position: absolute;
-            left: 0;
-            color: #6272a4;
-        }
-
-        .function-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            border-bottom: 1px solid #e5e5e5;
-            cursor: pointer;
-        }
-
-        .function-item:hover {
-            background-color: #f1f1f1;
-        }
-
-        .function-url {
-            color: #888;
-            font-size: 0.875rem;
-        }
-
-        .chevron {
-            font-size: 1.25rem;
-            transition: transform 0.3s;
-            margin-right: 0.5rem;
-        }
-
-        .chevron.up {
-            transform: rotate(180deg);
-        }
-
-        .function-details {
-            display: none;
-            padding: 1rem;
-            border-top: 1px solid #e5e5e5;
-        }
-
-        .function-details.active {
-            display: block;
-        }
-
-        .log-streams-container {
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        @media (max-width: 640px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .navbar a {
-                padding: 0.5rem 0;
-            }
-
-            .content {
-                margin-top: 6rem;
-            }
-
-            .function-item {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .chevron {
-                margin-right: 0;
-                margin-bottom: 0.5rem;
-            }
-        }
+        .navbar { display: flex; justify-content: space-between; padding: 1rem; background-color: #f8f8f8; border-bottom: 1px solid #e5e5e5; position: fixed; top: 0; width: 100%; z-index: 10; }
+        .navbar a { text-decoration: none; color: #333; padding: 0.5rem 1rem; }
+        .navbar a.active { border-bottom: 2px solid #4a90e2; color: #4a90e2; }
+        .navbar a.underline { text-decoration: underline; }
+        .content { margin-top: 4rem; /* Adjust this value if needed */ }
+        .toggle-buttons { display: flex; justify-content: space-between; margin-bottom: 1rem; }
+        .toggle-buttons button { background-color: #e5e5e5; border: none; padding: 0.5rem 1rem; cursor: pointer; }
+        .toggle-buttons button.active { background-color: #4a90e2; color: white; }
+        .code-box { background-color: #282a36; color: #f8f8f2; padding: 1rem; border-radius: 0.5rem; overflow: auto; white-space: pre-wrap; font-family: 'Fira Code', monospace; }
+        .code-box[contenteditable="true"] { outline: none; }
+        .line-numbers { counter-reset: line; }
+        .line-numbers > div { counter-increment: line; position: relative; padding-left: 2rem; }
+        .line-numbers > div::before { content: counter(line); position: absolute; left: 0; color: #6272a4; }
+        .function-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 1rem; border-bottom: 1px solid #e5e5e5; cursor: pointer; }
+        .function-item:hover { background-color: #f1f1f1; }
+        .function-url { color: #888; font-size: 0.875rem; }
+        .chevron { font-size: 1.25rem; transition: transform 0.3s; margin-right: 0.5rem; }
+        .chevron.up { transform: rotate(180deg); }
+        .function-details { display: none; padding: 1rem; border-top: 1px solid #e5e5e5; }
+        .function-details.active { display: block; }
+        .log-streams-container { max-height: 200px; overflow-y: auto; }
+        @media (max-width: 640px) { .navbar { flex-direction: column; align-items: flex-start; } .navbar a { padding: 0.5rem 0; } .content { margin-top: 6rem; } .function-item { flex-direction: column; align-items: flex-start; } .chevron { margin-right: 0; margin-bottom: 0.5rem; } }
     </style>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
@@ -178,7 +53,7 @@
             <h2 class="text-xl font-bold mb-2">Frontend:</h2>
             <div class="toggle-buttons">
                 <button id="toggleRendered" class="active">Rendered Content</button>
-                <button id="toggleCode">Code</button>
+                <button id="toggleCode" disabled>Code</button>
             </div>
             <div id="renderedContent" class="mb-4">
                 <iframe id="contentFrame" class="w-full h-64 border rounded"></iframe>
@@ -197,7 +72,6 @@
             <div id="lambdaFunctions" class="mt-6"></div>
         </div>
     </div>
-
     <div id="notification" aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6 hidden">
         <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
             <div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
@@ -220,14 +94,12 @@
             </div>
         </div>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script>
         let fetchedContent = '';
         let allLambdaFunctions = [];
-
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Page loaded, fetching all Lambda functions');
             try {
@@ -241,39 +113,30 @@
                 console.error('Error fetching all Lambda functions:', error);
             }
         });
-
         document.getElementById('fetchForm').addEventListener('submit', async function(event) {
             event.preventDefault();
             console.log('Form submitted');
-
             const url = document.getElementById('url').value;
             console.log('URL:', url);
-
             const resultDiv = document.getElementById('result');
             const contentFrame = document.getElementById('contentFrame');
             const codeBox = document.getElementById('codeBox');
             const lambdaFunctionsDiv = document.getElementById('lambdaFunctions');
-
             // Clear previous results
             resultDiv.classList.add('hidden');
             contentFrame.srcdoc = '';
             codeBox.textContent = '';
             lambdaFunctionsDiv.innerHTML = '';
             resultDiv.classList.remove('hidden');
-
             try {
                 // Fetch GitHub file content
                 const response = await fetch('https://7jgnzaokec66xxo4t3v2ixeqxm0rvzov.lambda-url.us-west-2.on.aws/', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url })
                 });
-
                 const data = await response.json();
                 console.log('Response:', data);
-
                 if (response.ok) {
                     fetchedContent = data.content;
                     contentFrame.srcdoc = fetchedContent;
@@ -282,85 +145,47 @@
                     contentFrame.srcdoc = `<p>${data.message}</p>`;
                     codeBox.textContent = data.message;
                 }
-
                 // Fetch Lambda functions related to the input URL
                 const lambdaResponse = await fetch('https://7t6svygyp2c5nnxcvq5ofpn7xa0xhcks.lambda-url.us-west-2.on.aws/', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url })
                 });
-
                 const lambdaData = await lambdaResponse.json();
                 console.log('Lambda Response Data:', lambdaData);
-
                 if (lambdaResponse.ok && lambdaData.lambda_functions && Object.keys(lambdaData.lambda_functions).length > 0) {
                     for (const [url, name] of Object.entries(lambdaData.lambda_functions)) {
                         const lambdaFunction = allLambdaFunctions.find(func => func.FunctionName === name);
                         const codeFile = lambdaFunction && lambdaFunction.CodeFiles && lambdaFunction.CodeFiles['lambda_function.py'] ? lambdaFunction.CodeFiles['lambda_function.py'] : 'No code available';
                         const functionArn = lambdaFunction ? lambdaFunction.FunctionArn : '';
-
                         const functionItem = document.createElement('div');
                         functionItem.className = 'function-item';
-                        functionItem.innerHTML = `
-                            <div class="chevron">▼</div>
-                            <div>
-                                <div class="function-name">${name}</div>
-                                <div class="function-url">${url}</div>
-                            </div>
-                        `;
+                        functionItem.innerHTML = ` <div class="chevron">▼</div> <div> <div class="function-name">${name}</div> <div class="function-url">${url}</div> </div> `;
                         lambdaFunctionsDiv.appendChild(functionItem);
-
                         const functionDetails = document.createElement('div');
                         functionDetails.className = 'function-details';
-                        functionDetails.innerHTML = `
-                            <div class="toggle-buttons">
-                                <button class="rendered-logs-button active">Rendered Logs</button>
-                                <button class="code-button">Code</button>
-                            </div>
-                            <div class="rendered-logs-content hidden">
-                                <div class="log-streams-container" id="logStreams-${name}"></div>
-                                <div class="log-events-container hidden" id="logEvents-${name}"></div>
-                            </div>
-                            <div class="code-content hidden">
-                                <textarea id="code-${name}-content" class="code-editor">${codeFile}</textarea>
-                                <textarea id="userRequest-${name}" class="mt-2 p-2 w-full border rounded" placeholder="User Request"></textarea>
-                                <div class="flex space-x-2 mt-2">
-                                    <button class="update-button bg-blue-500 text-white px-4 py-2 rounded" data-function-arn="${functionArn}">Update</button>
-                                    <button class="rewrite-button bg-green-500 text-white px-4 py-2 rounded" data-function-name="${name}">Rewrite Code</button>
-                                </div>
-                            </div>
-                        `;
+                        functionDetails.innerHTML = ` <div class="toggle-buttons"> <button class="rendered-logs-button active">Rendered Logs</button> <button class="code-button" disabled>Code</button> </div> <div class="rendered-logs-content hidden"> <div class="log-streams-container" id="logStreams-${name}"></div> <div class="log-events-container hidden" id="logEvents-${name}"></div> </div> <div class="code-content hidden"> <textarea id="code-${name}-content" class="code-editor">${codeFile}</textarea> <textarea id="userRequest-${name}" class="mt-2 p-2 w-full border rounded" placeholder="User Request"></textarea> <div class="flex space-x-2 mt-2"> <button class="update-button bg-blue-500 text-white px-4 py-2 rounded" data-function-arn="${functionArn}">Update</button> <button class="rewrite-button bg-green-500 text-white px-4 py-2 rounded" data-function-name="${name}">Rewrite Code</button> </div> </div> `;
                         lambdaFunctionsDiv.appendChild(functionDetails);
-
-                        const codeMirrorInstance = CodeMirror.fromTextArea(document.getElementById(`code-${name}-content`), {
-                            lineNumbers: true,
-                            mode: 'python',
-                            theme: 'dracula',
-                            readOnly: false
-                        });
-
+                        const codeMirrorInstance = CodeMirror.fromTextArea(document.getElementById(`code-${name}-content`), { lineNumbers: true, mode: 'python', theme: 'dracula', readOnly: false });
                         functionItem.addEventListener('click', () => {
                             functionDetails.classList.toggle('active');
                             const chevron = functionItem.querySelector('.chevron');
                             chevron.classList.toggle('up');
                         });
-
                         functionDetails.querySelector('.rendered-logs-button').addEventListener('click', () => {
                             functionDetails.querySelector('.rendered-logs-content').classList.remove('hidden');
                             functionDetails.querySelector('.code-content').classList.add('hidden');
                             functionDetails.querySelector('.rendered-logs-button').classList.add('active');
                             functionDetails.querySelector('.code-button').classList.remove('active');
                         });
-
                         functionDetails.querySelector('.code-button').addEventListener('click', () => {
                             functionDetails.querySelector('.rendered-logs-content').classList.add('hidden');
                             functionDetails.querySelector('.code-content').classList.remove('hidden');
                             functionDetails.querySelector('.rendered-logs-button').classList.remove('active');
                             functionDetails.querySelector('.code-button').classList.add('active');
                         });
-
+                        // Enable the code button after the code is loaded
+                        functionDetails.querySelector('.code-button').disabled = false;
                         // Add event listeners for update buttons
                         functionDetails.querySelector('.update-button').addEventListener('click', async (event) => {
                             const functionArn = event.currentTarget.getAttribute('data-function-arn');
@@ -382,7 +207,6 @@
                                 console.error('Error updating Lambda function:', error);
                             }
                         });
-
                         // Add event listeners for rewrite buttons
                         functionDetails.querySelector('.rewrite-button').addEventListener('click', async (event) => {
                             const functionName = event.currentTarget.getAttribute('data-function-name');
@@ -419,7 +243,6 @@
                                 rewriteButton.disabled = false;
                             }
                         });
-
                         // Add event listeners for view logs buttons
                         functionDetails.querySelector('.rendered-logs-button').addEventListener('click', async () => {
                             const logStreamsContainer = document.getElementById(`logStreams-${name}`);
@@ -530,36 +353,36 @@
             document.getElementById('toggleRendered').classList.remove('active');
         });
 
-document.getElementById('updateFrontendButton').addEventListener('click', async function() {
-    const userRequest = document.getElementById('frontendUserRequest').value;
-    const updatedCode = document.getElementById('codeBox').textContent;
-    const githubUrl = document.getElementById('url').value;
-    if (!userRequest || !updatedCode) {
-        alert('Please ensure both user request and updated code are provided.');
-        return;
-    }
-    this.textContent = 'Updating...';
-    this.disabled = true;
-    try {
-        const response = await fetch('https://e4dtiiwk2mn5k6z6s4vwpmluvi0kavve.lambda-url.us-west-2.on.aws/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: githubUrl, updatedCode: updatedCode })
+        document.getElementById('updateFrontendButton').addEventListener('click', async function() {
+            const userRequest = document.getElementById('frontendUserRequest').value;
+            const updatedCode = document.getElementById('codeBox').textContent;
+            const githubUrl = document.getElementById('url').value;
+            if (!userRequest || !updatedCode) {
+                alert('Please ensure both user request and updated code are provided.');
+                return;
+            }
+            this.textContent = 'Updating...';
+            this.disabled = true;
+            try {
+                const response = await fetch('https://e4dtiiwk2mn5k6z6s4vwpmluvi0kavve.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: githubUrl, updatedCode: updatedCode })
+                });
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // const data = await response.json();
+                // Commenting out the lines that update the codeBox and contentFrame
+                // document.getElementById('codeBox').textContent = data.updatedCode;
+                // document.getElementById('contentFrame').srcdoc = data.updatedCode;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                this.textContent = 'Update';
+                this.disabled = false;
+            }
         });
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        // const data = await response.json();
-        // Commenting out the lines that update the codeBox and contentFrame
-        // document.getElementById('codeBox').textContent = data.updatedCode;
-        // document.getElementById('contentFrame').srcdoc = data.updatedCode;
-    } catch (error) {
-        alert('Error: ' + error.message);
-    } finally {
-        this.textContent = 'Update';
-        this.disabled = false;
-    }
-});
 
         document.getElementById('rewriteFrontendButton').addEventListener('click', async function() {
             const userRequest = document.getElementById('frontendUserRequest').value;
@@ -583,9 +406,9 @@ document.getElementById('updateFrontendButton').addEventListener('click', async 
                 console.log('Rewrite response:', data);
                 if (data) {
                     document.getElementById('codeBox').textContent = '';
-                    document.getElementById('codeBox').textContent = data
+                    document.getElementById('codeBox').textContent = data;
                     document.getElementById('contentFrame').srcdoc = '';
-                    document.getElementById('contentFrame').srcdoc = data
+                    document.getElementById('contentFrame').srcdoc = data;
                 } else {
                     console.error('No updatedCode in response');
                 }
