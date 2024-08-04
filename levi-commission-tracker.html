@@ -70,6 +70,7 @@
                 } else if (status === 'NOT CLOSED') {
                     statusDotColor = 'bg-red-400';
                 }
+                const formattedCommission = commission.startsWith('$') ? commission : `$${commission}`;
                 return `
                     <tr>
                         <td class="py-4 pl-4 pr-8 sm:pl-6 lg:pl-8">
@@ -85,7 +86,7 @@
                                 <div class="hidden text-white sm:block">${status || 'UNKNOWN'}</div>
                             </div>
                         </td>
-                        <td class="py-4 pl-0 pr-4 text-sm leading-6 text-gray-400 sm:pr-8 lg:pr-20">${commission || '$0'}</td>
+                        <td class="py-4 pl-0 pr-4 text-sm leading-6 text-gray-400 sm:pr-8 lg:pr-20">${formattedCommission || '$0'}</td>
                         <td class="py-4 pl-0 pr-4 text-sm leading-6 text-gray-400 sm:pr-8 lg:pr-20">${stripeEmail}</td>
                     </tr>
                 `;
@@ -186,7 +187,7 @@
             <div class="flex space-x-4">
                 <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/users-cc360-stats.html')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Customer Success</a>
                 <a href="#" onclick="navigateTo('https://html-starter-coral.vercel.app/cc360-revenue-stats.html#')" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Sales</a>
-                <a href="#" class="text-white border-b-2 border-white px-3 py-2 rounded-md text-sm font-medium">Levi Tracker</a>
+                <a href="#" class="text-white border-b-2 border-white px-3 py-2 rounded-md text-sm font-medium">Jack Tracker</a>
             </div>
         </div>
     </nav>
