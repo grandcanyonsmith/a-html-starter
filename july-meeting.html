@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Comparison</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="container mx-auto">
+        <h1 class="text-3xl font-bold mb-6">Monthly Comparison: June vs July</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Revenue</h2>
+                <p>June: $130,000</p>
+                <p>July: $154,692</p>
+                <p class="text-green-500">Increase: $24,692 (19%)</p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Customers</h2>
+                <p>June: 143</p>
+                <p>July: 199</p>
+                <p class="text-green-500">Increase: 56 (39%)</p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">MRR</h2>
+                <p>Without Platinum Clients</p>
+                <p>June: $146,146</p>
+                <p>July: $158,113</p>
+                <p class="text-green-500">Increase: $11,967 (8%)</p>
+                <p class="mt-4">With Platinum Clients</p>
+                <p>July: $165,613</p>
+                <p class="text-green-500">Increase: $19,467 (13%)</p>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Churn</h2>
+                <p>With Platinum Clients: $16,265</p>
+                <p>Without Platinum Clients: $13,265</p>
+                <p class="text-green-500">Churn with Platinum Clients: $3,000</p>
+                <p class="mt-4 text-gray-600">Note: This was a healthy amount of churn given the growth we've had.</p>
+            </div>
+        </div>
+        
+        <div class="mt-8">
+            <canvas id="revenueChart"></canvas>
+        </div>
+        
+        <div class="mt-8">
+            <canvas id="customersChart"></canvas>
+        </div>
+        
+        <div class="mt-8">
+            <canvas id="mrrChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const customersCtx = document.getElementById('customersChart').getContext('2d');
+        const mrrCtx = document.getElementById('mrrChart').getContext('2d');
+
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: ['June', 'July'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [130000, 154692],
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const customersChart = new Chart(customersCtx, {
+            type: 'line',
+            data: {
+                labels: ['June', 'July'],
+                datasets: [{
+                    label: 'Customers',
+                    data: [143, 199],
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const mrrChart = new Chart(mrrCtx, {
+            type: 'line',
+            data: {
+                labels: ['June', 'July'],
+                datasets: [
+                    {
+                        label: 'MRR (Without Platinum Clients)',
+                        data: [146146, 158113],
+                        borderColor: '#4CAF50',
+                        backgroundColor: 'rgba(76, 175, 80, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'MRR (With Platinum Clients)',
+                        data: [null, 165613],
+                        borderColor: '#FF9800',
+                        backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
