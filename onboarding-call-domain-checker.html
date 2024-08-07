@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Domain Checker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen overflow-y-auto">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-4">Domain Checker</h1>
+        <form id="domainForm" class="space-y-4">
+            <div>
+                <label for="domain" class="block text-sm font-medium text-gray-700">Domain</label>
+                <input type="text" id="domain" name="domain" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+            </div>
+            <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Check Domain</button>
+        </form>
+        <div id="dnsInfo" class="mt-6 hidden">
+            <h2 class="text-xl font-bold mb-2">DNS Information</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Type</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Value</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Copy</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dnsContent" class="divide-y divide-gray-200">
+                        <!-- Dynamic content will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="softwareList" class="mt-6 hidden">
+            <h2 class="text-xl font-bold mb-2">Software Found</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Software</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="softwareContent" class="divide-y divide-gray-200">
+                        <!-- Dynamic content will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('domainForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            console.log('Form submitted');
+            const button = event.target.querySelector('button');
+            const domain = document.getElementById('domain').value;
+            const dnsInfoDiv = document.getElementById('dnsInfo');
+            const dnsContent = document.getElementById('dnsContent');
+            const softwareListDiv = document.getElementById('softwareList');
+            const softwareContent = document.getElementById('softwareContent');
+
+            button.textContent = 'Checking...';
+            button.disabled = true;
+
+            try {
+                const response = await fetch('https://nakc4uvio7tprydnh5m2w25sm40lmime.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ domain })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                // Populate DNS Info
+                dnsContent.innerHTML = '';
+                const dnsInfo = data.domain_info;
+                for (const [type, values] of Object.entries(dnsInfo)) {
+                    if (Array.isArray(values)) {
+                        values.forEach(value => {
+                            const row = document.createElement('tr');
+                            const typeCell = document.createElement('td');
+                            typeCell.className = 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0';
+                            typeCell.textContent = type;
+                            const valueCell = document.createElement('td');
+                            valueCell.className = 'whitespace-nowrap px-3 py-4 text-sm text-gray-500';
+                            valueCell.textContent = value;
+                            const copyCell = document.createElement('td');
+                            copyCell.className = 'whitespace-nowrap px-3 py-4 text-sm text-gray-500';
+                            const copyButton = document.createElement('button');
+                            copyButton.className = 'text-indigo-600 hover:text-indigo-900';
+                            copyButton.innerHTML = '📋';
+                            copyButton.addEventListener('click', () => {
+                                navigator.clipboard.writeText(value);
+                                console.log(`Copied: ${value}`);
+                            });
+                            copyCell.appendChild(copyButton);
+                            row.appendChild(typeCell);
+                            row.appendChild(valueCell);
+                            row.appendChild(copyCell);
+                            dnsContent.appendChild(row);
+                        });
+                    } else {
+                        const row = document.createElement('tr');
+                        const typeCell = document.createElement('td');
+                        typeCell.className = 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0';
+                        typeCell.textContent = type;
+                        const valueCell = document.createElement('td');
+                        valueCell.className = 'whitespace-nowrap px-3 py-4 text-sm text-gray-500';
+                        valueCell.textContent = values;
+                        const copyCell = document.createElement('td');
+                        copyCell.className = 'whitespace-nowrap px-3 py-4 text-sm text-gray-500';
+                        const copyButton = document.createElement('button');
+                        copyButton.className = 'text-indigo-600 hover:text-indigo-900';
+                        copyButton.innerHTML = '📋';
+                        copyButton.addEventListener('click', () => {
+                            navigator.clipboard.writeText(values);
+                            console.log(`Copied: ${values}`);
+                        });
+                        copyCell.appendChild(copyButton);
+                        row.appendChild(typeCell);
+                        row.appendChild(valueCell);
+                        row.appendChild(copyCell);
+                        dnsContent.appendChild(row);
+                    }
+                }
+                dnsInfoDiv.classList.remove('hidden');
+
+                // Combine software checks and remove duplicates
+                const combinedSoftwareChecks = {};
+                for (const [page, softwareChecks] of Object.entries(data.software_checks)) {
+                    for (const [software, found] of Object.entries(softwareChecks)) {
+                        if (found) {
+                            combinedSoftwareChecks[software] = true;
+                        } else if (!(software in combinedSoftwareChecks)) {
+                            combinedSoftwareChecks[software] = false;
+                        }
+                    }
+                }
+
+                // Sort software list to put found ones at the top
+                const sortedSoftwareChecks = Object.entries(combinedSoftwareChecks).sort((a, b) => b[1] - a[1]);
+
+                // Map combined software list to table
+                softwareContent.innerHTML = '';
+                for (const [software, found] of sortedSoftwareChecks) {
+                    const row = document.createElement('tr');
+                    const softwareCell = document.createElement('td');
+                    softwareCell.className = 'whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0';
+                    softwareCell.textContent = software;
+                    const statusCell = document.createElement('td');
+                    statusCell.className = 'whitespace-nowrap px-3 py-4 text-sm text-gray-500';
+                    statusCell.innerHTML = found ? '<span class="text-green-500">✔️</span>' : '<span class="text-red-500">❌</span>';
+                    row.appendChild(softwareCell);
+                    row.appendChild(statusCell);
+                    softwareContent.appendChild(row);
+                }
+
+                softwareListDiv.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+                dnsInfoDiv.classList.add('hidden');
+                softwareListDiv.classList.add('hidden');
+            } finally {
+                button.textContent = 'Check Domain';
+                button.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
