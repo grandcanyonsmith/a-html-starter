@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigma - Custom Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            z-index: 1;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+        }
+
+        .dropdown-content a {
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-content a span {
+            flex-shrink: 0;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body class="flex flex-col md:flex-row h-screen bg-gray-100">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 bg-white p-6 border-r overflow-y-auto">
+        <div class="flex items-center mb-6">
+            <svg class="w-8 h-8 text-purple-500 mr-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 20h20L12 2zm0 3.2l7.13 12.8H4.87L12 5.2zM11 9h2v4h-2V9zm0 6h2v2h-2v-2z"></path>
+            </svg>
+            <h3 class="text-xl font-semibold">Course Creator 360</h3>
+        </div>
+        <nav>
+            <ul class="space-y-4">
+                <!-- Report categories, as detailed in the provided HTML -->
+                <li>
+                    <h4 class="text-lg font-medium">BASIC REPORTS</h4>
+                    <ul class="mt-2 ml-4 space-y-2">
+                        <!-- List items as described in the provided HTML -->
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Daily activity</a>
+                            <p class="text-gray-500 text-sm">Sales, refunds, adjustments, and disputes</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Daily balance</a>
+                            <p class="text-gray-500 text-sm">Account balance and activity summary</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Monthly summary and balance</a>
+                            <p class="text-gray-500 text-sm">Sales, refunds, gross, and net activity</p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h4 class="text-lg font-medium">PAYMENTS, PAYOUTS AND TRANSFERS</h4>
+                    <ul class="mt-2 ml-4 space-y-2">
+                        <!-- List items as described in the provided HTML -->
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Gross charge volume by month</a>
+                            <p class="text-gray-500 text-sm">Charge volume by month using a local time zone</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Payment card breakdown</a>
+                            <p class="text-gray-500 text-sm">Charges and amounts for each card type by currency</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Payments info breakdown</a>
+                            <p class="text-gray-500 text-sm">Summary of address info submitted with charges</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Payout reconciliation</a>
+                            <p class="text-gray-500 text-sm">Transactions related to automatic payouts</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Invoice revenue</a>
+                            <p class="text-gray-500 text-sm">Total invoice revenue, including subscriptions and one-time payments</p>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <h4 class="text-lg font-medium">CHECKOUT</h4>
+                    <ul class="mt-2 ml-4 space-y-2">
+                        <!-- List items as described in the provided HTML -->
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Checkout conversion by week</a>
+                            <p class="text-gray-500 text-sm">How many of my customers that open Checkout actually complete payment?</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Order fulfillment</a>
+                            <p class="text-gray-500 text-sm">What did my customers order so I can ship them their products?</p>
+                        </li>
+                        <li>
+                            <a href="#" class="text-blue-600 hover:underline">Inventory planning</a>
+                            <p class="text-gray-500 text-sm">How many of my top products am I selling each month (&gt;100)?</p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+        <div class="mt-auto pt-6 border-t space-x-2 flex text-gray-500 text-sm">
+            <a href="#" class="hover:text-gray-700">Help</a>
+            <a href="#" class="hover:text-gray-700">Schema docs</a>
+            <a href="#" class="hover:text-gray-700">Feedback</a>
+        </div>
+    </aside>
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-y-auto bg-white">
+        <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center space-x-2">
+                <input type="text" id="reportTitle" class="text-xl font-bold flex items-center space-x-2 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" value="Untitled report">
+            </div>
+            <div class="flex space-x-2">
+                <button class="bg-white text-gray-600 py-2 px-4 border border-gray-300 rounded focus:outline-none">Schedule</button>
+                <button class="bg-white text-gray-600 py-2 px-4 border border-gray-300 rounded focus:outline-none">Format</button>
+                <button class="bg-white text-gray-600 py-2 px-4 border border-gray-300 rounded focus:outline-none">Save</button>
+                <button class="bg-blue-500 text-white py-2 px-4 border border-blue-500 rounded flex items-center focus:outline-none">
+                    Run
+                    <span class="ml-2">⌘ + ↵</span>
+                </button>
+            </div>
+        </div>
+        <div class="relative mb-6">
+            <div class="flex items-center bg-gray-100 border border-gray-300 rounded-md">
+                <button id="generateButton" class="bg-blue-500 text-white py-2 px-4 rounded-l focus:outline-none flex items-center" aria-haspopup="true" aria-expanded="false">
+                    + Generate
+                    <svg class="ml-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <input type="text" placeholder="Ask Sigma Assistant a question about your Stripe data" class="flex-1 p-2 bg-transparent border-0 focus:ring-0 focus:outline-none">
+            </div>
+            <div id="generate-dropdown-content" class="dropdown-content absolute left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg hidden">
+                <a href="#" class="block py-2 px-4 text-black hover:bg-gray-200 flex items-center">
+                    <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                        <path d="M6.85 1a.85.85 0 1 0-1.7 0v4.15H1a.85.85 0 0 0 0 1.7h4.15V11a.85.85 0 1 0 1.7 0V6.85H11a.85.85 0 1 0 0-1.7H6.85V1Z"></path>
+                    </svg>
+                    <div>
+                        <span class="block font-semibold">Generate</span>
+                        <span class="block text-sm text-gray-500">Create a new report</span>
+                    </div>
+                </a>
+                <a href="#" class="block py-2 px-4 text-black hover:bg-gray-200 flex items-center">
+                    <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M.975 7.875a1 1 0 0 1 .29-.64L7.44 1.06a1.5 1.5 0 0 1 2.122 0l1.378 1.378a1.5 1.5 0 0 1 0 2.122l-6.173 6.173a1 1 0 0 1-.64.291l-3.09.206a.25.25 0 0 1-.267-.266l.206-3.09Zm1.386 1.764.098-1.477L6.53 4.091 7.91 5.47 3.838 9.54l-1.477.1ZM8.97 4.41l.909-.909L8.5 2.121l-.909.91L8.97 4.408Z"></path>
+                    </svg>
+                    <div>
+                        <span class="block font-semibold">Edit</span>
+                        <span class="block text-sm text-gray-500">Refine the existing report</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="bg-gray-50 border border-gray-300 rounded p-4 h-96 text-gray-500 font-mono">
+            <textarea placeholder="Type SQL here" class="w-full h-full p-2 bg-transparent border-0 focus:ring-0 focus:outline-none resize-none"></textarea>
+        </div>
+        <footer class="mt-4 text-gray-500 text-xs text-center">
+            Sigma Assistant is powered by AI and might contain errors. <a href="#" class="text-blue-600 hover:underline">Learn more.</a>
+        </footer>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const generateButton = document.getElementById('generateButton');
+            const generateDropdownContent = document.getElementById('generate-dropdown-content');
+
+            generateButton.addEventListener('click', function (e) {
+                e.stopPropagation();
+                const isExpanded = generateButton.getAttribute('aria-expanded') === 'true';
+                generateButton.setAttribute('aria-expanded', !isExpanded);
+                generateDropdownContent.classList.toggle('active');
+                generateDropdownContent.classList.toggle('hidden', isExpanded);
+            });
+
+            window.addEventListener('click', function (event) {
+                if (!generateButton.contains(event.target)) {
+                    generateButton.setAttribute('aria-expanded', 'false');
+                    generateDropdownContent.classList.remove('active');
+                    generateDropdownContent.classList.add('hidden');
+                }
+            });
+
+            window.addEventListener('keydown', function (event) {
+                if (event.key === "Escape") {
+                    generateButton.setAttribute('aria-expanded', 'false');
+                    generateDropdownContent.classList.remove('active');
+                    generateDropdownContent.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
