@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en" class="h-full bg-white">
 
@@ -420,6 +423,209 @@
 
             // Initialize Feather icons
             feather.replace();
+        });
+    </script>
+</body>
+
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sigma - Custom Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            z-index: 1;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            top: 100%; /* Ensure dropdown goes below the button */
+        }
+
+        .dropdown-content a {
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .dropdown-content a span {
+            flex-shrink: 0;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .focus\:ring-blue-500:focus {
+            ring-color: #3b82f6 !important;
+        }
+
+        .focused-border {
+            border-color: #3b82f6 !important;
+        }
+
+        .loader {
+            display: none;
+        }
+
+        .loader-visible {
+            display: block !important;
+        }
+    </style>
+    <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+</head>
+
+<body class="flex flex-col md:flex-row h-screen bg-gray-100">
+    <div class="relative mb-4 w-full max-w-4xl mx-auto mt-20 flex items-center space-x-4">
+        <div class="flex items-center bg-white border border-gray-300 rounded-md w-full relative">
+            <!-- Button -->
+            <button id="actionButton" onclick="toggleDropdown()" class="bg-gray-200 text-black py-2 px-4 rounded-l flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 mr-2">
+                    <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                </svg>
+                Generate
+                <svg class="ml-2 h-4 w-4 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </button>
+            <!-- Text Input -->
+            <input type="text" placeholder='Ask Sigma Assistant to change your report (ex: "segment")' class="flex-1 p-2 bg-transparent border-0 focus:ring-0 focus:outline-none focus:ring-blue-500">
+            <!-- Dropdown Content -->
+            <div id="dropdown-content" class="dropdown-content absolute left-0 w-full max-w-xs bg-white border border-gray-300 rounded shadow-lg">
+            </div>
+        </div>
+        <!-- Summarize Button -->
+        <button id="summarizeButton" class="flex items-center px-4 py-2 text-gray-700 border border-gray-300 rounded-md hover:bg-gray-200 focus:outline-none relative">
+            <svg id="summarizeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-5 w-5 mr-2">
+                <path fill-rule="evenodd" d="M5 4a.75.75 0 0 1 .738.616l.252 1.388A1.25 1.25 0 0 0 6.996 7.01l1.388.252a.75.75 0 0 1 0 1.476l-1.388.252A1.25 1.25 0 0 0 5.99 9.996l-.252 1.388a.75.75 0 0 1-1.476 0L4.01 9.996A1.25 1.25 0 0 0 3.004 8.99l-1.388-.252a.75.75 0 0 1 0-1.476l1.388-.252A1.25 1.25 0 0 0 4.01 6.004l.252-1.388A.75.75 0 0 1 5 4ZM12 1a.75.75 0 0 1 .721.544l.195.682c.118.415.443.74.858.858l.682.195a.75.75 0 0 1 0 1.442l-.682.195a1.25 1.25 0 0 0-.858.858l-.195.682a.75.75 0 0 1-1.442 0l-.195-.682a1.25 1.25 0 0 0-.858-.858l-.682-.195a.75.75 0 0 1 0-1.442l.682-.195a1.25 1.25 0 0 0 .858-.858l.195-.682A.75.75 0 0 1 12 1ZM10 11a.75.75 0 0 1 .728.568.968.968 0 0 0 .704.704.75.75 0 0 1 0 1.456.968.968 0 0 0-.704.704.75.75 0 0 1-1.456 0 .968.968 0 0 0-.704-.704.75.75 0 0 1 0-1.456.968.968 0 0 0 .704-.704A.75.75 0 0 1 10 11Z" clip-rule="evenodd" />
+            </svg>
+            <span id="summarizeText">Summarize</span>
+            <div id="loader" class="loader absolute inset-0 flex items-center justify-center">
+                <dotlottie-player src="https://lottie.host/886a87d6-372d-4a17-be96-e765a10f336c/FjU3G7PjC1.json" background="transparent" speed="1" style="width: 24px; height: 24px;" loop autoplay></dotlottie-player>
+            </div>
+        </button>
+    </div>
+
+    <script>
+        const svgIcon = `
+            <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-2">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M1.926 7.243a.8.8 0 0 1 1.131-.017L6 10.085l2.943-2.859a.8.8 0 0 1 1.114 1.148l-3.5 3.4a.798.798 0 0 1-1.114 0l-3.5-3.4a.8.8 0 0 1-.017-1.131ZM5.443.226a.798.798 0 0 1 1.114 0l3.5 3.4a.8.8 0 0 1-1.114 1.148L6 1.915 3.057 4.774a.8.8 0 1 1-1.114-1.148l3.5-3.4Z"></path>
+            </svg>
+        `;
+
+        function toggleDropdown() {
+            const dropdownContent = document.getElementById('dropdown-content');
+            dropdownContent.style.display = dropdownContent.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function changeButtonText(action) {
+            const actionButton = document.getElementById('actionButton');
+            if (action === 'Generate') {
+                actionButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5 mr-2">
+                        <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                    </svg>
+                    Generate
+                    <svg class="ml-2 h-4 w-4 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                `;
+            } else if (action === 'Edit') {
+                actionButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-5 w-5 mr-2">
+                        <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+                    </svg>
+                    Edit
+                    <svg class="ml-2 h-4 w-4 inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                `;
+            }
+            toggleDropdown(); // Close the dropdown after selection
+        }
+
+        function createDropdown() {
+            const dropdownContent = document.getElementById('dropdown-content');
+            dropdownContent.innerHTML = `
+                <a href="#" onclick="changeButtonText('Generate')" class="block text-black hover:bg-gray-200 py-1 px-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" class="mr-2">
+                            <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                        </svg>
+                        <div>
+                            <span class="block font-semibold">Generate</span>
+                            <span class="block text-sm text-gray-500">Create a new report</span>
+                        </div>
+                    </div>
+                    ${svgIcon}
+                </a>
+                <a href="#" onclick="changeButtonText('Edit')" class="block text-black hover:bg-gray-200 py-1 px-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" class="mr-2">
+                            <path fill-rule="evenodd" d="M11.013 2.513a1.75 1.75 0 0 1 2.475 2.474L6.226 12.25a2.751 2.751 0 0 1-.892.596l-2.047.848a.75.75 0 0 1-.98-.98l.848-2.047a2.75 2.75 0 0 1 .596-.892l7.262-7.261Z" clip-rule="evenodd" />
+                        </svg>
+                        <div>
+                            <span class="block font-semibold">Edit</span>
+                            <span class="block text-sm text-gray-500">Refine the existing report</span>
+                        </div>
+                    </div>
+                    ${svgIcon}
+                </a>
+            `;
+        }
+
+        // Initialize the dropdown content when the page loads
+        document.addEventListener('DOMContentLoaded', createDropdown);
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+            if (!event.target.closest('#actionButton')) {
+                const dropdowns = document.getElementsByClassName("dropdown-content");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    const openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        // Add focus event to change Summarize button border color
+        const textInput = document.querySelector('input[type="text"]');
+        const summarizeButton = document.getElementById('summarizeButton');
+        const summarizeIcon = document.getElementById('summarizeIcon');
+        const summarizeText = document.getElementById('summarizeText');
+        const loader = document.getElementById('loader');
+
+        textInput.addEventListener('focus', () => {
+            summarizeButton.classList.add('focused-border');
+        });
+
+        textInput.addEventListener('blur', () => {
+            summarizeButton.classList.remove('focused-border');
+        });
+
+        // Show loader when Summarize button is clicked
+        summarizeButton.addEventListener('click', () => {
+            summarizeIcon.style.display = 'none';
+            summarizeText.style.display = 'none';
+            loader.classList.add('loader-visible');
+
+            setTimeout(() => {
+                loader.classList.remove('loader-visible');
+                summarizeIcon.style.display = 'block';
+                summarizeText.style.display = 'block';
+            }, 5000); // Hide loader after 5 seconds
         });
     </script>
 </body>
