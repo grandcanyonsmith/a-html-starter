@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <!-- Include the @tailwindcss/forms plugin -->
     <link href="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.4.0/dist/forms.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/@heroicons/react/outline/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
     <style>
         .dropdown-content {
             display: none;
@@ -45,7 +45,7 @@
                     <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
                         <button type="button" class="-m-2.5 p-2.5" id="close-mobile-menu">
                             <span class="sr-only">Close sidebar</span>
-                            <i data-icon="x-circle" class="h-6 w-6 text-white"></i>
+                            <i class="h-6 w-6 text-white" data-feather="x"></i>
                         </button>
                     </div>
 
@@ -60,25 +60,25 @@
                                     <ul role="list" class="-mx-2 space-y-1">
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6 text-indigo-600">
-                                                <i data-icon="home" class="h-6 w-6 shrink-0 text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-indigo-600" data-feather="home"></i>
                                                 Dashboard
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="users" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="users"></i>
                                                 Team
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="briefcase" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="briefcase"></i>
                                                 Projects
                                             </a>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="calendar" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="calendar"></i>
                                                 Calendar
                                             </a>
                                         </li>
@@ -109,7 +109,7 @@
                                 </li>
                                 <li class="mt-auto">
                                     <a href="#" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                        <i data-icon="cog" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                        <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="settings"></i>
                                         Settings
                                     </a>
                                 </li>
@@ -136,21 +136,21 @@
                                     <ul class="mt-2 ml-4 space-y-2">
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="document-report" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="file-text"></i>
                                                 Daily activity
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Sales, refunds, adjustments, and disputes</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="cash" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="credit-card"></i>
                                                 Daily balance
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Account balance and activity summary</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="chart-square-bar" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="bar-chart-2"></i>
                                                 Monthly summary and balance
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Sales, refunds, gross, and net activity</p>
@@ -162,35 +162,35 @@
                                     <ul class="mt-2 ml-4 space-y-2">
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="credit-card" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="shield"></i>
                                                 Gross charge volume by month
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Charge volume by month using a local time zone</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="view-list" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="credit-card"></i>
                                                 Payment card breakdown
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Charges and amounts for each card type by currency</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="receipt-tax" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="info"></i>
                                                 Payments info breakdown
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Summary of address info submitted with charges</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="annotation" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="dollar-sign"></i>
                                                 Payout reconciliation
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Transactions related to automatic payouts</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="calculator" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="file-text"></i>
                                                 Invoice revenue
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">Total invoice revenue, including subscriptions and one-time payments</p>
@@ -202,21 +202,21 @@
                                     <ul class="mt-2 ml-4 space-y-2">
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="shopping-cart" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="shopping-cart"></i>
                                                 Checkout conversion by week
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">How many of my customers that open Checkout actually complete payment?</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="truck" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="truck"></i>
                                                 Order fulfillment
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">What did my customers order so I can ship them their products?</p>
                                         </li>
                                         <li>
                                             <a href="#" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                                <i data-icon="cube" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="layers"></i>
                                                 Inventory planning
                                             </a>
                                             <p class="text-gray-500 text-sm ml-10">How many of my top products am I selling each month (&gt;100)?</p>
@@ -250,7 +250,7 @@
                         </li>
                         <li class="mt-auto">
                             <a href="#" class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                                <i data-icon="cog" class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"></i>
+                                <i class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600" data-feather="settings"></i>
                                 Settings
                             </a>
                         </li>
@@ -264,19 +264,19 @@
                 <div class="flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-0 lg:shadow-none">
                     <button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden" id="open-mobile-menu">
                         <span class="sr-only">Open sidebar</span>
-                        <i data-icon="menu" class="h-6 w-6"></i>
+                        <i class="h-6 w-6" data-feather="menu"></i>
                     </button>
 
                     <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
                         <form class="relative flex flex-1" action="#" method="GET">
                             <label for="search-field" class="sr-only">Search</label>
-                            <i data-icon="search" class="absolute inset-y-0 left-0 h-5 w-5 text-gray-400 m-2.5 pointer-events-none"></i>
+                            <i class="absolute inset-y-0 left-0 h-5 w-5 text-gray-400 m-2.5 pointer-events-none" data-feather="search"></i>
                             <input id="search-field" class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm" placeholder="Search..." type="search" name="search">
                         </form>
                         <div class="flex items-center gap-x-4 lg:gap-x-6">
                             <button type="button" class="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500">
                                 <span class="sr-only">View notifications</span>
-                                <i data-icon="bell" class="h-6 w-6"></i>
+                                <i class="h-6 w-6" data-feather="bell"></i>
                             </button>
 
                             <div class="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200" aria-hidden="true"></div>
@@ -287,7 +287,7 @@
                                     <img class="h-8 w-8 rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
                                     <span class="hidden lg:flex lg:items-center">
                                         <span class="ml-4 text-sm font-semibold leading-6 text-gray-900" aria-hidden="true">Tom Cook</span>
-                                        <i data-icon="chevron-down" class="ml-2 h-5 w-5 text-gray-400"></i>
+                                        <i class="ml-2 h-5 w-5 text-gray-400" data-feather="chevron-down"></i>
                                     </span>
                                 </button>
                                 <div class="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none hidden" id="user-dropdown-menu" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
@@ -307,33 +307,30 @@
                             <input type="text" id="reportTitle" class="text-xl font-bold flex items-center space-x-2 text-gray-700 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" value="Untitled report">
                         </div>
                         <div class="flex space-x-2">
-                            <button class="bg-white text-gray-600 py-2 px-4 border border-gray-300 rounded focus:outline-none">Schedule</button>
-                            <button class="bg-white text-gray-600 py-2 px-4 border border-gray-300 rounded focus:outline-none">Format</button>
-                            <button class="bg-white text-gray-600 py-2 px-4 border border-gray-300 rounded focus:outline-none">Save</button>
-                            <button class="bg-blue-500 text-white py-2 px-4 border border-blue-500 rounded flex items-center focus:outline-none">
-                                Run
-                                <span class="ml-2">⌘ + ↵</span>
-                            </button>
+                            <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Schedule</button>
+                            <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Format</button>
+                            <button type="button" class="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Save</button>
+                            <button type="button" class="rounded-md bg-blue-500 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-400">Run <span class="ml-2">⌘ + ↵</span></button>
                         </div>
                     </div>
                     <div class="relative mb-6">
                         <div class="flex items-center bg-gray-100 border border-gray-300 rounded-md">
                             <button id="generateButton" class="bg-blue-500 text-white py-2 px-4 rounded-l focus:outline-none flex items-center" aria-haspopup="true" aria-expanded="false">
                                 + Generate
-                                <i data-icon="chevron-down" class="ml-2 h-4 w-4"></i>
+                                <i class="ml-2 h-4 w-4" data-feather="chevron-down"></i>
                             </button>
                             <input type="text" placeholder="Ask Sigma Assistant a question about your Stripe data" class="flex-1 p-2 bg-transparent border-0 focus:ring-0 focus:outline-none">
                         </div>
                         <div id="generate-dropdown-content" class="dropdown-content absolute left-0 mt-2 w-48 bg-white border border-gray-300 rounded shadow-lg hidden">
                             <a href="#" class="block py-2 px-4 text-black hover:bg-gray-200 flex items-center">
-                                <i data-icon="plus-sm" class="mr-2 h-4 w-4"></i>
+                                <i class="mr-2" data-feather="plus"></i>
                                 <div>
                                     <span class="block font-semibold">Generate</span>
                                     <span class="block text-sm text-gray-500">Create a new report</span>
                                 </div>
                             </a>
                             <a href="#" class="block py-2 px-4 text-black hover:bg-gray-200 flex items-center">
-                                <i data-icon="pencil-alt" class="mr-2 h-4 w-4"></i>
+                                <i class="mr-2" data-feather="edit"></i>
                                 <div>
                                     <span class="block font-semibold">Edit</span>
                                     <span class="block text-sm text-gray-500">Refine the existing report</span>
@@ -421,6 +418,9 @@
                     userDropdownMenu.classList.add('hidden');
                 }
             });
+
+            // Initialize Feather icons
+            feather.replace();
         });
     </script>
 </body>
