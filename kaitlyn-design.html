@@ -3,60 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Copywriting Framework</title>
+    <title>Bride's Expenses</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        th {
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 1;
+        }
+    </style>
 </head>
 <body class="bg-gray-100 p-8">
     <div class="container mx-auto">
-        <h1 class="text-3xl font-bold mb-6">Email Copywriting Framework</h1>
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4">Email Components</h2>
-            <ul class="list-disc list-inside">
-                <li>Subject Line</li>
-                <li>Story</li>
-                <li>Pain Point</li>
-                <li>Solutions</li>
-                <li>Benefits</li>
-                <li>Call to Action</li>
-                <!-- Add more components as needed -->
-            </ul>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-lg mt-6">
-            <h2 class="text-2xl font-semibold mb-4">Email Types</h2>
-            <ul class="list-disc list-inside">
-                <li>Storytelling Email</li>
-                <li>Feature Comparing Email</li>
-                <li>Case Study Email</li>
-                <li>Objector Email</li>
-                <li>Demonstrator Email</li>
-                <li>Recommender Email</li>
-                <li>Educator Email</li>
-                <li>Sampler Email</li>
-                <li>Polarizer Email</li>
-                <!-- Add more email types as needed -->
-            </ul>
-        </div>
-        <div class="bg-white p-6 rounded-lg shadow-lg mt-6">
-            <h2 class="text-2xl font-semibold mb-4">Information Needed for Writing Emails</h2>
-            <ul class="list-disc list-inside">
-                <li>Course Title</li>
-                <li>Course Description</li>
-                <li>Target Audience</li>
-                <li>Key Benefits</li>
-                <li>Unique Selling Points</li>
-                <li>Instructor Bio</li>
-                <li>Course Curriculum</li>
-                <li>Testimonials</li>
-                <li>Pricing and Offers</li>
-                <li>Enrollment Process</li>
-                <li>Contact Information</li>
-                <!-- Add more information as needed -->
-            </ul>
+        <h1 class="text-2xl font-bold mb-4">Bride's Expenses</h1>
+        <div class="overflow-x-auto max-h-96">
+            <table class="min-w-full bg-white border border-gray-200">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b">Expense</th>
+                        <th class="py-2 px-4 border-b">National Avg. Cost</th>
+                        <th class="py-2 px-4 border-b">Idaho Avg. Cost</th>
+                        <th class="py-2 px-4 border-b">Personal Budget</th>
+                        <th class="py-2 px-4 border-b">Description</th>
+                    </tr>
+                </thead>
+                <tbody id="expenses-body">
+                    <tr>
+                        <td class="py-2 px-4 border-b">Photography and Videography</td>
+                        <td class="py-2 px-4 border-b" data-national="$3000-$5000">$3,000 - $5,000</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$2500-$4000">$2,500 - $4,000</td>
+                        <td class="py-2 px-4 border-b" data-personal="$2500-$4000">$2,500 - $4,000</td>
+                        <td class="py-2 px-4 border-b">Professional photography and videography services for the entire event</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Bride's Dress and Accessories</td>
+                        <td class="py-2 px-4 border-b" data-national="$1500-$3000">$1,500 - $3,000</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$1200-$2500">$1,200 - $2,500</td>
+                        <td class="py-2 px-4 border-b" data-personal="$2300-$3000">$2,300 - $3,000</td>
+                        <td class="py-2 px-4 border-b">Includes the cost of the wedding dress, veil, shoes, and jewelry</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Flowers</td>
+                        <td class="py-2 px-4 border-b" data-national="$1500-$2500">$1,500 - $2,500</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$1200-$2000">$1,200 - $2,000</td>
+                        <td class="py-2 px-4 border-b" data-personal="$1000-$2000">$1,000 - $2,000</td>
+                        <td class="py-2 px-4 border-b">Bouquets, boutonnieres, and decorative floral arrangements</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Hair and Makeup</td>
+                        <td class="py-2 px-4 border-b" data-national="$300-$600">$300 - $600</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$250-$500">$250 - $500</td>
+                        <td class="py-2 px-4 border-b" data-personal="$0-$0">$0 - $0</td>
+                        <td class="py-2 px-4 border-b">Professional hair and makeup services for the bride</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Bridal Party Gifts</td>
+                        <td class="py-2 px-4 border-b" data-national="$100-$300">$100 - $300 per person</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$75-$200">$75 - $200 per person</td>
+                        <td class="py-2 px-4 border-b" data-personal="$150-$300">$150 - $300</td>
+                        <td class="py-2 px-4 border-b">Gifts for bridesmaids</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Venue</td>
+                        <td class="py-2 px-4 border-b" data-national="$5000-$15000">$5,000 - $15,000</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$4000-$10000">$4,000 - $10,000</td>
+                        <td class="py-2 px-4 border-b" data-personal="$8000-$10000">$8,000 - $10,000</td>
+                        <td class="py-2 px-4 border-b">Bride's share of the cost for a paid venue in Hawaii</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Cake</td>
+                        <td class="py-2 px-4 border-b" data-national="$500-$1000">$500 - $1,000</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$400-$800">$400 - $800</td>
+                        <td class="py-2 px-4 border-b" data-personal="$150-$300">$150 - $300</td>
+                        <td class="py-2 px-4 border-b">Bride's share of the cost for a wedding cake</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Invitations and Stationery</td>
+                        <td class="py-2 px-4 border-b" data-national="$400-$800">$400 - $800</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$300-$600">$300 - $600</td>
+                        <td class="py-2 px-4 border-b" data-personal="$100-$250">$100 - $250</td>
+                        <td class="py-2 px-4 border-b">Bride's share of the cost for invitations, programs, and other stationery</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b">Wedding Favors</td>
+                        <td class="py-2 px-4 border-b" data-national="$200-$500">$200 - $500</td>
+                        <td class="py-2 px-4 border-b" data-idaho="$150-$400">$150 - $400</td>
+                        <td class="py-2 px-4 border-b" data-personal="$75-$225">$75 - $225</td>
+                        <td class="py-2 px-4 border-b">Bride's share of the cost for favors for guests</td>
+                    </tr>
+                    <tr>
+                        <td class="py-2 px-4 border-b font-bold">Total Estimated Cost</td>
+                        <td class="py-2 px-4 border-b font-bold">$12,500 - $28,700+</td>
+                        <td class="py-2 px-4 border-b font-bold">$10,075 - $21,000+</td>
+                        <td class="py-2 px-4 border-b font-bold">$14,275 - $20,075</td>
+                        <td class="py-2 px-4 border-b font-bold">Sum of the bride's expenses</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Email Copywriting Framework Page Loaded');
+            console.log('Bride\'s Expenses Page Loaded');
+            const rows = Array.from(document.querySelectorAll('#expenses-body tr'));
+
+            // Sort rows by the most expensive price for the personal budget
+            rows.sort((a, b) => {
+                const aPersonal = a.querySelector('[data-personal]');
+                const bPersonal = b.querySelector('[data-personal]');
+                if (!aPersonal || !bPersonal) return 0; // Skip rows without data-personal
+                const aPersonalRange = aPersonal.dataset.personal.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
+                const bPersonalRange = bPersonal.dataset.personal.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
+                return bPersonalRange[1] - aPersonalRange[1]; // Sort by the highest value in the range
+            });
+
+            // Append sorted rows back to the table body
+            const tbody = document.getElementById('expenses-body');
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+
+            // Highlight personal budget cells based on comparison
+            rows.forEach(row => {
+                const nationalAvg = row.querySelector('[data-national]');
+                const idahoAvg = row.querySelector('[data-idaho]');
+                const personalBudget = row.querySelector('[data-personal]');
+                if (nationalAvg && idahoAvg && personalBudget) {
+                    const nationalRange = nationalAvg.dataset.national.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
+                    const idahoRange = idahoAvg.dataset.idaho.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
+                    const personalRange = personalBudget.dataset.personal.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
+                    const avgNational = (nationalRange[0] + nationalRange[1]) / 2;
+                    const avgIdaho = (idahoRange[0] + idahoRange[1]) / 2;
+                    const avgPersonal = (personalRange[0] + personalRange[1]) / 2;
+                    if (row.cells[0].textContent.trim() === "Bridal Party Gifts") {
+                        const totalPersonal = personalRange[0]; // Since the personal budget is total, not per person
+                        if (totalPersonal < avgNational && totalPersonal < avgIdaho) {
+                            personalBudget.classList.add('text-green-500');
+                        } else if (totalPersonal > avgNational && totalPersonal > avgIdaho) {
+                            personalBudget.classList.add('text-red-500');
+                        } else {
+                            personalBudget.classList.add('text-yellow-500');
+                        }
+                    } else {
+                        if (avgPersonal > avgNational && avgPersonal > avgIdaho) {
+                            personalBudget.classList.add('text-red-500');
+                        } else if (avgPersonal < avgNational && avgPersonal < avgIdaho) {
+                            personalBudget.classList.add('text-green-500');
+                        } else {
+                            personalBudget.classList.add('text-yellow-500');
+                        }
+                    }
+                }
+            });
         });
     </script>
 </body>
