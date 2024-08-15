@@ -46,14 +46,6 @@
             </ol>
         </section>
     </main>
-    <!-- Email Input Section -->
-    <div class="container mx-auto mt-8" id="email-section">
-        <div class="bg-white p-6 rounded shadow-md">
-            <h3 class="text-xl font-bold mb-4">Enter Your Email</h3>
-            <input type="email" id="user-email-input" class="border p-2 rounded w-full" placeholder="Enter your email">
-            <button onclick="setEmail()" class="bg-blue-600 text-white px-4 py-2 rounded mt-2">Submit</button>
-        </div>
-    </div>
     <!-- User Dashboard -->
     <div class="container mx-auto mt-8 hidden" id="dashboard">
         <div class="bg-white p-6 rounded shadow-md">
@@ -147,6 +139,18 @@
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            userEmail = urlParams.get('email');
+            if (userEmail) {
+                document.getElementById('user-email').textContent = userEmail;
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('logout-button').classList.remove('hidden');
+                document.getElementById('introduction-section').classList.add('hidden');
+                getAllHabits();
+            } else {
+                alert('Email not provided in URL');
+            }
+
             document.querySelectorAll('.tab-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -171,22 +175,9 @@
             renderProgress();
         });
 
-        function setEmail() {
-            userEmail = document.getElementById('user-email-input').value.trim();
-            if (userEmail) {
-                document.getElementById('user-email').textContent = userEmail;
-                document.getElementById('email-section').classList.add('hidden');
-                document.getElementById('dashboard').classList.remove('hidden');
-                document.getElementById('logout-button').classList.remove('hidden');
-                document.getElementById('introduction-section').classList.add('hidden');
-                getAllHabits();
-            }
-        }
-
         function logout() {
             userEmail = '';
             document.getElementById('user-email').textContent = '';
-            document.getElementById('email-section').classList.remove('hidden');
             document.getElementById('dashboard').classList.add('hidden');
             document.getElementById('logout-button').classList.add('hidden');
             document.getElementById('introduction-section').classList.remove('hidden');
