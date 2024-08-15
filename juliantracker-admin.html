@@ -57,6 +57,12 @@
             </section>
             <section id="all-progress" class="tab-content hidden">
                 <h3 class="text-xl font-bold mb-4">All Progress</h3>
+                <div class="flex items-center mb-4">
+                    <button onclick="changeDate(-1)" class="bg-gray-200 p-2 rounded"><</button>
+                    <input type="date" id="progress-date" class="border p-2 rounded w-full mx-2" value="">
+                    <button onclick="changeDate(1)" class="bg-gray-200 p-2 rounded">></button>
+                </div>
+                <div id="progress-summary" class="mb-4 text-sm font-semibold"></div>
                 <div id="progress-list" class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
                     <!-- Progress will be dynamically added here -->
                 </div>
@@ -68,6 +74,7 @@
         let userEmail = '';
         let users = [];
         let progress = [];
+        let selectedDate = '';
 
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
@@ -89,6 +96,12 @@
                     switchTab(e.target.dataset.tab);
                 });
             });
+
+            // Load today's date automatically
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('progress-date').value = today;
+            selectedDate = today;
+            renderProgress();
         });
 
         function logout() {
@@ -142,16 +155,25 @@
         function renderProgress() {
             const progressList = document.getElementById('progress-list');
             progressList.innerHTML = '';
-            progress.forEach(item => {
+            const progressByDate = progress.filter(item => item.date === selectedDate);
+            const userProgress = users.map(email => {
+                const completedTasks = progressByDate.filter(item => item.email === email).length;
+                return { email, completedTasks };
+            });
+
+            userProgress.forEach(item => {
                 const progressItem = document.createElement('div');
                 progressItem.className = 'relative flex items-start py-4';
                 progressItem.innerHTML = `
                     <div class="min-w-0 flex-1 text-sm leading-6">
-                        <label class="select-none font-medium text-gray-900">${item.email} - ${item.habit} - ${item.date}</label>
+                        <label class="select-none font-medium text-gray-900">${item.email} - ${item.completedTasks} of 25 tasks completed</label>
                     </div>
                 `;
                 progressList.appendChild(progressItem);
             });
+
+            const totalCompletedTasks = userProgress.reduce((sum, item) => sum + item.completedTasks, 0);
+            document.getElementById('progress-summary').textContent = `Total completed tasks: ${totalCompletedTasks} of ${users.length * 25}`;
         }
 
         function switchTab(tabId) {
@@ -168,6 +190,19 @@
             activeLink.classList.add('active-tab');
             activeLink.classList.remove('text-gray-600');
             activeLink.classList.add('text-blue-600');
+
+            if (tabId === 'all-progress') {
+                renderProgress();
+            }
+        }
+
+        function changeDate(offset) {
+            const progressDateInput = document.getElementById('progress-date');
+            const currentDate = new Date(progressDateInput.value);
+            currentDate.setDate(currentDate.getDate() + offset);
+            progressDateInput.value = currentDate.toISOString().split('T')[0];
+            selectedDate = progressDateInput.value;
+            renderProgress();
         }
     </script>
 </body>
