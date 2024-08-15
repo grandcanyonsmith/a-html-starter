@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julian Brass Habit Tracker - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .completed { text-decoration: line-through; color: gray; }
+        .active-tab { text-decoration: underline; font-weight: bold; }
+        .tab-link { cursor: pointer; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-gray-800">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 justify-between items-center">
+                <div class="flex-1 flex justify-center items-center">
+                    <img src="https://images.leadconnectorhq.com/image/f_webp/q_80/r_1200/u_https://assets.cdn.filesafe.space/ecoK7rpTc7G3TJhXNL2R/media/e98659c2-6c40-40d0-8008-718bc5babd67.png" alt="Logo" class="h-10">
+                    <h1 class="text-white text-xl font-bold ml-4">Julian Brass Habit Tracker - Admin</h1>
+                </div>
+                <div class="flex items-center">
+                    <button id="logout-button" onclick="logout()" class="hidden bg-red-600 text-white px-3 py-2 rounded">Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="container mx-auto mt-8">
+        <section id="introduction-section" class="bg-white p-6 rounded shadow-md">
+            <h2 class="text-2xl font-bold mb-4">Introduction</h2>
+            <p>Welcome to the admin dashboard. Here you can view all users and their progress.</p>
+        </section>
+    </main>
+    <!-- Admin Dashboard -->
+    <div class="container mx-auto mt-8 hidden" id="dashboard">
+        <div class="bg-white p-6 rounded shadow-md">
+            <div class="flex items-center mb-4">
+                <div>
+                    <h2 class="text-xl font-bold" id="user-email"></h2>
+                </div>
+            </div>
+            <nav class="mb-4">
+                <ul class="flex space-x-4">
+                    <li><a href="#" class="text-blue-600 tab-link active-tab" data-tab="all-users">ALL USERS</a></li>
+                    <li><a href="#" class="text-gray-600 tab-link" data-tab="all-progress">ALL PROGRESS</a></li>
+                </ul>
+            </nav>
+            <!-- Content Sections -->
+            <section id="all-users" class="tab-content">
+                <h3 class="text-xl font-bold mb-4">All Users</h3>
+                <div id="user-list" class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
+                    <!-- Users will be dynamically added here -->
+                </div>
+            </section>
+            <section id="all-progress" class="tab-content hidden">
+                <h3 class="text-xl font-bold mb-4">All Progress</h3>
+                <div id="progress-list" class="mt-4 divide-y divide-gray-200 border-b border-t border-gray-200">
+                    <!-- Progress will be dynamically added here -->
+                </div>
+            </section>
+        </div>
+    </div>
+    <script>
+        const lambdaUrl = 'https://amk72w7spjzi6ovsj7tmfexqy40zplsi.lambda-url.us-west-2.on.aws/';
+        let userEmail = '';
+        let users = [];
+        let progress = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            userEmail = urlParams.get('email');
+            if (userEmail) {
+                document.getElementById('user-email').textContent = userEmail;
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('logout-button').classList.remove('hidden');
+                document.getElementById('introduction-section').classList.add('hidden');
+                getAllUsers();
+                getAllProgress();
+            } else {
+                alert('Email not provided in URL');
+            }
+
+            document.querySelectorAll('.tab-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    switchTab(e.target.dataset.tab);
+                });
+            });
+        });
+
+        function logout() {
+            userEmail = '';
+            document.getElementById('user-email').textContent = '';
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('logout-button').classList.add('hidden');
+            document.getElementById('introduction-section').classList.remove('hidden');
+        }
+
+        async function getAllUsers() {
+            const response = await fetch(lambdaUrl, {
+                method: 'POST',
+                body: JSON.stringify({ request_type: 'get_all_habits', email: userEmail }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            console.log(data);
+            users = data.filter(item => item.habit_id === undefined);
+            renderUsers();
+        }
+
+        async function getAllProgress() {
+            const response = await fetch(lambdaUrl, {
+                method: 'POST',
+                body: JSON.stringify({ request_type: 'get_all_habits', email: userEmail }),
+                headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await response.json();
+            console.log(data);
+            progress = data.filter(item => item.habit_id !== undefined);
+            renderProgress();
+        }
+
+        function renderUsers() {
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const userItem = document.createElement('div');
+                userItem.className = 'relative flex items-start py-4';
+                userItem.innerHTML = `
+                    <div class="min-w-0 flex-1 text-sm leading-6">
+                        <label class="select-none font-medium text-gray-900">${user.email}</label>
+                    </div>
+                `;
+                userList.appendChild(userItem);
+            });
+        }
+
+        function renderProgress() {
+            const progressList = document.getElementById('progress-list');
+            progressList.innerHTML = '';
+            progress.forEach(item => {
+                const progressItem = document.createElement('div');
+                progressItem.className = 'relative flex items-start py-4';
+                progressItem.innerHTML = `
+                    <div class="min-w-0 flex-1 text-sm leading-6">
+                        <label class="select-none font-medium text-gray-900">${item.email} - ${item.habit} - ${item.date}</label>
+                    </div>
+                `;
+                progressList.appendChild(progressItem);
+            });
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.tab-link').forEach(link => {
+                link.classList.remove('active-tab');
+                link.classList.remove('text-blue-600');
+                link.classList.add('text-gray-600');
+            });
+            const activeLink = document.querySelector(`.tab-link[data-tab="${tabId}"]`);
+            activeLink.classList.add('active-tab');
+            activeLink.classList.remove('text-gray-600');
+            activeLink.classList.add('text-blue-600');
+        }
+    </script>
+</body>
+</html>
