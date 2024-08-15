@@ -46,7 +46,11 @@
             event.preventDefault();
             const email = document.getElementById('email').value.trim();
             if (email) {
-                window.location.href = `https://html-starter-coral.vercel.app/juliantracker.html?email=${email}`;
+                if (email === 'julian@julianbrass.com') {
+                    window.location.href = `https://html-starter-coral.vercel.app/juliantracker-admin.html?email=${email}`;
+                } else {
+                    window.location.href = `https://html-starter-coral.vercel.app/juliantracker.html?email=${email}`;
+                }
             }
         }
     </script>
