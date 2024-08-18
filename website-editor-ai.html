@@ -16,7 +16,8 @@
     .draggable {
       cursor: move;
     }
-.dragging {
+
+    .dragging {
       opacity: 0.5;
     }
 
@@ -56,14 +57,14 @@
       left: 0;
       right: 0;
       background: white;
-padding-left: 1em;
-padding-right: 1em;
-padding-bottom: 1em;
+      padding-left: 1em;
+      padding-right: 1em;
+      padding-bottom: 1em;
       z-index: 1000;
       display: flex;
+      flex-direction: column;
       width: 100%;
       align-items: center;
-      justify-content: space-between;
     }
 
     @media (min-width: 768px) {
@@ -71,6 +72,33 @@ padding-bottom: 1em;
         left: 0;
         width: 100%;
       }
+    }
+    
+    .suggestions-container {
+      display: flex;
+font-size: 5;
+      overflow-x: auto;
+      padding: 0.1rem;
+      margin-bottom: .1rem;
+      width: 100%;
+    }
+
+    .suggestion-card {
+      border: 2px solid transparent;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+      margin-right: 0.5rem;
+      flex: 0 0 auto;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .suggestion-card:hover {
+      border-color: #a0aec0;
+    }
+
+    .suggestion-card.active {
+      border-color: #3182ce;
     }
   </style>
 </head>
@@ -81,6 +109,9 @@ padding-bottom: 1em;
   </div>
 
   <div class="user-request-box" id="userRequestBox">
+    <div class="suggestions-container" id="suggestionsContainer">
+      <!-- Suggestion cards will be appended here -->
+    </div>
     <form action="#" class="relative w-full flex items-center">
       <textarea rows="4" name="description" id="description" class="block w-full resize-none border rounded py-2 pl-4 pr-32 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Write a description..."></textarea>
       <div class="isolate absolute right-4 top-2 inline-flex rounded-md shadow-sm">
@@ -116,6 +147,7 @@ padding-bottom: 1em;
       const submitRequestButton = document.querySelector('.user-request-box button[type="submit"]');
       const addSectionButton = document.getElementById('addSectionButton');
       const trashCan = document.getElementById('trashCan');
+      const suggestionsContainer = document.getElementById('suggestionsContainer');
       let lockedDiv = null;
 
       trashCan.addEventListener('click', (e) => {
@@ -225,10 +257,28 @@ padding-bottom: 1em;
             }
 
             const data = await response.json();
-            lockedDiv.innerHTML = data.updatedCode || data;
+            lockedDiv.innerHTML = data.html_code || data;
             lockedDiv.querySelectorAll('div').forEach(addHighlightableEvents);
             addNestedHighlightableEvents(lockedDiv);
             userRequestInput.value = '';
+
+            // Create suggestion cards
+            const suggestions = JSON.parse(data.suggestions);
+            suggestionsContainer.innerHTML = ''; // Clear previous suggestions
+            suggestions.forEach((suggestion, index) => {
+              const card = document.createElement('div');
+              card.className = 'suggestion-card';
+              card.innerHTML = `<strong>${suggestion.title}</strong><p>${suggestion.details}</p>`;
+              card.addEventListener('click', () => {
+                // Remove 'active' class from all cards
+                document.querySelectorAll('.suggestion-card').forEach(c => c.classList.remove('active'));
+                // Add 'active' class to the clicked card
+                card.classList.add('active');
+                // Insert suggestion details into the user request textarea
+                userRequestInput.value = suggestion.details;
+              });
+              suggestionsContainer.appendChild(card);
+            });
           } catch (error) {
             alert('Error: ' + error.message);
           } finally {
@@ -284,4 +334,5 @@ padding-bottom: 1em;
     });
   </script>
 </body>
+
 </html>
