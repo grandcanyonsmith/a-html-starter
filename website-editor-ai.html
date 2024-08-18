@@ -13,9 +13,6 @@
       width: 100%;
       padding-bottom: 50%; /* Adjusted aspect ratio */
     }
-.main-content {
-height:85%;
-}
     .aspect-ratio-square > * {
       position: absolute;
       top: 50%;
@@ -58,23 +55,21 @@ height:85%;
       margin-top: 10px;
     }
     .user-request-box {
-height: 15%;
       position: fixed;
       bottom: 0;
-      left: 16rem; /* Adjust to match the width of the sidebar */
+      left: 0;
       right: 0;
-padding-left: 2%;
-padding-right: 2%;
-      background: white;;
-
+      background: white;
+      padding: 20px;
+      border-top: 1px solid #ccc;
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      transition: left 0.3s ease-in-out;
     }
     .user-request-box textarea {
       flex: 1;
-height: auto;
       margin-right: 10px;
     }
     .add-section-button {
@@ -118,7 +113,26 @@ height: auto;
     }
     .main-content {
       overflow-y: auto;
-      padding-bottom: 3vh; /* Space for the user request box */
+      padding-bottom: 80px; /* Space for the user request box */
+      transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    }
+    .main-content-expanded {
+      margin-left: 0;
+      width: 100%;
+    }
+    .main-content-constrained {
+
+    }
+    @media (min-width: 768px) {
+      .sidebar {
+        transform: translateX(0) !important;
+      }
+      .main-content {
+
+      }
+      .user-request-box {
+        left: 16rem; /* Adjust to match the width of the sidebar */
+      }
     }
   </style>
 </head>
@@ -133,7 +147,7 @@ height: auto;
   </div>
 
   <!-- Sidebar -->
-  <div id="sidebar" class="sidebar bg-gray-900 text-white p-4 w-64 flex flex-col gap-y-5 overflow-y-auto md:static md:transform-none md:flex">
+  <div id="sidebar" class="sidebar sidebar-closed bg-gray-900 text-white p-4 w-64 flex flex-col gap-y-5 overflow-y-auto md:static md:transform-none md:flex">
     <div class="flex h-16 shrink-0 items-center">
       <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
     </div>
@@ -190,7 +204,7 @@ height: auto;
     </nav>
   </div>
 
-  <div class="main-content flex-1 p-4 overflow-y-auto">
+  <div class="main-content main-content-expanded flex-1 p-4 overflow-y-auto">
     <div class="container" id="container">
       <!-- Empty canvas to start with -->
     </div>
@@ -215,11 +229,21 @@ height: auto;
       const trashCan = document.getElementById('trashCan');
       const sidebar = document.getElementById('sidebar');
       const mobileMenuButton = document.getElementById('mobileMenuButton');
+      const mainContent = document.querySelector('.main-content');
       let lockedDiv = null;
 
       mobileMenuButton.addEventListener('click', () => {
         sidebar.classList.toggle('sidebar-closed');
         sidebar.classList.toggle('sidebar-open');
+        if (sidebar.classList.contains('sidebar-closed')) {
+          userRequestBox.style.left = '0';
+          mainContent.classList.add('main-content-expanded');
+          mainContent.classList.remove('main-content-constrained');
+        } else {
+          userRequestBox.style.left = '16rem'; // Adjust to match the width of the sidebar
+          mainContent.classList.add('main-content-constrained');
+          mainContent.classList.remove('main-content-expanded');
+        }
       });
 
       trashCan.addEventListener('click', (e) => {
@@ -342,8 +366,7 @@ height: auto;
       addSectionButton.addEventListener('click', () => {
         userRequestBox.style.display = 'block';
       });
-
-      saveButton.addEventListener('click', () => {
+saveButton.addEventListener('click', () => {
         if (lockedDiv) {
           lockedDiv.innerHTML = codeBox.textContent;
           // Add highlightable events to any new divs inside the lockedDiv
