@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page Example</title>
+  <title>Form with Icons</title>
   <!-- Tailwind CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
@@ -11,41 +13,49 @@
     .aspect-ratio-square {
       position: relative;
       width: 100%;
-      padding-bottom: 50%; /* Adjusted aspect ratio */
+      padding-bottom: 50%;
     }
-    .aspect-ratio-square > * {
+
+    .aspect-ratio-square>* {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
+
     .highlighted {
       border: 2px solid blue !important;
       position: relative;
     }
+
     .draggable {
       cursor: move;
     }
+
     .dragging {
       opacity: 0.5;
     }
+
     .drag-placeholder {
       background-color: #ddd;
       border: 2px dashed #aaa;
       height: 50px;
-      margin-bottom: 0; /* No padding between sections */
+      margin-bottom: 0;
     }
+
     .editor {
       margin-top: 20px;
       display: none;
       flex-direction: column;
       align-items: center;
     }
+
     .editor textarea {
       width: 300px;
       height: 100px;
       margin-bottom: 10px;
     }
+
     .trash-can {
       background: white;
       border-radius: 50%;
@@ -54,6 +64,7 @@
       display: none;
       margin-top: 10px;
     }
+
     .user-request-box {
       position: fixed;
       bottom: 0;
@@ -64,15 +75,17 @@
       border-top: 1px solid #ccc;
       z-index: 1000;
       display: flex;
-width: 100%;
+      width: 100%;
       align-items: center;
       justify-content: space-between;
       transition: left 0.3s ease-in-out;
     }
+
     .user-request-box textarea {
       flex: 1;
       margin-right: 10px;
     }
+
     .add-section-button {
       background: blue;
       color: white;
@@ -87,6 +100,7 @@ width: 100%;
       z-index: 1000;
       margin-top: 10px;
     }
+
     .code-box {
       margin-top: 20px;
       background: #1e1e1e;
@@ -100,58 +114,59 @@ width: 100%;
       height: 200px;
       resize: vertical;
     }
+
     .code-box[contenteditable="true"]:focus {
       outline: none;
     }
+
     .sidebar {
       transition: transform 0.3s ease-in-out;
     }
+
     .sidebar-closed {
       transform: translateX(-100%);
     }
+
     .sidebar-open {
       transform: translateX(0);
     }
+
     .main-content {
       overflow-y: auto;
-      padding-bottom: 15%; /* Space for the user request box */
+      padding-bottom: 15%;
       transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
-height:85%;
+      height: 85%;
     }
+
     .main-content-expanded {
       margin-left: 0;
       width: 100%;
     }
+
     .main-content-constrained {
-      margin-left: 1rem; /* Adjust to match the width of the sidebar */
+      margin-left: 1rem;
     }
+
     @media (min-width: 768px) {
       .sidebar {
         transform: translateX(0) !important;
       }
+
       .main-content {
-        margin-left: 1rem; /* Adjust to match the width of the sidebar */
-width: 100%;
+        margin-left: 1rem;
+        width: 100%;
       }
+
       .user-request-box {
-        left: 3rem; /* Adjust to match the width of the sidebar */
-width: 95%;
-height: 15%;
+        left: 3rem;
+        width: 95%;
+        height: 15%;
       }
     }
   </style>
 </head>
-<body class="flex h-screen overflow-hidden">
-  <!-- Mobile menu button -->
-  <div class="fixed top-4 left-4 z-50 md:hidden">
-    <button id="mobileMenuButton" class="bg-gray-800 text-white p-2 rounded-md">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-      </svg>
-    </button>
-  </div>
 
-  <!-- Sidebar -->
+<body class="flex h-screen overflow-hidden">
   <div id="sidebar" class="sidebar sidebar-closed bg-gray-900 text-white p-4 w-12 flex flex-col gap-y-5 overflow-y-auto md:static md:transform-none md:flex">
     <div class="flex h-16 shrink-0 items-center">
       <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
@@ -161,23 +176,8 @@ height: 15%;
         <li>
           <ul role="list" class="-mx-2 space-y-1">
             <li>
-              <button id="fullWidth" class="group flex gap-x-3 rounded-md bg-gray-800 p-2 text-sm font-semibold leading-6 text-white w-full">
+              <button id="addSection" class="group flex gap-x-3 rounded-md bg-gray-800 p-2 text-sm font-semibold leading-6 text-white w-full" data-width="100%">
                 Full Width
-              </button>
-            </li>
-            <li>
-              <button id="wide" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
-                Wide
-              </button>
-            </li>
-            <li>
-              <button id="medium" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
-                Medium
-              </button>
-            </li>
-            <li>
-              <button id="small" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
-                Small
               </button>
             </li>
           </ul>
@@ -186,7 +186,21 @@ height: 15%;
           <div class="code-box" id="codeBox" contenteditable="true">
             <!-- Code will be displayed here -->
           </div>
-          <div class="isolate inline-flex rounded-md shadow-sm mt-4">
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="main-content main-content-expanded flex-1 overflow-y-auto">
+    <div class="container w-full" id="container">
+      <!-- Empty canvas to start with -->
+    </div>
+  </div>
+
+  <div class="user-request-box" id="userRequestBox">
+    <form action="#" class="relative w-full flex items-center">
+      <textarea rows="4" name="description" id="description" class="block w-full resize-none border-0 py-2 pl-4 pr-32 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Write a description..."></textarea>
+      <div class="isolate absolute right-4 top-2 inline-flex rounded-md shadow-sm ">
             <button id="saveButton" type="button" class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
                 <path d="M7.25 10.25a.75.75 0 0 0 1.5 0V4.56l2.22 2.22a.75.75 0 1 0 1.06-1.06l-3.5-3.5a.75.75 0 0 0-1.06 0l-3.5 3.5a.75.75 0 0 0 1.06 1.06l2.22-2.22v5.69Z" />
@@ -195,29 +209,17 @@ height: 15%;
             </button>
             <button id="trashCan" type="button" class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
-                <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+                <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" />
               </svg>
             </button>
             <button id="addSectionButton" type="button" class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
                 <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-              </svg>
+              </svg>null
             </button>
           </div>
-        </li>
-      </ul>
-    </nav>
-  </div>
-
-  <div class="main-content main-content-expanded flex-1overflow-y-auto">
-    <div class="container w-full" id="container">
-      <!-- Empty canvas to start with -->
-    </div>
-  </div>
-
-  <div class="user-request-box" id="userRequestBox">
-    <textarea id="userRequestInput" class="w-full p-2 border border-gray-300 rounded mb-4" rows="2" placeholder="Enter your request"></textarea>
-    <button id="submitRequestButton" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      <button type="submit" class="absolute bottom-2 right-4 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit</button>
+    </form>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
@@ -227,23 +229,14 @@ height: 15%;
       const container = document.getElementById('container');
       const codeBox = document.getElementById('codeBox');
       const saveButton = document.getElementById('saveButton');
-      const userRequestBox = document.getElementById('userRequestBox');
-      const userRequestInput = document.getElementById('userRequestInput');
-      const submitRequestButton = document.getElementById('submitRequestButton');
+      const userRequestInput = document.getElementById('description');
+      const submitRequestButton = document.querySelector('.user-request-box button[type="submit"]');
       const addSectionButton = document.getElementById('addSectionButton');
       const trashCan = document.getElementById('trashCan');
-      const sidebar = document.getElementById('sidebar');
-      const mobileMenuButton = document.getElementById('mobileMenuButton');
-      const mainContent = document.querySelector('.main-content');
       let lockedDiv = null;
 
-      mobileMenuButton.addEventListener('click', () => {
-        sidebar.classList.toggle('sidebar-closed');
-        sidebar.classList.toggle('sidebar-open');
-      });
-
       trashCan.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent event from bubbling up to parent elements
+        e.stopPropagation();
         if (lockedDiv) {
           lockedDiv.remove();
           codeBox.textContent = '';
@@ -265,7 +258,7 @@ height: 15%;
         });
 
         div.addEventListener('click', (e) => {
-          e.stopPropagation(); // Prevent event from bubbling up to parent elements
+          e.stopPropagation();
           if (lockedDiv) {
             lockedDiv.classList.remove('highlighted');
           }
@@ -273,8 +266,6 @@ height: 15%;
           div.classList.add('highlighted');
           codeBox.textContent = div.innerHTML;
           Prism.highlightElement(codeBox);
-
-          // Show the trash can icon
           trashCan.style.display = 'block';
         });
       }
@@ -290,7 +281,7 @@ height: 15%;
         });
       }
 
-      function handleDrop(e) {
+function handleDrop(e) {
         e.preventDefault();
         const draggingElement = document.querySelector('.dragging');
         const afterElement = getDragAfterElement(container, e.clientY);
@@ -308,11 +299,16 @@ height: 15%;
           const box = child.getBoundingClientRect();
           const offset = y - box.top - box.height / 2;
           if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
+            return {
+              offset: offset,
+              element: child
+            };
           } else {
             return closest;
           }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }, {
+          offset: Number.NEGATIVE_INFINITY
+        }).element;
       }
 
       container.addEventListener('dragover', (e) => {
@@ -321,7 +317,8 @@ height: 15%;
 
       container.addEventListener('drop', handleDrop);
 
-      submitRequestButton.addEventListener('click', async () => {
+      submitRequestButton.addEventListener('click', async (e) => {
+        e.preventDefault();
         if (lockedDiv) {
           const userRequest = userRequestInput.value;
           const existingCode = lockedDiv.innerHTML;
@@ -334,7 +331,10 @@ height: 15%;
               headers: {
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({ userRequest, existingCode })
+              body: JSON.stringify({
+                userRequest,
+                existingCode
+              })
             });
 
             if (!response.ok) {
@@ -343,13 +343,8 @@ height: 15%;
 
             const data = await response.json();
             lockedDiv.innerHTML = data.updatedCode || data;
-
-            // Add highlightable events to any new divs inside the lockedDiv
             lockedDiv.querySelectorAll('div').forEach(addHighlightableEvents);
-            // Add highlightable events to any new nested sections inside the lockedDiv
             addNestedHighlightableEvents(lockedDiv);
-
-            // Clear the user request text area
             userRequestInput.value = '';
           } catch (error) {
             alert('Error: ' + error.message);
@@ -360,17 +355,17 @@ height: 15%;
       });
 
       addSectionButton.addEventListener('click', () => {
-        userRequestBox.style.display = 'block';
+        const section = createSection();
+        container.appendChild(section);
+        makeDraggable(section);
+        addHighlightableEvents(section.querySelector('.highlightable'));
       });
 
       saveButton.addEventListener('click', () => {
         if (lockedDiv) {
           lockedDiv.innerHTML = codeBox.textContent;
-          // Add highlightable events to any new divs inside the lockedDiv
           lockedDiv.querySelectorAll('div').forEach(addHighlightableEvents);
-          // Add highlightable events to any new nested sections inside the lockedDiv
           addNestedHighlightableEvents(lockedDiv);
-          // Execute any JavaScript in the new code
           const scripts = lockedDiv.querySelectorAll('script');
           scripts.forEach(script => {
             const newScript = document.createElement('script');
@@ -381,49 +376,23 @@ height: 15%;
         }
       });
 
-      // Sidebar button functionality
-      document.getElementById('fullWidth').addEventListener('click', () => {
-        const section = document.createElement('div');
-        section.className = 'section draggable bg-white mb-0 w-full'; // Full width and no margin between sections
-        section.draggable = true;
-        section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
-        container.appendChild(section);
-        makeDraggable(section);
-        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
+      document.querySelectorAll('#addSection').forEach(button => {
+        button.addEventListener('click', () => {
+          const section = createSection();
+          container.appendChild(section);
+          makeDraggable(section);
+          addHighlightableEvents(section.querySelector('.highlightable'));
+        });
       });
 
-      document.getElementById('wide').addEventListener('click', () => {
+      function createSection() {
         const section = document.createElement('div');
-        section.className = 'section draggable bg-white mb-0'; // No margin between sections
+        section.className = 'section draggable bg-white mb-0';
         section.draggable = true;
-        section.style.width = '75%';
+        section.style.width = '100%';
         section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
-        container.appendChild(section);
-        makeDraggable(section);
-        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
-      });
-
-      document.getElementById('medium').addEventListener('click', () => {
-        const section = document.createElement('div');
-        section.className = 'section draggable bg-white mb-0'; // No margin between sections
-        section.draggable = true;
-        section.style.width = '50%';
-        section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
-        container.appendChild(section);
-        makeDraggable(section);
-        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
-      });
-
-      document.getElementById('small').addEventListener('click', () => {
-        const section = document.createElement('div');
-        section.className = 'section draggable bg-white mb-0'; // No margin between sections
-        section.draggable = true;
-        section.style.width = '25%';
-        section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
-        container.appendChild(section);
-        makeDraggable(section);
-        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
-      });
+        return section;
+      }
 
       function addNestedHighlightableEvents(element) {
         element.querySelectorAll('section').forEach(section => {
@@ -435,12 +404,11 @@ height: 15%;
         });
       }
 
-      // Add highlightable events to any nested sections in the initial content
-      const sections = container.querySelectorAll('.section');
-      sections.forEach(section => {
+      container.querySelectorAll('.section').forEach(section => {
         addNestedHighlightableEvents(section);
       });
     });
   </script>
 </body>
+
 </html>
