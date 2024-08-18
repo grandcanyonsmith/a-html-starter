@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,29 +9,14 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
   <style>
-    .aspect-ratio-square {
-      position: relative;
-      width: 100%;
-      padding-bottom: 50%;
-    }
-
-    .aspect-ratio-square>* {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-
     .highlighted {
       border: 2px solid blue !important;
-      position: relative;
     }
 
     .draggable {
       cursor: move;
     }
-
-    .dragging {
+.dragging {
       opacity: 0.5;
     }
 
@@ -43,66 +27,7 @@
       margin-bottom: 0;
     }
 
-    .editor {
-      margin-top: 20px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .editor textarea {
-      width: 300px;
-      height: 100px;
-      margin-bottom: 10px;
-    }
-
-    .trash-can {
-      background: white;
-      border-radius: 50%;
-      padding: 5px;
-      cursor: pointer;
-      display: none;
-      margin-top: 10px;
-    }
-
-    .user-request-box {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 20px;
-      border-top: 1px solid #ccc;
-      z-index: 1000;
-      display: flex;
-      width: 100%;
-      align-items: center;
-      justify-content: space-between;
-      transition: left 0.3s ease-in-out;
-    }
-
-    .user-request-box textarea {
-      flex: 1;
-      margin-right: 10px;
-    }
-
-    .add-section-button {
-      background: blue;
-      color: white;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 1000;
-      margin-top: 10px;
-    }
-
     .code-box {
-      margin-top: 20px;
       background: #1e1e1e;
       color: #dcdcdc;
       padding: 10px;
@@ -119,105 +44,63 @@
       outline: none;
     }
 
-    .sidebar {
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .sidebar-closed {
-      transform: translateX(-100%);
-    }
-
-    .sidebar-open {
-      transform: translateX(0);
-    }
-
     .main-content {
       overflow-y: auto;
-      padding-bottom: 15%;
-      transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
-      height: 85%;
+      padding: 1rem;
+      height: calc(100vh - 30%);
     }
 
-    .main-content-expanded {
-      margin-left: 0;
+    .user-request-box {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+padding-left: 1em;
+padding-right: 1em;
+padding-bottom: 1em;
+      z-index: 1000;
+      display: flex;
       width: 100%;
-    }
-
-    .main-content-constrained {
-      margin-left: 1rem;
+      align-items: center;
+      justify-content: space-between;
     }
 
     @media (min-width: 768px) {
-      .sidebar {
-        transform: translateX(0) !important;
-      }
-
-      .main-content {
-        margin-left: 1rem;
-        width: 100%;
-      }
-
       .user-request-box {
-        left: 3rem;
-        width: 95%;
-        height: 15%;
+        left: 0;
+        width: 100%;
       }
     }
   </style>
 </head>
 
 <body class="flex h-screen overflow-hidden">
-  <div id="sidebar" class="sidebar sidebar-closed bg-gray-900 text-white p-4 w-12 flex flex-col gap-y-5 overflow-y-auto md:static md:transform-none md:flex">
-    <div class="flex h-16 shrink-0 items-center">
-      <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
-    </div>
-    <nav class="flex flex-1 flex-col">
-      <ul role="list" class="flex flex-1 flex-col gap-y-7">
-        <li>
-          <ul role="list" class="-mx-2 space-y-1">
-            <li>
-              <button id="addSection" class="group flex gap-x-3 rounded-md bg-gray-800 p-2 text-sm font-semibold leading-6 text-white w-full" data-width="100%">
-                Full Width
-              </button>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <div class="code-box" id="codeBox" contenteditable="true">
-            <!-- Code will be displayed here -->
-          </div>
-        </li>
-      </ul>
-    </nav>
-  </div>
-
-  <div class="main-content main-content-expanded flex-1 overflow-y-auto">
-    <div class="container w-full" id="container">
-      <!-- Empty canvas to start with -->
-    </div>
+  <div class="main-content flex-1 overflow-y-auto" id="container">
+    <!-- Empty canvas to start with -->
   </div>
 
   <div class="user-request-box" id="userRequestBox">
     <form action="#" class="relative w-full flex items-center">
-      <textarea rows="4" name="description" id="description" class="block w-full resize-none border-0 py-2 pl-4 pr-32 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Write a description..."></textarea>
-      <div class="isolate absolute right-4 top-2 inline-flex rounded-md shadow-sm ">
-            <button id="saveButton" type="button" class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
-                <path d="M7.25 10.25a.75.75 0 0 0 1.5 0V4.56l2.22 2.22a.75.75 0 1 0 1.06-1.06l-3.5-3.5a.75.75 0 0 0-1.06 0l-3.5 3.5a.75.75 0 0 0 1.06 1.06l2.22-2.22v5.69Z" />
-                <path d="M3.5 9.75a.75.75 0 0 0-1.5 0v1.5A2.75 2.75 0 0 0 4.75 14h6.5A2.75 2.75 0 0 0 14 11.25v-1.5a.75.75 0 0 0-1.5 0v1.5c0 .69-.56 1.25-1.25 1.25h-6.5c-.69 0-1.25-.56-1.25-1.25v-1.5Z" />
-              </svg>
-            </button>
-            <button id="trashCan" type="button" class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
-                <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" />
-              </svg>
-            </button>
-            <button id="addSectionButton" type="button" class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
-                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
-              </svg>null
-            </button>
-          </div>
+      <textarea rows="4" name="description" id="description" class="block w-full resize-none border rounded py-2 pl-4 pr-32 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" placeholder="Write a description..."></textarea>
+      <div class="isolate absolute right-4 top-2 inline-flex rounded-md shadow-sm">
+        <button id="saveButton" type="button" class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
+            <path d="M7.25 10.25a.75.75 0 0 0 1.5 0V4.56l2.22 2.22a.75.75 0 1 0 1.06-1.06l-3.5-3.5a.75.75 0 0 0-1.06 0l-3.5 3.5a.75.75 0 0 0 1.06 1.06l2.22-2.22v5.69Z" />
+            <path d="M3.5 9.75a.75.75 0 0 0-1.5 0v1.5A2.75 2.75 0 0 0 4.75 14h6.5A2.75 2.75 0 0 0 14 11.25v-1.5a.75.75 0 0 0-1.5 0v1.5c0 .69-.56 1.25-1.25 1.25h-6.5c-.69 0-1.25-.56-1.25-1.25v-1.5Z" />
+          </svg>
+        </button>
+        <button id="trashCan" type="button" class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
+            <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" />
+          </svg>
+        </button>
+        <button id="addSectionButton" type="button" class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
+            <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+          </svg>
+        </button>
+      </div>
       <button type="submit" class="absolute bottom-2 right-4 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit</button>
     </form>
   </div>
@@ -281,7 +164,7 @@
         });
       }
 
-function handleDrop(e) {
+      function handleDrop(e) {
         e.preventDefault();
         const draggingElement = document.querySelector('.dragging');
         const afterElement = getDragAfterElement(container, e.clientY);
@@ -376,18 +259,9 @@ function handleDrop(e) {
         }
       });
 
-      document.querySelectorAll('#addSection').forEach(button => {
-        button.addEventListener('click', () => {
-          const section = createSection();
-          container.appendChild(section);
-          makeDraggable(section);
-          addHighlightableEvents(section.querySelector('.highlightable'));
-        });
-      });
-
       function createSection() {
         const section = document.createElement('div');
-        section.className = 'section draggable bg-white mb-0';
+        section.className = 'section draggable bg-white mb-0 p-4';
         section.draggable = true;
         section.style.width = '100%';
         section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
@@ -410,5 +284,4 @@ function handleDrop(e) {
     });
   </script>
 </body>
-
 </html>
