@@ -13,6 +13,9 @@
       width: 100%;
       padding-bottom: 50%; /* Adjusted aspect ratio */
     }
+.main-content {
+height:85%;
+}
     .aspect-ratio-square > * {
       position: absolute;
       top: 50%;
@@ -55,12 +58,13 @@
       margin-top: 10px;
     }
     .user-request-box {
+height: 15%;
       position: fixed;
       bottom: 0;
       left: 16rem; /* Adjust to match the width of the sidebar */
       right: 0;
-      background: white;
-      padding: 20px;
+padding: 1px;
+      background: white;;
       border-top: 1px solid #ccc;
       z-index: 1000;
       display: flex;
@@ -69,6 +73,7 @@
     }
     .user-request-box textarea {
       flex: 1;
+height: auto;
       margin-right: 10px;
     }
     .add-section-button {
@@ -112,7 +117,7 @@
     }
     .main-content {
       overflow-y: auto;
-      padding-bottom: 80px; /* Space for the user request box */
+      padding-bottom: 3vh; /* Space for the user request box */
     }
   </style>
 </head>
@@ -365,6 +370,7 @@
         makeDraggable(section);
         section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
       });
+
       document.getElementById('wide').addEventListener('click', () => {
         const section = document.createElement('div');
         section.className = 'section draggable bg-white mb-0'; // No margin between sections
