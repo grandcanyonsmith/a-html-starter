@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Example</title>
+  <!-- Tailwind CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+  <style>
+    .aspect-ratio-square {
+      position: relative;
+      width: 100%;
+      padding-bottom: 50%; /* Adjusted aspect ratio */
+    }
+    .aspect-ratio-square > * {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .highlighted {
+      border: 2px solid blue !important;
+      position: relative;
+    }
+    .draggable {
+      cursor: move;
+    }
+    .dragging {
+      opacity: 0.5;
+    }
+    .drag-placeholder {
+      background-color: #ddd;
+      border: 2px dashed #aaa;
+      height: 50px;
+      margin-bottom: 0; /* No padding between sections */
+    }
+    .editor {
+      margin-top: 20px;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .editor textarea {
+      width: 300px;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+    .trash-can {
+      background: white;
+      border-radius: 50%;
+      padding: 5px;
+      cursor: pointer;
+      display: none;
+      margin-top: 10px;
+    }
+    .user-request-box {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      z-index: 1000;
+    }
+    .add-section-button {
+      background: blue;
+      color: white;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1000;
+      margin-top: 10px;
+    }
+    .code-box {
+      margin-top: 20px;
+      background: #1e1e1e;
+      color: #dcdcdc;
+      padding: 10px;
+      border-radius: 5px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      overflow-y: auto;
+      height: 200px;
+      resize: vertical;
+    }
+    .code-box[contenteditable="true"]:focus {
+      outline: none;
+    }
+    .sidebar {
+      transition: transform 0.3s ease-in-out;
+    }
+    .sidebar-closed {
+      transform: translateX(-100%);
+    }
+    .sidebar-open {
+      transform: translateX(0);
+    }
+  </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+  <!-- Mobile menu button -->
+  <div class="fixed top-4 left-4 z-50 md:hidden">
+    <button id="mobileMenuButton" class="bg-gray-800 text-white p-2 rounded-md">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar bg-gray-900 text-white p-4 w-64 flex flex-col gap-y-5 overflow-y-auto md:static md:transform-none md:flex">
+    <div class="flex h-16 shrink-0 items-center">
+      <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500" alt="Your Company">
+    </div>
+    <nav class="flex flex-1 flex-col">
+      <ul role="list" class="flex flex-1 flex-col gap-y-7">
+        <li>
+          <ul role="list" class="-mx-2 space-y-1">
+            <li>
+              <button id="fullWidth" class="group flex gap-x-3 rounded-md bg-gray-800 p-2 text-sm font-semibold leading-6 text-white w-full">
+                Full Width
+              </button>
+            </li>
+            <li>
+              <button id="wide" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
+                Wide
+              </button>
+            </li>
+            <li>
+              <button id="medium" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
+                Medium
+              </button>
+            </li>
+            <li>
+              <button id="small" class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white w-full">
+                Small
+              </button>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <div class="code-box" id="codeBox" contenteditable="true">
+            <!-- Code will be displayed here -->
+          </div>
+          <div class="isolate inline-flex rounded-md shadow-sm mt-4">
+            <button id="saveButton" type="button" class="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
+                <path d="M7.25 10.25a.75.75 0 0 0 1.5 0V4.56l2.22 2.22a.75.75 0 1 0 1.06-1.06l-3.5-3.5a.75.75 0 0 0-1.06 0l-3.5 3.5a.75.75 0 0 0 1.06 1.06l2.22-2.22v5.69Z" />
+                <path d="M3.5 9.75a.75.75 0 0 0-1.5 0v1.5A2.75 2.75 0 0 0 4.75 14h6.5A2.75 2.75 0 0 0 14 11.25v-1.5a.75.75 0 0 0-1.5 0v1.5c0 .69-.56 1.25-1.25 1.25h-6.5c-.69 0-1.25-.56-1.25-1.25v-1.5Z" />
+              </svg>
+            </button>
+            <button id="trashCan" type="button" class="relative -ml-px inline-flex items-center bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
+                <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
+              </svg>
+            </button>
+            <button id="addSectionButton" type="button" class="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-4 w-4">
+                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+              </svg>
+            </button>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="main-content flex-1 p-4 overflow-y-auto">
+    <div class="container" id="container">
+      <!-- Empty canvas to start with -->
+    </div>
+  </div>
+
+  <div class="user-request-box" id="userRequestBox">
+    <h2 class="text-lg font-semibold mb-4">User Request</h2>
+    <textarea id="userRequestInput" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4" placeholder="Enter your request"></textarea>
+    <button id="submitRequestButton" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/plugins/normalize-whitespace/prism-normalize-whitespace.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('container');
+      const codeBox = document.getElementById('codeBox');
+      const saveButton = document.getElementById('saveButton');
+      const userRequestBox = document.getElementById('userRequestBox');
+      const userRequestInput = document.getElementById('userRequestInput');
+      const submitRequestButton = document.getElementById('submitRequestButton');
+      const addSectionButton = document.getElementById('addSectionButton');
+      const trashCan = document.getElementById('trashCan');
+      const sidebar = document.getElementById('sidebar');
+      const mobileMenuButton = document.getElementById('mobileMenuButton');
+      let lockedDiv = null;
+
+      mobileMenuButton.addEventListener('click', () => {
+        sidebar.classList.toggle('sidebar-closed');
+        sidebar.classList.toggle('sidebar-open');
+      });
+
+      trashCan.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent event from bubbling up to parent elements
+        if (lockedDiv) {
+          lockedDiv.remove();
+          codeBox.textContent = '';
+          trashCan.style.display = 'none';
+        }
+      });
+
+      function addHighlightableEvents(div) {
+        div.addEventListener('mouseover', () => {
+          if (!lockedDiv) {
+            div.classList.add('highlighted');
+          }
+        });
+
+        div.addEventListener('mouseout', () => {
+          if (!lockedDiv) {
+            div.classList.remove('highlighted');
+          }
+        });
+
+        div.addEventListener('click', (e) => {
+          e.stopPropagation(); // Prevent event from bubbling up to parent elements
+          if (lockedDiv) {
+            lockedDiv.classList.remove('highlighted');
+          }
+          lockedDiv = div;
+          div.classList.add('highlighted');
+          codeBox.textContent = div.innerHTML;
+          Prism.highlightElement(codeBox);
+
+          // Show the trash can icon
+          trashCan.style.display = 'block';
+        });
+      }
+
+      function makeDraggable(element) {
+        element.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('text/plain', null);
+          element.classList.add('dragging');
+        });
+
+        element.addEventListener('dragend', () => {
+          element.classList.remove('dragging');
+        });
+      }
+
+      function handleDrop(e) {
+        e.preventDefault();
+        const draggingElement = document.querySelector('.dragging');
+        const afterElement = getDragAfterElement(container, e.clientY);
+        if (afterElement == null) {
+          container.appendChild(draggingElement);
+        } else {
+          container.insertBefore(draggingElement, afterElement);
+        }
+      }
+
+      function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')];
+
+        return draggableElements.reduce((closest, child) => {
+          const box = child.getBoundingClientRect();
+          const offset = y - box.top - box.height / 2;
+          if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child };
+          } else {
+            return closest;
+          }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+      }
+
+      container.addEventListener('dragover', (e) => {
+        e.preventDefault();
+      });
+
+      container.addEventListener('drop', handleDrop);
+
+      submitRequestButton.addEventListener('click', async () => {
+        if (lockedDiv) {
+          const userRequest = userRequestInput.value;
+          const existingCode = lockedDiv.innerHTML;
+
+          submitRequestButton.textContent = 'Submitting...';
+
+          try {
+            const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ userRequest, existingCode })
+            });
+
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            lockedDiv.innerHTML = data.updatedCode || data;
+
+            // Add highlightable events to any new divs inside the lockedDiv
+            lockedDiv.querySelectorAll('div').forEach(addHighlightableEvents);
+            // Add highlightable events to any new nested sections inside the lockedDiv
+            addNestedHighlightableEvents(lockedDiv);
+
+            // Hide the user request box
+            userRequestBox.style.display = 'none';
+            userRequestInput.value = ''; // Clear the user request text area
+          } catch (error) {
+            alert('Error: ' + error.message);
+          } finally {
+            submitRequestButton.textContent = 'Submit';
+          }
+        }
+      });
+
+      addSectionButton.addEventListener('click', () => {
+        userRequestBox.style.display = 'block';
+      });
+
+      saveButton.addEventListener('click', () => {
+        if (lockedDiv) {
+          lockedDiv.innerHTML = codeBox.textContent;
+          // Add highlightable events to any new divs inside the lockedDiv
+          lockedDiv.querySelectorAll('div').forEach(addHighlightableEvents);
+          // Add highlightable events to any new nested sections inside the lockedDiv
+          addNestedHighlightableEvents(lockedDiv);
+          // Execute any JavaScript in the new code
+          const scripts = lockedDiv.querySelectorAll('script');
+          scripts.forEach(script => {
+            const newScript = document.createElement('script');
+            newScript.textContent = script.textContent;
+            document.body.appendChild(newScript);
+            document.body.removeChild(newScript);
+          });
+        }
+      });
+
+      // Sidebar button functionality
+      document.getElementById('fullWidth').addEventListener('click', () => {
+        const section = document.createElement('div');
+        section.className = 'section draggable bg-white mb-0'; // No margin between sections
+        section.draggable = true;
+        section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
+        container.appendChild(section);
+        makeDraggable(section);
+        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
+      });
+
+   document.getElementById('wide').addEventListener('click', () => {
+        const section = document.createElement('div');
+        section.className = 'section draggable bg-white mb-0'; // No margin between sections
+        section.draggable = true;
+        section.style.width = '75%';
+        section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
+        container.appendChild(section);
+        makeDraggable(section);
+        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
+      });
+
+      document.getElementById('medium').addEventListener('click', () => {
+        const section = document.createElement('div');
+        section.className = 'section draggable bg-white mb-0'; // No margin between sections
+        section.draggable = true;
+        section.style.width = '50%';
+        section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
+        container.appendChild(section);
+        makeDraggable(section);
+        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
+      });
+
+      document.getElementById('small').addEventListener('click', () => {
+        const section = document.createElement('div');
+        section.className = 'section draggable bg-white mb-0'; // No margin between sections
+        section.draggable = true;
+        section.style.width = '25%';
+        section.innerHTML = '<div class="row"><div class="column highlightable" contenteditable="true">Editable</div></div>';
+        container.appendChild(section);
+        makeDraggable(section);
+        section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
+      });
+
+      function addNestedHighlightableEvents(element) {
+        element.querySelectorAll('section').forEach(section => {
+          section.classList.add('highlightable');
+          section.setAttribute('contenteditable', 'true');
+          section.setAttribute('draggable', 'true');
+          makeDraggable(section);
+          addHighlightableEvents(section);
+        });
+      }
+
+      // Add highlightable events to any nested sections in the initial content
+      const sections = container.querySelectorAll('.section');
+      sections.forEach(section => {
+        addNestedHighlightableEvents(section);
+      });
+    });
+  </script>
+</body>
+</html>
