@@ -55,16 +55,21 @@
       margin-top: 10px;
     }
     .user-request-box {
-      display: none;
       position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      bottom: 0;
+      left: 16rem; /* Adjust to match the width of the sidebar */
+      right: 0;
       background: white;
       padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+      border-top: 1px solid #ccc;
       z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .user-request-box textarea {
+      flex: 1;
+      margin-right: 10px;
     }
     .add-section-button {
       background: blue;
@@ -182,8 +187,7 @@
   </div>
 
   <div class="user-request-box" id="userRequestBox">
-    <h2 class="text-lg font-semibold mb-4">User Request</h2>
-    <textarea id="userRequestInput" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4" placeholder="Enter your request"></textarea>
+    <textarea id="userRequestInput" class="w-full p-2 border border-gray-300 rounded mb-4" rows="2" placeholder="Enter your request"></textarea>
     <button id="submitRequestButton" class="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
   </div>
 
@@ -315,9 +319,8 @@
             // Add highlightable events to any new nested sections inside the lockedDiv
             addNestedHighlightableEvents(lockedDiv);
 
-            // Hide the user request box
-            userRequestBox.style.display = 'none';
-            userRequestInput.value = ''; // Clear the user request text area
+            // Clear the user request text area
+            userRequestInput.value = '';
           } catch (error) {
             alert('Error: ' + error.message);
           } finally {
@@ -359,7 +362,7 @@
         section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
       });
 
-   document.getElementById('wide').addEventListener('click', () => {
+      document.getElementById('wide').addEventListener('click', () => {
         const section = document.createElement('div');
         section.className = 'section draggable bg-white mb-0'; // No margin between sections
         section.draggable = true;
