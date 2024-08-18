@@ -110,6 +110,10 @@
     .sidebar-open {
       transform: translateX(0);
     }
+    .main-content {
+      overflow-y: auto;
+      padding-bottom: 80px; /* Space for the user request box */
+    }
   </style>
 </head>
 <body class="flex h-screen overflow-hidden">
@@ -361,7 +365,6 @@
         makeDraggable(section);
         section.querySelectorAll('.highlightable').forEach(addHighlightableEvents);
       });
-
       document.getElementById('wide').addEventListener('click', () => {
         const section = document.createElement('div');
         section.className = 'section draggable bg-white mb-0'; // No margin between sections
