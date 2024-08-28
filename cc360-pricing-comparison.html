@@ -9,12 +9,17 @@
     <style>
         @media (max-width: 640px) {
             table th, table td {
-                font-size: 0.3rem; /* Tailwind's  */
-                padding: 0.3rem; /* Tailwind's p-2 */
+                font-size: 0.75rem; /* Tailwind's  */
+                padding: 0.5rem; /* Tailwind's p-2 */
             }
             th, td {
                 word-break: break-word;
             }
+        }
+
+        .fixed-width-table th,
+        .fixed-width-table td {
+            width: 25%; /* Ensure each column takes up 25% of the table width */
         }
     </style>
 </head>
@@ -33,7 +38,7 @@
             </div>
 
             <div id="tableuserpilot" class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
-                <table class="w-full text-left">
+                <table class="fixed-width-table w-full text-left">
                     <thead class="border-b border-gray-200">
                         <tr>
                             <th></th>
@@ -76,7 +81,7 @@
 
             <h4 class="text-xl font-semibold mb-4">Products & Services</h4>
             <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
-                <table class="w-full text-left">
+                <table class="fixed-width-table w-full text-left">
                     <thead class="border-b border-gray-200">
                         <tr>
                             <th></th>
@@ -152,7 +157,7 @@
 
             <h4 class="text-xl font-semibold mt-8 mb-4">Account & Usage</h4>
             <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
-                <table class="w-full text-left">
+                <table class="fixed-width-table w-full text-left">
                     <thead class="border-b border-gray-200">
                         <tr>
                             <th></th>
@@ -186,7 +191,7 @@
 
             <h4 class="text-xl font-semibold mt-8 mb-4">Automation & Integrations</h4>
             <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
-                <table class="w-full text-left">
+                <table class="fixed-width-table w-full text-left">
                     <thead class="border-b border-gray-200">
                         <tr>
                             <th></th>
@@ -226,7 +231,7 @@
 
             <h4 class="text-xl font-semibold mt-8 mb-4">Support & Services</h4>
             <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
-                <table class="w-full text-left">
+                <table class="fixed-width-table w-full text-left">
                     <thead class="border-b border-gray-200">
                         <tr>
                             <th></th>
@@ -271,7 +276,7 @@
             </div>
             <h4 class="text-xl font-semibold mt-8 mb-4">Course Creator Pro Discount</h4>
             <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
-                <table class="w-full text-left">
+                <table class="fixed-width-table w-full text-left">
                     <thead class="border-b border-gray-200">
                         <tr>
                             <th></th>
