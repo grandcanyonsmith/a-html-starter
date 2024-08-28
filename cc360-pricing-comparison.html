@@ -6,76 +6,293 @@
     <title>Course Creator 360 Pricing Plans</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
+    <style>
+        @media (max-width: 640px) {
+            table th, table td {
+                font-size: 0.3rem; /* Tailwind's text-xs */
+                padding: 0.3rem; /* Tailwind's p-2 */
+            }
+            th, td {
+                word-break: break-word;
+            }
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-900 p-5">
 
-    <div id="pricing-comparison" class="pricing-comparison">
-        <div class="container mx-auto">
-            <div class="row">
-                <h3 class="text-2xl font-bold mb-4">Course Creator 360 Pricing Plans Overview</h3>
+<div id="pricing-comparison" class="pricing-comparison">
+    <div class="container mx-auto">
+        <div class="row">
+            <h3 class="text-2xl font-bold mb-4">Course Creator 360 Pricing Plans Overview</h3>
 
-                <!-- Pricing Plans Overview -->
-                <div class="table-info-box flex items-center mb-4 p-4 bg-white rounded-lg shadow">
-                    <div class="info-box-text">
-                        <h5 class="text-xl font-semibold">Pricing Plans</h5>
-                    </div>
+            <!-- Pricing Plans Overview -->
+            <div class="table-info-box flex items-center mb-4 p-4 bg-white rounded-lg shadow">
+                <div class="info-box-text">
+                    <h5 class="text-xl font-semibold">Pricing Plans</h5>
                 </div>
+            </div>
 
-                <div id="tableuserpilot" class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-200">
-                            <tr>
-                                <th></th>
-                                <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
-                                <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
-                                <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <th class="font-bold text-black text-sm p-3">Monthly Price</th>
-                                <td class="text-center text-black text-sm p-3">$97/month</td>
-                                <td class="text-center text-black text-sm p-3">$147/month</td>
-                                <td class="text-center text-black text-sm p-3">$297/month</td>
-                            </tr>
-                            <tr>
-                                <th class="font-bold text-black text-sm p-3">Support</th>
-                                <td class="text-center text-black text-sm p-3">Email (24-hour reply)</td>
-                                <td class="text-center text-black text-sm p-3">24/7 Chat Support</td>
-                                <td class="text-center text-black text-sm p-3">Priority Zoom Support</td>
-                            </tr>
-                            <tr>
-                                <th class="font-bold text-black text-sm p-3">Emails</th>
-                                <td class="text-center text-black text-sm p-3">Pay per email</td>
-                                <td class="text-center text-black text-sm p-3">4,000 Free Emails</td>
-                                <td class="text-center text-black text-sm p-3">Unlimited Emails</td>
-                            </tr>
-                            <tr>
-                                <th class="font-bold text-black text-sm p-3">Text Messages</th>
-                                <td class="text-center text-black text-sm p-3">$15 per 1,000 texts</td>
-                                <td class="text-center text-black text-sm p-3">$12 per 1,000 texts</td>
-                                <td class="text-center text-black text-sm p-3">$10 per 1,000 texts</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div id="tableuserpilot" class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
+                <table class="w-full text-left">
+                    <thead class="border-b border-gray-200">
+                        <tr>
+                            <th></th>
+                            <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Monthly Price</th>
+                            <td class="text-center text-black text-sm p-3">$97/month</td>
+                            <td class="text-center text-black text-sm p-3">$147/month</td>
+                            <td class="text-center text-black text-sm p-3">$297/month</td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Support</th>
+                            <td class="text-center text-black text-sm p-3">Email (24-hour reply)</td>
+                            <td class="text-center text-black text-sm p-3">24/7 Chat Support</td>
+                            <td class="text-center text-black text-sm p-3">Priority Zoom Support</td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Emails</th>
+                            <td class="text-center text-black text-sm p-3">Pay per email</td>
+                            <td class="text-center text-black text-sm p-3">4,000 Free Emails</td>
+                            <td class="text-center text-black text-sm p-3">Unlimited Emails</td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Text Messages</th>
+                            <td class="text-center text-black text-sm p-3">$15 per 1,000 texts</td>
+                            <td class="text-center text-black text-sm p-3">$12 per 1,000 texts</td>
+                            <td class="text-center text-black text-sm p-3">$10 per 1,000 texts</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <!-- Make font size smaller on smaller screens -->
-                <style>
-                    @media (max-width: 640px) {
-                        table th, table td {
-                            font-size: 0.75rem; /* Tailwind's text-xs */
-                            padding: 0.5rem; /* Tailwind's p-2 */
-                        }
-                        th, td {
-                            word-break: break-word;
-                        }
-                    }
-                </style>
+            <!-- Feature Comparison -->
+            <h3 class="text-2xl font-bold mt-8 mb-4">Feature Comparison</h3>
 
+            <h4 class="text-xl font-semibold mb-4">Products & Services</h4>
+            <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
+                <table class="w-full text-left">
+                    <thead class="border-b border-gray-200">
+                        <tr>
+                            <th></th>
+                            <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Custom Build-Outs</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i> 1 per month</td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Course Migrations</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Funnel Migrations</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Custom Branded Mobile App</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3">$59/month</td>
+                            <td class="text-center text-black text-sm p-3">$59/month</td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Free Landing Page Website</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Free Course Outline</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">White Glove Setup</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Bi-Weekly Coaching Calls</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Coaching Call Vault Access</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Affiliate Program Access</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-semibold mt-8 mb-4">Account & Usage</h4>
+            <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
+                <table class="w-full text-left">
+                    <thead class="border-b border-gray-200">
+                        <tr>
+                            <th></th>
+                            <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Number of Accounts</th>
+                            <td class="text-center text-black text-sm p-3">1</td>
+                            <td class="text-center text-black text-sm p-3">2</td>
+                            <td class="text-center text-black text-sm p-3">5</td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Funnel Access</th>
+                            <td class="text-center text-black text-sm p-3">25 Funnels</td>
+                            <td class="text-center text-black text-sm p-3">50 Funnels</td>
+                            <td class="text-center text-black text-sm p-3">All Funnels & Template Hub</td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Landing Page Access</th>
+                            <td class="text-center text-black text-sm p-3">25 Pages</td>
+                            <td class="text-center text-black text-sm p-3">50 Pages</td>
+                            <td class="text-center text-black text-sm p-3">All Pages</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-semibold mt-8 mb-4">Automation & Integrations</h4>
+            <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
+                <table class="w-full text-left">
+                    <thead class="border-b border-gray-200">
+                        <tr>
+                            <th></th>
+                            <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Automations</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Premium Automations</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Webhooks</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Custom API Integrations</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="text-xl font-semibold mt-8 mb-4">Support & Services</h4>
+            <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
+                <table class="w-full text-left">
+                    <thead class="border-b border-gray-200">
+                        <tr>
+                            <th></th>
+                            <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Email Support</th>
+                            <td class="text-center text-black text-sm p-3">24-hour reply</td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">24/7 Chat Support</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Priority Zoom Support</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">CC 360 Experts Access</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Community Access</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4 class="text-xl font-semibold mt-8 mb-4">Course Creator Pro Discount</h4>
+            <div class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
+                <table class="w-full text-left">
+                    <thead class="border-b border-gray-200">
+                        <tr>
+                            <th></th>
+                            <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
+                            <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <th class="font-bold text-black text-sm p-3">Course Creator Pro Discount</th>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-times"></i> No Discount</td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i> 50% Off ($997 course)</td>
+                            <td class="text-center text-black text-sm p-3"><i class="fas fa-check"></i> 70% Off ($997 course)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
 
 </body>
 </html>
