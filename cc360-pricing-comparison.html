@@ -6,41 +6,6 @@
     <title>Course Creator 360 Pricing Plans</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous">
-    <style>
-        .table-headlines {
-            font-weight: bold;
-            text-align: center;
-        }
-        .table-left-side {
-            font-weight: bold;
-        }
-        .table-border {
-            border: 1px solid #e5e7eb; /* Tailwind's gray-200 */
-        }
-        .text-black {
-            color: #000000; /* Black color */
-        }
-        .text-smaller {
-            font-size: 0.875rem; /* Tailwind's text-sm */
-        }
-        .text-larger {
-            font-size: 1rem; /* Tailwind's text-base */
-        }
-        .cell-padding {
-            padding: 0.75rem; /* Tailwind's p-3 */
-        }
-        .table-container {
-            display: grid;
-            grid-template-columns: 1fr repeat(3, 1fr);
-            gap: 1rem;
-        }
-        .table-container table {
-            grid-column: span 4;
-        }
-        .table-container th, .table-container td {
-            width: 25%;
-        }
-    </style>
 </head>
 <body class="bg-gray-50 text-gray-900 p-5">
 
@@ -56,264 +21,57 @@
                     </div>
                 </div>
 
-                <div id="tableuserpilot" class="table-container bg-white rounded-lg border border-gray-200 shadow-lg p-5 overflow-x-auto">
+                <div id="tableuserpilot" class="bg-white rounded-lg border border-gray-200 shadow-lg p-5">
                     <table class="w-full text-left">
                         <thead class="border-b border-gray-200">
                             <tr>
-                                <th scope="col"></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>STARTER</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>PREMIUM</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>ELITE</strong></th>
+                                <th></th>
+                                <th class="font-bold text-center text-black text-base"><strong>STARTER</strong></th>
+                                <th class="font-bold text-center text-black text-base"><strong>PREMIUM</strong></th>
+                                <th class="font-bold text-center text-black text-base"><strong>ELITE</strong></th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
                             <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Monthly Price</th>
-                                <td class="text-center text-black text-smaller cell-padding">$97/month</td>
-                                <td class="text-center text-black text-smaller cell-padding">$147/month</td>
-                                <td class="text-center text-black text-smaller cell-padding">$297/month</td>
+                                <th class="font-bold text-black text-sm p-3">Monthly Price</th>
+                                <td class="text-center text-black text-sm p-3">$97/month</td>
+                                <td class="text-center text-black text-sm p-3">$147/month</td>
+                                <td class="text-center text-black text-sm p-3">$297/month</td>
                             </tr>
                             <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Support</th>
-                                <td class="text-center text-black text-smaller cell-padding">Email (24-hour reply)</td>
-                                <td class="text-center text-black text-smaller cell-padding">24/7 Chat Support</td>
-                                <td class="text-center text-black text-smaller cell-padding">Priority Zoom Support</td>
+                                <th class="font-bold text-black text-sm p-3">Support</th>
+                                <td class="text-center text-black text-sm p-3">Email (24-hour reply)</td>
+                                <td class="text-center text-black text-sm p-3">24/7 Chat Support</td>
+                                <td class="text-center text-black text-sm p-3">Priority Zoom Support</td>
                             </tr>
                             <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Emails</th>
-                                <td class="text-center text-black text-smaller cell-padding">Pay per email</td>
-                                <td class="text-center text-black text-smaller cell-padding">4,000 Free Emails</td>
-                                <td class="text-center text-black text-smaller cell-padding">Unlimited Emails</td>
+                                <th class="font-bold text-black text-sm p-3">Emails</th>
+                                <td class="text-center text-black text-sm p-3">Pay per email</td>
+                                <td class="text-center text-black text-sm p-3">4,000 Free Emails</td>
+                                <td class="text-center text-black text-sm p-3">Unlimited Emails</td>
                             </tr>
                             <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Text Messages</th>
-                                <td class="text-center text-black text-smaller cell-padding">$15 per 1,000 texts</td>
-                                <td class="text-center text-black text-smaller cell-padding">$12 per 1,000 texts</td>
-                                <td class="text-center text-black text-smaller cell-padding">$10 per 1,000 texts</td>
+                                <th class="font-bold text-black text-sm p-3">Text Messages</th>
+                                <td class="text-center text-black text-sm p-3">$15 per 1,000 texts</td>
+                                <td class="text-center text-black text-sm p-3">$12 per 1,000 texts</td>
+                                <td class="text-center text-black text-sm p-3">$10 per 1,000 texts</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Feature Comparison -->
-                <h3 class="text-2xl font-bold mt-8 mb-4">Feature Comparison</h3>
-
-                <h4 class="text-xl font-semibold mb-4">Products & Services</h4>
-                <div class="table-container bg-white rounded-lg border border-gray-200 shadow-lg p-5 overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-200">
-                            <tr>
-                                <th scope="col"></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>STARTER</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>PREMIUM</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>ELITE</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Custom Build-Outs</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i> 1 per month</td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Course Migrations</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Funnel Migrations</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Custom-Branded Mobile App</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding">$59/month</td>
-                                <td class="text-center text-black text-smaller cell-padding">$59/month</td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Free Landing Page Website</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Free Course Outline</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">White Glove Setup</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Bi-Weekly Coaching Calls</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Coaching Call Vault Access</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Affiliate Program Access</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <h4 class="text-xl font-semibold mt-8 mb-4">Account & Usage</h4>
-                <div class="table-container bg-white rounded-lg border border-gray-200 shadow-lg p-5 overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-200">
-                            <tr>
-                                <th scope="col"></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>STARTER</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>PREMIUM</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>ELITE</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Number of Accounts</th>
-                                <td class="text-center text-black text-smaller cell-padding">1</td>
-                                <td class="text-center text-black text-smaller cell-padding">2</td>
-                                <td class="text-center text-black text-smaller cell-padding">5</td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Funnel Access</th>
-                                <td class="text-center text-black text-smaller cell-padding">25 Funnels</td>
-                                <td class="text-center text-black text-smaller cell-padding">50 Funnels</td>
-                                <td class="text-center text-black text-smaller cell-padding">All Funnels & Template Hub</td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Landing Page Access</th>
-                                <td class="text-center text-black text-smaller cell-padding">25 Pages</td>
-                                <td class="text-center text-black text-smaller cell-padding">50 Pages</td>
-                                <td class="text-center text-black text-smaller cell-padding">All Pages</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h4 class="text-xl font-semibold mt-8 mb-4">Automation & Integrations</h4>
-                <div class="table-container bg-white rounded-lg border border-gray-200 shadow-lg p-5 overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-200">
-                            <tr>
-                                <th scope="col"></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>STARTER</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>PREMIUM</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>ELITE</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Automations</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Premium Automations</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Webhooks</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Custom API Integrations</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h4 class="text-xl font-semibold mt-8 mb-4">Support & Services</h4>
-                <div class="table-container bg-white rounded-lg border border-gray-200 shadow-lg p-5 overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-200">
-                            <tr>
-                                <th scope="col"></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>STARTER</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>PREMIUM</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>ELITE</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Email Support</th>
-                                <td class="text-center text-black text-smaller cell-padding">24-hour reply</td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">24/7 Chat Support</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Priority Zoom Support</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">CC 360 Experts Access</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Community Access</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <h4 class="text-xl font-semibold mt-8 mb-4">Course Creator Pro Discount</h4>
-                <div class="table-container bg-white rounded-lg border border-gray-200 shadow-lg p-5 overflow-x-auto">
-                    <table class="w-full text-left">
-                        <thead class="border-b border-gray-200">
-                            <tr>
-                                <th scope="col"></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>STARTER</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>PREMIUM</strong></th>
-                                <th class="table-headlines text-center text-black text-larger" scope="col"><strong>ELITE</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200">
-                            <tr>
-                                <th class="table-left-side text-black text-smaller cell-padding" scope="row">Course Creator Pro Discount</th>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-times"></i> No Discount</td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i> 50% Off ($997 course)</td>
-                                <td class="text-center text-black text-smaller cell-padding"><i class="fas fa-check"></i> 70% Off ($997 course)</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <!-- Make font size smaller on smaller screens -->
+                <style>
+                    @media (max-width: 640px) {
+                        table th, table td {
+                            font-size: 0.75rem; /* Tailwind's text-xs */
+                            padding: 0.5rem; /* Tailwind's p-2 */
+                        }
+                        th, td {
+                            word-break: break-word;
+                        }
+                    }
+                </style>
 
             </div>
         </div>
