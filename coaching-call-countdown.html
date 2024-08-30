@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group Coaching Call</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen text-black">
+    <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/logo-bg-rm.png" alt="Logo" class="mb-8 w-48">
+    <h1 class="text-2xl mb-4">GROUP COACHING CALL STARTING IN</h1>
+    <div id="countdown" class="text-4xl"></div>
+
+    <script>
+        function countdownTimer() {
+            const targetTime = new Date();
+            targetTime.setHours(8, 0, 0, 0); // Set target time to 8:00 AM MST
+
+            const currentTime = new Date();
+            if (currentTime > targetTime) {
+                targetTime.setDate(targetTime.getDate() + 1); // If current time is past 8:00 AM, set target to next day
+            }
+
+            const timeDifference = targetTime - currentTime;
+
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+
+            if (timeDifference < 0) {
+                clearInterval(timerInterval);
+                document.getElementById('countdown').innerHTML = "The call has started!";
+            }
+        }
+
+        const timerInterval = setInterval(countdownTimer, 1000);
+    </script>
+</body>
+</html>
