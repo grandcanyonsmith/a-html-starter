@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding Flow</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.4.0/dist/tailwind-forms.min.css" rel="stylesheet">
+    <style>
+        .hidden {
+            display: none;
+        }
+        /* Progress Bar Styles */
+        .progress {
+            height: 20px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #ff0000; /* Red color */
+        }
+
+        .progress-bar-striped {
+            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+            background-size: 1rem 1rem;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 min-h-screen flex flex-col items-center justify-center p-4">
+        
+        <!-- Step 1 -->
+        <div id="step-1" class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl w-full max-w-md p-8">
+            <div class="flex justify-center mb-4">
+                <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/logo-bg-rm.png" alt="Course Creator 360 Logo" class="h-12">
+            </div>
+            <div class="space-y-10 divide-y divide-gray-900/10">
+                <div class="h-1 w-full bg-gray-200 rounded-full overflow-hidden mb-4 progress">
+                    <div id="progress-bar" class="h-full w-1/6 bg-red-500 transition-all duration-500 progress-bar progress-bar-striped"></div>
+                </div>
+                <div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Welcome</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">We're so excited to have you. We have a few questions to get started.</p>
+                </div>
+                <div class="pt-6">
+                    <button id="continueBtn1" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none">Continue</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div id="step-2" class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl w-full max-w-md p-8 hidden">
+            <div class="flex justify-center mb-4">
+                <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/logo-bg-rm.png" alt="Course Creator 360 Logo" class="h-12">
+            </div>
+            <div class="space-y-10 divide-y divide-gray-900/10">
+                <div class="h-1 w-full bg-gray-200 rounded-full overflow-hidden mb-4 progress">
+                    <div id="progress-bar-step2" class="h-full w-1/3 bg-red-500 transition-all duration-500 progress-bar progress-bar-striped"></div>
+                </div>
+                <div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Initial Questions</h2>
+                </div>
+                <form class="pt-6 space-y-8">
+                    <!-- Question 1 -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">What brings you to Course Creator 360?</label>
+                        <select class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option>Just casually exploring.</option>
+                            <option>I want to monetize my knowledge online.</option>
+                            <option>I'm looking for a better solution for my online business.</option>
+                        </select>
+                    </div>
+                    <!-- Question 2 -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">How would you describe yourself professionally?</label>
+                        <select class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option>Coach, teacher, or instructor.</option>
+                            <option>Content creator.</option>
+                            <option>Freelancer or consultant.</option>
+                            <option>Entrepreneur.</option>
+                            <option>Other.</option>
+                        </select>
+                    </div>
+                    <!-- Question 3 -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">Do you currently run an online business?</label>
+                        <select class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option>Yes, full-time.</option>
+                            <option>Yes, part-time.</option>
+                            <option>No, I'm helping someone else.</option>
+                            <option>No, I'm interested in starting one.</option>
+                            <option>No, but I run a physical business.</option>
+                        </select>
+                    </div>
+                    <!-- Question 4 -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">Which industry is most relevant to your business?</label>
+                        <select class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option>Health and fitness</option>
+                            <option>Business and finance</option>
+                            <option>Fashion and beauty</option>
+                            <option>Lifestyle and hobbies</option>
+                            <option>Personal development</option>
+                            <option>Family and parenting</option>
+                            <option>Design</option>
+                            <option>Academics and teacher training</option>
+                            <option>Software and technology</option>
+                            <option>Marketing</option>
+                            <option>Music and instruments</option>
+                            <option>Photo and videography</option>
+                            <option>Organization and productivity</option>
+                            <option>Travel and languages</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <!-- Question 5 -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">How many followers do you have on social media?</label>
+                        <select class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option>0 to 999</option>
+                            <option>1,000 to 10,000</option>
+                            <option>10,000 to 50,000</option>
+                            <option>50,000 to 100,000</option>
+                            <option>100,000 to 999,999</option>
+                            <option>1 million or more</option>
+                        </select>
+                    </div>
+                    <!-- Question 6 -->
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">How would you describe your experience with Course Creator 360 or similar platforms?</label>
+                        <select class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option>New to this type of platform</option>
+                            <option>I've seen tutorials or courses</option>
+                            <option>I'm experienced with Course Creator 360 and similar platforms</option>
+                        </select>
+                    </div>
+                    <div class="mt-6 flex justify-between">
+                        <button id="backBtn1" class="text-sm font-semibold leading-6 text-gray-900">Go Back</button>
+                        <button id="continueBtn2" class="bg-red-500 text-white px-3 py-2 rounded-md text-sm font-semibold shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Continue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div id="step-3" class="bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl w-full max-w-md p-8 hidden">
+            <div class="flex justify-center mb-4">
+                <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/logo-bg-rm.png" alt="Course Creator 360 Logo" class="h-12">
+            </div>
+            <div class="space-y-10 divide-y divide-gray-900/10">
+                <div class="h-1 w-full bg-gray-200 rounded-full overflow-hidden mb-4 progress">
+                    <div id="progress-bar-step3" class="h-full w-1/2 bg-red-500 transition-all duration-500 progress-bar progress-bar-striped"></div>
+                </div>
+                <div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Lastly, we just need your address</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">This will be used as your default business address. You can always change this later in your settings.</p>
+                </div>
+                <form class="pt-6 space-y-8">
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">Address</label>
+                        <input type="text" class="mt-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" placeholder="Enter your address" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">Apt, suite, etc.</label>
+                        <input type="text" class="mt-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" placeholder="Enter apt, suite, etc.">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">City</label>
+                        <input type="text" class="mt-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" placeholder="Enter city">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium leading-6 text-gray-900">Country</label>
+                        <select class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" required>
+                            <option value="" disabled selected>Select a country</option>
+                            <option>Country 1</option>
+                            <option>Country 2</option>
+                        </select>
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="w-1/2">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">State/Province/Region</label>
+                            <input type="text" class="mt-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" placeholder="Enter state/province/region">
+                        </div>
+                        <div class="w-1/2">
+                            <label class="block text-sm font-medium leading-6 text-gray-900">Zip/Postal Code</label>
+                            <input type="text" class="mt-2 block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-red-500 sm:text-sm sm:leading-6" placeholder="Enter zip/postal code">
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-between">
+                        <button id="backBtn2" class="text-sm font-semibold leading-6 text-gray-900">Go Back</button>
+                        <button type="submit" class="bg-red-500 text-white px-3 py-2 rounded-md text-sm font-semibold shadow-sm hover:bg-red-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('continueBtn1').addEventListener('click', function() {
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '33.33%';
+        });
+
+        document.getElementById('backBtn1').addEventListener('click', function() {
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-1').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '16.67%';
+        });
+
+        document.getElementById('continueBtn2').addEventListener('click', function() {
+            document.getElementById('step-2').classList.add('hidden');
+            document.getElementById('step-3').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '50%';
+        });
+
+        document.getElementById('backBtn2').addEventListener('click', function() {
+            document.getElementById('step-3').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '33.33%';
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var innerBar = document.getElementById("progress-bar");
+            innerBar.style.width = "16.67%";
+        });
+    </script>
+</body>
+
+</html> 
