@@ -1350,7 +1350,11 @@ window.onload = fetchData;
             };
         })();
         </script>
-        
+        <script>window.userpilotSettings = {token: "NX-e8076889"};</script>
+        <script src="https://js.userpilot.io/sdk/latest.js"></script>
+       import { Userpilot } from 'userpilot'
+       // Initialize Userpilot
+       Userpilot.initialize('NX-e8076889');
         <script>
         var head = document.head;
         var script = document.createElement('script');
