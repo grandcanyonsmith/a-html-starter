@@ -66,6 +66,7 @@
               </div>
             </div>
             
+            <!-- Step 2 -->
             <div id="step-2" class="step hidden">
               <h2 class="font-serif text-2xl font-semibold text-gray-700">How would you describe yourself professionally?</h2>
               <div class="mt-8 flex w-full flex-col pb-8">
@@ -107,33 +108,48 @@
               </div>
             </div>
             
+            <!-- Step 3 -->
             <div id="step-3" class="step hidden">
-              <h2 class="font-serif text-2xl font-semibold text-gray-700">Do you have an existing website?</h2>
+              <h2 class="font-serif text-2xl font-semibold text-gray-700">Do you currently run an online business?</h2>
               <div class="mt-8 flex w-full flex-col pb-8">
                 <div class="relative mb-4">
-                  <input class="peer hidden" id="radio_9" type="radio" name="website" value="Yes" />
+                  <input class="peer hidden" id="radio_9" type="radio" name="business" value="Yes, full-time." />
                   <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
                   <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_9">
-                    <span class="mb-2 text-lg font-semibold">Yes</span>
+                    <span class="mb-2 text-lg font-semibold">Yes, full-time.</span>
                   </label>
                 </div>
                 <div class="relative mb-4">
-                  <input class="peer hidden" id="radio_10" type="radio" name="website" value="No" />
+                  <input class="peer hidden" id="radio_10" type="radio" name="business" value="Yes, part-time." />
                   <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
                   <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_10">
-                    <span class="mb-2 text-lg font-semibold">No</span>
+                    <span class="mb-2 text-lg font-semibold">Yes, part-time.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_11" type="radio" name="business" value="No, I'm helping someone else." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_11">
+                    <span class="mb-2 text-lg font-semibold">No, I'm helping someone else.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_12" type="radio" name="business" value="No, I'm interested in starting one." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_12">
+                    <span class="mb-2 text-lg font-semibold">No, I'm interested in starting one.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_13" type="radio" name="business" value="No, but I run a physical business." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_13">
+                    <span class="mb-2 text-lg font-semibold">No, but I run a physical business.</span>
                   </label>
                 </div>
               </div>
             </div>
-            
-            <div id="step-4" class="step hidden">
-              <h2 class="font-serif text-2xl font-semibold text-gray-700">Please enter your website URL</h2>
-              <div class="mt-8 flex w-full flex-col pb-8">
-                <input type="url" id="website-url" class="w-full p-4 rounded-2xl border border-gray-300 bg-gray-100/80" placeholder="https://example.com" />
-              </div>
-            </div>
-            
+
             <button id="go-back" class="hidden text-gray-700 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300 absolute bottom-4 left-4 highlight-ring">Go Back</button>
           </div>
         </div>
@@ -142,10 +158,11 @@
 
     <div class="relative hidden h-screen select-none flex-col justify-center bg-red-900 bg-gradient-to-br md:flex md:w-1/2">
       <div class="py-16 px-8 text-white xl:w-[40rem]">
-        <span class="rounded-full bg-white px-3 py-1 font-medium text-red-900">New Feature</span>
-        <p class="my-6 text-3xl font-semibold leading-10">Create animations with <span class="whitespace-nowrap py-2 text-cyan-300">drag and drop</span>.</p>
-        <p class="mb-4">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt necessitatibus nostrum repellendus ab totam.</p>
-        <a href="#" class="font-semibold tracking-wide text-white underline underline-offset-4">Learn More</a>
+        <span class="rounded-full bg-white px-3 py-1 font-medium text-red-900">Review</span>
+        <p class="my-6 text-3xl font-semibold leading-10">Literal mind relief and game changer</p>
+        <p class="mb-4">After SamCart, Kajabi, Clickfunnels, GHL... after going through all of these platforms and ALWAYS getting frustrated by the fact that I still need more software outside the platform...</p>
+        <p class="mb-4">Finally I found the one platform that just relaxes my mind. I'm just so easily distracted and blocked as soon as things get too complex and when I have to connect multiple software to each other. 360 is so intuitive, the trainings are made for absolute beginners and the service is so kind and professional. I wish I could make you feel the relief in my head that 360 made and is still making me feel. Now, I just get things done and move forward. Thank you so much!</p>
+        <p class="italic">- Voice & Soul, August 28, 2024</p>
       </div>
     </div>
   </div>
@@ -158,8 +175,7 @@
       const goBackBtn = document.getElementById('go-back');
       const reasons = document.querySelectorAll('input[name="reason"]');
       const professions = document.querySelectorAll('input[name="profession"]');
-      const websites = document.querySelectorAll('input[name="website"]');
-      const websiteUrl = document.getElementById('website-url');
+      const businesses = document.querySelectorAll('input[name="business"]');
       let currentStep = 0;
 
       let answers = {};
@@ -203,29 +219,13 @@
         });
       });
 
-      websites.forEach((input) => {
+      businesses.forEach((input) => {
         input.addEventListener('change', () => {
-          answers.website = input.value;
+          answers.business = input.value;
           currentStep++;
-          if (input.value === 'Yes') {
-            showStep(currentStep);
-          }
-          updateProgressBar(80);
-
-          if (input.value === 'No') {
-            updateProgressBar(100);
-            console.log('Final Answers:', answers);
-          }
+          updateProgressBar(100);
+          console.log('Final Answers:', answers);
         });
-      });
-
-      websiteUrl.addEventListener('input', (event) => {
-        answers.websiteUrl = event.target.value;
-      });
-
-      websiteUrl.addEventListener('change', () => {
-        updateProgressBar(100);
-        console.log('Final Answers:', answers);
       });
 
       goBackBtn.addEventListener('click', () => {
