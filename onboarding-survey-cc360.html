@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding Flow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .hidden {
+      display: none;
+    }
+    .highlight-ring:focus {
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.5); /* Red ring */
+    }
+  </style>
+</head>
+<body class="bg-gray-100">
+  <div class="flex w-screen flex-wrap text-gray-800">
+    <div class="flex w-full flex-col md:w-1/2">
+      <div class="flex justify-center py-12 md:justify-start md:pl-12">
+        <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/logo-bg-rm.png" alt="Logo" class="h-12">
+      </div>
+      <div class="my-auto mx-auto flex flex-col justify-center pt-8 md:justify-start lg:w-[34rem]">
+        <div class="flex w-full flex-col rounded-2xl bg-white px-2 sm:px-14 relative">
+          <div class="mx-auto w-full max-w-md pb-20 px-8 sm:px-0">
+            <div class="relative mb-8 mt-8">
+              <div class="w-full bg-gray-200 h-2 rounded-full">
+                <div id="progress-bar" class="bg-red-900 h-2 rounded-full" style="width: 10%;"></div>
+              </div>
+            </div>
+
+            <!-- Introduction Step -->
+            <div id="step-intro" class="step">
+              <h2 class="font-serif text-2xl font-semibold text-gray-700">Welcome! We're so excited to have you</h2>
+              <p class="mt-4 text-gray-600">We have a few questions to help you get started.</p>
+              <button id="continue-btn" class="bg-red-900 text-white px-4 py-2 rounded-md mt-8 self-end hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300">Continue</button>
+            </div>
+            
+            <!-- Step 1 -->
+            <div id="step-1" class="step hidden">
+              <h2 class="font-serif text-2xl font-semibold text-gray-700">What brings you to Course Creator 360?</h2>
+              <div class="mt-8 flex w-full flex-col pb-8">
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_1" type="radio" name="reason" value="Just casually exploring." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_1">
+                    <span class="mb-2 text-lg font-semibold">Just casually exploring.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_2" type="radio" name="reason" value="I want to monetize my knowledge online." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_2">
+                    <span class="mb-2 text-lg font-semibold">I want to monetize my knowledge online.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_3" type="radio" name="reason" value="I'm looking for a better solution for my online business." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_3">
+                    <span class="mb-2 text-lg font-semibold">I'm looking for a better solution for my online business.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div id="step-2" class="step hidden">
+              <h2 class="font-serif text-2xl font-semibold text-gray-700">How would you describe yourself professionally?</h2>
+              <div class="mt-8 flex w-full flex-col pb-8">
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_4" type="radio" name="profession" value="Coach, teacher, or instructor." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_4">
+                    <span class="mb-2 text-lg font-semibold">Coach, teacher, or instructor.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_5" type="radio" name="profession" value="Content creator." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_5">
+                    <span class="mb-2 text-lg font-semibold">Content creator.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_6" type="radio" name="profession" value="Freelancer or consultant." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_6">
+                    <span class="mb-2 text-lg font-semibold">Freelancer or consultant.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_7" type="radio" name="profession" value="Entrepreneur." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_7">
+                    <span class="mb-2 text-lg font-semibold">Entrepreneur.</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_8" type="radio" name="profession" value="Other." />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_8">
+                    <span class="mb-2 text-lg font-semibold">Other.</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div id="step-3" class="step hidden">
+              <h2 class="font-serif text-2xl font-semibold text-gray-700">Do you have an existing website?</h2>
+              <div class="mt-8 flex w-full flex-col pb-8">
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_9" type="radio" name="website" value="Yes" />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_9">
+                    <span class="mb-2 text-lg font-semibold">Yes</span>
+                  </label>
+                </div>
+                <div class="relative mb-4">
+                  <input class="peer hidden" id="radio_10" type="radio" name="website" value="No" />
+                  <span class="absolute right-4 top-1/2 box-content block h-3 w-3 -translate-y-1/2 rounded-full border-8 border-gray-300 bg-white peer-checked:border-gray-900"></span>
+                  <label class="highlight-ring flex cursor-pointer flex-col rounded-2xl border border-gray-300 bg-gray-100/80 p-4 pr-8 sm:pr-16 hover:bg-gray-200" for="radio_10">
+                    <span class="mb-2 text-lg font-semibold">No</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div id="step-4" class="step hidden">
+              <h2 class="font-serif text-2xl font-semibold text-gray-700">Please enter your website URL</h2>
+              <div class="mt-8 flex w-full flex-col pb-8">
+                <input type="url" id="website-url" class="w-full p-4 rounded-2xl border border-gray-300 bg-gray-100/80" placeholder="https://example.com" />
+              </div>
+            </div>
+            
+            <button id="go-back" class="hidden text-gray-700 bg-gray-200 px-4 py-2 rounded-md hover:bg-gray-300 absolute bottom-4 left-4 highlight-ring">Go Back</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative hidden h-screen select-none flex-col justify-center bg-red-900 bg-gradient-to-br md:flex md:w-1/2">
+      <div class="py-16 px-8 text-white xl:w-[40rem]">
+        <span class="rounded-full bg-white px-3 py-1 font-medium text-red-900">New Feature</span>
+        <p class="my-6 text-3xl font-semibold leading-10">Create animations with <span class="whitespace-nowrap py-2 text-cyan-300">drag and drop</span>.</p>
+        <p class="mb-4">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Incidunt necessitatibus nostrum repellendus ab totam.</p>
+        <a href="#" class="font-semibold tracking-wide text-white underline underline-offset-4">Learn More</a>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const steps = document.querySelectorAll('.step');
+      const progressBar = document.getElementById('progress-bar');
+      const continueBtn = document.getElementById('continue-btn');
+      const goBackBtn = document.getElementById('go-back');
+      const reasons = document.querySelectorAll('input[name="reason"]');
+      const professions = document.querySelectorAll('input[name="profession"]');
+      const websites = document.querySelectorAll('input[name="website"]');
+      const websiteUrl = document.getElementById('website-url');
+      let currentStep = 0;
+
+      let answers = {};
+
+      const updateProgressBar = (percent) => {
+        progressBar.style.width = `${percent}%`;
+      };
+
+      const showStep = (stepIndex) => {
+        steps.forEach(step => step.classList.add('hidden'));
+        steps[stepIndex].classList.remove('hidden');
+
+        if (stepIndex > 0) {
+          goBackBtn.classList.remove('hidden');
+        } else {
+          goBackBtn.classList.add('hidden');
+        }
+      };
+
+      continueBtn.addEventListener('click', () => {
+        currentStep++;
+        showStep(currentStep);
+        updateProgressBar(20);
+      });
+
+      reasons.forEach((input) => {
+        input.addEventListener('change', () => {
+          answers.reason = input.value;
+          currentStep++;
+          showStep(currentStep);
+          updateProgressBar(40);
+        });
+      });
+
+      professions.forEach((input) => {
+        input.addEventListener('change', () => {
+          answers.profession = input.value;
+          currentStep++;
+          showStep(currentStep);
+          updateProgressBar(60);
+        });
+      });
+
+      websites.forEach((input) => {
+        input.addEventListener('change', () => {
+          answers.website = input.value;
+          currentStep++;
+          if (input.value === 'Yes') {
+            showStep(currentStep);
+          }
+          updateProgressBar(80);
+
+          if (input.value === 'No') {
+            updateProgressBar(100);
+            console.log('Final Answers:', answers);
+          }
+        });
+      });
+
+      websiteUrl.addEventListener('input', (event) => {
+        answers.websiteUrl = event.target.value;
+      });
+
+      websiteUrl.addEventListener('change', () => {
+        updateProgressBar(100);
+        console.log('Final Answers:', answers);
+      });
+
+      goBackBtn.addEventListener('click', () => {
+        currentStep--;
+        if (currentStep < 0) currentStep = 0;
+        showStep(currentStep);
+        updateProgressBar((currentStep + 1) * 20);
+      });
+
+      showStep(currentStep);
+
+      steps.forEach((step) => {
+        step.addEventListener('click', (event) => {
+          if (event.target.tagName === 'LABEL') {
+            event.preventDefault();
+            const input = document.getElementById(event.target.getAttribute('for'));
+            input.click();
+            input.classList.add('focus:outline-none');
+            input.focus();
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
