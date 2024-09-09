@@ -1232,202 +1232,201 @@ window.onload = fetchData;
 </html><meta name="creation-time" content="2024-09-07T23:12:27.302939+00:00">
 
         
-    <script>
-        (function() {
-            const tailwindLink = document.createElement('link');
-            tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-            tailwindLink.rel = 'stylesheet';
-            document.head.appendChild(tailwindLink);
+<script>
+    (function() {
+        const tailwindLink = document.createElement('link');
+        tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
+        tailwindLink.rel = 'stylesheet';
+        document.head.appendChild(tailwindLink);
 
-            // Create the banner and expiration message elements
-            const banner = document.createElement('div');
-            const countdownText = document.createElement('span');
-            const expirationMessage = document.createElement('div');
-            const expirationText = document.createElement('p');
-            const redirectLink = document.createElement('button');
+        // Create the banner and expiration message elements
+        const banner = document.createElement('div');
+        const countdownText = document.createElement('span');
+        const expirationMessage = document.createElement('div');
+        const expirationText = document.createElement('p');
+        const redirectLink = document.createElement('button');
 
-            // Apply styles to the banner
-            banner.id = 'banner';
-            banner.className = 'fixed top-0 w-full bg-red-100 text-red-700 text-center p-2 z-50 text-xs';
-            banner.innerHTML = `
-                <span id="banner-text">This website expires after 24 hours and will be deleted. If you would like to keep this webpage, sign up for a 30-day free trial and it will be transferred into your account.</span>
-                <span>Time remaining: <span id="countdown" class="font-bold">24:00:00</span></span>
-                <button id="signup-button" class="bg-blue-500 text-white font-bold py-1 px-2 ml-2 rounded hover:bg-blue-700 text-xs">Sign Up</button>
-            `;
+        // Apply styles to the banner
+        banner.id = 'banner';
+        banner.className = 'fixed top-0 w-full bg-red-100 text-red-700 text-center p-2 z-50 text-xs';
+        banner.innerHTML = `
+            <span id="banner-text">This website expires after 24 hours and will be deleted. If you would like to keep this webpage, sign up for a 30-day free trial and it will be transferred into your account.</span>
+            <span>Time remaining: <span id="countdown" class="font-bold">24:00:00</span></span>
+            <button id="signup-button" class="bg-blue-500 text-white font-bold py-1 px-2 ml-2 rounded hover:bg-blue-700 text-xs">Sign Up</button>
+        `;
 
-            // Apply styles to the expiration message
-            expirationMessage.className = 'fixed top-0 w-full h-full flex items-center justify-center bg-gray-100 text-center';
-            expirationMessage.style.display = 'none';
-            expirationText.className = 'text-lg font-bold';
-            expirationText.textContent = "Time has expired. To get access to this website, sign up for a free trial.";
-            redirectLink.id = 'signup-button';
-            redirectLink.className = 'bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-700';
-            redirectLink.textContent = 'Sign Up';
+        // Apply styles to the expiration message
+        expirationMessage.className = 'fixed top-0 w-full h-full flex items-center justify-center bg-gray-100 text-center';
+        expirationMessage.style.display = 'none';
+        expirationText.className = 'text-lg font-bold';
+        expirationText.textContent = "Time has expired. To get access to this website, sign up for a free trial.";
+        redirectLink.id = 'signup-button';
+        redirectLink.className = 'bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-700';
+        redirectLink.textContent = 'Sign Up';
 
-            // Append elements
-            expirationMessage.appendChild(expirationText);
-            expirationMessage.appendChild(redirectLink);
-            document.body.appendChild(banner);
-            document.body.appendChild(expirationMessage);
+        // Append elements
+        expirationMessage.appendChild(expirationText);
+        expirationMessage.appendChild(redirectLink);
+        document.body.appendChild(banner);
+        document.body.appendChild(expirationMessage);
 
-            async function checkExpiry(url) {
+        async function checkExpiry(url) {
+            const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    temporary_website_url: url
+                })
+            });
+
+            const data = await response.json();
+            if (response.status === 200) {
+                const {hours, minutes, seconds, customer_name, email} = data;
+                const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+                const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
+                const currentUrl = window.location.href;
+                const redirectUrl = `https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF`;
+                startCountdown(totalSeconds, redirectUrl);
+            } else {
+                console.error('Error fetching expiry time:', data.message || 'An error occurred');
+            }
+        }
+
+        function startCountdown(duration, redirectUrl) {
+            let timer = duration, hours, minutes, seconds;
+            const countdownElement = document.getElementById('countdown');
+            const interval = setInterval(function() {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                countdownElement.textContent = hours + ":" + minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    document.body.innerHTML = '';
+                    document.body.appendChild(expirationMessage);
+                    expirationMessage.style.display = 'flex';
+                    window.location.href = redirectUrl;
+                }
+            }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            const temporaryWebsiteUrl = window.location.href;
+            await checkExpiry(temporaryWebsiteUrl);
+
+            document.getElementById('signup-button').onclick = async function() {
+                const currentUrl = window.location.href;
                 const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        temporary_website_url: url
+                        temporary_website_url: currentUrl
                     })
                 });
-
                 const data = await response.json();
                 if (response.status === 200) {
-                    const {hours, minutes, seconds, customer_name, email} = data;
-                    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+                    const {customer_name, email} = data;
                     const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
-                    const currentUrl = window.location.href;
                     const redirectUrl = `https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF`;
-                    startCountdown(totalSeconds, redirectUrl);
+                    window.location.href = redirectUrl;
                 } else {
-                    console.error('Error fetching expiry time:', data.message || 'An error occurred');
-                }
-            }
-
-            function startCountdown(duration, redirectUrl) {
-                let timer = duration, hours, minutes, seconds;
-                const countdownElement = document.getElementById('countdown');
-                const interval = setInterval(function() {
-                    hours = parseInt(timer / 3600, 10);
-                    minutes = parseInt((timer % 3600) / 60, 10);
-                    seconds = parseInt(timer % 60, 10);
-
-                    hours = hours < 10 ? "0" + hours : hours;
-                    minutes = minutes < 10 ? "0" + minutes : minutes;
-                    seconds = seconds < 10 ? "0" + seconds : seconds;
-
-                    countdownElement.textContent = hours + ":" + minutes + ":" + seconds;
-
-                    if (--timer < 0) {
-                        clearInterval(interval);
-                        document.body.innerHTML = '';
-                        document.body.appendChild(expirationMessage);
-                        expirationMessage.style.display = 'flex';
-                        window.location.href = redirectUrl;
-                    }
-                }, 1000);
-            }
-
-            document.addEventListener('DOMContentLoaded', async function() {
-                const temporaryWebsiteUrl = window.location.href;
-                await checkExpiry(temporaryWebsiteUrl);
-
-                document.getElementById('signup-button').onclick = async function() {
-                    const currentUrl = window.location.href;
-                    const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            temporary_website_url: currentUrl
-                        })
-                    });
-                    const data = await response.json();
-                    if (response.status === 200) {
-                        const {customer_name, email} = data;
-                        const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
-                        const redirectUrl = `https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF`;
-                        window.location.href = redirectUrl;
-                    } else {
-                        console.error('Error fetching customer data:', data.message || 'An error occurred');
-                    }
-                };
-            });
-
-            window.onscroll = function() {
-                const bannerText = document.getElementById('banner-text');
-                if (window.scrollY > 0) {
-                    bannerText.style.display = 'none';
-                } else {
-                    bannerText.style.display = 'inline';
+                    console.error('Error fetching customer data:', data.message || 'An error occurred');
                 }
             };
-        })();
-    </script>
+        });
 
-    <script>
-        window.userpilotSettings = {
-            token: "NX-e8076889"
+        window.onscroll = function() {
+            const bannerText = document.getElementById('banner-text');
+            if (window.scrollY > 0) {
+                bannerText.style.display = 'none';
+            } else {
+                bannerText.style.display = 'inline';
+            }
         };
-    </script>
-    <script src="https://js.userpilot.io/sdk/latest.js"></script>
-    <script>
-        import { Userpilot } from 'userpilot';
-        // Initialize Userpilot
-        Userpilot.initialize('NX-e8076889');
-    </script>
+    })();
+</script>
 
-    <script>
-        var head = document.head;
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = "https://174657.t.hyros.com/v1/lst/universal-script?ph=bdeb637b658515b62841f4a4d102f258353fd4f7182cae8d051c84950fd9b4b3&tag=!clicked&ref_url=" + encodeURI(document.URL);
-        head.appendChild(script);
-    </script>
+<script>
+    window.userpilotSettings = {
+        token: "NX-e8076889"
+    };
+</script>
+<script src="https://js.userpilot.io/sdk/latest.js"></script>
+<script>
+    // Initialize Userpilot
+    Userpilot.initialize('NX-e8076889');
+</script>
 
-    <script>
-        !function() {
-            var i = "analytics"
-              , analytics = window[i] = window[i] || [];
-            if (!analytics.initialize)
-                if (analytics.invoked)
-                    window.console && console.error && console.error("Segment snippet included twice.");
-                else {
-                    analytics.invoked = !0;
-                    analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "screen", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware", "register"];
-                    analytics.factory = function(e) {
-                        return function() {
-                            if (window[i].initialized)
-                                return window[i][e].apply(window[i], arguments);
-                            var n = Array.prototype.slice.call(arguments);
-                            if (["track", "screen", "alias", "group", "page", "identify"].indexOf(e) > -1) {
-                                var c = document.querySelector("link[rel='canonical']");
-                                n.push({
-                                    __t: "bpc",
-                                    c: c && c.getAttribute("href") || void 0,
-                                    p: location.pathname,
-                                    u: location.href,
-                                    s: location.search,
-                                    t: document.title,
-                                    r: document.referrer
-                                });
-                            }
-                            n.unshift(e);
-                            analytics.push(n);
-                            return analytics;
-                        };
+<script>
+    var head = document.head;
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = "https://174657.t.hyros.com/v1/lst/universal-script?ph=bdeb637b658515b62841f4a4d102f258353fd4f7182cae8d051c84950fd9b4b3&tag=!clicked&ref_url=" + encodeURI(document.URL);
+    head.appendChild(script);
+</script>
+
+<script>
+    !function() {
+        var i = "analytics"
+          , analytics = window[i] = window[i] || [];
+        if (!analytics.initialize)
+            if (analytics.invoked)
+                window.console && console.error && console.error("Segment snippet included twice.");
+            else {
+                analytics.invoked = !0;
+                analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "screen", "once", "off", "on", "addSourceMiddleware", "addIntegrationMiddleware", "setAnonymousId", "addDestinationMiddleware", "register"];
+                analytics.factory = function(e) {
+                    return function() {
+                        if (window[i].initialized)
+                            return window[i][e].apply(window[i], arguments);
+                        var n = Array.prototype.slice.call(arguments);
+                        if (["track", "screen", "alias", "group", "page", "identify"].indexOf(e) > -1) {
+                            var c = document.querySelector("link[rel='canonical']");
+                            n.push({
+                                __t: "bpc",
+                                c: c && c.getAttribute("href") || void 0,
+                                p: location.pathname,
+                                u: location.href,
+                                s: location.search,
+                                t: document.title,
+                                r: document.referrer
+                            });
+                        }
+                        n.unshift(e);
+                        analytics.push(n);
+                        return analytics;
                     };
-                    for (var n = 0; n < analytics.methods.length; n++) {
-                        var key = analytics.methods[n];
-                        analytics[key] = analytics.factory(key);
-                    }
-                    analytics.load = function(key, n) {
-                        var t = document.createElement("script");
-                        t.type = "text/javascript";
-                        t.async = !0;
-                        t.setAttribute("data-global-segment-analytics-key", i);
-                        t.src = "https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";
-                        var r = document.getElementsByTagName("script")[0];
-                        r.parentNode.insertBefore(t, r);
-                        analytics._loadOptions = n;
-                    };
-                    analytics._writeKey = "UDEIWcy6Z2BMFv0HnJpA4XXECUYosQAf";
-                    analytics.SNIPPET_VERSION = "5.2.0";
-                    analytics.load("UDEIWcy6Z2BMFv0HnJpA4XXECUYosQAf");
-                    analytics.page();
+                };
+                for (var n = 0; n < analytics.methods.length; n++) {
+                    var key = analytics.methods[n];
+                    analytics[key] = analytics.factory(key);
                 }
-        }();
-    </script>
+                analytics.load = function(key, n) {
+                    var t = document.createElement("script");
+                    t.type = "text/javascript";
+                    t.async = !0;
+                    t.setAttribute("data-global-segment-analytics-key", i);
+                    t.src = "https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";
+                    var r = document.getElementsByTagName("script")[0];
+                    r.parentNode.insertBefore(t, r);
+                    analytics._loadOptions = n;
+                };
+                analytics._writeKey = "UDEIWcy6Z2BMFv0HnJpA4XXECUYosQAf";
+                analytics.SNIPPET_VERSION = "5.2.0";
+                analytics.load("UDEIWcy6Z2BMFv0HnJpA4XXECUYosQAf");
+                analytics.page();
+            }
+    }();
+</script>
 </body>
 </html>
