@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+this is the whole thing but its loading way too slow and the video isnt working <!DOCTYPE html>
 <html  lang="en">
 <head><meta charset="utf-8">
 <title>Marketing Agency Pro</title>
@@ -1232,137 +1232,109 @@ window.onload = fetchData;
 <script>window.__NUXT__={};window.__NUXT__.config={public:{baseUrl:"https://apisystem.tech",newBaseURL:"https://backend.leadconnectorhq.com/appengine",serverBaseUrl:"https://apisystem.tech",NODE_ENV:"production",REVIEW_WIDGET_URL:"https://backend.leadconnectorhq.com/appengine/reviews/get_widget/",REST_API_URLS:"https://backend.leadconnectorhq.com",STATS_API_URL:"https://backend.leadconnectorhq.com",OLD_STORAGE_API_URL1_CDN:"https://cdn.msgsndr.com",OLD_STORAGE_API_URL2_CDN:"https://assets.cdn.msgsndr.com",STORAGE_API_URL1_CDN:"https://cdn.filesafe.space",STORAGE_API_URL2_CDN:"https://assets.cdn.filesafe.space",paymentsServiceUrl:"https://backend.leadconnectorhq.com",HLS_URL:"https://content.apisystem.tech",IMAGE_CDN:"https://images.leadconnectorhq.com",IMAGE_CDN_WHITELIST:["assets.cdn.msgsndr.com","cdn.msgsndr.com","cdn.filesafe.space","assets.cdn.filesafe.space","storage.googleapis.com","firebasestorage.googleapis.com"],authorizeAcceptJsUrlTestMode:"https://jstest.authorize.net/v1/Accept.js",authorizeAcceptJsUrlLiveMode:"https://js.authorize.net/v1/Accept.js",nmiPaymentProviderScriptUrl:"https://secure.safewebservices.com/token/Collect.js",FORMS_SERVICE_URL:"https://backend.leadconnectorhq.com",SURVEYS_SERVICE_URL:"https://backend.leadconnectorhq.com",ECOMMERCE_SERVICE_URL:"https://backend.leadconnectorhq.com/ecommerce",HL_HOMEPAGE_STEPID:"6dcfb06b-9734-44bd-bbcc-8bd4b7fec976",STRIPE_BNPL_CONFIGURATION_TEST:"pmc_1OaAR1FpU9DlKp7RH0HHU4xH",STRIPE_BNPL_CONFIGURATION_LIVE:"pmc_1OlnyOFpU9DlKp7R4tTHuihw",STRIPE_PMC_KEY_TEST:"pmc_1PVvmcFpU9DlKp7RFsjX5G7G",STRIPE_PMC_KEY_LIVE:"pmc_1PVvogFpU9DlKp7Rj8F0ITLV",i18n:{baseUrl:"",defaultLocale:"en",defaultDirection:"ltr",strategy:"no_prefix",lazy:false,rootRedirect:"",routesNameSeparator:"___",defaultLocaleRouteNameSuffix:"default",skipSettingLocaleOnNavigate:false,differentDomains:false,trailingSlash:false,configLocales:[{code:"da",files:["locales/da.json"]},{code:"de",files:["locales/de.json"]},{code:"en",files:["locales/en_US.json"]},{code:"es",files:["locales/es.json"]},{code:"fr",files:["locales/fr.json"]},{code:"hu",files:["locales/hu.json"]},{code:"it",files:["locales/it.json"]},{code:"nl",files:["locales/nl.json"]},{code:"pl",files:["locales/pl.json"]},{code:"pt-br",files:["locales/pt_BR.json"]},{code:"pt",files:["locales/pt.json"]}],locales:{da:{domain:""},de:{domain:""},en:{domain:""},es:{domain:""},fr:{domain:""},hu:{domain:""},it:{domain:""},nl:{domain:""},pl:{domain:""},"pt-br":{domain:""},pt:{domain:""}},detectBrowserLanguage:{alwaysRedirect:false,cookieCrossOrigin:false,cookieDomain:"",cookieKey:"i18n_redirected",cookieSecure:false,fallbackLocale:"",redirectOn:"root",useCookie:false},experimental:{localeDetector:"",switchLocalePathLinkSSR:false,autoImportTranslationFunctions:false}}},app:{baseURL:"/",buildAssetsDir:"/_preview/",cdnURL:"https://stcdn.leadconnectorhq.com/"}}</script></body>
 </html><meta name="creation-time" content="2024-09-13T21:39:45.241309+00:00">
 
-        <script>
-        (function() {
-            const tailwindLink = document.createElement('link');
-            tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-            tailwindLink.rel = 'stylesheet';
-            document.head.appendChild(tailwindLink);
-    
-            // Create the banner and expiration message elements
-            const banner = document.createElement('div');
-            const countdownText = document.createElement('span');
-            const expirationMessage = document.createElement('div');
-            const expirationText = document.createElement('p');
-            const redirectLink = document.createElement('button');
-    
-            // Apply styles to the banner
-            banner.id = 'banner';
-            banner.className = 'fixed top-0 w-full bg-red-100 text-red-700 text-center p-2 z-50 text-xs';
-            banner.innerHTML = `
-                <span id="banner-text">This website expires after 24 hours and will be deleted. If you would like to keep this webpage, sign up for a 30-day free trial and it will be transferred into your account.</span>
-                <span>Time remaining: <span id="countdown" class="font-bold">24:00:00</span></span>
-                <button id="signup-button" class="bg-blue-500 text-white font-bold py-1 px-2 ml-2 rounded hover:bg-blue-700 text-xs">Sign Up</button>
-            `;
-    
-            // Apply styles to the expiration message
-            expirationMessage.className = 'fixed top-0 w-full h-full flex items-center justify-center bg-gray-100 text-center';
-            expirationMessage.style.display = 'none';
-            expirationText.className = 'text-lg font-bold';
-            expirationText.textContent = "Time has expired. To get access to this website, sign up for a free trial.";
-            redirectLink.id = 'signup-button';
-            redirectLink.className = 'bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-700';
-            redirectLink.textContent = 'Sign Up';
-    
-            // Append elements
-            expirationMessage.appendChild(expirationText);
-            expirationMessage.appendChild(redirectLink);
-            document.body.appendChild(banner);
-            document.body.appendChild(expirationMessage);
-    
-            async function checkExpiry(url) {
-                const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ temporary_website_url: url })
-                });
-    
-                const data = await response.json();
-                if (response.status === 200) {
-                    const { hours, minutes, seconds, customer_name, email } = data;
-                    const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-                    const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
-                    const currentUrl = window.location.href;
-                    const redirectUrl = `https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF`;
-                    startCountdown(totalSeconds, redirectUrl);
-                } else {
-                    console.error('Error fetching expiry time:', data.message || 'An error occurred');
-                }
-            }
-    
-            function startCountdown(duration, redirectUrl) {
-                let timer = duration, hours, minutes, seconds;
-                const countdownElement = document.getElementById('countdown');
-                const interval = setInterval(function () {
-                    hours = parseInt(timer / 3600, 10);
-                    minutes = parseInt((timer % 3600) / 60, 10);
-                    seconds = parseInt(timer % 60, 10);
-    
-                    hours = hours < 10 ? "0" + hours : hours;
-                    minutes = minutes < 10 ? "0" + minutes : minutes;
-                    seconds = seconds < 10 ? "0" + seconds : seconds;
-    
-                    countdownElement.textContent = hours + ":" + minutes + ":" + seconds;
-    
-                    if (--timer < 0) {
-                        clearInterval(interval);
-                        document.body.innerHTML = '';
-                        document.body.appendChild(expirationMessage);
-                        expirationMessage.style.display = 'flex';
-                        window.location.href = redirectUrl;
-                    }
-                }, 1000);
-            }
-    
-            document.addEventListener('DOMContentLoaded', async function() {
-                const temporaryWebsiteUrl = window.location.href;
-                await checkExpiry(temporaryWebsiteUrl);
-    
-                document.getElementById('signup-button').onclick = async function() {
-                    const currentUrl = window.location.href;
-                    const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ temporary_website_url: currentUrl })
-                    });
-                    const data = await response.json();
-                    if (response.status === 200) {
-                        const { customer_name, email } = data;
-                        const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
-                        const redirectUrl = `https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF`;
-                        window.location.href = redirectUrl;
-                    } else {
-                        console.error('Error fetching customer data:', data.message || 'An error occurred');
-                    }
-                };
+<script>
+(function() {
+    // Load Tailwind CSS asynchronously
+    const tailwindLink = document.createElement('link');
+    tailwindLink.rel = 'stylesheet';
+    tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
+    tailwindLink.onload = () => { tailwindLink.media = 'all'; };
+    tailwindLink.media = 'print';
+    document.head.appendChild(tailwindLink);
+
+    // Create banner and expiration message elements
+    const bannerHTML = `
+        <div id="banner" class="fixed top-0 w-full bg-red-100 text-red-700 text-center p-2 z-50 text-xs">
+            <span id="banner-text">This website expires after 24 hours and will be deleted. If you would like to keep this webpage, sign up for a 30-day free trial and it will be transferred into your account.</span>
+            <span>Time remaining: <span id="countdown" class="font-bold">24:00:00</span></span>
+            <button id="signup-button" class="bg-blue-500 text-white font-bold py-1 px-2 ml-2 rounded hover:bg-blue-700 text-xs">Sign Up</button>
+        </div>
+    `;
+    const expirationHTML = `
+        <div id="expiration-message" class="fixed top-0 w-full h-full flex items-center justify-center bg-gray-100 text-center" style="display: none;">
+            <div>
+                <p class="text-lg font-bold">Time has expired. To get access to this website, sign up for a free trial.</p>
+                <button id="expiration-signup-button" class="bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-700">Sign Up</button>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', bannerHTML + expirationHTML);
+
+    let totalSeconds = 0;
+    const redirectUrl = 'https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF';
+
+    async function fetchExpiryData(url) {
+        try {
+            const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ temporary_website_url: url })
             });
-    
-            window.onscroll = function() {
+            if (!response.ok) throw new Error('Network response was not ok');
+            const { hours, minutes, seconds } = await response.json();
+            totalSeconds = hours * 3600 + minutes * 60 + seconds;
+        } catch (error) {
+            console.error('Error fetching expiry data:', error);
+        }
+    }
+
+    function startCountdown() {
+        const countdownElement = document.getElementById('countdown');
+        const interval = setInterval(() => {
+            const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            countdownElement.textContent = `${hours}:${minutes}:${seconds}`;
+            if (--totalSeconds < 0) {
+                clearInterval(interval);
+                document.getElementById('banner').remove();
+                document.getElementById('expiration-message').style.display = 'flex';
+            }
+        }, 1000);
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await fetchExpiryData(window.location.href);
+        startCountdown();
+
+        document.getElementById('signup-button').addEventListener('click', () => {
+            window.location.href = redirectUrl;
+        });
+        document.getElementById('expiration-signup-button').addEventListener('click', () => {
+            window.location.href = redirectUrl;
+        });
+    });
+
+    // Throttle scroll event for performance
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        if (!scrollTimeout) {
+            scrollTimeout = setTimeout(() => {
                 const bannerText = document.getElementById('banner-text');
-                if (window.scrollY > 0) {
-                    bannerText.style.display = 'none';
-                } else {
-                    bannerText.style.display = 'inline';
-                }
-            };
-        })();
-        </script>
-        
-        <script>
-        var head = document.head;
-        var script = document.createElement('script');
-        script.type = 'text/javascript';
-        script.src = "https://174657.t.hyros.com/v1/lst/universal-script?ph=bdeb637b658515b62841f4a4d102f258353fd4f7182cae8d051c84950fd9b4b3&tag=!clicked&ref_url=" + encodeURI(document.URL) ;
-        head.appendChild(script);
-        </script>
-        
-        <script>window.userpilotSettings = {token: "NX-e8076889"};</script>
-        <script src="https://js.userpilot.io/sdk/latest.js"></script>
-        <script>
-        userpilot.anonymous();
-        </script>
-        
+                bannerText.style.display = window.scrollY > 0 ? 'none' : 'inline';
+                scrollTimeout = null;
+            }, 100);
+        }
+    });
+})();
+</script>
+
+<script>
+(function() {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = `https://174657.t.hyros.com/v1/lst/universal-script?ph=bdeb637b658515b62841f4a4d102f258353fd4f7182cae8d051c84950fd9b4b3&tag=!clicked&ref_url=${encodeURIComponent(document.URL)}`;
+    document.head.appendChild(script);
+})();
+</script>
+
+<script>
+window.userpilotSettings = { token: "NX-e8076889" };
+(function() {
+    const userpilotScript = document.createElement('script');
+    userpilotScript.src = "https://js.userpilot.io/sdk/latest.js";
+    userpilotScript.async = true;
+    userpilotScript.onload = () => { userpilot.anonymous(); };
+    document.head.appendChild(userpilotScript);
+})();
+</script>
