@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <!-- same head content as before -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lambda Function Generator</title>
@@ -54,7 +54,6 @@
         }
     </style>
 </head>
-
 <body class="bg-gray-100">
     <div class="navbar">
         <a href="#" class="active">Create Full Stack</a>
@@ -63,7 +62,7 @@
     </div>
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Lambda Function Generator</h1>
-        <div class="bg-white p-6 rounded shadow-md">
+        <div class="bg-white p-6 rounded shadow-md mb-6">
             <label for="userRequest" class="block text-gray-700 font-bold mb-2">User Request:</label>
             <textarea id="userRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4"></textarea>
             <div class="flex space-x-2">
@@ -71,9 +70,11 @@
                 <button id="rewriteButton" class="bg-yellow-500 text-white px-4 py-2 rounded hidden">Rewrite Function</button>
             </div>
         </div>
-        <div id="responseContainer" class="mt-6 hidden">
+
+        <!-- Response Container -->
+        <div id="responseContainer" class="hidden">
             <h2 class="text-xl font-bold mb-2">Generated Function:</h2>
-            <form id="responseForm" class="bg-gray-200 p-4 rounded">
+            <form id="responseForm" class="bg-gray-200 p-4 rounded mb-6">
                 <div class="mb-4">
                     <label for="functionCode" class="block text-gray-700 font-bold mb-2">Function Code:</label>
                     <textarea id="functionCode" class="w-full p-2 border border-gray-300 rounded" rows="6"></textarea>
@@ -90,23 +91,29 @@
                     <label for="tags" class="block text-gray-700 font-bold mb-2">Tags:</label>
                     <textarea id="tags" class="w-full p-2 border border-gray-300 rounded" rows="4"></textarea>
                 </div>
-                <button type="button" id="saveButton" class="bg-green-500 text-white px-4 py-2 rounded">Save Changes</button>
-                <button type="button" id="updateButton" class="bg-indigo-500 text-white px-4 py-2 rounded ml-2 hidden">Update Function</button>
+                <div class="flex space-x-2">
+                    <button type="button" id="saveButton" class="bg-green-500 text-white px-4 py-2 rounded">Save Changes</button>
+                    <button type="button" id="updateButton" class="bg-indigo-500 text-white px-4 py-2 rounded hidden">Update Function</button>
+                </div>
             </form>
         </div>
-        <div id="functionUrlContainer" class="mt-6 hidden">
+
+        <!-- Function URL Container -->
+        <div id="functionUrlContainer" class="hidden">
             <h2 class="text-xl font-bold mb-2">Function URL:</h2>
-            <div class="flex items-center">
+            <div class="flex items-center mb-4">
                 <input type="text" id="functionUrl" class="w-full p-2 border border-gray-300 rounded" readonly>
                 <button id="copyButton" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">Copy</button>
             </div>
-            <button id="createFrontendButton" class="bg-purple-500 text-white px-4 py-2 rounded mt-2">Create Frontend</button>
+            <button id="createFrontendButton" class="bg-purple-500 text-white px-4 py-2 rounded">Create Frontend</button>
         </div>
+
+        <!-- Frontend Response Container -->
         <div id="frontendResponseContainer" class="mt-6 hidden">
             <h2 class="text-xl font-bold mb-2">Frontend Response:</h2>
             <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md">
                 <pre id="responseText" class="mt-2 text-sm text-white dracula"></pre>
-                <button id="toggleViewButton" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md">View HTML Code</button>
+                <button id="toggleViewButton" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md">View Rendered HTML</button>
                 <button id="copyHtmlButton" class="mt-2 bg-green-500 text-white py-2 px-4 rounded-md">Copy HTML Code</button>
                 <button id="rewriteHtmlButton" class="mt-2 bg-yellow-500 text-white py-2 px-4 rounded-md">Rewrite HTML</button>
                 <div id="userRequestContainer" class="mt-4">
@@ -114,10 +121,17 @@
                     <textarea id="rewriteUserRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4"></textarea>
                 </div>
                 <iframe id="previewIframe" class="w-full h-64 border border-gray-300 rounded mt-4"></iframe>
+
+                <!-- Suggestions Container -->
+                <div id="suggestionsContainer" class="mt-4 hidden">
+                    <h3 class="text-lg font-bold mb-2">Improvement Suggestions:</h3>
+                    <ul id="suggestionsList" class="list-disc pl-5"></ul>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- JavaScript Code -->
     <script>
         let arn = '';
 
@@ -138,6 +152,7 @@
 
             generateButton.textContent = 'Generating...';
             generateButton.disabled = true;
+            console.log('Generating function for request:', userRequest);
 
             try {
                 const response = await fetch('https://o5eymk3mnn3j2tujvhhinuu25u0diooh.lambda-url.us-west-2.on.aws/', {
@@ -153,6 +168,7 @@
                 }
 
                 const data = await response.json();
+                console.log('Function generated:', data);
                 functionCode.value = data.FUNCTION_CODE;
                 functionName.value = data.FUNCTION_NAME;
                 description.value = data.DESCRIPTION;
@@ -161,6 +177,7 @@
                 responseContainer.classList.remove('hidden');
                 rewriteButton.classList.remove('hidden');
             } catch (error) {
+                console.error('Error:', error);
                 alert('Error: ' + error.message);
             } finally {
                 generateButton.textContent = 'Generate Function';
@@ -180,6 +197,7 @@
 
             rewriteButton.textContent = 'Rewriting...';
             rewriteButton.disabled = true;
+            console.log('Rewriting function with request:', userRequest);
 
             try {
                 const response = await fetch('https://xmakkpe5oox6hvkaei4tomxsty0bqsqn.lambda-url.us-west-2.on.aws/', {
@@ -198,8 +216,10 @@
                 }
 
                 const data = await response.json();
+                console.log('Function rewritten:', data);
                 document.getElementById('functionCode').value = data.updatedCode;
             } catch (error) {
+                console.error('Error:', error);
                 alert('Error: ' + error.message);
             } finally {
                 rewriteButton.textContent = 'Rewrite Function';
@@ -223,6 +243,7 @@
 
             saveButton.textContent = 'Saving...';
             saveButton.disabled = true;
+            console.log('Saving function:', updatedData);
 
             try {
                 const response = await fetch('https://cb233dat4uxipdench4kuqjp7q0wivpe.lambda-url.us-west-2.on.aws/', {
@@ -238,6 +259,7 @@
                 }
 
                 const data = await response.json();
+                console.log('Function saved:', data);
                 const functionUrlContainer = document.getElementById('functionUrlContainer');
                 const functionUrl = document.getElementById('functionUrl');
                 functionUrl.value = data.FunctionUrl;
@@ -248,6 +270,7 @@
                 const updateButton = document.getElementById('updateButton');
                 updateButton.classList.remove('hidden');
             } catch (error) {
+                console.error('Error:', error);
                 alert('Error: ' + error.message);
             } finally {
                 saveButton.textContent = 'Save Changes';
@@ -261,6 +284,7 @@
 
             updateButton.textContent = 'Updating...';
             updateButton.disabled = true;
+            console.log('Updating function code for ARN:', arn);
 
             try {
                 const response = await fetch('https://qklalf7lnzfjghjwubqq232bj40llolc.lambda-url.us-west-2.on.aws/', {
@@ -276,8 +300,10 @@
                 }
 
                 const data = await response.json();
+                console.log('Function code updated:', data);
                 alert('Lambda function code updated successfully');
             } catch (error) {
+                console.error('Error:', error);
                 alert('Error: ' + error.message);
             } finally {
                 updateButton.textContent = 'Update Function';
@@ -291,6 +317,7 @@
             functionUrl.setSelectionRange(0, 99999); // For mobile devices
             document.execCommand('copy');
             alert('Function URL copied to clipboard');
+            console.log('Function URL copied:', functionUrl.value);
         });
 
         document.getElementById('createFrontendButton').addEventListener('click', async () => {
@@ -303,6 +330,7 @@
 
             createFrontendButton.textContent = 'Creating Frontend...';
             createFrontendButton.disabled = true;
+            console.log('Creating frontend for function URL:', functionUrl);
 
             try {
                 const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
@@ -318,6 +346,7 @@
                 }
 
                 const data = await response.json();
+                console.log('Frontend created:', data);
                 const responseHtml = data;
 
                 responseText.textContent = responseHtml;
@@ -326,6 +355,7 @@
                 // Inject the HTML content into the iframe
                 previewIframe.srcdoc = responseHtml;
             } catch (error) {
+                console.error('Error:', error);
                 alert('Error: ' + error.message);
             } finally {
                 createFrontendButton.textContent = 'Create Frontend';
@@ -335,14 +365,19 @@
 
         document.getElementById('toggleViewButton').addEventListener('click', function () {
             const responseText = document.getElementById('responseText');
+            const previewIframe = document.getElementById('previewIframe');
             const toggleViewButton = document.getElementById('toggleViewButton');
 
             if (responseText.classList.contains('hidden')) {
                 responseText.classList.remove('hidden');
+                previewIframe.classList.add('hidden');
                 toggleViewButton.textContent = 'View Rendered HTML';
+                console.log('Showing HTML code');
             } else {
                 responseText.classList.add('hidden');
+                previewIframe.classList.remove('hidden');
                 toggleViewButton.textContent = 'View HTML Code';
+                console.log('Showing rendered HTML');
             }
         });
 
@@ -350,6 +385,7 @@
             const responseText = document.getElementById('responseText').textContent;
             navigator.clipboard.writeText(responseText).then(() => {
                 alert('HTML code copied to clipboard!');
+                console.log('HTML code copied to clipboard');
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
             });
@@ -362,6 +398,8 @@
             const userRequest = document.getElementById('rewriteUserRequest').value;
             const rewriteHtmlButton = document.getElementById('rewriteHtmlButton');
             const previewIframe = document.getElementById('previewIframe');
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            const suggestionsList = document.getElementById('suggestionsList');
 
             if (!userRequest || !existingCode) {
                 alert('Please ensure both user request and existing code are provided.');
@@ -370,6 +408,7 @@
 
             rewriteHtmlButton.textContent = 'Rewriting HTML...';
             rewriteHtmlButton.disabled = true;
+            console.log('Rewriting HTML with request:', userRequest);
 
             try {
                 const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
@@ -390,11 +429,31 @@
                 }
 
                 const data = await response.json();
-                responseText.textContent = data;
+                console.log('HTML rewritten:', data);
+
+                const htmlCode = data.html_code;
+                const suggestions = data.suggestions;
+
+                responseText.textContent = htmlCode;
 
                 // Inject the updated HTML content into the iframe
-                previewIframe.srcdoc = data;
+                previewIframe.srcdoc = htmlCode;
+
+                // Display suggestions
+                if (suggestions && suggestions.length > 0) {
+                    suggestionsList.innerHTML = ''; // Clear existing suggestions
+                    suggestions.forEach(suggestion => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<strong>${suggestion.title}</strong>: ${suggestion.details}`;
+                        suggestionsList.appendChild(li);
+                    });
+                    suggestionsContainer.classList.remove('hidden');
+                    console.log('Improvement suggestions displayed');
+                } else {
+                    suggestionsContainer.classList.add('hidden');
+                }
             } catch (error) {
+                console.error('Error:', error);
                 alert('Error: ' + error.message);
             } finally {
                 rewriteHtmlButton.textContent = 'Rewrite HTML';
@@ -403,5 +462,4 @@
         });
     </script>
 </body>
-
 </html>
