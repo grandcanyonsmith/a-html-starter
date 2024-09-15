@@ -1,584 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GitHub File and Lambda Function Viewer</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- CodeMirror CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <!-- CodeMirror Theme -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
-
-    <!-- Additional CSS Libraries -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css">
-
-    <!-- Custom Styles -->
+    <title>Lambda Function Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        /* Navbar Styles */
+        /* Dracula Dark Theme for Code Box */
+        .dracula {
+            background: #282a36;
+            color: #f8f8f2;
+            padding: 1rem;
+            border-radius: 0.25rem;
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .dracula .keyword {
+            color: #ff79c6;
+        }
+
+        .dracula .string {
+            color: #f1fa8c;
+        }
+
+        .dracula .comment {
+            color: #6272a4;
+        }
+
+        .dracula .function {
+            color: #50fa7b;
+        }
+
         .navbar {
             display: flex;
-            justify-content: space-around;
-            align-items: center;
+            justify-content: space-between;
             padding: 1rem;
-            background-color: #1a202c; /* Tailwind Gray-900 */
-            color: #fff;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
+            background-color: #f8f8f8;
+            border-bottom: 1px solid #e5e5e5;
         }
+
         .navbar a {
-            color: #fff;
             text-decoration: none;
-            font-weight: 500;
+            color: #333;
             padding: 0.5rem 1rem;
         }
-        .navbar a:hover {
-            background-color: #2d3748; /* Tailwind Gray-800 */
-            border-radius: 0.25rem;
-        }
+
         .navbar a.active {
-            background-color: #4a5568; /* Tailwind Gray-700 */
-            border-radius: 0.25rem;
-        }
-
-        /* Main Content */
-        .content {
-            margin-top: 6rem; /* Adjust for fixed navbar */
-            padding: 1rem;
-        }
-
-        /* Form Styles */
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-        input[type="url"],
-        textarea {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #cbd5e0; /* Tailwind Gray-400 */
-            border-radius: 0.25rem;
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-        input[type="url"]:focus,
-        textarea:focus {
-            outline: none;
-            border-color: #3182ce; /* Tailwind Blue-600 */
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Tailwind Blue-500 */
-        }
-        button {
-            padding: 0.75rem 1.5rem;
-            background-color: #3182ce; /* Tailwind Blue-600 */
-            color: #fff;
-            border: none;
-            border-radius: 0.25rem;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #2b6cb0; /* Tailwind Blue-700 */
-        }
-        button:disabled {
-            background-color: #a0aec0; /* Tailwind Gray-500 */
-            cursor: not-allowed;
-        }
-        /* Tab Styles */
-        .tab-buttons {
-            display: flex;
-            margin-bottom: 1rem;
-        }
-        .tab-buttons button {
-            flex: 1;
-            padding: 0.75rem;
-            background-color: #e2e8f0; /* Tailwind Gray-200 */
-            border: none;
-            border-bottom: 2px solid transparent;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .tab-buttons button.active {
-            background-color: #edf2f7; /* Tailwind Gray-100 */
-            border-bottom: 2px solid #3182ce; /* Tailwind Blue-600 */
-        }
-
-        /* Code Editor and Output */
-        .code-editor, .iframe-content {
-            width: 100%;
-            height: 600px;
-            border: 1px solid #cbd5e0; /* Tailwind Gray-400 */
-            border-radius: 0.25rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Function Item Styles */
-        .function-item {
-            border: 1px solid #cbd5e0;
-            border-radius: 0.25rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background-color: #fff;
-        }
-        .function-item .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-        .function-item .details {
-            display: none;
-            margin-top: 1rem;
-        }
-        .function-item.active .details {
-            display: block;
-        }
-        .function-item .chevron {
-            transition: transform 0.3s;
-        }
-        .function-item.active .chevron {
-            transform: rotate(180deg);
-        }
-
-        /* Notification Styles */
-        #notification {
-            position: fixed;
-            bottom: 1rem;
-            right: 1rem;
-            background-color: #48bb78; /* Tailwind Green-500 */
-            color: #fff;
-            padding: 1rem 1.5rem;
-            border-radius: 0.25rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            display: none;
-            z-index: 1001;
-            animation: fadeInOut 4s forwards;
-        }
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { opacity: 0; }
+            border-bottom: 2px solid #4a90e2;
+            color: #4a90e2;
         }
     </style>
 </head>
+
 <body class="bg-gray-100">
-    <!-- Navbar -->
-    <nav class="navbar">
-        <a href="https://html-starter-coral.vercel.app/fullstack-generator.html">Create Full Stack</a>
+    <div class="navbar">
+        <a href="#" class="active">Create Full Stack</a>
         <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html">Lambda Functions</a>
-        <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html">Lookup Lambdas</a>
-        <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="active">Lookup Frontend</a>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="content">
-        <h1 class="text-2xl font-bold mb-6">GitHub File and Lambda Function Viewer</h1>
-
-        <!-- URL Input Form -->
-        <form id="fetchForm" class="mb-8">
-            <label for="url">Enter GitHub File URL:</label>
-            <input type="url" id="url" name="url" placeholder="https://github.com/user/repo/blob/main/file.html" required>
-            <button type="submit">Fetch Content</button>
-        </form>
-
-        <!-- Results Section -->
-        <div id="result" class="hidden">
-            <!-- Frontend Content -->
-            <div class="mb-12">
-                <h2 class="text-xl font-semibold mb-4">Frontend</h2>
-                <!-- Tab Buttons -->
-                <div class="tab-buttons">
-                    <button id="toggleRendered" class="active">Rendered Content</button>
-                    <button id="toggleCode">Code</button>
-                </div>
-                <!-- Rendered Content -->
-                <div id="renderedContent">
-                    <iframe id="contentFrame" class="iframe-content"></iframe>
-                </div>
-                <!-- Code Content -->
-                <div id="codeContent" class="hidden">
-                    <textarea id="codeBox"></textarea>
-                </div>
-
-                <!-- User Request and Actions -->
-                <div class="mt-6">
-                    <label for="frontendUserRequest">User Request:</label>
-                    <textarea id="frontendUserRequest" rows="3" placeholder="Describe the changes you'd like to make..."></textarea>
-                    <div class="flex space-x-2 mt-4">
-                        <button id="updateFrontendButton">Update</button>
-                        <button id="rewriteFrontendButton">Rewrite HTML</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Backend Content -->
-            <div>
-                <h2 class="text-xl font-semibold mb-4">Backend</h2>
-                <div id="lambdaFunctions">
-                    <!-- Lambda Functions will be dynamically added here -->
-                </div>
+        <a href="lookup-lambda-functions-in-webpage-url.html">Lookup Lambdas</a>
+    </div>
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Lambda Function Generator</h1>
+        <div class="bg-white p-6 rounded shadow-md">
+            <label for="userRequest" class="block text-gray-700 font-bold mb-2">User Request:</label>
+            <textarea id="userRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4"></textarea>
+            <div class="flex space-x-2">
+                <button id="generateButton" class="bg-blue-500 text-white px-4 py-2 rounded">Generate Function</button>
+                <button id="rewriteButton" class="bg-yellow-500 text-white px-4 py-2 rounded hidden">Rewrite Function</button>
             </div>
         </div>
-    </main>
+        <div id="responseContainer" class="mt-6 hidden">
+            <h2 class="text-xl font-bold mb-2">Generated Function:</h2>
+            <form id="responseForm" class="bg-gray-200 p-4 rounded">
+                <div class="mb-4">
+                    <label for="functionCode" class="block text-gray-700 font-bold mb-2">Function Code:</label>
+                    <textarea id="functionCode" class="w-full p-2 border border-gray-300 rounded" rows="6"></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="functionName" class="block text-gray-700 font-bold mb-2">Function Name:</label>
+                    <input type="text" id="functionName" class="w-full p-2 border border-gray-300 rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="description" class="block text-gray-700 font-bold mb-2">Description:</label>
+                    <input type="text" id="description" class="w-full p-2 border border-gray-300 rounded">
+                </div>
+                <div class="mb-4">
+                    <label for="tags" class="block text-gray-700 font-bold mb-2">Tags:</label>
+                    <textarea id="tags" class="w-full p-2 border border-gray-300 rounded" rows="4"></textarea>
+                </div>
+                <button type="button" id="saveButton" class="bg-green-500 text-white px-4 py-2 rounded">Save Changes</button>
+                <button type="button" id="updateButton" class="bg-indigo-500 text-white px-4 py-2 rounded ml-2 hidden">Update Function</button>
+            </form>
+        </div>
+        <div id="functionUrlContainer" class="mt-6 hidden">
+            <h2 class="text-xl font-bold mb-2">Function URL:</h2>
+            <div class="flex items-center">
+                <input type="text" id="functionUrl" class="w-full p-2 border border-gray-300 rounded" readonly>
+                <button id="copyButton" class="bg-blue-500 text-white px-4 py-2 rounded ml-2">Copy</button>
+            </div>
+            <button id="createFrontendButton" class="bg-purple-500 text-white px-4 py-2 rounded mt-2">Create Frontend</button>
+        </div>
+        <div id="frontendResponseContainer" class="mt-6 hidden">
+            <h2 class="text-xl font-bold mb-2">Frontend Response:</h2>
+            <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                <pre id="responseText" class="mt-2 text-sm text-white dracula"></pre>
+                <button id="toggleViewButton" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md">View HTML Code</button>
+                <button id="copyHtmlButton" class="mt-2 bg-green-500 text-white py-2 px-4 rounded-md">Copy HTML Code</button>
+                <button id="rewriteHtmlButton" class="mt-2 bg-yellow-500 text-white py-2 px-4 rounded-md">Rewrite HTML</button>
+                <div id="userRequestContainer" class="mt-4">
+                    <label for="rewriteUserRequest" class="block text-gray-700 font-bold mb-2">User Request:</label>
+                    <textarea id="rewriteUserRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4"></textarea>
+                </div>
+                <iframe id="previewIframe" class="w-full h-64 border border-gray-300 rounded mt-4"></iframe>
+            </div>
+        </div>
+    </div>
 
-    <!-- Notification -->
-    <div id="notification">Copied to clipboard!</div>
-
-    <!-- External Scripts -->
-    <!-- CodeMirror -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-    <!-- CodeMirror Modes -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
-    <!-- CodeMirror Addons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
-
-    <!-- Main Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const fetchForm = document.getElementById('fetchForm');
-            const urlInput = document.getElementById('url');
-            const resultSection = document.getElementById('result');
-            const contentFrame = document.getElementById('contentFrame');
-            const codeBox = document.getElementById('codeBox');
-            const toggleRendered = document.getElementById('toggleRendered');
-            const toggleCode = document.getElementById('toggleCode');
-            const renderedContent = document.getElementById('renderedContent');
-            const codeContent = document.getElementById('codeContent');
-            const updateFrontendButton = document.getElementById('updateFrontendButton');
-            const rewriteFrontendButton = document.getElementById('rewriteFrontendButton');
-            const frontendUserRequest = document.getElementById('frontendUserRequest');
-            const lambdaFunctionsDiv = document.getElementById('lambdaFunctions');
-            const notification = document.getElementById('notification');
-            let fetchedContent = '';
+        let arn = '';
 
-            // Initialize CodeMirror Editor
-            const codeEditor = CodeMirror.fromTextArea(codeBox, {
-                mode: 'htmlmixed',
-                theme: 'dracula',
-                lineNumbers: true,
-                autoCloseBrackets: true,
+        document.getElementById('generateButton').addEventListener('click', async () => {
+            const userRequest = document.getElementById('userRequest').value;
+            const generateButton = document.getElementById('generateButton');
+            const responseContainer = document.getElementById('responseContainer');
+            const functionCode = document.getElementById('functionCode');
+            const functionName = document.getElementById('functionName');
+            const description = document.getElementById('description');
+            const tags = document.getElementById('tags');
+            const rewriteButton = document.getElementById('rewriteButton');
+
+            if (!userRequest) {
+                alert('Please enter a user request.');
+                return;
+            }
+
+            generateButton.textContent = 'Generating...';
+            generateButton.disabled = true;
+
+            try {
+                const response = await fetch('https://o5eymk3mnn3j2tujvhhinuu25u0diooh.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userRequest })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                functionCode.value = data.FUNCTION_CODE;
+                functionName.value = data.FUNCTION_NAME;
+                description.value = data.DESCRIPTION;
+                tags.value = JSON.stringify(data.TAGS, null, 2);
+                arn = data.ARN; // Set the ARN variable
+                responseContainer.classList.remove('hidden');
+                rewriteButton.classList.remove('hidden');
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                generateButton.textContent = 'Generate Function';
+                generateButton.disabled = false;
+            }
+        });
+
+        document.getElementById('rewriteButton').addEventListener('click', async () => {
+            const userRequest = document.getElementById('userRequest').value;
+            const existingCode = document.getElementById('functionCode').value;
+            const rewriteButton = document.getElementById('rewriteButton');
+
+            if (!userRequest || !existingCode) {
+                alert('Please ensure both user request and existing code are provided.');
+                return;
+            }
+
+            rewriteButton.textContent = 'Rewriting...';
+            rewriteButton.disabled = true;
+
+            try {
+                const response = await fetch('https://xmakkpe5oox6hvkaei4tomxsty0bqsqn.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userRequest: userRequest,
+                        existingCode: existingCode
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                document.getElementById('functionCode').value = data.updatedCode;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                rewriteButton.textContent = 'Rewrite Function';
+                rewriteButton.disabled = false;
+            }
+        });
+
+        document.getElementById('saveButton').addEventListener('click', async () => {
+            const saveButton = document.getElementById('saveButton');
+            const functionCode = document.getElementById('functionCode').value;
+            const functionName = document.getElementById('functionName').value;
+            const description = document.getElementById('description').value;
+            const tags = document.getElementById('tags').value;
+
+            const updatedData = {
+                FUNCTION_CODE: functionCode,
+                FUNCTION_NAME: functionName,
+                DESCRIPTION: description,
+                TAGS: JSON.parse(tags)
+            };
+
+            saveButton.textContent = 'Saving...';
+            saveButton.disabled = true;
+
+            try {
+                const response = await fetch('https://cb233dat4uxipdench4kuqjp7q0wivpe.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                const functionUrlContainer = document.getElementById('functionUrlContainer');
+                const functionUrl = document.getElementById('functionUrl');
+                functionUrl.value = data.FunctionUrl;
+                arn = data.FunctionArn; // Set the ARN variable from the response
+                functionUrlContainer.classList.remove('hidden');
+
+                // Show the update button
+                const updateButton = document.getElementById('updateButton');
+                updateButton.classList.remove('hidden');
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                saveButton.textContent = 'Save Changes';
+                saveButton.disabled = false;
+            }
+        });
+
+        document.getElementById('updateButton').addEventListener('click', async () => {
+            const updateButton = document.getElementById('updateButton');
+            const functionCode = document.getElementById('functionCode').value;
+
+            updateButton.textContent = 'Updating...';
+            updateButton.disabled = true;
+
+            try {
+                const response = await fetch('https://qklalf7lnzfjghjwubqq232bj40llolc.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ arn, updatedCode: functionCode })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                alert('Lambda function code updated successfully');
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                updateButton.textContent = 'Update Function';
+                updateButton.disabled = false;
+            }
+        });
+
+        document.getElementById('copyButton').addEventListener('click', () => {
+            const functionUrl = document.getElementById('functionUrl');
+            functionUrl.select();
+            functionUrl.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand('copy');
+            alert('Function URL copied to clipboard');
+        });
+
+        document.getElementById('createFrontendButton').addEventListener('click', async () => {
+            const functionCode = document.getElementById('functionCode').value;
+            const functionUrl = document.getElementById('functionUrl').value;
+            const createFrontendButton = document.getElementById('createFrontendButton');
+            const frontendResponseContainer = document.getElementById('frontendResponseContainer');
+            const responseText = document.getElementById('responseText');
+            const previewIframe = document.getElementById('previewIframe');
+
+            createFrontendButton.textContent = 'Creating Frontend...';
+            createFrontendButton.disabled = true;
+
+            try {
+                const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ functionCode, functionUrl })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                const responseHtml = data;
+
+                responseText.textContent = responseHtml;
+                frontendResponseContainer.classList.remove('hidden');
+
+                // Inject the HTML content into the iframe
+                previewIframe.srcdoc = responseHtml;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                createFrontendButton.textContent = 'Create Frontend';
+                createFrontendButton.disabled = false;
+            }
+        });
+
+        document.getElementById('toggleViewButton').addEventListener('click', function () {
+            const responseText = document.getElementById('responseText');
+            const toggleViewButton = document.getElementById('toggleViewButton');
+
+            if (responseText.classList.contains('hidden')) {
+                responseText.classList.remove('hidden');
+                toggleViewButton.textContent = 'View Rendered HTML';
+            } else {
+                responseText.classList.add('hidden');
+                toggleViewButton.textContent = 'View HTML Code';
+            }
+        });
+
+        document.getElementById('copyHtmlButton').addEventListener('click', function () {
+            const responseText = document.getElementById('responseText').textContent;
+            navigator.clipboard.writeText(responseText).then(() => {
+                alert('HTML code copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
             });
+        });
 
-            // Event Listeners
-            fetchForm.addEventListener('submit', handleFetchFormSubmit);
-            toggleRendered.addEventListener('click', showRenderedContent);
-            toggleCode.addEventListener('click', showCodeContent);
-            updateFrontendButton.addEventListener('click', handleUpdateFrontend);
-            rewriteFrontendButton.addEventListener('click', handleRewriteFrontend);
+        document.getElementById('rewriteHtmlButton').addEventListener('click', async () => {
+            const functionCode = document.getElementById('functionCode').value;
+            const functionUrl = document.getElementById('functionUrl').value;
+            const existingCode = document.getElementById('responseText').textContent;
+            const userRequest = document.getElementById('rewriteUserRequest').value;
+            const rewriteHtmlButton = document.getElementById('rewriteHtmlButton');
+            const previewIframe = document.getElementById('previewIframe');
 
-            // Handle Fetch Form Submit
-            async function handleFetchFormSubmit(event) {
-                event.preventDefault();
-                const url = urlInput.value.trim();
-                if (!url) return;
-
-                // Reset Content
-                resultSection.classList.add('hidden');
-                contentFrame.srcdoc = '';
-                codeEditor.setValue('');
-                lambdaFunctionsDiv.innerHTML = '';
-
-                try {
-                    // Fetch GitHub File Content
-                    const fileResponse = await fetch('https://7jgnzaokec66xxo4t3v2ixeqxm0rvzov.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url })
-                    });
-                    const fileData = await fileResponse.json();
-                    if (fileResponse.ok && fileData.content) {
-                        fetchedContent = fileData.content;
-                        contentFrame.srcdoc = fetchedContent;
-                        codeEditor.setValue(fetchedContent);
-                        resultSection.classList.remove('hidden');
-                    } else {
-                        throw new Error(fileData.message || 'Failed to fetch file content');
-                    }
-
-                    // Fetch Related Lambda Functions
-                    await fetchRelatedLambdaFunctions(url);
-                } catch (error) {
-                    console.error(error);
-                    alert('Error: ' + error.message);
-                }
+            if (!userRequest || !existingCode) {
+                alert('Please ensure both user request and existing code are provided.');
+                return;
             }
 
-            // Fetch Related Lambda Functions
-            async function fetchRelatedLambdaFunctions(url) {
-                try {
-                    const lambdaResponse = await fetch('https://7t6svygyp2c5nnxcvq5ofpn7xa0xhcks.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url })
-                    });
-                    const lambdaData = await lambdaResponse.json();
-                    if (lambdaResponse.ok && lambdaData.lambda_functions && Object.keys(lambdaData.lambda_functions).length > 0) {
-                        displayLambdaFunctions(lambdaData.lambda_functions);
-                    } else {
-                        lambdaFunctionsDiv.innerHTML = '<p>No Lambda functions found.</p>';
-                    }
-                } catch (error) {
-                    console.error(error);
-                    alert('Error fetching Lambda functions: ' + error.message);
-                }
-            }
+            rewriteHtmlButton.textContent = 'Rewriting HTML...';
+            rewriteHtmlButton.disabled = true;
 
-            // Display Lambda Functions
-            function displayLambdaFunctions(lambdaFunctions) {
-                lambdaFunctionsDiv.innerHTML = '';
-                Object.entries(lambdaFunctions).forEach(([lambdaUrl, functionName]) => {
-                    const functionItem = document.createElement('div');
-                    functionItem.classList.add('function-item');
-                    functionItem.innerHTML = `
-                        <div class="header">
-                            <div>
-                                <h3 class="text-lg font-semibold">${functionName}</h3>
-                                <p class="text-sm text-gray-500">${lambdaUrl}</p>
-                            </div>
-                            <div>
-                                <button class="toggle-details">▼</button>
-                            </div>
-                        </div>
-                        <div class="details">
-                            <p>Loading function details...</p>
-                        </div>
-                    `;
-                    lambdaFunctionsDiv.appendChild(functionItem);
-
-                    const toggleButton = functionItem.querySelector('.toggle-details');
-                    const detailsDiv = functionItem.querySelector('.details');
-                    toggleButton.addEventListener('click', () => {
-                        if (functionItem.classList.contains('active')) {
-                            functionItem.classList.remove('active');
-                        } else {
-                            functionItem.classList.add('active');
-                            if (!detailsDiv.dataset.loaded) {
-                                loadFunctionDetails(functionName, detailsDiv);
-                            }
-                        }
-                    });
+            try {
+                const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        functionCode: functionCode,
+                        functionUrl: functionUrl,
+                        existingCode: existingCode,
+                        userRequest: userRequest
+                    })
                 });
-            }
 
-            // Load Function Details
-            async function loadFunctionDetails(functionName, detailsDiv) {
-                try {
-                    const functionResponse = await fetch('https://8qfyzi5f1msnmjmbdawr6r7qdq0yswce.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ functionName })
-                    });
-                    const functionData = await functionResponse.json();
-                    if (functionResponse.ok) {
-                        detailsDiv.innerHTML = `
-                            <h4 class="text-md font-semibold mb-2">Function Code:</h4>
-                            <pre class="code-editor">${functionData.code || 'No code available'}</pre>
-                            <label for="userRequest-${functionName}">User Request:</label>
-                            <textarea id="userRequest-${functionName}" rows="2" placeholder="Describe changes to the function..."></textarea>
-                            <div class="flex space-x-2 mt-2">
-                                <button class="update-function-button" data-function-name="${functionName}">Update Function</button>
-                                <button class="rewrite-function-button" data-function-name="${functionName}">Rewrite Function</button>
-                            </div>
-                        `;
-                        // Add Event Listeners for Update and Rewrite Buttons
-                        const updateButton = detailsDiv.querySelector('.update-function-button');
-                        const rewriteButton = detailsDiv.querySelector('.rewrite-function-button');
-                        updateButton.addEventListener('click', handleUpdateFunction);
-                        rewriteButton.addEventListener('click', handleRewriteFunction);
-                        detailsDiv.dataset.loaded = true;
-                    } else {
-                        throw new Error(functionData.message || 'Failed to fetch function details');
-                    }
-                } catch (error) {
-                    console.error(error);
-                    detailsDiv.innerHTML = `<p class="text-red-500">Error: ${error.message}</p>`;
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            }
 
-            // Handle Update Function
-            async function handleUpdateFunction(event) {
-                const functionName = event.target.getAttribute('data-function-name');
-                const detailsDiv = event.target.closest('.details');
-                const code = detailsDiv.querySelector('.code-editor').textContent;
-                try {
-                    // Call API to update function code
-                    const response = await fetch('https://qklalf7lnzfjghjwubqq232bj40llolc.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ functionName, updatedCode: code })
-                    });
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert('Function updated successfully!');
-                    } else {
-                        throw new Error(data.message || 'Failed to update function');
-                    }
-                } catch (error) {
-                    console.error(error);
-                    alert('Error updating function: ' + error.message);
-                }
-            }
+                const data = await response.json();
+                responseText.textContent = data;
 
-            // Handle Rewrite Function
-            async function handleRewriteFunction(event) {
-                const functionName = event.target.getAttribute('data-function-name');
-                const detailsDiv = event.target.closest('.details');
-                const code = detailsDiv.querySelector('.code-editor').textContent;
-                const userRequest = detailsDiv.querySelector(`#userRequest-${functionName}`).value.trim();
-                if (!userRequest) {
-                    alert('Please enter a user request.');
-                    return;
-                }
-                event.target.textContent = 'Rewriting...';
-                event.target.disabled = true;
-
-                try {
-                    // Call API to rewrite function code
-                    const response = await fetch('https://xmakkpe5oox6hvkaei4tomxsty0bqsqn.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ functionName, existingCode: code, userRequest })
-                    });
-                    const data = await response.json();
-                    if (response.ok && data.updatedCode) {
-                        detailsDiv.querySelector('.code-editor').textContent = data.updatedCode;
-                        alert('Function rewritten successfully!');
-                    } else {
-                        throw new Error(data.message || 'Failed to rewrite function');
-                    }
-                } catch (error) {
-                    console.error(error);
-                    alert('Error rewriting function: ' + error.message);
-                } finally {
-                    event.target.textContent = 'Rewrite Function';
-                    event.target.disabled = false;
-                }
-            }
-
-            // Show Rendered Content
-            function showRenderedContent() {
-                toggleRendered.classList.add('active');
-                toggleCode.classList.remove('active');
-                renderedContent.classList.remove('hidden');
-                codeContent.classList.add('hidden');
-            }
-
-            // Show Code Content
-            function showCodeContent() {
-                toggleCode.classList.add('active');
-                toggleRendered.classList.remove('active');
-                codeContent.classList.remove('hidden');
-                renderedContent.classList.add('hidden');
-                codeEditor.refresh();
-            }
-
-            // Handle Update Frontend
-            async function handleUpdateFrontend() {
-                const updatedCode = codeEditor.getValue();
-                const githubUrl = urlInput.value.trim();
-                if (!updatedCode || !githubUrl) return;
-
-                updateFrontendButton.textContent = 'Updating...';
-                updateFrontendButton.disabled = true;
-
-                try {
-                    const response = await fetch('https://e4dtiiwk2mn5k6z6s4vwpmluvi0kavve.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url: githubUrl, updatedCode })
-                    });
-                    const data = await response.json();
-                    if (response.ok) {
-                        alert('Frontend updated successfully!');
-                    } else {
-                        throw new Error(data.message || 'Failed to update frontend');
-                    }
-                } catch (error) {
-                    console.error(error);
-                    alert('Error: ' + error.message);
-                } finally {
-                    updateFrontendButton.textContent = 'Update';
-                    updateFrontendButton.disabled = false;
-                }
-            }
-
-            // Handle Rewrite Frontend
-            async function handleRewriteFrontend() {
-                const userRequest = frontendUserRequest.value.trim();
-                const existingCode = codeEditor.getValue();
-                if (!userRequest || !existingCode) return;
-
-                rewriteFrontendButton.textContent = 'Rewriting...';
-                rewriteFrontendButton.disabled = true;
-
-                try {
-                    const response = await fetch('https://pphvmloxbpolihsjuelbfoieqm0zzvgq.lambda-url.us-west-2.on.aws/', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userRequest, existingCode })
-                    });
-                    const data = await response.json();
-                    if (response.ok && data.html_code) {
-                        codeEditor.setValue(data.html_code);
-                        contentFrame.srcdoc = data.html_code;
-
-                        // Display Improvement Suggestions
-                        displaySuggestions(data.suggestions);
-                    } else {
-                        throw new Error(data.message || 'Failed to rewrite frontend');
-                    }
-                } catch (error) {
-                    console.error(error);
-                    alert('Error: ' + error.message);
-                } finally {
-                    rewriteFrontendButton.textContent = 'Rewrite HTML';
-                    rewriteFrontendButton.disabled = false;
-                }
-            }
-
-            // Display Improvement Suggestions
-            function displaySuggestions(suggestions) {
-                if (!suggestions || !Array.isArray(suggestions)) return;
-                // Remove existing suggestions
-                let suggestionsContainer = document.getElementById('suggestions');
-                if (suggestionsContainer) {
-                    suggestionsContainer.remove();
-                }
-                suggestionsContainer = document.createElement('div');
-                suggestionsContainer.id = 'suggestions';
-                suggestionsContainer.classList.add('mt-6', 'bg-white', 'p-4', 'rounded', 'shadow');
-                const suggestionsTitle = document.createElement('h3');
-                suggestionsTitle.classList.add('text-lg', 'font-semibold', 'mb-2');
-                suggestionsTitle.textContent = 'Improvement Suggestions';
-                const suggestionsList = document.createElement('ul');
-                suggestionsList.classList.add('list-disc', 'list-inside');
-                suggestions.forEach(suggestion => {
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `<strong>${suggestion.title}</strong>: ${suggestion.details}`;
-                    suggestionsList.appendChild(listItem);
-                });
-                suggestionsContainer.appendChild(suggestionsTitle);
-                suggestionsContainer.appendChild(suggestionsList);
-                resultSection.appendChild(suggestionsContainer);
-            }
-
-            // Show Notification
-            function showNotification(message) {
-                notification.textContent = message;
-                notification.style.display = 'block';
-                setTimeout(() => {
-                    notification.style.display = 'none';
-                }, 4000);
+                // Inject the updated HTML content into the iframe
+                previewIframe.srcdoc = data;
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                rewriteHtmlButton.textContent = 'Rewrite HTML';
+                rewriteHtmlButton.disabled = false;
             }
         });
     </script>
 </body>
+
 </html>
