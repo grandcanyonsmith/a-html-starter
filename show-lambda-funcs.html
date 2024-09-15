@@ -26,6 +26,17 @@
             font-family: monospace;
             overflow-x: auto;
         }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #6366F1;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -33,7 +44,7 @@
     <div class="container mx-auto p-6">
         <header class="flex items-center justify-between mb-6">
             <h1 class="text-4xl font-bold text-gray-800">AWS Lambda Function Viewer</h1>
-            <button id="refreshFunctions" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200">Refresh Functions</button>
+            <button id="refreshFunctions" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Refresh Functions</button>
         </header>
         <div id="functionList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Lambda functions will be displayed here -->
@@ -48,7 +59,7 @@
                 <div class="flex items-center">
                     <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
                         <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75M3.3 16.4c-.87 1.5.22 3.36 1.95 3.36h14.5c1.73 0 2.8-1.87 1.95-3.36L13.95 3.36c-.87-1.5-3.03-1.5-3.9 0L3.3 16.4zM12 15.75h.01v.01H12v-.01z" />
                         </svg>
                     </div>
                     <div class="ml-4 text-center sm:text-left">
@@ -60,8 +71,8 @@
                 </div>
             </div>
             <div class="bg-gray-100 px-6 py-4 flex justify-end">
-                <button id="cancelDelete" type="button" class="mr-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition duration-200">Cancel</button>
-                <button id="confirmDelete" type="button" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-200">Delete</button>
+                <button id="cancelDelete" type="button" class="mr-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-opacity-50">Cancel</button>
+                <button id="confirmDelete" type="button" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Delete</button>
             </div>
         </div>
     </div>
@@ -79,7 +90,7 @@
 
             // Function to fetch and display Lambda functions
             async function loadFunctions() {
-                functionList.innerHTML = '<p class="text-gray-600">Loading functions...</p>';
+                functionList.innerHTML = '<div class="flex justify-center"><div class="spinner"></div></div>';
 
                 try {
                     const response = await fetch('https://j6uh5lxq4xjbm3k253olur2joy0bpebl.lambda-url.us-west-2.on.aws/');
@@ -126,14 +137,14 @@
                                 </button>
                             </div>
                             <div class="mt-4">
-                                <button class="view-logs-button bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-200" data-function-arn="${func.FunctionArn}">View Logs</button>
+                                <button class="view-logs-button bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}">View Logs</button>
                             </div>
                             <div class="code-container hidden mt-4" id="code-${func.FunctionName}">
                                 ${codeFilesContent}
                                 <textarea id="userRequest-${func.FunctionName}" class="mt-4 p-2 w-full border rounded" placeholder="Enter user request..."></textarea>
                                 <div class="flex space-x-2 mt-4">
-                                    <button class="update-button bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200" data-function-arn="${func.FunctionArn}">Update</button>
-                                    <button class="rewrite-button bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200" data-function-name="${func.FunctionName}">Rewrite Code</button>
+                                    <button class="update-button bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}">Update</button>
+                                    <button class="rewrite-button bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}">Rewrite Code</button>
                                 </div>
                             </div>
                             <div class="logs-container hidden mt-4" id="logs-${func.FunctionName}">
@@ -176,7 +187,7 @@
             // Refresh button handler
             refreshButton.addEventListener('click', () => {
                 console.log('Refresh button clicked');
-                refreshButton.textContent = 'Refreshing...';
+                refreshButton.innerHTML = '<div class="spinner"></div>';
                 refreshButton.disabled = true;
                 loadFunctions().then(() => {
                     refreshButton.textContent = 'Refresh Functions';
@@ -191,6 +202,7 @@
                     title.addEventListener('click', (event) => {
                         const functionName = event.currentTarget.getAttribute('data-function-name');
                         toggleCodeContainer(functionName);
+                        console.log(`Function ${functionName} clicked`);
                     });
                 });
 
@@ -199,6 +211,7 @@
                     button.addEventListener('click', (event) => {
                         const functionName = event.currentTarget.getAttribute('data-function-name');
                         toggleCodeContainer(functionName);
+                        console.log(`Edit button clicked for function: ${functionName}`);
                     });
                 });
 
@@ -277,7 +290,7 @@
                         console.log(`Update button clicked for function: ${functionName}`);
 
                         const updateButton = event.currentTarget;
-                        updateButton.textContent = 'Updating...';
+                        updateButton.innerHTML = '<div class="spinner"></div>';
                         updateButton.disabled = true;
 
                         try {
@@ -326,7 +339,7 @@
                         }
 
                         const rewriteButton = event.currentTarget;
-                        rewriteButton.textContent = 'Rewriting...';
+                        rewriteButton.innerHTML = '<div class="spinner"></div>';
                         rewriteButton.disabled = true;
 
                         try {
@@ -377,7 +390,7 @@
                             return;
                         }
 
-                        logsDiv.innerHTML = '<p class="text-gray-600">Loading log streams...</p>';
+                        logsDiv.innerHTML = '<div class="flex justify-center"><div class="spinner"></div></div>';
 
                         try {
                             const response = await fetch('https://dk4wzehdht64hx5gsye2njddzq0oxwow.lambda-url.us-west-2.on.aws/', {
@@ -424,7 +437,7 @@
 
             async function fetchLogEvents(functionArn, logStreamName, logsDiv) {
                 console.log(`Fetching log events for: ${logStreamName}`);
-                logsDiv.innerHTML = '<p class="text-gray-600">Loading log events...</p>';
+                logsDiv.innerHTML = '<div class="flex justify-center"><div class="spinner"></div></div>';
 
                 try {
                     const response = await fetch('https://dk4wzehdht64hx5gsye2njddzq0oxwow.lambda-url.us-west-2.on.aws/', {
