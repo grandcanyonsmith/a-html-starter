@@ -8,36 +8,10 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- CodeMirror CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" integrity="sha512-L3dDupTKu5DGZXhlZEdpcPrTZUR6L0kJYf7UBD1gZlGsS6tulnfkpVFuUtyma4sYBCsyJs42HVRwD0ecg3m0pA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css" integrity="sha512-JzE3MFdU2Rmqj9S3i68riggTVTuD9ZxOsNbDP2Y443K989/FiWH5G6pyclAcULWLB+CFzfFqBhWuId9i4APSEg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Moment.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <!-- Custom styles -->
-    <style>
-        .CodeMirror {
-            height: auto;
-        }
-        .log-event {
-            background-color: #1e1e1e;
-            color: #dcdcdc;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            font-family: monospace;
-            overflow-x: auto;
-        }
-        .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border-left-color: #6366F1;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-Cxe1J5PgRpMUZCaaQbd3mgbQRO0Lg1FkCmsu9Flu4b0WJqJEwvP2dIfGUb9G0cckVx+e9D10eIqkMf0wVUHD/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="bg-gray-50">
     <!-- Content -->
@@ -58,6 +32,7 @@
             <div class="px-6 py-4">
                 <div class="flex items-center">
                     <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                        <!-- Warning Icon -->
                         <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75M3.3 16.4c-.87 1.5.22 3.36 1.95 3.36h14.5c1.73 0 2.8-1.87 1.95-3.36L13.95 3.36c-.87-1.5-3.03-1.5-3.9 0L3.3 16.4zM12 15.75h.01v.01H12v-.01z" />
                         </svg>
@@ -78,9 +53,9 @@
     </div>
 
     <!-- CodeMirror JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js" integrity="sha512-x3612rjkvx5EqZTW2SqsK6Z1fsOhsqjdHNcqOtgqI85Czsnldigz4A68LN1TRD+Yxrvn80V67GES0HZPjtjfQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- CodeMirror Python Mode -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js" integrity="sha512-Cm/e9JB0c98oj4gyGDUDdQS5gR+n8r0qV/CEK+Haw3S28bZ6H4BcYIvQYgLiEGlZsoD2DA8VPBzaZDOZZ7+iuQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Main JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -90,7 +65,7 @@
 
             // Function to fetch and display Lambda functions
             async function loadFunctions() {
-                functionList.innerHTML = '<div class="flex justify-center"><div class="spinner"></div></div>';
+                functionList.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-9 w-9 border-t-2 border-b-2 border-blue-500"></div></div>';
 
                 try {
                     const response = await fetch('https://j6uh5lxq4xjbm3k253olur2joy0bpebl.lambda-url.us-west-2.on.aws/');
@@ -160,12 +135,14 @@
                         for (const fileName of Object.keys(func.CodeFiles)) {
                             const textArea = document.getElementById(`code-${func.FunctionName}-${fileName}`);
                             if (textArea) {
-                                CodeMirror.fromTextArea(textArea, {
+                                const editor = CodeMirror.fromTextArea(textArea, {
                                     lineNumbers: true,
                                     mode: 'python',
                                     theme: 'dracula',
                                     readOnly: false
                                 });
+                                // Add Tailwind classes to the CodeMirror wrapper element
+                                editor.getWrapperElement().classList.add('border', 'border-gray-300', 'rounded-md', 'h-auto', 'w-full', 'overflow-y-auto', 'max-h-96');
                             } else {
                                 console.error(`Textarea not found for ${func.FunctionName}-${fileName}`);
                             }
@@ -187,7 +164,7 @@
             // Refresh button handler
             refreshButton.addEventListener('click', () => {
                 console.log('Refresh button clicked');
-                refreshButton.innerHTML = '<div class="spinner"></div>';
+                refreshButton.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>';
                 refreshButton.disabled = true;
                 loadFunctions().then(() => {
                     refreshButton.textContent = 'Refresh Functions';
@@ -290,7 +267,7 @@
                         console.log(`Update button clicked for function: ${functionName}`);
 
                         const updateButton = event.currentTarget;
-                        updateButton.innerHTML = '<div class="spinner"></div>';
+                        updateButton.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>';
                         updateButton.disabled = true;
 
                         try {
@@ -339,7 +316,7 @@
                         }
 
                         const rewriteButton = event.currentTarget;
-                        rewriteButton.innerHTML = '<div class="spinner"></div>';
+                        rewriteButton.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>';
                         rewriteButton.disabled = true;
 
                         try {
@@ -390,7 +367,7 @@
                             return;
                         }
 
-                        logsDiv.innerHTML = '<div class="flex justify-center"><div class="spinner"></div></div>';
+                        logsDiv.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-9 w-9 border-t-2 border-b-2 border-yellow-500"></div></div>';
 
                         try {
                             const response = await fetch('https://dk4wzehdht64hx5gsye2njddzq0oxwow.lambda-url.us-west-2.on.aws/', {
@@ -437,7 +414,7 @@
 
             async function fetchLogEvents(functionArn, logStreamName, logsDiv) {
                 console.log(`Fetching log events for: ${logStreamName}`);
-                logsDiv.innerHTML = '<div class="flex justify-center"><div class="spinner"></div></div>';
+                logsDiv.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-9 w-9 border-t-2 border-b-2 border-yellow-500"></div></div>';
 
                 try {
                     const response = await fetch('https://dk4wzehdht64hx5gsye2njddzq0oxwow.lambda-url.us-west-2.on.aws/', {
@@ -462,10 +439,10 @@
 
                         logEvents.forEach(event => {
                             const eventElement = document.createElement('div');
-                            eventElement.className = 'bg-gray-800 text-white p-3 mb-2 rounded';
+                            eventElement.className = 'bg-gray-800 text-white p-3 mb-2 rounded overflow-x-auto';
                             eventElement.innerHTML = `
                                 <p class="text-sm font-semibold">${new Date(event.timestamp).toLocaleString()}</p>
-                                <pre class="mt-2">${event.message}</pre>
+                                <pre class="mt-2 whitespace-pre-wrap">${event.message}</pre>
                             `;
                             logEventsContainer.appendChild(eventElement);
                         });
