@@ -9,24 +9,32 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" integrity="sha512-L3dDupTKu5DGZXhlZEdpcPrTZUR6L0kJYf7UBD1gZlGsS6tulnfkpVFuUtyma4sYBCsyJs42HVRwD0ecg3m0pA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css" integrity="sha512-JzE3MFdU2Rmqj9S3i68riggTVTuD9ZxOsNbDP2Y443K989/FiWH5G6pyclAcULWLB+CFzfFqBhWuId9i4APSEg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- CodeMirror Monokai Theme -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css" integrity="sha512-qKJsmRQzx/6rE0Om9Zs5Y1G63mzrjAotjP/ptZU0vgPM6rCwsv4vYPdh6CF5PH5JqiDm6coXkTKRY8b86E2syw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Moment.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" integrity="sha512-Cxe1J5PgRpMUZCaaQbd3mgbQRO0Lg1FkCmsu9Flu4b0WJqJEwvP2dIfGUb9G0cckVx+e9D10eIqkMf0wVUHD/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body class="bg-gray-50">
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="fixed top-4 right-4 z-50"></div>
+
     <!-- Content -->
     <div class="container mx-auto p-6">
-        <header class="flex items-center justify-between mb-6">
-            <h1 class="text-4xl font-bold text-gray-800">AWS Lambda Function Viewer</h1>
-            <button id="refreshFunctions" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Refresh Functions</button>
+        <header class="flex flex-wrap items-center justify-between mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">AWS Lambda Function Viewer</h1>
+            <button id="refreshFunctions" class="bg-blue-600 text-white px-4 py-2 mt-4 sm:mt-0 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Refresh Functions</button>
         </header>
+        <!-- Search and Filter -->
+        <div class="mb-6">
+            <input type="text" id="searchInput" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Search functions by name...">
+        </div>
         <div id="functionList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Lambda functions will be displayed here -->
         </div>
     </div>
 
     <!-- Delete Modal -->
-    <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <div id="deleteModal" class="fixed inset-0 z-50 flex items-center justify-center hidden" role="dialog" aria-labelledby="modal-title" aria-modal="true">
         <div class="fixed inset-0 bg-black opacity-50"></div>
         <div class="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-lg w-full z-50">
             <div class="px-6 py-4">
@@ -62,6 +70,10 @@
             console.log('Page loaded, initializing function list');
             const functionList = document.getElementById('functionList');
             const refreshButton = document.getElementById('refreshFunctions');
+            const searchInput = document.getElementById('searchInput');
+
+            // Data storage for functions
+            let allFunctions = [];
 
             // Function to fetch and display Lambda functions
             async function loadFunctions() {
@@ -75,87 +87,100 @@
                     const data = await response.json();
                     console.log('Lambda Functions:', data);
 
-                    functionList.innerHTML = '';
-                    data.forEach(func => {
-                        const funcCard = document.createElement('div');
-                        funcCard.className = 'bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-200 relative flex flex-col';
-                        funcCard.setAttribute('data-function-arn', func.FunctionArn);
+                    allFunctions = data; // Store in global array
 
-                        // Create a string to hold the formatted code files
-                        let codeFilesContent = '';
-                        for (const [fileName, fileContent] of Object.entries(func.CodeFiles)) {
-                            codeFilesContent += `
-                                <div class="mt-4">
-                                    <h3 class="text-lg font-semibold mb-2">${fileName}</h3>
-                                    <textarea id="code-${func.FunctionName}-${fileName}" class="code-editor">${fileContent}</textarea>
-                                </div>
-                            `;
-                        }
-
-                        const lastModifiedRelative = moment(func.LastModified).fromNow();
-
-                        funcCard.innerHTML = `
-                            <div class="flex-1">
-                                <h2 class="text-xl font-bold text-gray-800 cursor-pointer hover:underline" data-function-name="${func.FunctionName}">${func.FunctionName}</h2>
-                                <p class="text-sm text-gray-500 mt-1">Last Modified: ${lastModifiedRelative}</p>
-                            </div>
-                            <div class="absolute top-4 right-4 flex space-x-2">
-                                <button class="edit-button" data-function-name="${func.FunctionName}" title="Edit">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-gray-800 transition duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l3.536 3.536m-1.768-1.768L5.232 15.232m0 0L3 21l5.768-2.232m0 0L15.232 9m0 0L21 3l-5.768 2.232z" />
-                                    </svg>
-                                </button>
-                                <button class="delete-button" data-function-name="${func.FunctionName}" data-function-arn="${func.FunctionArn}" title="Delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 hover:text-red-800 transition duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                            <div class="mt-4">
-                                <button class="view-logs-button bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}">View Logs</button>
-                            </div>
-                            <div class="code-container hidden mt-4" id="code-${func.FunctionName}">
-                                ${codeFilesContent}
-                                <textarea id="userRequest-${func.FunctionName}" class="mt-4 p-2 w-full border rounded" placeholder="Enter user request..."></textarea>
-                                <div class="flex space-x-2 mt-4">
-                                    <button class="update-button bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}">Update</button>
-                                    <button class="rewrite-button bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}">Rewrite Code</button>
-                                </div>
-                            </div>
-                            <div class="logs-container hidden mt-4" id="logs-${func.FunctionName}">
-                                <!-- Logs content will be injected here -->
-                            </div>
-                        `;
-
-                        functionList.appendChild(funcCard);
-                    });
-
-                    // Initialize CodeMirror editors after elements are added to the DOM
-                    data.forEach(func => {
-                        for (const fileName of Object.keys(func.CodeFiles)) {
-                            const textArea = document.getElementById(`code-${func.FunctionName}-${fileName}`);
-                            if (textArea) {
-                                const editor = CodeMirror.fromTextArea(textArea, {
-                                    lineNumbers: true,
-                                    mode: 'python',
-                                    theme: 'dracula',
-                                    readOnly: false
-                                });
-                                // Add Tailwind classes to the CodeMirror wrapper element
-                                editor.getWrapperElement().classList.add('border', 'border-gray-300', 'rounded-md', 'h-auto', 'w-full', 'overflow-y-auto', 'max-h-96');
-                            } else {
-                                console.error(`Textarea not found for ${func.FunctionName}-${fileName}`);
-                            }
-                        }
-                    });
-
-                    // Event handlers
-                    addEventHandlers();
-
+                    displayFunctions(allFunctions);
                 } catch (error) {
                     console.error('Error fetching Lambda functions:', error);
                     functionList.innerHTML = '<p class="text-red-500">Error fetching Lambda functions. Please try again later.</p>';
+                    showNotification('Error fetching Lambda functions. Please try again later.', 'error');
                 }
+            }
+
+            // Function to display functions
+            function displayFunctions(functions) {
+                functionList.innerHTML = '';
+                functions.forEach(func => {
+                    const funcCard = document.createElement('div');
+                    funcCard.className = 'bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-200 relative flex flex-col';
+                    funcCard.setAttribute('data-function-arn', func.FunctionArn);
+
+                    // Create a string to hold the formatted code files
+                    let codeFilesContent = '';
+                    for (const [fileName, fileContent] of Object.entries(func.CodeFiles)) {
+                        codeFilesContent += `
+                            <div class="mt-4">
+                                <h3 class="text-lg font-semibold mb-2">${fileName}</h3>
+                                <textarea id="code-${func.FunctionName}-${fileName}" class="code-editor">${fileContent}</textarea>
+                            </div>
+                        `;
+                    }
+
+                    const lastModifiedRelative = moment(func.LastModified).fromNow();
+
+                    funcCard.innerHTML = `
+                        <div class="flex items-center">
+                            <h2 class="text-xl font-bold text-gray-800 cursor-pointer hover:underline flex-grow" data-function-name="${func.FunctionName}">${func.FunctionName}</h2>
+                            <button class="code-toggle-button" data-function-name="${func.FunctionName}" aria-expanded="false" aria-label="Toggle code section">
+                                <!-- Chevron Down Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 transition-transform duration-200 transform rotate-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">Last Modified: ${lastModifiedRelative}</p>
+                        <div class="absolute top-4 right-4 flex space-x-2">
+                            <button class="edit-button" data-function-name="${func.FunctionName}" title="Edit" aria-label="Edit function">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600 hover:text-gray-800 transition duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l3.536 3.536m-1.768-1.768L5.232 15.232m0 0L3 21l5.768-2.232m0 0L15.232 9m0 0L21 3l-5.768 2.232z" />
+                                </svg>
+                            </button>
+                            <button class="delete-button" data-function-name="${func.FunctionName}" data-function-arn="${func.FunctionArn}" title="Delete" aria-label="Delete function">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600 hover:text-red-800 transition duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mt-4">
+                            <button class="view-logs-button bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}" aria-expanded="false" aria-label="Toggle logs">View Logs</button>
+                        </div>
+                        <div class="code-container hidden mt-4" id="code-${func.FunctionName}">
+                            ${codeFilesContent}
+                            <textarea id="userRequest-${func.FunctionName}" class="mt-4 p-2 w-full border rounded" placeholder="Enter user request..." aria-label="User request input"></textarea>
+                            <div class="flex space-x-2 mt-4">
+                                <button class="update-button bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}">Update</button>
+                                <button class="rewrite-button bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}">Rewrite Code</button>
+                            </div>
+                        </div>
+                        <div class="logs-container hidden mt-4 overflow-x-auto" id="logs-${func.FunctionName}">
+                            <!-- Logs content will be injected here -->
+                        </div>
+                    `;
+
+                    functionList.appendChild(funcCard);
+                });
+
+                // Initialize CodeMirror editors after elements are added to the DOM
+                functions.forEach(func => {
+                    for (const fileName of Object.keys(func.CodeFiles)) {
+                        const textArea = document.getElementById(`code-${func.FunctionName}-${fileName}`);
+                        if (textArea) {
+                            const editor = CodeMirror.fromTextArea(textArea, {
+                                lineNumbers: true,
+                                mode: 'python',
+                                theme: 'monokai',
+                                readOnly: false
+                            });
+                            // Add Tailwind classes to the CodeMirror wrapper element
+                            editor.getWrapperElement().classList.add('border', 'border-gray-300', 'rounded-md', 'h-auto', 'w-full', 'overflow-y-auto', 'max-h-96');
+                        } else {
+                            console.error(`Textarea not found for ${func.FunctionName}-${fileName}`);
+                        }
+                    }
+                });
+
+                // Event handlers
+                addEventHandlers();
             }
 
             // Load functions on page load
@@ -169,17 +194,18 @@
                 loadFunctions().then(() => {
                     refreshButton.textContent = 'Refresh Functions';
                     refreshButton.disabled = false;
+                    showNotification('Functions refreshed successfully.');
                 });
             });
 
             // Function to add event handlers
             function addEventHandlers() {
                 // Toggle code container
-                document.querySelectorAll('[data-function-name]').forEach(title => {
-                    title.addEventListener('click', (event) => {
+                document.querySelectorAll('.code-toggle-button').forEach(button => {
+                    button.addEventListener('click', (event) => {
                         const functionName = event.currentTarget.getAttribute('data-function-name');
-                        toggleCodeContainer(functionName);
-                        console.log(`Function ${functionName} clicked`);
+                        toggleCodeContainer(functionName, event.currentTarget);
+                        console.log(`Toggle code for function ${functionName}`);
                     });
                 });
 
@@ -211,7 +237,7 @@
                     const functionName = event.currentTarget.getAttribute('data-function-name');
                     const deleteButton = event.currentTarget;
                     console.log(`Confirm delete clicked for function: ${functionName}`);
-                    deleteButton.textContent = 'Deleting...';
+                    deleteButton.innerHTML = '<div class="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>';
                     deleteButton.disabled = true;
 
                     try {
@@ -238,10 +264,10 @@
 
                         // Close modal
                         document.getElementById('deleteModal').classList.add('hidden');
-                        alert(`Function "${functionName}" deleted successfully.`);
+                        showNotification(`Function "${functionName}" deleted successfully.`);
                     } catch (error) {
                         console.error('Error deleting Lambda function:', error);
-                        alert('Error: ' + error.message);
+                        showNotification('Error: ' + error.message, 'error');
                     } finally {
                         deleteButton.textContent = 'Delete';
                         deleteButton.disabled = false;
@@ -286,10 +312,10 @@
                             }
                             const result = await response.json();
                             console.log('Update result:', result);
-                            alert(`Function "${functionName}" updated successfully.`);
+                            showNotification(`Function "${functionName}" updated successfully.`);
                         } catch (error) {
                             console.error('Error updating Lambda function:', error);
-                            alert('Error: ' + error.message);
+                            showNotification('Error: ' + error.message, 'error');
                         } finally {
                             updateButton.textContent = 'Update';
                             updateButton.disabled = false;
@@ -311,7 +337,7 @@
                         console.log(`Rewrite button clicked for function: ${functionName}`);
 
                         if (!userRequest || !existingCode) {
-                            alert('Please ensure both user request and existing code are provided.');
+                            showNotification('Please ensure both user request and existing code are provided.', 'error');
                             return;
                         }
 
@@ -339,10 +365,10 @@
                             codeEditors.forEach(editor => {
                                 editor.CodeMirror.setValue(data.updatedCode);
                             });
-                            alert(`Code rewritten successfully for function "${functionName}".`);
+                            showNotification(`Code rewritten successfully for function "${functionName}".`);
                         } catch (error) {
                             console.error('Error rewriting code:', error);
-                            alert('Error: ' + error.message);
+                            showNotification('Error: ' + error.message, 'error');
                         } finally {
                             rewriteButton.textContent = 'Rewrite Code';
                             rewriteButton.disabled = false;
@@ -353,17 +379,23 @@
                 // View Logs button
                 document.querySelectorAll('.view-logs-button').forEach(button => {
                     button.addEventListener('click', async (event) => {
+                        const functionName = event.currentTarget.getAttribute('data-function-name');
                         const functionArn = event.currentTarget.getAttribute('data-function-arn');
-                        const functionName = functionArn.split(':').pop();
                         const logsDiv = document.getElementById(`logs-${functionName}`);
+                        const logsButton = event.currentTarget;
+
                         console.log(`View Logs button clicked for function: ${functionName}`);
 
                         if (logsDiv.classList.contains('hidden')) {
                             logsDiv.classList.remove('hidden');
                             logsDiv.classList.add('block');
+                            logsButton.setAttribute('aria-expanded', 'true');
+                            logsButton.textContent = 'Hide Logs';
                         } else {
                             logsDiv.classList.remove('block');
                             logsDiv.classList.add('hidden');
+                            logsButton.setAttribute('aria-expanded', 'false');
+                            logsButton.textContent = 'View Logs';
                             return;
                         }
 
@@ -407,6 +439,7 @@
                         } catch (error) {
                             console.error('Error fetching log streams:', error);
                             logsDiv.innerHTML = '<p class="text-red-500">Error fetching log streams. Please try again later.</p>';
+                            showNotification('Error fetching log streams. Please try again later.', 'error');
                         }
                     });
                 });
@@ -439,7 +472,7 @@
 
                         logEvents.forEach(event => {
                             const eventElement = document.createElement('div');
-                            eventElement.className = 'bg-gray-800 text-white p-3 mb-2 rounded overflow-x-auto';
+                            eventElement.className = 'bg-gray-800 text-white p-3 mb-2 rounded overflow-x-auto break-all';
                             eventElement.innerHTML = `
                                 <p class="text-sm font-semibold">${new Date(event.timestamp).toLocaleString()}</p>
                                 <pre class="mt-2 whitespace-pre-wrap">${event.message}</pre>
@@ -455,19 +488,55 @@
                 } catch (error) {
                     console.error('Error fetching log events:', error);
                     logsDiv.innerHTML = '<p class="text-red-500">Error fetching log events. Please try again later.</p>';
+                    showNotification('Error fetching log events. Please try again later.', 'error');
                 }
             }
 
-            function toggleCodeContainer(functionName) {
+            function toggleCodeContainer(functionName, button = null) {
                 const codeDiv = document.getElementById(`code-${functionName}`);
+                const toggleButton = button;
+
                 if (codeDiv.classList.contains('hidden')) {
                     codeDiv.classList.remove('hidden');
                     codeDiv.classList.add('block');
+                    if (toggleButton) {
+                        toggleButton.setAttribute('aria-expanded', 'true');
+                        toggleButton.querySelector('svg').classList.add('rotate-180');
+                    }
                 } else {
                     codeDiv.classList.remove('block');
                     codeDiv.classList.add('hidden');
+                    if (toggleButton) {
+                        toggleButton.setAttribute('aria-expanded', 'false');
+                        toggleButton.querySelector('svg').classList.remove('rotate-180');
+                    }
                 }
             }
+
+            // Function to show notifications
+            function showNotification(message, type = 'success') {
+                const notificationContainer = document.getElementById('notificationContainer');
+                const notification = document.createElement('div');
+                notification.className = `mb-4 px-4 py-2 rounded shadow-md text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+                notification.textContent = message;
+
+                notificationContainer.appendChild(notification);
+
+                // Remove the notification after some time
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+
+            // Function to filter functions
+            function filterFunctions() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredFunctions = allFunctions.filter(func => func.FunctionName.toLowerCase().includes(searchTerm));
+                displayFunctions(filteredFunctions);
+            }
+
+            // Event listener for search input
+            searchInput.addEventListener('input', filterFunctions);
         });
     </script>
 </body>
