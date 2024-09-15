@@ -11,27 +11,48 @@
 
     <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <!-- CodeMirror Theme -->
+    <!-- CodeMirror Themes -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/base16-light.min.css">
 
-    <!-- Custom Styles -->
+    <!-- Dark Mode Toggle Styles -->
     <style>
+        /* Custom CSS for dark mode transition */
+        .transition-colors {
+            transition: background-color 0.3s, color 0.3s;
+        }
         /* CodeMirror Height Fix */
         .CodeMirror {
             height: 600px;
         }
+        /* Loading Spinner Styles */
+        .loader {
+            border-top-color: #3498db;
+            animation: spinner 1.5s linear infinite;
+        }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 transition-colors" x-data="{ darkMode: false }" :class="{ 'bg-gray-900 text-white': darkMode, 'bg-gray-100 text-gray-900': !darkMode }">
+
     <!-- Navbar -->
-    <nav class="bg-gray-900 text-white fixed w-full top-0 z-50">
+    <nav class="bg-gray-900 text-white fixed w-full top-0 z-50 transition-colors" :class="{ 'bg-gray-800': darkMode }" aria-label="Main Navigation">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="hover:bg-gray-800 px-3 py-2 rounded">Create Full Stack</a>
-                <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="hover:bg-gray-800 px-3 py-2 rounded">Lambda Functions</a>
-                <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="hover:bg-gray-800 px-3 py-2 rounded">Lookup Lambdas</a>
-                <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="bg-gray-800 px-3 py-2 rounded">Lookup Frontend</a>
+                <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Create Full Stack">Create Full Stack</a>
+                <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Lambda Functions">Lambda Functions</a>
+                <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Lookup Lambdas">Lookup Lambdas</a>
+                <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Lookup Frontend">Lookup Frontend</a>
             </div>
+            <!-- Dark Mode Toggle -->
+            <button id="darkModeToggle" class="flex items-center px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle Dark Mode">
+                <svg id="darkModeIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <!-- Icon will change based on mode -->
+                </svg>
+            </button>
         </div>
     </nav>
 
@@ -40,11 +61,11 @@
         <h1 class="text-3xl font-bold mb-8 text-center">GitHub File and Lambda Function Viewer</h1>
 
         <!-- URL Input Form -->
-        <form id="fetchForm" class="mb-12 max-w-2xl mx-auto">
+        <form id="fetchForm" class="mb-12 max-w-2xl mx-auto" aria-label="Fetch GitHub File">
             <label for="url" class="block mb-2 font-medium">Enter GitHub File URL:</label>
             <div class="flex">
-                <input type="url" id="url" name="url" placeholder="https://github.com/user/repo/blob/main/file.html" required class="flex-1 p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-r-md">Fetch Content</button>
+                <input type="url" id="url" name="url" placeholder="https://github.com/user/repo/blob/main/file.html" required class="flex-1 p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="GitHub File URL">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500">Fetch Content</button>
             </div>
         </form>
 
@@ -55,12 +76,12 @@
                 <h2 class="text-2xl font-semibold mb-6">Frontend</h2>
                 <!-- Tab Buttons -->
                 <div class="flex border-b mb-4">
-                    <button id="toggleRendered" class="px-4 py-2 text-gray-600 border-b-2 border-blue-600 font-medium">Rendered Content</button>
-                    <button id="toggleCode" class="px-4 py-2 text-gray-600">Code</button>
+                    <button id="toggleRendered" class="px-4 py-2 text-gray-600 border-b-2 border-blue-600 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">Rendered Content</button>
+                    <button id="toggleCode" class="px-4 py-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Code</button>
                 </div>
                 <!-- Rendered Content -->
                 <div id="renderedContent">
-                    <iframe id="contentFrame" class="w-full h-96 border rounded-md"></iframe>
+                    <iframe id="contentFrame" class="w-full h-96 border rounded-md" aria-label="Rendered Content"></iframe>
                 </div>
                 <!-- Code Content -->
                 <div id="codeContent" class="hidden">
@@ -70,10 +91,10 @@
                 <!-- User Request and Actions -->
                 <div class="mt-8">
                     <label for="frontendUserRequest" class="block mb-2 font-medium">User Request:</label>
-                    <textarea id="frontendUserRequest" rows="3" placeholder="Describe the changes you'd like to make..." class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    <textarea id="frontendUserRequest" rows="3" placeholder="Describe the changes you'd like to make..." class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Frontend User Request"></textarea>
                     <div class="flex space-x-2 mt-4">
-                        <button id="updateFrontendButton" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md">Update</button>
-                        <button id="rewriteFrontendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md">Rewrite HTML</button>
+                        <button id="updateFrontendButton" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">Update</button>
+                        <button id="rewriteFrontendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">Rewrite HTML</button>
                     </div>
                 </div>
             </div>
@@ -88,22 +109,53 @@
         </div>
     </main>
 
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+        <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-20 w-20"></div>
+    </div>
+
     <!-- Notification -->
     <div id="notification" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-md shadow-md hidden">
-        Copied to clipboard!
+        <span id="notificationMessage">Copied to clipboard!</span>
     </div>
 
     <!-- External Scripts -->
-    <!-- CodeMirror -->
+    <!-- Include Alpine.js for reactivity (optional) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
+
+    <!-- CodeMirror Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
     <!-- CodeMirror Modes -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
     <!-- CodeMirror Addons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/closebrackets.min.js"></script>
+    <!-- CodeMirror Autocomplete -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/show-hint.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/show-hint.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/hint/javascript-hint.min.js"></script>
+    <!-- CodeMirror Linting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/lint/lint.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/lint/lint.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/lint/javascript-lint.min.js"></script>
+    <!-- Include JSHint for JavaScript linting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jshint/2.13.4/jshint.min.js"></script>
 
     <!-- Main Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Tailwind CSS configuration for dark mode
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            'dark-background': '#1a202c',
+                        }
+                    }
+                }
+            };
+
             const fetchForm = document.getElementById('fetchForm');
             const urlInput = document.getElementById('url');
             const resultSection = document.getElementById('result');
@@ -118,15 +170,40 @@
             const frontendUserRequest = document.getElementById('frontendUserRequest');
             const lambdaFunctionsDiv = document.getElementById('lambdaFunctions');
             const notification = document.getElementById('notification');
+            const notificationMessage = document.getElementById('notificationMessage');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const darkModeIcon = document.getElementById('darkModeIcon');
+            let darkMode = false;
             let fetchedContent = '';
 
             // Initialize CodeMirror Editor
             const codeEditor = CodeMirror.fromTextArea(codeBox, {
                 mode: 'htmlmixed',
-                theme: 'dracula',
+                theme: 'base16-light',
                 lineNumbers: true,
                 autoCloseBrackets: true,
+                matchBrackets: true,
+                lint: true,
+                extraKeys: { "Ctrl-Space": "autocomplete" },
             });
+
+            // Toggle Dark Mode
+            function updateDarkModeIcon() {
+                if (darkMode) {
+                    darkModeIcon.innerHTML = '<path d="M10 2a8 8 0 1 0 8 8 8.009 8.009 0 0 0-8-8zm0 14a6.007 6.007 0 0 1 0-12V16z"></path>';
+                } else {
+                    darkModeIcon.innerHTML = '<path d="M17.657 6.343A8 8 0 1 1 6.343 17.657 8 8 0 1 0 17.657 6.343z"></path>';
+                }
+            }
+            darkModeToggle.addEventListener('click', () => {
+                darkMode = !darkMode;
+                document.documentElement.classList.toggle('dark', darkMode);
+                codeEditor.setOption('theme', darkMode ? 'dracula' : 'base16-light');
+                updateDarkModeIcon();
+                console.log('Dark mode toggled:', darkMode);
+            });
+            updateDarkModeIcon();
 
             // Event Listeners
             fetchForm.addEventListener('submit', handleFetchFormSubmit);
@@ -148,6 +225,8 @@
                 lambdaFunctionsDiv.innerHTML = '';
                 console.log('Fetching content from GitHub URL:', url);
 
+                showLoading(true);
+
                 try {
                     // Fetch GitHub File Content
                     const fileResponse = await fetch('https://your-api-endpoint.com/fetch-file', {
@@ -161,6 +240,7 @@
                         contentFrame.srcdoc = fetchedContent;
                         codeEditor.setValue(fetchedContent);
                         resultSection.classList.remove('hidden');
+                        showNotification('Content fetched successfully!', 'success');
                     } else {
                         throw new Error(fileData.message || 'Failed to fetch file content');
                     }
@@ -169,7 +249,18 @@
                     await fetchRelatedLambdaFunctions(url);
                 } catch (error) {
                     console.error(error);
-                    alert('Error: ' + error.message);
+                    showNotification('Error: ' + error.message, 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
+
+            // Show or Hide Loading Spinner
+            function showLoading(show) {
+                if (show) {
+                    loadingSpinner.classList.remove('hidden');
+                } else {
+                    loadingSpinner.classList.add('hidden');
                 }
             }
 
@@ -190,7 +281,7 @@
                     }
                 } catch (error) {
                     console.error(error);
-                    alert('Error fetching Lambda functions: ' + error.message);
+                    showNotification('Error fetching Lambda functions: ' + error.message, 'error');
                 }
             }
 
@@ -199,14 +290,14 @@
                 lambdaFunctionsDiv.innerHTML = '';
                 Object.entries(lambdaFunctions).forEach(([lambdaUrl, functionName]) => {
                     const functionItem = document.createElement('div');
-                    functionItem.classList.add('border', 'border-gray-300', 'rounded-md', 'mb-6', 'p-4', 'bg-white');
+                    functionItem.classList.add('border', 'border-gray-300', 'rounded-md', 'mb-6', 'p-4', 'bg-white', 'dark:bg-gray-800');
                     functionItem.innerHTML = `
                         <div class="flex justify-between items-center cursor-pointer">
                             <div>
                                 <h3 class="text-lg font-semibold">${functionName}</h3>
                                 <p class="text-sm text-gray-500">${lambdaUrl}</p>
                             </div>
-                            <button class="toggle-details focus:outline-none">
+                            <button class="toggle-details focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle Details">
                                 <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path d="M19 9l-7 7-7-7"></path>
                                 </svg>
@@ -238,6 +329,7 @@
             // Load Function Details
             async function loadFunctionDetails(functionName, detailsDiv) {
                 console.log('Loading details for function:', functionName);
+                detailsDiv.innerHTML = `<p class="text-gray-600">Loading function details...</p>`;
                 try {
                     const functionResponse = await fetch('https://your-api-endpoint.com/get-function-details', {
                         method: 'POST',
@@ -252,26 +344,30 @@
                             <label for="userRequest-${functionName}" class="block mt-4 mb-2 font-medium">User Request:</label>
                             <textarea id="userRequest-${functionName}" rows="2" placeholder="Describe changes to the function..." class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             <div class="flex space-x-2 mt-4">
-                                <button class="update-function-button bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md" data-function-name="${functionName}">Update Function</button>
-                                <button class="rewrite-function-button bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md" data-function-name="${functionName}">Rewrite Function</button>
+                                <button class="update-function-button bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" data-function-name="${functionName}">Update Function</button>
+                                <button class="rewrite-function-button bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" data-function-name="${functionName}">Rewrite Function</button>
                             </div>
                         `;
                         const functionCodeArea = detailsDiv.querySelector('.function-code');
                         functionCodeArea.value = functionData.code || 'No code available';
 
                         // Initialize CodeMirror for function code
-                        CodeMirror.fromTextArea(functionCodeArea, {
+                        const functionCodeEditor = CodeMirror.fromTextArea(functionCodeArea, {
                             mode: 'javascript',
-                            theme: 'dracula',
+                            theme: darkMode ? 'dracula' : 'base16-light',
                             lineNumbers: true,
                             autoCloseBrackets: true,
+                            matchBrackets: true,
+                            lint: true,
+                            extraKeys: { "Ctrl-Space": "autocomplete" },
                         });
 
                         // Add Event Listeners for Update and Rewrite Buttons
                         const updateButton = detailsDiv.querySelector('.update-function-button');
                         const rewriteButton = detailsDiv.querySelector('.rewrite-function-button');
-                        updateButton.addEventListener('click', handleUpdateFunction);
-                        rewriteButton.addEventListener('click', handleRewriteFunction);
+                        updateButton.addEventListener('click', (e) => handleUpdateFunction(e, functionCodeEditor));
+                        rewriteButton.addEventListener('click', (e) => handleRewriteFunction(e, functionCodeEditor));
+
                         detailsDiv.dataset.loaded = true;
                     } else {
                         throw new Error(functionData.message || 'Failed to fetch function details');
@@ -283,12 +379,12 @@
             }
 
             // Handle Update Function
-            async function handleUpdateFunction(event) {
+            async function handleUpdateFunction(event, functionCodeEditor) {
                 const functionName = event.target.getAttribute('data-function-name');
                 const detailsDiv = event.target.closest('.details');
-                const codeMirrorInstance = detailsDiv.querySelector('.CodeMirror').CodeMirror;
-                const code = codeMirrorInstance.getValue();
+                const code = functionCodeEditor.getValue();
                 console.log(`Updating function ${functionName} with new code.`);
+                const originalText = event.target.textContent;
                 event.target.textContent = 'Updating...';
                 event.target.disabled = true;
 
@@ -301,31 +397,32 @@
                     });
                     const data = await response.json();
                     if (response.ok) {
-                        alert('Function updated successfully!');
+                        showNotification('Function updated successfully!', 'success');
+                        console.log('Function updated successfully.');
                     } else {
                         throw new Error(data.message || 'Failed to update function');
                     }
                 } catch (error) {
                     console.error(error);
-                    alert('Error updating function: ' + error.message);
+                    showNotification('Error updating function: ' + error.message, 'error');
                 } finally {
-                    event.target.textContent = 'Update Function';
+                    event.target.textContent = originalText;
                     event.target.disabled = false;
                 }
             }
 
             // Handle Rewrite Function
-            async function handleRewriteFunction(event) {
+            async function handleRewriteFunction(event, functionCodeEditor) {
                 const functionName = event.target.getAttribute('data-function-name');
                 const detailsDiv = event.target.closest('.details');
-                const codeMirrorInstance = detailsDiv.querySelector('.CodeMirror').CodeMirror;
-                const code = codeMirrorInstance.getValue();
+                const code = functionCodeEditor.getValue();
                 const userRequest = detailsDiv.querySelector(`#userRequest-${functionName}`).value.trim();
                 if (!userRequest) {
-                    alert('Please enter a user request.');
+                    showNotification('Please enter a user request.', 'warning');
                     return;
                 }
                 console.log(`Rewriting function ${functionName} based on user request: ${userRequest}`);
+                const originalText = event.target.textContent;
                 event.target.textContent = 'Rewriting...';
                 event.target.disabled = true;
 
@@ -338,16 +435,17 @@
                     });
                     const data = await response.json();
                     if (response.ok && data.updatedCode) {
-                        codeMirrorInstance.setValue(data.updatedCode);
-                        alert('Function rewritten successfully!');
+                        functionCodeEditor.setValue(data.updatedCode);
+                        showNotification('Function rewritten successfully!', 'success');
+                        console.log('Function rewritten successfully.');
                     } else {
                         throw new Error(data.message || 'Failed to rewrite function');
                     }
                 } catch (error) {
                     console.error(error);
-                    alert('Error rewriting function: ' + error.message);
+                    showNotification('Error rewriting function: ' + error.message, 'error');
                 } finally {
-                    event.target.textContent = 'Rewrite Function';
+                    event.target.textContent = originalText;
                     event.target.disabled = false;
                 }
             }
@@ -377,6 +475,7 @@
                 const githubUrl = urlInput.value.trim();
                 if (!updatedCode || !githubUrl) return;
 
+                const originalText = updateFrontendButton.textContent;
                 updateFrontendButton.textContent = 'Updating...';
                 updateFrontendButton.disabled = true;
                 console.log('Updating frontend code for URL:', githubUrl);
@@ -389,16 +488,16 @@
                     });
                     const data = await response.json();
                     if (response.ok) {
-                        alert('Frontend updated successfully!');
+                        showNotification('Frontend updated successfully!', 'success');
                         console.log('Frontend updated successfully.');
                     } else {
                         throw new Error(data.message || 'Failed to update frontend');
                     }
                 } catch (error) {
                     console.error(error);
-                    alert('Error: ' + error.message);
+                    showNotification('Error: ' + error.message, 'error');
                 } finally {
-                    updateFrontendButton.textContent = 'Update';
+                    updateFrontendButton.textContent = originalText;
                     updateFrontendButton.disabled = false;
                 }
             }
@@ -409,6 +508,7 @@
                 const existingCode = codeEditor.getValue();
                 if (!userRequest || !existingCode) return;
 
+                const originalText = rewriteFrontendButton.textContent;
                 rewriteFrontendButton.textContent = 'Rewriting...';
                 rewriteFrontendButton.disabled = true;
                 console.log('Rewriting frontend based on user request:', userRequest);
@@ -426,15 +526,16 @@
 
                         // Display Improvement Suggestions
                         displaySuggestions(data.suggestions);
+                        showNotification('Frontend rewritten successfully!', 'success');
                         console.log('Frontend rewritten successfully.');
                     } else {
                         throw new Error(data.message || 'Failed to rewrite frontend');
                     }
                 } catch (error) {
                     console.error(error);
-                    alert('Error: ' + error.message);
+                    showNotification('Error: ' + error.message, 'error');
                 } finally {
-                    rewriteFrontendButton.textContent = 'Rewrite HTML';
+                    rewriteFrontendButton.textContent = originalText;
                     rewriteFrontendButton.disabled = false;
                 }
             }
@@ -450,7 +551,7 @@
                 }
                 suggestionsContainer = document.createElement('div');
                 suggestionsContainer.id = 'suggestions';
-                suggestionsContainer.classList.add('mt-8', 'bg-white', 'p-6', 'rounded-md', 'shadow-md');
+                suggestionsContainer.classList.add('mt-8', 'bg-white', 'dark:bg-gray-800', 'p-6', 'rounded-md', 'shadow-md');
                 const suggestionsTitle = document.createElement('h3');
                 suggestionsTitle.classList.add('text-xl', 'font-semibold', 'mb-4');
                 suggestionsTitle.textContent = 'Improvement Suggestions';
@@ -467,8 +568,18 @@
             }
 
             // Show Notification
-            function showNotification(message) {
-                notification.textContent = message;
+            function showNotification(message, type = 'info') {
+                notificationMessage.textContent = message;
+                notification.className = 'fixed bottom-4 right-4 px-6 py-3 rounded-md shadow-md';
+                if (type === 'success') {
+                    notification.classList.add('bg-green-500', 'text-white');
+                } else if (type === 'error') {
+                    notification.classList.add('bg-red-500', 'text-white');
+                } else if (type === 'warning') {
+                    notification.classList.add('bg-yellow-500', 'text-white');
+                } else {
+                    notification.classList.add('bg-blue-500', 'text-white');
+                }
                 notification.classList.remove('hidden');
                 setTimeout(() => {
                     notification.classList.add('hidden');
