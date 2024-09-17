@@ -95,6 +95,11 @@
                 return Math.floor(seconds) + " seconds ago";
             }
 
+            // Function to make safe IDs
+            function createSafeId(str) {
+                return str.replace(/[^a-zA-Z0-9_-]/g, '_');
+            }
+
             // Function to fetch and display Lambda functions
             async function loadFunctions() {
                 functionList.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-9 w-9 border-t-2 border-b-2 border-blue-500"></div></div>';
@@ -121,6 +126,7 @@
             function displayFunctions(functions) {
                 functionList.innerHTML = '';
                 functions.forEach(func => {
+                    const safeFunctionName = createSafeId(func.FunctionName);
                     const funcCard = document.createElement('div');
                     funcCard.className = 'bg-white p-6 rounded-lg shadow hover:shadow-lg transition-shadow duration-200 relative flex flex-col';
                     funcCard.setAttribute('data-function-arn', func.FunctionArn);
@@ -128,10 +134,11 @@
                     // Create a string to hold the formatted code files
                     let codeFilesContent = '';
                     for (const [fileName, fileContent] of Object.entries(func.CodeFiles)) {
+                        const safeFileName = createSafeId(fileName);
                         codeFilesContent += `
                             <div class="mt-4">
                                 <h3 class="text-lg font-semibold mb-2">${fileName}</h3>
-                                <textarea id="code-${func.FunctionName}-${fileName}" class="code-editor">${fileContent}</textarea>
+                                <textarea id="code-${safeFunctionName}-${safeFileName}" class="code-editor">${fileContent}</textarea>
                             </div>
                         `;
                     }
@@ -163,17 +170,17 @@
                             </button>
                         </div>
                         <div class="mt-4">
-                            <button class="view-logs-button bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}" aria-expanded="false" aria-label="Toggle logs">View Logs</button>
+                            <button class="view-logs-button bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 transition duration-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}" data-function-arn="${func.FunctionArn}" aria-expanded="false" aria-label="Toggle logs">View Logs</button>
                         </div>
-                        <div class="code-container hidden mt-4" id="code-${func.FunctionName}">
+                        <div class="code-container hidden mt-4" id="code-${safeFunctionName}">
                             ${codeFilesContent}
-                            <textarea id="userRequest-${func.FunctionName}" class="mt-4 p-2 w-full border rounded" placeholder="Enter user request..." aria-label="User request input"></textarea>
+                            <textarea id="userRequest-${safeFunctionName}" class="mt-4 p-2 w-full border rounded" placeholder="Enter user request..." aria-label="User request input"></textarea>
                             <div class="flex space-x-2 mt-4">
                                 <button class="update-button bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}">Update</button>
                                 <button class="rewrite-button bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}">Rewrite Code</button>
                             </div>
                         </div>
-                        <div class="logs-container hidden mt-4 overflow-x-auto" id="logs-${func.FunctionName}">
+                        <div class="logs-container hidden mt-4 overflow-x-auto" id="logs-${safeFunctionName}">
                             <!-- Logs content will be injected here -->
                         </div>
                     `;
@@ -183,8 +190,10 @@
 
                 // Initialize CodeMirror editors after elements are added to the DOM
                 functions.forEach(func => {
+                    const safeFunctionName = createSafeId(func.FunctionName);
                     for (const fileName of Object.keys(func.CodeFiles)) {
-                        const textArea = document.getElementById(`code-${func.FunctionName}-${fileName}`);
+                        const safeFileName = createSafeId(fileName);
+                        const textArea = document.getElementById(`code-${safeFunctionName}-${safeFileName}`);
                         if (textArea) {
                             const editor = CodeMirror.fromTextArea(textArea, {
                                 lineNumbers: true,
@@ -235,24 +244,55 @@
                     button.addEventListener('click', async (event) => {
                         const buttonEl = event.currentTarget;
                         const functionName = buttonEl.getAttribute('data-function-name');
-                        const logsContainer = document.getElementById(`logs-${functionName}`);
+                        const functionArn = buttonEl.getAttribute('data-function-arn');
+                        const safeFunctionName = createSafeId(functionName);
+                        const logsContainer = document.getElementById(`logs-${safeFunctionName}`);
                         const isExpanded = buttonEl.getAttribute('aria-expanded') === 'true';
 
                         if (!isExpanded) {
                             // Change button text to 'Loading...'
                             buttonEl.textContent = 'Loading...';
                             try {
-                                // Fetch logs
-                                console.log(`Fetching logs for function ${functionName}`);
-                                const response = await fetch(`your-api-endpoint/logs/${functionName}`); // Replace 'your-api-endpoint' with actual API endpoint
+                                // Fetch log streams
+                                console.log(`Fetching log streams for function ${functionName}`);
+                                const response = await fetch('your-api-endpoint/logs', { // Replace 'your-api-endpoint' with actual API endpoint
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        requestType: 'fetchLogStreams',
+                                        functionArn: functionArn
+                                    })
+                                });
                                 if (!response.ok) {
                                     throw new Error('Network response was not ok');
                                 }
-                                const logsData = await response.text();
-                                logsContainer.innerHTML = `<pre class="bg-gray-100 p-4 rounded">${logsData}</pre>`;
+                                const logStreams = await response.json();
+                                console.log('Log Streams:', logStreams);
+
+                                if (logStreams.length === 0) {
+                                    logsContainer.innerHTML = '<p class="text-gray-600">No log streams found.</p>';
+                                } else {
+                                    const logStreamsContainer = document.createElement('div');
+                                    logStreamsContainer.className = 'mt-4';
+
+                                    logStreams.forEach(stream => {
+                                        const streamElement = document.createElement('div');
+                                        streamElement.className = 'bg-gray-100 p-3 mb-2 rounded cursor-pointer hover:bg-gray-200 transition duration-200';
+                                        streamElement.textContent = `Log Stream: ${stream.logStreamName} (Last Event: ${new Date(stream.lastEventTimestamp).toLocaleString()})`;
+                                        streamElement.addEventListener('click', () => fetchLogEvents(functionArn, stream.logStreamName, logsContainer));
+                                        logStreamsContainer.appendChild(streamElement);
+                                    });
+
+                                    logsContainer.innerHTML = '';
+                                    logsContainer.appendChild(logStreamsContainer);
+                                }
+
                             } catch (error) {
                                 console.error(`Error fetching logs for ${functionName}:`, error);
                                 logsContainer.innerHTML = `<p class="text-red-500">Error fetching logs. Please try again later.</p>`;
+                                showNotification('Error fetching logs. Please try again later.', 'error');
                             }
                             // Restore button text
                             buttonEl.textContent = 'Hide Logs';
@@ -272,14 +312,15 @@
                         const updateBtn = event.currentTarget;
                         const functionArn = updateBtn.getAttribute('data-function-arn');
                         const functionName = updateBtn.closest('[data-function-arn]').querySelector('h2').getAttribute('data-function-name');
-                        const userRequest = document.getElementById(`userRequest-${functionName}`).value;
+                        const safeFunctionName = createSafeId(functionName);
+                        const userRequest = document.getElementById(`userRequest-${safeFunctionName}`).value;
 
                         // Get code from CodeMirror editors
-                        const codeEditors = [...document.querySelectorAll(`#code-${functionName} .CodeMirror`)];
+                        const codeEditors = [...document.querySelectorAll(`#code-${safeFunctionName} .CodeMirror`)];
                         const codeFiles = {};
                         codeEditors.forEach(editorEl => {
                             const textarea = editorEl.nextElementSibling;
-                            const fileName = textarea.id.split('-').slice(2).join('-');
+                            const fileName = textarea.id.split('-').slice(2).join('-').replace(/_/g, '-');
                             const editorInstance = editorEl.CodeMirror;
                             codeFiles[fileName] = editorInstance.getValue();
                         });
@@ -328,7 +369,8 @@
                         const rewriteBtn = event.currentTarget;
                         const functionName = rewriteBtn.getAttribute('data-function-name');
                         const functionArn = rewriteBtn.closest('[data-function-arn]').getAttribute('data-function-arn');
-                        const userRequest = document.getElementById(`userRequest-${functionName}`).value;
+                        const safeFunctionName = createSafeId(functionName);
+                        const userRequest = document.getElementById(`userRequest-${safeFunctionName}`).value;
 
                         console.log(`Rewriting code for function ${functionName}`);
                         console.log('User request:', userRequest);
@@ -356,10 +398,10 @@
                             console.log('Rewrite result:', result);
 
                             // Update CodeMirror editors with new code
-                            const codeEditors = [...document.querySelectorAll(`#code-${functionName} .CodeMirror`)];
+                            const codeEditors = [...document.querySelectorAll(`#code-${safeFunctionName} .CodeMirror`)];
                             codeEditors.forEach(editorEl => {
                                 const textarea = editorEl.nextElementSibling;
-                                const fileName = textarea.id.split('-').slice(2).join('-');
+                                const fileName = textarea.id.split('-').slice(2).join('-').replace(/_/g, '-');
                                 const editorInstance = editorEl.CodeMirror;
                                 if (result.codeFiles[fileName]) {
                                     editorInstance.setValue(result.codeFiles[fileName]);
@@ -392,9 +434,61 @@
                 searchInput.addEventListener('input', filterFunctions);
             }
 
+            async function fetchLogEvents(functionArn, logStreamName, logsDiv) {
+                console.log(`Fetching log events for: ${logStreamName}`);
+                logsDiv.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-9 w-9 border-t-2 border-b-2 border-yellow-500"></div></div>';
+
+                try {
+                    const response = await fetch('your-api-endpoint/logs', { // Replace 'your-api-endpoint' with actual API endpoint
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            requestType: 'fetchLogs',
+                            functionArn: functionArn,
+                            logStreamName: logStreamName
+                        })
+                    });
+
+                    if (response.ok) {
+                        const logEvents = await response.json();
+                        console.log('Log Events:', logEvents);
+
+                        if (logEvents.length === 0) {
+                            logsDiv.innerHTML = '<p class="text-gray-600">No log events found.</p>';
+                            return;
+                        }
+
+                        const logEventsContainer = document.createElement('div');
+                        logEventsContainer.className = 'mt-4';
+
+                        logEvents.forEach(event => {
+                            const eventElement = document.createElement('div');
+                            eventElement.className = 'bg-gray-800 text-white p-3 mb-2 rounded overflow-x-auto break-all';
+                            eventElement.innerHTML = `
+                                <p class="text-sm font-semibold">${new Date(event.timestamp).toLocaleString()}</p>
+                                <pre class="mt-2 whitespace-pre-wrap">${event.message}</pre>
+                            `;
+                            logEventsContainer.appendChild(eventElement);
+                        });
+
+                        logsDiv.innerHTML = '';
+                        logsDiv.appendChild(logEventsContainer);
+                    } else {
+                        throw new Error('Failed to fetch log events');
+                    }
+                } catch (error) {
+                    console.error('Error fetching log events:', error);
+                    logsDiv.innerHTML = '<p class="text-red-500">Error fetching log events. Please try again later.</p>';
+                    showNotification('Error fetching log events. Please try again later.', 'error');
+                }
+            }
+
             // Function to toggle code container
             function toggleCodeContainer(functionName, button) {
-                const codeContainer = document.getElementById(`code-${functionName}`);
+                const safeFunctionName = createSafeId(functionName);
+                const codeContainer = document.getElementById(`code-${safeFunctionName}`);
                 codeContainer.classList.toggle('hidden');
 
                 const isExpanded = button.getAttribute('aria-expanded') === 'true';
@@ -449,6 +543,10 @@
                     // Close modal
                     deleteModal.classList.add('hidden');
 
+                    // Change button text and disable it
+                    confirmDelete.textContent = 'Deleting...';
+                    confirmDelete.disabled = true;
+
                     try {
                         // Make API call to delete function
                         const response = await fetch('your-api-endpoint/delete', { // Replace 'your-api-endpoint' with actual API endpoint
@@ -472,6 +570,10 @@
                         console.error('Error deleting function:', error);
                         showNotification('Error deleting function. Please try again.', 'error');
                     }
+
+                    // Restore button text and enable it
+                    confirmDelete.textContent = 'Delete';
+                    confirmDelete.disabled = false;
                 };
 
                 // Cancel delete
