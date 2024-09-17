@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css" integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- CodeMirror Monokai Theme -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css" integrity="sha512-R6PH4vSzF2Yxjdvb2p2FA06yWul+U0PDDav4b/od/oXf9Iw37zl10plvwOXelrjV2Ai7Eo3vyHeyFUjhXdBCVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .CodeMirror {
+            height: auto;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
     <!-- Notification Container -->
@@ -64,8 +69,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js" integrity="sha512-Vs2GKxnxnTQBRW7o2xXZ9A28njjmu5RToS42efiKNEWmikov0inZY522EtGVK5CcVo0M/FQwmXsTfl9skgRnvw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Main JavaScript -->
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             console.log('Page loaded, initializing function list');
+
+            // API Endpoints
+            const FUNCTIONS_ENDPOINT = 'https://j6uh5lxq4xjbm3k253olur2joy0bpebl.lambda-url.us-west-2.on.aws/';
+            const UPDATE_FUNCTION_ENDPOINT = 'https://qklalf7lnzfjghjwubqq232bj40llolc.lambda-url.us-west-2.on.aws/';
+            const REWRITE_CODE_ENDPOINT = 'https://xmakkpe5oox6hvkaei4tomxsty0bqsqn.lambda-url.us-west-2.on.aws/';
+            const DELETE_FUNCTION_ENDPOINT = 'https://4g64lwaoh6whewppdclrtfgw340phswd.lambda-url.us-west-2.on.aws/';
+            const LOGS_ENDPOINT = 'https://dk4wzehdht64hx5gsye2njddzq0oxwow.lambda-url.us-west-2.on.aws/';
+
             const functionList = document.getElementById('functionList');
             const refreshButton = document.getElementById('refreshFunctions');
             const searchInput = document.getElementById('searchInput');
@@ -105,7 +118,7 @@
                 functionList.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-9 w-9 border-t-2 border-b-2 border-blue-500"></div></div>';
 
                 try {
-                    const response = await fetch('https://j6uh5lxq4xjbm3k253olur2joy0bpebl.lambda-url.us-west-2.on.aws/');
+                    const response = await fetch(FUNCTIONS_ENDPOINT);
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
@@ -138,7 +151,7 @@
                         codeFilesContent += `
                             <div class="mt-4">
                                 <h3 class="text-lg font-semibold mb-2">${fileName}</h3>
-                                <textarea id="code-${safeFunctionName}-${safeFileName}" class="code-editor">${fileContent}</textarea>
+                                <textarea id="code-${safeFunctionName}-${safeFileName}" class="code-editor" data-filename="${fileName}">${fileContent}</textarea>
                             </div>
                         `;
                     }
@@ -176,8 +189,8 @@
                             ${codeFilesContent}
                             <textarea id="userRequest-${safeFunctionName}" class="mt-4 p-2 w-full border rounded" placeholder="Enter user request..." aria-label="User request input"></textarea>
                             <div class="flex space-x-2 mt-4">
-                                <button class="update-button bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}">Update</button>
-                                <button class="rewrite-button bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}">Rewrite Code</button>
+                                <button class="update-button bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" data-function-arn="${func.FunctionArn}" data-function-name="${func.FunctionName}">Update</button>
+                                <button class="rewrite-button bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" data-function-name="${func.FunctionName}" data-function-arn="${func.FunctionArn}">Rewrite Code</button>
                             </div>
                         </div>
                         <div class="logs-container hidden mt-4 overflow-x-auto" id="logs-${safeFunctionName}">
@@ -203,6 +216,8 @@
                             });
                             // Add Tailwind classes to the CodeMirror wrapper element
                             editor.getWrapperElement().classList.add('border', 'border-gray-300', 'rounded-md', 'h-auto', 'w-full', 'overflow-y-auto', 'max-h-96');
+                            // Store the editor instance in the textarea element
+                            textArea.CodeMirrorInstance = editor;
                         } else {
                             console.error(`Textarea not found for ${func.FunctionName}-${fileName}`);
                         }
@@ -252,10 +267,11 @@
                         if (!isExpanded) {
                             // Change button text to 'Loading...'
                             buttonEl.textContent = 'Loading...';
+                            buttonEl.disabled = true;
                             try {
                                 // Fetch log streams
                                 console.log(`Fetching log streams for function ${functionName}`);
-                                const response = await fetch('your-api-endpoint/logs', { // Replace 'your-api-endpoint' with actual API endpoint
+                                const response = await fetch(LOGS_ENDPOINT, {
                                     method: 'POST',
                                     headers: {
                                         'Content-Type': 'application/json'
@@ -281,7 +297,7 @@
                                         const streamElement = document.createElement('div');
                                         streamElement.className = 'bg-gray-100 p-3 mb-2 rounded cursor-pointer hover:bg-gray-200 transition duration-200';
                                         streamElement.textContent = `Log Stream: ${stream.logStreamName} (Last Event: ${new Date(stream.lastEventTimestamp).toLocaleString()})`;
-                                        streamElement.addEventListener('click', () => fetchLogEvents(functionArn, stream.logStreamName, logsContainer));
+                                        streamElement.addEventListener('click', () => fetchLogEvents(functionArn, stream.logStreamName, logsContainer, functionName));
                                         logStreamsContainer.appendChild(streamElement);
                                     });
 
@@ -296,6 +312,7 @@
                             }
                             // Restore button text
                             buttonEl.textContent = 'Hide Logs';
+                            buttonEl.disabled = false;
                             buttonEl.setAttribute('aria-expanded', 'true');
                             logsContainer.classList.remove('hidden');
                         } else {
@@ -311,23 +328,25 @@
                     button.addEventListener('click', async (event) => {
                         const updateBtn = event.currentTarget;
                         const functionArn = updateBtn.getAttribute('data-function-arn');
-                        const functionName = updateBtn.closest('[data-function-arn]').querySelector('h2').getAttribute('data-function-name');
+                        const functionName = updateBtn.getAttribute('data-function-name');
                         const safeFunctionName = createSafeId(functionName);
                         const userRequest = document.getElementById(`userRequest-${safeFunctionName}`).value;
 
                         // Get code from CodeMirror editors
-                        const codeEditors = [...document.querySelectorAll(`#code-${safeFunctionName} .CodeMirror`)];
-                        const codeFiles = {};
-                        codeEditors.forEach(editorEl => {
-                            const textarea = editorEl.nextElementSibling;
-                            const fileName = textarea.id.split('-').slice(2).join('-').replace(/_/g, '-');
-                            const editorInstance = editorEl.CodeMirror;
-                            codeFiles[fileName] = editorInstance.getValue();
+                        const codeEditors = document.querySelectorAll(`#code-${safeFunctionName} .code-editor`);
+                        let updatedCode = '';
+                        codeEditors.forEach(textArea => {
+                            if (textArea.CodeMirrorInstance) {
+                                const editorInstance = textArea.CodeMirrorInstance;
+                                updatedCode += editorInstance.getValue() + '\n';
+                            } else {
+                                console.error(`Editor instance not found for textarea with id ${textArea.id}`);
+                            }
                         });
 
                         console.log(`Updating function ${functionName} with ARN ${functionArn}`);
                         console.log('User request:', userRequest);
-                        console.log('Code files:', codeFiles);
+                        console.log('Updated code:', updatedCode);
 
                         // Change button text and disable it
                         updateBtn.textContent = 'Updating...';
@@ -335,15 +354,14 @@
 
                         try {
                             // Make API call to update function
-                            const response = await fetch('your-api-endpoint/update', { // Replace 'your-api-endpoint' with actual API endpoint
+                            const response = await fetch(UPDATE_FUNCTION_ENDPOINT, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    functionArn: functionArn,
-                                    codeFiles: codeFiles,
-                                    userRequest: userRequest
+                                    arn: functionArn,
+                                    updatedCode: updatedCode
                                 })
                             });
                             if (!response.ok) {
@@ -368,12 +386,25 @@
                     button.addEventListener('click', async (event) => {
                         const rewriteBtn = event.currentTarget;
                         const functionName = rewriteBtn.getAttribute('data-function-name');
-                        const functionArn = rewriteBtn.closest('[data-function-arn]').getAttribute('data-function-arn');
+                        const functionArn = rewriteBtn.getAttribute('data-function-arn');
                         const safeFunctionName = createSafeId(functionName);
                         const userRequest = document.getElementById(`userRequest-${safeFunctionName}`).value;
 
+                        // Get code from CodeMirror editors
+                        const codeEditors = document.querySelectorAll(`#code-${safeFunctionName} .code-editor`);
+                        let existingCode = '';
+                        codeEditors.forEach(textArea => {
+                            if (textArea.CodeMirrorInstance) {
+                                const editorInstance = textArea.CodeMirrorInstance;
+                                existingCode += editorInstance.getValue() + '\n';
+                            } else {
+                                console.error(`Editor instance not found for textarea with id ${textArea.id}`);
+                            }
+                        });
+
                         console.log(`Rewriting code for function ${functionName}`);
                         console.log('User request:', userRequest);
+                        console.log('Existing code:', existingCode);
 
                         // Change button text and disable it
                         rewriteBtn.textContent = 'Rewriting...';
@@ -381,30 +412,26 @@
 
                         try {
                             // Make API call to rewrite code
-                            const response = await fetch('your-api-endpoint/rewrite', { // Replace 'your-api-endpoint' with actual API endpoint
+                            const response = await fetch(REWRITE_CODE_ENDPOINT, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json'
                                 },
                                 body: JSON.stringify({
-                                    functionArn: functionArn,
-                                    userRequest: userRequest
+                                    userRequest: userRequest,
+                                    existingCode: existingCode
                                 })
                             });
                             if (!response.ok) {
                                 throw new Error('Network response was not ok');
                             }
-                            const result = await response.json();
-                            console.log('Rewrite result:', result);
+                            const data = await response.json();
+                            console.log('Rewrite result:', data);
 
                             // Update CodeMirror editors with new code
-                            const codeEditors = [...document.querySelectorAll(`#code-${safeFunctionName} .CodeMirror`)];
-                            codeEditors.forEach(editorEl => {
-                                const textarea = editorEl.nextElementSibling;
-                                const fileName = textarea.id.split('-').slice(2).join('-').replace(/_/g, '-');
-                                const editorInstance = editorEl.CodeMirror;
-                                if (result.codeFiles[fileName]) {
-                                    editorInstance.setValue(result.codeFiles[fileName]);
+                            codeEditors.forEach(textArea => {
+                                if (textArea.CodeMirrorInstance) {
+                                    textArea.CodeMirrorInstance.setValue(data.updatedCode);
                                 }
                             });
 
@@ -434,19 +461,20 @@
                 searchInput.addEventListener('input', filterFunctions);
             }
 
-            async function fetchLogEvents(functionArn, logStreamName, logsDiv) {
+            // Function to fetch log events
+            async function fetchLogEvents(functionArn, logStreamName, logsDiv, functionName) {
                 console.log(`Fetching log events for: ${logStreamName}`);
                 logsDiv.innerHTML = '<div class="flex justify-center"><div class="animate-spin rounded-full h-9 w-9 border-t-2 border-b-2 border-yellow-500"></div></div>';
 
                 try {
-                    const response = await fetch('your-api-endpoint/logs', { // Replace 'your-api-endpoint' with actual API endpoint
+                    const response = await fetch(LOGS_ENDPOINT, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
                             requestType: 'fetchLogs',
-                            functionArn: functionArn,
+                            logGroupName: `/aws/lambda/${functionName}`,
                             logStreamName: logStreamName
                         })
                     });
@@ -549,8 +577,8 @@
 
                     try {
                         // Make API call to delete function
-                        const response = await fetch('your-api-endpoint/delete', { // Replace 'your-api-endpoint' with actual API endpoint
-                            method: 'DELETE',
+                        const response = await fetch(DELETE_FUNCTION_ENDPOINT, {
+                            method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
