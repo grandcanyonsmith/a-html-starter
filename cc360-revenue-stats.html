@@ -79,7 +79,7 @@
       <!-- Date Picker and Fetch Button -->
       <section class="mt-8 flex flex-wrap items-center justify-center" aria-label="Date Selection and Data Fetch">
         <!-- Date Quick Select Options -->
-        <div class="flex flex-wrap items-center justify-center mb-4 md:mb-0">
+        <div class="flex flex-wrap items-center justify-center mb-4 md:mb-0 w-full md:w-auto">
           <label for="date-range" class="text-white mr-2">Quick Select:</label>
           <select id="date-range" class="rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mr-4" aria-label="Select Quick Date Range">
             <option value="">Custom Range</option>
@@ -88,11 +88,11 @@
             <option value="last_quarter">Last Quarter</option>
           </select>
         </div>
-        <div class="flex flex-wrap items-center justify-center">
+        <div class="flex flex-wrap items-center justify-center w-full md:w-auto">
           <label for="start_date" class="text-white mr-2">Start Date:</label>
-          <input type="date" id="start_date" class="rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mr-4" aria-label="Select Start Date">
+          <input type="date" id="start_date" class="rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mr-4 mb-4 md:mb-0" aria-label="Select Start Date">
           <label for="end_date" class="text-white mr-2">End Date:</label>
-          <input type="date" id="end_date" class="rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mr-4" aria-label="Select End Date">
+          <input type="date" id="end_date" class="rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mr-4 mb-4 md:mb-0" aria-label="Select End Date">
         </div>
         <button id="fetch-button" onclick="fetchSalesData()" class="relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mt-4 md:mt-0" aria-label="Fetch Sales Data">
           <svg id="fetch-button-spinner" class="hidden animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
@@ -236,6 +236,26 @@
             </div>
           </div>
           <!-- Repeat placeholder cards as needed -->
+          <div class="bg-gray-800 overflow-hidden shadow rounded-lg animate-pulse" aria-hidden="true">
+            <div class="px-4 py-5 sm:p-6">
+              <dt class="text-sm font-medium text-gray-400 truncate">
+                <div class="h-4 bg-gray-700 rounded w-3/4"></div>
+              </dt>
+              <dd class="mt-1 text-3xl font-semibold text-white">
+                <div class="h-8 bg-gray-700 rounded w-1/2"></div>
+              </dd>
+            </div>
+          </div>
+          <div class="bg-gray-800 overflow-hidden shadow rounded-lg animate-pulse" aria-hidden="true">
+            <div class="px-4 py-5 sm:p-6">
+              <dt class="text-sm font-medium text-gray-400 truncate">
+                <div class="h-4 bg-gray-700 rounded w-3/4"></div>
+              </dt>
+              <dd class="mt-1 text-3xl font-semibold text-white">
+                <div class="h-8 bg-gray-700 rounded w-1/2"></div>
+              </dd>
+            </div>
+          </div>
         </div>
         <div id="source-mrr-increase" class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 hidden">
           <!-- Cards will be dynamically inserted here -->
@@ -262,6 +282,32 @@
             </div>
           </div>
           <!-- Repeat placeholder cards as needed -->
+          <div class="bg-gray-800 overflow-hidden shadow rounded-lg animate-pulse" aria-hidden="true">
+            <div class="px-4 py-5 sm:p-6">
+              <dt class="text-sm font-medium text-gray-400 truncate">
+                <div class="h-4 bg-gray-700 rounded w-3/4"></div>
+              </dt>
+              <dd class="mt-1 text-3xl font-semibold text-white">
+                <div class="h-8 bg-gray-700 rounded w-1/2"></div>
+              </dd>
+              <dd class="text-sm text-gray-400">
+                <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+              </dd>
+            </div>
+          </div>
+          <div class="bg-gray-800 overflow-hidden shadow rounded-lg animate-pulse" aria-hidden="true">
+            <div class="px-4 py-5 sm:p-6">
+              <dt class="text-sm font-medium text-gray-400 truncate">
+                <div class="h-4 bg-gray-700 rounded w-3/4"></div>
+              </dt>
+              <dd class="mt-1 text-3xl font-semibold text-white">
+                <div class="h-8 bg-gray-700 rounded w-1/2"></div>
+              </dd>
+              <dd class="text-sm text-gray-400">
+                <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+              </dd>
+            </div>
+          </div>
         </div>
         <div id="source-counts" class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 hidden">
           <!-- Cards will be dynamically inserted here -->
@@ -300,6 +346,20 @@
                   </td>
                 </tr>
                 <!-- Repeat placeholder rows as needed -->
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-3/4"></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-1/2"></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-1/3"></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -322,7 +382,7 @@
               </select>
             </div>
           </div>
-          <div class="shadow overflow-hidden border-b border-gray-700 sm:rounded-lg">
+          <div class="shadow overflow-x-auto border-b border-gray-700 sm:rounded-lg">
             <table id="grouped-sales-table" class="min-w-full divide-y divide-gray-700">
               <thead>
                 <tr>
@@ -350,8 +410,8 @@
             </table>
           </div>
           <!-- Pagination -->
-          <div class="mt-4 flex items-center justify-between">
-            <div>
+          <div class="mt-4 flex flex-wrap items-center justify-between">
+            <div class="mb-2 md:mb-0">
               <p class="text-sm text-gray-300">
                 Showing <span id="grouped-start-index">1</span> to <span id="grouped-end-index">10</span> of <span id="grouped-total-entries">0</span> entries
               </p>
@@ -402,6 +462,20 @@
                   </td>
                 </tr>
                 <!-- Repeat placeholder rows as needed -->
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-3/4"></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-1/2"></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-1/3"></div>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -424,7 +498,7 @@
               </select>
             </div>
           </div>
-          <div class="shadow overflow-hidden border-b border-gray-700 sm:rounded-lg">
+          <div class="shadow overflow-x-auto border-b border-gray-700 sm:rounded-lg">
             <table id="detailed-sales-table" class="min-w-full divide-y divide-gray-700">
               <thead>
                 <tr>
@@ -452,8 +526,8 @@
             </table>
           </div>
           <!-- Pagination -->
-          <div class="mt-4 flex items-center justify-between">
-            <div>
+          <div class="mt-4 flex flex-wrap items-center justify-between">
+            <div class="mb-2 md:mb-0">
               <p class="text-sm text-gray-300">
                 Showing <span id="detailed-start-index">1</span> to <span id="detailed-end-index">10</span> of <span id="detailed-total-entries">0</span> entries
               </p>
@@ -704,6 +778,8 @@
       fetchButtonText.textContent = 'Fetching...';
       fetchButtonSpinner.classList.remove('hidden');
 
+      console.log('Fetch Sales Data button clicked');
+
       // Show loading placeholders and hide data sections
       document.getElementById('stats-cards-loading').classList.remove('hidden');
       document.getElementById('stats-cards').classList.add('hidden');
@@ -717,8 +793,6 @@
       document.getElementById('detailed-sales-table').classList.add('hidden');
       document.getElementById('chart-loading').classList.remove('hidden');
       document.getElementById('chart-container').classList.add('hidden');
-
-      console.log('Fetch Sales Data button clicked');
 
       try {
         const startDate = new Date(startDateInput.value);
@@ -736,6 +810,10 @@
 
         console.log('Start Date:', startDate);
         console.log('End Date:', endDate);
+
+        // Change button text to indicate loading
+        fetchButtonText.textContent = 'Fetching...';
+        console.log('Fetching data from API...');
 
         const response = await fetch('https://wse6p5xqvwvjqwjdzo5qphqkue0titsh.lambda-url.us-west-2.on.aws/', {
           method: 'POST',
