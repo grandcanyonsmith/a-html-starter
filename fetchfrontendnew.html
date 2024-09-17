@@ -9,6 +9,20 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Tailwind CSS Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-background': '#1a202c',
+                    }
+                }
+            }
+        };
+    </script>
+
     <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
     <!-- CodeMirror Themes -->
@@ -36,36 +50,54 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 transition-colors" x-data="{ darkMode: false }" :class="{ 'bg-gray-900 text-white': darkMode, 'bg-gray-100 text-gray-900': !darkMode }">
+<body class="bg-gray-100 transition-colors" x-data="{ darkMode: false, mobileMenuOpen: false }" :class="{ 'bg-gray-900 text-white': darkMode, 'bg-gray-100 text-gray-900': !darkMode }">
 
     <!-- Navbar -->
     <nav class="bg-gray-900 text-white fixed w-full top-0 z-50 transition-colors" :class="{ 'bg-gray-800': darkMode }" aria-label="Main Navigation">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <a href="#" class="text-xl font-bold">App Name</a>
             <div class="flex items-center space-x-4">
-                <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Create Full Stack">Create Full Stack</a>
-                <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Lambda Functions">Lambda Functions</a>
-                <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Lookup Lambdas">Lookup Lambdas</a>
-                <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Lookup Frontend">Lookup Frontend</a>
+                <!-- Hamburger Menu Button -->
+                <button class="sm:hidden focus:outline-none focus:ring-2 focus:ring-blue-500" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle Menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+                <!-- Navigation Links -->
+                <div class="hidden sm:flex items-center space-x-4">
+                    <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Create Full Stack</a>
+                    <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Lambda Functions</a>
+                    <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Lookup Lambdas</a>
+                    <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Lookup Frontend</a>
+                </div>
+                <!-- Dark Mode Toggle -->
+                <button id="darkModeToggle" class="ml-4 flex items-center px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle Dark Mode">
+                    <svg id="darkModeIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <!-- Icon will change based on mode -->
+                    </svg>
+                </button>
             </div>
-            <!-- Dark Mode Toggle -->
-            <button id="darkModeToggle" class="flex items-center px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle Dark Mode">
-                <svg id="darkModeIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <!-- Icon will change based on mode -->
-                </svg>
-            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div x-show="mobileMenuOpen" class="sm:hidden bg-gray-800">
+            <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="block px-4 py-2 hover:bg-gray-700">Create Full Stack</a>
+            <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="block px-4 py-2 hover:bg-gray-700">Lambda Functions</a>
+            <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="block px-4 py-2 hover:bg-gray-700">Lookup Lambdas</a>
+            <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="block px-4 py-2 hover:bg-gray-700">Lookup Frontend</a>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-16">
+    <main class="container mx-auto px-4 py-24">
         <h1 class="text-3xl font-bold mb-8 text-center">GitHub File and Lambda Function Viewer</h1>
 
         <!-- URL Input Form -->
         <form id="fetchForm" class="mb-12 max-w-2xl mx-auto" aria-label="Fetch GitHub File">
             <label for="url" class="block mb-2 font-medium">Enter GitHub File URL:</label>
-            <div class="flex">
-                <input type="url" id="url" name="url" placeholder="https://github.com/user/repo/blob/main/file.html" required class="flex-1 p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="GitHub File URL">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500">Fetch Content</button>
+            <div class="flex flex-col sm:flex-row">
+                <input type="url" id="url" name="url" placeholder="https://github.com/user/repo/blob/main/file.html" required class="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 sm:mb-0 sm:rounded-r-none" aria-label="GitHub File URL">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md sm:rounded-l-none focus:outline-none focus:ring-2 focus:ring-blue-500">Fetch Content</button>
             </div>
         </form>
 
@@ -92,8 +124,8 @@
                 <div class="mt-8">
                     <label for="frontendUserRequest" class="block mb-2 font-medium">User Request:</label>
                     <textarea id="frontendUserRequest" rows="3" placeholder="Describe the changes you'd like to make..." class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Frontend User Request"></textarea>
-                    <div class="flex space-x-2 mt-4">
-                        <button id="updateFrontendButton" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">Update</button>
+                    <div class="flex flex-col sm:flex-row sm:space-x-2 mt-4">
+                        <button id="updateFrontendButton" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md mb-2 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-green-500">Update</button>
                         <button id="rewriteFrontendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">Rewrite HTML</button>
                     </div>
                 </div>
@@ -133,7 +165,7 @@
     </div>
 
     <!-- External Scripts -->
-    <!-- Include Alpine.js for reactivity (optional) -->
+    <!-- Include Alpine.js for reactivity -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.12.0/cdn.min.js" defer></script>
 
     <!-- CodeMirror Scripts -->
@@ -157,18 +189,6 @@
     <!-- Main Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Tailwind CSS configuration for dark mode
-            tailwind.config = {
-                darkMode: 'class',
-                theme: {
-                    extend: {
-                        colors: {
-                            'dark-background': '#1a202c',
-                        }
-                    }
-                }
-            };
-
             const fetchForm = document.getElementById('fetchForm');
             const urlInput = document.getElementById('url');
             const resultSection = document.getElementById('result');
@@ -338,9 +358,11 @@
                             if (!detailsDiv.dataset.loaded) {
                                 loadFunctionDetails(functionName, detailsDiv);
                             }
+                            console.log('Showing details for function:', functionName);
                         } else {
                             detailsDiv.classList.add('hidden');
                             toggleButton.querySelector('svg').classList.remove('rotate-180');
+                            console.log('Hiding details for function:', functionName);
                         }
                     });
                 });
@@ -363,8 +385,8 @@
                             <textarea class="function-code w-full h-64 border border-gray-300 rounded-md p-3"></textarea>
                             <label for="userRequest-${functionName}" class="block mt-4 mb-2 font-medium">User Request:</label>
                             <textarea id="userRequest-${functionName}" rows="2" placeholder="Describe changes to the function..." class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-                            <div class="flex space-x-2 mt-4">
-                                <button class="update-function-button bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" data-function-name="${functionName}">Update Function</button>
+                            <div class="flex flex-col sm:flex-row sm:space-x-2 mt-4">
+                                <button class="update-function-button bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md mb-2 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-green-500" data-function-name="${functionName}">Update Function</button>
                                 <button class="rewrite-function-button bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" data-function-name="${functionName}">Rewrite Function</button>
                             </div>
                         `;
@@ -385,8 +407,8 @@
                         // Add Event Listeners for Update and Rewrite Buttons
                         const updateButton = detailsDiv.querySelector('.update-function-button');
                         const rewriteButton = detailsDiv.querySelector('.rewrite-function-button');
-                        updateButton.addEventListener('click', (e) => handleUpdateFunction(e, functionCodeEditor));
-                        rewriteButton.addEventListener('click', (e) => handleRewriteFunction(e, functionCodeEditor));
+                        updateButton.addEventListener('click', (e) => handleUpdateFunction(e, functionCodeEditor, updateButton));
+                        rewriteButton.addEventListener('click', (e) => handleRewriteFunction(e, functionCodeEditor, rewriteButton));
 
                         detailsDiv.dataset.loaded = true;
                     } else {
@@ -399,14 +421,14 @@
             }
 
             // Handle Update Function
-            async function handleUpdateFunction(event, functionCodeEditor) {
+            async function handleUpdateFunction(event, functionCodeEditor, button) {
                 const functionName = event.target.getAttribute('data-function-name');
                 const detailsDiv = event.target.closest('.details');
                 const code = functionCodeEditor.getValue();
                 console.log(`Updating function ${functionName} with new code.`);
-                const originalText = event.target.textContent;
-                event.target.textContent = 'Updating...';
-                event.target.disabled = true;
+                const originalText = button.textContent;
+                button.textContent = 'Updating...';
+                button.disabled = true;
 
                 try {
                     // Call API to update function code
@@ -426,13 +448,13 @@
                     console.error(error);
                     showNotification('Error updating function: ' + error.message, 'error');
                 } finally {
-                    event.target.textContent = originalText;
-                    event.target.disabled = false;
+                    button.textContent = originalText;
+                    button.disabled = false;
                 }
             }
 
             // Handle Rewrite Function
-            async function handleRewriteFunction(event, functionCodeEditor) {
+            async function handleRewriteFunction(event, functionCodeEditor, button) {
                 const functionName = event.target.getAttribute('data-function-name');
                 const detailsDiv = event.target.closest('.details');
                 const code = functionCodeEditor.getValue();
@@ -442,9 +464,9 @@
                     return;
                 }
                 console.log(`Rewriting function ${functionName} based on user request: ${userRequest}`);
-                const originalText = event.target.textContent;
-                event.target.textContent = 'Rewriting...';
-                event.target.disabled = true;
+                const originalText = button.textContent;
+                button.textContent = 'Rewriting...';
+                button.disabled = true;
 
                 try {
                     // Call API to rewrite function code
@@ -465,8 +487,8 @@
                     console.error(error);
                     showNotification('Error rewriting function: ' + error.message, 'error');
                 } finally {
-                    event.target.textContent = originalText;
-                    event.target.disabled = false;
+                    button.textContent = originalText;
+                    button.disabled = false;
                 }
             }
 
