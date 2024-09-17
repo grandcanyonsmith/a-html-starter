@@ -97,6 +97,19 @@
                         <button id="rewriteFrontendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">Rewrite HTML</button>
                     </div>
                 </div>
+
+                <!-- Version History -->
+                <div id="versionHistory" class="mt-8">
+                    <h3 class="text-xl font-semibold mb-4">Version History</h3>
+                    <ul id="versionList" class="list-disc list-inside space-y-2">
+                        <!-- Versions will be dynamically added here -->
+                    </ul>
+                </div>
+
+                <!-- Improvement Suggestions -->
+                <div id="suggestions" class="mt-8 hidden">
+                    <!-- Suggestions will be dynamically added here -->
+                </div>
             </div>
 
             <!-- Backend Content -->
@@ -176,6 +189,7 @@
             const darkModeIcon = document.getElementById('darkModeIcon');
             let darkMode = false;
             let fetchedContent = '';
+            let frontendVersions = [];
 
             // Initialize CodeMirror Editor
             const codeEditor = CodeMirror.fromTextArea(codeBox, {
@@ -223,6 +237,8 @@
                 contentFrame.srcdoc = '';
                 codeEditor.setValue('');
                 lambdaFunctionsDiv.innerHTML = '';
+                frontendVersions = [];
+                displayVersionHistory();
                 console.log('Fetching content from GitHub URL:', url);
 
                 showLoading(true);
@@ -241,6 +257,10 @@
                         codeEditor.setValue(fetchedContent);
                         resultSection.classList.remove('hidden');
                         showNotification('Content fetched successfully!', 'success');
+                        // Save initial fetched content as version 1
+                        frontendVersions = []; // Reset version history
+                        saveCurrentVersion();
+                        displayVersionHistory();
                     } else {
                         throw new Error(fileData.message || 'Failed to fetch file content');
                     }
@@ -469,11 +489,62 @@
                 console.log('Showing code content.');
             }
 
+            // Save Current Version
+            function saveCurrentVersion() {
+                const currentCode = codeEditor.getValue();
+                const timestamp = new Date();
+                // Save code and timestamp
+                frontendVersions.push({
+                    code: currentCode,
+                    timestamp: timestamp.toLocaleString()
+                });
+                console.log('Version saved at', timestamp.toLocaleString());
+            }
+
+            // Display Version History
+            function displayVersionHistory() {
+                const versionList = document.getElementById('versionList');
+                versionList.innerHTML = '';
+                frontendVersions.forEach((version, index) => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('flex', 'justify-between', 'items-center');
+                    listItem.innerHTML = `
+                        <span>Version ${index + 1} - ${version.timestamp}</span>
+                        <button class="restore-button bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" data-index="${index}">Restore</button>
+                    `;
+                    versionList.appendChild(listItem);
+                });
+
+                // Add event listeners to restore buttons
+                const restoreButtons = versionList.querySelectorAll('.restore-button');
+                restoreButtons.forEach(button => {
+                    button.addEventListener('click', handleRestoreVersion);
+                });
+            }
+
+            // Handle Restore Version
+            function handleRestoreVersion(event) {
+                const index = event.target.getAttribute('data-index');
+                const version = frontendVersions[index];
+                if (version) {
+                    codeEditor.setValue(version.code);
+                    contentFrame.srcdoc = version.code;
+                    showNotification(`Restored version ${parseInt(index) + 1}`, 'success');
+                    console.log(`Restored version ${parseInt(index) + 1}`);
+                } else {
+                    showNotification('Failed to restore version.', 'error');
+                    console.error('Failed to restore version. Invalid index:', index);
+                }
+            }
+
             // Handle Update Frontend
             async function handleUpdateFrontend() {
                 const updatedCode = codeEditor.getValue();
                 const githubUrl = urlInput.value.trim();
                 if (!updatedCode || !githubUrl) return;
+
+                // Save current code to version history before updating
+                saveCurrentVersion();
 
                 const originalText = updateFrontendButton.textContent;
                 updateFrontendButton.textContent = 'Updating...';
@@ -490,6 +561,10 @@
                     if (response.ok) {
                         showNotification('Frontend updated successfully!', 'success');
                         console.log('Frontend updated successfully.');
+                        // Update the rendered content
+                        contentFrame.srcdoc = updatedCode;
+                        // Update version history UI
+                        displayVersionHistory();
                     } else {
                         throw new Error(data.message || 'Failed to update frontend');
                     }
@@ -508,6 +583,9 @@
                 const existingCode = codeEditor.getValue();
                 if (!userRequest || !existingCode) return;
 
+                // Save current code to version history before rewriting
+                saveCurrentVersion();
+
                 const originalText = rewriteFrontendButton.textContent;
                 rewriteFrontendButton.textContent = 'Rewriting...';
                 rewriteFrontendButton.disabled = true;
@@ -523,9 +601,10 @@
                     if (response.ok && data.html_code) {
                         codeEditor.setValue(data.html_code);
                         contentFrame.srcdoc = data.html_code;
-
                         // Display Improvement Suggestions
                         displaySuggestions(data.suggestions);
+                        // Update version history UI
+                        displayVersionHistory();
                         showNotification('Frontend rewritten successfully!', 'success');
                         console.log('Frontend rewritten successfully.');
                     } else {
@@ -544,14 +623,9 @@
             function displaySuggestions(suggestions) {
                 if (!suggestions || !Array.isArray(suggestions)) return;
                 console.log('Displaying improvement suggestions.');
-                // Remove existing suggestions
                 let suggestionsContainer = document.getElementById('suggestions');
-                if (suggestionsContainer) {
-                    suggestionsContainer.remove();
-                }
-                suggestionsContainer = document.createElement('div');
-                suggestionsContainer.id = 'suggestions';
-                suggestionsContainer.classList.add('mt-8', 'bg-white', 'dark:bg-gray-800', 'p-6', 'rounded-md', 'shadow-md');
+                suggestionsContainer.innerHTML = '';
+                suggestionsContainer.classList.remove('hidden');
                 const suggestionsTitle = document.createElement('h3');
                 suggestionsTitle.classList.add('text-xl', 'font-semibold', 'mb-4');
                 suggestionsTitle.textContent = 'Improvement Suggestions';
@@ -564,7 +638,6 @@
                 });
                 suggestionsContainer.appendChild(suggestionsTitle);
                 suggestionsContainer.appendChild(suggestionsList);
-                resultSection.appendChild(suggestionsContainer);
             }
 
             // Show Notification
