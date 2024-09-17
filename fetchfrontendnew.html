@@ -53,51 +53,69 @@
 <body class="bg-gray-100 transition-colors" x-data="{ darkMode: false, mobileMenuOpen: false }" :class="{ 'bg-gray-900 text-white': darkMode, 'bg-gray-100 text-gray-900': !darkMode }">
 
     <!-- Navbar -->
-    <nav class="bg-gray-900 text-white fixed w-full top-0 z-50 transition-colors" :class="{ 'bg-gray-800': darkMode }" aria-label="Main Navigation">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="#" class="text-xl font-bold">App Name</a>
-            <div class="flex items-center space-x-4">
-                <!-- Hamburger Menu Button -->
-                <button class="sm:hidden focus:outline-none focus:ring-2 focus:ring-blue-500" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="Toggle Menu">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-                <!-- Navigation Links -->
-                <div class="hidden sm:flex items-center space-x-4">
-                    <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Create Full Stack</a>
-                    <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Lambda Functions</a>
-                    <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="hover:bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Lookup Lambdas</a>
-                    <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="bg-gray-800 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500">Lookup Frontend</a>
+    <nav class="bg-white dark:bg-gray-800 shadow fixed w-full top-0 z-50 transition-colors" aria-label="Main Navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <a href="#" class="flex-shrink-0 flex items-center">
+                        <span class="text-xl font-bold">App Name</span>
+                    </a>
+                    <div class="hidden sm:-my-px sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Create Full Stack</a>
+                        <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Lambda Functions</a>
+                        <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Lookup Lambdas</a>
+                        <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="border-indigo-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Lookup Frontend</a>
+                    </div>
                 </div>
-                <!-- Dark Mode Toggle -->
-                <button id="darkModeToggle" class="ml-4 flex items-center px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle Dark Mode">
-                    <svg id="darkModeIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <!-- Icon will change based on mode -->
-                    </svg>
-                </button>
+                <div class="flex items-center">
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" class="p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-label="Toggle Dark Mode">
+                        <svg id="darkModeIcon" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                            <!-- Icon will change based on mode -->
+                        </svg>
+                    </button>
+                    <!-- Mobile menu button -->
+                    <div class="-mr-2 flex sm:hidden">
+                        <button @click="mobileMenuOpen = !mobileMenuOpen" type="button" class="bg-white dark:bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false" aria-label="Toggle Menu">
+                            <svg class="h-6 w-6" x-show="!mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            </svg>
+                            <svg class="h-6 w-6" x-show="mobileMenuOpen" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" x-cloak>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
+
         <!-- Mobile Menu -->
-        <div x-show="mobileMenuOpen" class="sm:hidden bg-gray-800">
-            <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="block px-4 py-2 hover:bg-gray-700">Create Full Stack</a>
-            <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="block px-4 py-2 hover:bg-gray-700">Lambda Functions</a>
-            <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="block px-4 py-2 hover:bg-gray-700">Lookup Lambdas</a>
-            <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="block px-4 py-2 hover:bg-gray-700">Lookup Frontend</a>
+        <div :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}" class="sm:hidden transition-colors" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="https://html-starter-coral.vercel.app/fullstack-generator.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300">Create Full Stack</a>
+                <a href="https://html-starter-coral.vercel.app/show-lambda-funcs.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300">Lambda Functions</a>
+                <a href="https://html-starter-coral.vercel.app/lookup-lambda-functions-in-webpage-url.html" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:border-gray-300">Lookup Lambdas</a>
+                <a href="https://html-starter-coral.vercel.app/fetch-frontend-code.html" class="block pl-3 pr-4 py-2 border-l-4 border-indigo-500 text-base font-medium text-indigo-700 dark:text-white bg-indigo-50 dark:bg-gray-900 focus:outline-none focus:text-indigo-800 focus:bg-indigo-100">Lookup Frontend</a>
+            </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="container mx-auto px-4 py-24">
+    <main class="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold mb-8 text-center">GitHub File and Lambda Function Viewer</h1>
 
         <!-- URL Input Form -->
         <form id="fetchForm" class="mb-12 max-w-2xl mx-auto" aria-label="Fetch GitHub File">
-            <label for="url" class="block mb-2 font-medium">Enter GitHub File URL:</label>
-            <div class="flex flex-col sm:flex-row">
-                <input type="url" id="url" name="url" placeholder="https://github.com/user/repo/blob/main/file.html" required class="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4 sm:mb-0 sm:rounded-r-none" aria-label="GitHub File URL">
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md sm:rounded-l-none focus:outline-none focus:ring-2 focus:ring-blue-500">Fetch Content</button>
+            <div class="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-8">
+                <div class="sm:col-span-2">
+                    <label for="url" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Enter GitHub File URL:</label>
+                    <div class="mt-1">
+                        <input type="url" id="url" name="url" placeholder="https://github.com/user/repo/blob/main/file.html" required class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md" aria-label="GitHub File URL">
+                    </div>
+                </div>
+                <div class="sm:col-span-1 flex items-end">
+                    <button type="submit" class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Fetch Content</button>
+                </div>
             </div>
         </form>
 
@@ -107,26 +125,37 @@
             <div class="mb-12">
                 <h2 class="text-2xl font-semibold mb-6">Frontend</h2>
                 <!-- Tab Buttons -->
-                <div class="flex border-b mb-4">
-                    <button id="toggleRendered" class="px-4 py-2 text-gray-600 border-b-2 border-blue-600 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">Rendered Content</button>
-                    <button id="toggleCode" class="px-4 py-2 text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Code</button>
+                <div class="sm:hidden">
+                    <label for="tabs" class="sr-only">Select a tab</label>
+                    <select id="tabs" class="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md">
+                        <option>Rendered Content</option>
+                        <option>Code</option>
+                    </select>
+                </div>
+                <div class="hidden sm:block">
+                    <nav class="-mb-px flex space-x-8">
+                        <button id="toggleRendered" class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm border-indigo-500 text-indigo-600">Rendered Content</button>
+                        <button id="toggleCode" class="whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm text-gray-500 dark:text-gray-300 hover:text-gray-700 hover:border-gray-300">Code</button>
+                    </nav>
                 </div>
                 <!-- Rendered Content -->
-                <div id="renderedContent">
+                <div id="renderedContent" class="mt-6">
                     <iframe id="contentFrame" class="w-full h-96 border rounded-md" aria-label="Rendered Content"></iframe>
                 </div>
                 <!-- Code Content -->
-                <div id="codeContent" class="hidden">
+                <div id="codeContent" class="hidden mt-6">
                     <textarea id="codeBox"></textarea>
                 </div>
 
                 <!-- User Request and Actions -->
                 <div class="mt-8">
-                    <label for="frontendUserRequest" class="block mb-2 font-medium">User Request:</label>
-                    <textarea id="frontendUserRequest" rows="3" placeholder="Describe the changes you'd like to make..." class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Frontend User Request"></textarea>
-                    <div class="flex flex-col sm:flex-row sm:space-x-2 mt-4">
-                        <button id="updateFrontendButton" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-md mb-2 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-green-500">Update</button>
-                        <button id="rewriteFrontendButton" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500">Rewrite HTML</button>
+                    <label for="frontendUserRequest" class="block mb-2 font-medium text-gray-700 dark:text-gray-300">User Request:</label>
+                    <div class="mt-1">
+                        <textarea id="frontendUserRequest" rows="3" placeholder="Describe the changes you'd like to make..." class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md" aria-label="Frontend User Request"></textarea>
+                    </div>
+                    <div class="mt-4 flex space-x-4">
+                        <button id="updateFrontendButton" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Update</button>
+                        <button id="rewriteFrontendButton" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">Rewrite HTML</button>
                     </div>
                 </div>
 
@@ -334,7 +363,7 @@
                     functionItem.innerHTML = `
                         <div class="flex justify-between items-center cursor-pointer">
                             <div>
-                                <h3 class="text-lg font-semibold">${functionName}</h3>
+                                <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">${functionName}</h3>
                                 <p class="text-sm text-gray-500">${lambdaUrl}</p>
                             </div>
                             <button class="toggle-details focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle Details">
@@ -381,13 +410,13 @@
                     const functionData = await functionResponse.json();
                     if (functionResponse.ok) {
                         detailsDiv.innerHTML = `
-                            <h4 class="text-md font-semibold mb-2">Function Code:</h4>
-                            <textarea class="function-code w-full h-64 border border-gray-300 rounded-md p-3"></textarea>
-                            <label for="userRequest-${functionName}" class="block mt-4 mb-2 font-medium">User Request:</label>
-                            <textarea id="userRequest-${functionName}" rows="2" placeholder="Describe changes to the function..." class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            <h4 class="text-md font-semibold mb-2 text-gray-700 dark:text-gray-300">Function Code:</h4>
+                            <textarea class="function-code w-full h-64 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md p-3"></textarea>
+                            <label for="userRequest-${functionName}" class="block mt-4 mb-2 font-medium text-gray-700 dark:text-gray-300">User Request:</label>
+                            <textarea id="userRequest-${functionName}" rows="2" placeholder="Describe changes to the function..." class="w-full p-3 border border-gray-300 dark:border-gray-700 dark:bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                             <div class="flex flex-col sm:flex-row sm:space-x-2 mt-4">
-                                <button class="update-function-button bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-md mb-2 sm:mb-0 focus:outline-none focus:ring-2 focus:ring-green-500" data-function-name="${functionName}">Update Function</button>
-                                <button class="rewrite-function-button bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" data-function-name="${functionName}">Rewrite Function</button>
+                                <button class="update-function-button inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" data-function-name="${functionName}">Update Function</button>
+                                <button class="rewrite-function-button inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500" data-function-name="${functionName}">Rewrite Function</button>
                             </div>
                         `;
                         const functionCodeArea = detailsDiv.querySelector('.function-code');
@@ -494,8 +523,8 @@
 
             // Show Rendered Content
             function showRenderedContent() {
-                toggleRendered.classList.add('border-blue-600', 'font-medium');
-                toggleCode.classList.remove('border-blue-600', 'font-medium');
+                toggleRendered.classList.add('border-indigo-500', 'text-indigo-600');
+                toggleCode.classList.remove('border-indigo-500', 'text-indigo-600');
                 renderedContent.classList.remove('hidden');
                 codeContent.classList.add('hidden');
                 console.log('Showing rendered content.');
@@ -503,8 +532,8 @@
 
             // Show Code Content
             function showCodeContent() {
-                toggleCode.classList.add('border-blue-600', 'font-medium');
-                toggleRendered.classList.remove('border-blue-600', 'font-medium');
+                toggleCode.classList.add('border-indigo-500', 'text-indigo-600');
+                toggleRendered.classList.remove('border-indigo-500', 'text-indigo-600');
                 codeContent.classList.remove('hidden');
                 renderedContent.classList.add('hidden');
                 codeEditor.refresh();
@@ -532,7 +561,7 @@
                     listItem.classList.add('flex', 'justify-between', 'items-center');
                     listItem.innerHTML = `
                         <span>Version ${index + 1} - ${version.timestamp}</span>
-                        <button class="restore-button bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" data-index="${index}">Restore</button>
+                        <button class="restore-button inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" data-index="${index}">Restore</button>
                     `;
                     versionList.appendChild(listItem);
                 });
