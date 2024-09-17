@@ -1,0 +1,581 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Snake Game</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <!-- Game Container -->
+    <div class="text-center">
+        <h1 class="text-2xl font-bold mb-4">Snake Game</h1>
+        <!-- Score Display -->
+        <div id="score" class="text-lg font-semibold mb-2">Score: 0</div>
+        <!-- High Score Display -->
+        <div id="highScore" class="text-lg font-semibold mb-2">High Score: 0</div>
+        <!-- Game Over Message -->
+        <div id="gameOverMessage" class="hidden text-red-600 text-xl font-bold mb-2">Game Over</div>
+        <!-- Restart Button -->
+        <button id="restartButton" class="hidden bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+            Restart Game
+        </button>
+        <!-- Pause Button -->
+        <button id="pauseButton" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded mb-4">
+            Pause Game
+        </button>
+        <!-- Mute Button -->
+        <button id="muteButton" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded mb-4">
+            Mute
+        </button>
+        <!-- Level Selection -->
+        <div id="levelSelection" class="mb-4">
+            <label class="mr-2 font-semibold">Select Level:</label>
+            <select id="levelSelect" class="border border-gray-300 rounded px-2 py-1">
+                <option value="0">Easy</option>
+                <option value="1">Medium</option>
+                <option value="2">Hard</option>
+                <option value="3">Insane</option>
+            </select>
+        </div>
+        <!-- Snake Customization -->
+        <div id="customization" class="mb-4">
+            <label class="mr-2 font-semibold">Select Snake Skin:</label>
+            <select id="skinSelect" class="border border-gray-300 rounded px-2 py-1">
+                <option value="default">Default</option>
+                <option value="red">Red Snake</option>
+                <option value="blue" disabled>Blue Snake (Unlock at 50 points)</option>
+                <option value="gold" disabled>Gold Snake (Unlock at 100 points)</option>
+            </select>
+        </div>
+        <canvas id="gameCanvas" width="400" height="400" class="border border-gray-500 mx-auto"></canvas>
+        <p class="mt-4 text-gray-600">Use the arrow keys or swipe gestures to play.</p>
+    </div>
+
+    <script>
+        // JavaScript code for the snake game
+
+        // Set up the canvas
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Size of each grid cell
+        let gridSize = 20;
+
+        // Snake starting position and velocity
+        let snake = [{ x: 200, y: 200 }];
+        let dx = gridSize;
+        let dy = 0;
+
+        // Food position
+        let food = { x: 0, y: 0 };
+        generateFood();
+
+        // Power-up
+        let powerUp = null;
+
+        let changingDirection = false;
+
+        // Score
+        let score = 0;
+
+        // High Score
+        let highScore = localStorage.getItem('snakeHighScore') || 0;
+
+        // Game speed (in milliseconds)
+        let gameSpeed = 100;
+
+        // Game loop interval
+        let gameInterval;
+
+        // Obstacles
+        let obstacles = [];
+        const maxObstacles = 5; // Max number of obstacles
+
+        // Levels
+        const levels = [
+            { name: 'Easy', gridSize: 20, speed: 150, obstacles: 0 },
+            { name: 'Medium', gridSize: 20, speed: 100, obstacles: 3 },
+            { name: 'Hard', gridSize: 20, speed: 75, obstacles: 5 },
+            { name: 'Insane', gridSize: 20, speed: 50, obstacles: 8 }
+        ];
+
+        // Selected level
+        let selectedLevel = levels[0];
+
+        // Sound effects
+        const eatSound = new Audio('https://www.soundjay.com/buttons/sounds/button-16.mp3');
+        const gameOverSound = new Audio('https://www.soundjay.com/misc/sounds/fail-buzzer-01.mp3');
+        const backgroundMusic = new Audio('https://www.bensound.com/bensound-music/bensound-ukulele.mp3'); // Background music
+        backgroundMusic.loop = true;
+        backgroundMusic.volume = 0.5; // Set default volume
+
+        // Touch controls start/end positions
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        // Game state
+        let isPaused = false;
+
+        // Power-up effects
+        let speedBoostActive = false;
+        let invincibilityActive = false;
+
+        // Snake skins
+        let snakeColor = '#34D399'; // Default Tailwind green-400
+        let snakeBorderColor = '#065F46'; // Default Tailwind green-800
+        let unlockedSkins = JSON.parse(localStorage.getItem('snakeUnlockedSkins')) || ['default', 'red'];
+        let selectedSkin = localStorage.getItem('snakeSelectedSkin') || 'default';
+        setSnakeSkin(selectedSkin);
+
+        // Update skin options based on unlocked skins
+        const skinOptions = document.querySelectorAll('#skinSelect option');
+        skinOptions.forEach(option => {
+            if (unlockedSkins.includes(option.value)) {
+                option.disabled = false;
+            } else {
+                option.disabled = true;
+            }
+        });
+        document.getElementById('skinSelect').value = selectedSkin;
+
+        // Start the game
+        document.addEventListener('keydown', changeDirection);
+        document.getElementById('restartButton').addEventListener('click', restartGame);
+        document.getElementById('pauseButton').addEventListener('click', togglePause);
+        document.getElementById('muteButton').addEventListener('click', toggleMute);
+
+        // Touch events
+        canvas.addEventListener('touchstart', handleTouchStart, false);
+        canvas.addEventListener('touchend', handleTouchEnd, false);
+
+        // Populate level selection
+        const levelSelect = document.getElementById('levelSelect');
+        levelSelect.addEventListener('change', (e) => {
+            selectedLevel = levels[e.target.value];
+            console.log('Level selected:', selectedLevel.name);
+            restartGame();
+        });
+
+        // Snake skin selection
+        document.getElementById('skinSelect').addEventListener('change', (e) => {
+            const skin = e.target.value;
+            setSnakeSkin(skin);
+            console.log('Snake skin selected:', skin);
+        });
+
+        // Display high score
+        document.getElementById('highScore').textContent = 'High Score: ' + highScore;
+
+        startGame();
+
+        function startGame() {
+            score = 0;
+            document.getElementById('score').textContent = 'Score: ' + score;
+            document.getElementById('highScore').textContent = 'High Score: ' + highScore;
+            document.getElementById('gameOverMessage').classList.add('hidden');
+            document.getElementById('restartButton').classList.add('hidden');
+            dx = selectedLevel.gridSize;
+            dy = 0;
+            gameSpeed = selectedLevel.speed;
+            gridSize = selectedLevel.gridSize;
+            changingDirection = false;
+            snake = [{ x: gridSize * 10, y: gridSize * 10 }];
+            obstacles = [];
+            generateFood();
+            powerUp = null;
+            generateObstacles(selectedLevel.obstacles);
+            if (gameInterval) clearInterval(gameInterval);
+            isPaused = false;
+            document.getElementById('pauseButton').textContent = 'Pause Game';
+            backgroundMusic.play();
+            gameInterval = setInterval(main, gameSpeed);
+        }
+
+        function restartGame() {
+            console.log('Game restarted.');
+            startGame();
+        }
+
+        function main() {
+            if (isPaused) {
+                return;
+            }
+
+            if (didGameEnd()) {
+                gameOverSound.play();
+                console.log('Game Over');
+                document.getElementById('gameOverMessage').classList.remove('hidden');
+                document.getElementById('restartButton').classList.remove('hidden');
+                clearInterval(gameInterval);
+                backgroundMusic.pause();
+                // Update high score
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem('snakeHighScore', highScore);
+                    document.getElementById('highScore').textContent = 'High Score: ' + highScore;
+                }
+                return;
+            }
+
+            changingDirection = false;
+
+            clearCanvas();
+            drawFood();
+            drawPowerUp();
+            drawObstacles();
+            moveSnake();
+            drawSnake();
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = 'black';
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function drawSnake() {
+            snake.forEach(drawSnakePart);
+        }
+
+        function drawSnakePart(snakePart) {
+            ctx.fillStyle = snakeColor;
+            ctx.strokeStyle = snakeBorderColor;
+
+            ctx.fillRect(snakePart.x, snakePart.y, gridSize, gridSize);
+            ctx.strokeRect(snakePart.x, snakePart.y, gridSize, gridSize);
+        }
+
+        function moveSnake() {
+            // Create new head
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+            // Add the new head to the beginning of snake body
+            snake.unshift(head);
+
+            // Check if snake has eaten the food
+            const hasEatenFood = snake[0].x === food.x && snake[0].y === food.y;
+
+            if (hasEatenFood) {
+                // Play eat sound
+                eatSound.play();
+
+                // Increase score
+                score += 10;
+                document.getElementById('score').textContent = 'Score: ' + score;
+
+                // Increase game speed
+                if (gameSpeed > 50) {
+                    gameSpeed -= 5;
+                    clearInterval(gameInterval);
+                    gameInterval = setInterval(main, gameSpeed);
+                }
+
+                // Unlock skins based on score
+                if (score >= 50 && !unlockedSkins.includes('blue')) {
+                    unlockedSkins.push('blue');
+                    localStorage.setItem('snakeUnlockedSkins', JSON.stringify(unlockedSkins));
+                    document.querySelector('#skinSelect option[value="blue"]').disabled = false;
+                    alert('You have unlocked the Blue Snake skin!');
+                }
+                if (score >= 100 && !unlockedSkins.includes('gold')) {
+                    unlockedSkins.push('gold');
+                    localStorage.setItem('snakeUnlockedSkins', JSON.stringify(unlockedSkins));
+                    document.querySelector('#skinSelect option[value="gold"]').disabled = false;
+                    alert('You have unlocked the Gold Snake skin!');
+                }
+
+                // Generate new food
+                generateFood();
+            } else {
+                // Remove the last part of snake body
+                snake.pop();
+            }
+
+            // Check if snake has gotten the power-up
+            if (powerUp && snake[0].x === powerUp.x && snake[0].y === powerUp.y) {
+                console.log('Power-up collected:', powerUp.type);
+                activatePowerUp(powerUp.type);
+                powerUp = null;
+            }
+        }
+
+        function changeDirection(event) {
+            const keyPressed = event.keyCode;
+            console.log('Key pressed:', keyPressed);
+
+            // Prevent the snake from reversing
+            if (changingDirection) return;
+            changingDirection = true;
+
+            const goingUp = dy === -gridSize;
+            const goingDown = dy === gridSize;
+            const goingRight = dx === gridSize;
+            const goingLeft = dx === -gridSize;
+
+            if (keyPressed === 37 && !goingRight) {
+                dx = -gridSize;
+                dy = 0;
+            }
+
+            if (keyPressed === 38 && !goingDown) {
+                dx = 0;
+                dy = -gridSize;
+            }
+
+            if (keyPressed === 39 && !goingLeft) {
+                dx = gridSize;
+                dy = 0;
+            }
+
+            if (keyPressed === 40 && !goingUp) {
+                dx = 0;
+                dy = gridSize;
+            }
+        }
+
+        function handleTouchStart(evt) {
+            const touch = evt.touches[0];
+            touchStartX = touch.clientX;
+            touchStartY = touch.clientY;
+            console.log('Touch start:', touchStartX, touchStartY);
+        }
+
+        function handleTouchEnd(evt) {
+            const touch = evt.changedTouches[0];
+            touchEndX = touch.clientX;
+            touchEndY = touch.clientY;
+            console.log('Touch end:', touchEndX, touchEndY);
+            handleGesture();
+        }
+
+        function handleGesture() {
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                // Horizontal swipe
+                if (diffX > 0 && dx !== -gridSize) {
+                    // Swipe right
+                    dx = gridSize;
+                    dy = 0;
+                    console.log('Swipe right');
+                } else if (diffX < 0 && dx !== gridSize) {
+                    // Swipe left
+                    dx = -gridSize;
+                    dy = 0;
+                    console.log('Swipe left');
+                }
+            } else {
+                // Vertical swipe
+                if (diffY > 0 && dy !== -gridSize) {
+                    // Swipe down
+                    dx = 0;
+                    dy = gridSize;
+                    console.log('Swipe down');
+                } else if (diffY < 0 && dy !== gridSize) {
+                    // Swipe up
+                    dx = 0;
+                    dy = -gridSize;
+                    console.log('Swipe up');
+                }
+            }
+        }
+
+        function generateFood() {
+            food.x = getRandomInt(0, (canvas.width / gridSize) - 1) * gridSize;
+            food.y = getRandomInt(0, (canvas.height / gridSize) - 1) * gridSize;
+
+            // Ensure food does not appear on the snake or obstacles
+            snake.forEach(function(part) {
+                const foodIsOnSnake = part.x === food.x && part.y === food.y;
+                if (foodIsOnSnake) generateFood();
+            });
+            obstacles.forEach(function(obstacle) {
+                const foodIsOnObstacle = obstacle.x === food.x && obstacle.y === food.y;
+                if (foodIsOnObstacle) generateFood();
+            });
+
+            // Chance to generate power-up
+            if (Math.random() < 0.2) { // 20% chance
+                generatePowerUp();
+            } else {
+                powerUp = null;
+            }
+        }
+
+        function drawFood() {
+            ctx.fillStyle = '#EF4444'; // Tailwind red-500
+            ctx.fillRect(food.x, food.y, gridSize, gridSize);
+            ctx.strokeRect(food.x, food.y, gridSize, gridSize);
+        }
+
+        function generatePowerUp() {
+            let powerUpTypes = ['speed', 'invincibility'];
+            let randomIndex = Math.floor(Math.random() * powerUpTypes.length);
+            let type = powerUpTypes[randomIndex];
+
+            powerUp = {
+                x: getRandomInt(0, (canvas.width / gridSize) - 1) * gridSize,
+                y: getRandomInt(0, (canvas.height / gridSize) - 1) * gridSize,
+                type: type,
+                duration: 5000 // duration in milliseconds
+            };
+
+            // Ensure power-up does not appear on snake, food, or obstacles
+            snake.forEach(function(part) {
+                const isOnSnake = part.x === powerUp.x && part.y === powerUp.y;
+                if (isOnSnake) generatePowerUp();
+            });
+            if (food.x === powerUp.x && food.y === powerUp.y) {
+                generatePowerUp();
+            }
+            obstacles.forEach(function(obstacle) {
+                const isOnObstacle = obstacle.x === powerUp.x && obstacle.y === powerUp.y;
+                if (isOnObstacle) generatePowerUp();
+            });
+        }
+
+        function drawPowerUp() {
+            if (powerUp) {
+                let color = '';
+                if (powerUp.type === 'speed') {
+                    color = '#3B82F6'; // Tailwind blue-500
+                } else if (powerUp.type === 'invincibility') {
+                    color = '#8B5CF6'; // Tailwind purple-500
+                }
+                ctx.fillStyle = color;
+                ctx.fillRect(powerUp.x, powerUp.y, gridSize, gridSize);
+                ctx.strokeRect(powerUp.x, powerUp.y, gridSize, gridSize);
+            }
+        }
+
+        function activatePowerUp(type) {
+            if (type === 'speed') {
+                speedBoostActive = true;
+                // Increase game speed
+                if (gameSpeed > 25) { // limit the max speed increase
+                    gameSpeed -= 25;
+                    clearInterval(gameInterval);
+                    gameInterval = setInterval(main, gameSpeed);
+                }
+                // Set timeout to deactivate after duration
+                setTimeout(() => {
+                    speedBoostActive = false;
+                    // Reset game speed
+                    gameSpeed += 25;
+                    clearInterval(gameInterval);
+                    gameInterval = setInterval(main, gameSpeed);
+                }, 5000); // 5 seconds
+            } else if (type === 'invincibility') {
+                invincibilityActive = true;
+                setTimeout(() => {
+                    invincibilityActive = false;
+                }, 5000); // 5 seconds
+            }
+        }
+
+        function generateObstacles(count) {
+            obstacles = [];
+            for (let i = 0; i < count; i++) {
+                let obstacle = { x: 0, y: 0 };
+                do {
+                    obstacle.x = getRandomInt(0, (canvas.width / gridSize) - 1) * gridSize;
+                    obstacle.y = getRandomInt(0, (canvas.height / gridSize) - 1) * gridSize;
+                } while (isObstacleOnSnakeOrFood(obstacle));
+                obstacles.push(obstacle);
+            }
+        }
+
+        function isObstacleOnSnakeOrFood(obstacle) {
+            let onSnake = snake.some(part => part.x === obstacle.x && part.y === obstacle.y);
+            let onFood = (obstacle.x === food.x && obstacle.y === food.y);
+            return onSnake || onFood;
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = '#6B7280'; // Tailwind gray-500
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, gridSize, gridSize);
+                ctx.strokeRect(obstacle.x, obstacle.y, gridSize, gridSize);
+            });
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function didGameEnd() {
+            for (let i = 4; i < snake.length; i++) {
+                if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+                    if (!invincibilityActive) {
+                        return true;
+                    }
+                }
+            }
+
+            const hitLeftWall = snake[0].x < 0;
+            const hitRightWall = snake[0].x >= canvas.width;
+            const hitTopWall = snake[0].y < 0;
+            const hitBottomWall = snake[0].y >= canvas.height;
+
+            const hitObstacle = obstacles.some(obstacle => obstacle.x === snake[0].x && obstacle.y === snake[0].y);
+
+            if (invincibilityActive) {
+                return false;
+            } else {
+                return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall || hitObstacle;
+            }
+        }
+
+        function togglePause() {
+            isPaused = !isPaused;
+            if (isPaused) {
+                console.log('Game paused.');
+                document.getElementById('pauseButton').textContent = 'Resume Game';
+            } else {
+                console.log('Game resumed.');
+                document.getElementById('pauseButton').textContent = 'Pause Game';
+            }
+        }
+
+        function toggleMute() {
+            if (backgroundMusic.muted) {
+                backgroundMusic.muted = false;
+                eatSound.muted = false;
+                gameOverSound.muted = false;
+                console.log('Sound unmuted.');
+                document.getElementById('muteButton').textContent = 'Mute';
+            } else {
+                backgroundMusic.muted = true;
+                eatSound.muted = true;
+                gameOverSound.muted = true;
+                console.log('Sound muted.');
+                document.getElementById('muteButton').textContent = 'Unmute';
+            }
+        }
+
+        function setSnakeSkin(skin) {
+            selectedSkin = skin;
+            localStorage.setItem('snakeSelectedSkin', selectedSkin);
+            if (skin === 'default') {
+                snakeColor = '#34D399'; // Default Tailwind green-400
+                snakeBorderColor = '#065F46'; // Default Tailwind green-800
+            } else if (skin === 'red') {
+                snakeColor = '#EF4444'; // Red
+                snakeBorderColor = '#991B1B'; // Dark Red
+            } else if (skin === 'blue') {
+                snakeColor = '#3B82F6'; // Blue
+                snakeBorderColor = '#1E3A8A'; // Dark Blue
+            } else if (skin === 'gold') {
+                snakeColor = '#F59E0B'; // Amber
+                snakeBorderColor = '#B45309'; // Dark Amber
+            }
+        }
+
+    </script>
+</body>
+</html>
