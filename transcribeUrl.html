@@ -11,9 +11,17 @@
     <div class="bg-white p-8 rounded shadow-md w-full max-w-lg">
         <h1 class="text-2xl font-bold mb-4">Audio Transcription Service</h1>
         <form id="transcriptionForm" class="space-y-4">
-            <div>
-                <label for="audioUrl" class="block text-sm font-medium text-gray-700">Audio URL</label>
-                <input type="text" id="audioUrl" name="audioUrl" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="Enter audio URL">
+            <div id="drop-area" class="flex items-center justify-center w-full">
+                <label for="fileInput" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                        <svg class="w-8 h-8 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4a4 4 0 018 0v12M4 12h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6z"/>
+                        </svg>
+                        <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                        <p class="text-xs text-gray-500">MP3, WAV, OGG (MAX. 100MB)</p>
+                    </div>
+                    <input id="fileInput" type="file" class="hidden" accept="audio/*" />
+                </label>
             </div>
             <button type="submit" id="submitButton" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Transcribe</button>
         </form>
@@ -23,8 +31,9 @@
             <div class="relative">
                 <pre id="transcriptionText" class="bg-gray-100 p-4 rounded h-64 overflow-y-auto whitespace-pre-wrap"></pre>
                 <button id="copyButton" class="absolute top-2 right-2 bg-gray-200 p-1 rounded hover:bg-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184" />
+                    <!-- SVG icon for copy -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h8m-8-4h8m2 16H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2-2h4a2 2 0 012 2v17a2 2 0 01-2 2z"/>
                     </svg>
                 </button>
             </div>
@@ -38,8 +47,8 @@
                 <div class="p-4">
                     <div class="flex items-start">
                         <div class="flex-shrink-0">
-                            <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <svg class="h-6 w-6 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/>
                             </svg>
                         </div>
                         <div class="ml-3 w-0 flex-1 pt-0.5">
@@ -49,8 +58,9 @@
                         <div class="ml-4 flex flex-shrink-0">
                             <button type="button" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" onclick="hideNotification()">
                                 <span class="sr-only">Close</span>
-                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                                <!-- Close icon -->
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586 14.293 4.293a1 1 0 011.414 1.414L11.415 10l4.292 4.293a1 1 0 01-1.415 1.414L10 11.415l-4.293 4.292a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
                                 </svg>
                             </button>
                         </div>
@@ -61,17 +71,89 @@
     </div>
 
     <script>
+        let selectedFile;
+
+        // File upload handling
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('fileInput');
+
+        // Prevent default behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop area when file is dragged over
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropArea.classList.add('border-blue-500');
+        }
+
+        function unhighlight(e) {
+            dropArea.classList.remove('border-blue-500');
+        }
+
+        // Handle dropped files
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+            handleFiles(files);
+            console.log('File dropped:', files[0]);
+        }
+
+        // Handle file selection via input
+        fileInput.addEventListener('change', function(e) {
+            let files = e.target.files;
+            handleFiles(files);
+            console.log('File selected via input:', files[0]);
+        });
+
+        function handleFiles(files) {
+            selectedFile = files[0];
+
+            if (selectedFile) {
+                console.log('File selected:', selectedFile.name);
+                updateFileNameDisplay();
+            }
+        }
+
+        function updateFileNameDisplay() {
+            const label = dropArea.querySelector('label');
+            const existingFileNameDisplay = label.querySelector('.file-name-display');
+            if (existingFileNameDisplay) {
+                existingFileNameDisplay.textContent = `Selected file: ${selectedFile.name}`;
+            } else {
+                const fileNameDisplay = document.createElement('p');
+                fileNameDisplay.className = 'mt-2 text-sm text-gray-500 file-name-display';
+                fileNameDisplay.textContent = `Selected file: ${selectedFile.name}`;
+                label.appendChild(fileNameDisplay);
+            }
+        }
+
+        // Form submission handling
         document.getElementById('transcriptionForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-            const audioUrl = document.getElementById('audioUrl').value;
             const submitButton = document.getElementById('submitButton');
             const timerDiv = document.getElementById('timer');
             const resultDiv = document.getElementById('result');
             const transcriptionText = document.getElementById('transcriptionText');
             const copyButton = document.getElementById('copyButton');
 
-            if (!audioUrl) {
-                alert('Please enter an audio URL');
+            if (!selectedFile) {
+                alert('Please select an audio file');
                 return;
             }
 
@@ -86,11 +168,14 @@
             }, 1000);
 
             try {
-                const response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', {
-                    audio_url: audioUrl
-                }, {
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+
+                console.log('Sending file to server:', selectedFile.name);
+
+                const response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', formData, {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'multipart/form-data'
                     }
                 });
 
@@ -108,12 +193,14 @@
             }
         });
 
+        // Copy to clipboard handling
         document.getElementById('copyButton').addEventListener('click', function() {
-            const transcriptionText = document.getElementById('transcriptionText').textContent;
-            navigator.clipboard.writeText(transcriptionText).then(() => {
+            const transcriptionTextContent = document.getElementById('transcriptionText').textContent;
+            navigator.clipboard.writeText(transcriptionTextContent).then(() => {
+                console.log('Transcription copied to clipboard');
                 showNotification();
             }).catch(err => {
-                console.error('Error copying text: ', err);
+                console.error('Error copying text:', err);
             });
         });
 
