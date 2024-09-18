@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- same head content as before -->
+    <!-- Head Content -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lambda Function Generator</title>
@@ -112,7 +112,7 @@
         <div id="frontendResponseContainer" class="mt-6 hidden">
             <h2 class="text-xl font-bold mb-2">Frontend Response:</h2>
             <div class="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md">
-                <pre id="responseText" class="mt-2 text-sm text-white dracula"></pre>
+                <textarea id="responseText" class="w-full p-2 border border-gray-300 rounded mt-2" rows="10"></textarea>
                 <button id="toggleViewButton" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded-md">View Rendered HTML</button>
                 <button id="copyHtmlButton" class="mt-2 bg-green-500 text-white py-2 px-4 rounded-md">Copy HTML Code</button>
                 <button id="rewriteHtmlButton" class="mt-2 bg-yellow-500 text-white py-2 px-4 rounded-md">Rewrite HTML</button>
@@ -120,7 +120,7 @@
                     <label for="rewriteUserRequest" class="block text-gray-700 font-bold mb-2">User Request:</label>
                     <textarea id="rewriteUserRequest" class="w-full p-2 border border-gray-300 rounded mb-4" rows="4"></textarea>
                 </div>
-                <iframe id="previewIframe" class="w-full h-64 border border-gray-300 rounded mt-4"></iframe>
+                <iframe id="previewIframe" class="w-full h-64 border border-gray-300 rounded mt-4 hidden"></iframe>
 
                 <!-- Suggestions Container -->
                 <div id="suggestionsContainer" class="mt-4 hidden">
@@ -327,6 +327,8 @@
             const frontendResponseContainer = document.getElementById('frontendResponseContainer');
             const responseText = document.getElementById('responseText');
             const previewIframe = document.getElementById('previewIframe');
+            const suggestionsContainer = document.getElementById('suggestionsContainer');
+            const suggestionsList = document.getElementById('suggestionsList');
 
             createFrontendButton.textContent = 'Creating Frontend...';
             createFrontendButton.disabled = true;
@@ -347,13 +349,28 @@
 
                 const data = await response.json();
                 console.log('Frontend created:', data);
-                const responseHtml = data;
+                const responseHtml = data.html_code; // Get the 'html_code' from response
+                const suggestions = data.suggestions;
 
-                responseText.textContent = responseHtml;
+                responseText.value = responseHtml;
                 frontendResponseContainer.classList.remove('hidden');
 
                 // Inject the HTML content into the iframe
                 previewIframe.srcdoc = responseHtml;
+
+                // Display suggestions
+                if (suggestions && suggestions.length > 0) {
+                    suggestionsList.innerHTML = ''; // Clear existing suggestions
+                    suggestions.forEach(suggestion => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<strong>${suggestion.title}</strong>: ${suggestion.details}`;
+                        suggestionsList.appendChild(li);
+                    });
+                    suggestionsContainer.classList.remove('hidden');
+                    console.log('Improvement suggestions displayed');
+                } else {
+                    suggestionsContainer.classList.add('hidden');
+                }
             } catch (error) {
                 console.error('Error:', error);
                 alert('Error: ' + error.message);
@@ -382,8 +399,8 @@
         });
 
         document.getElementById('copyHtmlButton').addEventListener('click', function () {
-            const responseText = document.getElementById('responseText').textContent;
-            navigator.clipboard.writeText(responseText).then(() => {
+            const responseTextContent = document.getElementById('responseText').value;
+            navigator.clipboard.writeText(responseTextContent).then(() => {
                 alert('HTML code copied to clipboard!');
                 console.log('HTML code copied to clipboard');
             }).catch(err => {
@@ -394,15 +411,16 @@
         document.getElementById('rewriteHtmlButton').addEventListener('click', async () => {
             const functionCode = document.getElementById('functionCode').value;
             const functionUrl = document.getElementById('functionUrl').value;
-            const existingCode = document.getElementById('responseText').textContent;
+            const existingCode = document.getElementById('responseText').value;
             const userRequest = document.getElementById('rewriteUserRequest').value;
             const rewriteHtmlButton = document.getElementById('rewriteHtmlButton');
             const previewIframe = document.getElementById('previewIframe');
             const suggestionsContainer = document.getElementById('suggestionsContainer');
             const suggestionsList = document.getElementById('suggestionsList');
+            const responseText = document.getElementById('responseText');
 
-            if (!userRequest || !existingCode) {
-                alert('Please ensure both user request and existing code are provided.');
+            if (!userRequest) {
+                alert('Please enter a user request.');
                 return;
             }
 
@@ -434,7 +452,7 @@
                 const htmlCode = data.html_code;
                 const suggestions = data.suggestions;
 
-                responseText.textContent = htmlCode;
+                responseText.value = htmlCode;
 
                 // Inject the updated HTML content into the iframe
                 previewIframe.srcdoc = htmlCode;
