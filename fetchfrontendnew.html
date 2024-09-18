@@ -56,7 +56,7 @@
     <!-- (Navbar code remains the same) -->
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto py-6 sm:py-8 px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold mb-8 text-center">GitHub File and Lambda Function Viewer</h1>
 
         <!-- URL Input Form -->
@@ -64,12 +64,12 @@
             <div class="flex items-center">
                 <label for="url" class="sr-only">GitHub File URL</label>
                 <input type="text" id="url" name="url" placeholder="Enter GitHub file URL" class="flex-grow p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="GitHub file URL">
-                <button type="submit" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Fetch Content">Fetch</button>
+                <button type="submit" id="fetchButton" class="px-6 py-3 bg-blue-600 text-white font-medium rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Fetch Content">Fetch</button>
             </div>
         </form>
 
         <!-- Results Section -->
-        <div id="result" class="hidden">
+        <section id="result" class="hidden">
             <!-- Frontend Content -->
             <div>
                 <h2 class="text-2xl font-semibold mb-6">Frontend</h2>
@@ -82,7 +82,7 @@
                 </div>
                 <!-- Content Sections -->
                 <div id="renderedContent" class="mb-8">
-                    <iframe id="contentFrame" srcdoc="" class="w-full h-96 border border-gray-300 rounded-md"></iframe>
+                    <iframe id="contentFrame" srcdoc="" class="w-full h-96 sm:h-[500px] border border-gray-300 rounded-md"></iframe>
                 </div>
                 <div id="codeContent" class="hidden mb-8">
                     <textarea id="codeBox" class="w-full h-96"></textarea>
@@ -118,7 +118,7 @@
                     <!-- Lambda Functions will be dynamically added here -->
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <!-- Loading Spinner -->
@@ -173,6 +173,7 @@
             const notification = document.getElementById('notification');
             const notificationMessage = document.getElementById('notificationMessage');
             const loadingSpinner = document.getElementById('loadingSpinner');
+            const fetchButton = document.getElementById('fetchButton');
             let fetchedContent = '';
             let frontendVersions = [];
             const logsPerPage = 10;
@@ -211,6 +212,9 @@
                 displayVersionHistory();
                 console.log('Fetching content from GitHub URL:', url);
 
+                const originalButtonText = fetchButton.textContent;
+                fetchButton.textContent = 'Fetching...';
+                fetchButton.disabled = true;
                 showLoading(true);
 
                 try {
@@ -235,12 +239,8 @@
                         saveCurrentVersion();
                         displayVersionHistory();
 
-                        // Parse functions from fetched content
-                        const functionNames = getFunctionsFromContent(fetchedContent);
-                        console.log('Function names extracted:', functionNames);
-
-                        // Display the functions
-                        displayFunctionsFromContent(functionNames);
+                        // Fetch related Lambda functions
+                        await fetchRelatedLambdaFunctions(url);
                     } else {
                         throw new Error(fileData.message || 'Failed to fetch file content');
                     }
@@ -249,6 +249,8 @@
                     showNotification('Error: ' + error.message, 'error');
                 } finally {
                     showLoading(false);
+                    fetchButton.textContent = originalButtonText;
+                    fetchButton.disabled = false;
                 }
             }
 
@@ -261,26 +263,38 @@
                 }
             }
 
-            // Parse Functions from Content
-            function getFunctionsFromContent(content) {
-                const functionNames = [];
-                const regex = /def\s+([a-zA-Z_][\w]*)\s*\(/g;
-                let match;
-                while ((match = regex.exec(content)) !== null) {
-                    functionNames.push(match[1]);
+            // Fetch Related Lambda Functions
+            async function fetchRelatedLambdaFunctions(url) {
+                console.log('Fetching related Lambda functions for URL:', url);
+                try {
+                    const lambdaResponse = await fetch('https://7t6svygyp2c5nnxcvq5ofpn7xa0xhcks.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url })
+                    });
+                    const lambdaData = await lambdaResponse.json();
+                    if (lambdaResponse.ok && lambdaData.lambda_functions && Object.keys(lambdaData.lambda_functions).length > 0) {
+                        displayLambdaFunctions(lambdaData.lambda_functions);
+                    } else {
+                        lambdaFunctionsDiv.innerHTML = '<p class="text-gray-600">No Lambda functions found.</p>';
+                    }
+                } catch (error) {
+                    console.error(error);
+                    showNotification('Error fetching Lambda functions: ' + error.message, 'error');
                 }
-                return functionNames;
             }
 
-            // Display Functions from Content
-            function displayFunctionsFromContent(functionNames) {
+            // Display Lambda Functions
+            function displayLambdaFunctions(lambdaFunctions) {
                 lambdaFunctionsDiv.innerHTML = '';
-                if (!functionNames || functionNames.length === 0) {
-                    lambdaFunctionsDiv.innerHTML = '<p class="text-gray-600">No functions found in the provided content.</p>';
+                if (!lambdaFunctions || Object.keys(lambdaFunctions).length === 0) {
+                    lambdaFunctionsDiv.innerHTML = '<p class="text-gray-600">No Lambda functions found.</p>';
                     return;
                 }
 
-                functionNames.forEach(funcName => {
+                Object.keys(lambdaFunctions).forEach(funcName => {
+                    const functionDetails = lambdaFunctions[funcName];
+                    const filePath = functionDetails.file_path; // Ensure this is provided by the API
                     const safeFunctionName = funcName.replace(/[^a-zA-Z0-9]/g, '_');
                     const functionItem = document.createElement('div');
                     functionItem.classList.add('border', 'border-gray-300', 'rounded-md', 'mb-6', 'p-4', 'bg-white');
@@ -288,6 +302,7 @@
                         <div class="flex justify-between items-center cursor-pointer">
                             <div>
                                 <h3 class="text-lg font-semibold text-gray-700">${funcName}</h3>
+                                <p class="text-sm text-gray-500">${filePath}</p>
                             </div>
                             <button class="toggle-details focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Toggle Details">
                                 <svg class="w-6 h-6 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -296,6 +311,7 @@
                             </button>
                         </div>
                         <div class="details mt-4 hidden" id="details-${safeFunctionName}">
+                            <!-- Loading indicator -->
                             <p class="text-gray-600">Loading function content...</p>
                         </div>
                     `;
@@ -309,7 +325,7 @@
                             detailsDiv.classList.remove('hidden');
                             toggleButton.querySelector('svg').classList.add('rotate-180');
                             if (!detailsDiv.dataset.loaded) {
-                                loadFunctionDetails(funcName, detailsDiv);
+                                loadFunctionDetails(funcName, filePath, detailsDiv);
                             }
                             console.log('Showing details for function:', funcName);
                         } else {
@@ -333,11 +349,11 @@
             }
 
             // Load Function Details
-            function loadFunctionDetails(functionName, detailsDiv) {
-                console.log('Loading details for function:', functionName);
+            function loadFunctionDetails(functionName, filePath, detailsDiv) {
+                console.log('Loading details for function:', functionName, 'from file:', filePath);
                 detailsDiv.innerHTML = `<p class="text-gray-600">Loading function content...</p>`;
-                const codeFilePath = 'codeFiles/lambda_function.py'; // Fixed path as per user request
-                const codeFileUrl = getGitHubFileUrl(baseGitHubUrl, codeFilePath);
+
+                const codeFileUrl = getGitHubFileUrl(baseGitHubUrl, filePath);
                 if (!codeFileUrl) {
                     detailsDiv.innerHTML = `<p class="text-red-500">Error: Unable to construct URL to code file.</p>`;
                     return;
@@ -355,7 +371,7 @@
                         detailsDiv.dataset.loaded = true;
                         console.log('Function code loaded for:', functionName);
                     } else {
-                        throw new Error('Failed to fetch code file.');
+                        throw new Error('Failed to fetch function code.');
                     }
                 })
                 .catch(error => {
