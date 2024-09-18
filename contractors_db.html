@@ -9,6 +9,25 @@
     <div class="container mx-auto p-4">
         <h1 class="text-2xl font-bold mb-4">Contractors Data</h1>
 
+        <!-- Notification Area -->
+        <div id="notification" class="mb-4"></div>
+
+        <!-- Search and Filter -->
+        <div class="mb-6">
+            <h2 class="text-xl font-semibold mb-2">Search and Filter Contractors</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <input type="text" id="search-name" placeholder="Search by Name" class="w-full border border-gray-300 rounded px-3 py-2">
+                </div>
+                <div>
+                    <input type="text" id="filter-country" placeholder="Filter by Country" class="w-full border border-gray-300 rounded px-3 py-2">
+                </div>
+                <div>
+                    <input type="text" id="filter-rates" placeholder="Filter by Rates" class="w-full border border-gray-300 rounded px-3 py-2">
+                </div>
+            </div>
+        </div>
+
         <!-- Create Contractor Form -->
         <div class="mb-6">
             <h2 class="text-xl font-semibold mb-2">Add New Contractor</h2>
@@ -92,6 +111,26 @@
     <script>
         const lambdaUrl = 'https://in3k57uvf5h3tdi4ntgdtvqrfi0ydvie.lambda-url.us-west-2.on.aws/';
 
+        // Holds the data fetched from the server
+        let contractorsData = [];
+
+        // Current contractor being edited
+        let currentEditingContractorEmail = null;
+
+        // Function to display notifications
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.innerHTML = `
+                <div class="p-4 mb-4 text-sm text-${type === 'success' ? 'green' : 'red'}-700 bg-${type === 'success' ? 'green' : 'red'}-100 rounded-lg" role="alert">
+                    <span class="font-medium">${message}</span>
+                </div>
+            `;
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.innerHTML = '';
+            }, 3000);
+        }
+
         // Function to fetch data from the Lambda function
         async function fetchContractorsData() {
             console.log('Fetching contractors data...');
@@ -114,10 +153,12 @@
                 const data = await response.json();
                 console.log('Data received:', data);
 
+                contractorsData = data;
                 displayContractorsData(data);
 
             } catch (error) {
                 console.error('Error fetching data:', error);
+                showNotification('Error fetching contractors data', 'error');
             }
         }
 
@@ -126,12 +167,14 @@
             const container = document.getElementById('contractors-container');
             container.innerHTML = ''; // Clear previous data
 
-            if (contractors.length === 0) {
+            const filteredContractors = filterContractors(contractors);
+
+            if (filteredContractors.length === 0) {
                 container.innerHTML = '<p>No contractors found.</p>';
                 return;
             }
 
-            contractors.forEach(contractor => {
+            filteredContractors.forEach(contractor => {
                 const card = document.createElement('div');
                 card.className = 'bg-white p-4 shadow rounded relative';
 
@@ -165,6 +208,87 @@
             });
         }
 
+        // Function to filter contractors based on search/filter inputs
+        function filterContractors(contractors) {
+            const searchName = document.getElementById('search-name').value.toLowerCase();
+            const filterCountry = document.getElementById('filter-country').value.toLowerCase();
+            const filterRates = document.getElementById('filter-rates').value.toLowerCase();
+
+            return contractors.filter(contractor => {
+                const matchesName = contractor.Name && contractor.Name.toLowerCase().includes(searchName);
+                const matchesCountry = !filterCountry || (contractor.Country && contractor.Country.toLowerCase().includes(filterCountry));
+                const matchesRates = !filterRates || (contractor.Rates && contractor.Rates.toLowerCase().includes(filterRates));
+
+                return matchesName && matchesCountry && matchesRates;
+            });
+        }
+
+        // Event listeners for search/filter inputs
+        document.getElementById('search-name').addEventListener('input', () => displayContractorsData(contractorsData));
+        document.getElementById('filter-country').addEventListener('input', () => displayContractorsData(contractorsData));
+        document.getElementById('filter-rates').addEventListener('input', () => displayContractorsData(contractorsData));
+
+        // Function to validate form inputs
+        function validateFormData(formData, isUpdate = false) {
+            const errors = [];
+
+            // Validate Name
+            const name = formData.get('Name');
+            if (!name) {
+                errors.push('Name is required.');
+            }
+
+            // Validate Email (only for create, not for update)
+            const email = formData.get('Email');
+            if (!isUpdate) {
+                if (!email) {
+                    errors.push('Email is required.');
+                } else if (!validateEmail(email)) {
+                    errors.push('Invalid email format.');
+                }
+            }
+
+            // Validate Phone Number
+            const phoneNumber = formData.get('PhoneNumber');
+            if (phoneNumber && !validatePhoneNumber(phoneNumber)) {
+                errors.push('Invalid phone number format.');
+            }
+
+            // Validate URLs
+            const testWork = formData.get('TestWork');
+            if (testWork && !validateURL(testWork)) {
+                errors.push('Invalid Test Work URL.');
+            }
+
+            const loomVideo = formData.get('LoomVideo');
+            if (loomVideo && !validateURL(loomVideo)) {
+                errors.push('Invalid Loom Video URL.');
+            }
+
+            return errors;
+        }
+
+        // Helper functions for validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePhoneNumber(phoneNumber) {
+            const re = /^\+?[0-9\s\-()]+$/;
+            return re.test(phoneNumber);
+        }
+
+        function validateURL(url) {
+            let urlObj;
+            try {
+                urlObj = new URL(url);
+            } catch (_) {
+                return false;
+            }
+            return urlObj.protocol === "http:" || urlObj.protocol === "https:";
+        }
+
         // Function to handle Create Contractor
         async function handleCreateContractor(event) {
             event.preventDefault();
@@ -172,6 +296,14 @@
 
             const form = event.target;
             const formData = new FormData(form);
+
+            // Validate form data
+            const errors = validateFormData(formData);
+            if (errors.length > 0) {
+                showNotification(errors.join(' '), 'error');
+                return;
+            }
+
             const contractor = {};
 
             formData.forEach((value, key) => {
@@ -199,6 +331,9 @@
                 const result = await response.json();
                 console.log('Create result:', result);
 
+                // Show success message
+                showNotification('Contractor added successfully.', 'success');
+
                 // Refresh the contractors list
                 fetchContractorsData();
 
@@ -207,6 +342,7 @@
 
             } catch (error) {
                 console.error('Error creating contractor:', error);
+                showNotification('Error creating contractor.', 'error');
             }
         }
 
@@ -215,17 +351,16 @@
             const email = event.target.getAttribute('data-email');
             console.log('Editing contractor with email:', email);
 
-            // Find the contractor data from the displayed list
-            const contractorCard = event.target.closest('div');
-            const contractorData = {
-                Email: email,
-                Name: contractorCard.querySelector('h2').textContent,
-                PhoneNumber: contractorCard.querySelector('p:nth-child(3)').textContent.replace('Phone Number: ', ''),
-                Country: contractorCard.querySelector('p:nth-child(4)').textContent.replace('Country: ', ''),
-                TestWork: contractorCard.querySelector('p:nth-child(5) a').getAttribute('href'),
-                LoomVideo: contractorCard.querySelector('p:nth-child(6) a').getAttribute('href'),
-                Rates: contractorCard.querySelector('p:nth-child(7)').textContent.replace('Rates: ', '')
-            };
+            currentEditingContractorEmail = email;
+
+            // Find the contractor data from the stored data
+            const contractorData = contractorsData.find(contractor => contractor.Email === email);
+
+            if (!contractorData) {
+                console.error('Contractor data not found.');
+                showNotification('Contractor data not found.', 'error');
+                return;
+            }
 
             console.log('Contractor data to edit:', contractorData);
 
@@ -241,15 +376,6 @@
 
             // Show the modal
             updateModal.classList.remove('hidden');
-
-            // Add event listener for form submission
-            updateForm.addEventListener('submit', handleUpdateContractor);
-
-            // Add event listener for cancel button
-            document.getElementById('cancel-update-btn').addEventListener('click', () => {
-                updateModal.classList.add('hidden');
-                updateForm.removeEventListener('submit', handleUpdateContractor);
-            });
         }
 
         // Function to handle Update Contractor
@@ -259,6 +385,14 @@
 
             const form = event.target;
             const formData = new FormData(form);
+
+            // Validate form data
+            const errors = validateFormData(formData, true);
+            if (errors.length > 0) {
+                showNotification(errors.join(' '), 'error');
+                return;
+            }
+
             const email = formData.get('Email');
             const updateAttributes = {};
 
@@ -294,14 +428,15 @@
                 // Hide the modal
                 document.getElementById('update-modal').classList.add('hidden');
 
+                // Show success message
+                showNotification('Contractor updated successfully.', 'success');
+
                 // Refresh the contractors list
                 fetchContractorsData();
 
-                // Remove event listener
-                form.removeEventListener('submit', handleUpdateContractor);
-
             } catch (error) {
                 console.error('Error updating contractor:', error);
+                showNotification('Error updating contractor.', 'error');
             }
         }
 
@@ -333,16 +468,28 @@
                 const result = await response.json();
                 console.log('Delete result:', result);
 
+                // Show success message
+                showNotification('Contractor deleted successfully.', 'success');
+
                 // Refresh the contractors list
                 fetchContractorsData();
 
             } catch (error) {
                 console.error('Error deleting contractor:', error);
+                showNotification('Error deleting contractor.', 'error');
             }
         }
 
         // Event listener for Create Contractor form
         document.getElementById('create-contractor-form').addEventListener('submit', handleCreateContractor);
+
+        // Event listener for Update Contractor form
+        document.getElementById('update-contractor-form').addEventListener('submit', handleUpdateContractor);
+
+        // Event listener for Cancel Update button
+        document.getElementById('cancel-update-btn').addEventListener('click', () => {
+            document.getElementById('update-modal').classList.add('hidden');
+        });
 
         // Call the function when the page loads
         window.onload = fetchContractorsData;
