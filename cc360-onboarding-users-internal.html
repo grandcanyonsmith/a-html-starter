@@ -104,14 +104,9 @@
                     return;
                 }
 
-                // Disable form inputs and submit button
-                toggleFormElements(true);
-
-                // Show loading spinner and update button text
-                submitButtonText.textContent = 'Submitting...';
-                loadingSpinner.classList.remove('hidden');
-
+                // Collect form data before disabling inputs
                 const formData = new FormData(accessForm);
+
                 const userData = {
                     requestType: 'create_user',
                     firstName: formData.get('firstName'),
@@ -122,8 +117,16 @@
                     role: 'user' // Default role
                 };
 
+                console.log('Sending user data:', userData);
+
+                // Disable form inputs and submit button
+                toggleFormElements(true);
+
+                // Show loading spinner and update button text
+                submitButtonText.textContent = 'Submitting...';
+                loadingSpinner.classList.remove('hidden');
+
                 try {
-                    console.log('Sending user data:', userData);
                     const response = await axios.post('https://pk27rf2b6cl4mdof27koyj7zfu0reobl.lambda-url.us-west-2.on.aws/', userData);
                     console.log('Response:', response.data);
 
