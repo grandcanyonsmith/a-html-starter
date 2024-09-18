@@ -1,498 +1,715 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
     <title>Contractors Data - CRUD Operations</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Tailwind CSS Configuration for Stripe-like UI -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#635bff',
+            },
+            fontFamily: {
+              sans: ['Inter var', 'sans-serif'],
+            },
+          }
+        }
+      }
+    </script>
+    <!-- Include Inter font for better typography -->
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <!-- Meta tags for responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta tags for accessibility -->
+    <meta name="description" content="Manage Contractors Data with CRUD Operations and improved UI/UX">
 </head>
-<body>
-    <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-4">Contractors Data</h1>
+<body class="bg-gray-50 font-sans h-full">
+    <div class="min-h-full">
 
-        <!-- Notification Area -->
-        <div id="notification" class="mb-4"></div>
+        <!-- Navigation Bar -->
+        <nav class="bg-white border-b border-gray-200">
+            <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+                <a href="#" class="text-xl font-semibold text-gray-900">Contractor Manager</a>
+                <div>
+                    <!-- Additional nav items if needed -->
+                </div>
+            </div>
+        </nav>
 
-        <!-- Search and Filter -->
-        <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">Search and Filter Contractors</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <input type="text" id="search-name" placeholder="Search by Name" class="w-full border border-gray-300 rounded px-3 py-2">
+        <main class="container mx-auto p-4">
+
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900">Contractors Data</h1>
+                <p class="mt-2 text-sm text-gray-600">Manage your contractors efficiently with the improved interface.</p>
+            </div>
+
+            <!-- Notification Area -->
+            <div aria-live="assertive" aria-atomic="true" class="mb-4" id="notification"></div>
+
+            <!-- Search and Filter -->
+            <div class="mb-8 bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4 text-gray-900">Search and Filter Contractors</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label for="search-name" class="block text-sm font-medium text-gray-700 mb-1">Search by Name</label>
+                        <input type="text" id="search-name" placeholder="Name" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Search by Name">
+                    </div>
+                    <div>
+                        <label for="filter-country" class="block text-sm font-medium text-gray-700 mb-1">Filter by Country</label>
+                        <input type="text" id="filter-country" placeholder="Country" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Filter by Country">
+                    </div>
+                    <div>
+                        <label for="filter-rates" class="block text-sm font-medium text-gray-700 mb-1">Filter by Rates</label>
+                        <input type="text" id="filter-rates" placeholder="Rates" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Filter by Rates">
+                    </div>
                 </div>
+            </div>
+
+            <!-- Create Contractor Form -->
+            <div class="mb-8 bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold mb-4 text-gray-900">Add New Contractor</h2>
+                <form id="create-contractor-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" aria-label="Add New Contractor">
+                    <div>
+                        <label for="create-name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="create-name" name="Name" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" required aria-required="true" aria-label="Name">
+                    </div>
+                    <div>
+                        <label for="create-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="create-email" name="Email" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" required aria-required="true" aria-label="Email">
+                    </div>
+                    <div>
+                        <label for="create-phone-number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="text" id="create-phone-number" name="PhoneNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Phone Number">
+                    </div>
+                    <div>
+                        <label for="create-country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                        <input type="text" id="create-country" name="Country" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Country">
+                    </div>
+                    <div>
+                        <label for="create-test-work" class="block text-sm font-medium text-gray-700 mb-1">Test Work URL</label>
+                        <input type="url" id="create-test-work" name="TestWork" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Test Work URL">
+                    </div>
+                    <div>
+                        <label for="create-loom-video" class="block text-sm font-medium text-gray-700 mb-1">Loom Video URL</label>
+                        <input type="url" id="create-loom-video" name="LoomVideo" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Loom Video URL">
+                    </div>
+                    <div>
+                        <label for="create-rates" class="block text-sm font-medium text-gray-700 mb-1">Rates</label>
+                        <input type="text" id="create-rates" name="Rates" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Rates">
+                    </div>
+                    <div class="md:col-span-2 flex justify-end">
+                        <button type="submit" class="inline-flex items-center bg-primary hover:bg-indigo-700 text-white px-5 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" aria-label="Add Contractor">
+                            Add Contractor
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Contractors List -->
+            <div id="contractors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" aria-label="Contractors List"></div>
+
+            <!-- Pagination Controls -->
+            <div id="pagination-controls" class="mt-8 flex items-center justify-between" aria-label="Pagination Controls">
                 <div>
-                    <input type="text" id="filter-country" placeholder="Filter by Country" class="w-full border border-gray-300 rounded px-3 py-2">
+                    <p class="text-sm text-gray-700">
+                        Showing <span id="current-page"></span> of <span id="total-pages"></span> pages
+                    </p>
                 </div>
-                <div>
-                    <input type="text" id="filter-rates" placeholder="Filter by Rates" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
+                <nav class="inline-flex -space-x-px" aria-label="Pagination Navigation">
+                    <button id="prev-page-btn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-primary" disabled aria-label="Previous Page">
+                        Previous
+                    </button>
+                    <button id="next-page-btn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-primary" disabled aria-label="Next Page">
+                        Next
+                    </button>
+                </nav>
+            </div>
+
+        </main>
+
+        <!-- Update Contractor Modal -->
+        <div id="update-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
+            <div class="bg-white p-6 rounded shadow-lg w-full max-w-md" role="document">
+                <h2 id="update-modal-title" class="text-xl font-semibold mb-4 text-gray-900">Update Contractor</h2>
+                <form id="update-contractor-form" class="grid grid-cols-1 gap-4" aria-label="Update Contractor">
+                    <input type="hidden" name="Email">
+                    <div>
+                        <label for="update-name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="update-name" name="Name" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Name">
+                    </div>
+                    <div>
+                        <label for="update-phone-number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="text" id="update-phone-number" name="PhoneNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Phone Number">
+                    </div>
+                    <div>
+                        <label for="update-country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                        <input type="text" id="update-country" name="Country" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Country">
+                    </div>
+                    <div>
+                        <label for="update-test-work" class="block text-sm font-medium text-gray-700 mb-1">Test Work URL</label>
+                        <input type="url" id="update-test-work" name="TestWork" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Test Work URL">
+                    </div>
+                    <div>
+                        <label for="update-loom-video" class="block text-sm font-medium text-gray-700 mb-1">Loom Video URL</label>
+                        <input type="url" id="update-loom-video" name="LoomVideo" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Loom Video URL">
+                    </div>
+                    <div>
+                        <label for="update-rates" class="block text-sm font-medium text-gray-700 mb-1">Rates</label>
+                        <input type="text" id="update-rates" name="Rates" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Rates">
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button type="button" id="cancel-update-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" aria-label="Cancel Update">
+                            Cancel
+                        </button>
+                        <button type="submit" class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" aria-label="Update Contractor">
+                            Update Contractor
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <!-- Create Contractor Form -->
-        <div class="mb-6">
-            <h2 class="text-xl font-semibold mb-2">Add New Contractor</h2>
-            <form id="create-contractor-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Name</label>
-                    <input type="text" name="Name" class="w-full border border-gray-300 rounded px-3 py-2" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Email</label>
-                    <input type="email" name="Email" class="w-full border border-gray-300 rounded px-3 py-2" required>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Phone Number</label>
-                    <input type="text" name="PhoneNumber" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Country</label>
-                    <input type="text" name="Country" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Test Work URL</label>
-                    <input type="url" name="TestWork" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Loom Video URL</label>
-                    <input type="url" name="LoomVideo" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Rates</label>
-                    <input type="text" name="Rates" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div class="md:col-span-2">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Add Contractor</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- Contractors List -->
-        <div id="contractors-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     </div>
 
-    <!-- Update Contractor Modal -->
-    <div id="update-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded shadow-lg w-full max-w-md">
-            <h2 class="text-xl font-semibold mb-4">Update Contractor</h2>
-            <form id="update-contractor-form" class="grid grid-cols-1 gap-4">
-                <input type="hidden" name="Email">
-                <div>
-                    <label class="block text-sm font-medium mb-1">Name</label>
-                    <input type="text" name="Name" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Phone Number</label>
-                    <input type="text" name="PhoneNumber" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Country</label>
-                    <input type="text" name="Country" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Test Work URL</label>
-                    <input type="url" name="TestWork" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Loom Video URL</label>
-                    <input type="url" name="LoomVideo" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1">Rates</label>
-                    <input type="text" name="Rates" class="w-full border border-gray-300 rounded px-3 py-2">
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" id="cancel-update-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Cancel</button>
-                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Update Contractor</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    <!-- JavaScript Code -->
+    <script type="module">
+        // Using ES6 Modules to organize the code
 
-    <script>
-        const lambdaUrl = 'https://in3k57uvf5h3tdi4ntgdtvqrfi0ydvie.lambda-url.us-west-2.on.aws/';
+        const ContractorsManager = (() => {
 
-        // Holds the data fetched from the server
-        let contractorsData = [];
+            const lambdaUrl = 'https://in3k57uvf5h3tdi4ntgdtvqrfi0ydvie.lambda-url.us-west-2.on.aws/';
 
-        // Current contractor being edited
-        let currentEditingContractorEmail = null;
+            // Cache key for localStorage
+            const cacheKey = 'contractorsData';
 
-        // Function to display notifications
-        function showNotification(message, type = 'success') {
-            const notification = document.getElementById('notification');
-            notification.innerHTML = `
-                <div class="p-4 mb-4 text-sm text-${type === 'success' ? 'green' : 'red'}-700 bg-${type === 'success' ? 'green' : 'red'}-100 rounded-lg" role="alert">
-                    <span class="font-medium">${message}</span>
-                </div>
-            `;
-            // Remove notification after 3 seconds
-            setTimeout(() => {
-                notification.innerHTML = '';
-            }, 3000);
-        }
+            // Holds the data fetched from the server
+            let contractorsData = [];
 
-        // Function to fetch data from the Lambda function
-        async function fetchContractorsData() {
-            console.log('Fetching contractors data...');
+            // Pagination variables
+            const itemsPerPage = 6;
+            let currentPage = 1;
+            let totalPages = 1;
 
-            try {
-                const response = await fetch(lambdaUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'request_type': 'read'
-                    })
+            // Current contractor being edited
+            let currentEditingContractorEmail = null;
+
+            // Initialize the module
+            function init() {
+                bindEventListeners();
+                loadContractorsData();
+            }
+
+            // Bind event listeners
+            function bindEventListeners() {
+                // Event listener for Create Contractor form
+                document.getElementById('create-contractor-form').addEventListener('submit', handleCreateContractor);
+
+                // Event listener for Update Contractor form
+                document.getElementById('update-contractor-form').addEventListener('submit', handleUpdateContractor);
+
+                // Event listener for Cancel Update button
+                document.getElementById('cancel-update-btn').addEventListener('click', closeUpdateModal);
+
+                // Event listeners for search/filter inputs
+                document.getElementById('search-name').addEventListener('input', () => {
+                    resetPagination();
+                    displayContractorsData();
+                });
+                document.getElementById('filter-country').addEventListener('input', () => {
+                    resetPagination();
+                    displayContractorsData();
+                });
+                document.getElementById('filter-rates').addEventListener('input', () => {
+                    resetPagination();
+                    displayContractorsData();
                 });
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const data = await response.json();
-                console.log('Data received:', data);
-
-                contractorsData = data;
-                displayContractorsData(data);
-
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                showNotification('Error fetching contractors data', 'error');
-            }
-        }
-
-        // Function to display contractors data
-        function displayContractorsData(contractors) {
-            const container = document.getElementById('contractors-container');
-            container.innerHTML = ''; // Clear previous data
-
-            const filteredContractors = filterContractors(contractors);
-
-            if (filteredContractors.length === 0) {
-                container.innerHTML = '<p>No contractors found.</p>';
-                return;
+                // Pagination buttons
+                document.getElementById('prev-page-btn').addEventListener('click', goToPreviousPage);
+                document.getElementById('next-page-btn').addEventListener('click', goToNextPage);
             }
 
-            filteredContractors.forEach(contractor => {
-                const card = document.createElement('div');
-                card.className = 'bg-white p-4 shadow rounded relative';
-
-                card.innerHTML = `
-                    <h2 class="text-xl font-semibold mb-2">${contractor.Name || 'No Name'}</h2>
-                    <p><strong>Email:</strong> ${contractor.Email || 'N/A'}</p>
-                    <p><strong>Phone Number:</strong> ${contractor.PhoneNumber || 'N/A'}</p>
-                    <p><strong>Country:</strong> ${contractor.Country || 'N/A'}</p>
-                    <p><strong>Test Work:</strong> <a href="${contractor.TestWork || '#'}" class="text-blue-500" target="_blank">View</a></p>
-                    <p><strong>Loom Video:</strong> <a href="${contractor.LoomVideo || '#'}" class="text-blue-500" target="_blank">Watch</a></p>
-                    <p><strong>Rates:</strong> ${contractor.Rates || 'N/A'}</p>
-                    <div class="mt-4 flex space-x-2">
-                        <button class="edit-btn bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded" data-email="${contractor.Email}">Edit</button>
-                        <button class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded" data-email="${contractor.Email}">Delete</button>
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-
-            // Add event listeners for Edit and Delete buttons
-            const editButtons = document.querySelectorAll('.edit-btn');
-            const deleteButtons = document.querySelectorAll('.delete-btn');
-
-            editButtons.forEach(button => {
-                button.addEventListener('click', handleEditContractor);
-            });
-
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', handleDeleteContractor);
-            });
-        }
-
-        // Function to filter contractors based on search/filter inputs
-        function filterContractors(contractors) {
-            const searchName = document.getElementById('search-name').value.toLowerCase();
-            const filterCountry = document.getElementById('filter-country').value.toLowerCase();
-            const filterRates = document.getElementById('filter-rates').value.toLowerCase();
-
-            return contractors.filter(contractor => {
-                const matchesName = contractor.Name && contractor.Name.toLowerCase().includes(searchName);
-                const matchesCountry = !filterCountry || (contractor.Country && contractor.Country.toLowerCase().includes(filterCountry));
-                const matchesRates = !filterRates || (contractor.Rates && contractor.Rates.toLowerCase().includes(filterRates));
-
-                return matchesName && matchesCountry && matchesRates;
-            });
-        }
-
-        // Event listeners for search/filter inputs
-        document.getElementById('search-name').addEventListener('input', () => displayContractorsData(contractorsData));
-        document.getElementById('filter-country').addEventListener('input', () => displayContractorsData(contractorsData));
-        document.getElementById('filter-rates').addEventListener('input', () => displayContractorsData(contractorsData));
-
-        // Function to validate form inputs
-        function validateFormData(formData, isUpdate = false) {
-            const errors = [];
-
-            // Validate Name
-            const name = formData.get('Name');
-            if (!name) {
-                errors.push('Name is required.');
-            }
-
-            // Validate Email (only for create, not for update)
-            const email = formData.get('Email');
-            if (!isUpdate) {
-                if (!email) {
-                    errors.push('Email is required.');
-                } else if (!validateEmail(email)) {
-                    errors.push('Invalid email format.');
+            // Load contractors data
+            function loadContractorsData() {
+                // Check if data is in cache
+                const cachedData = localStorage.getItem(cacheKey);
+                if (cachedData) {
+                    contractorsData = JSON.parse(cachedData);
+                    console.log('Loaded contractors data from cache.');
+                    displayContractorsData();
+                } else {
+                    fetchContractorsData();
                 }
             }
 
-            // Validate Phone Number
-            const phoneNumber = formData.get('PhoneNumber');
-            if (phoneNumber && !validatePhoneNumber(phoneNumber)) {
-                errors.push('Invalid phone number format.');
+            // Fetch data from the server
+            async function fetchContractorsData() {
+                console.log('Fetching contractors data from server...');
+
+                try {
+                    const response = await fetch(lambdaUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'request_type': 'read'
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    console.log('Data received:', data);
+
+                    contractorsData = data;
+                    // Save data to cache
+                    localStorage.setItem(cacheKey, JSON.stringify(contractorsData));
+                    displayContractorsData();
+
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    showNotification('Error fetching contractors data', 'error');
+                }
             }
 
-            // Validate URLs
-            const testWork = formData.get('TestWork');
-            if (testWork && !validateURL(testWork)) {
-                errors.push('Invalid Test Work URL.');
+            // Display contractors data
+            function displayContractorsData() {
+                const container = document.getElementById('contractors-container');
+                container.innerHTML = ''; // Clear previous data
+
+                const filteredContractors = filterContractors(contractorsData);
+
+                totalPages = Math.ceil(filteredContractors.length / itemsPerPage);
+                updatePaginationControls();
+
+                if (filteredContractors.length === 0) {
+                    container.innerHTML = '<p>No contractors found.</p>';
+                    return;
+                }
+
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = currentPage * itemsPerPage;
+
+                const contractorsToDisplay = filteredContractors.slice(startIndex, endIndex);
+
+                contractorsToDisplay.forEach(contractor => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-white p-6 rounded-lg shadow relative flex flex-col';
+                    card.tabIndex = 0;
+                    card.setAttribute('role', 'article');
+
+                    card.innerHTML = `
+                        <h2 class="text-xl font-semibold mb-2 text-gray-900">${contractor.Name || 'No Name'}</h2>
+                        <p class="text-sm text-gray-600"><strong>Email:</strong> ${contractor.Email || 'N/A'}</p>
+                        <p class="text-sm text-gray-600"><strong>Phone Number:</strong> ${contractor.PhoneNumber || 'N/A'}</p>
+                        <p class="text-sm text-gray-600"><strong>Country:</strong> ${contractor.Country || 'N/A'}</p>
+                        <p class="text-sm text-gray-600"><strong>Test Work:</strong> <a href="${contractor.TestWork || '#'}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">View</a></p>
+                        <p class="text-sm text-gray-600"><strong>Loom Video:</strong> <a href="${contractor.LoomVideo || '#'}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Watch</a></p>
+                        <p class="text-sm text-gray-600"><strong>Rates:</strong> ${contractor.Rates || 'N/A'}</p>
+                        <div class="mt-auto flex space-x-2 pt-4">
+                            <button class="edit-btn inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" data-email="${contractor.Email}" aria-label="Edit ${contractor.Name}">
+                                Edit
+                            </button>
+                            <button class="delete-btn inline-flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" data-email="${contractor.Email}" aria-label="Delete ${contractor.Name}">
+                                Delete
+                            </button>
+                        </div>
+                    `;
+
+                    container.appendChild(card);
+                });
+
+                // Add event listeners for Edit and Delete buttons
+                const editButtons = container.querySelectorAll('.edit-btn');
+                const deleteButtons = container.querySelectorAll('.delete-btn');
+
+                editButtons.forEach(button => {
+                    button.addEventListener('click', handleEditContractor);
+                });
+
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', handleDeleteContractor);
+                });
             }
 
-            const loomVideo = formData.get('LoomVideo');
-            if (loomVideo && !validateURL(loomVideo)) {
-                errors.push('Invalid Loom Video URL.');
+            // Filter contractors based on search/filter inputs
+            function filterContractors(contractors) {
+                const searchName = document.getElementById('search-name').value.toLowerCase();
+                const filterCountry = document.getElementById('filter-country').value.toLowerCase();
+                const filterRates = document.getElementById('filter-rates').value.toLowerCase();
+
+                return contractors.filter(contractor => {
+                    const matchesName = contractor.Name && contractor.Name.toLowerCase().includes(searchName);
+                    const matchesCountry = !filterCountry || (contractor.Country && contractor.Country.toLowerCase().includes(filterCountry));
+                    const matchesRates = !filterRates || (contractor.Rates && contractor.Rates.toLowerCase().includes(filterRates));
+
+                    return matchesName && matchesCountry && matchesRates;
+                });
             }
-
-            return errors;
-        }
-
-        // Helper functions for validation
-        function validateEmail(email) {
-            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return re.test(email);
-        }
-
-        function validatePhoneNumber(phoneNumber) {
-            const re = /^\+?[0-9\s\-()]+$/;
-            return re.test(phoneNumber);
-        }
-
-        function validateURL(url) {
-            let urlObj;
-            try {
-                urlObj = new URL(url);
-            } catch (_) {
-                return false;
-            }
-            return urlObj.protocol === "http:" || urlObj.protocol === "https:";
-        }
-
-        // Function to handle Create Contractor
-        async function handleCreateContractor(event) {
-            event.preventDefault();
-            console.log('Creating new contractor...');
-
-            const form = event.target;
-            const formData = new FormData(form);
 
             // Validate form data
-            const errors = validateFormData(formData);
-            if (errors.length > 0) {
-                showNotification(errors.join(' '), 'error');
-                return;
-            }
+            function validateFormData(formData, isUpdate = false) {
+                const errors = [];
 
-            const contractor = {};
-
-            formData.forEach((value, key) => {
-                contractor[key] = value;
-            });
-
-            console.log('Contractor data to create:', contractor);
-
-            try {
-                const response = await fetch(lambdaUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'request_type': 'create',
-                        'contractors': [contractor]
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                // Validate Name
+                const name = formData.get('Name');
+                if (!name) {
+                    errors.push('Name is required.');
                 }
 
-                const result = await response.json();
-                console.log('Create result:', result);
+                // Validate Email (only for create, not for update)
+                const email = formData.get('Email');
+                if (!isUpdate) {
+                    if (!email) {
+                        errors.push('Email is required.');
+                    } else if (!validateEmail(email)) {
+                        errors.push('Invalid email format.');
+                    }
+                }
 
-                // Show success message
-                showNotification('Contractor added successfully.', 'success');
+                // Validate Phone Number
+                const phoneNumber = formData.get('PhoneNumber');
+                if (phoneNumber && !validatePhoneNumber(phoneNumber)) {
+                    errors.push('Invalid phone number format.');
+                }
 
-                // Refresh the contractors list
-                fetchContractorsData();
+                // Validate URLs
+                const testWork = formData.get('TestWork');
+                if (testWork && !validateURL(testWork)) {
+                    errors.push('Invalid Test Work URL.');
+                }
+
+                const loomVideo = formData.get('LoomVideo');
+                if (loomVideo && !validateURL(loomVideo)) {
+                    errors.push('Invalid Loom Video URL.');
+                }
+
+                return errors;
+            }
+
+            // Helper functions for validation
+            function validateEmail(email) {
+                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return re.test(email);
+            }
+
+            function validatePhoneNumber(phoneNumber) {
+                const re = /^\+?[0-9\s\-()]+$/;
+                return re.test(phoneNumber);
+            }
+
+            function validateURL(url) {
+                let urlObj;
+                try {
+                    urlObj = new URL(url);
+                } catch (_) {
+                    return false;
+                }
+                return urlObj.protocol === "http:" || urlObj.protocol === "https:";
+            }
+
+            // Handle Create Contractor
+            async function handleCreateContractor(event) {
+                event.preventDefault();
+                console.log('Creating new contractor...');
+
+                const form = event.target;
+                const formData = new FormData(form);
+
+                // Validate form data
+                const errors = validateFormData(formData);
+                if (errors.length > 0) {
+                    showNotification(errors.join(' '), 'error');
+                    return;
+                }
+
+                const contractor = {};
+
+                formData.forEach((value, key) => {
+                    contractor[key] = value;
+                });
+
+                console.log('Contractor data to create:', contractor);
+
+                // Change button text to indicate loading
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Adding...';
+
+                try {
+                    const response = await fetch(lambdaUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'request_type': 'create',
+                            'contractors': [contractor]
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    console.log('Create result:', result);
+
+                    // Show success message
+                    showNotification('Contractor added successfully.', 'success');
+
+                    // Reset the form
+                    form.reset();
+
+                    // Invalidate cache and reload data
+                    localStorage.removeItem(cacheKey);
+                    await fetchContractorsData();
+
+                } catch (error) {
+                    console.error('Error creating contractor:', error);
+                    showNotification('Error creating contractor.', 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Add Contractor';
+                }
+            }
+
+            // Handle Edit Contractor
+            function handleEditContractor(event) {
+                const email = event.target.getAttribute('data-email');
+                console.log('Editing contractor with email:', email);
+
+                currentEditingContractorEmail = email;
+
+                // Find the contractor data from the stored data
+                const contractorData = contractorsData.find(contractor => contractor.Email === email);
+
+                if (!contractorData) {
+                    console.error('Contractor data not found.');
+                    showNotification('Contractor data not found.', 'error');
+                    return;
+                }
+
+                console.log('Contractor data to edit:', contractorData);
+
+                // Populate the update form with existing data
+                const updateForm = document.getElementById('update-contractor-form');
+
+                for (const key in contractorData) {
+                    if (updateForm.elements[key]) {
+                        updateForm.elements[key].value = contractorData[key] || '';
+                    }
+                }
+
+                // Show the modal
+                openUpdateModal();
+            }
+
+            // Handle Update Contractor
+            async function handleUpdateContractor(event) {
+                event.preventDefault();
+                console.log('Updating contractor...');
+
+                const form = event.target;
+                const formData = new FormData(form);
+
+                // Validate form data
+                const errors = validateFormData(formData, true);
+                if (errors.length > 0) {
+                    showNotification(errors.join(' '), 'error');
+                    return;
+                }
+
+                const email = formData.get('Email');
+                const updateAttributes = {};
+
+                formData.forEach((value, key) => {
+                    if (key !== 'Email' && value !== '') {
+                        updateAttributes[key] = value;
+                    }
+                });
+
+                console.log('Email:', email);
+                console.log('Update attributes:', updateAttributes);
+
+                // Change button text to indicate loading
+                const submitButton = form.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+                submitButton.textContent = 'Updating...';
+
+                try {
+                    const response = await fetch(lambdaUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'request_type': 'update',
+                            'Email': email,
+                            'update_attributes': updateAttributes
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    console.log('Update result:', result);
+
+                    // Hide the modal
+                    closeUpdateModal();
+
+                    // Show success message
+                    showNotification('Contractor updated successfully.', 'success');
+
+                    // Invalidate cache and reload data
+                    localStorage.removeItem(cacheKey);
+                    await fetchContractorsData();
+
+                } catch (error) {
+                    console.error('Error updating contractor:', error);
+                    showNotification('Error updating contractor.', 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Update Contractor';
+                }
+            }
+
+            // Handle Delete Contractor
+            async function handleDeleteContractor(event) {
+                const email = event.target.getAttribute('data-email');
+                console.log('Deleting contractor with email:', email);
+
+                if (!confirm('Are you sure you want to delete this contractor?')) {
+                    return;
+                }
+
+                // Change button text to indicate loading
+                event.target.disabled = true;
+                const originalText = event.target.textContent;
+                event.target.textContent = 'Deleting...';
+
+                try {
+                    const response = await fetch(lambdaUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            'request_type': 'delete',
+                            'Email': email
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const result = await response.json();
+                    console.log('Delete result:', result);
+
+                    // Show success message
+                    showNotification('Contractor deleted successfully.', 'success');
+
+                    // Invalidate cache and reload data
+                    localStorage.removeItem(cacheKey);
+                    await fetchContractorsData();
+
+                } catch (error) {
+                    console.error('Error deleting contractor:', error);
+                    showNotification('Error deleting contractor.', 'error');
+                } finally {
+                    event.target.disabled = false;
+                    event.target.textContent = originalText;
+                }
+            }
+
+            // Open Update Modal
+            function openUpdateModal() {
+                const updateModal = document.getElementById('update-modal');
+                updateModal.classList.remove('opacity-0', 'pointer-events-none');
+                updateModal.classList.add('opacity-100');
+
+                // Accessibility focus management
+                updateModal.querySelector('[name="Name"]').focus();
+            }
+
+            // Close Update Modal
+            function closeUpdateModal() {
+                const updateModal = document.getElementById('update-modal');
+                updateModal.classList.add('opacity-0', 'pointer-events-none');
+                updateModal.classList.remove('opacity-100');
 
                 // Reset the form
-                form.reset();
-
-            } catch (error) {
-                console.error('Error creating contractor:', error);
-                showNotification('Error creating contractor.', 'error');
-            }
-        }
-
-        // Function to handle Edit Contractor
-        function handleEditContractor(event) {
-            const email = event.target.getAttribute('data-email');
-            console.log('Editing contractor with email:', email);
-
-            currentEditingContractorEmail = email;
-
-            // Find the contractor data from the stored data
-            const contractorData = contractorsData.find(contractor => contractor.Email === email);
-
-            if (!contractorData) {
-                console.error('Contractor data not found.');
-                showNotification('Contractor data not found.', 'error');
-                return;
+                document.getElementById('update-contractor-form').reset();
             }
 
-            console.log('Contractor data to edit:', contractorData);
+            // Show Notification
+            function showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                const bgColor = type === 'success' ? 'bg-green-100' : 'bg-red-100';
+                const textColor = type === 'success' ? 'text-green-700' : 'text-red-700';
+                notification.innerHTML = `
+                    <div class="p-4 mb-4 text-sm ${textColor} ${bgColor} rounded-lg" role="alert">
+                        <span class="font-medium">${message}</span>
+                    </div>
+                `;
+                // Remove notification after 3 seconds
+                setTimeout(() => {
+                    notification.innerHTML = '';
+                }, 3000);
+            }
 
-            // Populate the update form with existing data
-            const updateModal = document.getElementById('update-modal');
-            const updateForm = document.getElementById('update-contractor-form');
+            // Pagination functions
+            function resetPagination() {
+                currentPage = 1;
+            }
 
-            for (const key in contractorData) {
-                if (updateForm.elements[key]) {
-                    updateForm.elements[key].value = contractorData[key] || '';
+            function updatePaginationControls() {
+                document.getElementById('current-page').textContent = currentPage;
+                document.getElementById('total-pages').textContent = totalPages;
+
+                const prevButton = document.getElementById('prev-page-btn');
+                const nextButton = document.getElementById('next-page-btn');
+
+                prevButton.disabled = currentPage === 1;
+                nextButton.disabled = currentPage === totalPages || totalPages === 0;
+            }
+
+            function goToPreviousPage() {
+                if (currentPage > 1) {
+                    currentPage--;
+                    displayContractorsData();
                 }
             }
 
-            // Show the modal
-            updateModal.classList.remove('hidden');
-        }
-
-        // Function to handle Update Contractor
-        async function handleUpdateContractor(event) {
-            event.preventDefault();
-            console.log('Updating contractor...');
-
-            const form = event.target;
-            const formData = new FormData(form);
-
-            // Validate form data
-            const errors = validateFormData(formData, true);
-            if (errors.length > 0) {
-                showNotification(errors.join(' '), 'error');
-                return;
-            }
-
-            const email = formData.get('Email');
-            const updateAttributes = {};
-
-            formData.forEach((value, key) => {
-                if (key !== 'Email' && value !== '') {
-                    updateAttributes[key] = value;
+            function goToNextPage() {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    displayContractorsData();
                 }
-            });
-
-            console.log('Email:', email);
-            console.log('Update attributes:', updateAttributes);
-
-            try {
-                const response = await fetch(lambdaUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'request_type': 'update',
-                        'Email': email,
-                        'update_attributes': updateAttributes
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-
-                const result = await response.json();
-                console.log('Update result:', result);
-
-                // Hide the modal
-                document.getElementById('update-modal').classList.add('hidden');
-
-                // Show success message
-                showNotification('Contractor updated successfully.', 'success');
-
-                // Refresh the contractors list
-                fetchContractorsData();
-
-            } catch (error) {
-                console.error('Error updating contractor:', error);
-                showNotification('Error updating contractor.', 'error');
-            }
-        }
-
-        // Function to handle Delete Contractor
-        async function handleDeleteContractor(event) {
-            const email = event.target.getAttribute('data-email');
-            console.log('Deleting contractor with email:', email);
-
-            if (!confirm('Are you sure you want to delete this contractor?')) {
-                return;
             }
 
-            try {
-                const response = await fetch(lambdaUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        'request_type': 'delete',
-                        'Email': email
-                    })
-                });
+            // Expose public functions if needed
+            return {
+                init
+            };
 
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+        })();
 
-                const result = await response.json();
-                console.log('Delete result:', result);
-
-                // Show success message
-                showNotification('Contractor deleted successfully.', 'success');
-
-                // Refresh the contractors list
-                fetchContractorsData();
-
-            } catch (error) {
-                console.error('Error deleting contractor:', error);
-                showNotification('Error deleting contractor.', 'error');
-            }
-        }
-
-        // Event listener for Create Contractor form
-        document.getElementById('create-contractor-form').addEventListener('submit', handleCreateContractor);
-
-        // Event listener for Update Contractor form
-        document.getElementById('update-contractor-form').addEventListener('submit', handleUpdateContractor);
-
-        // Event listener for Cancel Update button
-        document.getElementById('cancel-update-btn').addEventListener('click', () => {
-            document.getElementById('update-modal').classList.add('hidden');
+        // Initialize the ContractorsManager on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            ContractorsManager.init();
         });
-
-        // Call the function when the page loads
-        window.onload = fetchContractorsData;
     </script>
+
 </body>
 </html>
