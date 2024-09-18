@@ -9,39 +9,76 @@
   <!-- Axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-lg">
-    <h1 class="text-2xl font-bold mb-4">Audio Transcription Service</h1>
+<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen">
+  <div class="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Audio Transcription Service</h1>
     <form id="transcriptionForm" class="space-y-4" aria-label="Audio Transcription Form">
+      <!-- Toggle Dark Mode Button -->
+      <div class="flex justify-end">
+        <button id="themeToggle" type="button" class="text-gray-500 dark:text-gray-200 focus:outline-none" aria-label="Toggle Dark Mode">
+          <!-- Theme Toggle Icon -->
+          <svg id="themeToggleIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <!-- Filled dynamically via JavaScript -->
+          </svg>
+        </button>
+      </div>
+      <!-- Language Selection -->
+      <div>
+        <label for="languageSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Language</label>
+        <select id="languageSelect" name="language" class="mt-1 block w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+          <!-- Language options -->
+          <option value="en" selected>English</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+          <!-- Add more languages as needed -->
+        </select>
+      </div>
+      <!-- Audio URL Input -->
+      <div>
+        <label for="audioUrl" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Audio URL</label>
+        <input type="text" id="audioUrl" name="audioUrl" class="mt-1 block w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Enter audio URL">
+      </div>
+      <!-- File Upload Area -->
       <div id="drop-area" class="flex items-center justify-center w-full" aria-label="File Upload Area">
-        <label for="fileInput" tabindex="0" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Click to upload or drag and drop an audio file">
+        <label for="fileInput" tabindex="0" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Click to upload or drag and drop an audio file">
           <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <svg class="w-8 h-8 mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <!-- File Upload Icon -->
+            <svg class="w-8 h-8 mb-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4a4 4 0 018 0v12M4 12h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6z"/>
             </svg>
-            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-            <p class="text-xs text-gray-500">MP3, WAV, OGG (MAX. 100MB)</p>
+            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">MP3, WAV, OGG (MAX. 100MB)</p>
           </div>
           <input id="fileInput" type="file" class="hidden" accept=".mp3, .wav, .ogg" aria-label="File Input" />
         </label>
       </div>
       <!-- Display selected file name -->
-      <div id="fileNameDisplay" class="text-sm text-gray-500"></div>
-      <button type="submit" id="submitButton" class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Transcribe Button">Transcribe</button>
+      <div id="fileNameDisplay" class="text-sm text-gray-500 dark:text-gray-400"></div>
+      <!-- Submit and Cancel Buttons -->
+      <div class="flex space-x-4">
+        <button type="submit" id="submitButton" class="flex-1 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Transcribe Button">Transcribe</button>
+        <button type="button" id="cancelButton" class="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500" aria-label="Cancel Button" disabled>Cancel</button>
+      </div>
       <!-- Progress bar -->
-      <div id="uploadProgress" class="w-full bg-gray-200 rounded-full h-2.5 mt-4 hidden" aria-label="Upload Progress">
+      <div id="uploadProgress" class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-4 hidden" aria-label="Upload Progress">
         <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
       </div>
     </form>
-    <div id="timer" class="mt-4 text-sm text-gray-500 hidden">Transcription in progress... This can take up to 2 minutes.</div>
+    <div id="timer" class="mt-4 text-sm text-gray-500 dark:text-gray-400 hidden">Transcription in progress... This can take up to 2 minutes.</div>
     <div id="result" class="mt-4 hidden">
-      <h2 class="text-xl font-bold mb-2">Transcription Result</h2>
+      <h2 class="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">Transcription Result</h2>
       <div class="relative">
-        <pre id="transcriptionText" class="bg-gray-100 p-4 rounded h-64 overflow-y-auto whitespace-pre-wrap"></pre>
-        <button id="copyButton" class="absolute top-2 right-2 bg-gray-200 p-1 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Copy Transcription">
-          <!-- SVG icon for copy -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <pre id="transcriptionText" class="bg-gray-100 dark:bg-gray-800 p-4 rounded h-64 overflow-y-auto whitespace-pre-wrap text-gray-900 dark:text-gray-100"></pre>
+        <button id="copyButton" class="absolute top-2 right-2 bg-gray-200 dark:bg-gray-700 p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Copy Transcription">
+          <!-- Copy Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h8m-8-4h8m2 16H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2-2h4a2 2 0 012 2v17a2 2 0 01-2 2z"/>
+          </svg>
+        </button>
+        <button id="downloadButton" class="absolute top-2 right-10 bg-gray-200 dark:bg-gray-700 p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Download Transcription">
+          <!-- Download Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a1 1 0 001 1h14a1 1 0 001-1v-1m-5-4l-3 3-3-3m3 3V4"/>
           </svg>
         </button>
       </div>
@@ -51,22 +88,22 @@
   <!-- Global notification live region -->
   <div aria-live="assertive" class="pointer-events-none fixed inset-0 flex items-end px-4 py-6 sm:items-start sm:p-6">
     <div class="flex w-full flex-col items-center space-y-4 sm:items-end">
-      <div id="notification" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 hidden">
+      <div id="notification" class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 hidden">
         <div class="p-4">
           <div class="flex items-start">
             <div id="notificationIcon" class="flex-shrink-0">
               <!-- Dynamic SVG icon -->
             </div>
             <div class="ml-3 w-0 flex-1 pt-0.5">
-              <p id="notificationTitle" class="text-sm font-medium text-gray-900"></p>
-              <p id="notificationMessage" class="mt-1 text-sm text-gray-500"></p>
+              <p id="notificationTitle" class="text-sm font-medium text-gray-900 dark:text-gray-100"></p>
+              <p id="notificationMessage" class="mt-1 text-sm text-gray-500 dark:text-gray-300"></p>
             </div>
             <div class="ml-4 flex flex-shrink-0">
-              <button type="button" id="notificationCloseButton" class="inline-flex rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Close Notification">
+              <button type="button" id="notificationCloseButton" class="inline-flex rounded-md bg-white dark:bg-gray-800 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" aria-label="Close Notification">
                 <span class="sr-only">Close</span>
                 <!-- Close icon -->
-                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586 14.293 4.293a1 1 0 011.414 1.414L11.415 10l4.292 4.293a1 1 0 01-1.415 1.414L10 11.415l-4.293 4.292a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                <svg class="h-5 w-5 text-gray-700 dark:text-gray-300" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.415 10l4.292 4.293a1 1 0 01-1.415 1.414L10 11.415l-4.293 4.292a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" />
                 </svg>
               </button>
             </div>
@@ -78,6 +115,24 @@
 
   <script>
     let selectedFile;
+    let cancelTokenSource;
+    let transcriptionInProgress = false;
+
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeToggleIcon = document.getElementById('themeToggleIcon');
+    let darkMode = false;
+
+    themeToggle.addEventListener('click', () => {
+      darkMode = !darkMode;
+      if (darkMode) {
+        document.documentElement.classList.add('dark');
+        themeToggleIcon.innerHTML = '<path d="M10 2a1 1 0 000 2 8 8 0 018 8 1 1 0 102 0 10 10 0 00-10-10z"/>';
+      } else {
+        document.documentElement.classList.remove('dark');
+        themeToggleIcon.innerHTML = '<path fill-rule="evenodd" d="M10 2a8 8 0 018 8 8 8 0 01-8 8 8 8 0 010-16zm0 2a6 6 0 000 12 6 6 0 000-12z" clip-rule="evenodd" />';
+      }
+    });
 
     // File upload handling
     const dropArea = document.getElementById('drop-area');
@@ -177,22 +232,30 @@
     // Form submission handling
     document.getElementById('transcriptionForm').addEventListener('submit', async function(event) {
       event.preventDefault();
+      if (transcriptionInProgress) return; // Prevent multiple submissions
+
+      const audioUrl = document.getElementById('audioUrl').value.trim();
+      const language = document.getElementById('languageSelect').value;
       const submitButton = document.getElementById('submitButton');
+      const cancelButton = document.getElementById('cancelButton');
       const timerDiv = document.getElementById('timer');
       const resultDiv = document.getElementById('result');
       const transcriptionText = document.getElementById('transcriptionText');
-      const copyButton = document.getElementById('copyButton');
       const uploadProgress = document.getElementById('uploadProgress');
       const progressBar = document.getElementById('progressBar');
 
-      if (!selectedFile) {
-        showNotification('error', 'No file selected', 'Please select an audio file to transcribe.');
+      if (!selectedFile && !audioUrl) {
+        showNotification('error', 'No input provided', 'Please select an audio file or enter an audio URL to transcribe.');
         return;
       }
 
+      transcriptionInProgress = true;
+      cancelButton.disabled = false;
       submitButton.textContent = 'Transcribing...';
       submitButton.disabled = true;
       timerDiv.classList.remove('hidden');
+      resultDiv.classList.add('hidden');
+      transcriptionText.textContent = '';
 
       let seconds = 0;
       const timer = setInterval(() => {
@@ -204,11 +267,19 @@
       uploadProgress.classList.remove('hidden');
       progressBar.style.width = '0%';
 
-      try {
-        const formData = new FormData();
-        formData.append('file', selectedFile);
+      // Create cancel token for Axios
+      cancelTokenSource = axios.CancelToken.source();
 
-        console.log('Sending file to server:', selectedFile.name);
+      try {
+        let formData = new FormData();
+        if (selectedFile) {
+          formData.append('file', selectedFile);
+        } else {
+          formData.append('audio_url', audioUrl);
+        }
+        formData.append('language', language);
+
+        console.log('Sending data to server');
 
         const response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', formData, {
           headers: {
@@ -218,7 +289,8 @@
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             console.log('Upload progress:', percentCompleted + '%');
             updateProgressBar(percentCompleted);
-          }
+          },
+          cancelToken: cancelTokenSource.token
         });
 
         console.log('Response from server:', response.data);
@@ -227,19 +299,31 @@
         showNotification('success', 'Transcription Complete', 'Your audio has been successfully transcribed.');
       } catch (error) {
         console.error('Error:', error);
-        if (error.response && error.response.data) {
+        if (axios.isCancel(error)) {
+          console.log('Request canceled:', error.message);
+          showNotification('info', 'Transcription Canceled', 'The transcription process has been canceled.');
+        } else if (error.response && error.response.data) {
           showNotification('error', 'Transcription Failed', error.response.data.message || 'An error occurred while transcribing the audio.');
         } else {
           showNotification('error', 'Transcription Failed', 'An error occurred while transcribing the audio.');
         }
       } finally {
         clearInterval(timer);
+        transcriptionInProgress = false;
+        cancelButton.disabled = true;
         submitButton.textContent = 'Transcribe';
         submitButton.disabled = false;
         timerDiv.classList.add('hidden');
         // Hide upload progress bar
         uploadProgress.classList.add('hidden');
         progressBar.style.width = '0%';
+      }
+    });
+
+    // Cancel Button Handling
+    document.getElementById('cancelButton').addEventListener('click', function() {
+      if (transcriptionInProgress && cancelTokenSource) {
+        cancelTokenSource.cancel('User canceled the transcription.');
       }
     });
 
@@ -253,6 +337,19 @@
         console.error('Error copying text:', err);
         showNotification('error', 'Copy Failed', 'Failed to copy the transcription to your clipboard.');
       });
+    });
+
+    // Download Transcription Handling
+    document.getElementById('downloadButton').addEventListener('click', function() {
+      const transcriptionTextContent = document.getElementById('transcriptionText').textContent;
+      const blob = new Blob([transcriptionTextContent], { type: 'text/plain' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'transcription.txt';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      console.log('Transcription downloaded');
     });
 
     function updateProgressBar(percent) {
