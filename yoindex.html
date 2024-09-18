@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to XYZ Gym</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between">
+                <div class="flex space-x-7">
+                    <a href="#" class="flex items-center py-4 px-2">
+                        <span class="font-semibold text-gray-500 text-lg">XYZ Gym</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#" class="py-4 px-2 text-green-500 border-b-4 border-green-500 font-semibold">Home</a>
+                    <a href="#about" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">About</a>
+                    <a href="#classes" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Classes</a>
+                    <a href="#contact" class="py-4 px-2 text-gray-500 font-semibold hover:text-green-500 transition duration-300">Contact</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button class="outline-none mobile-menu-button">
+                        <svg class="w-6 h-6 text-gray-500 hover:text-green-500"
+                             fill="none"
+                             stroke-linecap="round"
+                             stroke-linejoin="round"
+                             stroke-width="2"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor">
+                            <path d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div class="hidden mobile-menu">
+            <ul>
+                <li><a href="#" class="block text-sm px-2 py-4 text-white bg-green-500 font-semibold">Home</a></li>
+                <li><a href="#about" class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">About</a></li>
+                <li><a href="#classes" class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">Classes</a></li>
+                <li><a href="#contact" class="block text-sm px-2 py-4 hover:bg-green-500 transition duration-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-cover bg-center h-screen" style="background-image: url('https://via.placeholder.com/1500x600');">
+        <div class="flex items-center justify-center h-full w-full bg-gray-900 bg-opacity-50">
+            <div class="text-center">
+                <h1 class="text-white text-5xl font-semibold">Welcome to XYZ Gym</h1>
+                <p class="text-white text-xl mt-4">Your journey to fitness starts here</p>
+                <button class="mt-8 px-4 py-2 bg-green-500 text-white text-lg font-semibold rounded hover:bg-green-600 transition duration-300">Join Now</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto py-8">
+        <!-- About Section -->
+        <section id="about" class="py-8">
+            <h2 class="text-3xl font-semibold text-center text-gray-800">About Us</h2>
+            <p class="mt-4 text-gray-600 text-center max-w-2xl mx-auto">At XYZ Gym, we are committed to helping you achieve your fitness goals. Our state-of-the-art facility provides a welcoming environment for people of all fitness levels.</p>
+        </section>
+
+        <!-- Classes Section -->
+        <section id="classes" class="py-8">
+            <h2 class="text-3xl font-semibold text-center text-gray-800">Our Classes</h2>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white rounded shadow p-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Yoga</h3>
+                    <p class="mt-2 text-gray-600">Improve flexibility and reduce stress with our yoga classes.</p>
+                </div>
+                <div class="bg-white rounded shadow p-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Cardio</h3>
+                    <p class="mt-2 text-gray-600">Get your heart pumping with high-intensity cardio workouts.</p>
+                </div>
+                <div class="bg-white rounded shadow p-6">
+                    <h3 class="text-xl font-semibold text-gray-800">Strength Training</h3>
+                    <p class="mt-2 text-gray-600">Build muscle and increase strength with our guided programs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-8">
+            <h2 class="text-3xl font-semibold text-center text-gray-800">Contact Us</h2>
+            <form class="mt-8 max-w-md mx-auto">
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700">Name</label>
+                    <input type="text" id="name" class="w-full px-3 py-2 border rounded" placeholder="Your Name">
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700">Email</label>
+                    <input type="email" id="email" class="w-full px-3 py-2 border rounded" placeholder="Your Email">
+                </div>
+                <div class="mb-4">
+                    <label for="message" class="block text-gray-700">Message</label>
+                    <textarea id="message" class="w-full px-3 py-2 border rounded" rows="4" placeholder="Your Message"></textarea>
+                </div>
+                <button type="submit" class="w-full px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600 transition duration-300">Send Message</button>
+            </form>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800">
+        <div class="max-w-7xl mx-auto py-4 text-center text-white">
+            &copy; 2023 XYZ Gym. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        console.log('Page loaded');
+
+        // Mobile menu toggle
+        const btn = document.querySelector('.mobile-menu-button');
+        const menu = document.querySelector('.mobile-menu');
+
+        btn.addEventListener('click', () => {
+            console.log('Mobile menu button clicked');
+            menu.classList.toggle('hidden');
+        });
+
+        // Form submission handling
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            console.log('Form submitted');
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            console.log('Form data:', { name, email, message });
+
+            // Send form data to AWS Lambda
+            fetch('https://5eajq3guas3lenj6wg25gd6sqy0cgync.lambda-url.us-west-2.on.aws/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, message })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from Lambda:', data);
+                alert('Message sent successfully!');
+                form.reset();
+            })
+            .catch(error => {
+                console.error('Error sending message:', error);
+                alert('Error sending message. Please try again later.');
+            });
+        });
+    </script>
+</body>
+</html>
