@@ -25,27 +25,32 @@
             <form id="accessForm" novalidate>
                 <div class="mb-4">
                     <label for="firstName" class="block text-gray-700">First Name <span class="text-red-500">*</span></label>
-                    <input type="text" name="firstName" id="firstName" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false">
+                    <input type="text" name="firstName" id="firstName" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="firstNameError">
                     <div id="firstNameError" class="text-red-500 text-sm mt-1 hidden">First name is required.</div>
                 </div>
                 <div class="mb-4">
                     <label for="lastName" class="block text-gray-700">Last Name <span class="text-red-500">*</span></label>
-                    <input type="text" name="lastName" id="lastName" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false">
+                    <input type="text" name="lastName" id="lastName" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="lastNameError">
                     <div id="lastNameError" class="text-red-500 text-sm mt-1 hidden">Last name is required.</div>
                 </div>
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700">Email <span class="text-red-500">*</span></label>
-                    <input type="email" name="email" id="email" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false">
+                    <input type="email" name="email" id="email" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="emailError">
                     <div id="emailError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email address.</div>
                 </div>
                 <div class="mb-4">
                     <label for="password" class="block text-gray-700">Password <span class="text-red-500">*</span></label>
-                    <input type="password" name="password" id="password" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false">
+                    <input type="password" name="password" id="password" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="passwordError">
                     <div id="passwordError" class="text-red-500 text-sm mt-1 hidden">Password is required.</div>
                 </div>
                 <div class="mb-4">
+                    <label for="confirmPassword" class="block text-gray-700">Confirm Password <span class="text-red-500">*</span></label>
+                    <input type="password" name="confirmPassword" id="confirmPassword" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="confirmPasswordError">
+                    <div id="confirmPasswordError" class="text-red-500 text-sm mt-1 hidden">Passwords do not match.</div>
+                </div>
+                <div class="mb-4">
                     <label for="phone" class="block text-gray-700">Phone (optional)</label>
-                    <input type="text" name="phone" id="phone" class="w-full p-2 border rounded" aria-invalid="false">
+                    <input type="text" name="phone" id="phone" class="w-full p-2 border rounded" aria-invalid="false" aria-describedby="phoneError">
                     <div id="phoneError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid phone number.</div>
                 </div>
                 <button type="submit" id="submitButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full flex items-center justify-center">
@@ -75,6 +80,7 @@
             const lastNameInput = document.getElementById('lastName');
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
             const phoneInput = document.getElementById('phone');
 
             // Error message elements
@@ -82,6 +88,7 @@
             const lastNameError = document.getElementById('lastNameError');
             const emailError = document.getElementById('emailError');
             const passwordError = document.getElementById('passwordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
             const phoneError = document.getElementById('phoneError');
 
             accessForm.addEventListener('submit', async (event) => {
@@ -128,9 +135,13 @@
                     }
                 } catch (error) {
                     console.error('Error submitting form:', error);
-                    errorMessage.textContent = 'An error occurred while submitting the form. Please try again later.';
-                    errorMessage.classList.remove('hidden');
-                    successMessage.classList.add('hidden');
+                    if (error.response && error.response.data && error.response.data.message) {
+                        displayServerError(error.response.data.message);
+                    } else {
+                        errorMessage.textContent = 'An error occurred while submitting the form. Please try again later.';
+                        errorMessage.classList.remove('hidden');
+                        successMessage.classList.add('hidden');
+                    }
                 } finally {
                     // Reset button text and state
                     submitButtonText.textContent = 'Submit';
@@ -168,6 +179,18 @@
                 if (passwordInput.value.trim() === '') {
                     showValidationError(passwordInput, passwordError, 'Password is required.');
                     isValid = false;
+                } else if (!validatePasswordStrength(passwordInput.value.trim())) {
+                    showValidationError(passwordInput, passwordError, 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character.');
+                    isValid = false;
+                }
+
+                // Validate confirm password
+                if (confirmPasswordInput.value.trim() === '') {
+                    showValidationError(confirmPasswordInput, confirmPasswordError, 'Please confirm your password.');
+                    isValid = false;
+                } else if (passwordInput.value.trim() !== confirmPasswordInput.value.trim()) {
+                    showValidationError(confirmPasswordInput, confirmPasswordError, 'Passwords do not match.');
+                    isValid = false;
                 }
 
                 // Validate phone (optional)
@@ -187,10 +210,10 @@
 
             function clearValidationErrors() {
                 // Reset aria-invalid attributes and hide error messages
-                [firstNameInput, lastNameInput, emailInput, passwordInput, phoneInput].forEach(input => {
+                [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput, phoneInput].forEach(input => {
                     input.setAttribute('aria-invalid', 'false');
                 });
-                [firstNameError, lastNameError, emailError, passwordError, phoneError].forEach(errorEl => {
+                [firstNameError, lastNameError, emailError, passwordError, confirmPasswordError, phoneError].forEach(errorEl => {
                     errorEl.classList.add('hidden');
                 });
                 errorMessage.classList.add('hidden');
@@ -201,6 +224,12 @@
                 // Simple email regex
                 const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 return re.test(email);
+            }
+
+            function validatePasswordStrength(password) {
+                // Password must be at least 8 characters, include uppercase, lowercase, number, and special character
+                const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+                return re.test(password);
             }
 
             function validatePhone(phone) {
@@ -217,20 +246,34 @@
 
             function displayServerError(messages) {
                 let messageContent = '';
-                if (Array.isArray(messages)) {
-                    messageContent = messages.join('<br>');
+                if (typeof messages === 'object') {
+                    // If messages is an object, show errors next to relevant fields
+                    Object.keys(messages).forEach(key => {
+                        const inputElement = document.getElementById(key);
+                        const errorElement = document.getElementById(`${key}Error`);
+                        if (inputElement && errorElement) {
+                            showValidationError(inputElement, errorElement, messages[key]);
+                        } else {
+                            messageContent += messages[key] + '<br>';
+                        }
+                    });
                 } else if (typeof messages === 'string') {
                     messageContent = messages;
                 } else {
                     messageContent = 'An unknown error occurred.';
                 }
-                errorMessage.innerHTML = messageContent;
-                errorMessage.classList.remove('hidden');
+
+                if (messageContent) {
+                    errorMessage.innerHTML = messageContent;
+                    errorMessage.classList.remove('hidden');
+                } else {
+                    errorMessage.classList.add('hidden');
+                }
                 successMessage.classList.add('hidden');
             }
 
             function toggleFormElements(disable) {
-                [firstNameInput, lastNameInput, emailInput, passwordInput, phoneInput, submitButton].forEach(el => {
+                [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput, phoneInput, submitButton].forEach(el => {
                     el.disabled = disable;
                 });
             }
