@@ -39,6 +39,11 @@
                     <div id="emailError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email address.</div>
                 </div>
                 <div class="mb-4">
+                    <label for="password" class="block text-gray-700">Password <span class="text-red-500">*</span></label>
+                    <input type="password" name="password" id="password" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false">
+                    <div id="passwordError" class="text-red-500 text-sm mt-1 hidden">Password is required.</div>
+                </div>
+                <div class="mb-4">
                     <label for="phone" class="block text-gray-700">Phone (optional)</label>
                     <input type="text" name="phone" id="phone" class="w-full p-2 border rounded" aria-invalid="false">
                     <div id="phoneError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid phone number.</div>
@@ -69,12 +74,14 @@
             const firstNameInput = document.getElementById('firstName');
             const lastNameInput = document.getElementById('lastName');
             const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
             const phoneInput = document.getElementById('phone');
 
             // Error message elements
             const firstNameError = document.getElementById('firstNameError');
             const lastNameError = document.getElementById('lastNameError');
             const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
             const phoneError = document.getElementById('phoneError');
 
             accessForm.addEventListener('submit', async (event) => {
@@ -93,7 +100,7 @@
                 // Disable form inputs and submit button
                 toggleFormElements(true);
 
-                // Show loading spinner
+                // Show loading spinner and update button text
                 submitButtonText.textContent = 'Submitting...';
                 loadingSpinner.classList.remove('hidden');
 
@@ -103,7 +110,7 @@
                     firstName: formData.get('firstName'),
                     lastName: formData.get('lastName'),
                     email: formData.get('email'),
-                    password: '', // Assuming the backend will handle password setup via email
+                    password: formData.get('password'),
                     phone: formData.get('phone'),
                     role: 'user' // Default role
                 };
@@ -116,7 +123,7 @@
                     if (response.data.error) {
                         displayServerError(response.data.message);
                     } else {
-                        displaySuccessMessage(`Thank you, ${userData.firstName}! You'll receive an email at ${userData.email} with login instructions shortly.`);
+                        displaySuccessMessage(`Thank you, ${userData.firstName}! Your account has been created successfully.`);
                         accessForm.reset();
                     }
                 } catch (error) {
@@ -157,6 +164,12 @@
                     isValid = false;
                 }
 
+                // Validate password
+                if (passwordInput.value.trim() === '') {
+                    showValidationError(passwordInput, passwordError, 'Password is required.');
+                    isValid = false;
+                }
+
                 // Validate phone (optional)
                 if (phoneInput.value.trim() !== '' && !validatePhone(phoneInput.value.trim())) {
                     showValidationError(phoneInput, phoneError, 'Please enter a valid phone number.');
@@ -174,10 +187,10 @@
 
             function clearValidationErrors() {
                 // Reset aria-invalid attributes and hide error messages
-                [firstNameInput, lastNameInput, emailInput, phoneInput].forEach(input => {
+                [firstNameInput, lastNameInput, emailInput, passwordInput, phoneInput].forEach(input => {
                     input.setAttribute('aria-invalid', 'false');
                 });
-                [firstNameError, lastNameError, emailError, phoneError].forEach(errorEl => {
+                [firstNameError, lastNameError, emailError, passwordError, phoneError].forEach(errorEl => {
                     errorEl.classList.add('hidden');
                 });
                 errorMessage.classList.add('hidden');
@@ -217,7 +230,7 @@
             }
 
             function toggleFormElements(disable) {
-                [firstNameInput, lastNameInput, emailInput, phoneInput, submitButton].forEach(el => {
+                [firstNameInput, lastNameInput, emailInput, passwordInput, phoneInput, submitButton].forEach(el => {
                     el.disabled = disable;
                 });
             }
