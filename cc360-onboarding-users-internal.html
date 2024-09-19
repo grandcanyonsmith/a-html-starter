@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta tags and title -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Our Test Account</title>
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
@@ -13,46 +15,56 @@
             Great, here is access to one of our test accounts. Fill out this form and you’ll be sent an email to login. Just set your password.
         </p>
         
+        <!-- Success Message -->
         <div id="successMessage" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6" role="alert" aria-live="polite">
             <!-- Success messages will be displayed here -->
         </div>
 
+        <!-- Error Message -->
         <div id="errorMessage" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6" role="alert" aria-live="polite">
             <!-- General error messages will be displayed here -->
         </div>
         
+        <!-- Form Container -->
         <div class="bg-white p-4 rounded shadow">
             <form id="accessForm" novalidate>
+                <!-- First Name -->
                 <div class="mb-4">
                     <label for="firstName" class="block text-gray-700">First Name <span class="text-red-500">*</span></label>
                     <input type="text" name="firstName" id="firstName" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="firstNameError">
                     <div id="firstNameError" class="text-red-500 text-sm mt-1 hidden">First name is required.</div>
                 </div>
+                <!-- Last Name -->
                 <div class="mb-4">
                     <label for="lastName" class="block text-gray-700">Last Name <span class="text-red-500">*</span></label>
                     <input type="text" name="lastName" id="lastName" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="lastNameError">
                     <div id="lastNameError" class="text-red-500 text-sm mt-1 hidden">Last name is required.</div>
                 </div>
+                <!-- Email -->
                 <div class="mb-4">
                     <label for="email" class="block text-gray-700">Email <span class="text-red-500">*</span></label>
                     <input type="email" name="email" id="email" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="emailError">
                     <div id="emailError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid email address.</div>
                 </div>
+                <!-- Password -->
                 <div class="mb-4">
                     <label for="password" class="block text-gray-700">Password <span class="text-red-500">*</span></label>
                     <input type="password" name="password" id="password" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="passwordError">
                     <div id="passwordError" class="text-red-500 text-sm mt-1 hidden">Password is required.</div>
                 </div>
+                <!-- Confirm Password -->
                 <div class="mb-4">
                     <label for="confirmPassword" class="block text-gray-700">Confirm Password <span class="text-red-500">*</span></label>
                     <input type="password" name="confirmPassword" id="confirmPassword" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="confirmPasswordError">
                     <div id="confirmPasswordError" class="text-red-500 text-sm mt-1 hidden">Passwords do not match.</div>
                 </div>
+                <!-- Phone -->
                 <div class="mb-4">
                     <label for="phone" class="block text-gray-700">Phone <span class="text-red-500">*</span></label>
                     <input type="text" name="phone" id="phone" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="phoneError">
                     <div id="phoneError" class="text-red-500 text-sm mt-1 hidden">Phone number is required.</div>
                 </div>
+                <!-- Submit Button -->
                 <button type="submit" id="submitButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full flex items-center justify-center">
                     <span id="submitButtonText">Submit</span>
                     <svg id="loadingSpinner" class="animate-spin h-5 w-5 ml-2 hidden text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -133,7 +145,7 @@
                     if (response.data.error) {
                         displayServerError(response.data.message);
                     } else {
-                        displaySuccessMessage(`Thank you, ${userData.firstName}! Your account has been created successfully.`);
+                        displaySuccessMessage(`Thank you, ${userData.firstName}! Your account has been created successfully.`, userData.email, userData.password);
                         accessForm.reset();
                     }
                 } catch (error) {
@@ -244,10 +256,26 @@
                 return re.test(phone);
             }
 
-            function displaySuccessMessage(message) {
-                successMessage.innerHTML = message + '<div class="mt-4"><a href="https://app.coursecreator360.com" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full block text-center">LOGIN</a></div>';
+            function displaySuccessMessage(message, email, password) {
+                successMessage.innerHTML = `
+                    <p>${message}</p>
+                    <div class="mt-4">
+                        <form action="https://app.coursecreator360.com" method="POST" class="space-y-4">
+                            <div>
+                                <label class="block text-gray-700">Email</label>
+                                <input type="email" name="email" value="${email}" class="w-full p-2 border rounded" readonly>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700">Password</label>
+                                <input type="password" name="password" value="${password}" class="w-full p-2 border rounded" readonly>
+                            </div>
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full">LOGIN</button>
+                        </form>
+                    </div>
+                `;
                 successMessage.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
+                console.log('Displaying success message with login form');
             }
 
             function displayServerError(messages) {
@@ -276,12 +304,14 @@
                     errorMessage.classList.add('hidden');
                 }
                 successMessage.classList.add('hidden');
+                console.log('Displaying server error:', messageContent);
             }
 
             function toggleFormElements(disable) {
                 [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput, phoneInput, submitButton].forEach(el => {
                     el.disabled = disable;
                 });
+                console.log(disable ? 'Form elements disabled' : 'Form elements enabled');
             }
         });
     </script>
