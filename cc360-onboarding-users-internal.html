@@ -49,9 +49,9 @@
                     <div id="confirmPasswordError" class="text-red-500 text-sm mt-1 hidden">Passwords do not match.</div>
                 </div>
                 <div class="mb-4">
-                    <label for="phone" class="block text-gray-700">Phone (optional)</label>
-                    <input type="text" name="phone" id="phone" class="w-full p-2 border rounded" aria-invalid="false" aria-describedby="phoneError">
-                    <div id="phoneError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid phone number.</div>
+                    <label for="phone" class="block text-gray-700">Phone <span class="text-red-500">*</span></label>
+                    <input type="text" name="phone" id="phone" class="w-full p-2 border rounded" required aria-required="true" aria-invalid="false" aria-describedby="phoneError">
+                    <div id="phoneError" class="text-red-500 text-sm mt-1 hidden">Phone number is required.</div>
                 </div>
                 <button type="submit" id="submitButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-full flex items-center justify-center">
                     <span id="submitButtonText">Submit</span>
@@ -196,8 +196,11 @@
                     isValid = false;
                 }
 
-                // Validate phone (optional)
-                if (phoneInput.value.trim() !== '' && !validatePhone(phoneInput.value.trim())) {
+                // Validate phone (required)
+                if (phoneInput.value.trim() === '') {
+                    showValidationError(phoneInput, phoneError, 'Phone number is required.');
+                    isValid = false;
+                } else if (!validatePhone(phoneInput.value.trim())) {
                     showValidationError(phoneInput, phoneError, 'Please enter a valid phone number.');
                     isValid = false;
                 }
@@ -242,7 +245,7 @@
             }
 
             function displaySuccessMessage(message) {
-                successMessage.innerHTML = message;
+                successMessage.innerHTML = message + '<div class="mt-4"><a href="https://app.coursecreator360.com" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full block text-center">LOGIN</a></div>';
                 successMessage.classList.remove('hidden');
                 errorMessage.classList.add('hidden');
             }
