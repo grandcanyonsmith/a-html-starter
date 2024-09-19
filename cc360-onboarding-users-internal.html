@@ -133,8 +133,10 @@
                     if (response.data.error) {
                         displayServerError(response.data.message);
                     } else {
-                        displaySuccessMessage(`Thank you, ${userData.firstName}! Your account has been created successfully.`);
-                        accessForm.reset();
+                        // Redirect to the specified URL with email as a parameter
+                        const redirectUrl = 'https://app.coursecreator360.com/?email=' + encodeURIComponent(userData.email);
+                        console.log('Redirecting to:', redirectUrl);
+                        window.location.href = redirectUrl;
                     }
                 } catch (error) {
                     console.error('Error submitting form:', error);
@@ -242,12 +244,6 @@
                 // Simple phone number regex (numbers, spaces, dashes, parentheses)
                 const re = /^[0-9\s\-()+]+$/;
                 return re.test(phone);
-            }
-
-            function displaySuccessMessage(message) {
-                successMessage.innerHTML = message + '<div class="mt-4"><a href="https://app.coursecreator360.com" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded w-full block text-center">LOGIN</a></div>';
-                successMessage.classList.remove('hidden');
-                errorMessage.classList.add('hidden');
             }
 
             function displayServerError(messages) {
