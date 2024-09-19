@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Contractors Data - CRUD Operations</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Include Tailwind CSS Configuration for Stripe-like UI -->
+    <!-- Tailwind CSS Configuration -->
     <script>
       tailwind.config = {
         theme: {
@@ -19,7 +19,7 @@
         }
       }
     </script>
-    <!-- Include Inter font for better typography -->
+    <!-- Inter font for better typography -->
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <!-- Meta tags for responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,82 +28,83 @@
 </head>
 <body class="bg-gray-50 font-sans h-full">
     <div class="min-h-full">
-
         <!-- Navigation Bar -->
-        <nav class="bg-white border-b border-gray-200">
+        <nav class="bg-white border-b border-gray-200 shadow-md">
             <div class="container mx-auto px-4 py-4 flex items-center justify-between">
-                <a href="#" class="text-xl font-semibold text-gray-900">Contractor Manager</a>
+                <div class="flex items-center space-x-3">
+                    <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/logo-bg-rm.png" alt="Logo" class="w-10 h-10">
+                    <a href="#" class="text-2xl font-bold text-gray-900">Contractor Manager</a>
+                </div>
                 <div>
                     <!-- Additional nav items if needed -->
                 </div>
             </div>
         </nav>
 
-        <main class="container mx-auto p-4">
-
+        <main class="container mx-auto p-6">
             <!-- Header -->
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-900">Contractors Data</h1>
-                <p class="mt-2 text-sm text-gray-600">Manage your contractors efficiently with the improved interface.</p>
+            <div class="mb-8 text-center">
+                <h1 class="text-4xl font-extrabold text-gray-900">Contractors Data</h1>
+                <p class="mt-4 text-lg text-gray-600">Manage your contractors efficiently with the improved interface.</p>
             </div>
 
             <!-- Notification Area -->
             <div aria-live="assertive" aria-atomic="true" class="mb-4" id="notification"></div>
 
             <!-- Search and Filter -->
-            <div class="mb-8 bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-semibold mb-4 text-gray-900">Search and Filter Contractors</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="mb-8 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-6 text-gray-900">Search and Filter Contractors</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div>
-                        <label for="search-name" class="block text-sm font-medium text-gray-700 mb-1">Search by Name</label>
-                        <input type="text" id="search-name" placeholder="Name" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Search by Name">
+                        <label for="search-name" class="block text-sm font-medium text-gray-700 mb-2">Search by Name</label>
+                        <input type="text" id="search-name" placeholder="Name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Search by Name">
                     </div>
                     <div>
-                        <label for="filter-country" class="block text-sm font-medium text-gray-700 mb-1">Filter by Country</label>
-                        <input type="text" id="filter-country" placeholder="Country" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Filter by Country">
+                        <label for="filter-country" class="block text-sm font-medium text-gray-700 mb-2">Filter by Country</label>
+                        <input type="text" id="filter-country" placeholder="Country" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Filter by Country">
                     </div>
                     <div>
-                        <label for="filter-rates" class="block text-sm font-medium text-gray-700 mb-1">Filter by Rates</label>
-                        <input type="text" id="filter-rates" placeholder="Rates" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Filter by Rates">
+                        <label for="filter-rates" class="block text-sm font-medium text-gray-700 mb-2">Filter by Rates</label>
+                        <input type="text" id="filter-rates" placeholder="Rates" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Filter by Rates">
                     </div>
                 </div>
             </div>
 
             <!-- Create Contractor Form -->
-            <div class="mb-8 bg-white p-6 rounded-lg shadow">
-                <h2 class="text-xl font-semibold mb-4 text-gray-900">Add New Contractor</h2>
-                <form id="create-contractor-form" class="grid grid-cols-1 md:grid-cols-2 gap-4" aria-label="Add New Contractor">
+            <div class="mb-8 bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-6 text-gray-900">Add New Contractor</h2>
+                <form id="create-contractor-form" class="grid grid-cols-1 md:grid-cols-2 gap-6" aria-label="Add New Contractor">
                     <div>
-                        <label for="create-name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                        <input type="text" id="create-name" name="Name" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" required aria-required="true" aria-label="Name">
+                        <label for="create-name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" id="create-name" name="Name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" required aria-required="true" aria-label="Name">
                     </div>
                     <div>
-                        <label for="create-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                        <input type="email" id="create-email" name="Email" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" required aria-required="true" aria-label="Email">
+                        <label for="create-email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="create-email" name="Email" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" required aria-required="true" aria-label="Email">
                     </div>
                     <div>
-                        <label for="create-phone-number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input type="text" id="create-phone-number" name="PhoneNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Phone Number">
+                        <label for="create-phone-number" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <input type="text" id="create-phone-number" name="PhoneNumber" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Phone Number">
                     </div>
                     <div>
-                        <label for="create-country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                        <input type="text" id="create-country" name="Country" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Country">
+                        <label for="create-country" class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                        <input type="text" id="create-country" name="Country" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Country">
                     </div>
                     <div>
-                        <label for="create-test-work" class="block text-sm font-medium text-gray-700 mb-1">Test Work URL</label>
-                        <input type="url" id="create-test-work" name="TestWork" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Test Work URL">
+                        <label for="create-test-work" class="block text-sm font-medium text-gray-700 mb-2">Test Work URL</label>
+                        <input type="url" id="create-test-work" name="TestWork" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Test Work URL">
                     </div>
                     <div>
-                        <label for="create-loom-video" class="block text-sm font-medium text-gray-700 mb-1">Loom Video URL</label>
-                        <input type="url" id="create-loom-video" name="LoomVideo" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Loom Video URL">
+                        <label for="create-loom-video" class="block text-sm font-medium text-gray-700 mb-2">Loom Video URL</label>
+                        <input type="url" id="create-loom-video" name="LoomVideo" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Loom Video URL">
                     </div>
                     <div>
-                        <label for="create-rates" class="block text-sm font-medium text-gray-700 mb-1">Rates</label>
-                        <input type="text" id="create-rates" name="Rates" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Rates">
+                        <label for="create-rates" class="block text-sm font-medium text-gray-700 mb-2">Rates</label>
+                        <input type="text" id="create-rates" name="Rates" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Rates">
                     </div>
                     <div class="md:col-span-2 flex justify-end">
-                        <button type="submit" class="inline-flex items-center bg-primary hover:bg-indigo-700 text-white px-5 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" aria-label="Add Contractor">
-                            Add Contractor
+                        <button type="submit" class="inline-flex items-center bg-primary hover:bg-indigo-700 text-white px-6 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary" aria-label="Add Contractor">
+                            <span id="create-button-text">Add Contractor</span>
                         </button>
                     </div>
                 </form>
@@ -116,57 +117,56 @@
             <div id="pagination-controls" class="mt-8 flex items-center justify-between" aria-label="Pagination Controls">
                 <div>
                     <p class="text-sm text-gray-700">
-                        Showing <span id="current-page"></span> of <span id="total-pages"></span> pages
+                        Showing page <span id="current-page"></span> of <span id="total-pages"></span>
                     </p>
                 </div>
                 <nav class="inline-flex -space-x-px" aria-label="Pagination Navigation">
-                    <button id="prev-page-btn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-primary" disabled aria-label="Previous Page">
+                    <button id="prev-page-btn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 focus:z-10 focus:outline-none focus:ring-1 focus:ring-primary" disabled aria-label="Previous Page">
                         Previous
                     </button>
-                    <button id="next-page-btn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-primary" disabled aria-label="Next Page">
+                    <button id="next-page-btn" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 focus:z-10 focus:outline-none focus:ring-1 focus:ring-primary" disabled aria-label="Next Page">
                         Next
                     </button>
                 </nav>
             </div>
-
         </main>
 
         <!-- Update Contractor Modal -->
-        <div id="update-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none transition-opacity duration-300" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
-            <div class="bg-white p-6 rounded shadow-lg w-full max-w-md" role="document">
-                <h2 id="update-modal-title" class="text-xl font-semibold mb-4 text-gray-900">Update Contractor</h2>
-                <form id="update-contractor-form" class="grid grid-cols-1 gap-4" aria-label="Update Contractor">
+        <div id="update-modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 pointer-events-none transition-opacity duration-300 z-50" role="dialog" aria-modal="true" aria-labelledby="update-modal-title">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md" role="document">
+                <h2 id="update-modal-title" class="text-2xl font-semibold mb-6 text-gray-900">Update Contractor</h2>
+                <form id="update-contractor-form" class="grid grid-cols-1 gap-6" aria-label="Update Contractor">
                     <input type="hidden" name="Email">
                     <div>
-                        <label for="update-name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                        <input type="text" id="update-name" name="Name" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Name">
+                        <label for="update-name" class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" id="update-name" name="Name" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Name">
                     </div>
                     <div>
-                        <label for="update-phone-number" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                        <input type="text" id="update-phone-number" name="PhoneNumber" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Phone Number">
+                        <label for="update-phone-number" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                        <input type="text" id="update-phone-number" name="PhoneNumber" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Phone Number">
                     </div>
                     <div>
-                        <label for="update-country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-                        <input type="text" id="update-country" name="Country" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Country">
+                        <label for="update-country" class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                        <input type="text" id="update-country" name="Country" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Country">
                     </div>
                     <div>
-                        <label for="update-test-work" class="block text-sm font-medium text-gray-700 mb-1">Test Work URL</label>
-                        <input type="url" id="update-test-work" name="TestWork" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Test Work URL">
+                        <label for="update-test-work" class="block text-sm font-medium text-gray-700 mb-2">Test Work URL</label>
+                        <input type="url" id="update-test-work" name="TestWork" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Test Work URL">
                     </div>
                     <div>
-                        <label for="update-loom-video" class="block text-sm font-medium text-gray-700 mb-1">Loom Video URL</label>
-                        <input type="url" id="update-loom-video" name="LoomVideo" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Loom Video URL">
+                        <label for="update-loom-video" class="block text-sm font-medium text-gray-700 mb-2">Loom Video URL</label>
+                        <input type="url" id="update-loom-video" name="LoomVideo" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Loom Video URL">
                     </div>
                     <div>
-                        <label for="update-rates" class="block text-sm font-medium text-gray-700 mb-1">Rates</label>
-                        <input type="text" id="update-rates" name="Rates" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-primary focus:border-primary" aria-label="Rates">
+                        <label for="update-rates" class="block text-sm font-medium text-gray-700 mb-2">Rates</label>
+                        <input type="text" id="update-rates" name="Rates" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary" aria-label="Rates">
                     </div>
-                    <div class="flex justify-end space-x-2">
-                        <button type="button" id="cancel-update-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" aria-label="Cancel Update">
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancel-update-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500" aria-label="Cancel Update">
                             Cancel
                         </button>
-                        <button type="submit" class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" aria-label="Update Contractor">
-                            Update Contractor
+                        <button type="submit" class="inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" aria-label="Update Contractor">
+                            <span id="update-button-text">Update Contractor</span>
                         </button>
                     </div>
                 </form>
@@ -177,8 +177,7 @@
 
     <!-- JavaScript Code -->
     <script type="module">
-        // Using ES6 Modules to organize the code
-
+        // ContractorsManager Module
         const ContractorsManager = (() => {
 
             const lambdaUrl = 'https://in3k57uvf5h3tdi4ntgdtvqrfi0ydvie.lambda-url.us-west-2.on.aws/';
@@ -290,7 +289,7 @@
                 updatePaginationControls();
 
                 if (filteredContractors.length === 0) {
-                    container.innerHTML = '<p>No contractors found.</p>';
+                    container.innerHTML = '<p class="text-center text-gray-600">No contractors found.</p>';
                     return;
                 }
 
@@ -301,23 +300,23 @@
 
                 contractorsToDisplay.forEach(contractor => {
                     const card = document.createElement('div');
-                    card.className = 'bg-white p-6 rounded-lg shadow relative flex flex-col';
+                    card.className = 'bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 relative flex flex-col';
                     card.tabIndex = 0;
                     card.setAttribute('role', 'article');
 
                     card.innerHTML = `
-                        <h2 class="text-xl font-semibold mb-2 text-gray-900">${contractor.Name || 'No Name'}</h2>
-                        <p class="text-sm text-gray-600"><strong>Email:</strong> ${contractor.Email || 'N/A'}</p>
-                        <p class="text-sm text-gray-600"><strong>Phone Number:</strong> ${contractor.PhoneNumber || 'N/A'}</p>
-                        <p class="text-sm text-gray-600"><strong>Country:</strong> ${contractor.Country || 'N/A'}</p>
-                        <p class="text-sm text-gray-600"><strong>Test Work:</strong> <a href="${contractor.TestWork || '#'}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">View</a></p>
-                        <p class="text-sm text-gray-600"><strong>Loom Video:</strong> <a href="${contractor.LoomVideo || '#'}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Watch</a></p>
-                        <p class="text-sm text-gray-600"><strong>Rates:</strong> ${contractor.Rates || 'N/A'}</p>
-                        <div class="mt-auto flex space-x-2 pt-4">
-                            <button class="edit-btn inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" data-email="${contractor.Email}" aria-label="Edit ${contractor.Name}">
+                        <h2 class="text-2xl font-bold mb-4 text-gray-900">${contractor.Name || 'No Name'}</h2>
+                        <p class="text-sm text-gray-600 mb-2"><strong>Email:</strong> ${contractor.Email || 'N/A'}</p>
+                        <p class="text-sm text-gray-600 mb-2"><strong>Phone Number:</strong> ${contractor.PhoneNumber || 'N/A'}</p>
+                        <p class="text-sm text-gray-600 mb-2"><strong>Country:</strong> ${contractor.Country || 'N/A'}</p>
+                        <p class="text-sm text-gray-600 mb-2"><strong>Test Work:</strong> ${contractor.TestWork ? `<a href="${contractor.TestWork}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">View</a>` : 'N/A'}</p>
+                        <p class="text-sm text-gray-600 mb-2"><strong>Loom Video:</strong> ${contractor.LoomVideo ? `<a href="${contractor.LoomVideo}" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Watch</a>` : 'N/A'}</p>
+                        <p class="text-sm text-gray-600 mb-4"><strong>Rates:</strong> ${contractor.Rates || 'N/A'}</p>
+                        <div class="mt-auto flex space-x-4 pt-4">
+                            <button class="edit-btn inline-flex items-center bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" data-email="${contractor.Email}" aria-label="Edit ${contractor.Name}">
                                 Edit
                             </button>
-                            <button class="delete-btn inline-flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" data-email="${contractor.Email}" aria-label="Delete ${contractor.Name}">
+                            <button class="delete-btn inline-flex items-center bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" data-email="${contractor.Email}" aria-label="Delete ${contractor.Name}">
                                 Delete
                             </button>
                         </div>
@@ -440,8 +439,9 @@
 
                 // Change button text to indicate loading
                 const submitButton = form.querySelector('button[type="submit"]');
+                const buttonText = document.getElementById('create-button-text');
                 submitButton.disabled = true;
-                submitButton.textContent = 'Adding...';
+                buttonText.textContent = 'Adding...';
 
                 try {
                     const response = await fetch(lambdaUrl, {
@@ -477,7 +477,7 @@
                     showNotification('Error creating contractor.', 'error');
                 } finally {
                     submitButton.disabled = false;
-                    submitButton.textContent = 'Add Contractor';
+                    buttonText.textContent = 'Add Contractor';
                 }
             }
 
@@ -541,8 +541,9 @@
 
                 // Change button text to indicate loading
                 const submitButton = form.querySelector('button[type="submit"]');
+                const buttonText = document.getElementById('update-button-text');
                 submitButton.disabled = true;
-                submitButton.textContent = 'Updating...';
+                buttonText.textContent = 'Updating...';
 
                 try {
                     const response = await fetch(lambdaUrl, {
@@ -579,7 +580,7 @@
                     showNotification('Error updating contractor.', 'error');
                 } finally {
                     submitButton.disabled = false;
-                    submitButton.textContent = 'Update Contractor';
+                    buttonText.textContent = 'Update Contractor';
                 }
             }
 
@@ -710,6 +711,5 @@
             ContractorsManager.init();
         });
     </script>
-
 </body>
 </html>
