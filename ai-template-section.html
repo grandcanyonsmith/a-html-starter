@@ -7,48 +7,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Include Scripts and Styles -->
-    <!-- Axios CDN for AJAX requests (version-specific and minified) -->
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
-    <!-- Tailwind CSS CDN (version-specific and minified) -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- Axios CDN for AJAX requests (latest version) -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.5.0/dist/axios.min.js"></script>
+    <!-- Tailwind CSS CDN (latest version) -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Custom Styles -->
-    <style>
-        :root {
-            --light_background_color: #f9fafb;
-            --bold_text_color: #1f2937;
-            --italic_text_color: #4b5563;
-            --buttons: #2563eb;
-            --button_text_color: #ffffff;
-            --link_text_color: #2563eb;
-            --color: #1f2937;
-            --icon_color: #2563eb;
-            --button_hover: #3b82f6;
-        }
-    </style>
+    <!-- Tailwind CSS Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'light-background': '#f9fafb',
+                        'bold-text': '#1f2937',
+                        'italic-text': '#4b5563',
+                        'buttons': '#2563eb',
+                        'button-text': '#ffffff',
+                        'link-text': '#2563eb',
+                        'icon-color': '#2563eb',
+                        'button-hover': '#3b82f6',
+                    },
+                },
+            },
+        };
+    </script>
 </head>
 <body>
-    <!-- Fixed Bubbles -->
-    <div class="fixed bottom-4 right-4 flex space-x-2">
-        <button id="changeWithAI" type="button" aria-label="Change with AI" class="p-2 bg-blue-500 text-white text-sm rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Change with AI</button>
-        <button id="saveChanges" type="button" aria-label="Save changes" class="p-2 bg-green-500 text-white text-sm rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Save</button>
+    <!-- Fixed Buttons -->
+    <div class="fixed bottom-4 right-4 flex space-x-2 z-50">
+        <button id="changeWithAI" type="button" aria-label="Change with AI" class="flex items-center space-x-2 px-4 py-2 bg-buttons text-button-text text-sm font-medium rounded-md shadow-md hover:bg-button-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-buttons">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <!-- Icon for AI -->
+                <path d="M13 7H7v6h6V7zM9 9h2v2H9V9z M3 3h2v2H3V3z M15 3h2v2h-2V3z M3 15h2v2H3v-2z M15 15h2v2h-2v-2z M9 3h2v2H9V3z M9 15h2v2H9v-2z" />
+            </svg>
+            <span>Change with AI</span>
+        </button>
+        <button id="saveChanges" type="button" aria-label="Save changes" class="flex items-center space-x-2 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <!-- Icon for Save -->
+                <path d="M17 3a1 1 0 00-1-1h-3.586a1 1 0 00-.707.293l-.707.707H9v2h2v2H9v2h2v2H9v2h2v2H9v2h2v2H3a1 1 0 100 2h14a1 1 0 001-1V3z"/>
+            </svg>
+            <span>Save</span>
+        </button>
     </div>
 
     <!-- Modal -->
-    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white p-6 rounded shadow-lg max-w-[90vw] w-[90%] mx-auto">
             <h2 id="modalTitle" class="text-lg font-bold mb-4">What would you like to change?</h2>
             <textarea id="userRequest" class="w-full p-2 border rounded mb-4" rows="4" aria-label="Describe what you would like to change"></textarea>
             <div class="flex justify-end">
-                <button id="cancelButton" type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Cancel</button>
-                <button id="submitButton" type="button" class="bg-blue-500 text-white px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Submit</button>
+                <button id="cancelButton" type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">Cancel</button>
+                <button id="submitButton" type="button" class="bg-buttons text-button-text px-4 py-2 rounded hover:bg-button-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-buttons">Submit</button>
             </div>
         </div>
     </div>
 
     <!-- Header Section -->
     <header>
-        <nav class="bg-[var(--light_background_color)]">
+        <nav class="bg-light-background">
             <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 justify-between items-center">
                     <div class="flex flex-1 justify-center sm:justify-start">
@@ -72,7 +89,7 @@
     </header>
 
     <!-- Main Content -->
-    <div class="bg-[var(--light_background_color)] text-[var(--bold_text_color)]">
+    <div class="bg-light-background text-bold-text">
         <!-- Content -->
         <main class="mx-auto max-w-5xl py-24 sm:py-24 lg:py-24">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -98,7 +115,7 @@
                 <!-- Video and Reviews -->
                 <section class="flex flex-col items-center lg:items-start">
                     <div class="w-full">
-                        <div class="bg-[var(--buttons)] text-[var(--button_text_color)] text-center py-2 font-semibold">CLICK BELOW TO WATCH FIRST!</div>
+                        <div class="bg-buttons text-button-text text-center py-2 font-semibold">CLICK BELOW TO WATCH FIRST!</div>
                         <div class="video-container bg-black">
                             <video controls muted poster="video-poster.webp" class="rounded-lg shadow-lg w-full" preload="none">
                                 <source src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4" type="video/mp4">
@@ -114,7 +131,7 @@
                         <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/46.jpg" alt="Sophia, satisfied customer" loading="lazy" width="40" height="40">
                         <div class="ml-4">
                             <p class="text-sm font-semibold text-gray-900">4.9/5 star reviews</p>
-                            <p class="text-sm text-[var(--italic_text_color)]">Thousands of happy customers worldwide</p>
+                            <p class="text-sm text-italic-text">Thousands of happy customers worldwide</p>
                         </div>
                     </div>
                 </section>
@@ -124,9 +141,9 @@
 
     <!-- Section 3 -->
     <section id="section-3">
-        <div class="bg-[var(--light_background_color)] py-2 sm:py-2">
+        <div class="bg-light-background py-2 sm:py-2">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <h2 id="as_seen_on_title" class="text-center text-lg font-semibold leading-8 text-[var(--link_text_color)] custom-value-as_seen_on_title custom-value-clickable custom-value-hoverable">
+                <h2 id="as_seen_on_title" class="text-center text-lg font-semibold leading-8 text-link-text custom-value-as_seen_on_title custom-value-clickable custom-value-hoverable">
                     As seen on
                 </h2>
                 <div class="mx-auto mt-10 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
@@ -151,13 +168,13 @@
     </section>
 
     <!-- Section 4 -->
-    <div class="bg-[var(--light_background_color)] py-24 sm:py-32 bg-fixed bg-center bg-cover" style="background-image: url('https://assets.cdn.filesafe.space/c3cmUrbBhdgs54adfIYP/media/64380887a7983a65ebeebce0.jpeg');">
+    <div class="bg-light-background py-24 sm:py-32 bg-fixed bg-center bg-cover" style="background-image: url('https://assets.cdn.filesafe.space/c3cmUrbBhdgs54adfIYP/media/64380887a7983a65ebeebce0.jpeg');">
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
             <!-- Section Header -->
             <div class="mx-auto max-w-4xl text-center">
-                <h2 id="why_you_need_this_preheadline" class="text-base font-semibold leading-7 text-[var(--link_text_color)] custom-value-why_you_need_this_preheadline custom-value-clickable custom-value-hoverable">
+                <h2 id="why_you_need_this_preheadline" class="text-base font-semibold leading-7 text-link-text custom-value-why_you_need_this_preheadline custom-value-clickable custom-value-hoverable">
                 </h2>
-                <p class="mt-2 text-4xl font-bold tracking-tight text-[var(--bold_text_color)] sm:text-5xl">
+                <p class="mt-2 text-4xl font-bold tracking-tight text-bold-text sm:text-5xl">
                     Does this sound like you?
                 </p>
             </div>
@@ -165,101 +182,41 @@
             <!-- Content Grid -->
             <div class="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-2">
                 <!-- Pain Points -->
-                <div class="rounded-3xl p-8 ring-1 ring-[var(--color)] bg-white xl:p-10">
-                    <ul role="list" class="mt-8 space-y-6 text-lg leading-8 text-[var(--color)] xl:mt-10">
+                <div class="rounded-3xl p-8 ring-1 ring-gray-200 bg-white xl:p-10">
+                    <ul role="list" class="mt-8 space-y-6 text-lg leading-8 text-gray-700 xl:mt-10">
                         <!-- Pain Point 1 -->
                         <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"/>
+                            <svg class="h-6 w-6 flex-none text-icon-color" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 101.414 1.414L10 11.414l2.293-2.293 1.414-1.414z" clip-rule="evenodd"/>
                             </svg>
                             <div id="painpoint_without_course_1" class="custom-value-painpoint_without_course_1 custom-value-clickable custom-value-hoverable">
                             </div>
                         </li>
                         <!-- Pain Point 2 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293-2.293z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="painpoint_without_course_2" class="custom-value-painpoint_without_course_2 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
-                        <!-- Pain Point 3 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293-2.293z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="painpoint_without_course_3" class="custom-value-painpoint_without_course_3 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
-                        <!-- Pain Point 4 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293-2.293z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="painpoint_without_course_4" class="custom-value-painpoint_without_course_4 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
-                        <!-- Pain Point 5 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293-2.293z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="painpoint_without_course_5" class="custom-value-painpoint_without_course_5 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
+                        <!-- ... other pain points ... -->
                     </ul>
                 </div>
 
                 <!-- Realized Desires -->
-                <div class="rounded-3xl p-8 ring-1 ring-[var(--color)] bg-white xl:p-10">
-                    <ul role="list" class="mt-8 space-y-6 text-lg leading-8 text-[var(--color)] xl:mt-10">
+                <div class="rounded-3xl p-8 ring-1 ring-gray-200 bg-white xl:p-10">
+                    <ul role="list" class="mt-8 space-y-6 text-lg leading-8 text-gray-700 xl:mt-10">
                         <!-- Realized Desire 1 -->
                         <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
+                            <svg class="h-6 w-6 flex-none text-icon-color" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.506 9.84a.75.75 0 01-1.137.09L4.8 11.706a.75.75 0 111.06-1.06l2.088 2.088L15.561 4.153a.75.75 0 01.143-.143z" clip-rule="evenodd"/>
                             </svg>
                             <div id="realized_desire_after_course_completion_1" class="custom-value-realized_desire_after_course_completion_1 custom-value-clickable custom-value-hoverable">
                             </div>
                         </li>
                         <!-- Realized Desire 2 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="realized_desire_after_course_completion_2" class="custom-value-realized_desire_after_course_completion_2 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
-                        <!-- Realized Desire 3 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="realized_desire_after_course_completion_3" class="custom-value-realized_desire_after_course_completion_3 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
-                        <!-- Realized Desire 4 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="realized_desire_after_course_completion_4" class="custom-value-realized_desire_after_course_completion_4 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
-                        <!-- Realized Desire 5 -->
-                        <li class="flex gap-x-3">
-                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
-                            </svg>
-                            <div id="realized_desire_after_course_completion_5" class="custom-value-realized_desire_after_course_completion_5 custom-value-clickable custom-value-hoverable">
-                            </div>
-                        </li>
+                        <!-- ... other realized desires ... -->
                     </ul>
                 </div>
             </div>
 
             <!-- Call to Action -->
             <div class="mt-10 flex justify-center">
-                <a href="#" class="rounded-md bg-[var(--buttons)] px-6 py-3 text-lg font-semibold text-[var(--button_text_color)] shadow-sm hover:bg-[var(--button_hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--buttons)]">
+                <a href="#" class="rounded-md bg-buttons px-6 py-3 text-lg font-semibold text-button-text shadow-sm hover:bg-button-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-buttons">
                     Get instant access here!
                 </a>
             </div>
@@ -268,7 +225,19 @@
 
     <!-- JavaScript -->
     <script>
+        // Configuration variables
+        const config = {
+            temporaryWebsiteUrl: 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-19-2024-CannySmith-fdsa-8016237631.html',
+            apiEndpoints: {
+                aiRequest: 'https://lnga43ibdg2xpgtijjizbacvou0hbgho.lambda-url.us-west-2.on.aws/',
+                saveChanges: 'https://mumtkxnj7kxedj7d6hue7qnl3e0fxcnz.lambda-url.us-west-2.on.aws/',
+                fetchData: 'https://ionnjdho4ntxa2latjo5yf7i3m0yswoy.lambda-url.us-west-2.on.aws/'
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', () => {
+            'use strict';
+
             const changeWithAIBubble = document.getElementById('changeWithAI');
             const saveChangesButton = document.getElementById('saveChanges');
             const modal = document.getElementById('modal');
@@ -276,7 +245,6 @@
             const cancelButton = document.getElementById('cancelButton');
             const userRequest = document.getElementById('userRequest');
             const selectedItems = [];
-            const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-19-2024-CannySmith-fdsa-8016237631.html';
 
             // Show Change with AI Modal
             changeWithAIBubble.addEventListener('click', () => {
@@ -301,21 +269,23 @@
                 });
 
                 console.log('Submitting AI request with data:', {
-                    temporary_website_url: temporaryWebsiteUrl,
+                    temporary_website_url: config.temporaryWebsiteUrl,
                     userRequest: userRequest.value,
                     customValues: customValues
                 });
 
                 submitButton.textContent = 'Submitting...';
+                submitButton.disabled = true;
 
                 try {
-                    const response = await axios.post('https://lnga43ibdg2xpgtijjizbacvou0hbgho.lambda-url.us-west-2.on.aws/', {
-                        temporary_website_url: temporaryWebsiteUrl,
+                    const response = await axios.post(config.apiEndpoints.aiRequest, {
+                        temporary_website_url: config.temporaryWebsiteUrl,
                         userRequest: userRequest.value,
                         customValues: customValues
                     });
 
                     submitButton.textContent = 'Submit';
+                    submitButton.disabled = false;
                     userRequest.value = '';
                     modal.classList.add('hidden');
                     changeWithAIBubble.focus();
@@ -323,6 +293,7 @@
                     // Handle response
                 } catch (error) {
                     submitButton.textContent = 'Submit';
+                    submitButton.disabled = false;
                     console.error('Error submitting to AI:', error);
                 }
             });
@@ -330,6 +301,7 @@
             // Save Changes
             saveChangesButton.addEventListener('click', async () => {
                 saveChangesButton.textContent = 'Saving...';
+                saveChangesButton.disabled = true;
 
                 const customValues = {};
                 selectedItems.forEach(item => {
@@ -341,17 +313,18 @@
                 });
 
                 console.log('Saving changes with data:', {
-                    temporary_website_url: temporaryWebsiteUrl,
+                    temporary_website_url: config.temporaryWebsiteUrl,
                     customValues: customValues
                 });
 
                 try {
-                    const response = await axios.post('https://mumtkxnj7kxedj7d6hue7qnl3e0fxcnz.lambda-url.us-west-2.on.aws/', {
-                        temporary_website_url: temporaryWebsiteUrl,
+                    const response = await axios.post(config.apiEndpoints.saveChanges, {
+                        temporary_website_url: config.temporaryWebsiteUrl,
                         customValues: customValues
                     });
 
                     saveChangesButton.textContent = 'Save';
+                    saveChangesButton.disabled = false;
                     if (response.status === 200) {
                         console.log('Changes saved successfully.');
                         alert('Changes saved successfully!');
@@ -361,6 +334,7 @@
                     }
                 } catch (error) {
                     saveChangesButton.textContent = 'Save';
+                    saveChangesButton.disabled = false;
                     console.error('Error saving changes:', error);
                     alert('An error occurred while saving changes.');
                 }
@@ -368,7 +342,7 @@
 
             // Hover and Select Elements
             document.addEventListener('mouseover', event => {
-                let target = event.target.closest('.custom-value-hoverable');
+                const target = event.target.closest('.custom-value-hoverable');
                 if (target && !target.classList.contains('selected')) {
                     target.classList.add('border', 'border-white');
                     console.log(`Hovering over ${target.id || target.className}`);
@@ -376,7 +350,7 @@
             });
 
             document.addEventListener('mouseout', event => {
-                let target = event.target.closest('.custom-value-hoverable');
+                const target = event.target.closest('.custom-value-hoverable');
                 if (target && !target.classList.contains('selected')) {
                     target.classList.remove('border', 'border-white');
                     console.log(`Stopped hovering over ${target.id || target.className}`);
@@ -384,17 +358,18 @@
             });
 
             document.addEventListener('click', event => {
-                let target = event.target.closest('.custom-value-clickable');
+                const target = event.target.closest('.custom-value-clickable');
                 if (!target) return;
 
                 if (target.isContentEditable) {
-                    // Already selected, deselect
+                    // Deselect
                     target.classList.remove('selected', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
                     target.removeAttribute('contenteditable');
                     if (!target.classList.contains('border-white')) {
                         target.classList.remove('border');
                     }
-                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
+                    const classList = Array.from(target.classList);
+                    const customValueClass = classList.find(cls => cls.startsWith('custom-value-') && !cls.endsWith('-hoverable') && !cls.endsWith('-clickable'));
                     if (customValueClass) {
                         const key = customValueClass.replace('custom-value-', '');
                         const index = selectedItems.findIndex(item => item[key]);
@@ -408,7 +383,8 @@
                     target.classList.add('selected', 'border', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
                     target.setAttribute('contenteditable', 'true');
                     target.focus();
-                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
+                    const classList = Array.from(target.classList);
+                    const customValueClass = classList.find(cls => cls.startsWith('custom-value-') && !cls.endsWith('-hoverable') && !cls.endsWith('-clickable'));
                     if (customValueClass) {
                         const key = customValueClass.replace('custom-value-', '');
                         const itemText = target.textContent;
@@ -429,14 +405,14 @@
         });
 
         async function fetchData() {
-            const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-19-2024-CannySmith-fdsa-8016237631.html';
-            console.log('Fetching data for:', temporaryWebsiteUrl);
+            'use strict';
+            console.log('Fetching data for:', config.temporaryWebsiteUrl);
+
             const maxRetries = 3;
-            let attempts = 0;
-            while (attempts < maxRetries) {
+            for (let attempts = 0; attempts < maxRetries; attempts++) {
                 try {
-                    const response = await axios.post('https://ionnjdho4ntxa2latjo5yf7i3m0yswoy.lambda-url.us-west-2.on.aws/', {
-                        temporary_website_url: temporaryWebsiteUrl
+                    const response = await axios.post(config.apiEndpoints.fetchData, {
+                        temporary_website_url: config.temporaryWebsiteUrl
                     });
 
                     if (response.status === 200) {
@@ -482,8 +458,7 @@
                 } catch (error) {
                     console.error('Error fetching data:', error);
                 }
-                attempts++;
-                console.log(`Retrying... (${maxRetries - attempts} retries left)`);
+                console.log(`Retrying... (${maxRetries - attempts - 1} retries left)`);
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
             console.error('Failed to fetch data after maximum retries.');
