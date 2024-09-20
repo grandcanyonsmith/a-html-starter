@@ -25,35 +25,23 @@
             --icon_color: #2563eb;
             --button_hover: #3b82f6;
         }
-        .modal {
-            max-width: 90vw;
-            width: 90%;
-            margin: 0 auto;
-        }
-        .hovered {
-            border: 1px solid white !important;
-        }
-        .selected {
-            border: 1px solid red !important;
-            background-color: rgba(255, 0, 0, 0.1);
-        }
     </style>
 </head>
 <body>
     <!-- Fixed Bubbles -->
     <div class="fixed bottom-4 right-4 flex space-x-2">
-        <button id="changeWithAI" class="p-2 bg-blue-500 text-white text-sm rounded cursor-pointer">Change with AI</button>
-        <button id="saveChanges" class="p-2 bg-green-500 text-white text-sm rounded cursor-pointer">Save</button>
+        <button id="changeWithAI" type="button" aria-label="Change with AI" class="p-2 bg-blue-500 text-white text-sm rounded cursor-pointer">Change with AI</button>
+        <button id="saveChanges" type="button" aria-label="Save changes" class="p-2 bg-green-500 text-white text-sm rounded cursor-pointer">Save</button>
     </div>
 
     <!-- Modal -->
     <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded shadow-lg modal">
+        <div class="bg-white p-6 rounded shadow-lg max-w-[90vw] w-[90%] mx-auto">
             <h2 id="modalTitle" class="text-lg font-bold mb-4">What would you like to change?</h2>
             <textarea id="userRequest" class="w-full p-2 border rounded mb-4" rows="4" aria-label="Describe what you would like to change"></textarea>
             <div class="flex justify-end">
-                <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
-                <button id="submitButton" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+                <button id="cancelButton" type="button" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                <button id="submitButton" type="button" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
             </div>
         </div>
     </div>
@@ -138,19 +126,23 @@
     <section id="section-3">
         <div class="bg-[var(--light_background_color)] py-2 sm:py-2">
             <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <h2 id="as_seen_on_title" class="text-center text-lg font-semibold leading-8 text-[var(--link_text_color)]">
+                <h2 id="as_seen_on_title" class="text-center text-lg font-semibold leading-8 text-[var(--link_text_color)] custom-value-as_seen_on_title">
                     As seen on
                 </h2>
                 <div class="mx-auto mt-10 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
                     <!-- Image placeholders -->
                     <div id="as_seen_on_1_placeholder" class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 bg-gray-200 animate-pulse h-12 rounded"></div>
                     <img id="as_seen_on_1" class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 custom-value-as_seen_on_1 hidden" src="" alt="As Seen On 1" width="158" height="48">
+
                     <div id="as_seen_on_2_placeholder" class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 bg-gray-200 animate-pulse h-12 rounded"></div>
                     <img id="as_seen_on_2" class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 custom-value-as_seen_on_2 hidden" src="" alt="As Seen On 2" width="158" height="48">
+
                     <div id="as_seen_on_3_placeholder" class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 bg-gray-200 animate-pulse h-12 rounded"></div>
                     <img id="as_seen_on_3" class="col-span-2 max-h-12 w-full object-contain lg:col-span-1 custom-value-as_seen_on_3 hidden" src="" alt="As Seen On 3" width="158" height="48">
+
                     <div id="as_seen_on_4_placeholder" class="col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1 bg-gray-200 animate-pulse h-12 rounded"></div>
                     <img id="as_seen_on_4" class="col-span-2 max-h-12 w-full object-contain sm:col-start-2 lg:col-span-1 custom-value-as_seen_on_4 hidden" src="" alt="As Seen On 4" width="158" height="48">
+
                     <div id="as_seen_on_5_placeholder" class="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1 bg-gray-200 animate-pulse h-12 rounded"></div>
                     <img id="as_seen_on_5" class="col-span-2 col-start-2 max-h-12 w-full object-contain sm:col-start-auto lg:col-span-1 custom-value-as_seen_on_5 hidden" src="" alt="As Seen On 5" width="158" height="48">
                 </div>
@@ -163,7 +155,7 @@
         <div class="mx-auto max-w-6xl px-6 lg:px-8">
             <!-- Section Header -->
             <div class="mx-auto max-w-4xl text-center">
-                <h2 id="why_you_need_this_preheadline" class="text-base font-semibold leading-7 text-[var(--link_text_color)] custom-value-why_you_need_this_preheadline">
+                <h2 id="why_you_need_this_preheadline" class="text-base font-semibold leading-7 text-[var(--link_text_color)] custom-value-why_you_need_this_preheadline custom-value-clickable custom-value-hoverable">
                 </h2>
                 <p class="mt-2 text-4xl font-bold tracking-tight text-[var(--bold_text_color)] sm:text-5xl">
                     Does this sound like you?
@@ -194,7 +186,7 @@
                         <!-- Pain Point 3 -->
                         <li class="flex gap-x-3">
                             <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414 1.414L11.414 10l2.293-2.293z" clip-rule="evenodd"/>
                             </svg>
                             <div id="painpoint_without_course_3" class="custom-value-painpoint_without_course_3 custom-value-clickable custom-value-hoverable">
                             </div>
@@ -284,6 +276,7 @@
             const cancelButton = document.getElementById('cancelButton');
             const userRequest = document.getElementById('userRequest');
             const selectedItems = [];
+            const temporaryWebsiteUrl = window.location.href;
 
             // Show Change with AI Modal
             changeWithAIBubble.addEventListener('click', () => {
@@ -295,6 +288,7 @@
             // Hide Modal on Cancel
             cancelButton.addEventListener('click', () => {
                 modal.classList.add('hidden');
+                changeWithAIBubble.focus();
                 console.log('Cancel clicked, hiding modal.');
             });
 
@@ -306,7 +300,6 @@
                     customValues[key] = item[key];
                 });
 
-                const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-19-2024-CannySmith-fdsa-8016237631.html'
                 console.log('Submitting AI request with data:', {
                     temporary_website_url: temporaryWebsiteUrl,
                     userRequest: userRequest.value,
@@ -321,9 +314,11 @@
                         userRequest: userRequest.value,
                         customValues: customValues
                     });
+
                     submitButton.textContent = 'Submit';
                     userRequest.value = '';
                     modal.classList.add('hidden');
+                    changeWithAIBubble.focus();
                     console.log('AI Response:', response.data);
                     // Handle response
                 } catch (error) {
@@ -345,7 +340,6 @@
                     }
                 });
 
-                const temporaryWebsiteUrl = window.location.href;
                 console.log('Saving changes with data:', {
                     temporary_website_url: temporaryWebsiteUrl,
                     customValues: customValues
@@ -356,6 +350,7 @@
                         temporary_website_url: temporaryWebsiteUrl,
                         customValues: customValues
                     });
+
                     saveChangesButton.textContent = 'Save';
                     if (response.status === 200) {
                         console.log('Changes saved successfully.');
@@ -375,7 +370,7 @@
             document.addEventListener('mouseover', event => {
                 let target = event.target.closest('.custom-value-hoverable');
                 if (target && !target.classList.contains('selected')) {
-                    target.classList.add('hovered');
+                    target.classList.add('border', 'border-white');
                     console.log(`Hovering over ${target.id || target.className}`);
                 }
             });
@@ -383,7 +378,7 @@
             document.addEventListener('mouseout', event => {
                 let target = event.target.closest('.custom-value-hoverable');
                 if (target && !target.classList.contains('selected')) {
-                    target.classList.remove('hovered');
+                    target.classList.remove('border', 'border-white');
                     console.log(`Stopped hovering over ${target.id || target.className}`);
                 }
             });
@@ -392,9 +387,25 @@
                 let target = event.target.closest('.custom-value-clickable');
                 if (!target) return;
 
-                target.classList.toggle('selected');
-
-                if (target.classList.contains('selected')) {
+                if (target.isContentEditable) {
+                    // Already selected, deselect
+                    target.classList.remove('selected', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
+                    target.removeAttribute('contenteditable');
+                    if (!target.classList.contains('border-white')) {
+                        target.classList.remove('border');
+                    }
+                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
+                    if (customValueClass) {
+                        const key = customValueClass.replace('custom-value-', '');
+                        const index = selectedItems.findIndex(item => item[key]);
+                        if (index > -1) {
+                            selectedItems.splice(index, 1);
+                        }
+                    }
+                    console.log(`Element ${target.id || target.className} deselected`);
+                } else {
+                    // Select
+                    target.classList.add('selected', 'border', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
                     target.setAttribute('contenteditable', 'true');
                     target.focus();
                     const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
@@ -408,18 +419,9 @@
                         }
                     }
                     console.log(`Element ${target.id || target.className} selected`);
-                } else {
-                    target.removeAttribute('contenteditable');
-                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
-                    if (customValueClass) {
-                        const key = customValueClass.replace('custom-value-', '');
-                        const index = selectedItems.findIndex(item => item[key]);
-                        if (index > -1) {
-                            selectedItems.splice(index, 1);
-                        }
-                    }
-                    console.log(`Element ${target.id || target.className} deselected`);
                 }
+
+                event.stopPropagation();
             });
 
             // Fetch Data
