@@ -7,9 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Include Scripts and Styles -->
-    <!-- Axios CDN for AJAX requests -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- Tailwind CSS CDN -->
+    <!-- Axios CDN for AJAX requests (version-specific and minified) -->
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js"></script>
+    <!-- Tailwind CSS CDN (version-specific and minified) -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
     <!-- Custom Styles -->
@@ -38,15 +38,15 @@
 <body>
     <!-- Fixed Bubbles -->
     <div class="fixed bottom-4 right-4 flex space-x-2">
-        <div id="changeWithAI" class="p-2 bg-blue-500 text-white text-sm rounded cursor-pointer">Change with AI</div>
-        <div id="saveChanges" class="p-2 bg-green-500 text-white text-sm rounded cursor-pointer">Save</div>
+        <button id="changeWithAI" class="p-2 bg-blue-500 text-white text-sm rounded cursor-pointer">Change with AI</button>
+        <button id="saveChanges" class="p-2 bg-green-500 text-white text-sm rounded cursor-pointer">Save</button>
     </div>
 
     <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+    <div id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded shadow-lg modal">
-            <h2 class="text-lg font-bold mb-4">What would you like to change?</h2>
-            <textarea id="userRequest" class="w-full p-2 border rounded mb-4" rows="4"></textarea>
+            <h2 id="modalTitle" class="text-lg font-bold mb-4">What would you like to change?</h2>
+            <textarea id="userRequest" class="w-full p-2 border rounded mb-4" rows="4" aria-label="Describe what you would like to change"></textarea>
             <div class="flex justify-end">
                 <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
                 <button id="submitButton" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
@@ -63,11 +63,11 @@
                         <div class="flex-shrink-0 flex items-center">
                             <!-- Placeholder for logo -->
                             <div id="logo_url_placeholder" class="bg-gray-200 animate-pulse h-16 w-32 rounded"></div>
-                            <img id="logo_url" class="custom-value-logo_url h-16 w-auto hidden" src="" alt="Company Logo">
+                            <img id="logo_url" class="custom-value-logo_url h-16 w-auto hidden" src="" alt="Company Logo" loading="lazy" height="64">
                         </div>
                     </div>
                     <div class="hidden sm:flex items-center">
-                        <svg class="mr-2 h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="mr-2 h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                             <path d="M2.94 4.94A1.5 1.5 0 014.5 4h11a1.5 1.5 0 011.56 1.44l-7.06 4.72a.5.5 0 01-.56 0L2.94 5.44zM2 6.5v7A1.5 1.5 0 003.5 15h13a1.5 1.5 0 001.5-1.5v-7l-7.06 4.72a2.5 2.5 0 01-2.88 0L2 6.5z" />
                         </svg>
                         <!-- Placeholder for email -->
@@ -108,7 +108,7 @@
                     <div class="w-full">
                         <div class="bg-[var(--buttons)] text-[var(--button_text_color)] text-center py-2 font-semibold">CLICK BELOW TO WATCH FIRST!</div>
                         <div class="video-container bg-black">
-                            <video controls muted poster="video-poster.jpg" class="rounded-lg shadow-lg w-full">
+                            <video controls muted poster="video-poster.webp" class="rounded-lg shadow-lg w-full" preload="none">
                                 <source src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4" type="video/mp4">
                                 <track kind="captions" src="captions.vtt" srclang="en" label="English">
                                 <p>Your browser does not support the video tag. Here is a <a href="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4">link to the video</a> instead.</p>
@@ -116,10 +116,10 @@
                         </div>
                     </div>
                     <div class="mt-4 flex items-center">
-                        <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="John, satisfied customer">
-                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Emily, satisfied customer">
-                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Michael, satisfied customer">
-                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/46.jpg" alt="Sophia, satisfied customer">
+                        <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="John, satisfied customer" loading="lazy" width="40" height="40">
+                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Emily, satisfied customer" loading="lazy" width="40" height="40">
+                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Michael, satisfied customer" loading="lazy" width="40" height="40">
+                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/46.jpg" alt="Sophia, satisfied customer" loading="lazy" width="40" height="40">
                         <div class="ml-4">
                             <p class="text-sm font-semibold text-gray-900">4.9/5 star reviews</p>
                             <p class="text-sm text-[var(--italic_text_color)]">Thousands of happy customers worldwide</p>
@@ -144,6 +144,7 @@
             // Show Change with AI Modal
             changeWithAIBubble.addEventListener('click', () => {
                 modal.classList.remove('hidden');
+                userRequest.focus();
                 console.log('Change with AI clicked, showing modal.');
             });
 
@@ -228,10 +229,7 @@
 
             // Hover and Select Elements
             document.addEventListener('mouseover', event => {
-                let target = event.target;
-                while (target && !target.classList.contains('custom-value-hoverable')) {
-                    target = target.parentElement;
-                }
+                let target = event.target.closest('.custom-value-hoverable');
                 if (target && !target.classList.contains('selected')) {
                     target.classList.add('hovered');
                     console.log(`Hovering over ${target.id || target.className}`);
@@ -239,10 +237,7 @@
             });
 
             document.addEventListener('mouseout', event => {
-                let target = event.target;
-                while (target && !target.classList.contains('custom-value-hoverable')) {
-                    target = target.parentElement;
-                }
+                let target = event.target.closest('.custom-value-hoverable');
                 if (target && !target.classList.contains('selected')) {
                     target.classList.remove('hovered');
                     console.log(`Stopped hovering over ${target.id || target.className}`);
@@ -250,10 +245,7 @@
             });
 
             document.addEventListener('click', event => {
-                let target = event.target;
-                while (target && !target.classList.contains('custom-value-clickable')) {
-                    target = target.parentElement;
-                }
+                let target = event.target.closest('.custom-value-clickable');
                 if (!target) return;
 
                 target.classList.toggle('selected');
