@@ -5,18 +5,21 @@
     <meta charset="UTF-8">
     <title>Change with AI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <!-- Include Scripts and Styles -->
     <!-- Axios CDN for AJAX requests -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <!-- Tailwind CSS CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">    <!-- Custom Styles -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
     <style>
         :root {
-            --light_background_color: #f9fafb; /* Replace with actual value */
-            --bold_text_color: #1f2937; /* Replace with actual value */
-            --italic_text_color: #4b5563; /* Replace with actual value */
-            --buttons: #2563eb; /* Replace with actual value */
-            --button_text_color: #ffffff; /* Replace with actual value */
+            --light_background_color: #f9fafb;
+            --bold_text_color: #1f2937;
+            --italic_text_color: #4b5563;
+            --buttons: #2563eb;
+            --button_text_color: #ffffff;
         }
         .modal {
             max-width: 90vw;
@@ -85,15 +88,15 @@
                 <section class="text-center lg:text-left">
                     <!-- Placeholder for headline -->
                     <p id="headline_to_establish_credibility_and_summarize_course_placeholder" class="bg-gray-200 animate-pulse h-4 w-1/2 mx-auto lg:mx-0 rounded"></p>
-                    <p id="headline_to_establish_credibility_and_summarize_course" class="text-sm font-semibold tracking-wide custom-value-headline_to_establish_credibility_and_summarize_course hidden"></p>
+                    <p id="headline_to_establish_credibility_and_summarize_course" class="text-sm font-semibold tracking-wide custom-value-headline_to_establish_credibility_and_summarize_course hidden custom-value-clickable custom-value-hoverable"></p>
 
                     <!-- Placeholder for main heading -->
                     <div id="get_this_amazing_outcome_without_this_painful_thing_placeholder" class="mt-4 bg-gray-200 animate-pulse h-8 w-full rounded"></div>
-                    <h1 id="get_this_amazing_outcome_without_this_painful_thing" class="mt-4 text-3xl font-bold tracking-tight sm:text-3xl lg:text-5xl custom-value-get_this_amazing_outcome_without_this_painful_thing hidden"></h1>
+                    <h1 id="get_this_amazing_outcome_without_this_painful_thing" class="mt-4 text-3xl font-bold tracking-tight sm:text-3xl lg:text-5xl custom-value-get_this_amazing_outcome_without_this_painful_thing hidden custom-value-clickable custom-value-hoverable"></h1>
 
                     <!-- Placeholder for description -->
                     <p id="what_you_will_learn_in_the_course_placeholder" class="mt-2 bg-gray-200 animate-pulse h-4 w-3/4 mx-auto lg:mx-0 rounded"></p>
-                    <p id="what_you_will_learn_in_the_course" class="mt-2 text-base leading-8 custom-value-what_you_will_learn_in_the_course hidden"></p>
+                    <p id="what_you_will_learn_in_the_course" class="mt-2 text-base leading-8 custom-value-what_you_will_learn_in_the_course hidden custom-value-clickable custom-value-hoverable"></p>
 
                     <div class="mt-8 flex items-center justify-center lg:justify-start gap-x-6">
                         <a href="#" class="bg-blue-600 text-white px-5 py-3 rounded-md text-base font-medium">Get Instant Access Here!</a>
@@ -119,7 +122,7 @@
                         <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/46.jpg" alt="Sophia, satisfied customer">
                         <div class="ml-4">
                             <p class="text-sm font-semibold text-gray-900">4.9/5 star reviews</p>
-                            <p class="text-sm custom-value-italic_text_color">Thousands of happy customers worldwide</p>
+                            <p class="text-sm text-[var(--italic_text_color)]">Thousands of happy customers worldwide</p>
                         </div>
                     </div>
                 </section>
@@ -138,7 +141,7 @@
             const userRequest = document.getElementById('userRequest');
             const selectedItems = [];
 
-            // Show Change with AI Bubble
+            // Show Change with AI Modal
             changeWithAIBubble.addEventListener('click', () => {
                 modal.classList.remove('hidden');
                 console.log('Change with AI clicked, showing modal.');
@@ -226,27 +229,29 @@
             // Hover and Select Elements
             document.addEventListener('mouseover', event => {
                 let target = event.target;
-                while (target && !Array.from(target.classList).some(cls => cls.includes('custom-value'))) {
+                while (target && !target.classList.contains('custom-value-hoverable')) {
                     target = target.parentElement;
                 }
                 if (target && !target.classList.contains('selected')) {
                     target.classList.add('hovered');
+                    console.log(`Hovering over ${target.id || target.className}`);
                 }
             });
 
             document.addEventListener('mouseout', event => {
                 let target = event.target;
-                while (target && !Array.from(target.classList).some(cls => cls.includes('custom-value'))) {
+                while (target && !target.classList.contains('custom-value-hoverable')) {
                     target = target.parentElement;
                 }
                 if (target && !target.classList.contains('selected')) {
                     target.classList.remove('hovered');
+                    console.log(`Stopped hovering over ${target.id || target.className}`);
                 }
             });
 
             document.addEventListener('click', event => {
                 let target = event.target;
-                while (target && !Array.from(target.classList).some(cls => cls.includes('custom-value'))) {
+                while (target && !target.classList.contains('custom-value-clickable')) {
                     target = target.parentElement;
                 }
                 if (!target) return;
@@ -256,7 +261,7 @@
                 if (target.classList.contains('selected')) {
                     target.setAttribute('contenteditable', 'true');
                     target.focus();
-                    const customValueClass = Array.from(target.classList).find(cls => cls.includes('custom-value'));
+                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
                     if (customValueClass) {
                         const key = customValueClass.replace('custom-value-', '');
                         const itemText = target.textContent;
@@ -266,9 +271,10 @@
                             selectedItems.push(newItem);
                         }
                     }
+                    console.log(`Element ${target.id || target.className} selected`);
                 } else {
                     target.removeAttribute('contenteditable');
-                    const customValueClass = Array.from(target.classList).find(cls => cls.includes('custom-value'));
+                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
                     if (customValueClass) {
                         const key = customValueClass.replace('custom-value-', '');
                         const index = selectedItems.findIndex(item => item[key]);
@@ -276,9 +282,8 @@
                             selectedItems.splice(index, 1);
                         }
                     }
+                    console.log(`Element ${target.id || target.className} deselected`);
                 }
-
-                console.log(`Element ${target.id || target.className} ${target.classList.contains('selected') ? 'selected' : 'deselected'}`);
             });
 
             // Fetch Data
@@ -286,7 +291,7 @@
         });
 
         async function fetchData() {
-            const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-19-2024-CannySmith-fdsa-8016237631.html';
+            const temporaryWebsiteUrl = window.location.href;
             console.log('Fetching data for:', temporaryWebsiteUrl);
             const maxRetries = 3;
             let attempts = 0;
