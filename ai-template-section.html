@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <title>Change with AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Include Scripts and Styles -->
+    <!-- Axios CDN for AJAX requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">    <!-- Custom Styles -->
+    <style>
+        :root {
+            --light_background_color: #f9fafb; /* Replace with actual value */
+            --bold_text_color: #1f2937; /* Replace with actual value */
+            --italic_text_color: #4b5563; /* Replace with actual value */
+            --buttons: #2563eb; /* Replace with actual value */
+            --button_text_color: #ffffff; /* Replace with actual value */
+        }
+        .modal {
+            max-width: 90vw;
+            width: 90%;
+            margin: 0 auto;
+        }
+        .hovered {
+            border: 1px solid white !important;
+        }
+        .selected {
+            border: 1px solid red !important;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Bubbles -->
+    <div class="fixed bottom-4 right-4 flex space-x-2">
+        <div id="changeWithAI" class="p-2 bg-blue-500 text-white text-sm rounded cursor-pointer">Change with AI</div>
+        <div id="saveChanges" class="p-2 bg-green-500 text-white text-sm rounded cursor-pointer">Save</div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded shadow-lg modal">
+            <h2 class="text-lg font-bold mb-4">What would you like to change?</h2>
+            <textarea id="userRequest" class="w-full p-2 border rounded mb-4" rows="4"></textarea>
+            <div class="flex justify-end">
+                <button id="cancelButton" class="bg-gray-500 text-white px-4 py-2 rounded mr-2">Cancel</button>
+                <button id="submitButton" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header>
+        <nav class="bg-[var(--light_background_color)]">
+            <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <div class="flex h-16 justify-between items-center">
+                    <div class="flex flex-1 justify-center sm:justify-start">
+                        <div class="flex-shrink-0 flex items-center">
+                            <!-- Placeholder for logo -->
+                            <div id="logo_url_placeholder" class="bg-gray-200 animate-pulse h-16 w-32 rounded"></div>
+                            <img id="logo_url" class="custom-value-logo_url h-16 w-auto hidden" src="" alt="Company Logo">
+                        </div>
+                    </div>
+                    <div class="hidden sm:flex items-center">
+                        <svg class="mr-2 h-6 w-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.94 4.94A1.5 1.5 0 014.5 4h11a1.5 1.5 0 011.56 1.44l-7.06 4.72a.5.5 0 01-.56 0L2.94 5.44zM2 6.5v7A1.5 1.5 0 003.5 15h13a1.5 1.5 0 001.5-1.5v-7l-7.06 4.72a2.5 2.5 0 01-2.88 0L2 6.5z" />
+                        </svg>
+                        <!-- Placeholder for email -->
+                        <div id="location_owner_email_placeholder" class="bg-gray-200 animate-pulse h-4 w-32 rounded"></div>
+                        <span id="location_owner_email" class="text-gray-900 text-sm font-medium hidden"></span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="bg-[var(--light_background_color)] text-[var(--bold_text_color)]">
+        <!-- Content -->
+        <main class="mx-auto max-w-5xl py-24 sm:py-24 lg:py-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Text Content -->
+                <section class="text-center lg:text-left">
+                    <!-- Placeholder for headline -->
+                    <p id="headline_to_establish_credibility_and_summarize_course_placeholder" class="bg-gray-200 animate-pulse h-4 w-1/2 mx-auto lg:mx-0 rounded"></p>
+                    <p id="headline_to_establish_credibility_and_summarize_course" class="text-sm font-semibold tracking-wide custom-value-headline_to_establish_credibility_and_summarize_course hidden"></p>
+
+                    <!-- Placeholder for main heading -->
+                    <div id="get_this_amazing_outcome_without_this_painful_thing_placeholder" class="mt-4 bg-gray-200 animate-pulse h-8 w-full rounded"></div>
+                    <h1 id="get_this_amazing_outcome_without_this_painful_thing" class="mt-4 text-3xl font-bold tracking-tight sm:text-3xl lg:text-5xl custom-value-get_this_amazing_outcome_without_this_painful_thing hidden"></h1>
+
+                    <!-- Placeholder for description -->
+                    <p id="what_you_will_learn_in_the_course_placeholder" class="mt-2 bg-gray-200 animate-pulse h-4 w-3/4 mx-auto lg:mx-0 rounded"></p>
+                    <p id="what_you_will_learn_in_the_course" class="mt-2 text-base leading-8 custom-value-what_you_will_learn_in_the_course hidden"></p>
+
+                    <div class="mt-8 flex items-center justify-center lg:justify-start gap-x-6">
+                        <a href="#" class="bg-blue-600 text-white px-5 py-3 rounded-md text-base font-medium">Get Instant Access Here!</a>
+                    </div>
+                </section>
+
+                <!-- Video and Reviews -->
+                <section class="flex flex-col items-center lg:items-start">
+                    <div class="w-full">
+                        <div class="bg-[var(--buttons)] text-[var(--button_text_color)] text-center py-2 font-semibold">CLICK BELOW TO WATCH FIRST!</div>
+                        <div class="video-container bg-black">
+                            <video controls muted poster="video-poster.jpg" class="rounded-lg shadow-lg w-full">
+                                <source src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4" type="video/mp4">
+                                <track kind="captions" src="captions.vtt" srclang="en" label="English">
+                                <p>Your browser does not support the video tag. Here is a <a href="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4">link to the video</a> instead.</p>
+                            </video>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center">
+                        <img class="h-10 w-10 rounded-full" src="https://randomuser.me/api/portraits/men/32.jpg" alt="John, satisfied customer">
+                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Emily, satisfied customer">
+                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/men/45.jpg" alt="Michael, satisfied customer">
+                        <img class="h-10 w-10 rounded-full -ml-2" src="https://randomuser.me/api/portraits/women/46.jpg" alt="Sophia, satisfied customer">
+                        <div class="ml-4">
+                            <p class="text-sm font-semibold text-gray-900">4.9/5 star reviews</p>
+                            <p class="text-sm custom-value-italic_text_color">Thousands of happy customers worldwide</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const changeWithAIBubble = document.getElementById('changeWithAI');
+            const saveChangesButton = document.getElementById('saveChanges');
+            const modal = document.getElementById('modal');
+            const submitButton = document.getElementById('submitButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const userRequest = document.getElementById('userRequest');
+            const selectedItems = [];
+
+            // Show Change with AI Bubble
+            changeWithAIBubble.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                console.log('Change with AI clicked, showing modal.');
+            });
+
+            // Hide Modal on Cancel
+            cancelButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                console.log('Cancel clicked, hiding modal.');
+            });
+
+            // Submit AI Request
+            submitButton.addEventListener('click', async () => {
+                const customValues = {};
+                selectedItems.forEach(item => {
+                    const key = Object.keys(item)[0];
+                    customValues[key] = item[key];
+                });
+
+                const temporaryWebsiteUrl = window.location.href;
+                console.log('Submitting AI request with data:', {
+                    temporary_website_url: temporaryWebsiteUrl,
+                    userRequest: userRequest.value,
+                    customValues: customValues
+                });
+
+                submitButton.textContent = 'Submitting...';
+
+                try {
+                    const response = await axios.post('https://lnga43ibdg2xpgtijjizbacvou0hbgho.lambda-url.us-west-2.on.aws/', {
+                        temporary_website_url: temporaryWebsiteUrl,
+                        userRequest: userRequest.value,
+                        customValues: customValues
+                    });
+                    submitButton.textContent = 'Submit';
+                    userRequest.value = '';
+                    modal.classList.add('hidden');
+                    console.log('AI Response:', response.data);
+                    // Handle response
+                } catch (error) {
+                    submitButton.textContent = 'Submit';
+                    console.error('Error submitting to AI:', error);
+                }
+            });
+
+            // Save Changes
+            saveChangesButton.addEventListener('click', async () => {
+                saveChangesButton.textContent = 'Saving...';
+
+                const customValues = {};
+                selectedItems.forEach(item => {
+                    const key = Object.keys(item)[0];
+                    const element = document.querySelector(`.custom-value-${key}`);
+                    if (element) {
+                        customValues[key] = element.textContent;
+                    }
+                });
+
+                const temporaryWebsiteUrl = window.location.href;
+                console.log('Saving changes with data:', {
+                    temporary_website_url: temporaryWebsiteUrl,
+                    customValues: customValues
+                });
+
+                try {
+                    const response = await axios.post('https://mumtkxnj7kxedj7d6hue7qnl3e0fxcnz.lambda-url.us-west-2.on.aws/', {
+                        temporary_website_url: temporaryWebsiteUrl,
+                        customValues: customValues
+                    });
+                    saveChangesButton.textContent = 'Save';
+                    if (response.status === 200) {
+                        console.log('Changes saved successfully.');
+                        alert('Changes saved successfully!');
+                    } else {
+                        console.error('Failed to save changes.');
+                        alert('Failed to save changes.');
+                    }
+                } catch (error) {
+                    saveChangesButton.textContent = 'Save';
+                    console.error('Error saving changes:', error);
+                    alert('An error occurred while saving changes.');
+                }
+            });
+
+            // Hover and Select Elements
+            document.addEventListener('mouseover', event => {
+                let target = event.target;
+                while (target && !Array.from(target.classList).some(cls => cls.includes('custom-value'))) {
+                    target = target.parentElement;
+                }
+                if (target && !target.classList.contains('selected')) {
+                    target.classList.add('hovered');
+                }
+            });
+
+            document.addEventListener('mouseout', event => {
+                let target = event.target;
+                while (target && !Array.from(target.classList).some(cls => cls.includes('custom-value'))) {
+                    target = target.parentElement;
+                }
+                if (target && !target.classList.contains('selected')) {
+                    target.classList.remove('hovered');
+                }
+            });
+
+            document.addEventListener('click', event => {
+                let target = event.target;
+                while (target && !Array.from(target.classList).some(cls => cls.includes('custom-value'))) {
+                    target = target.parentElement;
+                }
+                if (!target) return;
+
+                target.classList.toggle('selected');
+
+                if (target.classList.contains('selected')) {
+                    target.setAttribute('contenteditable', 'true');
+                    target.focus();
+                    const customValueClass = Array.from(target.classList).find(cls => cls.includes('custom-value'));
+                    if (customValueClass) {
+                        const key = customValueClass.replace('custom-value-', '');
+                        const itemText = target.textContent;
+                        if (!selectedItems.some(item => item[key] === itemText)) {
+                            const newItem = {};
+                            newItem[key] = itemText;
+                            selectedItems.push(newItem);
+                        }
+                    }
+                } else {
+                    target.removeAttribute('contenteditable');
+                    const customValueClass = Array.from(target.classList).find(cls => cls.includes('custom-value'));
+                    if (customValueClass) {
+                        const key = customValueClass.replace('custom-value-', '');
+                        const index = selectedItems.findIndex(item => item[key]);
+                        if (index > -1) {
+                            selectedItems.splice(index, 1);
+                        }
+                    }
+                }
+
+                console.log(`Element ${target.id || target.className} ${target.classList.contains('selected') ? 'selected' : 'deselected'}`);
+            });
+
+            // Fetch Data
+            fetchData();
+        });
+
+        async function fetchData() {
+            const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-19-2024-CannySmith-fdsa-8016237631.html';
+            console.log('Fetching data for:', temporaryWebsiteUrl);
+            const maxRetries = 3;
+            let attempts = 0;
+            while (attempts < maxRetries) {
+                try {
+                    const response = await axios.post('https://ionnjdho4ntxa2latjo5yf7i3m0yswoy.lambda-url.us-west-2.on.aws/', {
+                        temporary_website_url: temporaryWebsiteUrl
+                    });
+
+                    if (response.status === 200) {
+                        const data = response.data;
+                        console.log('Data fetched:', data);
+
+                        for (const key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                const element = document.getElementById(key);
+                                const placeholder = document.getElementById(`${key}_placeholder`);
+
+                                if (element) {
+                                    if(element.tagName.toLowerCase() === 'img') {
+                                        element.src = data[key];
+                                    } else {
+                                        element.innerHTML = data[key];
+                                    }
+                                    element.classList.remove('hidden');
+                                    if (placeholder) {
+                                        placeholder.classList.add('hidden');
+                                    }
+                                }
+
+                                const elements = document.querySelectorAll(`.custom-value-${key}`);
+                                elements.forEach(el => {
+                                    if(el.tagName.toLowerCase() === 'img') {
+                                        el.src = data[key];
+                                    } else {
+                                        el.innerHTML = data[key];
+                                    }
+                                    el.classList.remove('hidden');
+                                    const placeholderElement = document.getElementById(`${key}_placeholder`);
+                                    if (placeholderElement) {
+                                        placeholderElement.classList.add('hidden');
+                                    }
+                                });
+                            }
+                        }
+                        return; // Data fetched successfully
+                    } else {
+                        console.error('Error fetching data:', response);
+                    }
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+                attempts++;
+                console.log(`Retrying... (${maxRetries - attempts} retries left)`);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            console.error('Failed to fetch data after maximum retries.');
+        }
+    </script>
+</body>
+</html>
