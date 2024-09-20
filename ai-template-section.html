@@ -216,4 +216,278 @@
                         <!-- Realized Desire 1 -->
                         <li class="flex gap-x-3">
                             <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48
+<path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
+                            </svg>
+                            <div id="realized_desire_after_course_completion_1" class="custom-value-realized_desire_after_course_completion_1 custom-value-clickable custom-value-hoverable">
+                            </div>
+                        </li>
+                        <!-- Realized Desire 2 -->
+                        <li class="flex gap-x-3">
+                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
+                            </svg>
+                            <div id="realized_desire_after_course_completion_2" class="custom-value-realized_desire_after_course_completion_2 custom-value-clickable custom-value-hoverable">
+                            </div>
+                        </li>
+                        <!-- Realized Desire 3 -->
+                        <li class="flex gap-x-3">
+                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
+                            </svg>
+                            <div id="realized_desire_after_course_completion_3" class="custom-value-realized_desire_after_course_completion_3 custom-value-clickable custom-value-hoverable">
+                            </div>
+                        </li>
+                        <!-- Realized Desire 4 -->
+                        <li class="flex gap-x-3">
+                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
+                            </svg>
+                            <div id="realized_desire_after_course_completion_4" class="custom-value-realized_desire_after_course_completion_4 custom-value-clickable custom-value-hoverable">
+                            </div>
+                        </li>
+                        <!-- Realized Desire 5 -->
+                        <li class="flex gap-x-3">
+                            <svg class="h-6 w-6 flex-none text-[var(--icon_color)]" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 011.143 1.052l-7.48 9.817a.75.75 0 01-1.137.089l-2.5-2.5a.75.75 0 011.06-1.06l1.88 1.88 3.483-4.79a.75.75 0 011.214.882z" clip-rule="evenodd"/>
+                            </svg>
+                            <div id="realized_desire_after_course_completion_5" class="custom-value-realized_desire_after_course_completion_5 custom-value-clickable custom-value-hoverable">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="mt-10 flex justify-center">
+                <a href="#" class="rounded-md bg-[var(--buttons)] px-6 py-3 text-lg font-semibold text-[var(--button_text_color)] shadow-sm hover:bg-[var(--button_hover)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--buttons)]">
+                    Get instant access here!
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const changeWithAIBubble = document.getElementById('changeWithAI');
+            const saveChangesButton = document.getElementById('saveChanges');
+            const modal = document.getElementById('modal');
+            const submitButton = document.getElementById('submitButton');
+            const cancelButton = document.getElementById('cancelButton');
+            const userRequest = document.getElementById('userRequest');
+            const selectedItems = [];
+            const temporaryWebsiteUrl = window.location.href;
+
+            // Show Change with AI Modal
+            changeWithAIBubble.addEventListener('click', () => {
+                modal.classList.remove('hidden');
+                userRequest.focus();
+                console.log('Change with AI clicked, showing modal.');
+            });
+
+            // Hide Modal on Cancel
+            cancelButton.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                changeWithAIBubble.focus();
+                console.log('Cancel clicked, hiding modal.');
+            });
+
+            // Submit AI Request
+            submitButton.addEventListener('click', async () => {
+                const customValues = {};
+                selectedItems.forEach(item => {
+                    const key = Object.keys(item)[0];
+                    customValues[key] = item[key];
+                });
+
+                console.log('Submitting AI request with data:', {
+                    temporary_website_url: temporaryWebsiteUrl,
+                    userRequest: userRequest.value,
+                    customValues: customValues
+                });
+
+                submitButton.textContent = 'Submitting...';
+
+                try {
+                    const response = await axios.post('https://lnga43ibdg2xpgtijjizbacvou0hbgho.lambda-url.us-west-2.on.aws/', {
+                        temporary_website_url: temporaryWebsiteUrl,
+                        userRequest: userRequest.value,
+                        customValues: customValues
+                    });
+
+                    submitButton.textContent = 'Submit';
+                    userRequest.value = '';
+                    modal.classList.add('hidden');
+                    changeWithAIBubble.focus();
+                    console.log('AI Response:', response.data);
+                    // Handle response
+                } catch (error) {
+                    submitButton.textContent = 'Submit';
+                    console.error('Error submitting to AI:', error);
+                }
+            });
+
+            // Save Changes
+            saveChangesButton.addEventListener('click', async () => {
+                saveChangesButton.textContent = 'Saving...';
+
+                const customValues = {};
+                selectedItems.forEach(item => {
+                    const key = Object.keys(item)[0];
+                    const element = document.querySelector(`.custom-value-${key}`);
+                    if (element) {
+                        customValues[key] = element.textContent.trim();
+                    }
+                });
+
+                console.log('Saving changes with data:', {
+                    temporary_website_url: temporaryWebsiteUrl,
+                    customValues: customValues
+                });
+
+                try {
+                    const response = await axios.post('https://mumtkxnj7kxedj7d6hue7qnl3e0fxcnz.lambda-url.us-west-2.on.aws/', {
+                        temporary_website_url: temporaryWebsiteUrl,
+                        customValues: customValues
+                    });
+
+                    saveChangesButton.textContent = 'Save';
+                    if (response.status === 200) {
+                        console.log('Changes saved successfully.');
+                        alert('Changes saved successfully!');
+                    } else {
+                        console.error('Failed to save changes.');
+                        alert('Failed to save changes.');
+                    }
+                } catch (error) {
+                    saveChangesButton.textContent = 'Save';
+                    console.error('Error saving changes:', error);
+                    alert('An error occurred while saving changes.');
+                }
+            });
+
+            // Hover and Select Elements
+            document.addEventListener('mouseover', event => {
+                let target = event.target.closest('.custom-value-hoverable');
+                if (target && !target.classList.contains('selected')) {
+                    target.classList.add('border', 'border-white');
+                    console.log(`Hovering over ${target.id || target.className}`);
+                }
+            });
+
+            document.addEventListener('mouseout', event => {
+                let target = event.target.closest('.custom-value-hoverable');
+                if (target && !target.classList.contains('selected')) {
+                    target.classList.remove('border', 'border-white');
+                    console.log(`Stopped hovering over ${target.id || target.className}`);
+                }
+            });
+
+            document.addEventListener('click', event => {
+                let target = event.target.closest('.custom-value-clickable');
+                if (!target) return;
+
+                if (target.isContentEditable) {
+                    // Already selected, deselect
+                    target.classList.remove('selected', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
+                    target.removeAttribute('contenteditable');
+                    if (!target.classList.contains('border-white')) {
+                        target.classList.remove('border');
+                    }
+                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
+                    if (customValueClass) {
+                        const key = customValueClass.replace('custom-value-', '');
+                        const index = selectedItems.findIndex(item => item[key]);
+                        if (index > -1) {
+                            selectedItems.splice(index, 1);
+                        }
+                    }
+                    console.log(`Element ${target.id || target.className} deselected`);
+                } else {
+                    // Select
+                    target.classList.add('selected', 'border', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
+                    target.setAttribute('contenteditable', 'true');
+                    target.focus();
+                    const customValueClass = Array.from(target.classList).find(cls => cls.startsWith('custom-value-') && !cls.endsWith('hoverable') && !cls.endsWith('clickable'));
+                    if (customValueClass) {
+                        const key = customValueClass.replace('custom-value-', '');
+                        const itemText = target.textContent;
+                        if (!selectedItems.some(item => item[key] === itemText)) {
+                            const newItem = {};
+                            newItem[key] = itemText;
+                            selectedItems.push(newItem);
+                        }
+                    }
+                    console.log(`Element ${target.id || target.className} selected`);
+                }
+
+                event.stopPropagation();
+            });
+
+            // Fetch Data
+            fetchData();
+        });
+
+        async function fetchData() {
+            const temporaryWebsiteUrl = window.location.href;
+            console.log('Fetching data for:', temporaryWebsiteUrl);
+            const maxRetries = 3;
+            let attempts = 0;
+            while (attempts < maxRetries) {
+                try {
+                    const response = await axios.post('https://ionnjdho4ntxa2latjo5yf7i3m0yswoy.lambda-url.us-west-2.on.aws/', {
+                        temporary_website_url: temporaryWebsiteUrl
+                    });
+
+                    if (response.status === 200) {
+                        const data = response.data;
+                        console.log('Data fetched:', data);
+
+                        for (const key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                const element = document.getElementById(key);
+                                const placeholder = document.getElementById(`${key}_placeholder`);
+
+                                if (element) {
+                                    if (element.tagName.toLowerCase() === 'img') {
+                                        element.src = data[key];
+                                    } else {
+                                        element.innerHTML = data[key];
+                                    }
+                                    element.classList.remove('hidden');
+                                    if (placeholder) {
+                                        placeholder.classList.add('hidden');
+                                    }
+                                }
+
+                                const elements = document.querySelectorAll(`.custom-value-${key}`);
+                                elements.forEach(el => {
+                                    if (el.tagName.toLowerCase() === 'img') {
+                                        el.src = data[key];
+                                    } else {
+                                        el.innerHTML = data[key];
+                                    }
+                                    el.classList.remove('hidden');
+                                    const placeholderElement = document.getElementById(`${key}_placeholder`);
+                                    if (placeholderElement) {
+                                        placeholderElement.classList.add('hidden');
+                                    }
+                                });
+                            }
+                        }
+                        return; // Data fetched successfully
+                    } else {
+                        console.error('Error fetching data:', response);
+                    }
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                }
+                attempts++;
+                console.log(`Retrying... (${maxRetries - attempts} retries left)`);
+                await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+            console.error('Failed to fetch data after maximum retries.');
+        }
+    </script>
+</body>
+</html>
