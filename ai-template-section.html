@@ -680,9 +680,8 @@ What our students are saying...
                         </blockquote>
                         <figcaption class="mt-10 flex items-center gap-x-6">
                             <!-- Placeholder for Testimonial Image 1 -->
-                            <div id="testimonial_image_1_placeholder" class="bg-gray-200 animate-pulse h-14 w-14 rounded-full"></div>
                             <!-- Testimonial Image 1 -->
-                            <img id="testimonial_image_1" class="h-14 w-14 rounded-full custom-value-testimonial_image_1 hidden" src="" alt="" loading="lazy">
+                            <img id="testimonial_image_1" class="h-14 w-14 rounded-full custom-value-testimonial_image_1" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" loading="lazy">
                             <div class="text-base">
                                 <!-- Placeholder for Testimonial Name 1 -->
                                 <div id="testimonial_name_1_placeholder" class="bg-gray-200 animate-pulse h-4 w-32 rounded"></div>
@@ -725,9 +724,9 @@ What our students are saying...
                         </blockquote>
                         <figcaption class="mt-10 flex items-center gap-x-6">
                             <!-- Placeholder for Testimonial Image 2 -->
-                            <div id="testimonial_image_2_placeholder" class="bg-gray-200 animate-pulse h-14 w-14 rounded-full"></div>
+
                             <!-- Testimonial Image 2 -->
-                            <img id="testimonial_image_2" class="h-14 w-14 rounded-full custom-value-testimonial_image_2 hidden" src="" alt="" loading="lazy">
+                            <img id="testimonial_image_2" class="h-14 w-14 rounded-full custom-value-testimonial_image_2" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" loading="lazy">
                             <div class="text-base">
                                 <!-- Placeholder for Testimonial Name 2 -->
                                 <div id="testimonial_name_2_placeholder" class="bg-gray-200 animate-pulse h-4 w-32 rounded"></div>
@@ -770,9 +769,8 @@ What our students are saying...
                         </blockquote>
                         <figcaption class="mt-10 flex items-center gap-x-6">
                             <!-- Placeholder for Testimonial Image 3 -->
-                            <div id="testimonial_image_3_placeholder" class="bg-gray-200 animate-pulse h-14 w-14 rounded-full"></div>
                             <!-- Testimonial Image 3 -->
-                            <img id="testimonial_image_3" class="h-14 w-14 rounded-full custom-value-testimonial_image_3 hidden" src="" alt="" loading="lazy">
+                            <img id="testimonial_image_3" class="h-14 w-14 rounded-full custom-value-testimonial_image_3" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" loading="lazy">
                             <div class="text-base">
                                 <!-- Placeholder for Testimonial Name 3 -->
                                 <div id="testimonial_name_3_placeholder" class="bg-gray-200 animate-pulse h-4 w-32 rounded"></div>
@@ -1073,16 +1071,14 @@ Best Purchase Ever!
       <!-- Text Content -->
       <div class="w-full lg:w-1/2">
         <!-- Placeholder for About Instructor Title -->
-        <div id="about_instructor_title_placeholder" class="bg-gray-200 animate-pulse h-8 w-1/2 rounded"></div>
         <!-- About Instructor Title -->
-        <h2 id="about_instructor_title" class="text-3xl font-bold tracking-tight text-link-text custom-value-about_instructor_title custom-value-clickable custom-value-hoverable hidden">
+        <h2 id="about_instructor_title" class="text-3xl font-bold tracking-tight text-link-text">
           ABOUT YOUR INSTRUCTOR
         </h2>
         <!-- Placeholder for Instructor Name -->
-        <div id="instructor_name_placeholder" class="bg-gray-200 animate-pulse h-8 w-1/2 mt-4 rounded"></div>
         <!-- Instructor Name -->
-        <h2 id="instructor_name" class="text-3xl font-bold tracking-tight text-button-text mt-4 custom-value-instructor_name custom-value-clickable custom-value-hoverable hidden">
-          Meet {{ location_owner_first_name }}
+        <h2 id="instructor_name" class="text-3xl font-bold tracking-tight text-button-text mt-4">
+          Meet {{ location_owner.first_name }}
         </h2>
         <!-- Placeholder for Introduction to Instructor -->
         <div id="introduction_to_instructor_placeholder" class="bg-gray-200 animate-pulse h-24 w-full mt-6 rounded"></div>
@@ -1356,18 +1352,12 @@ Best Purchase Ever!
   <div class="relative z-10 bg-dark-background bg-opacity-50 px-6 py-24 sm:py-32 lg:px-8 lg:py-40">
     <div class="max-w-4xl mx-auto">
       <!-- "STILL GOT QUESTIONS?" Title -->
-      <!-- Placeholder for "STILL GOT QUESTIONS?" -->
-      <div id="still_got_questions_placeholder" class="bg-gray-200 animate-pulse h-6 w-1/2 mx-auto rounded"></div>
-      <!-- "STILL GOT QUESTIONS?" -->
-      <h2 id="still_got_questions" class="text-xl font-semibold leading-10 tracking-tight text-link-text text-center hidden custom-value-still_got_questions custom-value-clickable custom-value-hoverable">
+      <h2 id="still_got_questions" class="text-xl font-semibold leading-10 tracking-tight text-link-text text-center">
         STILL GOT QUESTIONS?
       </h2>
       <!-- FAQ Title -->
-      <!-- Placeholder for FAQ Title -->
-      <div id="faq_title_placeholder" class="bg-gray-200 animate-pulse h-8 w-2/3 mx-auto mt-2 rounded"></div>
-      <!-- FAQ Title -->
-      <h2 id="faq_title" class="mt-2 text-3xl font-bold leading-10 tracking-tight text-button-text text-center hidden custom-value-faq_title custom-value-clickable custom-value-hoverable">
-        <!-- Content will be injected here -->
+      <h2 id="faq_title" class="mt-2 text-3xl font-bold leading-10 tracking-tight text-button-text text-center">
+Frequently asked questions...
       </h2>
       <!-- FAQ List -->
       <dl class="mt-10 space-y-6 divide-y divide-button-text/10">
@@ -1472,9 +1462,8 @@ Best Purchase Ever!
     </div>
     <div class="mt-16 text-center">
       <!-- Placeholder for "Get instant access here!" Button -->
-      <div id="get_instant_access_placeholder" class="bg-gray-200 animate-pulse h-12 w-64 mx-auto rounded"></div>
       <!-- "Get instant access here!" Button -->
-      <a href="#" id="get_instant_access" class="mt-8 inline-block rounded-md bg-buttons px-6 py-3 text-base font-semibold leading-7 text-button-text hover:bg-button-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-buttons hidden custom-value-get_instant_access custom-value-clickable custom-value-hoverable">
+      <a href="#" id="get_instant_access" class="mt-8 inline-block rounded-md bg-buttons px-6 py-3 text-base font-semibold leading-7 text-button-text hover:bg-button-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-buttons">
         Get instant access here!
       </a>
     </div>
