@@ -1065,7 +1065,9 @@
 </section>
 
 <!-- Section 9 -->
+<!-- Section 9 -->
 <section id="section-9" class="relative isolate py-24 sm:py-32 px-6 lg:px-8" style="background-color: var(--dark-background-color);">
+  <!-- Overlay -->
   <div class="absolute inset-0" style="background-color: var(--dark-overlay-color);"></div>
   <div class="relative z-10 mx-auto max-w-7xl">
     <div class="mx-auto flex flex-col-reverse lg:flex-row max-w-6xl gap-16">
@@ -1080,7 +1082,7 @@
           Meet {{ location_owner.first_name }}
         </h2>
         <!-- Introduction to Instructor Placeholder -->
-        <div id="introduction_to_instructor_placeholder" class="bg-gray-200 animate-pulse h-24 w-full mt-6 rounded"></div>
+        <div id="introduction_to_instructor_placeholder" class="bg-gray-200 text-base animate-pulse h-24 w-full mt-6 rounded"></div>
         <!-- Introduction to Instructor -->
         <p id="introduction_to_instructor" class="mt-6 text-lg leading-8 custom-value-introduction_to_instructor custom-value-clickable custom-value-hoverable hidden" style="color: var(--page-text-color);">
           <!-- Content will be injected here -->
@@ -1112,8 +1114,41 @@
             </span>
           </li>
           <!-- Achievement 2 -->
-          <!-- Repeat for additional achievements -->
-          <!-- ... -->
+          <li class="flex gap-x-3">
+            <svg class="h-7 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="color: var(--icon-color);">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            <!-- Placeholder -->
+            <div id="instructor_achievement_2_placeholder" class="bg-gray-200 animate-pulse h-4 w-3/4 rounded"></div>
+            <!-- Instructor Achievement 2 -->
+            <span id="instructor_achievement_2" class="hidden custom-value-instructor_achievement_2 custom-value-clickable custom-value-hoverable">
+              <!-- Content will be injected here -->
+            </span>
+          </li>
+          <!-- Achievement 3 -->
+          <li class="flex gap-x-3">
+            <svg class="h-7 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="color: var(--icon-color);">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            <!-- Placeholder -->
+            <div id="instructor_achievement_3_placeholder" class="bg-gray-200 animate-pulse h-4 w-3/4 rounded"></div>
+            <!-- Instructor Achievement 3 -->
+            <span id="instructor_achievement_3" class="hidden custom-value-instructor_achievement_3 custom-value-clickable custom-value-hoverable">
+              <!-- Content will be injected here -->
+            </span>
+          </li>
+          <!-- Achievement 4 -->
+          <li class="flex gap-x-3">
+            <svg class="h-7 w-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" style="color: var(--icon-color);">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd" />
+            </svg>
+            <!-- Placeholder -->
+            <div id="instructor_achievement_4_placeholder" class="bg-gray-200 animate-pulse h-4 w-3/4 rounded"></div>
+            <!-- Instructor Achievement 4 -->
+            <span id="instructor_achievement_4" class="hidden custom-value-instructor_achievement_4 custom-value-clickable custom-value-hoverable">
+              <!-- Content will be injected here -->
+            </span>
+          </li>
         </ul>
       </div>
       <!-- Image Content -->
@@ -1129,6 +1164,176 @@
   <div class="absolute inset-x-0 bottom-0 -z-10 flex justify-center overflow-hidden blur-3xl" aria-hidden="true">
     <div class="w-[82.375rem] flex-none" style="background: linear-gradient(to right, var(--gradient-color-start), var(--gradient-color-end)); opacity: 0.25; clip-path: polygon(73.6% 51.7%, 91.7% 11.8%, 100% 46.4%, 97.4% 82.2%, 92.5% 84.9%, 75.7% 64%, 55.3% 47.5%, 46.5% 49.4%, 45% 62.9%, 50.3% 87.2%, 21.3% 64.1%, 0.1% 100%, 5.4% 51.1%, 21.4% 63.9%, 58.9% 0.2%, 73.6% 51.7%);">
     </div>
+  </div>
+</section>
+
+
+<!-- Section 10 -->
+<section id="section-10" class="py-24 sm:py-32 px-4 sm:px-6 lg:px-8 flex flex-col items-center" style="background-color: var(--light-background-color);">
+  <!-- Section Header -->
+  <div class="text-center max-w-2xl">
+    <!-- "WHO IS THIS FOR..." -->
+    <p class="text-xl uppercase tracking-wider" style="color: var(--link-text-color);">
+      Who is this course for...
+    </p>
+    <!-- "Who is this course for" -->
+    <h1 id="who_is_this_course_for" class="mt-4 text-4xl font-bold custom-value-who_is_this_course_for custom-value-clickable custom-value-hoverable" style="color: var(--bold-text-color);">
+      Professionals Eager to Master New Skills
+    </h1>
+  </div>
+
+  <!-- Cards Grid -->
+  <div class="mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-6xl">
+    <!-- Card 1 -->
+    <div id="made_for_card_1" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 1 -->
+        <p id="made_for_1" class="text-lg font-semibold custom-value-made_for_1 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          Individuals wanting to enhance their coding skills.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div id="made_for_card_2" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 2 -->
+        <p id="made_for_2" class="text-lg font-semibold custom-value-made_for_2 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          Students preparing for a career in tech.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div id="made_for_card_3" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 3 -->
+        <p id="made_for_3" class="text-lg font-semibold custom-value-made_for_3 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          Entrepreneurs building tech startups.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div id="made_for_card_4" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 4 -->
+        <p id="made_for_4" class="text-lg font-semibold custom-value-made_for_4 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          Developers looking to update their skillset.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div id="made_for_card_5" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 5 -->
+        <p id="made_for_5" class="text-lg font-semibold custom-value-made_for_5 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          Career changers entering the tech industry.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div id="made_for_card_6" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 6 -->
+        <p id="made_for_6" class="text-lg font-semibold custom-value-made_for_6 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          Designers wanting to understand development.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 7 -->
+    <div id="made_for_card_7" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 7 -->
+        <p id="made_for_7" class="text-lg font-semibold custom-value-made_for_7 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          IT professionals expanding their roles.
+        </p>
+      </div>
+    </div>
+
+    <!-- Card 8 -->
+    <div id="made_for_card_8" class="rounded-xl shadow-lg p-6 flex items-start transform transition-transform hover:scale-105" style="background-color: var(--buttons);">
+      <div class="flex-shrink-0">
+        <span class="h-10 w-10 rounded-full flex items-center justify-center" style="background-color: var(--link-text-color);">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="color: var(--button-text-color);">
+            <!-- Checkmark Icon -->
+            <path d="M9 16.17l-3.88-3.88a1 1 0 101.42 1.42l2.5 2.5a1 1 0 001.42 0l6.3-6.29a1 1 0 10-1.42-1.42L9 16.17z" />
+          </svg>
+        </span>
+      </div>
+      <div class="ml-4">
+        <!-- Card Text 8 -->
+        <p id="made_for_8" class="text-lg font-semibold custom-value-made_for_8 custom-value-clickable custom-value-hoverable" style="color: var(--button-text-color);">
+          Hobbyists passionate about technology.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Button -->
+  <div class="mt-16">
+    <a href="#" id="get_instant_access_button" class="inline-block rounded-full px-8 py-4 text-lg font-semibold shadow-xl hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 transition" style="background-color: var(--buttons); color: var(--button-text-color);">
+      Get Instant Access Here!
+    </a>
   </div>
 </section>
 
@@ -1665,8 +1870,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
