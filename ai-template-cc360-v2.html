@@ -117,7 +117,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
-            const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-22-2024-cancanman-bro-8016237631.html';
+            const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-aug-02-2024-Cosette-8019465870.html';
             await checkExpiry(temporaryWebsiteUrl);
 
             document.getElementById('signup-button').onclick = async function() {
@@ -1617,217 +1617,220 @@ Explore the modules included in our course and discover what you'll learn.
 
 
     <!-- JavaScript -->
-    <script>
-        // Global Configuration Object
-        const config = {
-            temporaryWebsiteUrl: 'https://html-starter-coral.vercel.app/cc360-ai-templates-sep-22-2024-cancanman-bro-8016237631.html',
-            apiEndpoints: {
-                aiRequest: 'https://lnga43ibdg2xpgtijjizbacvou0hbgho.lambda-url.us-west-2.on.aws/',
-                saveChanges: 'https://mumtkxnj7kxedj7d6hue7qnl3e0fxcnz.lambda-url.us-west-2.on.aws/',
-                fetchData: 'https://ionnjdho4ntxa2latjo5yf7i3m0yswoy.lambda-url.us-west-2.on.aws/'
-            }
-        };
 
+<script>
+    // Global Configuration Object
+    const config = {
+        temporaryWebsiteUrl: 'https://html-starter-coral.vercel.app/cc360-ai-templates-aug-02-2024-Cosette-8019465870.html',
+        apiEndpoints: {
+            aiRequest: 'https://lnga43ibdg2xpgtijjizbacvou0hbgho.lambda-url.us-west-2.on.aws/',
+            saveChanges: 'https://mumtkxnj7kxedj7d6hue7qnl3e0fxcnz.lambda-url.us-west-2.on.aws/',
+            fetchData: 'https://ionnjdho4ntxa2latjo5yf7i3m0yswoy.lambda-url.us-west-2.on.aws/'
+        }
+    };
 
-        document.addEventListener('DOMContentLoaded', () => {
-            'use strict';
+    document.addEventListener('DOMContentLoaded', () => {
+        'use strict';
 
-            const changeWithAIButton = document.getElementById('changeWithAI');
-            const saveChangesButton = document.getElementById('saveChanges');
-            const modal = document.getElementById('modal');
-            const submitButton = document.getElementById('submitButton');
-            const cancelButton = document.getElementById('cancelButton');
-            const userRequest = document.getElementById('userRequest');
-            const selectedItems = [];
+        const changeWithAIButton = document.getElementById('changeWithAI');
+        const saveChangesButton = document.getElementById('saveChanges');
+        const modal = document.getElementById('modal');
+        const submitButton = document.getElementById('submitButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const userRequest = document.getElementById('userRequest');
+        const selectedItems = [];
 
-            // Show Change with AI Modal
-            changeWithAIButton.addEventListener('click', () => {
-                modal.classList.remove('hidden');
-                userRequest.focus();
-                console.log('Change with AI clicked, showing modal.');
+        // Show Change with AI Modal
+        changeWithAIButton.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+            userRequest.focus();
+            console.log('Change with AI clicked, showing modal.');
+        });
+
+        // Hide Modal on Cancel
+        cancelButton.addEventListener('click', () => {
+            modal.classList.add('hidden');
+            changeWithAIButton.focus();
+            console.log('Cancel clicked, hiding modal.');
+        });
+
+        // Submit AI Request
+        submitButton.addEventListener('click', async () => {
+            const customValues = {};
+            selectedItems.forEach(item => {
+                const key = Object.keys(item)[0];
+                customValues[key] = item[key];
             });
 
-            // Hide Modal on Cancel
-            cancelButton.addEventListener('click', () => {
-                modal.classList.add('hidden');
-                changeWithAIButton.focus();
-                console.log('Cancel clicked, hiding modal.');
+            console.log('Submitting AI request with data:', {
+                temporary_website_url: config.temporaryWebsiteUrl,
+                userRequest: userRequest.value,
+                customValues: customValues
             });
 
-            // Submit AI Request
-            submitButton.addEventListener('click', async () => {
-                const customValues = {};
-                selectedItems.forEach(item => {
-                    const key = Object.keys(item)[0];
-                    customValues[key] = item[key];
-                });
+            submitButton.textContent = 'Submitting...';
+            submitButton.disabled = true;
 
-                console.log('Submitting AI request with data:', {
+            try {
+                const response = await axios.post(config.apiEndpoints.aiRequest, {
                     temporary_website_url: config.temporaryWebsiteUrl,
                     userRequest: userRequest.value,
                     customValues: customValues
                 });
 
-                submitButton.textContent = 'Submitting...';
-                submitButton.disabled = true;
+                submitButton.textContent = 'Submit';
+                submitButton.disabled = false;
+                userRequest.value = '';
+                modal.classList.add('hidden');
+                changeWithAIButton.focus();
+                console.log('AI Response:', response.data);
+                // Handle response
+            } catch (error) {
+                submitButton.textContent = 'Submit';
+                submitButton.disabled = false;
+                console.error('Error submitting to AI:', error);
+            }
+        });
 
-                try {
-                    const response = await axios.post(config.apiEndpoints.aiRequest, {
-                        temporary_website_url: config.temporaryWebsiteUrl,
-                        userRequest: userRequest.value,
-                        customValues: customValues
-                    });
+        // Save Changes
+        saveChangesButton.addEventListener('click', async () => {
+            saveChangesButton.textContent = 'Saving...';
+            saveChangesButton.disabled = true;
 
-                    submitButton.textContent = 'Submit';
-                    submitButton.disabled = false;
-                    userRequest.value = '';
-                    modal.classList.add('hidden');
-                    changeWithAIButton.focus();
-                    console.log('AI Response:', response.data);
-                    // Handle response
-                } catch (error) {
-                    submitButton.textContent = 'Submit';
-                    submitButton.disabled = false;
-                    console.error('Error submitting to AI:', error);
+            const customValues = {};
+            selectedItems.forEach(item => {
+                const key = Object.keys(item)[0];
+                const element = document.querySelector(`.custom-value-${key}`);
+                if (element) {
+                    customValues[key] = element.textContent.trim();
                 }
             });
 
-            // Save Changes
-            saveChangesButton.addEventListener('click', async () => {
-                saveChangesButton.textContent = 'Saving...';
-                saveChangesButton.disabled = true;
+            console.log('Saving changes with data:', {
+                temporary_website_url: config.temporaryWebsiteUrl,
+                customValues: customValues
+            });
 
-                const customValues = {};
-                selectedItems.forEach(item => {
-                    const key = Object.keys(item)[0];
-                    const element = document.querySelector(`.custom-value-${key}`);
-                    if (element) {
-                        customValues[key] = element.textContent.trim();
-                    }
-                });
-
-                console.log('Saving changes with data:', {
+            try {
+                const response = await axios.post(config.apiEndpoints.saveChanges, {
                     temporary_website_url: config.temporaryWebsiteUrl,
                     customValues: customValues
                 });
 
-                try {
-                    const response = await axios.post(config.apiEndpoints.saveChanges, {
-                        temporary_website_url: config.temporaryWebsiteUrl,
-                        customValues: customValues
-                    });
-
-                    saveChangesButton.textContent = 'Save Changes';
-                    saveChangesButton.disabled = false;
-                    if (response.status === 200) {
-                        console.log('Changes saved successfully.');
-                        alert('Changes saved successfully!');
-                    } else {
-                        console.error('Failed to save changes.');
-                        alert('Failed to save changes.');
-                    }
-                } catch (error) {
-                    saveChangesButton.textContent = 'Save Changes';
-                    saveChangesButton.disabled = false;
-                    console.error('Error saving changes:', error);
-                    alert('An error occurred while saving changes.');
-                }
-            });
-
-            // Hover and Select Elements
-            document.addEventListener('mouseover', event => {
-                const target = event.target.closest('.custom-value-hoverable');
-                if (target && !target.classList.contains('selected')) {
-                    target.classList.add('border', 'border-blue-500');
-                    console.log(`Hovering over ${target.id || target.className}`);
-                }
-            });
-
-            document.addEventListener('mouseout', event => {
-                const target = event.target.closest('.custom-value-hoverable');
-                if (target && !target.classList.contains('selected')) {
-                    target.classList.remove('border', 'border-blue-500');
-                    console.log(`Stopped hovering over ${target.id || target.className}`);
-                }
-            });
-
-            document.addEventListener('click', event => {
-                const target = event.target.closest('.custom-value-clickable');
-                if (!target) return;
-
-                if (target.isContentEditable) {
-                    // Deselect
-                    target.classList.remove('selected', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
-                    target.removeAttribute('contenteditable');
-                    target.classList.remove('border', 'border-blue-500');
-                    const classList = Array.from(target.classList);
-                    const customValueClass = classList.find(cls => cls.startsWith('custom-value-') && !cls.endsWith('-hoverable') && !cls.endsWith('-clickable'));
-                    if (customValueClass) {
-                        const key = customValueClass.replace('custom-value-', '');
-                        const index = selectedItems.findIndex(item => item[key]);
-                        if (index > -1) {
-                            selectedItems.splice(index, 1);
-                        }
-                    }
-                    console.log(`Element ${target.id || target.className} deselected`);
+                saveChangesButton.textContent = 'Save Changes';
+                saveChangesButton.disabled = false;
+                if (response.status === 200) {
+                    console.log('Changes saved successfully.');
+                    alert('Changes saved successfully!');
                 } else {
-                    // Select
-                    target.classList.add('selected', 'border', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
-                    target.setAttribute('contenteditable', 'true');
-                    target.focus();
-                    const classList = Array.from(target.classList);
-                    const customValueClass = classList.find(cls => cls.startsWith('custom-value-') && !cls.endsWith('-hoverable') && !cls.endsWith('-clickable'));
-                    if (customValueClass) {
-                        const key = customValueClass.replace('custom-value-', '');
-                        const itemText = target.textContent;
-                        if (!selectedItems.some(item => item[key] === itemText)) {
-                            const newItem = {};
-                            newItem[key] = itemText;
-                            selectedItems.push(newItem);
-                        }
-                    }
-                    console.log(`Element ${target.id || target.className} selected`);
+                    console.error('Failed to save changes.');
+                    alert('Failed to save changes.');
                 }
-
-                event.stopPropagation();
-            });
-
-            // Fetch Data
-            fetchData();
+            } catch (error) {
+                saveChangesButton.textContent = 'Save Changes';
+                saveChangesButton.disabled = false;
+                console.error('Error saving changes:', error);
+                alert('An error occurred while saving changes.');
+            }
         });
 
-        async function fetchData() {
-            'use strict';
-            console.log('Fetching data for:', config.temporaryWebsiteUrl);
+        // Hover and Select Elements
+        document.addEventListener('mouseover', event => {
+            const target = event.target.closest('.custom-value-hoverable');
+            if (target && !target.classList.contains('selected')) {
+                target.classList.add('border', 'border-blue-500');
+                console.log(`Hovering over ${target.id || target.className}`);
+            }
+        });
 
-            const maxRetries = 3;
-            for (let attempts = 0; attempts < maxRetries; attempts++) {
-                try {
-                    const response = await axios.post(config.apiEndpoints.fetchData, {
-                        temporary_website_url: config.temporaryWebsiteUrl
-                    });
+        document.addEventListener('mouseout', event => {
+            const target = event.target.closest('.custom-value-hoverable');
+            if (target && !target.classList.contains('selected')) {
+                target.classList.remove('border', 'border-blue-500');
+                console.log(`Stopped hovering over ${target.id || target.className}`);
+            }
+        });
 
-                    if (response.status === 200) {
-                        const data = response.data;
-                        console.log('Data fetched:', data);
+        document.addEventListener('click', event => {
+            const target = event.target.closest('.custom-value-clickable');
+            if (!target) return;
 
-                        // Extract color variables from data
-                        const colorProperties = [
-                            'italic_text_color',
-                            'light_background_color',
-                            'link_text_color',
-                            'icon_color',
-                            'dark_background_color',
-                            'bold_text_color',
-                            'underline_text_color',
-                            'button_hover',
-                            'button_text_color',
-                            'buttons',
-                            'color',
-                            'green_button',
-                            'green_button_hover'
-                        ];
-                        // Map Tailwind color names to their hex codes
+            if (target.isContentEditable) {
+                // Deselect
+                target.classList.remove('selected', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
+                target.removeAttribute('contenteditable');
+                target.classList.remove('border', 'border-blue-500');
+                const classList = Array.from(target.classList);
+                const customValueClass = classList.find(cls => cls.startsWith('custom-value-') && !cls.endsWith('-hoverable') && !cls.endsWith('-clickable'));
+                if (customValueClass) {
+                    const key = customValueClass.replace('custom-value-', '');
+                    const index = selectedItems.findIndex(item => item[key]);
+                    if (index > -1) {
+                        selectedItems.splice(index, 1);
+                    }
+                }
+                console.log(`Element ${target.id || target.className} deselected`);
+            } else {
+                // Select
+                target.classList.add('selected', 'border', 'border-red-500', 'bg-red-500', 'bg-opacity-10');
+                target.setAttribute('contenteditable', 'true');
+                target.focus();
+                const classList = Array.from(target.classList);
+                const customValueClass = classList.find(cls => cls.startsWith('custom-value-') && !cls.endsWith('-hoverable') && !cls.endsWith('-clickable'));
+                if (customValueClass) {
+                    const key = customValueClass.replace('custom-value-', '');
+                    const itemText = target.textContent;
+                    if (!selectedItems.some(item => item[key] === itemText)) {
+                        const newItem = {};
+                        newItem[key] = itemText;
+                        selectedItems.push(newItem);
+                    }
+                }
+                console.log(`Element ${target.id || target.className} selected`);
+            }
+
+            event.stopPropagation();
+        });
+
+        // Fetch Data
+        fetchData();
+
+        // Set up interaction listener
+        setupInteractionListener();
+    });
+
+    async function fetchData() {
+        'use strict';
+        console.log('Fetching data for:', config.temporaryWebsiteUrl);
+
+        const maxRetries = 3;
+        for (let attempts = 0; attempts < maxRetries; attempts++) {
+            try {
+                const response = await axios.post(config.apiEndpoints.fetchData, {
+                    temporary_website_url: config.temporaryWebsiteUrl
+                });
+
+                if (response.status === 200) {
+                    const data = response.data;
+                    console.log('Data fetched:', data);
+
+                    // Extract color variables from data
+                    const colorProperties = [
+                        'italic_text_color',
+                        'light_background_color',
+                        'link_text_color',
+                        'icon_color',
+                        'dark_background_color',
+                        'bold_text_color',
+                        'underline_text_color',
+                        'button_hover',
+                        'button_text_color',
+                        'buttons',
+                        'color',
+                        'green_button',
+                        'green_button_hover'
+                    ];
+                    // Map Tailwind color names to their hex codes
                         const tailwindColors = {
                             /* BLACK */
                             'black': '#000000',
@@ -2078,111 +2081,133 @@ Explore the modules included in our course and discover what you'll learn.
                             // Add more mappings if Tailwind expands colors
                         };
 
-                        // Set CSS custom properties
-                        colorProperties.forEach(colorProp => {
-                            if (data.hasOwnProperty(colorProp)) {
-                                const cssVariableName = `--${colorProp.replace(/_/g, '-')}`;
-                                const colorValue = tailwindColors[data[colorProp]] || data[colorProp];
-                                document.documentElement.style.setProperty(cssVariableName, colorValue);
-                                console.log(`Set CSS variable ${cssVariableName} to ${colorValue}`);
-                            }
-                        });
+                    // Set CSS custom properties
+                    colorProperties.forEach(colorProp => {
+                        if (data.hasOwnProperty(colorProp)) {
+                            const cssVariableName = `--${colorProp.replace(/_/g, '-')}`;
+                            const colorValue = tailwindColors[data[colorProp]] || data[colorProp];
+                            document.documentElement.style.setProperty(cssVariableName, colorValue);
+                            console.log(`Set CSS variable ${cssVariableName} to ${colorValue}`);
+                        }
+                    });
 
-                        for (const key in data) {
-                            if (data.hasOwnProperty(key)) {
-                                const element = document.getElementById(key);
-                                const placeholder = document.getElementById(`${key}_placeholder`);
+                    for (const key in data) {
+                        if (data.hasOwnProperty(key)) {
+                            const element = document.getElementById(key);
+                            const placeholder = document.getElementById(`${key}_placeholder`);
 
-                                if (element) {
-                                    if (element.tagName.toLowerCase() === 'img') {
-                                        element.src = data[key];
-                                        // Remove hidden class from the image element
-                                        element.classList.remove('hidden');
-                                        // Hide the placeholder
-                                        if (placeholder) {
-                                            placeholder.classList.add('hidden');
-                                        }
-                                    } else {
-                                        element.innerHTML = data[key];
-                                        element.classList.remove('hidden');
-                                        if (placeholder) {
-                                            placeholder.classList.add('hidden');
-                                        }
+                            if (element) {
+                                if (element.tagName.toLowerCase() === 'img') {
+                                    element.src = data[key];
+                                    // Remove hidden class from the image element
+                                    element.classList.remove('hidden');
+                                    // Hide the placeholder
+                                    if (placeholder) {
+                                        placeholder.classList.add('hidden');
+                                    }
+                                } else {
+                                    element.innerHTML = data[key];
+                                    element.classList.remove('hidden');
+                                    if (placeholder) {
+                                        placeholder.classList.add('hidden');
                                     }
                                 }
-
-                                const elements = document.querySelectorAll(`.custom-value-${key}`);
-                                elements.forEach(el => {
-                                    if (el.tagName.toLowerCase() === 'img') {
-                                        el.src = data[key];
-                                    } else {
-                                        el.innerHTML = data[key];
-                                    }
-                                    el.classList.remove('hidden');
-                                    const placeholderElement = document.getElementById(`${key}_placeholder`);
-                                    if (placeholderElement) {
-                                        placeholderElement.classList.add('hidden');
-                                    }
-                                });
                             }
+
+                            const elements = document.querySelectorAll(`.custom-value-${key}`);
+                            elements.forEach(el => {
+                                if (el.tagName.toLowerCase() === 'img') {
+                                    el.src = data[key];
+                                } else {
+                                    el.innerHTML = data[key];
+                                }
+                                el.classList.remove('hidden');
+                                const placeholderElement = document.getElementById(`${key}_placeholder`);
+                                if (placeholderElement) {
+                                    placeholderElement.classList.add('hidden');
+                                }
+                            });
                         }
-
-                        // Call the function to control the video after data fetching is complete
-                        controlVideo();
-
-                        return; // Data fetched successfully
-                    } else {
-                        console.error('Error fetching data:', response);
                     }
-                } catch (error) {
-                    console.error('Error fetching data:', error);
+
+                    return; // Data fetched successfully
+                } else {
+                    console.error('Error fetching data:', response);
                 }
-                console.log(`Retrying... (${maxRetries - attempts - 1} retries left)`);
-                await new Promise(resolve => setTimeout(resolve, 1000));
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-            console.error('Failed to fetch data after maximum retries.');
+            console.log(`Retrying... (${maxRetries - attempts - 1} retries left)`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        console.error('Failed to fetch data after maximum retries.');
+    }
+
+    function setupInteractionListener() {
+        let interactionOccurred = false;
+
+        function onFirstInteraction() {
+            if (!interactionOccurred) {
+                interactionOccurred = true;
+                console.log('User interaction detected. Starting timer...');
+                // Remove the event listeners after first interaction
+                document.removeEventListener('click', onFirstInteraction);
+                document.removeEventListener('keydown', onFirstInteraction);
+                // Wait for 2 seconds before controlling the video
+                setTimeout(controlVideo, 2000);
+            }
         }
 
-        // Function to control the video
-        function controlVideo() {
-            console.log('Attempting to control the video after 2 seconds...');
-            setTimeout(async () => {
-                const video = document.getElementById('introVideo');
-                if (!video) {
-                    console.error('Video element not found.');
-                    return;
-                }
+        // Listen for user interaction events
+        document.addEventListener('click', onFirstInteraction);
+        document.addEventListener('keydown', onFirstInteraction);
+    }
 
-                try {
-                    // Increase volume by 20%
-                    video.volume = Math.min(video.volume + 0.2, 1);
-                    console.log(`Video volume increased to ${video.volume}`);
+    // Function to control the video
+    function controlVideo() {
+        console.log('Attempting to control the video after user interaction and 2 seconds...');
+        const video = document.getElementById('introVideo');
+        if (!video) {
+            console.error('Video element not found.');
+            return;
+        }
 
-                    // Play the video
-                    await video.play();
-                    console.log('Video playback started.');
+        // Unmute video (if it was muted)
+        video.muted = false;
 
-                    // Request Picture-in-Picture
-                    if ('pictureInPictureEnabled' in document) {
-                        try {
-                            const pipWindow = await video.requestPictureInPicture();
+        try {
+            // Increase volume by 20%
+            video.volume = Math.min(video.volume + 0.2, 1);
+            console.log(`Video volume increased to ${video.volume}`);
+
+            // Play the video
+            video.play().then(() => {
+                console.log('Video playback started.');
+
+                // Request Picture-in-Picture
+                if ('pictureInPictureEnabled' in document) {
+                    video.requestPictureInPicture()
+                        .then(pipWindow => {
                             console.log('Entered Picture-in-Picture mode.');
 
-                            // Positioning the PiP window is not supported by browsers for security reasons
-                            // This functionality is controlled by the browser and cannot be set via JavaScript
+                            // Note: Positioning the PiP window is not possible due to browser security policies
                             console.warn('Positioning the Picture-in-Picture window programmatically is not supported due to browser security policies.');
-
-                        } catch (error) {
+                        })
+                        .catch(error => {
                             console.error('Error entering Picture-in-Picture mode:', error);
-                        }
-                    } else {
-                        console.warn('Picture-in-Picture is not supported in this browser.');
-                    }
-                } catch (error) {
-                    console.error('Error controlling the video:', error);
+                        });
+                } else {
+                    console.warn('Picture-in-Picture is not supported in this browser.');
                 }
-            }, 2000);
+
+            }).catch(error => {
+                console.error('Error playing the video:', error);
+            });
+
+        } catch (error) {
+            console.error('Error controlling the video:', error);
         }
-    </script>
+    }
+</script>
 </body>
 </html>
