@@ -47,12 +47,13 @@
             bottom: 20px; /* Slide into view */
         }
 
-     #slidingVideoContainer video {
-         width: 100%;
-         height: auto;
-         position: relative;
-         z-index: 1;
-     }
+        #slidingVideoContainer video {
+            width: 100%;
+            height: auto;
+            display: block;
+            background-color: black;
+        }
+
         #slidingVideoContainer .close-button {
             position: absolute;
             top: 5px;
@@ -67,7 +68,16 @@
             line-height: 24px;
             text-align: center;
             cursor: pointer;
-         z-index: 2;
+            z-index: 2;
+        }
+
+        /* Ensure the video container adjusts for mobile screens */
+        @media only screen and (max-width: 600px) {
+            #slidingVideoContainer {
+                width: 100%;
+                left: 0;
+                border-radius: 0;
+            }
         }
     </style>
 </head>
@@ -1655,12 +1665,12 @@ Explore the modules included in our course and discover what you'll learn.
 </section>
 
     <!-- Sliding Video Container -->
-     <div id="slidingVideoContainer">
-         <video id="slidingVideo" preload="metadata">
+    <div id="slidingVideoContainer">
+        <button class="close-button" aria-label="Close video">&times;</button>
+        <video id="slidingVideo" preload="metadata" controls poster="path/to/your/poster-image.jpg">
             <source src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4" type="video/mp4">
             <p>Your browser does not support the video tag.</p>
         </video>
-         <button class="close-button" aria-label="Close video">&times;</button>
     </div>
 
     <!-- JavaScript -->
@@ -2197,37 +2207,44 @@ Explore the modules included in our course and discover what you'll learn.
             const video = document.getElementById('slidingVideo');
             const closeButton = videoContainer.querySelector('.close-button');
 
-            // Check for autoplay permissions
-            video.volume = 1.0; // Set volume to maximum
-            video.muted = false; // Start muted to comply with autoplay policies
+            // Adjust for mobile devices
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
             // Wait for 3 seconds after page load
             setTimeout(() => {
-                // Try to play the video muted
-                video.play().then(() => {
-                    console.log('Video started playing muted.');
+                // Show the video container
+                videoContainer.classList.add('visible');
 
-                    // Show the video container
-                    videoContainer.classList.add('visible');
+                if (!isMobile) {
+                    // Try to autoplay the video muted on desktop
+                    video.volume = 1.0;
+                    video.muted = false; // Start muted to comply with autoplay policies
 
-                    // Unmute after user interaction
-                    const unmuteVideo = () => {
-                        video.muted = false;
-                        console.log('Video unmuted after user interaction.');
-                        // Remove event listeners
-                        video.removeEventListener('click', unmuteVideo);
-                        document.removeEventListener('keydown', unmuteVideo);
-                    };
+                    video.play().then(() => {
+                        console.log('Video started playing muted.');
 
-                    // Listen for user interaction to unmute
-                    video.addEventListener('click', unmuteVideo);
-                    document.addEventListener('keydown', unmuteVideo);
+                        // Unmute after user interaction
+                        const unmuteVideo = () => {
+                            video.muted = false;
+                            console.log('Video unmuted after user interaction.');
+                            // Remove event listeners
+                            video.removeEventListener('click', unmuteVideo);
+                            document.removeEventListener('keydown', unmuteVideo);
+                        };
 
-                }).catch(error => {
-                    console.error('Error playing video:', error);
-                    // Show the video container anyway for user to play manually
-                    videoContainer.classList.add('visible');
-                });
+                        // Listen for user interaction to unmute
+                        video.addEventListener('click', unmuteVideo);
+                        document.addEventListener('keydown', unmuteVideo);
+
+                    }).catch(error => {
+                        console.error('Error playing video:', error);
+                        // Video cannot autoplay; user must start it manually
+                    });
+                } else {
+                    console.log('Mobile device detected. Autoplay is disabled.');
+                    // For mobile, show a poster image with a play button
+                    // The 'controls' attribute in the video tag allows users to play the video
+                }
 
             }, 3000);
 
