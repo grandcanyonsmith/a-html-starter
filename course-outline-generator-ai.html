@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Outline</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100" onload="init()">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Course Outline</h1>
+        <div id="courseContainer"></div>
+        <div class="mt-4">
+            <button id="addModuleButton" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Add Module</button>
+            <button id="saveButton" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 ml-2">Save</button>
+        </div>
+    </div>
+
+    <script>
+        const lambdaUrl = 'https://rbmcf7azkyxn2inth2ypngpc2q0azsyv.lambda-url.us-west-2.on.aws/';
+        let courseData = {};
+
+        async function init() {
+            console.log('Page loaded, initializing...');
+            // Fetch data on page load
+            const response = await fetch(lambdaUrl, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    locationId: 'kgREXsjAvhag6Qn8Yjqn',
+                    timestamp: '1727018371',
+                    request_type: 'READ'
+                })
+            });
+            const responseData = await response.json();
+            console.log('Data fetched:', responseData);
+            // Parse the DynamoDB JSON data
+            courseData = parseDynamoDBJson(responseData);
+            console.log('Parsed data:', courseData);
+            // Render the course data
+            renderCourseData();
+        }
+
+        function parseDynamoDBJson(obj) {
+            if (typeof obj !== 'object' || obj === null) {
+                return obj;
+            }
+            const keys = Object.keys(obj);
+            if (keys.length === 1 && ['S', 'N', 'M', 'L'].includes(keys[0])) {
+                const key = keys[0];
+                const value = obj[key];
+
+                if (key === 'S' || key === 'N') {
+                    return value;
+                } else if (key === 'M') {
+                    const result = {};
+                    for (const k in value) {
+                        result[k] = parseDynamoDBJson(value[k]);
+                    }
+                    return result;
+                } else if (key === 'L') {
+                    return value.map(parseDynamoDBJson);
+                } else {
+                    return value;
+                }
+            } else {
+                const result = {};
+                for (const k in obj) {
+                    result[k] = parseDynamoDBJson(obj[k]);
+                }
+                return result;
+            }
+        }
+
+        function renderCourseData() {
+            const container = document.getElementById('courseContainer');
+            container.innerHTML = ''; // Clear the container
+
+            if (courseData.course_data) {
+                const modules = courseData.course_data;
+                let moduleIndex = 1;
+                for (const moduleKey in modules) {
+                    const module = modules[moduleKey];
+                    const moduleDiv = document.createElement('div');
+                    moduleDiv.className = 'border border-gray-300 p-4 mb-4';
+                    moduleDiv.dataset.moduleKey = moduleKey;
+
+                    // Module title
+                    const moduleTitleDiv = document.createElement('div');
+                    moduleTitleDiv.className = 'flex items-center justify-between mb-2';
+
+                    const moduleTitleInput = document.createElement('input');
+                    moduleTitleInput.type = 'text';
+                    moduleTitleInput.value = module.title || '';
+                    moduleTitleInput.className = 'text-xl font-semibold border rounded p-1 w-2/3';
+                    moduleTitleInput.addEventListener('input', (event) => {
+                        console.log(`Module ${moduleKey} title changed.`);
+                        module.title = event.target.value;
+                    });
+
+                    const moduleButtonDiv = document.createElement('div');
+
+                    const editModuleButton = document.createElement('button');
+                    editModuleButton.textContent = 'Edit';
+                    editModuleButton.className = 'px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 mr-2';
+                    editModuleButton.addEventListener('click', () => {
+                        console.log(`Edit Module ${moduleKey} clicked.`);
+                        moduleTitleInput.disabled = !moduleTitleInput.disabled;
+                        editModuleButton.textContent = moduleTitleInput.disabled ? 'Edit' : 'Save';
+                    });
+
+                    const deleteModuleButton = document.createElement('button');
+                    deleteModuleButton.textContent = 'Delete';
+                    deleteModuleButton.className = 'px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600';
+                    deleteModuleButton.addEventListener('click', () => {
+                        console.log(`Delete Module ${moduleKey} clicked.`);
+                        delete courseData.course_data[moduleKey];
+                        renderCourseData();
+                    });
+
+                    moduleButtonDiv.appendChild(editModuleButton);
+                    moduleButtonDiv.appendChild(deleteModuleButton);
+
+                    moduleTitleDiv.appendChild(moduleTitleInput);
+                    moduleTitleDiv.appendChild(moduleButtonDiv);
+
+                    moduleDiv.appendChild(moduleTitleDiv);
+
+                    // Lessons
+                    const lessonsDiv = document.createElement('div');
+                    lessonsDiv.className = 'pl-4';
+
+                    const lessons = module.lessons || {};
+                    let lessonIndex = 1;
+                    for (const lessonKey in lessons) {
+                        const lessonTitle = lessons[lessonKey];
+
+                        const lessonDiv = document.createElement('div');
+                        lessonDiv.className = 'flex items-center justify-between mb-1';
+                        lessonDiv.dataset.lessonKey = lessonKey;
+
+                        const lessonInput = document.createElement('input');
+                        lessonInput.type = 'text';
+                        lessonInput.value = lessonTitle;
+                        lessonInput.className = 'border rounded p-1 w-2/3';
+                        lessonInput.addEventListener('input', (event) => {
+                            console.log(`Lesson ${lessonKey} in Module ${moduleKey} changed.`);
+                            lessons[lessonKey] = event.target.value;
+                        });
+
+                        const lessonButtonDiv = document.createElement('div');
+
+                        const editLessonButton = document.createElement('button');
+                        editLessonButton.textContent = 'Edit';
+                        editLessonButton.className = 'px-2 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 mr-2';
+                        editLessonButton.addEventListener('click', () => {
+                            console.log(`Edit Lesson ${lessonKey} in Module ${moduleKey} clicked.`);
+                            lessonInput.disabled = !lessonInput.disabled;
+                            editLessonButton.textContent = lessonInput.disabled ? 'Edit' : 'Save';
+                        });
+
+                        const deleteLessonButton = document.createElement('button');
+                        deleteLessonButton.textContent = 'Delete';
+                        deleteLessonButton.className = 'px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600';
+                        deleteLessonButton.addEventListener('click', () => {
+                            console.log(`Delete Lesson ${lessonKey} in Module ${moduleKey} clicked.`);
+                            delete lessons[lessonKey];
+                            renderCourseData();
+                        });
+
+                        lessonButtonDiv.appendChild(editLessonButton);
+                        lessonButtonDiv.appendChild(deleteLessonButton);
+
+                        lessonDiv.appendChild(lessonInput);
+                        lessonDiv.appendChild(lessonButtonDiv);
+
+                        lessonsDiv.appendChild(lessonDiv);
+
+                        lessonIndex++;
+                    }
+
+                    // Add Lesson button
+                    const addLessonButton = document.createElement('button');
+                    addLessonButton.textContent = 'Add Lesson';
+                    addLessonButton.className = 'px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 mt-2';
+                    addLessonButton.addEventListener('click', () => {
+                        console.log(`Add Lesson in Module ${moduleKey} clicked.`);
+                        const newLessonKey = `lesson_${Object.keys(lessons).length + 1}`;
+                        lessons[newLessonKey] = 'New Lesson';
+                        renderCourseData();
+                    });
+
+                    lessonsDiv.appendChild(addLessonButton);
+                    moduleDiv.appendChild(lessonsDiv);
+
+                    container.appendChild(moduleDiv);
+
+                    moduleIndex++;
+                }
+            } else {
+                container.innerHTML = 'No course data available.';
+            }
+        }
+
+        document.getElementById('saveButton').addEventListener('click', async () => {
+            console.log('Save button clicked.');
+            // Send updated data to the lambda function
+            const requestData = {
+                locationId: courseData.locationId,
+                timestamp: courseData.timestamp,
+                request_type: 'UPDATE',
+                course_data: courseData.course_data
+            };
+
+            const response = await fetch(lambdaUrl, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(requestData)
+            });
+
+            const responseData = await response.json();
+            console.log('Save response:', responseData);
+            alert('Data saved successfully.');
+        });
+
+        document.getElementById('addModuleButton').addEventListener('click', () => {
+            console.log('Add Module button clicked.');
+            const modules = courseData.course_data || {};
+            const newModuleKey = `module_${Object.keys(modules).length + 1}`;
+            modules[newModuleKey] = {
+                title: 'New Module',
+                lessons: {}
+            };
+            courseData.course_data = modules;
+            renderCourseData();
+        });
+    </script>
+</body>
+</html>
