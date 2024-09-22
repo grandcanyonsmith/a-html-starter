@@ -29,6 +29,44 @@
             --green-button: ;
             --green-button-hover: ;
         }
+        /* Styles for the sliding video */
+        #slidingVideoContainer {
+            position: fixed;
+            bottom: -300px; /* Hidden off-screen */
+            left: 20px;
+            width: 300px;
+            max-width: 90%;
+            background-color: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: bottom 0.5s ease-in-out;
+            z-index: 1000;
+        }
+
+        #slidingVideoContainer.visible {
+            bottom: 20px; /* Slide into view */
+        }
+
+        #slidingVideoContainer video {
+            width: 100%;
+            height: auto;
+        }
+
+        #slidingVideoContainer .close-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 24px;
+            text-align: center;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -117,7 +155,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
-            const temporaryWebsiteUrl = 'https://html-starter-coral.vercel.app/cc360-ai-templates-aug-02-2024-Cosette-8019465870.html';
+            const temporaryWebsiteUrl = window.location.href;
             await checkExpiry(temporaryWebsiteUrl);
 
             document.getElementById('signup-button').onclick = async function() {
@@ -1614,10 +1652,18 @@ Explore the modules included in our course and discover what you'll learn.
   </script>
 </section>
 
-
+    <!-- Sliding Video Container -->
+    <div id="slidingVideoContainer">
+        <button class="close-button" aria-label="Close video">&times;</button>
+        <video id="slidingVideo" preload="metadata">
+            <source src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4" type="video/mp4">
+            <p>Your browser does not support the video tag.</p>
+        </video>
+    </div>
 
     <!-- JavaScript -->
 
+    <!-- JavaScript -->
     <script>
         // Global Configuration Object
         const config = {
@@ -1795,24 +1841,24 @@ Explore the modules included in our course and discover what you'll learn.
             // Fetch Data
             fetchData();
 
-            // Set up interaction listener
-            setupInteractionListener();
+            // Initialize Sliding Video after data fetch
+            initSlidingVideo();
         });
 
-    async function fetchData() {
-        'use strict';
-        console.log('Fetching data for:', config.temporaryWebsiteUrl);
+        async function fetchData() {
+            'use strict';
+            console.log('Fetching data for:', config.temporaryWebsiteUrl);
 
-        const maxRetries = 3;
-        for (let attempts = 0; attempts < maxRetries; attempts++) {
-            try {
-                const response = await axios.post(config.apiEndpoints.fetchData, {
-                    temporary_website_url: config.temporaryWebsiteUrl
-                });
+            const maxRetries = 3;
+            for (let attempts = 0; attempts < maxRetries; attempts++) {
+                try {
+                    const response = await axios.post(config.apiEndpoints.fetchData, {
+                        temporary_website_url: config.temporaryWebsiteUrl
+                    });
 
-                if (response.status === 200) {
-                    const data = response.data;
-                    console.log('Data fetched:', data);
+                    if (response.status === 200) {
+                        const data = response.data;
+                        console.log('Data fetched:', data);
 
                     // Extract color variables from data
                     const colorProperties = [
@@ -2130,7 +2176,7 @@ Explore the modules included in our course and discover what you'll learn.
                         }
                     }
 
-                    return; // Data fetched successfully
+                        return; // Data fetched successfully
                     } else {
                         console.error('Error fetching data:', response);
                     }
@@ -2143,95 +2189,52 @@ Explore the modules included in our course and discover what you'll learn.
             console.error('Failed to fetch data after maximum retries.');
         }
 
-        function setupInteractionListener() {
-            let interactionOccurred = false;
+        function initSlidingVideo() {
+            console.log('Initializing sliding video...');
+            const videoContainer = document.getElementById('slidingVideoContainer');
+            const video = document.getElementById('slidingVideo');
+            const closeButton = videoContainer.querySelector('.close-button');
 
-            function onFirstInteraction() {
-                if (!interactionOccurred) {
-                    interactionOccurred = true;
-                    console.log('User interaction detected. Starting timer...');
-                    // Remove the event listeners after first interaction
-                    document.removeEventListener('click', onFirstInteraction);
-                    document.removeEventListener('keydown', onFirstInteraction);
-                    // Wait for 2 seconds before controlling the video
-                    setTimeout(controlVideo, 2000);
-                }
-            }
+            // Check for autoplay permissions
+            video.volume = 1.0; // Set volume to maximum
+            video.muted = false; // Start muted to comply with autoplay policies
 
-            // Listen for user interaction events
-            document.addEventListener('click', onFirstInteraction);
-            document.addEventListener('keydown', onFirstInteraction);
-        }
-
-        // Function to determine if the device is mobile
-        function isMobileDevice() {
-            return /Mobi|Android/i.test(navigator.userAgent);
-        }
-
-        // Function to control the video
-        function controlVideo() {
-            console.log('Attempting to control the video after user interaction and 2 seconds...');
-            const video = document.getElementById('introVideo');
-            if (!video) {
-                console.error('Video element not found.');
-                return;
-            }
-
-            // Unmute video (if it was muted)
-            video.muted = false;
-
-            try {
-                // Increase volume by 20% if supported
-                try {
-                    // iOS devices do not allow programmatic volume control
-                    video.volume = Math.min(video.volume + 0.2, 1);
-                    console.log(`Video volume increased to ${video.volume}`);
-                } catch (error) {
-                    console.warn('Volume adjustment not supported on this device.');
-                }
-
-                // Play the video
+            // Wait for 3 seconds after page load
+            setTimeout(() => {
+                // Try to play the video muted
                 video.play().then(() => {
-                    console.log('Video playback started.');
+                    console.log('Video started playing muted.');
 
-                    if (isMobileDevice()) {
-                        console.log('Mobile device detected.');
+                    // Show the video container
+                    videoContainer.classList.add('visible');
 
-                        // For mobile devices, attempt to enter fullscreen mode
-                        if (video.requestFullscreen) {
-                            video.requestFullscreen();
-                            console.log('Requested fullscreen mode.');
-                        } else if (video.webkitEnterFullscreen) {
-                            video.webkitEnterFullscreen();
-                            console.log('Requested fullscreen mode (webkit).');
-                        } else {
-                            console.warn('Fullscreen API not supported on this device.');
-                        }
-                    } else {
-                        // Request Picture-in-Picture on desktop
-                        if ('pictureInPictureEnabled' in document) {
-                            video.requestPictureInPicture()
-                                .then(pipWindow => {
-                                    console.log('Entered Picture-in-Picture mode.');
+                    // Unmute after user interaction
+                    const unmuteVideo = () => {
+                        video.muted = false;
+                        console.log('Video unmuted after user interaction.');
+                        // Remove event listeners
+                        video.removeEventListener('click', unmuteVideo);
+                        document.removeEventListener('keydown', unmuteVideo);
+                    };
 
-                                    // Note: Positioning the PiP window is not possible due to browser security policies
-                                    console.warn('Positioning the Picture-in-Picture window programmatically is not supported due to browser security policies.');
-                                })
-                                .catch(error => {
-                                    console.error('Error entering Picture-in-Picture mode:', error);
-                                });
-                        } else {
-                            console.warn('Picture-in-Picture is not supported in this browser.');
-                        }
-                    }
+                    // Listen for user interaction to unmute
+                    video.addEventListener('click', unmuteVideo);
+                    document.addEventListener('keydown', unmuteVideo);
 
                 }).catch(error => {
-                    console.error('Error playing the video:', error);
+                    console.error('Error playing video:', error);
+                    // Show the video container anyway for user to play manually
+                    videoContainer.classList.add('visible');
                 });
 
-            } catch (error) {
-                console.error('Error controlling the video:', error);
-            }
+            }, 3000);
+
+            // Close button functionality
+            closeButton.addEventListener('click', () => {
+                video.pause();
+                videoContainer.classList.remove('visible');
+                console.log('Video closed by user.');
+            });
         }
     </script>
 </body>
