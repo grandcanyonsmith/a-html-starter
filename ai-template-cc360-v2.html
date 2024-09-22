@@ -72,13 +72,13 @@
         }
 
         /* Ensure the video container adjusts for mobile screens */
-        @media only screen and (max-width: 600px) {
-            #slidingVideoContainer {
-                width: 100%;
-                left: 0;
-                border-radius: 0;
-            }
-        }
+     @media only screen and (max-width: 600px) {
+         #slidingVideoContainer {
+             width: 100%;
+             left: 0;
+             border-radius: 0;
+         }
+     }
     </style>
 </head>
 <body>
@@ -281,7 +281,7 @@
                     <div class="w-full">
                         <div class="text-center py-2 font-semibold" style="background-color: var(--buttons); color: var(--button-text-color);">CLICK BELOW TO WATCH FIRST!</div>
                         <div class="video-container bg-black">
-                            <video id="introVideo" controls poster="video-poster.webp" class="rounded-lg shadow-lg w-full" preload="none">
+                            <video controls poster="video-poster.webp" class="rounded-lg shadow-lg w-full" preload="none">
                                 <source src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4" type="video/mp4">
                                 <track kind="captions" src="captions.vtt" srclang="en" label="English">
                                 <p>Your browser does not support the video tag. Here is a <a href="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4">link to the video</a> instead.</p>
@@ -1667,7 +1667,7 @@ Explore the modules included in our course and discover what you'll learn.
     <!-- Sliding Video Container -->
     <div id="slidingVideoContainer">
         <button class="close-button" aria-label="Close video">&times;</button>
-        <video id="slidingVideo" preload="metadata" controls poster="path/to/your/poster-image.jpg">
+     <video id="slidingVideo" preload="none" controls playsinline webkit-playsinline poster="path/to/your/poster-image.jpg">
             <source src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/CARD+REQUIRED+VERSION+2+(1).mp4" type="video/mp4">
             <p>Your browser does not support the video tag.</p>
         </video>
@@ -2215,36 +2215,30 @@ Explore the modules included in our course and discover what you'll learn.
                 // Show the video container
                 videoContainer.classList.add('visible');
 
-                if (!isMobile) {
-                    // Try to autoplay the video muted on desktop
-                    video.volume = 1.0;
-                    video.muted = false; // Start muted to comply with autoplay policies
+                // Attempt to autoplay the video muted
+                video.volume = 1.0;
+                video.muted = false; // Start muted to comply with autoplay policies
 
-                    video.play().then(() => {
-                        console.log('Video started playing muted.');
+                video.play().then(() => {
+                    console.log('Video started playing muted.');
 
-                        // Unmute after user interaction
-                        const unmuteVideo = () => {
-                            video.muted = false;
-                            console.log('Video unmuted after user interaction.');
-                            // Remove event listeners
-                            video.removeEventListener('click', unmuteVideo);
-                            document.removeEventListener('keydown', unmuteVideo);
-                        };
+                    // Unmute after user interaction
+                    const unmuteVideo = () => {
+                        video.muted = false;
+                        console.log('Video unmuted after user interaction.');
+                        // Remove event listeners
+                        video.removeEventListener('click', unmuteVideo);
+                        document.removeEventListener('keydown', unmuteVideo);
+                    };
 
-                        // Listen for user interaction to unmute
-                        video.addEventListener('click', unmuteVideo);
-                        document.addEventListener('keydown', unmuteVideo);
+                    // Listen for user interaction to unmute
+                    video.addEventListener('click', unmuteVideo);
+                    document.addEventListener('keydown', unmuteVideo);
 
-                    }).catch(error => {
-                        console.error('Error playing video:', error);
-                        // Video cannot autoplay; user must start it manually
-                    });
-                } else {
-                    console.log('Mobile device detected. Autoplay is disabled.');
-                    // For mobile, show a poster image with a play button
-                    // The 'controls' attribute in the video tag allows users to play the video
-                }
+                }).catch(error => {
+                    console.error('Error playing video:', error);
+                    // Video cannot autoplay; user must start it manually
+                });
 
             }, 3000);
 
