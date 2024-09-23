@@ -2,384 +2,226 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Turn It Up Productions - Premium Wedding DJ and Entertainment Services</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Performance Overview</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-white p-6">
-    <div class="container mx-auto">
-        <h1 class="text-3xl font-bold mb-6 text-black">Performance Overview</h1>
-        
-        <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Ad Spend Card -->
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h2 class="text-2xl font-bold mb-4 text-indigo-600">Ad Spend</h2>
-                <p id="adSpendJune">June: Loading...</p>
-                <p id="adSpendJuly">July: Loading...</p>
-                <p id="adSpendAugust">August: Loading...</p>
-                <p id="adSpendIncrease" class="text-green-500">Loading...</p>
-                <p class="mt-4 text-gray-600">We increased our ad spend to reach a wider audience.</p>
-            </div>
-            
-            <!-- Revenue per Unique User Card -->
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h2 class="text-2xl font-bold mb-4 text-indigo-600">Revenue per Unique User</h2>
-                <p id="revPerUserJune">June: Loading...</p>
-                <p id="revPerUserJuly">July: Loading...</p>
-                <p id="revPerUserAugust">August: Loading...</p>
-                <p id="revPerUserIncrease" class="text-green-500">Loading...</p>
-                <p class="mt-4 text-gray-600">Optimizations led to higher revenue per user.</p>
-            </div>
-            
-            <!-- Lead Unit Cost Card -->
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h2 class="text-2xl font-bold mb-4 text-indigo-600">Lead Unit Cost</h2>
-                <p id="leadCostJune">June: Loading...</p>
-                <p id="leadCostJuly">July: Loading...</p>
-                <p id="leadCostAugust">August: Loading...</p>
-                <p id="leadCostDecrease" class="text-green-500">Loading...</p>
-                <p class="mt-4 text-gray-600">Improved targeting reduced our cost per lead.</p>
-            </div>
-            
-            <!-- Total Spend Card -->
-            <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-                <h2 class="text-2xl font-bold mb-4 text-indigo-600">Total Spend</h2>
-                <p id="totalSpendJune">June: Loading...</p>
-                <p id="totalSpendJuly">July: Loading...</p>
-                <p id="totalSpendAugust">August: Loading...</p>
-                <p id="totalSpendIncrease" class="text-green-500">Loading...</p>
-                <p class="mt-4 text-gray-600">Aligned with our growth strategy.</p>
-            </div>
-        </div>
+<body class="bg-gray-100">
 
-        <!-- Goals -->
-        <div class="bg-white p-6 rounded-lg shadow-md mt-8 border border-gray-200">
-            <h2 class="text-2xl font-bold mb-4 text-black">Goals</h2>
-            <p>Our goal is to increase revenue per user to $15 by the end of the year.</p>
+<!-- Navigation Bar -->
+<nav class="bg-white shadow">
+    <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="text-2xl font-bold text-gray-800">
+            <a href="#" class="hover:text-red-500">Turn It Up Productions</a>
         </div>
-        
-        <!-- Chart Controls -->
-        <div class="flex space-x-4 mt-8">
-            <button id="btnLast7Days" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" aria-pressed="false">
-                Last 7 Days
-            </button>
-            <button id="btnLast30Days" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" aria-pressed="false">
-                Last 30 Days
-            </button>
-            <button id="btnMonthToDate" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" aria-pressed="false">
-                Month to Date vs Last Year
-            </button>
-        </div>
-
-        <!-- Chart -->
-        <div class="mt-8">
-            <canvas id="performanceChart" aria-label="Performance Chart" role="img"></canvas>
+        <div class="flex space-x-4 text-gray-600">
+            <a href="#" class="hover:text-red-500">Home</a>
+            <a href="#" class="hover:text-red-500">Wedding DJ</a>
+            <a href="#" class="hover:text-red-500">Photo Booth</a>
+            <a href="#" class="hover:text-red-500">Reviews</a>
+            <a href="#" class="hover:text-red-500">Contact Us</a>
         </div>
     </div>
+</nav>
 
-    <!-- JavaScript -->
-    <script>
-        // Simulate fetching data from an API
-        function fetchData(endpoint) {
-            return new Promise((resolve) => {
-                console.log(`Fetching data from ${endpoint}`);
-                // Simulate network delay
-                setTimeout(() => {
-                    let data;
-                    if (endpoint === 'summary') {
-                        data = {
-                            adSpend: { June: 50000, July: 60000, August: 70000 },
-                            revenuePerUser: { June: 10, July: 12, August: 13 },
-                            leadUnitCost: { June: 5.00, July: 4.50, August: 4.00 },
-                            totalSpend: { June: 50000, July: 60000, August: 70000 }
-                        };
-                    } else if (endpoint === 'last7days') {
-                        data = {
-                            labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
-                            costPerUser: [5.2, 5.5, 5.7, 5.4, 5.6, 5.8, 5.9],
-                            revenuePerUser: [10.5, 11, 11.2, 11.5, 11.8, 12, 12.2],
-                            adSpend: [5000, 5200, 5400, 5600, 5800, 6000, 6200]
-                        };
-                    } else if (endpoint === 'last30days') {
-                        data = {
-                            labels: Array.from({length: 30}, (_, i) => `Day ${i + 1}`),
-                            costPerUser: [/* 30 data points */],
-                            revenuePerUser: [/* 30 data points */],
-                            adSpend: [/* 30 data points */]
-                        };
-                        // Generating sample data
-                        data.costPerUser = Array.from({length:30}, () => (Math.random() * (6 - 5) + 5).toFixed(2));
-                        data.revenuePerUser = Array.from({length:30}, () => (Math.random() * (14 - 10) + 10).toFixed(2));
-                        data.adSpend = Array.from({length:30}, (_, i) => 5000 + i * 200);
-                    } else if (endpoint === 'monthToDate') {
-                        data = {
-                            labels: ['June', 'July', 'August'],
-                            costPerUserThisYear: [5.5, 5.3, 5.2],
-                            revenuePerUserThisYear: [11.0, 12.0, 13.5],
-                            adSpendThisYear: [50000, 60000, 70000],
-                            costPerUserLastYear: [6.0, 5.8, 5.7],
-                            revenuePerUserLastYear: [10.0, 11.0, 12.0],
-                            adSpendLastYear: [45000, 55000, 65000]
-                        };
-                    }
-                    resolve(data);
-                }, 1000);
-            });
-        }
+<!-- Hero Section -->
+<section class="bg-cover bg-center" style="background-image: url('your-hero-image.jpg');">
+    <div class="bg-gray-900 bg-opacity-50">
+        <div class="container mx-auto px-6 py-32 text-center">
+            <h1 class="text-5xl font-bold text-white mb-4">DJ Entertainment for Weddings and Parties</h1>
+            <p class="text-xl text-white mb-8">Bay City - Midland - Saginaw</p>
+            <a href="#contact" class="bg-red-500 text-white px-6 py-3 rounded-full text-lg hover:bg-red-600">Request a Quote</a>
+        </div>
+    </div>
+</section>
 
-        // Fetch and display summary data
-        async function loadSummaryData() {
-            const data = await fetchData('summary');
+<!-- Special Offer -->
+<section class="bg-red-100 py-8">
+    <div class="container mx-auto px-6 text-center">
+        <h2 class="text-3xl font-semibold text-red-700 mb-4">Spring Into Action</h2>
+        <p class="text-lg text-red-600 mb-4">Book in May and we’ll donate to a local charity in your honor! Ask for details!</p>
+    </div>
+</section>
 
-            // Update Ad Spend Card
-            document.getElementById('adSpendJune').textContent = `June: $${data.adSpend.June.toLocaleString()}`;
-            document.getElementById('adSpendJuly').textContent = `July: $${data.adSpend.July.toLocaleString()}`;
-            document.getElementById('adSpendAugust').textContent = `August: $${data.adSpend.August.toLocaleString()}`;
-            const adSpendIncrease = data.adSpend.August - data.adSpend.June;
-            const adSpendIncreasePercent = ((adSpendIncrease / data.adSpend.June) * 100).toFixed(2);
-            document.getElementById('adSpendIncrease').textContent = `Increase from June to August: $${adSpendIncrease.toLocaleString()} (${adSpendIncreasePercent}%)`;
+<!-- About Section -->
+<section class="py-16">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800">About Turn It Up Productions</h2>
+        </div>
+        <div class="flex flex-wrap -mx-6">
+            <div class="w-full md:w-1/2 px-6 mb-10 md:mb-0">
+                <h3 class="text-2xl font-semibold mb-4">All Kinds of Parties!</h3>
+                <p class="text-gray-700 mb-6">From Weddings and Anniversary renewals, to graduation and birthday parties, we are your DJ entertainment connection in the Bay City, Midland, and Saginaw area. Got a Theme party? I'll jump right into the theme and rock my own costume! We can TURN IT UP at your next event!</p>
+                <h3 class="text-2xl font-semibold mb-4">Great Music</h3>
+                <p class="text-gray-700">Your Music. Your Way. We work with you to ensure your event has the vibe you want and we keep it clean. We've got the latest hits and they're radio edited to ensure everyone enjoys the music!</p>
+            </div>
+            <div class="w-full md:w-1/2 px-6">
+                <!-- Insert an image or slideshow here -->
+                <img src="your-image.jpg" alt="DJ at event" class="rounded-lg shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
 
-            // Update Revenue per Unique User Card
-            document.getElementById('revPerUserJune').textContent = `June: $${data.revenuePerUser.June}`;
-            document.getElementById('revPerUserJuly').textContent = `July: $${data.revenuePerUser.July}`;
-            document.getElementById('revPerUserAugust').textContent = `August: $${data.revenuePerUser.August}`;
-            const revPerUserIncrease = data.revenuePerUser.August - data.revenuePerUser.June;
-            const revPerUserIncreasePercent = ((revPerUserIncrease / data.revenuePerUser.June) * 100).toFixed(2);
-            document.getElementById('revPerUserIncrease').textContent = `Increase from June to August: $${revPerUserIncrease} (${revPerUserIncreasePercent}%)`;
+<!-- Services Section -->
+<section class="bg-gray-100 py-16">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800">Our Services</h2>
+        </div>
+        <div class="flex flex-wrap -mx-6">
+            <!-- Service 1 -->
+            <div class="w-full md:w-1/3 px-6 mb-10">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-2xl font-semibold mb-4">Unlimited DJ Reception</h3>
+                    <p class="text-gray-700">Enjoy an unforgettable reception with continuous music tailored to your tastes, ensuring a night you and your guests will never forget.</p>
+                </div>
+            </div>
+            <!-- Service 2 -->
+            <div class="w-full md:w-1/3 px-6 mb-10">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-2xl font-semibold mb-4">No Time Limit Photo Booth</h3>
+                    <p class="text-gray-700">Capture every moment with our unlimited photo booth service, providing fun props and instant prints for your guests all night long.</p>
+                </div>
+            </div>
+            <!-- Service 3 -->
+            <div class="w-full md:w-1/3 px-6 mb-10">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-2xl font-semibold mb-4">Ceremony Coverage</h3>
+                    <p class="text-gray-700">Ensure every word and note is heard with our professional ceremony sound services, including microphones and music coordination.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-            // Update Lead Unit Cost Card
-            document.getElementById('leadCostJune').textContent = `June: $${data.leadUnitCost.June.toFixed(2)}`;
-            document.getElementById('leadCostJuly').textContent = `July: $${data.leadUnitCost.July.toFixed(2)}`;
-            document.getElementById('leadCostAugust').textContent = `August: $${data.leadUnitCost.August.toFixed(2)}`;
-            const leadCostDecrease = data.leadUnitCost.June - data.leadUnitCost.August;
-            const leadCostDecreasePercent = ((leadCostDecrease / data.leadUnitCost.June) * 100).toFixed(2);
-            document.getElementById('leadCostDecrease').textContent = `Decrease from June to August: $${leadCostDecrease.toFixed(2)} (-${leadCostDecreasePercent}%)`;
+<!-- Reviews Section -->
+<section class="py-16">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800">Why Choose Us?</h2>
+        </div>
+        <div class="space-y-8">
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-2xl font-semibold mb-4">Well - We Turn It UP!</h3>
+                <p class="text-gray-700">Want the best party? Get a Party DJ that's energetic and loves music - All kinds of music! We'll keep the dance floor rockin' until they kick us out!</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-2xl font-semibold mb-4">Planning a Wedding or Event?</h3>
+                <p class="text-gray-700">The flow of your event is only as good as your DJ entertainment. We've got this! So you can relax and have fun. It's time to TURN IT UP.</p>
+            </div>
+            <!-- Additional reviews can be added here -->
+        </div>
+    </div>
+</section>
 
-            // Update Total Spend Card
-            document.getElementById('totalSpendJune').textContent = `June: $${data.totalSpend.June.toLocaleString()}`;
-            document.getElementById('totalSpendJuly').textContent = `July: $${data.totalSpend.July.toLocaleString()}`;
-            document.getElementById('totalSpendAugust').textContent = `August: $${data.totalSpend.August.toLocaleString()}`;
-            const totalSpendIncrease = data.totalSpend.August - data.totalSpend.June;
-            const totalSpendIncreasePercent = ((totalSpendIncrease / data.totalSpend.June) * 100).toFixed(2);
-            document.getElementById('totalSpendIncrease').textContent = `Total Increase: $${totalSpendIncrease.toLocaleString()} (${totalSpendIncreasePercent}%)`;
-        }
+<!-- Contact Form -->
+<section id="contact" class="bg-gray-100 py-16">
+    <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800">Connect With Us</h2>
+        </div>
+        <div class="flex flex-col md:flex-row -mx-6">
+            <div class="w-full md:w-1/2 px-6 mb-6 md:mb-0">
+                <h3 class="text-2xl font-semibold mb-4">Live Chat</h3>
+                <!-- Live chat embed code or description -->
+                <p class="text-gray-700">Chat with us now!</p>
+            </div>
+            <div class="w-full md:w-1/2 px-6">
+                <h3 class="text-2xl font-semibold mb-4">Send Message</h3>
+                <form id="contactForm">
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700">Name*</label>
+                        <input type="text" id="name" name="name" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="phone" class="block text-gray-700">Phone*</label>
+                        <input type="tel" id="phone" name="phone" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-gray-700">Email*</label>
+                        <input type="email" id="email" name="email" required class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700">Services Interested In*</label>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="services" value="Unlimited DJ Reception" class="form-checkbox text-red-500">
+                                    <span class="ml-2">Unlimited DJ Reception</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="services" value="No Time Limit Photo Booth" class="form-checkbox text-red-500">
+                                    <span class="ml-2">No Time Limit Photo Booth</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="services" value="Ceremony Coverage" class="form-checkbox text-red-500">
+                                    <span class="ml-2">Ceremony Coverage</span>
+                                </label>
+                            </div>
+                            <div>
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" name="services" value="Other" class="form-checkbox text-red-500">
+                                    <span class="ml-2">Other</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="block text-gray-700">Message</label>
+                        <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"></textarea>
+                    </div>
+                    <button type="submit" id="submitButton" class="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600">Get My Party Started!</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 
-        // Initialize the chart
-        let performanceChart;
+<!-- Footer -->
+<footer class="bg-white py-6">
+    <div class="container mx-auto px-6 text-center text-gray-600">
+        <p>Contact us today! 989.326.1167 | <a href="mailto:turnitupproductions989@gmail.com" class="text-red-500 hover:underline">turnitupproductions989@gmail.com</a></p>
+        <p>© 2019 Turn It Up Productions - All Rights Reserved.</p>
+    </div>
+</footer>
 
-        async function loadChartData(endpoint) {
-            const data = await fetchData(endpoint);
+<!-- JavaScript -->
+<script>
+    // Handle contact form submission
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
 
-            let datasets = [];
+        var submitButton = document.getElementById('submitButton');
+        submitButton.disabled = true;
+        var originalButtonText = submitButton.textContent;
+        submitButton.textContent = 'Submitting...';
 
-            if (endpoint === 'last7days' || endpoint === 'last30days') {
-                datasets = [
-                    {
-                        type: 'bar',
-                        label: 'Cost per Unique User',
-                        data: data.costPerUser,
-                        backgroundColor: '#1f2937', // Gray-800
-                        yAxisID: 'y',
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Revenue per Unique User',
-                        data: data.revenuePerUser,
-                        backgroundColor: '#3b82f6', // Blue-500
-                        yAxisID: 'y',
-                    },
-                    {
-                        type: 'line',
-                        label: 'Ad Spend',
-                        data: data.adSpend,
-                        borderColor: '#6366f1', // Indigo-500
-                        backgroundColor: '#6366f1',
-                        fill: false,
-                        yAxisID: 'y1',
-                        tension: 0.4,
-                        pointHoverRadius: 7,
-                    }
-                ];
-            } else if (endpoint === 'monthToDate') {
-                datasets = [
-                    {
-                        type: 'bar',
-                        label: 'Cost per Unique User (This Year)',
-                        data: data.costPerUserThisYear,
-                        backgroundColor: '#1f2937', // Gray-800
-                        yAxisID: 'y',
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Revenue per Unique User (This Year)',
-                        data: data.revenuePerUserThisYear,
-                        backgroundColor: '#3b82f6', // Blue-500
-                        yAxisID: 'y',
-                    },
-                    {
-                        type: 'line',
-                        label: 'Ad Spend (This Year)',
-                        data: data.adSpendThisYear,
-                        borderColor: '#6366f1', // Indigo-500
-                        backgroundColor: '#6366f1',
-                        fill: false,
-                        yAxisID: 'y1',
-                        tension: 0.4,
-                        pointHoverRadius: 7,
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Cost per Unique User (Last Year)',
-                        data: data.costPerUserLastYear,
-                        backgroundColor: '#9ca3af', // Gray-400
-                        yAxisID: 'y',
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Revenue per Unique User (Last Year)',
-                        data: data.revenuePerUserLastYear,
-                        backgroundColor: '#60a5fa', // Light Blue-400
-                        yAxisID: 'y',
-                    },
-                    {
-                        type: 'line',
-                        label: 'Ad Spend (Last Year)',
-                        data: data.adSpendLastYear,
-                        borderColor: '#a5b4fc', // Indigo-300
-                        backgroundColor: '#a5b4fc',
-                        fill: false,
-                        yAxisID: 'y1',
-                        tension: 0.4,
-                        pointHoverRadius: 7,
-                    }
-                ];
-            }
-
-            const chartData = {
-                labels: data.labels,
-                datasets: datasets
-            };
-
-            if (performanceChart) {
-                performanceChart.data = chartData;
-                performanceChart.update();
-            } else {
-                const ctx = document.getElementById('performanceChart').getContext('2d');
-                performanceChart = new Chart(ctx, {
-                    data: chartData,
-                    options: {
-                        responsive: true,
-                        interaction: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        plugins: {
-                            legend: {
-                                labels: {
-                                    color: '#000'
-                                }
-                            },
-                            tooltip: {
-                                mode: 'index',
-                                intersect: false,
-                                enabled: true,
-                                callbacks: {
-                                    label: function(context) {
-                                        let label = context.dataset.label || '';
-                                        if (label) {
-                                            label += ': ';
-                                        }
-                                        if (context.parsed.y !== null) {
-                                            label += '$' + context.parsed.y;
-                                        }
-                                        return label;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                type: 'linear',
-                                display: true,
-                                position: 'left',
-                                ticks: {
-                                    color: '#000'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Cost/Revenue per User',
-                                    color: '#000'
-                                }
-                            },
-                            y1: {
-                                type: 'linear',
-                                display: true,
-                                position: 'right',
-                                grid: {
-                                    drawOnChartArea: false,
-                                },
-                                ticks: {
-                                    color: '#000'
-                                },
-                                title: {
-                                    display: true,
-                                    text: 'Ad Spend',
-                                    color: '#000'
-                                }
-                            },
-                            x: {
-                                ticks: {
-                                    color: '#000'
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
-        // Button Event Handlers
-        const btnLast7Days = document.getElementById('btnLast7Days');
-        const btnLast30Days = document.getElementById('btnLast30Days');
-        const btnMonthToDate = document.getElementById('btnMonthToDate');
-
-        btnLast7Days.addEventListener('click', async function() {
-            console.log('Last 7 Days button clicked');
-            const originalText = btnLast7Days.textContent;
-            btnLast7Days.textContent = 'Loading...';
-            btnLast7Days.disabled = true;
-            await loadChartData('last7days');
-            btnLast7Days.textContent = originalText;
-            btnLast7Days.disabled = false;
+        // Log form submission
+        console.log('Form submitted:', {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            email: document.getElementById('email').value,
+            services: Array.from(document.querySelectorAll('input[name="services"]:checked')).map(el => el.value),
+            message: document.getElementById('message').value
         });
 
-        btnLast30Days.addEventListener('click', async function() {
-            console.log('Last 30 Days button clicked');
-            const originalText = btnLast30Days.textContent;
-            btnLast30Days.textContent = 'Loading...';
-            btnLast30Days.disabled = true;
-            await loadChartData('last30days');
-            btnLast30Days.textContent = originalText;
-            btnLast30Days.disabled = false;
-        });
+        // Simulate an API call
+        setTimeout(function() {
+            // Simulate a server response
+            alert('Thank you for your message! We will get back to you soon.');
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+            document.getElementById('contactForm').reset();
+        }, 2000);
+    });
+</script>
 
-        btnMonthToDate.addEventListener('click', async function() {
-            console.log('Month to Date vs Last Year button clicked');
-            const originalText = btnMonthToDate.textContent;
-            btnMonthToDate.textContent = 'Loading...';
-            btnMonthToDate.disabled = true;
-            await loadChartData('monthToDate');
-            btnMonthToDate.textContent = originalText;
-            btnMonthToDate.disabled = false;
-        });
-
-        // Load initial data
-        loadSummaryData();
-        loadChartData('last7days');
-    </script>
 </body>
 </html>
