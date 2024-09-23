@@ -2,196 +2,224 @@
 <html>
 <head>
   <title>Answers to Your Questions from Our Zoom Call</title>
+  <meta charset="UTF-8">
+  <!-- Include Tailwind CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body style="margin:0; padding:0; background-color:#f7fafc; font-family:Arial, sans-serif; color:#2d3748;">
+<body class="bg-gray-100 font-sans text-gray-800">
 
   <!-- Preheader Text -->
-  <div style="display:none; font-size:1px; color:#f7fafc; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;">
+  <span class="hidden" style="display:none !important; visibility:hidden; mso-hide:all;">
     We have answered your questions from our Zoom call. Read more inside!
-  </div>
+  </span>
 
   <!-- Container Table -->
-  <table align="center" border="0" cellpadding="0" cellspacing="0" width="600" style="border-collapse:collapse; background-color:#ffffff; margin-top:20px;">
-    
+  <table align="center" class="w-full max-w-3xl mx-auto bg-white mt-5" cellpadding="0" cellspacing="0" border="0">
+
     <!-- Header -->
     <tr>
-      <td align="center" style="background-color:#000000; padding:30px 0 30px 0;">
-        <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/LIGHTBULB+360+HEX+WHITE.png" alt="Course Creator 360 Logo" width="150" style="display:block;">
+      <td align="center" class="bg-black p-8">
+        <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/LIGHTBULB+360+HEX+WHITE.png" alt="Course Creator 360 Logo" class="mx-auto" style="width:150px;">
       </td>
     </tr>
-    
+
     <!-- Content -->
     <tr>
-      <td style="padding:40px 30px 30px 30px;">
+      <td class="p-8">
+
         <!-- Main Heading -->
-        <h1 style="color:#e53e3e; font-size:24px; margin-bottom:20px;">Answers to Your Questions</h1>
-        <p style="margin:0;">Hi [Recipient's Name],</p>
-        <p style="margin-top:15px;">It was great speaking with you earlier. As promised, here are the answers to the questions you asked about Course Creator 360:</p>
+        <table width="100%">
+          <tr>
+            <td>
+              <p class="text-red-600 text-2xl font-bold mb-5">Answers to Your Questions</p>
+              <p>Hi [Recipient's Name],</p>
+              <p class="mt-4">It was great speaking with you earlier. As promised, here are the answers to the questions you asked about Course Creator 360:</p>
+            </td>
+          </tr>
+        </table>
+
       </td>
     </tr>
-    
-    <!-- Sections -->
+
     <!-- Section 1 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #e2e8f0; margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">1. Shopify Integration</h2>
-              <p style="font-weight:bold; margin:0;">Can products from Shopify and courses on Course Creator 360 be purchased together in one checkout?</p>
-              <p style="color:#4a5568; margin-top:10px;">Currently, combining Shopify products and CC360 courses into a single unified checkout isn't supported. Customers need to complete separate checkouts: one on your Shopify store for physical products and another on CC360 for courses or digital products.</p>
-              
-              <p style="font-weight:bold; margin-top:20px;">How does inventory reconcile if a kit is sold along with a course?</p>
-              <p style="color:#4a5568; margin-top:10px;">Real-time inventory synchronization during the CC360 checkout process isn't available by default. However, you can use webhooks to send data to or from Course Creator 360 automations. If someone checks out a product in Shopify, you can set up an automation that grants access to that user to the course. This allows you to link physical product sales in Shopify with course access in CC360, providing a seamless experience for your customers.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">1. Shopify Integration</p>
+              <p class="font-bold">Can products from Shopify and courses on Course Creator 360 be purchased together in one checkout?</p>
+              <p class="text-gray-700 mt-2">Currently, combining Shopify products and CC360 courses into a single unified checkout isn't supported. Customers need to complete separate checkouts: one on your Shopify store for physical products and another on CC360 for courses or digital products.</p>
+
+              <p class="font-bold mt-5">How does inventory reconcile if a kit is sold along with a course?</p>
+              <p class="text-gray-700 mt-2">Real-time inventory synchronization during the CC360 checkout process isn't available by default. However, you can use webhooks to send data to or from Course Creator 360 automations. If someone checks out a product in Shopify, you can set up an automation that grants access to that user to the course. This allows you to link physical product sales in Shopify with course access in CC360, providing a seamless experience for your customers.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Section 2 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #e2e8f0; margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">2. Anti-Piracy Measures</h2>
-              <p style="font-weight:bold; margin:0;">What anti-piracy measures are in place on the Course Creator 360 platform?</p>
-              <p style="color:#4a5568; margin-top:10px;">CC360 provides basic content protection by requiring users to log in to access course materials. It doesn't offer advanced Digital Rights Management (DRM) features or encryption specifically designed to prevent piracy.</p>
-              
-              <p style="font-weight:bold; margin-top:20px;">Can the system detect screen recording or prevent piracy (e.g., through OBS or other screen recording tools)?</p>
-              <p style="color:#4a5568; margin-top:10px;">No, CC360 doesn't have the capability to detect or prevent screen recording through tools like OBS.</p>
-              
-              <p style="font-weight:bold; margin-top:20px;">What support is available if the course content gets pirated? Can Course Creator 360 assist with DMCA takedowns or any other anti-piracy enforcement?</p>
-              <p style="color:#4a5568; margin-top:10px;">CC360 doesn't provide direct support for anti-piracy enforcement or assistance with DMCA takedown notices. You would need to handle detection and takedown requests independently or through third-party services.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">2. Anti-Piracy Measures</p>
+              <p class="font-bold">What anti-piracy measures are in place on the Course Creator 360 platform?</p>
+              <p class="text-gray-700 mt-2">CC360 provides basic content protection by requiring users to log in to access course materials. It doesn't offer advanced Digital Rights Management (DRM) features or encryption specifically designed to prevent piracy.</p>
+
+              <p class="font-bold mt-5">Can the system detect screen recording or prevent piracy (e.g., through OBS or other screen recording tools)?</p>
+              <p class="text-gray-700 mt-2">No, CC360 doesn't have the capability to detect or prevent screen recording through tools like OBS.</p>
+
+              <p class="font-bold mt-5">What support is available if the course content gets pirated? Can Course Creator 360 assist with DMCA takedowns or any other anti-piracy enforcement?</p>
+              <p class="text-gray-700 mt-2">CC360 doesn't provide direct support for anti-piracy enforcement or assistance with DMCA takedown notices. You would need to handle detection and takedown requests independently or through third-party services.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Section 3 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #e2e8f0; margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">3. Affiliate Program</h2>
-              <p style="font-weight:bold; margin:0;">Can affiliate commission rates be customized on a per-affiliate basis?</p>
-              <p style="color:#4a5568; margin-top:10px;">Yes, you can set custom commission rates for individual affiliates within our affiliate management system.</p>
-              
-              <p style="font-weight:bold; margin-top:20px;">Does the affiliate program set a cookie for tracking purchases over multiple sessions, or is it only within the same session?</p>
-              <p style="color:#4a5568; margin-top:10px;">CC360 uses cookies to track affiliate referrals, and you can set the cookie duration according to your preference (e.g., 30 days).</p>
-              
-              <p style="font-weight:bold; margin-top:20px;">What is the onboarding process for affiliates, and can you set up an affiliate on their behalf?</p>
-              <p style="color:#4a5568; margin-top:10px;">Affiliates can sign up through a custom sign-up page, or you can manually add them to the system on their behalf.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">3. Affiliate Program</p>
+              <p class="font-bold">Can affiliate commission rates be customized on a per-affiliate basis?</p>
+              <p class="text-gray-700 mt-2">Yes, you can set custom commission rates for individual affiliates within our affiliate management system.</p>
+
+              <p class="font-bold mt-5">Does the affiliate program set a cookie for tracking purchases over multiple sessions, or is it only within the same session?</p>
+              <p class="text-gray-700 mt-2">CC360 uses cookies to track affiliate referrals, and you can set the cookie duration according to your preference (e.g., 30 days).</p>
+
+              <p class="font-bold mt-5">What is the onboarding process for affiliates, and can you set up an affiliate on their behalf?</p>
+              <p class="text-gray-700 mt-2">Affiliates can sign up through a custom sign-up page, or you can manually add them to the system on their behalf.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Section 4 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #e2e8f0; margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">4. Data Security and Hosting</h2>
-              <p style="font-weight:bold; margin:0;">Where are Course Creator 360's servers located? Are they in the United States or elsewhere?</p>
-              <p style="color:#4a5568; margin-top:10px;">Our infrastructure is primarily hosted on Amazon Web Services (AWS) cloud servers located in the United States.</p>
-              
-              <p style="font-weight:bold; margin-top:20px;">What measures are in place to protect data, especially considering your audience is tech-savvy and may attempt to probe security vulnerabilities?</p>
-              <p style="color:#4a5568; margin-top:10px;">We employ multiple security measures, including data encryption, secure data centers, regular security updates, and access controls to protect user data.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">4. Data Security and Hosting</p>
+              <p class="font-bold">Where are Course Creator 360's servers located? Are they in the United States or elsewhere?</p>
+              <p class="text-gray-700 mt-2">Our infrastructure is primarily hosted on Amazon Web Services (AWS) cloud servers located in the United States.</p>
+
+              <p class="font-bold mt-5">What measures are in place to protect data, especially considering your audience is tech-savvy and may attempt to probe security vulnerabilities?</p>
+              <p class="text-gray-700 mt-2">We employ multiple security measures, including data encryption, secure data centers, regular security updates, and access controls to protect user data.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Section 5 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #e2e8f0; margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">5. Community Moderation</h2>
-              <p style="font-weight:bold; margin:0;">Does the platform offer any auto-moderation features for community posts (e.g., to automatically block or censor offensive words)?</p>
-              <p style="color:#4a5568; margin-top:10px;">Currently, our community feature offers basic moderation tools but doesn't include advanced auto-moderation capabilities like automatic filtering or censoring of offensive language.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">5. Community Moderation</p>
+              <p class="font-bold">Does the platform offer any auto-moderation features for community posts (e.g., to automatically block or censor offensive words)?</p>
+              <p class="text-gray-700 mt-2">Currently, our community feature offers basic moderation tools but doesn't include advanced auto-moderation capabilities like automatic filtering or censoring of offensive language.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Section 6 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #e2e8f0; margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">6. Video Hosting</h2>
-              <p style="font-weight:bold; margin:0;">Who is the video host for Course Creator 360, and what anti-piracy measures are in place specific to video content?</p>
-              <p style="color:#4a5568; margin-top:10px;">We use AWS for hosting video content uploaded directly to the platform. CC360 doesn't support advanced DRM features to prevent downloading or screen recording of video content.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">6. Video Hosting</p>
+              <p class="font-bold">Who is the video host for Course Creator 360, and what anti-piracy measures are in place specific to video content?</p>
+              <p class="text-gray-700 mt-2">We use AWS for hosting video content uploaded directly to the platform. CC360 doesn't support advanced DRM features to prevent downloading or screen recording of video content.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Section 7 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom:1px solid #e2e8f0; margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">7. Two-Factor Authentication</h2>
-              <p style="font-weight:bold; margin:0;">Does the platform offer two-factor authentication for account security?</p>
-              <p style="color:#4a5568; margin-top:10px;">Yes, CC360 natively supports two-factor authentication (2FA) for user accounts. Users can enable 2FA in their account settings to enhance account security.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">7. Two-Factor Authentication</p>
+              <p class="font-bold">Does the platform offer two-factor authentication for account security?</p>
+              <p class="text-gray-700 mt-2">Yes, CC360 natively supports two-factor authentication (2FA) for user accounts. Users can enable 2FA in their account settings to enhance account security.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Section 8 -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top:30px; padding-bottom:20px;">
+      <td class="px-8 pb-8">
+        <table width="100%" class="border-b border-gray-300 mt-8 pb-5">
           <tr>
             <td>
-              <h2 style="color:#e53e3e; font-size:20px; margin-bottom:15px;">8. API Integrations</h2>
-              <p style="font-weight:bold; margin:0;">Does Course Creator 360 offer API integration for external systems?</p>
-              <p style="color:#4a5568; margin-top:10px;">Yes, we provide a REST API that allows developers to integrate external systems with the platform. API documentation is available within your CC360 account under the "Settings" section.</p>
+              <p class="text-red-600 text-xl font-bold mb-4">8. API Integrations</p>
+              <p class="font-bold">Does Course Creator 360 offer API integration for external systems?</p>
+              <p class="text-gray-700 mt-2">Yes, we provide a REST API that allows developers to integrate external systems with the platform. API documentation is available within your CC360 account under the "Settings" section.</p>
             </td>
           </tr>
         </table>
       </td>
     </tr>
-    
+
     <!-- Closing -->
     <tr>
-      <td style="padding:0 30px 30px 30px;">
-        <p style="margin-top:30px;">Feel free to reach out if you have any more questions or need further assistance.</p>
-        <p style="margin-top:15px;">Best regards,<br>Jack</p>
+      <td class="px-8 pb-8">
+        <p class="mt-8">Feel free to reach out if you have any more questions or need further assistance.</p>
+        <p class="mt-4">Best regards,<br>Jack</p>
       </td>
     </tr>
-    
+
     <!-- Call-to-Action Button -->
     <tr>
-      <td align="center" style="padding:0 30px 30px 30px;">
-        <p style="margin-top:30px;">If that answers all of your questions, you can proceed to purchase the Annual Elite Plan:</p>
-        <a href="https://checkout.coursecreator360.com/b/fZe9BpgeSc7s0ogaEP" style="background-color:#e53e3e; color:#ffffff; padding:15px 25px; text-decoration:none; border-radius:5px; font-size:16px; display:inline-block; margin-top:15px;">Purchase Annual Elite Plan</a>
+      <td align="center" class="px-8 pb-8">
+        <p class="mt-8">If that answers all of your questions, you can proceed to purchase the Annual Elite Plan:</p>
+        <!-- Button -->
+        <a href="https://checkout.coursecreator360.com/b/fZe9BpgeSc7s0ogaEP" target="_blank" id="cta-button" onclick="changeButtonText()" class="inline-block mt-4 px-6 py-3 bg-red-600 text-white text-base font-semibold rounded-md">Purchase Annual Elite Plan</a>
       </td>
     </tr>
-    
+
     <!-- Footer -->
     <tr>
-      <td align="center" style="background-color:#f7fafc; color:#718096; font-size:12px; padding:20px;">
-        &copy; 2024 Course Creator 360. All rights reserved.
+      <td align="center" class="bg-gray-100 text-gray-600 text-xs py-5">
+        &copy; 2024 Course Creator 360. All rights reserved.<br>
+        1234 Course Creator Lane, City, State, ZIP Code<br>
+        <a href="https://yourdomain.com/unsubscribe" class="text-blue-600 underline">Unsubscribe</a>
       </td>
     </tr>
-    
+
   </table>
+
+  <!-- JavaScript -->
+  <script>
+    function changeButtonText() {
+      var button = document.getElementById("cta-button");
+      button.innerText = "Processing...";
+      console.log("Button clicked, processing purchase.");
+      // Simulate API response delay
+      setTimeout(function() {
+        button.innerText = "Purchase Annual Elite Plan";
+        console.log("Response received.");
+      }, 2000);
+    }
+  </script>
+
 </body>
 </html>
