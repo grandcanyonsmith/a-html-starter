@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Replacement Example with Tailwind CSS</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- Main Image with Overlay -->
+<div class="flex justify-center mt-10">
+    <div class="relative" id="imageContainer">
+        <img id="mainImage" src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/20240608-183351_course_module_img_with_text_1.png" alt="Image" class="w-full h-full object-cover cursor-pointer">
+        <!-- Overlay -->
+        <div id="imageOverlay" class="absolute bottom-0 left-0 w-full p-4">
+            <p id="overlayText" class="text-center break-words">Default Text</p>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div id="imageModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Background overlay -->
+    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+      <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+    </div>
+
+    <!-- Modal content -->
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <div class="inline-block overflow-hidden text-left align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
+      <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
+        <!-- Close Button -->
+        <div class="flex justify-end">
+          <button type="button" class="text-gray-400 bg-transparent hover:text-gray-500 focus:outline-none" id="closeModal">
+            <span class="text-2xl">&times;</span>
+          </button>
+        </div>
+        <h2 class="mb-4 text-xl font-bold text-gray-700">Replace Image</h2>
+
+        <!-- Overlay Settings -->
+        <div class="mb-4">
+            <h2 class="mb-2 text-lg font-semibold text-gray-700">Overlay Settings</h2>
+            <!-- Live Preview -->
+            <div id="livePreview" class="relative mb-4 border rounded overflow-hidden">
+                <img id="previewImage" src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/20240608-183351_course_module_img_with_text_1.png" alt="Preview Image" class="w-full h-full object-cover">
+                <!-- Overlay -->
+                <div id="previewOverlay" class="absolute bottom-0 left-0 w-full p-2">
+                    <p id="previewOverlayText" class="text-center break-words">Default Text</p>
+                </div>
+            </div>
+            <!-- Overlay Inputs -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label for="overlayTextInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Text</label>
+                    <textarea id="overlayTextInput" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter overlay text"></textarea>
+                </div>
+                <div>
+                    <label for="overlayColorInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Color</label>
+                    <input type="color" id="overlayColorInput" class="w-full h-10 border rounded focus:outline-none">
+                </div>
+                <div>
+                    <label for="overlayOpacityInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Opacity</label>
+                    <input type="range" id="overlayOpacityInput" class="w-full h-10" min="0" max="1" step="0.01" value="1">
+                </div>
+                <div>
+                    <label for="textColorInput" class="block mb-1 text-sm font-medium text-gray-700">Text Color</label>
+                    <input type="color" id="textColorInput" class="w-full h-10 border rounded focus:outline-none">
+                </div>
+                <div>
+                    <label for="fontSizeInput" class="block mb-1 text-sm font-medium text-gray-700">Font Size</label>
+                    <input type="number" id="fontSizeInput" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" min="8" max="200" step="1" value="132">
+                </div>
+                <div>
+                    <label for="overlayHeightInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Height (%)</label>
+                    <input type="number" id="overlayHeightInput" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" min="10" max="100" step="1" value="33">
+                </div>
+                <div>
+                    <label for="textAlignmentSelect" class="block mb-1 text-sm font-medium text-gray-700">Text Alignment</label>
+                    <select id="textAlignmentSelect" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="text-left">Left</option>
+                        <option value="text-center" selected>Center</option>
+                        <option value="text-right">Right</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="fontFamilySelect" class="block mb-1 text-sm font-medium text-gray-700">Font Family</label>
+                    <select id="fontFamilySelect" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="font-sans" selected>Sans-serif</option>
+                        <option value="font-serif">Serif</option>
+                        <option value="font-mono">Monospace</option>
+                    </select>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="boldCheckbox" class="form-checkbox h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Bold</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" id="italicCheckbox" class="form-checkbox h-5 w-5 text-blue-600">
+                        <span class="ml-2 text-gray-700">Italic</span>
+                    </label>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button id="updateTextButton" class="px-4 py-2 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Apply Changes</button>
+                <button id="exportImageButton" class="px-4 py-2 mt-2 text-white bg-green-500 rounded hover:bg-green-600">Export Image</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="mb-4 border-b border-gray-200">
+          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Upload">Upload Image</a>
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Camera">Take Photo</a>
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="URL">Upload via URL</a>
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Unsplash">Search Unsplash</a>
+          </nav>
+        </div>
+
+        <!-- Tab Contents -->
+        <div id="Upload" class="tabcontent">
+          <h3 class="mb-2 text-lg font-semibold text-gray-700">Upload Image</h3>
+          <input type="file" accept="image/*" id="uploadInput" class="block w-full text-sm text-gray-700 file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+        </div>
+
+        <div id="Camera" class="tabcontent hidden">
+          <h3 class="mb-2 text-lg font-semibold text-gray-700">Take Photo</h3>
+          <video id="video" width="320" height="240" autoplay class="border"></video>
+          <div id="cameraErrorMessage" class="mt-2 text-red-500"></div>
+          <div class="mt-4">
+            <button id="snap" class="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600">Snap Photo</button>
+            <button id="usePhoto" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">Use Photo</button>
+          </div>
+          <canvas id="canvas" width="320" height="240" class="hidden mt-4 border"></canvas>
+        </div>
+
+        <div id="URL" class="tabcontent hidden">
+          <h3 class="mb-2 text-lg font-semibold text-gray-700">Upload via URL</h3>
+          <div class="flex">
+            <input type="text" id="urlInput" placeholder="Enter Image URL" class="flex-grow w-full px-3 py-2 mr-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button id="urlButton" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Load Image</button>
+          </div>
+        </div>
+
+        <div id="Unsplash" class="tabcontent hidden">
+          <h3 class="mb-2 text-lg font-semibold text-gray-700">Search Unsplash</h3>
+          <div class="flex">
+            <input type="text" id="unsplashQuery" placeholder="Search for images" class="flex-grow w-full px-3 py-2 mr-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button id="unsplashSearch" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Search</button>
+          </div>
+          <div id="unsplashResults" class="grid grid-cols-3 gap-4 mt-4"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+'use strict';
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Unsplash Access Key
+    const accessKey = 'y-eSCtciq7d7GZrzIJ2xbH2SXze_AcJOxykieEZP53I';
+
+    // Get elements
+    const modal = document.getElementById("imageModal");
+    const mainImage = document.getElementById("mainImage");
+    const imageContainer = document.getElementById("imageContainer");
+    const overlayTextInput = document.getElementById('overlayTextInput');
+    const overlayColorInput = document.getElementById('overlayColorInput');
+    const overlayOpacityInput = document.getElementById('overlayOpacityInput');
+    const textColorInput = document.getElementById('textColorInput');
+    const fontSizeInput = document.getElementById('fontSizeInput');
+    const overlayText = document.getElementById('overlayText');
+    const imageOverlay = document.getElementById('imageOverlay');
+    const updateTextButton = document.getElementById('updateTextButton');
+    const exportImageButton = document.getElementById('exportImageButton');
+    const closeModalButton = document.getElementById("closeModal");
+    const tabLinks = document.querySelectorAll('.tablinks');
+    const uploadInput = document.getElementById('uploadInput');
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+    const snapButton = document.getElementById('snap');
+    const usePhotoButton = document.getElementById('usePhoto');
+    const urlButton = document.getElementById('urlButton');
+    const unsplashSearchButton = document.getElementById('unsplashSearch');
+    const unsplashResultsDiv = document.getElementById('unsplashResults');
+    const overlayHeightInput = document.getElementById('overlayHeightInput');
+    const textAlignmentSelect = document.getElementById('textAlignmentSelect');
+    const fontFamilySelect = document.getElementById('fontFamilySelect');
+    const boldCheckbox = document.getElementById('boldCheckbox');
+    const italicCheckbox = document.getElementById('italicCheckbox');
+    const livePreview = document.getElementById('livePreview');
+    const previewImage = document.getElementById('previewImage');
+    const previewOverlay = document.getElementById('previewOverlay');
+    const previewOverlayText = document.getElementById('previewOverlayText');
+
+    let stream;
+
+    // Initialize default overlay settings
+    let overlayColor = '#325AE5'; // default color
+    let overlayOpacity = 1; // default opacity
+    let textColor = '#FFFFFF'; // default text color (white)
+    let fontSize = 132; // default font size
+    let overlayHeightPercentage = 33; // default overlay height percentage
+    let textAlignment = 'text-center'; // default text alignment
+    let fontFamily = 'font-sans'; // default font family
+    let isBold = false; // default text bold
+    let isItalic = false; // default text italic
+
+    // Initialize inputs
+    overlayColorInput.value = overlayColor;
+    overlayOpacityInput.value = overlayOpacity;
+    textColorInput.value = textColor;
+    fontSizeInput.value = fontSize;
+    overlayHeightInput.value = overlayHeightPercentage;
+    textAlignmentSelect.value = textAlignment;
+    fontFamilySelect.value = fontFamily;
+    boldCheckbox.checked = isBold;
+    italicCheckbox.checked = isItalic;
+
+    // Set initial styles for main image overlay
+    overlayText.style.fontSize = fontSize + 'px';
+    imageOverlay.style.background = `linear-gradient(to top, ${hexToRgba(overlayColor, overlayOpacity)}, transparent)`;
+    imageOverlay.style.height = overlayHeightPercentage + '%';
+    overlayText.style.color = textColor;
+    overlayText.className = `${textAlignment} ${fontFamily} ${isBold ? 'font-bold' : ''} ${isItalic ? 'italic' : ''} break-words`;
+
+    // Set initial styles for preview overlay
+    previewOverlayText.textContent = overlayText.textContent;
+    previewOverlayText.style.fontSize = fontSize + 'px';
+    previewOverlay.style.background = `linear-gradient(to top, ${hexToRgba(overlayColor, overlayOpacity)}, transparent)`;
+    previewOverlay.style.height = overlayHeightPercentage + '%';
+    previewOverlayText.style.color = textColor;
+    previewOverlayText.className = `${textAlignment} ${fontFamily} ${isBold ? 'font-bold' : ''} ${isItalic ? 'italic' : ''} break-words`;
+
+    let originalImageWidth;
+    let originalImageHeight;
+
+    // Main image onload
+    mainImage.onload = () => {
+        const width = mainImage.naturalWidth;
+        const height = mainImage.naturalHeight;
+        console.log('Main image dimensions:', width, height);
+        if (!originalImageWidth) {
+            originalImageWidth = width;
+            originalImageHeight = height;
+            imageContainer.style.width = originalImageWidth + 'px';
+            imageContainer.style.height = originalImageHeight + 'px';
+        } else {
+            imageContainer.style.width = originalImageWidth + 'px';
+            imageContainer.style.height = originalImageHeight + 'px';
+        }
+        mainImage.style.width = '100%';
+        mainImage.style.height = '100%';
+    };
+
+    // Main image click
+    mainImage.addEventListener('click', () => {
+        console.log('Main image clicked');
+        modal.classList.remove("hidden");
+        // Initialize inputs with current values
+        overlayTextInput.value = overlayText.textContent || '';
+        overlayColorInput.value = overlayColor;
+        overlayOpacityInput.value = overlayOpacity;
+        textColorInput.value = textColor;
+        fontSizeInput.value = fontSize;
+        overlayHeightInput.value = overlayHeightPercentage;
+        textAlignmentSelect.value = textAlignment;
+        fontFamilySelect.value = fontFamily;
+        boldCheckbox.checked = isBold;
+        italicCheckbox.checked = isItalic;
+        // Set preview image source
+        previewImage.src = mainImage.src;
+        // Update preview
+        updatePreview();
+    });
+
+    // Update Preview function
+    function updatePreview() {
+        console.log('Updating live preview');
+        // Update the overlay text
+        previewOverlayText.textContent = overlayTextInput.value;
+        // Update the overlay color and opacity
+        let previewOverlayColor = overlayColorInput.value;
+        let previewOverlayOpacity = overlayOpacityInput.value;
+        previewOverlay.style.background = `linear-gradient(to top, ${hexToRgba(previewOverlayColor, previewOverlayOpacity)}, transparent)`;
+        // Update the font size
+        let previewFontSize = fontSizeInput.value;
+        previewOverlayText.style.fontSize = previewFontSize + 'px';
+        // Update the overlay height
+        let previewOverlayHeightPercentage = overlayHeightInput.value;
+        previewOverlay.style.height = previewOverlayHeightPercentage + '%';
+        // Update text color
+        let previewTextColor = textColorInput.value;
+        previewOverlayText.style.color = previewTextColor;
+        // Update text alignment
+        let previewTextAlignment = textAlignmentSelect.value;
+        // Update font family
+        let previewFontFamily = fontFamilySelect.value;
+        // Update text styles
+        let previewIsBold = boldCheckbox.checked;
+        let previewIsItalic = italicCheckbox.checked;
+        previewOverlayText.className = `${previewTextAlignment} ${previewFontFamily} ${previewIsBold ? 'font-bold' : ''} ${previewIsItalic ? 'italic' : ''} break-words`;
+    }
+
+    // Event listeners for inputs to update preview live
+    overlayTextInput.addEventListener('input', updatePreview);
+    overlayColorInput.addEventListener('input', updatePreview);
+    overlayOpacityInput.addEventListener('input', updatePreview);
+    textColorInput.addEventListener('input', updatePreview);
+    fontSizeInput.addEventListener('input', updatePreview);
+    overlayHeightInput.addEventListener('input', updatePreview);
+    textAlignmentSelect.addEventListener('change', updatePreview);
+    fontFamilySelect.addEventListener('change', updatePreview);
+    boldCheckbox.addEventListener('change', updatePreview);
+    italicCheckbox.addEventListener('change', updatePreview);
+
+    // Update Overlay button click
+    updateTextButton.addEventListener('click', () => {
+        console.log('Apply Changes button clicked');
+        // Update the overlay text
+        overlayText.textContent = overlayTextInput.value;
+        // Update the overlay color and opacity
+        overlayColor = overlayColorInput.value;
+        overlayOpacity = overlayOpacityInput.value;
+        imageOverlay.style.background = `linear-gradient(to top, ${hexToRgba(overlayColor, overlayOpacity)}, transparent)`;
+        // Update the font size
+        fontSize = fontSizeInput.value;
+        overlayText.style.fontSize = fontSize + 'px';
+        // Update the overlay height
+        overlayHeightPercentage = overlayHeightInput.value;
+        imageOverlay.style.height = overlayHeightPercentage + '%';
+        // Update text color
+        textColor = textColorInput.value;
+        overlayText.style.color = textColor;
+        // Update text alignment
+        textAlignment = textAlignmentSelect.value;
+        // Update font family
+        fontFamily = fontFamilySelect.value;
+        // Update text styles
+        isBold = boldCheckbox.checked;
+        isItalic = italicCheckbox.checked;
+        overlayText.className = `${textAlignment} ${fontFamily} ${isBold ? 'font-bold' : ''} ${isItalic ? 'italic' : ''} break-words`;
+        modal.classList.add("hidden");
+        stopCamera();
+    });
+
+    // Export Image button click
+    exportImageButton.addEventListener('click', () => {
+        console.log('Export Image button clicked');
+        exportModifiedImage();
+    });
+
+    function exportModifiedImage() {
+        // Create a canvas with the dimensions of the image
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = originalImageWidth;
+        exportCanvas.height = originalImageHeight;
+        const ctx = exportCanvas.getContext('2d');
+
+        // Draw the main image
+        const image = new Image();
+        image.crossOrigin = "anonymous";
+        image.src = mainImage.src;
+        image.onload = () => {
+            ctx.drawImage(image, 0, 0, exportCanvas.width, exportCanvas.height);
+
+            // Draw the overlay
+            ctx.fillStyle = ctx.createLinearGradient(0, exportCanvas.height, 0, exportCanvas.height - (overlayHeightPercentage / 100) * exportCanvas.height);
+            let rgbaOverlayColor = hexToRgba(overlayColor, overlayOpacity);
+            ctx.fillStyle.addColorStop(0, rgbaOverlayColor);
+            ctx.fillStyle.addColorStop(1, 'transparent');
+            ctx.fillRect(0, exportCanvas.height - (overlayHeightPercentage / 100) * exportCanvas.height, exportCanvas.width, (overlayHeightPercentage / 100) * exportCanvas.height);
+
+            // Draw the text
+            ctx.fillStyle = textColor;
+            ctx.font = `${isItalic ? 'italic' : ''} ${isBold ? 'bold' : ''} ${fontSize}px ${fontFamily.replace('font-', '')}`;
+            ctx.textAlign = textAlignment.replace('text-', '');
+            ctx.textBaseline = 'bottom';
+            const lines = overlayText.textContent.split('\n');
+            const lineHeight = fontSize * 1.2;
+            const x = exportCanvas.width / 2;
+            let y = exportCanvas.height - ((overlayHeightPercentage / 100) * exportCanvas.height) + lineHeight;
+            lines.forEach((line) => {
+                ctx.fillText(line, x, y);
+                y += lineHeight;
+            });
+
+            // Create a download link
+            const dataURL = exportCanvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'modified_image.png';
+            link.click();
+        };
+    }
+
+    // Close modal button click
+    closeModalButton.addEventListener('click', () => {
+        console.log('Close modal button clicked');
+        modal.classList.add("hidden");
+        stopCamera();
+    });
+
+    // Click outside modal content
+    window.addEventListener('click', (event) => {
+        if (event.target == modal) {
+            console.log('Clicked outside modal content');
+            modal.classList.add("hidden");
+            stopCamera();
+        }
+    });
+
+    // Tab link clicks
+    tabLinks.forEach((tabLink) => {
+        tabLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            const tabName = tabLink.getAttribute('data-tab');
+            console.log('Tab clicked:', tabName);
+            openTab(tabName, tabLink);
+        });
+    });
+
+    // Open tab function
+    function openTab(tabName, tabLink) {
+        const tabcontents = document.querySelectorAll('.tabcontent');
+        tabcontents.forEach((tabcontent) => {
+            tabcontent.classList.add('hidden');
+        });
+
+        tabLinks.forEach((link) => {
+            link.classList.remove("border-blue-500", "text-blue-600");
+        });
+
+        document.getElementById(tabName).classList.remove('hidden');
+        tabLink.classList.add("border-blue-500", "text-blue-600");
+
+        if (tabName === "Camera") {
+            startCamera();
+        } else {
+            stopCamera();
+        }
+    }
+
+    // Open the first tab by default
+    openTab('Upload', document.querySelector('.tablinks[data-tab="Upload"]'));
+
+    // Start camera
+    function startCamera() {
+        const cameraErrorMessage = document.getElementById('cameraErrorMessage');
+        cameraErrorMessage.textContent = '';
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then((s) => {
+                console.log('Camera started');
+                stream = s;
+                video.srcObject = stream;
+                video.play();
+            })
+            .catch((error) => {
+                console.error('Error accessing camera:', error);
+                cameraErrorMessage.textContent = 'Error accessing camera: ' + error.message;
+            });
+        } else {
+            console.error('getUserMedia not supported');
+            cameraErrorMessage.textContent = 'Camera access not supported by your browser.';
+        }
+    }
+
+    // Stop camera
+    function stopCamera() {
+        if (stream) {
+            stream.getTracks().forEach((track) => {
+                track.stop();
+            });
+            video.srcObject = null;
+            stream = null;
+            console.log('Camera stopped');
+        }
+    }
+
+    // Snap photo
+    snapButton.addEventListener('click', () => {
+        console.log('Snap photo button clicked');
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.classList.remove('hidden');
+    });
+
+    // Use photo
+    usePhotoButton.addEventListener('click', () => {
+        console.log('Use photo button clicked');
+        const dataURL = canvas.toDataURL('image/png');
+        mainImage.src = dataURL;
+        previewImage.src = dataURL;
+        modal.classList.add("hidden");
+        stopCamera();
+    });
+
+    // Upload image
+    uploadInput.addEventListener('change', (event) => {
+        console.log('Upload input changed');
+        const file = uploadInput.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            console.log('FileReader onloadend');
+            mainImage.src = reader.result;
+            previewImage.src = reader.result;
+            modal.classList.add("hidden");
+        };
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Upload via URL
+    urlButton.addEventListener('click', () => {
+        console.log('URL button clicked');
+        const urlInput = document.getElementById('urlInput');
+        const url = urlInput.value;
+        mainImage.src = url;
+        previewImage.src = url;
+        modal.classList.add("hidden");
+    });
+
+    // Unsplash search
+    unsplashSearchButton.addEventListener('click', () => {
+        console.log('Unsplash search button clicked');
+        const query = document.getElementById('unsplashQuery').value;
+        unsplashResultsDiv.innerHTML = '<p class="text-gray-500">Loading...</p>';
+        unsplashSearchButton.disabled = true;
+        unsplashSearchButton.textContent = 'Searching...';
+
+        // Use Unsplash API to search images
+        const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=9&client_id=${accessKey}`;
+
+        fetch(url)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log('Unsplash API response received');
+                unsplashSearchButton.disabled = false;
+                unsplashSearchButton.textContent = 'Search';
+                unsplashResultsDiv.innerHTML = '';
+                data.results.forEach((photo) => {
+                    const imgElement = document.createElement('img');
+                    imgElement.src = photo.urls.thumb;
+                    imgElement.classList.add('cursor-pointer', 'border', 'rounded');
+                    imgElement.addEventListener('click', () => {
+                        console.log('Unsplash image clicked:', photo.urls.regular);
+                        mainImage.src = photo.urls.regular;
+                        previewImage.src = photo.urls.regular;
+                        modal.classList.add("hidden");
+                    });
+                    unsplashResultsDiv.appendChild(imgElement);
+                });
+            })
+            .catch((error) => {
+                console.error('Error fetching from Unsplash API:', error);
+                unsplashSearchButton.disabled = false;
+                unsplashSearchButton.textContent = 'Search';
+                unsplashResultsDiv.innerHTML = '<p class="text-red-500">Error loading images</p>';
+            });
+    });
+
+    // Utility function to convert hex to rgba
+    function hexToRgba(hex, opacity) {
+        let c;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c = hex.substring(1).split('');
+            if(c.length == 3){
+                c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c = '0x' + c.join('');
+            return 'rgba(' + [(c>>16)&255, (c>>8)&255, c&255].join(',') + ',' + opacity + ')';
+        }
+        return 'rgba(0,0,0,' + opacity + ')';
+    }
+});
+</script>
+
+</body>
+</html>
