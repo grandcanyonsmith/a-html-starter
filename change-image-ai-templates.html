@@ -5,17 +5,22 @@
     <title>Image Replacement Example with Tailwind CSS</title>
     <!-- Include Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Include desired fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Open+Sans&family=Playfair+Display&family=Roboto&display=swap" rel="stylesheet">
 </head>
 <body class="bg-gray-100">
 
 <!-- Main Image with Overlay -->
 <div class="flex justify-center mt-10">
-    <div class="relative" id="imageContainer">
-        <img id="mainImage" src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/20240608-183351_course_module_img_with_text_1.png" alt="Image" class="w-full h-full object-cover cursor-pointer">
-        <!-- Overlay -->
-        <div id="imageOverlay" class="absolute bottom-0 left-0 w-full p-4">
-            <p id="overlayText" class="text-center break-words">Default Text</p>
-        </div>
+    <div class="relative max-w-full" id="imageContainer">
+        <img id="mainImage" src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/20240608-183351_course_module_img_with_text_1.png" alt="Image" class="w-full h-auto object-cover cursor-pointer" loading="lazy">
+        <!-- Overlay Div -->
+        <div id="overlayDiv" class="absolute inset-x-0 bottom-0 pointer-events-none"></div>
+        <!-- Overlay Text -->
+        <p id="overlayText" class="absolute text-center text-white break-words"></p>
     </div>
 </div>
 
@@ -44,54 +49,67 @@
             <h2 class="mb-2 text-lg font-semibold text-gray-700">Overlay Settings</h2>
             <!-- Live Preview -->
             <div id="livePreview" class="relative mb-4 border rounded overflow-hidden">
-                <img id="previewImage" src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/20240608-183351_course_module_img_with_text_1.png" alt="Preview Image" class="w-full h-full object-cover">
-                <!-- Overlay -->
-                <div id="previewOverlay" class="absolute bottom-0 left-0 w-full p-2">
-                    <p id="previewOverlayText" class="text-center break-words">Default Text</p>
-                </div>
+                <img id="previewImage" src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/20240608-183351_course_module_img_with_text_1.png" alt="Preview Image" class="w-full h-auto object-cover" loading="lazy">
+                <!-- Overlay Div -->
+                <div id="previewOverlayDiv" class="absolute inset-x-0 bottom-0 pointer-events-none"></div>
+                <!-- Overlay Text -->
+                <p id="previewOverlayText" class="absolute text-center text-white break-words cursor-grab"></p>
             </div>
             <!-- Overlay Inputs -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <!-- Overlay Text Input -->
                 <div>
                     <label for="overlayTextInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Text</label>
                     <textarea id="overlayTextInput" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter overlay text"></textarea>
                 </div>
+                <!-- Overlay Color Input -->
                 <div>
                     <label for="overlayColorInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Color</label>
                     <input type="color" id="overlayColorInput" class="w-full h-10 border rounded focus:outline-none">
                 </div>
+                <!-- Overlay Opacity Input -->
                 <div>
                     <label for="overlayOpacityInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Opacity</label>
                     <input type="range" id="overlayOpacityInput" class="w-full h-10" min="0" max="1" step="0.01" value="1">
                 </div>
+                <!-- Text Color Input -->
                 <div>
                     <label for="textColorInput" class="block mb-1 text-sm font-medium text-gray-700">Text Color</label>
                     <input type="color" id="textColorInput" class="w-full h-10 border rounded focus:outline-none">
                 </div>
+                <!-- Font Size Input -->
                 <div>
                     <label for="fontSizeInput" class="block mb-1 text-sm font-medium text-gray-700">Font Size</label>
                     <input type="number" id="fontSizeInput" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" min="8" max="200" step="1" value="132">
                 </div>
+                <!-- Overlay Height Input -->
                 <div>
                     <label for="overlayHeightInput" class="block mb-1 text-sm font-medium text-gray-700">Overlay Height (%)</label>
-                    <input type="number" id="overlayHeightInput" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" min="10" max="100" step="1" value="33">
+                    <input type="number" id="overlayHeightInput" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500" min="0" max="100" step="1" value="33">
                 </div>
+                <!-- Text Alignment Select -->
                 <div>
                     <label for="textAlignmentSelect" class="block mb-1 text-sm font-medium text-gray-700">Text Alignment</label>
                     <select id="textAlignmentSelect" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="text-left">Left</option>
-                        <option value="text-center" selected>Center</option>
-                        <option value="text-right">Right</option>
+                        <option value="left">Left</option>
+                        <option value="center" selected>Center</option>
+                        <option value="right">Right</option>
                     </select>
                 </div>
+                <!-- Font Family Select -->
                 <div>
                     <label for="fontFamilySelect" class="block mb-1 text-sm font-medium text-gray-700">Font Family</label>
                     <select id="fontFamilySelect" class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="font-sans" selected>Sans-serif</option>
-                        <option value="font-serif">Serif</option>
-                        <option value="font-mono">Monospace</option>
+                        <option value="'Open Sans', sans-serif" selected>Open Sans</option>
+                        <option value="'Roboto', sans-serif">Roboto</option>
+                        <option value="'Lobster', cursive">Lobster</option>
+                        <option value="'Playfair Display', serif">Playfair Display</option>
+                        <option value="sans-serif">Sans-serif</option>
+                        <option value="serif">Serif</option>
+                        <option value="monospace">Monospace</option>
                     </select>
                 </div>
+                <!-- Bold and Italic Options -->
                 <div class="flex items-center space-x-4">
                     <label class="inline-flex items-center">
                         <input type="checkbox" id="boldCheckbox" class="form-checkbox h-5 w-5 text-blue-600">
@@ -103,7 +121,8 @@
                     </label>
                 </div>
             </div>
-            <div class="flex space-x-4">
+            <!-- Apply and Export Buttons -->
+            <div class="flex flex-wrap space-x-4">
                 <button id="updateTextButton" class="px-4 py-2 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Apply Changes</button>
                 <button id="exportImageButton" class="px-4 py-2 mt-2 text-white bg-green-500 rounded hover:bg-green-600">Export Image</button>
             </div>
@@ -111,7 +130,7 @@
 
         <!-- Tabs -->
         <div class="mb-4 border-b border-gray-200">
-          <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+          <nav class="-mb-px flex flex-wrap space-x-8" aria-label="Tabs">
             <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Upload">Upload Image</a>
             <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Camera">Take Photo</a>
             <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="URL">Upload via URL</a>
@@ -129,8 +148,8 @@
           <h3 class="mb-2 text-lg font-semibold text-gray-700">Take Photo</h3>
           <video id="video" width="320" height="240" autoplay class="border"></video>
           <div id="cameraErrorMessage" class="mt-2 text-red-500"></div>
-          <div class="mt-4">
-            <button id="snap" class="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600">Snap Photo</button>
+          <div class="mt-4 flex flex-wrap space-x-2">
+            <button id="snap" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Snap Photo</button>
             <button id="usePhoto" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">Use Photo</button>
           </div>
           <canvas id="canvas" width="320" height="240" class="hidden mt-4 border"></canvas>
@@ -138,19 +157,19 @@
 
         <div id="URL" class="tabcontent hidden">
           <h3 class="mb-2 text-lg font-semibold text-gray-700">Upload via URL</h3>
-          <div class="flex">
+          <div class="flex flex-wrap">
             <input type="text" id="urlInput" placeholder="Enter Image URL" class="flex-grow w-full px-3 py-2 mr-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="urlButton" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Load Image</button>
+            <button id="urlButton" class="px-4 py-2 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Load Image</button>
           </div>
         </div>
 
         <div id="Unsplash" class="tabcontent hidden">
           <h3 class="mb-2 text-lg font-semibold text-gray-700">Search Unsplash</h3>
-          <div class="flex">
+          <div class="flex flex-wrap">
             <input type="text" id="unsplashQuery" placeholder="Search for images" class="flex-grow w-full px-3 py-2 mr-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="unsplashSearch" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Search</button>
+            <button id="unsplashSearch" class="px-4 py-2 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Search</button>
           </div>
-          <div id="unsplashResults" class="grid grid-cols-3 gap-4 mt-4"></div>
+          <div id="unsplashResults" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4"></div>
         </div>
 
       </div>
@@ -159,282 +178,302 @@
 </div>
 
 <!-- JavaScript -->
-<script>
+<script type="module">
 'use strict';
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Unsplash Access Key
-    const accessKey = 'y-eSCtciq7d7GZrzIJ2xbH2SXze_AcJOxykieEZP53I';
-
-    // Get elements
-    const modal = document.getElementById("imageModal");
-    const mainImage = document.getElementById("mainImage");
-    const imageContainer = document.getElementById("imageContainer");
-    const overlayTextInput = document.getElementById('overlayTextInput');
-    const overlayColorInput = document.getElementById('overlayColorInput');
-    const overlayOpacityInput = document.getElementById('overlayOpacityInput');
-    const textColorInput = document.getElementById('textColorInput');
-    const fontSizeInput = document.getElementById('fontSizeInput');
-    const overlayText = document.getElementById('overlayText');
-    const imageOverlay = document.getElementById('imageOverlay');
-    const updateTextButton = document.getElementById('updateTextButton');
-    const exportImageButton = document.getElementById('exportImageButton');
-    const closeModalButton = document.getElementById("closeModal");
-    const tabLinks = document.querySelectorAll('.tablinks');
-    const uploadInput = document.getElementById('uploadInput');
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
-    const snapButton = document.getElementById('snap');
-    const usePhotoButton = document.getElementById('usePhoto');
-    const urlButton = document.getElementById('urlButton');
-    const unsplashSearchButton = document.getElementById('unsplashSearch');
-    const unsplashResultsDiv = document.getElementById('unsplashResults');
-    const overlayHeightInput = document.getElementById('overlayHeightInput');
-    const textAlignmentSelect = document.getElementById('textAlignmentSelect');
-    const fontFamilySelect = document.getElementById('fontFamilySelect');
-    const boldCheckbox = document.getElementById('boldCheckbox');
-    const italicCheckbox = document.getElementById('italicCheckbox');
-    const livePreview = document.getElementById('livePreview');
-    const previewImage = document.getElementById('previewImage');
-    const previewOverlay = document.getElementById('previewOverlay');
-    const previewOverlayText = document.getElementById('previewOverlayText');
-
-    let stream;
-
-    // Initialize default overlay settings
-    let overlayColor = '#325AE5'; // default color
-    let overlayOpacity = 1; // default opacity
-    let textColor = '#FFFFFF'; // default text color (white)
-    let fontSize = 132; // default font size
-    let overlayHeightPercentage = 33; // default overlay height percentage
-    let textAlignment = 'text-center'; // default text alignment
-    let fontFamily = 'font-sans'; // default font family
-    let isBold = false; // default text bold
-    let isItalic = false; // default text italic
-
-    // Initialize inputs
-    overlayColorInput.value = overlayColor;
-    overlayOpacityInput.value = overlayOpacity;
-    textColorInput.value = textColor;
-    fontSizeInput.value = fontSize;
-    overlayHeightInput.value = overlayHeightPercentage;
-    textAlignmentSelect.value = textAlignment;
-    fontFamilySelect.value = fontFamily;
-    boldCheckbox.checked = isBold;
-    italicCheckbox.checked = isItalic;
-
-    // Set initial styles for main image overlay
-    overlayText.style.fontSize = fontSize + 'px';
-    imageOverlay.style.background = `linear-gradient(to top, ${hexToRgba(overlayColor, overlayOpacity)}, transparent)`;
-    imageOverlay.style.height = overlayHeightPercentage + '%';
-    overlayText.style.color = textColor;
-    overlayText.className = `${textAlignment} ${fontFamily} ${isBold ? 'font-bold' : ''} ${isItalic ? 'italic' : ''} break-words`;
-
-    // Set initial styles for preview overlay
-    previewOverlayText.textContent = overlayText.textContent;
-    previewOverlayText.style.fontSize = fontSize + 'px';
-    previewOverlay.style.background = `linear-gradient(to top, ${hexToRgba(overlayColor, overlayOpacity)}, transparent)`;
-    previewOverlay.style.height = overlayHeightPercentage + '%';
-    previewOverlayText.style.color = textColor;
-    previewOverlayText.className = `${textAlignment} ${fontFamily} ${isBold ? 'font-bold' : ''} ${isItalic ? 'italic' : ''} break-words`;
-
-    let originalImageWidth;
-    let originalImageHeight;
-
-    // Main image onload
-    mainImage.onload = () => {
-        const width = mainImage.naturalWidth;
-        const height = mainImage.naturalHeight;
-        console.log('Main image dimensions:', width, height);
-        if (!originalImageWidth) {
-            originalImageWidth = width;
-            originalImageHeight = height;
-            imageContainer.style.width = originalImageWidth + 'px';
-            imageContainer.style.height = originalImageHeight + 'px';
-        } else {
-            imageContainer.style.width = originalImageWidth + 'px';
-            imageContainer.style.height = originalImageHeight + 'px';
-        }
-        mainImage.style.width = '100%';
-        mainImage.style.height = '100%';
-    };
-
-    // Main image click
-    mainImage.addEventListener('click', () => {
-        console.log('Main image clicked');
-        modal.classList.remove("hidden");
-        // Initialize inputs with current values
-        overlayTextInput.value = overlayText.textContent || '';
-        overlayColorInput.value = overlayColor;
-        overlayOpacityInput.value = overlayOpacity;
-        textColorInput.value = textColor;
-        fontSizeInput.value = fontSize;
-        overlayHeightInput.value = overlayHeightPercentage;
-        textAlignmentSelect.value = textAlignment;
-        fontFamilySelect.value = fontFamily;
-        boldCheckbox.checked = isBold;
-        italicCheckbox.checked = isItalic;
-        // Set preview image source
-        previewImage.src = mainImage.src;
-        // Update preview
-        updatePreview();
-    });
-
-    // Update Preview function
-    function updatePreview() {
-        console.log('Updating live preview');
-        // Update the overlay text
-        previewOverlayText.textContent = overlayTextInput.value;
-        // Update the overlay color and opacity
-        let previewOverlayColor = overlayColorInput.value;
-        let previewOverlayOpacity = overlayOpacityInput.value;
-        previewOverlay.style.background = `linear-gradient(to top, ${hexToRgba(previewOverlayColor, previewOverlayOpacity)}, transparent)`;
-        // Update the font size
-        let previewFontSize = fontSizeInput.value;
-        previewOverlayText.style.fontSize = previewFontSize + 'px';
-        // Update the overlay height
-        let previewOverlayHeightPercentage = overlayHeightInput.value;
-        previewOverlay.style.height = previewOverlayHeightPercentage + '%';
-        // Update text color
-        let previewTextColor = textColorInput.value;
-        previewOverlayText.style.color = previewTextColor;
-        // Update text alignment
-        let previewTextAlignment = textAlignmentSelect.value;
-        // Update font family
-        let previewFontFamily = fontFamilySelect.value;
-        // Update text styles
-        let previewIsBold = boldCheckbox.checked;
-        let previewIsItalic = italicCheckbox.checked;
-        previewOverlayText.className = `${previewTextAlignment} ${previewFontFamily} ${previewIsBold ? 'font-bold' : ''} ${previewIsItalic ? 'italic' : ''} break-words`;
-    }
-
-    // Event listeners for inputs to update preview live
-    overlayTextInput.addEventListener('input', updatePreview);
-    overlayColorInput.addEventListener('input', updatePreview);
-    overlayOpacityInput.addEventListener('input', updatePreview);
-    textColorInput.addEventListener('input', updatePreview);
-    fontSizeInput.addEventListener('input', updatePreview);
-    overlayHeightInput.addEventListener('input', updatePreview);
-    textAlignmentSelect.addEventListener('change', updatePreview);
-    fontFamilySelect.addEventListener('change', updatePreview);
-    boldCheckbox.addEventListener('change', updatePreview);
-    italicCheckbox.addEventListener('change', updatePreview);
-
-    // Update Overlay button click
-    updateTextButton.addEventListener('click', () => {
-        console.log('Apply Changes button clicked');
-        // Update the overlay text
-        overlayText.textContent = overlayTextInput.value;
-        // Update the overlay color and opacity
-        overlayColor = overlayColorInput.value;
-        overlayOpacity = overlayOpacityInput.value;
-        imageOverlay.style.background = `linear-gradient(to top, ${hexToRgba(overlayColor, overlayOpacity)}, transparent)`;
-        // Update the font size
-        fontSize = fontSizeInput.value;
-        overlayText.style.fontSize = fontSize + 'px';
-        // Update the overlay height
-        overlayHeightPercentage = overlayHeightInput.value;
-        imageOverlay.style.height = overlayHeightPercentage + '%';
-        // Update text color
-        textColor = textColorInput.value;
-        overlayText.style.color = textColor;
-        // Update text alignment
-        textAlignment = textAlignmentSelect.value;
-        // Update font family
-        fontFamily = fontFamilySelect.value;
-        // Update text styles
-        isBold = boldCheckbox.checked;
-        isItalic = italicCheckbox.checked;
-        overlayText.className = `${textAlignment} ${fontFamily} ${isBold ? 'font-bold' : ''} ${isItalic ? 'italic' : ''} break-words`;
-        modal.classList.add("hidden");
-        stopCamera();
-    });
-
-    // Export Image button click
-    exportImageButton.addEventListener('click', () => {
-        console.log('Export Image button clicked');
-        exportModifiedImage();
-    });
-
-    function exportModifiedImage() {
-        // Create a canvas with the dimensions of the image
-        const exportCanvas = document.createElement('canvas');
-        exportCanvas.width = originalImageWidth;
-        exportCanvas.height = originalImageHeight;
-        const ctx = exportCanvas.getContext('2d');
-
-        // Draw the main image
-        const image = new Image();
-        image.crossOrigin = "anonymous";
-        image.src = mainImage.src;
-        image.onload = () => {
-            ctx.drawImage(image, 0, 0, exportCanvas.width, exportCanvas.height);
-
-            // Draw the overlay
-            ctx.fillStyle = ctx.createLinearGradient(0, exportCanvas.height, 0, exportCanvas.height - (overlayHeightPercentage / 100) * exportCanvas.height);
-            let rgbaOverlayColor = hexToRgba(overlayColor, overlayOpacity);
-            ctx.fillStyle.addColorStop(0, rgbaOverlayColor);
-            ctx.fillStyle.addColorStop(1, 'transparent');
-            ctx.fillRect(0, exportCanvas.height - (overlayHeightPercentage / 100) * exportCanvas.height, exportCanvas.width, (overlayHeightPercentage / 100) * exportCanvas.height);
-
-            // Draw the text
-            ctx.fillStyle = textColor;
-            ctx.font = `${isItalic ? 'italic' : ''} ${isBold ? 'bold' : ''} ${fontSize}px ${fontFamily.replace('font-', '')}`;
-            ctx.textAlign = textAlignment.replace('text-', '');
-            ctx.textBaseline = 'bottom';
-            const lines = overlayText.textContent.split('\n');
-            const lineHeight = fontSize * 1.2;
-            const x = exportCanvas.width / 2;
-            let y = exportCanvas.height - ((overlayHeightPercentage / 100) * exportCanvas.height) + lineHeight;
-            lines.forEach((line) => {
-                ctx.fillText(line, x, y);
-                y += lineHeight;
-            });
-
-            // Create a download link
-            const dataURL = exportCanvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = dataURL;
-            link.download = 'modified_image.png';
-            link.click();
+/**
+ * ImageEditor class handles the image overlay and editing functionalities.
+ */
+class ImageEditor {
+    constructor() {
+        this.elements = {};
+        // Default overlay settings
+        this.overlaySettings = {
+            overlayColor: '#325AE5', // default color
+            overlayOpacity: 1, // default opacity
+            textColor: '#FFFFFF', // default text color
+            fontSize: 132, // default font size
+            overlayHeightPercentage: 33, // default overlay height percentage
+            textAlignment: 'center', // default text alignment
+            fontFamily: "'Open Sans', sans-serif", // default font family
+            isBold: false, // default bold
+            isItalic: false, // default italic
+            textPositionLeft: 50, // percentage
+            textPositionTop: 50 // percentage
         };
+        this.stream = null; // For camera stream
+        // Unsplash Access Key
+        this.unsplashAccessKey = 'y-eSCtciq7d7GZrzIJ2xbH2SXze_AcJOxykieEZP53I';
+        // Dragging variables
+        this.isDragging = false;
+        this.dragStartX = 0;
+        this.dragStartY = 0;
+        this.elementStartLeft = 0;
+        this.elementStartTop = 0;
     }
 
-    // Close modal button click
-    closeModalButton.addEventListener('click', () => {
-        console.log('Close modal button clicked');
-        modal.classList.add("hidden");
-        stopCamera();
-    });
+    /**
+     * Initializes the ImageEditor by caching elements and setting up event listeners.
+     */
+    init() {
+        this.cacheElements();
+        this.initializeOverlaySettings();
+        this.setEventListeners();
+        this.openTab('Upload', this.elements.tabLinks[0]); // Open the first tab by default
+    }
 
-    // Click outside modal content
-    window.addEventListener('click', (event) => {
-        if (event.target == modal) {
-            console.log('Clicked outside modal content');
-            modal.classList.add("hidden");
-            stopCamera();
-        }
-    });
+    /**
+     * Caches frequently accessed DOM elements to optimize performance.
+     */
+    cacheElements() {
+        // Cache DOM elements
+        this.elements.modal = document.getElementById("imageModal");
+        this.elements.mainImage = document.getElementById("mainImage");
+        this.elements.imageContainer = document.getElementById("imageContainer");
+        this.elements.overlayDiv = document.getElementById("overlayDiv");
+        this.elements.overlayText = document.getElementById('overlayText');
+        this.elements.overlayTextInput = document.getElementById('overlayTextInput');
+        this.elements.overlayColorInput = document.getElementById('overlayColorInput');
+        this.elements.overlayOpacityInput = document.getElementById('overlayOpacityInput');
+        this.elements.textColorInput = document.getElementById('textColorInput');
+        this.elements.fontSizeInput = document.getElementById('fontSizeInput');
+        this.elements.overlayHeightInput = document.getElementById('overlayHeightInput');
+        this.elements.textAlignmentSelect = document.getElementById('textAlignmentSelect');
+        this.elements.fontFamilySelect = document.getElementById('fontFamilySelect');
+        this.elements.boldCheckbox = document.getElementById('boldCheckbox');
+        this.elements.italicCheckbox = document.getElementById('italicCheckbox');
+        this.elements.updateTextButton = document.getElementById('updateTextButton');
+        this.elements.exportImageButton = document.getElementById('exportImageButton');
+        this.elements.closeModalButton = document.getElementById("closeModal");
+        this.elements.tabLinks = document.querySelectorAll('.tablinks');
+        this.elements.uploadInput = document.getElementById('uploadInput');
+        this.elements.urlInput = document.getElementById('urlInput');
+        this.elements.urlButton = document.getElementById('urlButton');
+        this.elements.unsplashQuery = document.getElementById('unsplashQuery');
+        this.elements.unsplashSearchButton = document.getElementById('unsplashSearch');
+        this.elements.unsplashResultsDiv = document.getElementById('unsplashResults');
+        this.elements.video = document.getElementById('video');
+        this.elements.canvas = document.getElementById('canvas');
+        this.elements.context = this.elements.canvas.getContext('2d');
+        this.elements.snapButton = document.getElementById('snap');
+        this.elements.usePhotoButton = document.getElementById('usePhoto');
+        this.elements.cameraErrorMessage = document.getElementById('cameraErrorMessage');
+        this.elements.livePreview = document.getElementById('livePreview');
+        this.elements.previewImage = document.getElementById('previewImage');
+        this.elements.previewOverlayDiv = document.getElementById('previewOverlayDiv');
+        this.elements.previewOverlayText = document.getElementById('previewOverlayText');
+    }
 
-    // Tab link clicks
-    tabLinks.forEach((tabLink) => {
-        tabLink.addEventListener('click', (event) => {
-            event.preventDefault();
-            const tabName = tabLink.getAttribute('data-tab');
-            console.log('Tab clicked:', tabName);
-            openTab(tabName, tabLink);
+    /**
+     * Initializes overlay settings and styles for both the main image and the preview.
+     */
+    initializeOverlaySettings() {
+        // Initialize inputs with default settings
+        this.elements.overlayColorInput.value = this.overlaySettings.overlayColor;
+        this.elements.overlayOpacityInput.value = this.overlaySettings.overlayOpacity;
+        this.elements.textColorInput.value = this.overlaySettings.textColor;
+        this.elements.fontSizeInput.value = this.overlaySettings.fontSize;
+        this.elements.overlayHeightInput.value = this.overlaySettings.overlayHeightPercentage;
+        this.elements.textAlignmentSelect.value = this.overlaySettings.textAlignment;
+        this.elements.fontFamilySelect.value = this.overlaySettings.fontFamily;
+        this.elements.boldCheckbox.checked = this.overlaySettings.isBold;
+        this.elements.italicCheckbox.checked = this.overlaySettings.isItalic;
+
+        // Set initial styles for main image overlay text
+        this.setOverlayTextStyle(this.elements.overlayText, this.overlaySettings);
+        this.positionOverlayText(this.elements.overlayText, this.overlaySettings.textPositionLeft, this.overlaySettings.textPositionTop);
+
+        // Set initial styles for preview overlay text
+        this.elements.previewOverlayText.textContent = this.elements.overlayText.textContent;
+        this.setOverlayTextStyle(this.elements.previewOverlayText, this.overlaySettings);
+        this.positionOverlayText(this.elements.previewOverlayText, 50, 50); // Center in preview
+    }
+
+    /**
+     * Sets up event listeners for various interactive elements.
+     */
+    setEventListeners() {
+        // Set up event listeners with correct 'this' context
+        this.elements.mainImage.addEventListener('click', this.onMainImageClick.bind(this));
+        this.elements.updateTextButton.addEventListener('click', this.onUpdateTextButtonClick.bind(this));
+        this.elements.exportImageButton.addEventListener('click', this.onExportImageButtonClick.bind(this));
+        this.elements.closeModalButton.addEventListener('click', this.onCloseModalButtonClick.bind(this));
+        window.addEventListener('click', this.onWindowClick.bind(this));
+
+        // Event listeners for live preview updates
+        this.elements.overlayTextInput.addEventListener('input', this.updatePreviewOverlay.bind(this));
+        this.elements.overlayColorInput.addEventListener('input', this.updatePreviewOverlay.bind(this));
+        this.elements.overlayOpacityInput.addEventListener('input', this.updatePreviewOverlay.bind(this));
+        this.elements.textColorInput.addEventListener('input', this.updatePreviewOverlay.bind(this));
+        this.elements.fontSizeInput.addEventListener('input', this.updatePreviewOverlay.bind(this));
+        this.elements.overlayHeightInput.addEventListener('input', this.updatePreviewOverlay.bind(this));
+        this.elements.textAlignmentSelect.addEventListener('change', this.updatePreviewOverlay.bind(this));
+        this.elements.fontFamilySelect.addEventListener('change', this.updatePreviewOverlay.bind(this));
+        this.elements.boldCheckbox.addEventListener('change', this.updatePreviewOverlay.bind(this));
+        this.elements.italicCheckbox.addEventListener('change', this.updatePreviewOverlay.bind(this));
+
+        // Tab link clicks
+        this.elements.tabLinks.forEach((tabLink) => {
+            tabLink.addEventListener('click', (event) => {
+                event.preventDefault();
+                const tabName = tabLink.getAttribute('data-tab');
+                console.log('Tab clicked:', tabName);
+                this.openTab(tabName, tabLink);
+            });
         });
-    });
 
-    // Open tab function
-    function openTab(tabName, tabLink) {
+        // Upload image
+        this.elements.uploadInput.addEventListener('change', this.onUploadInputChange.bind(this));
+
+        // Snap and use photo
+        this.elements.snapButton.addEventListener('click', this.onSnapButtonClick.bind(this));
+        this.elements.usePhotoButton.addEventListener('click', this.onUsePhotoButtonClick.bind(this));
+
+        // URL button
+        this.elements.urlButton.addEventListener('click', this.onUrlButtonClick.bind(this));
+
+        // Unsplash search
+        this.elements.unsplashSearchButton.addEventListener('click', this.onUnsplashSearchButtonClick.bind(this));
+
+        // Drag and drop for overlay text in preview
+        this.elements.previewOverlayText.addEventListener('mousedown', this.onDragStart.bind(this));
+        document.addEventListener('mousemove', this.onDrag.bind(this));
+        document.addEventListener('mouseup', this.onDragEnd.bind(this));
+    }
+
+    /**
+     * Handles the main image click event to open the modal.
+     */
+    onMainImageClick() {
+        console.log('Main image clicked');
+        this.elements.modal.classList.remove("hidden");
+        // Initialize inputs with current values
+        this.elements.overlayTextInput.value = this.elements.overlayText.textContent || '';
+        this.elements.overlayColorInput.value = this.overlaySettings.overlayColor;
+        this.elements.overlayOpacityInput.value = this.overlaySettings.overlayOpacity;
+        this.elements.textColorInput.value = this.overlaySettings.textColor;
+        this.elements.fontSizeInput.value = this.overlaySettings.fontSize;
+        this.elements.overlayHeightInput.value = this.overlaySettings.overlayHeightPercentage;
+        this.elements.textAlignmentSelect.value = this.overlaySettings.textAlignment;
+        this.elements.fontFamilySelect.value = this.overlaySettings.fontFamily;
+        this.elements.boldCheckbox.checked = this.overlaySettings.isBold;
+        this.elements.italicCheckbox.checked = this.overlaySettings.isItalic;
+        // Set preview image source
+        this.elements.previewImage.src = this.elements.mainImage.src;
+        this.elements.previewOverlayText.textContent = this.elements.overlayText.textContent;
+        // Update preview
+        this.updatePreviewOverlay();
+    }
+
+    /**
+     * Updates the live preview overlay as the user adjusts settings.
+     */
+    updatePreviewOverlay() {
+        console.log('Updating live preview');
+        // Update overlay settings from inputs
+        const previewSettings = {
+            overlayColor: this.elements.overlayColorInput.value,
+            overlayOpacity: this.elements.overlayOpacityInput.value,
+            textColor: this.elements.textColorInput.value,
+            fontSize: this.elements.fontSizeInput.value,
+            overlayHeightPercentage: this.elements.overlayHeightInput.value,
+            textAlignment: this.elements.textAlignmentSelect.value,
+            fontFamily: this.elements.fontFamilySelect.value,
+            isBold: this.elements.boldCheckbox.checked,
+            isItalic: this.elements.italicCheckbox.checked,
+            textPositionLeft: this.overlaySettings.textPositionLeft,
+            textPositionTop: this.overlaySettings.textPositionTop
+        };
+
+        // Update the overlay div
+        this.elements.previewOverlayDiv.style.height = `${previewSettings.overlayHeightPercentage}%`;
+        this.elements.previewOverlayDiv.style.background = `linear-gradient(to top, ${this.hexToRgba(previewSettings.overlayColor, previewSettings.overlayOpacity)} 0%, transparent 100%)`;
+        this.elements.previewOverlayDiv.style.bottom = '0';
+        this.elements.previewOverlayDiv.style.top = 'auto';
+
+        // Update the overlay text
+        this.elements.previewOverlayText.textContent = this.elements.overlayTextInput.value;
+        // Update text style
+        this.setOverlayTextStyle(this.elements.previewOverlayText, previewSettings);
+        this.positionOverlayText(this.elements.previewOverlayText, previewSettings.textPositionLeft, previewSettings.textPositionTop);
+    }
+
+    /**
+     * Applies changes from the preview to the main image overlay.
+     */
+    onUpdateTextButtonClick() {
+        console.log('Apply Changes button clicked');
+        // Update overlay settings from preview inputs
+        this.overlaySettings.overlayColor = this.elements.overlayColorInput.value;
+        this.overlaySettings.overlayOpacity = this.elements.overlayOpacityInput.value;
+        this.overlaySettings.textColor = this.elements.textColorInput.value;
+        this.overlaySettings.fontSize = this.elements.fontSizeInput.value;
+        this.overlaySettings.overlayHeightPercentage = this.elements.overlayHeightInput.value;
+        this.overlaySettings.textAlignment = this.elements.textAlignmentSelect.value;
+        this.overlaySettings.fontFamily = this.elements.fontFamilySelect.value;
+        this.overlaySettings.isBold = this.elements.boldCheckbox.checked;
+        this.overlaySettings.isItalic = this.elements.italicCheckbox.checked;
+
+        // Update the overlay div
+        this.elements.overlayDiv.style.height = `${this.overlaySettings.overlayHeightPercentage}%`;
+        this.elements.overlayDiv.style.background = `linear-gradient(to top, ${this.hexToRgba(this.overlaySettings.overlayColor, this.overlaySettings.overlayOpacity)} 0%, transparent 100%)`;
+        this.elements.overlayDiv.style.bottom = '0';
+        this.elements.overlayDiv.style.top = 'auto';
+
+        // Update the overlay text
+        this.elements.overlayText.textContent = this.elements.overlayTextInput.value;
+        // Update text style
+        this.setOverlayTextStyle(this.elements.overlayText, this.overlaySettings);
+        this.positionOverlayText(this.elements.overlayText, this.overlaySettings.textPositionLeft, this.overlaySettings.textPositionTop);
+
+        this.elements.modal.classList.add("hidden");
+        this.stopCamera();
+    }
+
+    /**
+     * Exports the modified image by rendering it onto a canvas and initiating download.
+     */
+    async onExportImageButtonClick() {
+        console.log('Export Image button clicked');
+        const originalText = this.elements.exportImageButton.textContent;
+        this.elements.exportImageButton.textContent = 'Exporting...';
+        await this.exportImage();
+        this.elements.exportImageButton.textContent = originalText;
+    }
+
+    /**
+     * Handles the closing of the modal.
+     */
+    onCloseModalButtonClick() {
+        console.log('Close modal button clicked');
+        this.elements.modal.classList.add("hidden");
+        this.stopCamera();
+    }
+
+    /**
+     * Closes the modal if the user clicks outside of it.
+     * @param {Event} event - The click event.
+     */
+    onWindowClick(event) {
+        if (event.target == this.elements.modal) {
+            console.log('Clicked outside modal content');
+            this.elements.modal.classList.add("hidden");
+            this.stopCamera();
+        }
+    }
+
+    /**
+     * Opens the specified tab in the modal.
+     * @param {string} tabName - The name of the tab to open.
+     * @param {HTMLElement} tabLink - The tab link that was clicked.
+     */
+    openTab(tabName, tabLink) {
         const tabcontents = document.querySelectorAll('.tabcontent');
         tabcontents.forEach((tabcontent) => {
             tabcontent.classList.add('hidden');
         });
 
-        tabLinks.forEach((link) => {
+        this.elements.tabLinks.forEach((link) => {
             link.classList.remove("border-blue-500", "text-blue-600");
         });
 
@@ -442,133 +481,232 @@ document.addEventListener('DOMContentLoaded', () => {
         tabLink.classList.add("border-blue-500", "text-blue-600");
 
         if (tabName === "Camera") {
-            startCamera();
+            this.startCamera();
         } else {
-            stopCamera();
+            this.stopCamera();
         }
     }
 
-    // Open the first tab by default
-    openTab('Upload', document.querySelector('.tablinks[data-tab="Upload"]'));
-
-    // Start camera
-    function startCamera() {
-        const cameraErrorMessage = document.getElementById('cameraErrorMessage');
-        cameraErrorMessage.textContent = '';
+    /**
+     * Starts the camera for capturing photos.
+     */
+    startCamera() {
+        this.elements.cameraErrorMessage.textContent = '';
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ video: true })
             .then((s) => {
                 console.log('Camera started');
-                stream = s;
-                video.srcObject = stream;
-                video.play();
+                this.stream = s;
+                this.elements.video.srcObject = this.stream;
+                this.elements.video.play();
             })
             .catch((error) => {
                 console.error('Error accessing camera:', error);
-                cameraErrorMessage.textContent = 'Error accessing camera: ' + error.message;
+                this.elements.cameraErrorMessage.textContent = 'Error accessing camera: ' + error.message;
             });
         } else {
             console.error('getUserMedia not supported');
-            cameraErrorMessage.textContent = 'Camera access not supported by your browser.';
+            this.elements.cameraErrorMessage.textContent = 'Camera access not supported by your browser.';
         }
     }
 
-    // Stop camera
-    function stopCamera() {
-        if (stream) {
-            stream.getTracks().forEach((track) => {
+    /**
+     * Stops the camera stream to release resources.
+     */
+    stopCamera() {
+        if (this.stream) {
+            this.stream.getTracks().forEach((track) => {
                 track.stop();
             });
-            video.srcObject = null;
-            stream = null;
+            this.elements.video.srcObject = null;
+            this.stream = null;
             console.log('Camera stopped');
         }
     }
 
-    // Snap photo
-    snapButton.addEventListener('click', () => {
+    /**
+     * Captures a photo using the camera and displays it in the canvas.
+     */
+    onSnapButtonClick() {
         console.log('Snap photo button clicked');
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.classList.remove('hidden');
-    });
+        this.elements.context.drawImage(this.elements.video, 0, 0, this.elements.canvas.width, this.elements.canvas.height);
+        this.elements.canvas.classList.remove('hidden');
+    }
 
-    // Use photo
-    usePhotoButton.addEventListener('click', () => {
+    /**
+     * Uses the captured photo as the main image.
+     */
+    onUsePhotoButtonClick() {
         console.log('Use photo button clicked');
-        const dataURL = canvas.toDataURL('image/png');
-        mainImage.src = dataURL;
-        previewImage.src = dataURL;
-        modal.classList.add("hidden");
-        stopCamera();
-    });
+        const dataURL = this.elements.canvas.toDataURL('image/png');
+        this.elements.mainImage.src = dataURL;
+        this.elements.previewImage.src = dataURL;
+        this.elements.modal.classList.add("hidden");
+        this.stopCamera();
+    }
 
-    // Upload image
-    uploadInput.addEventListener('change', (event) => {
+    /**
+     * Handles the image upload input change event.
+     */
+    onUploadInputChange() {
         console.log('Upload input changed');
-        const file = uploadInput.files[0];
+        const file = this.elements.uploadInput.files[0];
         const reader = new FileReader();
         reader.onloadend = () => {
             console.log('FileReader onloadend');
-            mainImage.src = reader.result;
-            previewImage.src = reader.result;
-            modal.classList.add("hidden");
+            this.elements.mainImage.src = reader.result;
+            this.elements.previewImage.src = reader.result;
+            this.elements.modal.classList.add("hidden");
         };
         if (file) {
             reader.readAsDataURL(file);
         }
-    });
+    }
 
-    // Upload via URL
-    urlButton.addEventListener('click', () => {
+    /**
+     * Loads an image from a specified URL.
+     */
+    onUrlButtonClick() {
         console.log('URL button clicked');
-        const urlInput = document.getElementById('urlInput');
-        const url = urlInput.value;
-        mainImage.src = url;
-        previewImage.src = url;
-        modal.classList.add("hidden");
-    });
+        const url = this.elements.urlInput.value;
+        this.elements.mainImage.src = url;
+        this.elements.previewImage.src = url;
+        this.elements.modal.classList.add("hidden");
+    }
 
-    // Unsplash search
-    unsplashSearchButton.addEventListener('click', () => {
+    /**
+     * Searches for images on Unsplash based on user input.
+     */
+    onUnsplashSearchButtonClick() {
         console.log('Unsplash search button clicked');
-        const query = document.getElementById('unsplashQuery').value;
-        unsplashResultsDiv.innerHTML = '<p class="text-gray-500">Loading...</p>';
-        unsplashSearchButton.disabled = true;
-        unsplashSearchButton.textContent = 'Searching...';
+        const query = this.elements.unsplashQuery.value;
+        this.elements.unsplashResultsDiv.innerHTML = '<p class="text-gray-500">Loading...</p>';
+        this.elements.unsplashSearchButton.textContent = 'Searching...';
 
         // Use Unsplash API to search images
-        const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=9&client_id=${accessKey}`;
+        const url = `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=9&client_id=${this.unsplashAccessKey}`;
 
         fetch(url)
             .then((response) => response.json())
             .then((data) => {
                 console.log('Unsplash API response received');
-                unsplashSearchButton.disabled = false;
-                unsplashSearchButton.textContent = 'Search';
-                unsplashResultsDiv.innerHTML = '';
+                this.elements.unsplashSearchButton.textContent = 'Search';
+                this.elements.unsplashResultsDiv.innerHTML = '';
                 data.results.forEach((photo) => {
                     const imgElement = document.createElement('img');
                     imgElement.src = photo.urls.thumb;
+                    imgElement.loading = 'lazy';
                     imgElement.classList.add('cursor-pointer', 'border', 'rounded');
                     imgElement.addEventListener('click', () => {
                         console.log('Unsplash image clicked:', photo.urls.regular);
-                        mainImage.src = photo.urls.regular;
-                        previewImage.src = photo.urls.regular;
-                        modal.classList.add("hidden");
+                        this.elements.mainImage.src = photo.urls.regular;
+                        this.elements.previewImage.src = photo.urls.regular;
+                        this.elements.modal.classList.add("hidden");
                     });
-                    unsplashResultsDiv.appendChild(imgElement);
+                    this.elements.unsplashResultsDiv.appendChild(imgElement);
                 });
             })
             .catch((error) => {
                 console.error('Error fetching from Unsplash API:', error);
-                unsplashSearchButton.disabled = false;
-                unsplashSearchButton.textContent = 'Search';
-                unsplashResultsDiv.innerHTML = '<p class="text-red-500">Error loading images</p>';
+                this.elements.unsplashSearchButton.textContent = 'Search';
+                this.elements.unsplashResultsDiv.innerHTML = '<p class="text-red-500">Error loading images</p>';
             });
-    });
+    }
 
-    // Utility function to convert hex to rgba
-    function hexToRgba(hex, opacity) {
+    /**
+     * Sets the style for the overlay text element.
+     * @param {HTMLElement} textElement - The text element to style.
+     * @param {Object} settings - The settings for styling.
+     */
+    setOverlayTextStyle(textElement, settings) {
+        textElement.style.fontSize = settings.fontSize + 'px';
+        textElement.style.color = settings.textColor;
+        textElement.style.fontFamily = settings.fontFamily;
+        textElement.style.fontWeight = settings.isBold ? 'bold' : 'normal';
+        textElement.style.fontStyle = settings.isItalic ? 'italic' : 'normal';
+        textElement.style.textAlign = settings.textAlignment;
+        textElement.style.width = '100%';
+    }
+
+    /**
+     * Positions the overlay text element.
+     * @param {HTMLElement} textElement - The text element to position.
+     * @param {number} leftPercent - The horizontal position as a percentage.
+     * @param {number} topPercent - The vertical position as a percentage.
+     */
+    positionOverlayText(textElement, leftPercent, topPercent) {
+        textElement.style.left = leftPercent + '%';
+        textElement.style.top = topPercent + '%';
+        textElement.style.transform = 'translate(-50%, -50%)';
+        textElement.style.position = 'absolute';
+    }
+
+    /**
+     * Exports the modified image by drawing it onto a canvas.
+     */
+    async exportImage() {
+        // Create a canvas with the dimensions of the image
+        const exportCanvas = document.createElement('canvas');
+        const image = new Image();
+        image.crossOrigin = "anonymous";
+        image.src = this.elements.mainImage.src;
+
+        await new Promise((resolve, reject) => {
+            image.onload = () => resolve();
+            image.onerror = reject;
+        });
+
+        // Set canvas dimensions after image has loaded
+        exportCanvas.width = image.naturalWidth;
+        exportCanvas.height = image.naturalHeight;
+
+        const ctx = exportCanvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, exportCanvas.width, exportCanvas.height);
+
+        // Draw the overlay
+        if (this.overlaySettings.overlayOpacity > 0) {
+            const overlayHeight = (this.overlaySettings.overlayHeightPercentage / 100) * exportCanvas.height;
+            const gradient = ctx.createLinearGradient(0, exportCanvas.height, 0, exportCanvas.height - overlayHeight);
+            gradient.addColorStop(0, this.hexToRgba(this.overlaySettings.overlayColor, this.overlaySettings.overlayOpacity));
+            gradient.addColorStop(1, this.hexToRgba(this.overlaySettings.overlayColor, 0));
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, exportCanvas.height - overlayHeight, exportCanvas.width, overlayHeight);
+        }
+
+        // Draw the text
+        ctx.fillStyle = this.overlaySettings.textColor;
+        const fontSizeScaled = (this.overlaySettings.fontSize / this.elements.imageContainer.clientWidth) * exportCanvas.width;
+        ctx.font = `${this.overlaySettings.isItalic ? 'italic' : ''} ${this.overlaySettings.isBold ? 'bold' : ''} ${fontSizeScaled}px ${this.overlaySettings.fontFamily}`;
+        ctx.textAlign = this.overlaySettings.textAlignment;
+        ctx.textBaseline = 'middle';
+
+        const x = (this.overlaySettings.textPositionLeft / 100) * exportCanvas.width;
+        const y = (this.overlaySettings.textPositionTop / 100) * exportCanvas.height;
+
+        const lines = this.elements.overlayText.textContent.split('\n');
+        const lineHeight = fontSizeScaled * 1.2;
+        let currentY = y - ((lines.length - 1) * lineHeight) / 2;
+
+        lines.forEach((line) => {
+            ctx.fillText(line, x, currentY);
+            currentY += lineHeight;
+        });
+
+        // Create a download link
+        const dataURL = exportCanvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = dataURL;
+        link.download = 'modified_image.png';
+        link.click();
+    }
+
+    /**
+     * Converts a hex color code to rgba string.
+     * @param {string} hex - The hex color code.
+     * @param {number} opacity - The opacity value.
+     * @returns {string} - The rgba color string.
+     */
+    hexToRgba(hex, opacity) {
         let c;
         if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
             c = hex.substring(1).split('');
@@ -580,7 +718,72 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return 'rgba(0,0,0,' + opacity + ')';
     }
+
+    /**
+     * Handles the drag start event for the overlay text in the preview.
+     * @param {Event} event - The mousedown event.
+     */
+    onDragStart(event) {
+        console.log('Drag started');
+        this.isDragging = true;
+        this.dragStartX = event.clientX;
+        this.dragStartY = event.clientY;
+        const rect = this.elements.previewOverlayText.getBoundingClientRect();
+        this.elementStartLeft = rect.left;
+        this.elementStartTop = rect.top;
+        // Prevent text selection
+        event.preventDefault();
+        // Set cursor
+        this.elements.previewOverlayText.style.cursor = 'grabbing';
+    }
+
+    /**
+     * Handles the drag move event for the overlay text in the preview.
+     * @param {Event} event - The mousemove event.
+     */
+    onDrag(event) {
+        if (!this.isDragging) {
+            return;
+        }
+        console.log('Dragging');
+        // Prevent text selection
+        event.preventDefault();
+        // Calculate new position
+        const deltaX = event.clientX - this.dragStartX;
+        const deltaY = event.clientY - this.dragStartY;
+        const newLeft = this.elementStartLeft + deltaX;
+        const newTop = this.elementStartTop + deltaY;
+        // Get container dimensions
+        const containerRect = this.elements.livePreview.getBoundingClientRect();
+        // Get percentage positions
+        const leftPercent = ((newLeft - containerRect.left) / containerRect.width) * 100;
+        const topPercent = ((newTop - containerRect.top) / containerRect.height) * 100;
+        this.overlaySettings.textPositionLeft = leftPercent;
+        this.overlaySettings.textPositionTop = topPercent;
+        this.positionOverlayText(this.elements.previewOverlayText, leftPercent, topPercent);
+    }
+
+    /**
+     * Handles the drag end event for the overlay text in the preview.
+     * @param {Event} event - The mouseup event.
+     */
+    onDragEnd(event) {
+        if (!this.isDragging) {
+            return;
+        }
+        console.log('Drag ended');
+        this.isDragging = false;
+        // Reset cursor
+        this.elements.previewOverlayText.style.cursor = 'grab';
+    }
+}
+
+// Initialize the ImageEditor when the DOM content is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const imageEditor = new ImageEditor();
+    imageEditor.init();
 });
+
 </script>
 
 </body>
