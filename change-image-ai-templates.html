@@ -2,11 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Image Replacement Example with Tailwind CSS and Interact.js</title>
+    <title>Image Replacement Example with Tailwind CSS</title>
     <!-- Include Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Include Interact.js via CDN -->
-    <script src="https://cdn.interactjs.io/v1.10.11/interact.min.js"></script>
     <!-- Include Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,8 +16,8 @@
 <body class="bg-gray-100">
 
 <!-- Main Image with Overlay -->
-<div class="flex justify-center mt-4 px-2">
-    <div class="relative w-full max-w-md" id="imageContainer">
+<div class="flex justify-center mt-10 px-4">
+    <div class="relative max-w-full w-full sm:w-auto" id="imageContainer">
         <img id="mainImage" src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/20240608-183351_course_module_img_with_text_1.png" alt="Image" class="w-full h-auto object-cover cursor-pointer" loading="lazy">
         <!-- Overlay Div -->
         <div id="overlayDiv" class="absolute inset-x-0 bottom-0 pointer-events-none"></div>
@@ -30,7 +28,7 @@
 
 <!-- The Modal -->
 <div id="imageModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-  <div class="flex items-center justify-center min-h-screen px-2 pt-4 pb-20 text-center sm:block sm:p-0">
+  <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
     <!-- Background overlay -->
     <div class="fixed inset-0 transition-opacity" aria-hidden="true">
       <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -38,7 +36,7 @@
 
     <!-- Modal content -->
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-    <div class="inline-block align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl w-full">
+    <div class="inline-block align-bottom bg-white rounded-lg shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full w-full">
       <div class="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
         <!-- Close Button -->
         <div class="flex justify-end">
@@ -57,15 +55,7 @@
                 <!-- Overlay Div -->
                 <div id="previewOverlayDiv" class="absolute inset-x-0 bottom-0 pointer-events-none"></div>
                 <!-- Overlay Text -->
-                <p id="previewOverlayText" class="absolute text-center text-white break-words touch-none"></p>
-            </div>
-            <!-- Drag Mode Toggle -->
-            <div class="flex items-center mb-4">
-                <label class="inline-flex items-center mr-2">
-                    <input type="checkbox" id="dragModeToggle" class="form-checkbox h-5 w-5 text-blue-600">
-                    <span class="ml-2 text-gray-700">Drag Mode</span>
-                </label>
-                <span class="text-sm text-gray-500">Activate to reposition overlay text.</span>
+                <p id="previewOverlayText" class="absolute text-center text-white break-words cursor-grab touch-none"></p>
             </div>
             <!-- Overlay Inputs -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
@@ -122,7 +112,7 @@
                     </select>
                 </div>
                 <!-- Bold and Italic Options -->
-                <div class="flex flex-wrap items-center space-x-4 space-y-2 sm:space-y-0">
+                <div class="flex items-center space-x-4">
                     <label class="inline-flex items-center">
                         <input type="checkbox" id="boldCheckbox" class="form-checkbox h-5 w-5 text-blue-600">
                         <span class="ml-2 text-gray-700">Bold</span>
@@ -134,19 +124,19 @@
                 </div>
             </div>
             <!-- Apply and Export Buttons -->
-            <div class="flex flex-wrap flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-                <button id="updateTextButton" class="px-6 py-3 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Apply Changes</button>
-                <button id="exportImageButton" class="px-6 py-3 mt-2 text-white bg-green-500 rounded hover:bg-green-600">Export Image</button>
+            <div class="flex flex-wrap space-x-4">
+                <button id="updateTextButton" class="px-4 py-2 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Apply Changes</button>
+                <button id="exportImageButton" class="px-4 py-2 mt-2 text-white bg-green-500 rounded hover:bg-green-600">Export Image</button>
             </div>
         </div>
 
         <!-- Tabs -->
         <div class="mb-4 border-b border-gray-200">
-          <nav class="-mb-px flex flex-wrap overflow-x-auto" aria-label="Tabs">
-            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Upload">Upload Image</a>
-            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Camera">Take Photo</a>
-            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="URL">Upload via URL</a>
-            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm" data-tab="Unsplash">Search Unsplash</a>
+          <nav class="-mb-px flex flex-wrap space-x-4 overflow-x-auto" aria-label="Tabs">
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex-shrink-0" data-tab="Upload">Upload Image</a>
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex-shrink-0" data-tab="Camera">Take Photo</a>
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex-shrink-0" data-tab="URL">Upload via URL</a>
+            <a href="#" class="tablinks text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm flex-shrink-0" data-tab="Unsplash">Search Unsplash</a>
           </nav>
         </div>
 
@@ -158,20 +148,20 @@
 
         <div id="Camera" class="tabcontent hidden">
           <h3 class="mb-2 text-lg font-semibold text-gray-700">Take Photo</h3>
-          <video id="video" class="border w-full h-auto" autoplay></video>
+          <video id="video" width="320" height="240" autoplay class="border w-full h-auto"></video>
           <div id="cameraErrorMessage" class="mt-2 text-red-500"></div>
-          <div class="mt-4 flex flex-wrap flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-            <button id="snap" class="px-6 py-3 text-white bg-blue-500 rounded hover:bg-blue-600">Snap Photo</button>
-            <button id="usePhoto" class="px-6 py-3 text-white bg-green-500 rounded hover:bg-green-600">Use Photo</button>
+          <div class="mt-4 flex flex-wrap space-x-2">
+            <button id="snap" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Snap Photo</button>
+            <button id="usePhoto" class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">Use Photo</button>
           </div>
-          <canvas id="canvas" class="hidden mt-4 border w-full h-auto"></canvas>
+          <canvas id="canvas" width="320" height="240" class="hidden mt-4 border w-full h-auto"></canvas>
         </div>
 
         <div id="URL" class="tabcontent hidden">
           <h3 class="mb-2 text-lg font-semibold text-gray-700">Upload via URL</h3>
           <div class="flex flex-wrap">
             <input type="text" id="urlInput" placeholder="Enter Image URL" class="flex-grow w-full px-3 py-2 mr-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="urlButton" class="px-6 py-3 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Load Image</button>
+            <button id="urlButton" class="px-4 py-2 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Load Image</button>
           </div>
         </div>
 
@@ -179,9 +169,9 @@
           <h3 class="mb-2 text-lg font-semibold text-gray-700">Search Unsplash</h3>
           <div class="flex flex-wrap">
             <input type="text" id="unsplashQuery" placeholder="Search for images" class="flex-grow w-full px-3 py-2 mr-2 mb-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="unsplashSearch" class="px-6 py-3 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Search</button>
+            <button id="unsplashSearch" class="px-4 py-2 mt-2 text-white bg-blue-500 rounded hover:bg-blue-600">Search</button>
           </div>
-          <div id="unsplashResults" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-4"></div>
+          <div id="unsplashResults" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4"></div>
         </div>
 
       </div>
@@ -216,6 +206,12 @@ class ImageEditor {
         this.stream = null; // For camera stream
         // Unsplash Access Key
         this.unsplashAccessKey = 'y-eSCtciq7d7GZrzIJ2xbH2SXze_AcJOxykieEZP53I';
+        // Dragging variables
+        this.isDragging = false;
+        this.dragStartX = 0;
+        this.dragStartY = 0;
+        this.elementStartLeft = 0;
+        this.elementStartTop = 0;
     }
 
     /**
@@ -268,7 +264,6 @@ class ImageEditor {
         this.elements.previewImage = document.getElementById('previewImage');
         this.elements.previewOverlayDiv = document.getElementById('previewOverlayDiv');
         this.elements.previewOverlayText = document.getElementById('previewOverlayText');
-        this.elements.dragModeToggle = document.getElementById('dragModeToggle');
     }
 
     /**
@@ -342,39 +337,15 @@ class ImageEditor {
         // Unsplash search
         this.elements.unsplashSearchButton.addEventListener('click', this.onUnsplashSearchButtonClick.bind(this));
 
-        // Drag Mode Toggle
-        this.elements.dragModeToggle.addEventListener('change', (event) => {
-            console.log('Drag Mode changed:', event.target.checked);
-            if (event.target.checked) {
-                this.dragInteract.draggable(true);
-                this.elements.previewOverlayText.style.cursor = 'move';
-                this.elements.previewOverlayText.style.userSelect = 'none';
-            } else {
-                this.dragInteract.draggable(false);
-                this.elements.previewOverlayText.style.cursor = 'default';
-                this.elements.previewOverlayText.style.userSelect = 'text';
-            }
-        });
-
-        // Initialize interact.js for dragging
-        this.dragInteract = interact(this.elements.previewOverlayText)
-            .draggable({
-                inertia: true,
-                modifiers: [
-                    interact.modifiers.restrictRect({
-                        restriction: 'parent',
-                        endOnly: true
-                    })
-                ],
-                autoScroll: true,
-                listeners: {
-                    move: this.onDragMove.bind(this),
-                    end: this.onDragEnd.bind(this)
-                }
-            });
-
-        // Initially disable dragging
-        this.dragInteract.draggable(false);
+        // Drag and drop for overlay text in preview
+        // Mouse events
+        this.elements.previewOverlayText.addEventListener('mousedown', this.onDragStart.bind(this));
+        document.addEventListener('mousemove', this.onDrag.bind(this));
+        document.addEventListener('mouseup', this.onDragEnd.bind(this));
+        // Touch events
+        this.elements.previewOverlayText.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
+        document.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false });
+        document.addEventListener('touchend', this.onTouchEnd.bind(this));
     }
 
     /**
@@ -432,10 +403,6 @@ class ImageEditor {
         // Update text style
         this.setOverlayTextStyle(this.elements.previewOverlayText, previewSettings);
         this.positionOverlayText(this.elements.previewOverlayText, previewSettings.textPositionLeft, previewSettings.textPositionTop);
-        // Reset drag data
-        this.elements.previewOverlayText.setAttribute('data-x', 0);
-        this.elements.previewOverlayText.setAttribute('data-y', 0);
-        this.elements.previewOverlayText.style.transform = 'translate(-50%, -50%)';
     }
 
     /**
@@ -453,8 +420,6 @@ class ImageEditor {
         this.overlaySettings.fontFamily = this.elements.fontFamilySelect.value;
         this.overlaySettings.isBold = this.elements.boldCheckbox.checked;
         this.overlaySettings.isItalic = this.elements.italicCheckbox.checked;
-        this.overlaySettings.textPositionLeft = this.overlaySettings.textPositionLeft;
-        this.overlaySettings.textPositionTop = this.overlaySettings.textPositionTop;
 
         // Update the overlay div
         this.elements.overlayDiv.style.height = `${this.overlaySettings.overlayHeightPercentage}%`;
@@ -571,9 +536,6 @@ class ImageEditor {
      */
     onSnapButtonClick() {
         console.log('Snap photo button clicked');
-        // Resize canvas to match video dimensions
-        this.elements.canvas.width = this.elements.video.videoWidth;
-        this.elements.canvas.height = this.elements.video.videoHeight;
         this.elements.context.drawImage(this.elements.video, 0, 0, this.elements.canvas.width, this.elements.canvas.height);
         this.elements.canvas.classList.remove('hidden');
     }
@@ -672,7 +634,6 @@ class ImageEditor {
         textElement.style.fontStyle = settings.isItalic ? 'italic' : 'normal';
         textElement.style.textAlign = settings.textAlignment;
         textElement.style.width = '100%';
-        textElement.style.wordWrap = 'break-word';
     }
 
     /**
@@ -686,44 +647,6 @@ class ImageEditor {
         textElement.style.top = topPercent + '%';
         textElement.style.transform = 'translate(-50%, -50%)';
         textElement.style.position = 'absolute';
-    }
-
-    /**
-     * Handles the drag move event for the overlay text in the preview.
-     * @param {Event} event - The interact.js dragmove event.
-     */
-    onDragMove(event) {
-        console.log('Drag move:', event);
-        const target = event.target;
-
-        // Keep the dragged position in the data-x/data-y attributes
-        let x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-        let y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-        // Translate the element
-        target.style.transform = `translate(${x}px, ${y}px) translate(-50%, -50%)`;
-
-        // Update the position attributes
-        target.setAttribute('data-x', x);
-        target.setAttribute('data-y', y);
-
-        // Update percentage positions
-        const rect = target.getBoundingClientRect();
-        const containerRect = this.elements.livePreview.getBoundingClientRect();
-        const leftPercent = ((rect.left + rect.width / 2 - containerRect.left) / containerRect.width) * 100;
-        const topPercent = ((rect.top + rect.height / 2 - containerRect.top) / containerRect.height) * 100;
-
-        this.overlaySettings.textPositionLeft = leftPercent;
-        this.overlaySettings.textPositionTop = topPercent;
-    }
-
-    /**
-     * Handles the drag end event for the overlay text in the preview.
-     * @param {Event} event - The interact.js dragend event.
-     */
-    onDragEnd(event) {
-        console.log('Drag end:', event);
-        // Optionally, implement any logic needed after drag ends
     }
 
     /**
@@ -760,7 +683,7 @@ class ImageEditor {
 
         // Draw the text
         ctx.fillStyle = this.overlaySettings.textColor;
-        const fontSizeScaled = (this.overlaySettings.fontSize / this.elements.livePreview.clientWidth) * exportCanvas.width;
+        const fontSizeScaled = (this.overlaySettings.fontSize / this.elements.imageContainer.clientWidth) * exportCanvas.width;
         ctx.font = `${this.overlaySettings.isItalic ? 'italic' : ''} ${this.overlaySettings.isBold ? 'bold' : ''} ${fontSizeScaled}px ${this.overlaySettings.fontFamily}`;
         ctx.textAlign = this.overlaySettings.textAlignment;
         ctx.textBaseline = 'middle';
@@ -802,6 +725,124 @@ class ImageEditor {
             return 'rgba(' + [(c>>16)&255, (c>>8)&255, c&255].join(',') + ',' + opacity + ')';
         }
         return 'rgba(0,0,0,' + opacity + ')';
+    }
+
+    /**
+     * Handles the drag start event for the overlay text in the preview (mouse).
+     * @param {Event} event - The mousedown event.
+     */
+    onDragStart(event) {
+        console.log('Drag started');
+        this.isDragging = true;
+        this.dragStartX = event.clientX;
+        this.dragStartY = event.clientY;
+        const rect = this.elements.previewOverlayText.getBoundingClientRect();
+        this.elementStartLeft = rect.left;
+        this.elementStartTop = rect.top;
+        // Prevent text selection
+        event.preventDefault();
+        // Set cursor
+        this.elements.previewOverlayText.style.cursor = 'grabbing';
+    }
+
+    /**
+     * Handles the drag move event for the overlay text in the preview (mouse).
+     * @param {Event} event - The mousemove event.
+     */
+    onDrag(event) {
+        if (!this.isDragging) {
+            return;
+        }
+        console.log('Dragging');
+        // Prevent text selection
+        event.preventDefault();
+        // Calculate new position
+        const deltaX = event.clientX - this.dragStartX;
+        const deltaY = event.clientY - this.dragStartY;
+        const newLeft = this.elementStartLeft + deltaX;
+        const newTop = this.elementStartTop + deltaY;
+        // Get container dimensions
+        const containerRect = this.elements.livePreview.getBoundingClientRect();
+        // Get percentage positions
+        const leftPercent = ((newLeft - containerRect.left) / containerRect.width) * 100;
+        const topPercent = ((newTop - containerRect.top) / containerRect.height) * 100;
+        this.overlaySettings.textPositionLeft = leftPercent;
+        this.overlaySettings.textPositionTop = topPercent;
+        this.positionOverlayText(this.elements.previewOverlayText, leftPercent, topPercent);
+    }
+
+    /**
+     * Handles the drag end event for the overlay text in the preview (mouse).
+     * @param {Event} event - The mouseup event.
+     */
+    onDragEnd(event) {
+        if (!this.isDragging) {
+            return;
+        }
+        console.log('Drag ended');
+        this.isDragging = false;
+        // Reset cursor
+        this.elements.previewOverlayText.style.cursor = 'grab';
+    }
+
+    /**
+     * Handles the touch start event for the overlay text in the preview (touch).
+     * @param {Event} event - The touchstart event.
+     */
+    onTouchStart(event) {
+        console.log('Touch start');
+        this.isDragging = true;
+        const touch = event.touches[0];
+        this.dragStartX = touch.clientX;
+        this.dragStartY = touch.clientY;
+        const rect = this.elements.previewOverlayText.getBoundingClientRect();
+        this.elementStartLeft = rect.left;
+        this.elementStartTop = rect.top;
+        // Prevent scrolling
+        event.preventDefault();
+        // Set cursor
+        this.elements.previewOverlayText.style.cursor = 'grabbing';
+    }
+
+    /**
+     * Handles the touch move event for the overlay text in the preview (touch).
+     * @param {Event} event - The touchmove event.
+     */
+    onTouchMove(event) {
+        if (!this.isDragging) {
+            return;
+        }
+        console.log('Touch moving');
+        // Prevent scrolling
+        event.preventDefault();
+        const touch = event.touches[0];
+        // Calculate new position
+        const deltaX = touch.clientX - this.dragStartX;
+        const deltaY = touch.clientY - this.dragStartY;
+        const newLeft = this.elementStartLeft + deltaX;
+        const newTop = this.elementStartTop + deltaY;
+        // Get container dimensions
+        const containerRect = this.elements.livePreview.getBoundingClientRect();
+        // Get percentage positions
+        const leftPercent = ((newLeft - containerRect.left) / containerRect.width) * 100;
+        const topPercent = ((newTop - containerRect.top) / containerRect.height) * 100;
+        this.overlaySettings.textPositionLeft = leftPercent;
+        this.overlaySettings.textPositionTop = topPercent;
+        this.positionOverlayText(this.elements.previewOverlayText, leftPercent, topPercent);
+    }
+
+    /**
+     * Handles the touch end event for the overlay text in the preview (touch).
+     * @param {Event} event - The touchend event.
+     */
+    onTouchEnd(event) {
+        if (!this.isDragging) {
+            return;
+        }
+        console.log('Touch end');
+        this.isDragging = false;
+        // Reset cursor
+        this.elements.previewOverlayText.style.cursor = 'grab';
     }
 }
 
