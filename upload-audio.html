@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Upload MP3 or MP4 Directly to AWS S3</title>
+    <title>Upload Files Directly to AWS S3</title>
     <!-- Include Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -20,7 +20,7 @@
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
     <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
-        <h1 class="text-2xl font-bold mb-6 text-center">Upload MP3 or MP4 to AWS S3</h1>
+        <h1 class="text-2xl font-bold mb-6 text-center">Upload Files to AWS S3</h1>
         
         <!-- Drop Zone -->
         <div id="drop-zone" class="mb-4 p-6 border-2 border-dashed border-gray-300 rounded flex flex-col items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100" role="button" tabindex="0" aria-label="File Upload Drop Zone">
@@ -28,8 +28,8 @@
             <svg class="w-12 h-12 text-gray-400 mb-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M7.4 10L12 14.6 16.6 10 18 11.4l-6 6-6-6z"></path>
             </svg>
-            <p class="text-gray-500 text-center">Drag and drop your MP3 or MP4 files here or <span class="text-blue-500 underline">browse</span></p>
-            <input type="file" id="fileInput" name="file" accept=".mp3,.mp4" multiple class="hidden" aria-label="File Input" />
+            <p class="text-gray-500 text-center">Drag and drop your files here or <span class="text-blue-500 underline">browse</span></p>
+            <input type="file" id="fileInput" name="file" multiple class="hidden" aria-label="File Input" />
         </div>
 
         <!-- Error Message -->
@@ -67,8 +67,6 @@
             let selectedFiles = [];
             let totalFileSize = 0; // in bytes
             let totalUploadedBytes = 0; // in bytes
-
-            const MAX_FILE_SIZE = 5000 * 1024 * 1024; // 5GB
 
             // Handle drop zone click and keyboard activation
             dropZone.addEventListener('click', function() {
@@ -125,41 +123,8 @@
                 totalProgressContainer.classList.add('hidden');
                 totalUploadStatus.textContent = '';
 
-                const validTypes = ['audio/mpeg', 'audio/mp3', 'video/mp4'];
-                const maxFileSize = MAX_FILE_SIZE;
-
                 for (let i = 0; i < files.length; i++) {
                     const file = files[i];
-
-                    // Validate file type
-                    if (!validTypes.includes(file.type)) {
-                        const errorItem = document.createElement('div');
-                        errorItem.textContent = 'Invalid file type for ' + file.name + '. Please select MP3 or MP4 files.';
-                        errorItem.classList.add('text-red-500', 'mb-2');
-                        fileListDisplay.appendChild(errorItem);
-                        // Add shake effect
-                        dropZone.classList.add('shake');
-                        dropZone.classList.add('border-red-500');
-                        setTimeout(function() {
-                            dropZone.classList.remove('shake');
-                        }, 500);
-                        continue; // skip this file
-                    }
-
-                    // Validate file size
-                    if (file.size > maxFileSize) {
-                        const errorItem = document.createElement('div');
-                        errorItem.textContent = 'File size exceeds 5GB limit for ' + file.name + '.';
-                        errorItem.classList.add('text-red-500', 'mb-2');
-                        fileListDisplay.appendChild(errorItem);
-                        // Add shake effect
-                        dropZone.classList.add('shake');
-                        dropZone.classList.add('border-red-500');
-                        setTimeout(function() {
-                            dropZone.classList.remove('shake');
-                        }, 500);
-                        continue; // skip this file
-                    }
 
                     // Create UI elements for this file
                     const fileItem = document.createElement('div');
@@ -168,9 +133,6 @@
                     const fileName = document.createElement('div');
                     fileName.textContent = file.name;
                     fileName.classList.add('text-gray-700', 'mb-2', 'font-semibold');
-
-                    // Add file preview
-                    addFilePreview(file, fileItem);
 
                     // Add Progress Bar
                     const fileProgressContainer = document.createElement('div');
@@ -213,35 +175,6 @@
                 }
             }
 
-            function addFilePreview(file, fileItem) {
-                const previewContainer = document.createElement('div');
-                previewContainer.classList.add('mb-2');
-
-                if (file.type.startsWith('video/')) {
-                    const video = document.createElement('video');
-                    video.src = URL.createObjectURL(file);
-                    video.controls = false;
-                    video.classList.add('w-full', 'h-auto', 'mb-2');
-                    video.setAttribute('aria-label', 'Video preview of ' + file.name);
-                    previewContainer.appendChild(video);
-                } else if (file.type.startsWith('audio/')) {
-                    const audio = document.createElement('audio');
-                    audio.src = URL.createObjectURL(file);
-                    audio.controls = false;
-                    audio.classList.add('w-full', 'h-auto', 'mb-2');
-                    audio.setAttribute('aria-label', 'Audio preview of ' + file.name);
-                    previewContainer.appendChild(audio);
-                } else {
-                    // For unknown type, show generic icon
-                    const icon = document.createElement('div');
-                    icon.classList.add('w-12', 'h-12', 'bg-gray-300', 'rounded', 'mb-2');
-                    icon.setAttribute('aria-hidden', 'true');
-                    previewContainer.appendChild(icon);
-                }
-
-                fileItem.appendChild(previewContainer);
-            }
-
             // Handle upload button click
             uploadButton.addEventListener('click', function() {
                 if (selectedFiles.length === 0) {
@@ -266,24 +199,26 @@
                 const statusText = fileObj.statusText;
 
                 try {
-const presignedResponse = await fetch('https://xgvm4vnzjnwodou462vkpdttnm0slvnk.lambda-url.us-west-2.on.aws/', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        fileName: generateUniqueFileName(file.name),
-        fileType: file.type,
-        fileSize: file.size
-    })
-});
+                    // Step 1: Request a pre-signed URL from the backend
+                    const presignedResponse = await fetch('https://xgvm4vnzjnwodou462vkpdttnm0slvnk.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            fileName: generateUniqueFileName(file.name),
+                            fileType: file.type,
+                            fileSize: file.size
+                        })
+                    });
 
-if (!presignedResponse.ok) {
-    throw new Error('Failed to get pre-signed URL.');
-}
+                    if (!presignedResponse.ok) {
+                        throw new Error('Failed to get pre-signed URL.');
+                    }
 
-const presignedData = await presignedResponse.json();
-console.log(presignedData,'presignedData');
+                    const presignedData = await presignedResponse.json();
+                    console.log(presignedData, 'presignedData');
+
                     // Step 2: Upload the file directly to S3 using the pre-signed URL
                     const formData = new FormData();
                     Object.keys(presignedData.fields).forEach(key => {
@@ -352,7 +287,7 @@ console.log(presignedData,'presignedData');
             }
 
             function generateUniqueFileName(originalName) {
-                // Generate a unique filename using UUID or timestamp
+                // Generate a unique filename using timestamp
                 const timestamp = Date.now();
                 const extension = originalName.substring(originalName.lastIndexOf('.'));
                 return timestamp + '_' + originalName;
