@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload MP3 or MP4 Directly to AWS S3</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+    .shake {
+        animation: shake 0.5s;
+    }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white p-6 rounded shadow-md w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Upload MP3 or MP4 to AWS S3</h1>
+        
+        <!-- Drop Zone -->
+        <div id="drop-zone" class="mb-4 p-6 border-2 border-dashed border-gray-300 rounded flex flex-col items-center justify-center cursor-pointer bg-gray-50 hover:bg-gray-100" role="button" tabindex="0" aria-label="File Upload Drop Zone">
+            <!-- Icon -->
+            <svg class="w-12 h-12 text-gray-400 mb-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7.4 10L12 14.6 16.6 10 18 11.4l-6 6-6-6z"></path>
+            </svg>
+            <p class="text-gray-500 text-center">Drag and drop your MP3 or MP4 files here or <span class="text-blue-500 underline">browse</span></p>
+            <input type="file" id="fileInput" name="file" accept=".mp3,.mp4" multiple class="hidden" aria-label="File Input" />
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="text-red-500 text-center mb-4" role="alert" aria-live="assertive"></div>
+
+        <!-- Selected Files List -->
+        <div id="file-list" class="mb-4"></div>
+
+        <!-- Upload Button -->
+        <button id="uploadButton" class="bg-blue-500 w-full text-white py-2 px-4 rounded hover:bg-blue-600 cursor-pointer" disabled aria-label="Upload Files">Upload</button>
+        
+        <!-- Total Upload Progress -->
+        <div id="total-progress-container" class="bg-gray-200 rounded-full h-2 w-full mt-4 hidden">
+            <div id="total-progress-bar" class="bg-blue-500 h-2 rounded-full w-0"></div>
+        </div>
+
+        <!-- Total Upload Status -->
+        <div id="total-upload-status" class="text-gray-500 text-center mt-2" role="status" aria-live="polite"></div>
+
+        <!-- Result Message -->
+        <p id="result" class="mt-4 text-center" role="status" aria-live="polite"></p>
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('drop-zone');
+            const fileInput = document.getElementById('fileInput');
+            const uploadButton = document.getElementById('uploadButton');
+            const result = document.getElementById('result');
+            const fileListDisplay = document.getElementById('file-list');
+            const errorMessage = document.getElementById('error-message');
+            const totalProgressContainer = document.getElementById('total-progress-container');
+            const totalProgressBar = document.getElementById('total-progress-bar');
+            const totalUploadStatus = document.getElementById('total-upload-status');
+            let selectedFiles = [];
+            let totalFileSize = 0; // in bytes
+            let totalUploadedBytes = 0; // in bytes
+
+            const MAX_FILE_SIZE = 5000 * 1024 * 1024; // 5GB
+
+            // Handle drop zone click and keyboard activation
+            dropZone.addEventListener('click', function() {
+                fileInput.click();
+            });
+            dropZone.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    fileInput.click();
+                }
+            });
+
+            // Touch events for mobile support
+            dropZone.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                fileInput.click();
+            });
+
+            // Update the drop zone UI when files are selected
+            fileInput.addEventListener('change', function() {
+                handleFileSelection(fileInput.files);
+            });
+
+            // Handle drag over
+            dropZone.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                dropZone.classList.add('bg-gray-100');
+            });
+
+            // Handle drag leave
+            dropZone.addEventListener('dragleave', function(event) {
+                event.preventDefault();
+                dropZone.classList.remove('bg-gray-100');
+            });
+
+            // Handle drop
+            dropZone.addEventListener('drop', function(event) {
+                event.preventDefault();
+                dropZone.classList.remove('bg-gray-100');
+                if (event.dataTransfer.files.length > 0) {
+                    fileInput.files = event.dataTransfer.files; // Update the file input
+                    handleFileSelection(event.dataTransfer.files);
+                }
+            });
+            
+            function handleFileSelection(files) {
+                selectedFiles = [];
+                fileListDisplay.innerHTML = ''; // clear UI
+                errorMessage.textContent = ''; // clear errors
+                dropZone.classList.remove('border-red-500');
+                totalFileSize = 0;
+                totalUploadedBytes = 0;
+                totalProgressBar.style.width = '0%';
+                totalProgressContainer.classList.add('hidden');
+                totalUploadStatus.textContent = '';
+
+                const validTypes = ['audio/mpeg', 'audio/mp3', 'video/mp4'];
+                const maxFileSize = MAX_FILE_SIZE;
+
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+
+                    // Validate file type
+                    if (!validTypes.includes(file.type)) {
+                        const errorItem = document.createElement('div');
+                        errorItem.textContent = 'Invalid file type for ' + file.name + '. Please select MP3 or MP4 files.';
+                        errorItem.classList.add('text-red-500', 'mb-2');
+                        fileListDisplay.appendChild(errorItem);
+                        // Add shake effect
+                        dropZone.classList.add('shake');
+                        dropZone.classList.add('border-red-500');
+                        setTimeout(function() {
+                            dropZone.classList.remove('shake');
+                        }, 500);
+                        continue; // skip this file
+                    }
+
+                    // Validate file size
+                    if (file.size > maxFileSize) {
+                        const errorItem = document.createElement('div');
+                        errorItem.textContent = 'File size exceeds 5GB limit for ' + file.name + '.';
+                        errorItem.classList.add('text-red-500', 'mb-2');
+                        fileListDisplay.appendChild(errorItem);
+                        // Add shake effect
+                        dropZone.classList.add('shake');
+                        dropZone.classList.add('border-red-500');
+                        setTimeout(function() {
+                            dropZone.classList.remove('shake');
+                        }, 500);
+                        continue; // skip this file
+                    }
+
+                    // Create UI elements for this file
+                    const fileItem = document.createElement('div');
+                    fileItem.classList.add('mb-4', 'border', 'p-2', 'rounded');
+
+                    const fileName = document.createElement('div');
+                    fileName.textContent = file.name;
+                    fileName.classList.add('text-gray-700', 'mb-2', 'font-semibold');
+
+                    // Add file preview
+                    addFilePreview(file, fileItem);
+
+                    // Add Progress Bar
+                    const fileProgressContainer = document.createElement('div');
+                    fileProgressContainer.classList.add('bg-gray-200', 'rounded-full', 'h-2', 'w-full', 'mb-2');
+
+                    const fileProgressBar = document.createElement('div');
+                    fileProgressBar.classList.add('bg-blue-500', 'h-2', 'rounded-full', 'w-0');
+
+                    fileProgressContainer.appendChild(fileProgressBar);
+
+                    // Add Status Text
+                    const fileStatus = document.createElement('div');
+                    fileStatus.classList.add('text-gray-500', 'mt-2');
+                    fileStatus.textContent = 'Ready to upload';
+                    fileStatus.setAttribute('role', 'status');
+                    fileStatus.setAttribute('aria-live', 'polite');
+
+                    // Append elements
+                    fileItem.appendChild(fileName);
+                    fileItem.appendChild(fileProgressContainer);
+                    fileItem.appendChild(fileStatus);
+
+                    fileListDisplay.appendChild(fileItem);
+
+                    // Add to selected files array
+                    selectedFiles.push({
+                        file: file,
+                        progressBar: fileProgressBar,
+                        statusText: fileStatus,
+                        uploadedBytes: 0
+                    });
+                }
+
+                if (selectedFiles.length > 0) {
+                    uploadButton.disabled = false;
+                    // Calculate total file size
+                    totalFileSize = selectedFiles.reduce((acc, fileObj) => acc + fileObj.file.size, 0);
+                } else {
+                    uploadButton.disabled = true;
+                }
+            }
+
+            function addFilePreview(file, fileItem) {
+                const previewContainer = document.createElement('div');
+                previewContainer.classList.add('mb-2');
+
+                if (file.type.startsWith('video/')) {
+                    const video = document.createElement('video');
+                    video.src = URL.createObjectURL(file);
+                    video.controls = false;
+                    video.classList.add('w-full', 'h-auto', 'mb-2');
+                    video.setAttribute('aria-label', 'Video preview of ' + file.name);
+                    previewContainer.appendChild(video);
+                } else if (file.type.startsWith('audio/')) {
+                    const audio = document.createElement('audio');
+                    audio.src = URL.createObjectURL(file);
+                    audio.controls = false;
+                    audio.classList.add('w-full', 'h-auto', 'mb-2');
+                    audio.setAttribute('aria-label', 'Audio preview of ' + file.name);
+                    previewContainer.appendChild(audio);
+                } else {
+                    // For unknown type, show generic icon
+                    const icon = document.createElement('div');
+                    icon.classList.add('w-12', 'h-12', 'bg-gray-300', 'rounded', 'mb-2');
+                    icon.setAttribute('aria-hidden', 'true');
+                    previewContainer.appendChild(icon);
+                }
+
+                fileItem.appendChild(previewContainer);
+            }
+
+            // Handle upload button click
+            uploadButton.addEventListener('click', function() {
+                if (selectedFiles.length === 0) {
+                    result.textContent = 'Please select files.';
+                    return;
+                }
+
+                uploadButton.disabled = true;
+                totalUploadedBytes = 0;
+                totalProgressBar.style.width = '0%';
+                totalProgressContainer.classList.remove('hidden');
+                totalUploadStatus.textContent = 'Total Upload Progress: 0%';
+
+                selectedFiles.forEach(function(fileObj) {
+                    uploadFile(fileObj);
+                });
+            });
+
+            async function uploadFile(fileObj) {
+                const file = fileObj.file;
+                const progressBar = fileObj.progressBar;
+                const statusText = fileObj.statusText;
+
+                try {
+const presignedResponse = await fetch('https://xgvm4vnzjnwodou462vkpdttnm0slvnk.lambda-url.us-west-2.on.aws/', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        fileName: generateUniqueFileName(file.name),
+        fileType: file.type,
+        fileSize: file.size
+    })
+});
+
+if (!presignedResponse.ok) {
+    throw new Error('Failed to get pre-signed URL.');
+}
+
+const presignedData = await presignedResponse.json();
+console.log(presignedData,'presignedData');
+                    // Step 2: Upload the file directly to S3 using the pre-signed URL
+                    const formData = new FormData();
+                    Object.keys(presignedData.fields).forEach(key => {
+                        formData.append(key, presignedData.fields[key]);
+                    });
+                    formData.append('file', file);
+
+                    const uploadRequest = new XMLHttpRequest();
+                    uploadRequest.open('POST', presignedData.url, true);
+
+                    uploadRequest.upload.addEventListener('progress', function(e) {
+                        if (e.lengthComputable) {
+                            const percentComplete = (e.loaded / e.total) * 100;
+                            progressBar.style.width = percentComplete + '%';
+                            statusText.textContent = 'Uploading... ' + Math.round(percentComplete) + '%';
+
+                            // Update uploadedBytes for this file
+                            fileObj.uploadedBytes = e.loaded;
+
+                            // Update totalUploadedBytes
+                            totalUploadedBytes = selectedFiles.reduce((acc, fileObj) => acc + fileObj.uploadedBytes, 0);
+
+                            // Update total progress bar
+                            const totalPercentComplete = (totalUploadedBytes / totalFileSize) * 100;
+                            totalProgressBar.style.width = totalPercentComplete + '%';
+
+                            // Update total upload status
+                            totalUploadStatus.textContent = 'Total Upload Progress: ' + Math.round(totalPercentComplete) + '%';
+                        }
+                    });
+
+                    uploadRequest.onload = function() {
+                        if (uploadRequest.status === 204 || uploadRequest.status === 201) {
+                            statusText.textContent = 'Upload successful.';
+                            statusText.classList.remove('text-gray-500');
+                            statusText.classList.add('text-green-500');
+                        } else {
+                            statusText.textContent = 'An error occurred during the upload.';
+                            statusText.classList.add('text-red-500');
+                        }
+                        checkAllUploadsComplete();
+                    };
+
+                    uploadRequest.onerror = function() {
+                        statusText.textContent = 'An error occurred during the upload.';
+                        statusText.classList.add('text-red-500');
+                        checkAllUploadsComplete();
+                    };
+
+                    uploadRequest.send(formData);
+                } catch (error) {
+                    statusText.textContent = 'Error: ' + error.message;
+                    statusText.classList.add('text-red-500');
+                    checkAllUploadsComplete();
+                }
+            }
+
+            function checkAllUploadsComplete() {
+                const anyUploading = selectedFiles.some(fileObj => {
+                    return fileObj.uploadedBytes < fileObj.file.size;
+                });
+                if (!anyUploading) {
+                    uploadButton.disabled = false;
+                    totalUploadStatus.textContent = 'All uploads are complete.';
+                }
+            }
+
+            function generateUniqueFileName(originalName) {
+                // Generate a unique filename using UUID or timestamp
+                const timestamp = Date.now();
+                const extension = originalName.substring(originalName.lastIndexOf('.'));
+                return timestamp + '_' + originalName;
+            }
+        });
+    </script>
+</body>
+</html>
