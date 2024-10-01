@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Audio Transcription Service</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Tailwind CSS CDN -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <!-- Axios CDN -->
@@ -11,74 +11,64 @@
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen">
   <div class="bg-white dark:bg-gray-800 p-8 rounded shadow-md w-full max-w-lg">
-    <h1 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Audio Transcription Service</h1>
-    <form id="transcriptionForm" class="space-y-4" aria-label="Audio Transcription Form">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Audio Transcription Service</h1>
       <!-- Toggle Dark Mode Button -->
-      <div class="flex justify-end">
-        <button id="themeToggle" type="button" class="text-gray-500 dark:text-gray-200 focus:outline-none" aria-label="Toggle Dark Mode">
-          <!-- Theme Toggle Icon -->
-          <svg id="themeToggleIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <!-- Filled dynamically via JavaScript -->
-          </svg>
-        </button>
-      </div>
-      <!-- Language Selection -->
-      <div>
-        <label for="languageSelect" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Select Language</label>
-        <select id="languageSelect" name="language" class="mt-1 block w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-          <!-- Language options -->
-          <option value="en" selected>English</option>
-          <option value="es">Spanish</option>
-          <option value="de">German</option>
-          <!-- Add more languages as needed -->
-        </select>
-      </div>
+      <button id="themeToggle" type="button" class="text-gray-500 dark:text-gray-200 focus:outline-none" aria-label="Toggle Dark Mode">
+        <!-- Theme Toggle Icon -->
+        <svg id="themeToggleIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+          <!-- Filled dynamically via JavaScript -->
+        </svg>
+      </button>
+    </div>
+    <form id="transcriptionForm" class="space-y-4" aria-label="Audio Transcription Form">
       <!-- Audio URL Input -->
       <div>
         <label for="audioUrl" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Audio URL</label>
         <input type="text" id="audioUrl" name="audioUrl" class="mt-1 block w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" placeholder="Enter audio URL">
       </div>
-      <!-- File Upload Area -->
-      <div id="drop-area" class="flex items-center justify-center w-full" aria-label="File Upload Area">
-        <label for="fileInput" tabindex="0" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Click to upload or drag and drop an audio file">
-          <div class="flex flex-col items-center justify-center pt-5 pb-6">
-            <!-- File Upload Icon -->
-            <svg class="w-8 h-8 mb-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4a4 4 0 018 0v12M4 12h16v6a2 2 0 01-2 2H6a2 2 0 01-2-2v-6z"/>
-            </svg>
-            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">MP3, WAV, OGG (MAX. 100MB)</p>
-          </div>
-          <input id="fileInput" type="file" class="hidden" accept=".mp3, .wav, .ogg" aria-label="File Input" />
-        </label>
+      <!-- File Upload -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Upload Audio File</label>
+        <div class="mt-1 flex items-center">
+          <input id="fileInput" type="file" accept=".mp3, .wav, .ogg, .mp4" class="hidden" />
+          <button type="button" id="fileUploadButton" class="bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-700 rounded-md py-2 px-3 text-sm leading-4 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Choose File
+          </button>
+          <span id="fileNameDisplay" class="ml-3 text-sm text-gray-500 dark:text-gray-400">No file selected</span>
+        </div>
+        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">MP3, WAV, OGG, MP4 (MAX. 100MB)</p>
       </div>
-      <!-- Display selected file name -->
-      <div id="fileNameDisplay" class="text-sm text-gray-500 dark:text-gray-400"></div>
       <!-- Submit and Cancel Buttons -->
       <div class="flex space-x-4">
-        <button type="submit" id="submitButton" class="flex-1 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Transcribe Button">Transcribe</button>
-        <button type="button" id="cancelButton" class="flex-1 bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500" aria-label="Cancel Button" disabled>Cancel</button>
+        <button type="submit" id="submitButton" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Transcribe Button">Transcribe</button>
+        <button type="button" id="cancelButton" class="flex-1 bg-red-600 text-white py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500" aria-label="Cancel Button" disabled>Cancel</button>
       </div>
       <!-- Progress bar -->
-      <div id="uploadProgress" class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-4 hidden" aria-label="Upload Progress">
-        <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+      <div id="uploadProgressContainer" class="w-full hidden flex-col items-center">
+        <div id="uploadProgress" class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-4" aria-label="Upload Progress">
+          <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+        </div>
+        <p id="uploadProgressText" class="text-sm text-gray-500 dark:text-gray-400 mt-2">Uploading file...</p>
       </div>
     </form>
     <div id="timer" class="mt-4 text-sm text-gray-500 dark:text-gray-400 hidden">Transcription in progress... This can take up to 2 minutes.</div>
+    <!-- Transcription Result -->
     <div id="result" class="mt-4 hidden">
       <h2 class="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100">Transcription Result</h2>
       <div class="relative">
-        <pre id="transcriptionText" class="bg-gray-100 dark:bg-gray-800 p-4 rounded h-64 overflow-y-auto whitespace-pre-wrap text-gray-900 dark:text-gray-100"></pre>
-        <button id="copyButton" class="absolute top-2 right-2 bg-gray-200 dark:bg-gray-700 p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Copy Transcription">
+        <pre id="transcriptionText" class="bg-gray-100 dark:bg-gray-700 p-4 rounded h-64 overflow-y-auto whitespace-pre-wrap text-gray-900 dark:text-gray-100"></pre>
+        <button id="copyButton" class="absolute top-2 right-2 bg-gray-200 dark:bg-gray-600 p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Copy Transcription">
           <!-- Copy Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h8M8 12h8m-8-4h8m2 16H6a2 2 0 01-2-2V7a2 2 0 012-2h4l2-2h4a2 2 0 012 2v17a2 2 0 01-2 2z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16V8m0 0l4 4m-4-4l-4 4" />
           </svg>
         </button>
-        <button id="downloadButton" class="absolute top-2 right-10 bg-gray-200 dark:bg-gray-700 p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Download Transcription">
+        <button id="downloadButton" class="absolute top-2 right-10 bg-gray-200 dark:bg-gray-600 p-1 rounded hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Download Transcription">
           <!-- Download Icon -->
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-700 dark:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a1 1 0 001 1h14a1 1 0 001-1v-1m-5-4l-3 3-3-3m3 3V4"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11h10M12 6v10" />
           </svg>
         </button>
       </div>
@@ -103,7 +93,7 @@
                 <span class="sr-only">Close</span>
                 <!-- Close icon -->
                 <svg class="h-5 w-5 text-gray-700 dark:text-gray-300" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.415 10l4.292 4.293a1 1 0 01-1.415 1.414L10 11.415l-4.293 4.292a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" />
+                  <path d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.415 10l4.292 4.293a1 1 0 01-1.415 1.414L10 11.415l-4.293 4.292a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" />
                 </svg>
               </button>
             </div>
@@ -116,6 +106,7 @@
   <script>
     let selectedFile;
     let cancelTokenSource;
+    let uploadCancelTokenSource;
     let transcriptionInProgress = false;
 
     // Dark Mode Toggle
@@ -135,58 +126,17 @@
     });
 
     // File upload handling
-    const dropArea = document.getElementById('drop-area');
     const fileInput = document.getElementById('fileInput');
+    const fileUploadButton = document.getElementById('fileUploadButton');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
 
-    // Prevent default behaviors
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      dropArea.addEventListener(eventName, preventDefaults, false);
+    fileUploadButton.addEventListener('click', function() {
+      fileInput.click();
     });
 
-    function preventDefaults(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
-    // Highlight drop area when file is dragged over
-    ['dragenter', 'dragover'].forEach(eventName => {
-      dropArea.addEventListener(eventName, highlight, false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-      dropArea.addEventListener(eventName, unhighlight, false);
-    });
-
-    function highlight(e) {
-      dropArea.classList.add('border-blue-500');
-    }
-
-    function unhighlight(e) {
-      dropArea.classList.remove('border-blue-500');
-    }
-
-    // Handle dropped files
-    dropArea.addEventListener('drop', handleDrop, false);
-
-    function handleDrop(e) {
-      let dt = e.dataTransfer;
-      let files = dt.files;
-      handleFiles(files);
-      console.log('File dropped:', files[0]);
-    }
-
-    // Handle file selection via input
     fileInput.addEventListener('change', function(e) {
       let files = e.target.files;
       handleFiles(files);
-      console.log('File selected via input:', files[0]);
-    });
-
-    // Handle keyboard activation of drop area
-    dropArea.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        fileInput.click();
-      }
     });
 
     function handleFiles(files) {
@@ -204,11 +154,11 @@
           return;
         }
 
-        const allowedExtensions = ['mp3', 'wav', 'ogg'];
+        const allowedExtensions = ['mp3', 'wav', 'ogg', 'mp4'];
         const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
         if (!allowedExtensions.includes(fileExtension)) {
           console.error('Unsupported file format');
-          showNotification('error', 'Unsupported format', 'Please upload an MP3, WAV, or OGG audio file.');
+          showNotification('error', 'Unsupported format', 'Please upload an MP3, WAV, OGG, or MP4 audio file.');
           selectedFile = null;
           fileInput.value = '';
           updateFileNameDisplay();
@@ -221,11 +171,10 @@
     }
 
     function updateFileNameDisplay() {
-      const fileNameDisplay = document.getElementById('fileNameDisplay');
       if (selectedFile) {
-        fileNameDisplay.textContent = `Selected file: ${selectedFile.name}`;
+        fileNameDisplay.textContent = selectedFile.name;
       } else {
-        fileNameDisplay.textContent = '';
+        fileNameDisplay.textContent = 'No file selected';
       }
     }
 
@@ -234,15 +183,16 @@
       event.preventDefault();
       if (transcriptionInProgress) return; // Prevent multiple submissions
 
-      const audioUrl = document.getElementById('audioUrl').value.trim();
-      const language = document.getElementById('languageSelect').value;
+      const audioUrlInput = document.getElementById('audioUrl').value.trim();
       const submitButton = document.getElementById('submitButton');
       const cancelButton = document.getElementById('cancelButton');
       const timerDiv = document.getElementById('timer');
       const resultDiv = document.getElementById('result');
       const transcriptionText = document.getElementById('transcriptionText');
-      const uploadProgress = document.getElementById('uploadProgress');
+      const uploadProgressContainer = document.getElementById('uploadProgressContainer');
       const progressBar = document.getElementById('progressBar');
+
+      let audioUrl = audioUrlInput;
 
       if (!selectedFile && !audioUrl) {
         showNotification('error', 'No input provided', 'Please select an audio file or enter an audio URL to transcribe.');
@@ -263,55 +213,69 @@
         timerDiv.textContent = `Transcription in progress... This can take up to 2 minutes. Elapsed time: ${seconds} seconds.`;
       }, 1000);
 
+      // Show upload progress bar if file is being uploaded
+      if (selectedFile) {
+        uploadProgressContainer.classList.remove('hidden');
+        progressBar.style.width = '0%';
+      }
+
       // Create cancel token for Axios
       cancelTokenSource = axios.CancelToken.source();
+      uploadCancelTokenSource = axios.CancelToken.source();
 
       try {
-        let response;
-
         if (selectedFile) {
-          // Show upload progress bar
-          uploadProgress.classList.remove('hidden');
-          progressBar.style.width = '0%';
+          // Step 1: Request a pre-signed URL for file upload
+          console.log('Requesting presigned URL...');
+          const presignResponse = await axios.post('https://xgvm4vnzjnwodou462vkpdttnm0slvnk.lambda-url.us-west-2.on.aws/', {
+            filename: selectedFile.name,
+            content_type: selectedFile.type
+          }, {
+            cancelToken: cancelTokenSource.token
+          });
 
-          let formData = new FormData();
-          formData.append('file', selectedFile);
-          formData.append('language', language);
+          const presignedUrl = presignResponse.data.presigned_url;
+          audioUrl = presignResponse.data.url;
 
-          console.log('Sending file to server');
+          console.log('Presigned URL received:', presignedUrl);
 
-          response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', formData, {
+          // Step 2: Upload the file to S3 via the pre-signed URL
+          console.log('Uploading file to S3...');
+          await axios.put(presignedUrl, selectedFile, {
             headers: {
-              'Content-Type': 'multipart/form-data'
+              'Content-Type': selectedFile.type,
             },
             onUploadProgress: function(progressEvent) {
               const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
               console.log('Upload progress:', percentCompleted + '%');
               updateProgressBar(percentCompleted);
             },
-            cancelToken: cancelTokenSource.token
+            cancelToken: uploadCancelTokenSource.token
           });
 
-          // Hide upload progress bar
-          uploadProgress.classList.add('hidden');
-          progressBar.style.width = '0%';
+          console.log('File uploaded successfully');
+          updateProgressBar(100); // Ensure progress bar is at 100%
+          uploadProgressContainer.classList.add('hidden');
 
-        } else {
-          console.log('Sending audio URL to server');
-
-          response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', {
-            audio_url: audioUrl,
-            language: language
-          }, {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            cancelToken: cancelTokenSource.token
-          });
+          // Reset file input
+          selectedFile = null;
+          fileInput.value = '';
+          updateFileNameDisplay();
         }
 
-        console.log('Response from server:', response.data);
-        transcriptionText.textContent = response.data.transcription;
+        // Step 3: Send the audio URL to the transcription service
+        console.log('Sending audio URL to transcription service...');
+        const transcriptionResponse = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', {
+          audio_url: audioUrl
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          cancelToken: cancelTokenSource.token
+        });
+
+        console.log('Response from server:', transcriptionResponse.data);
+        transcriptionText.textContent = transcriptionResponse.data.transcription;
         resultDiv.classList.remove('hidden');
         showNotification('success', 'Transcription Complete', 'Your audio has been successfully transcribed.');
       } catch (error) {
@@ -331,6 +295,9 @@
         submitButton.textContent = 'Transcribe';
         submitButton.disabled = false;
         timerDiv.classList.add('hidden');
+        // Hide upload progress bar
+        uploadProgressContainer.classList.add('hidden');
+        progressBar.style.width = '0%';
       }
     });
 
@@ -338,6 +305,10 @@
     document.getElementById('cancelButton').addEventListener('click', function() {
       if (transcriptionInProgress && cancelTokenSource) {
         cancelTokenSource.cancel('User canceled the transcription.');
+        if (uploadCancelTokenSource) {
+          uploadCancelTokenSource.cancel('User canceled the upload.');
+        }
+        console.log('Transcription canceled by user');
       }
     });
 
@@ -422,8 +393,6 @@
       const notification = document.getElementById('notification');
       notification.classList.add('hidden');
     }
-
   </script>
-
 </body>
 </html>
