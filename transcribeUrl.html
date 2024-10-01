@@ -221,7 +221,7 @@
       if (selectedFile) {
         console.log('File selected:', selectedFile.name);
         // Validate File Size
-        const MAX_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
+        const MAX_SIZE = 3 * 1024 * 1024 * 1024; // 2GB
         if (selectedFile.size > MAX_SIZE) {
           showToast('error', 'The file size exceeds the maximum limit of 2GB.');
           console.error('File size exceeds limit:', selectedFile.size);
