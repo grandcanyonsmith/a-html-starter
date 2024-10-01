@@ -4,28 +4,20 @@
   <meta charset="UTF-8">
   <title>Audio Transcription Service</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Tailwind CSS CDN (Upgraded to version 3) -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   <!-- Axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <!-- Heroicons CDN -->
-  <script src="https://unpkg.com/heroicons@1.0.6/dist/outline/index.js"></script>
   <!-- Favicon -->
   <link rel="icon" href="favicon.ico">
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
   <!-- Main Container -->
-  <main class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-lg shadow-md w-full max-w-lg mx-4">
+  <main class="bg-white p-6 sm:p-8 rounded-lg shadow-md w-full max-w-lg mx-4">
     <!-- Header -->
     <header class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Audio Transcription Service</h1>
-      <!-- Dark Mode Toggle Button -->
-      <button id="themeToggle" type="button" class="text-gray-500 dark:text-gray-200 focus:outline-none" aria-label="Toggle Dark Mode">
-        <svg id="themeToggleIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-          <!-- Icon will be updated via JavaScript -->
-        </svg>
-      </button>
+      <h1 class="text-2xl font-bold text-gray-900">Audio Transcription Service</h1>
     </header>
 
     <!-- Form Section -->
@@ -33,28 +25,29 @@
       <form id="transcriptionForm" class="space-y-6" aria-label="Audio Transcription Form">
         <!-- Audio URL Input -->
         <div>
-          <label for="audioUrl" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Audio URL</label>
-          <input type="url" id="audioUrl" name="audioUrl" class="mt-1 block w-full border border-gray-300 dark:border-gray-700 rounded-md shadow-sm p-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter audio URL" aria-label="Audio URL">
+          <label for="audioUrl" class="block text-sm font-medium text-gray-700">Audio URL</label>
+          <input type="url" id="audioUrl" name="audioUrl" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 bg-white text-gray-900 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter audio URL" aria-label="Audio URL">
         </div>
 
         <!-- Drag and Drop File Upload -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Upload Audio File</label>
-          <div id="fileUploadArea" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-md cursor-pointer">
+          <label class="block text-sm font-medium text-gray-700">Upload Audio File</label>
+          <div id="fileUploadArea" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-md cursor-pointer">
             <div class="space-y-1 text-center">
-              <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+              <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                 <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 22l10-10 10 10M14 34h20M24 12v22" />
               </svg>
-              <div class="flex text-sm text-gray-600 dark:text-gray-400">
-                <label for="fileInput" class="relative cursor-pointer bg-white dark:bg-gray-700 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+              <div class="flex text-sm text-gray-600">
+                <label for="fileInput" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                   <span>Upload a file</span>
                   <input id="fileInput" name="fileInput" type="file" accept=".mp3, .wav, .ogg, .mp4" class="sr-only" aria-label="File Input">
                 </label>
                 <p class="pl-1">or drag and drop</p>
               </div>
-              <p class="text-xs text-gray-500 dark:text-gray-400">MP3, WAV, OGG, MP4 up to 100MB</p>
+              <p class="text-xs text-gray-500">MP3, WAV, OGG, MP4 up to 100MB</p>
             </div>
           </div>
+          <p id="fileInfo" class="mt-2 text-sm text-gray-500"></p>
         </div>
 
         <!-- Submit and Cancel Buttons -->
@@ -65,10 +58,10 @@
 
         <!-- Progress bar -->
         <div id="uploadProgressContainer" class="w-full hidden flex-col items-center">
-          <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-4">
+          <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
             <div id="progressBar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
           </div>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-2">Uploading file...</p>
+          <p class="text-sm text-gray-500 mt-2">Uploading file...</p>
         </div>
       </form>
     </section>
@@ -81,39 +74,36 @@
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"></path>
         </svg>
       </div>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 text-center">Transcription in progress...</p>
+      <p class="text-sm text-gray-500 mt-2 text-center">Transcription in progress...</p>
     </div>
 
     <!-- Transcription Result -->
     <section id="result" class="mt-6 hidden">
-      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-gray-100">Transcription Result</h2>
+      <h2 class="text-xl font-bold mb-4 text-gray-900">Transcription Result</h2>
       <div class="relative">
-        <pre id="transcriptionText" class="bg-gray-100 dark:bg-gray-700 p-4 rounded-md h-64 overflow-y-auto whitespace-pre-wrap text-gray-900 dark:text-gray-100 text-sm leading-6 font-mono resize-y"></pre>
+        <pre id="transcriptionText" class="bg-gray-100 p-4 rounded-md h-64 overflow-y-auto whitespace-pre-wrap text-gray-900 text-sm leading-6 font-mono resize-y"></pre>
         <!-- Copy and Download Buttons -->
         <div class="absolute top-2 right-2 flex space-x-2">
-          <button id="copyButton" class="bg-gray-200 dark:bg-gray-600 p-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Copy Transcription">
+          <button id="copyButton" class="bg-gray-200 p-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Copy Transcription">
             <!-- Clipboard Copy Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
               <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 000 4h10a2 2 0 000-4h-1V4a2 2 0 00-2-2H8zM5 9a1 1 0 100 2h10a1 1 0 100-2H5z"></path>
               <path d="M6 11a2 2 0 00-2 2v4a2 2 0 002 2h8a2 2 0 002-2v-4a2 2 0 00-2-2H6z"></path>
             </svg>
           </button>
-          <button id="downloadButton" class="bg-gray-200 dark:bg-gray-600 p-2 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Download Transcription">
+          <button id="downloadButton" class="bg-gray-200 p-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Download Transcription">
             <!-- Download Icon -->
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
               <path d="M3 14a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
               <path d="M7 10a1 1 0 011.707-.707L10 10.586V3a1 1 0 112 0v7.586l1.293-1.293A1 1 0 0115 10a1 1 0 01-.293.707l-3 3a1 1 0 01-1.414 0l-3-3A1 1 0 017 10z"></path>
             </svg>
           </button>
         </div>
       </div>
+      <!-- Character Count -->
+      <p id="characterCount" class="mt-2 text-sm text-gray-500"></p>
     </section>
 
-    <!-- No File Selected Illustration -->
-    <div id="noFileSelected" class="text-center mt-6 hidden">
-      <img src="https://undraw.co/api/illustrations/7c87f0eb-9ef4-4f57-8e0b-55849139c3f6" alt="No file selected" class="mx-auto h-48 w-auto">
-      <p class="text-gray-600 dark:text-gray-400 mt-4">No file selected. Please upload an audio file to begin transcription.</p>
-    </div>
   </main>
 
   <!-- Toast Notification Container -->
@@ -125,11 +115,8 @@
     let selectedFile = null;
     let cancelTokenSource = null;
     let transcriptionInProgress = false;
-    let darkMode = localStorage.getItem('darkMode') === 'true' || window.matchMedia('(prefers-color-scheme: dark)').matches;
 
     // DOM Elements
-    const themeToggle = document.getElementById('themeToggle');
-    const themeToggleIcon = document.getElementById('themeToggleIcon');
     const fileInput = document.getElementById('fileInput');
     const fileUploadArea = document.getElementById('fileUploadArea');
     const transcriptionForm = document.getElementById('transcriptionForm');
@@ -142,24 +129,7 @@
     const downloadButton = document.getElementById('downloadButton');
     const uploadProgressContainer = document.getElementById('uploadProgressContainer');
     const progressBar = document.getElementById('progressBar');
-    const noFileSelected = document.getElementById('noFileSelected');
-
-    // Update Theme Icon and Mode
-    function updateTheme() {
-      document.documentElement.classList.toggle('dark', darkMode);
-      localStorage.setItem('darkMode', darkMode);
-      themeToggleIcon.innerHTML = darkMode
-        ? `<path d="M17.293 13.293a8 8 0 11-11.586-11.586 1 1 0 011.414 1.414 6 6 0 008.758 8.758 1 1 0 011.414 1.414z"/>` // Moon icon
-        : `<path d="M12 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zM4.929 4.929a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414L4.93 6.343a1 1 0 010-1.414zM2 11a1 1 0 100 2h1a1 1 0 100-2H2zm9 9a1 1 0 110-2h.01a1 1 0 110 2H11zM4.93 17.657a1 1 0 001.414 1.414l.707-.707a1 1 0 10-1.414-1.414l-.707.707zM17 11a1 1 0 100 2h1a1 1 0 100-2h-1zm-1.657-4.929a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0z"/>`; // Sun icon
-    }
-
-    themeToggle.addEventListener('click', () => {
-      darkMode = !darkMode;
-      updateTheme();
-    });
-
-    // Initial Theme Setup
-    updateTheme();
+    const characterCount = document.getElementById('characterCount');
 
     // Handle File Input Change
     fileInput.addEventListener('change', (e) => {
@@ -187,9 +157,9 @@
       selectedFile = files[0];
       if (selectedFile) {
         // Validate File Size
-        const MAX_SIZE = 100 * 1024 * 1024; // 100MB
+        const MAX_SIZE = 1000 * 1024 * 1024; // 100MB
         if (selectedFile.size > MAX_SIZE) {
-          showToast('error', 'The file size exceeds the maximum limit of 100MB.');
+          showToast('error', 'The file size exceeds the maximum limit of 1GB.');
           selectedFile = null;
           fileInput.value = '';
           updateFileUploadArea();
@@ -207,33 +177,59 @@
           return;
         }
 
-        updateFileUploadArea();
+        getAudioDuration(selectedFile);
       }
     }
 
+    // Get Audio Duration
+    function getAudioDuration(file) {
+      const url = URL.createObjectURL(file);
+      const audio = new Audio();
+      audio.src = url;
+      audio.addEventListener('loadedmetadata', () => {
+        const duration = audio.duration;
+        updateFileUploadArea(duration);
+        URL.revokeObjectURL(url);
+      });
+      audio.addEventListener('error', () => {
+        showToast('error', 'Failed to load audio file.');
+        selectedFile = null;
+        fileInput.value = '';
+        updateFileUploadArea();
+        URL.revokeObjectURL(url);
+      });
+    }
+
     // Update File Upload Area
-    function updateFileUploadArea() {
+    function updateFileUploadArea(duration = null) {
       if (selectedFile) {
+        let durationText = '';
+        if (duration) {
+          const minutes = Math.floor(duration / 60);
+          const seconds = Math.floor(duration % 60);
+          durationText = `Duration: ${minutes}m ${seconds}s`;
+        }
         fileUploadArea.innerHTML = `
           <div class="text-center">
-            <p class="text-sm text-gray-600 dark:text-gray-400">Selected File:</p>
-            <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${selectedFile.name}</p>
+            <p class="text-sm text-gray-600">Selected File:</p>
+            <p class="text-sm font-medium text-gray-900">${selectedFile.name}</p>
+            <p class="text-sm text-gray-600">${durationText}</p>
           </div>
         `;
       } else {
         fileUploadArea.innerHTML = `
           <div class="space-y-1 text-center">
-            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
               <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 22l10-10 10 10M14 34h20M24 12v22" />
             </svg>
-            <div class="flex text-sm text-gray-600 dark:text-gray-400">
-              <label for="fileInput" class="relative cursor-pointer bg-white dark:bg-gray-700 rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+            <div class="flex text-sm text-gray-600">
+              <label for="fileInput" class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
                 <span>Upload a file</span>
                 <input id="fileInput" name="fileInput" type="file" accept=".mp3, .wav, .ogg, .mp4" class="sr-only" aria-label="File Input">
               </label>
               <p class="pl-1">or drag and drop</p>
             </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400">MP3, WAV, OGG, MP4 up to 100MB</p>
+            <p class="text-xs text-gray-500">MP3, WAV, OGG, MP4 up to 100MB</p>
           </div>
         `;
       }
@@ -259,6 +255,7 @@
       loader.classList.remove('hidden');
       resultSection.classList.add('hidden');
       transcriptionText.textContent = '';
+      characterCount.textContent = '';
 
       // Show upload progress bar if file is being uploaded
       if (selectedFile) {
@@ -312,14 +309,18 @@
 
         transcriptionText.textContent = transcriptionResponse.data.transcription;
         resultSection.classList.remove('hidden');
+        const transcriptionLength = transcriptionResponse.data.transcription.length;
+        characterCount.textContent = `Character count: ${transcriptionLength}`;
         showToast('success', 'Your audio has been successfully transcribed.');
 
       } catch (error) {
         if (axios.isCancel(error)) {
           showToast('info', 'The transcription process has been canceled.');
+          console.log('Transcription canceled by user.');
         } else {
           const errorMessage = error.response?.data?.message || 'An error occurred while transcribing the audio.';
           showToast('error', errorMessage);
+          console.error('Transcription error:', error);
         }
       } finally {
         transcriptionInProgress = false;
@@ -336,6 +337,7 @@
     cancelButton.addEventListener('click', () => {
       if (transcriptionInProgress && cancelTokenSource) {
         cancelTokenSource.cancel('User canceled the transcription.');
+        console.log('Transcription canceled by user.');
       }
     });
 
@@ -344,8 +346,10 @@
       const transcriptionContent = transcriptionText.textContent;
       navigator.clipboard.writeText(transcriptionContent).then(() => {
         showToast('success', 'The transcription has been copied to your clipboard.');
+        console.log('Transcription copied to clipboard.');
       }).catch((err) => {
         showToast('error', 'Failed to copy the transcription to your clipboard.');
+        console.error('Failed to copy transcription to clipboard.', err);
       });
     });
 
@@ -359,18 +363,20 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      console.log('Transcription downloaded.');
     });
 
     // Update Progress Bar
     function updateProgressBar(percent) {
       progressBar.style.width = percent + '%';
+      console.log(`Upload progress: ${percent}%`);
     }
 
     // Toast Notification System
     function showToast(type, message) {
       const toastContainer = document.getElementById('toast-container');
       const toast = document.createElement('div');
-      toast.className = 'max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto mb-4';
+      toast.className = 'max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto mb-4';
       toast.role = 'alert';
       toast.innerHTML = `
         <div class="p-4">
@@ -379,11 +385,11 @@
               ${getToastIcon(type)}
             </div>
             <div class="ml-3 w-0 flex-1">
-              <p class="text-sm font-medium text-gray-900 dark:text-gray-100">${getToastTitle(type)}</p>
-              <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">${message}</p>
+              <p class="text-sm font-medium text-gray-900">${getToastTitle(type)}</p>
+              <p class="mt-1 text-sm text-gray-500">${message}</p>
             </div>
             <div class="ml-4 flex-shrink-0 flex">
-              <button class="inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500" onclick="removeToast(this.parentElement.parentElement.parentElement)">
+              <button class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" onclick="removeToast(this.parentElement.parentElement.parentElement)">
                 <span class="sr-only">Close</span>
                 <!-- Close Icon -->
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
