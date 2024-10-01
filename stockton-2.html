@@ -1,1 +1,121 @@
-yo
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding Summary - Kelly Life Coach Client</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Header Section -->
+    <header class="bg-black py-6">
+        <div class="container mx-auto text-center">
+            <img src="https://storage.googleapis.com/msgsndr/c2DjRsOo4e13Od6ZTU6S/media/62dff99b98649e19bec35e95.png" alt="Logo" class="mx-auto h-16">
+        </div>
+    </header>
+
+    <!-- Client Name at the top -->
+    <div class="bg-red-600 py-4">
+        <h1 class="text-4xl text-white font-bold text-center">Summary of Onboarding Call with Kelly - Life Coach Client</h1>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-6">
+        <!-- Business Info Section -->
+        <section class="mb-10">
+            <h2 class="text-3xl font-bold text-red-600 mb-4">Business Info:</h2>
+            <h3 class="text-2xl font-semibold mb-2">Current Operations:</h3>
+            <ul class="list-disc ml-6 space-y-2">
+                <li>She is a life coach and a stay-at-home mom.</li>
+                <li>Wishes to transition her coaching business to an online platform.</li>
+                <li>Aims to create courses that teach people how to coach themselves.</li>
+                <li>Desires to minimize one-on-one calls and focus on scalable online content.</li>
+                <li>Intends to build an app with features like push notifications, habit trackers, and affirmation widgets.</li>
+            </ul>
+        </section>
+
+        <!-- Goals Section -->
+        <section class="mb-10">
+            <h2 class="text-3xl font-bold text-red-600 mb-4">Goals:</h2>
+            <h3 class="text-2xl font-semibold mb-2">App Development:</h3>
+            <ul class="list-disc ml-6 space-y-2">
+                <li>Develop a custom app to enhance client engagement and retention.</li>
+                <li>Integrate features such as push notifications aligned with module drips.</li>
+                <li>Include habit trackers and journal entries for clients to track their progress.</li>
+                <li>Implement affirmation widgets on clients' home screens.</li>
+                <li>Utilize gamification elements like points and rewards to motivate clients.</li>
+            </ul>
+
+            <h3 class="text-2xl font-semibold mt-6 mb-2">Course Creation:</h3>
+            <ul class="list-disc ml-6 space-y-2">
+                <li>Create online courses hosted on Course Creator 360.</li>
+                <li>Offer digital downloads, freebies, and sneak peeks into other courses.</li>
+                <li>Provide assessments and assignments within modules.</li>
+                <li>Allow for upsells and downsells within the platform.</li>
+            </ul>
+        </section>
+
+        <!-- Needs/Problems Section -->
+        <section class="mb-10">
+            <h2 class="text-3xl font-bold text-red-600 mb-4">Needs/Problems:</h2>
+            <ul class="list-disc ml-6 space-y-2">
+                <li><strong>Technical Support:</strong> Feels overwhelmed by software stacks and needs assistance with setup.</li>
+                <li><strong>Platform Features:</strong> Has specific questions about Course Creator 360 capabilities.</li>
+                <li><strong>Customization:</strong> Wants to ensure the app meets her unique requirements.</li>
+                <li><strong>Time Management:</strong> Desires to avoid spending excessive time learning new software.</li>
+                <li><strong>Subscription Plans:</strong> Interested in higher-tier plans that offer more support.</li>
+            </ul>
+        </section>
+
+        <!-- Homework/Action Points Section -->
+        <section>
+            <h2 class="text-3xl font-bold text-red-600 mb-4">Homework/Action Points:</h2>
+            <ul class="list-disc ml-6 space-y-2">
+                <li>Start a free trial of Course Creator 360 to test platform capabilities.
+                    <button id="start-trial-button" class="ml-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">Start Free Trial</button>
+                </li>
+                <li>Explore the Collab app to understand the end-user experience.</li>
+                <li>Consider purchasing Course Creator Pro at the discounted rate of $300.</li>
+                <li>Await responses regarding app features:
+                    <ul class="list-disc ml-6">
+                        <li>Push notifications scheduling with module drips.</li>
+                        <li>In-app purchases and Apple/Google store policies.</li>
+                        <li>Affirmation widgets and custom app widgets.</li>
+                        <li>E-signature capabilities for forms.</li>
+                        <li>Resume playback functionality for video content.</li>
+                    </ul>
+                </li>
+                <li>Decide on the subscription plan based on the level of support needed.</li>
+            </ul>
+        </section>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-black py-6 mt-10">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>&copy; 2024 Life Coach's Program. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.getElementById('start-trial-button').addEventListener('click', function() {
+            var button = this;
+            console.log('Start Free Trial button clicked.');
+            var originalText = button.textContent;
+            button.textContent = 'Starting Free Trial...';
+            button.disabled = true;
+
+            // Simulate API call with setTimeout
+            setTimeout(function() {
+                console.log('Free trial started successfully.');
+                button.textContent = originalText;
+                button.disabled = false;
+                alert('Free trial started!');
+            }, 2000);
+        });
+    </script>
+
+</body>
+</html>
