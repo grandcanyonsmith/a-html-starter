@@ -263,35 +263,52 @@
         timerDiv.textContent = `Transcription in progress... This can take up to 2 minutes. Elapsed time: ${seconds} seconds.`;
       }, 1000);
 
-      // Show upload progress bar
-      uploadProgress.classList.remove('hidden');
-      progressBar.style.width = '0%';
-
       // Create cancel token for Axios
       cancelTokenSource = axios.CancelToken.source();
 
       try {
-        let formData = new FormData();
+        let response;
+
         if (selectedFile) {
+          // Show upload progress bar
+          uploadProgress.classList.remove('hidden');
+          progressBar.style.width = '0%';
+
+          let formData = new FormData();
           formData.append('file', selectedFile);
+          formData.append('language', language);
+
+          console.log('Sending file to server');
+
+          response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: function(progressEvent) {
+              const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+              console.log('Upload progress:', percentCompleted + '%');
+              updateProgressBar(percentCompleted);
+            },
+            cancelToken: cancelTokenSource.token
+          });
+
+          // Hide upload progress bar
+          uploadProgress.classList.add('hidden');
+          progressBar.style.width = '0%';
+
         } else {
-          formData.append('audio_url', audioUrl);
+          console.log('Sending audio URL to server');
+
+          response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', {
+            audio_url: audioUrl,
+            language: language
+          }, {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            cancelToken: cancelTokenSource.token
+          });
         }
-        formData.append('language', language);
-
-        console.log('Sending data to server');
-
-        const response = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: function(progressEvent) {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            console.log('Upload progress:', percentCompleted + '%');
-            updateProgressBar(percentCompleted);
-          },
-          cancelToken: cancelTokenSource.token
-        });
 
         console.log('Response from server:', response.data);
         transcriptionText.textContent = response.data.transcription;
@@ -314,9 +331,6 @@
         submitButton.textContent = 'Transcribe';
         submitButton.disabled = false;
         timerDiv.classList.add('hidden');
-        // Hide upload progress bar
-        uploadProgress.classList.add('hidden');
-        progressBar.style.width = '0%';
       }
     });
 
