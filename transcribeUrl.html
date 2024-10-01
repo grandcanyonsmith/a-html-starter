@@ -28,7 +28,7 @@
     }
   </style>
 </head>
-<body class="bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center min-h-screen">
+<body class="bg-gradient-to-br from-gray-50 to-gray-200 flex items-center justify-center min-h-screen">
 
   <!-- Main Container -->
   <main class="bg-white bg-opacity-90 backdrop-filter backdrop-blur-lg p-8 sm:p-12 rounded-3xl shadow-2xl w-full max-w-2xl mx-4">
@@ -43,26 +43,26 @@
         <!-- Audio URL Input -->
         <div>
           <label for="audioUrl" class="block text-sm font-semibold text-gray-700">Audio URL</label>
-          <input type="url" id="audioUrl" name="audioUrl" class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm p-3 bg-white text-gray-900 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter audio URL" aria-label="Audio URL">
+          <input type="url" id="audioUrl" name="audioUrl" class="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm p-3 bg-white text-gray-900 focus:ring-red-500 focus:border-red-500" placeholder="Enter audio URL" aria-label="Audio URL">
           <p id="audioUrlError" class="mt-2 text-sm text-red-600 hidden"></p>
         </div>
 
         <!-- Drag and Drop File Upload -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Audio File</label>
-          <div id="fileUploadArea" class="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer transition hover:border-indigo-500">
+          <div id="fileUploadArea" class="flex flex-col justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer transition hover:border-red-500">
             <div class="space-y-1 text-center" id="fileUploadContent">
               <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
                 <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M14 22l10-10 10 10M14 34h20M24 12v22" />
               </svg>
               <div class="flex text-sm text-gray-600">
-                <label for="fileInput" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                <label for="fileInput" class="relative cursor-pointer bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-red-500">
                   <span>Upload a file</span>
                   <input id="fileInput" name="fileInput" type="file" accept=".mp3, .wav, .ogg, .mp4" class="sr-only" aria-label="File Input">
                 </label>
                 <p class="pl-1">or drag and drop</p>
               </div>
-              <p class="text-xs text-gray-500">MP3, WAV, OGG, MP4 up to 1GB</p>
+              <p class="text-xs text-gray-500">MP3, WAV, OGG, MP4 up to 2GB</p>
             </div>
           </div>
           <!-- Audio Player for File Preview -->
@@ -84,10 +84,10 @@
 
         <!-- Submit and Cancel Buttons -->
         <div class="flex space-x-4">
-          <button type="submit" id="submitButton" class="flex-1 bg-indigo-600 text-white py-3 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-offset-2 transition" aria-label="Transcribe Button">
+          <button type="submit" id="submitButton" class="flex-1 bg-black text-white py-3 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Transcribe Button" disabled>
             Transcribe
           </button>
-          <button type="button" id="cancelButton" class="flex-1 bg-red-500 text-white py-3 px-4 rounded-md hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-400 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Cancel Button" disabled>
+          <button type="button" id="cancelButton" class="flex-1 bg-red-600 text-white py-3 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-400 focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Cancel Button" disabled>
             Cancel
           </button>
         </div>
@@ -95,22 +95,32 @@
         <!-- Progress bar -->
         <div id="uploadProgressContainer" class="w-full hidden flex-col items-center">
           <div class="w-full bg-gray-200 rounded-full h-2.5 mt-4">
-            <div id="progressBar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+            <div id="progressBar" class="bg-red-600 h-2.5 rounded-full" style="width: 0%"></div>
           </div>
           <p class="text-sm text-gray-500 mt-2">Uploading file...</p>
         </div>
       </form>
     </section>
 
-    <!-- Loader -->
+    <!-- Loader and Timer -->
     <div id="loader" class="mt-8 hidden">
-      <div class="flex justify-center">
-        <svg class="animate-spin h-10 w-10 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-label="Loading">
+      <div class="flex justify-center items-center">
+        <!-- Spinner -->
+        <svg class="animate-spin h-10 w-10 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-label="Loading">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8V12H4z"></path>
         </svg>
+        <!-- Timer -->
+        <p id="transcriptionTimer" class="text-sm text-gray-500 ml-4">Elapsed Time: 00:00</p>
       </div>
       <p class="text-sm text-gray-500 mt-2 text-center">Transcription in progress...</p>
+      <!-- Transcription Progress -->
+      <div id="transcriptionProgressContainer" class="w-full flex-col items-center mt-4">
+        <div class="w-full bg-gray-200 rounded-full h-2.5">
+          <div id="transcriptionProgressBar" class="bg-red-600 h-2.5 rounded-full" style="width: 0%"></div>
+        </div>
+        <p id="transcriptionProgressText" class="text-sm text-gray-500 mt-2">Starting transcription...</p>
+      </div>
     </div>
 
     <!-- Transcription Result -->
@@ -120,14 +130,14 @@
         <pre id="transcriptionText" class="bg-gray-50 p-4 rounded-lg h-64 overflow-y-auto whitespace-pre-wrap text-gray-900 text-sm leading-6 font-mono resize-y shadow-inner"></pre>
         <!-- Copy and Download Buttons -->
         <div class="absolute top-3 right-3 flex space-x-2">
-          <button id="copyButton" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Copy Transcription">
+          <button id="copyButton" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500" aria-label="Copy Transcription">
             <!-- Clipboard Copy Icon -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
               <path d="M8 2a2 2 0 00-2 2v1H5a2 2 0 000 4h10a2 2 0 000-4h-1V4a2 2 0 00-2-2H8zM5 9a1 1 0 100 2h10a1 1 0 100-2H5z"></path>
               <path d="M6 11a2 2 0 00-2 2v4a2 2 0 002 2h8a2 2 0 002-2v-4a2 2 0 00-2-2H6z"></path>
             </svg>
           </button>
-          <button id="downloadButton" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="Download Transcription">
+          <button id="downloadButton" class="bg-gray-200 p-2 rounded-full hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500" aria-label="Download Transcription">
             <!-- Download Icon -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
               <path d="M3 14a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"></path>
@@ -151,6 +161,8 @@
     let selectedFile = null;
     let cancelTokenSource = null;
     let transcriptionInProgress = false;
+    let transcriptionStartTime = null;
+    let transcriptionTimerInterval = null;
 
     // DOM Elements
     const fileInput = document.getElementById('fileInput');
@@ -173,6 +185,9 @@
     const audioUrlError = document.getElementById('audioUrlError');
     const urlAudioPreview = document.getElementById('urlAudioPreview');
     const urlAudioPlayer = document.getElementById('urlAudioPlayer');
+    const transcriptionTimer = document.getElementById('transcriptionTimer');
+    const transcriptionProgressBar = document.getElementById('transcriptionProgressBar');
+    const transcriptionProgressText = document.getElementById('transcriptionProgressText');
 
     // Supported audio formats
     const allowedExtensions = ['mp3', 'wav', 'ogg', 'mp4'];
@@ -180,22 +195,24 @@
     // Handle File Input Change
     fileInput.addEventListener('change', (e) => {
       handleFiles(e.target.files);
+      validateForm();
     });
 
     // Drag and Drop Events
     fileUploadArea.addEventListener('dragover', (e) => {
       e.preventDefault();
-      fileUploadArea.classList.add('border-indigo-500');
+      fileUploadArea.classList.add('border-red-500');
     });
 
     fileUploadArea.addEventListener('dragleave', (e) => {
-      fileUploadArea.classList.remove('border-indigo-500');
+      fileUploadArea.classList.remove('border-red-500');
     });
 
     fileUploadArea.addEventListener('drop', (e) => {
       e.preventDefault();
-      fileUploadArea.classList.remove('border-indigo-500');
+      fileUploadArea.classList.remove('border-red-500');
       handleFiles(e.dataTransfer.files);
+      validateForm();
     });
 
     // Handle Files
@@ -204,13 +221,14 @@
       if (selectedFile) {
         console.log('File selected:', selectedFile.name);
         // Validate File Size
-        const MAX_SIZE = 2000 * 1024 * 1024; // 2GB
+        const MAX_SIZE = 2 * 1024 * 1024 * 1024; // 2GB
         if (selectedFile.size > MAX_SIZE) {
           showToast('error', 'The file size exceeds the maximum limit of 2GB.');
           console.error('File size exceeds limit:', selectedFile.size);
           selectedFile = null;
           fileInput.value = '';
           updateFileUploadArea();
+          validateForm();
           return;
         }
 
@@ -222,6 +240,7 @@
           selectedFile = null;
           fileInput.value = '';
           updateFileUploadArea();
+          validateForm();
           return;
         }
 
@@ -240,7 +259,10 @@
         // Display audio player for preview
         fileAudioPlayer.src = url;
         fileAudioPreview.classList.remove('hidden');
-        URL.revokeObjectURL(url);
+        console.log('Audio metadata loaded:', { duration });
+        // Do not revoke URL here as it will invalidate the audio player source
+        audioUrlInput.disabled = true; // Disable URL input when file is selected
+        validateForm();
       });
       audio.addEventListener('error', () => {
         showToast('error', 'Failed to load audio file.');
@@ -250,6 +272,7 @@
         updateFileUploadArea();
         fileAudioPreview.classList.add('hidden');
         URL.revokeObjectURL(url);
+        validateForm();
       });
     }
 
@@ -263,23 +286,40 @@
           const seconds = Math.floor(duration % 60);
           durationText = `Duration: ${minutes}m ${seconds}s`;
         }
+        const fileSize = formatFileSize(selectedFile.size);
         fileUploadArea.innerHTML = `
           <div class="text-center">
             <p class="text-sm text-gray-600">Selected File:</p>
             <p class="text-sm font-medium text-gray-900">${selectedFile.name}</p>
             <p class="text-sm text-gray-600">${durationText}</p>
+            <p class="text-sm text-gray-600">Size: ${fileSize}</p>
           </div>
         `;
       } else {
         console.log('No file selected. Resetting file upload area.');
         fileUploadArea.innerHTML = fileUploadContent.innerHTML;
         fileAudioPreview.classList.add('hidden');
+        audioUrlInput.disabled = false; // Enable URL input when no file is selected
       }
     }
 
+    // Format File Size
+    function formatFileSize(bytes) {
+      const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+      if (bytes === 0) return '0 Byte';
+      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+      return Math.round(bytes / Math.pow(1024, i), 2) + ' ' + sizes[i];
+    }
+
     // Validate Audio URL Input
+    audioUrlInput.addEventListener('input', () => {
+      validateAudioUrl();
+      validateForm();
+    });
+
     audioUrlInput.addEventListener('blur', () => {
       validateAudioUrl();
+      validateForm();
     });
 
     function validateAudioUrl() {
@@ -291,17 +331,19 @@
         // No URL entered
         urlAudioPreview.classList.add('hidden');
         urlAudioPlayer.src = '';
-        return true;
+        return false;
       }
 
       try {
         const url = new URL(audioUrl);
-        const extension = url.pathname.split('.').pop().toLowerCase();
+        const extension = url.pathname.split('.').pop().toLowerCase().split('?')[0];
         if (!allowedExtensions.includes(extension)) {
           throw new Error('Unsupported audio file format.');
         }
         // Test loading the audio
         testAudioUrl(audioUrl);
+        console.log('Valid audio URL:', audioUrl);
+        fileInput.disabled = true; // Disable file input when URL is provided
         return true;
       } catch (error) {
         audioUrlError.textContent = 'Invalid URL or unsupported audio format.';
@@ -310,6 +352,7 @@
         urlAudioPreview.classList.add('hidden');
         urlAudioPlayer.src = '';
         console.error('Audio URL validation error:', error);
+        fileInput.disabled = false;
         return false;
       }
     }
@@ -317,42 +360,52 @@
     function testAudioUrl(url) {
       urlAudioPlayer.src = url;
       urlAudioPreview.classList.remove('hidden');
-      urlAudioPlayer.load();
-      urlAudioPlayer.addEventListener('error', () => {
+      urlAudioPlayer.addEventListener('loadedmetadata', function onLoadMetadata() {
+        console.log('Audio URL metadata loaded.');
+        urlAudioPlayer.removeEventListener('loadedmetadata', onLoadMetadata);
+      });
+      urlAudioPlayer.addEventListener('error', function onError() {
         showToast('error', 'Unable to load audio from the provided URL.');
         audioUrlError.textContent = 'Unable to load audio from the provided URL.';
         audioUrlError.classList.remove('hidden');
         audioUrlInput.classList.add('border-red-500', 'text-red-600');
         urlAudioPreview.classList.add('hidden');
+        urlAudioPlayer.src = '';
         console.error('Failed to load audio from URL.');
+        urlAudioPlayer.removeEventListener('error', onError);
+        fileInput.disabled = false;
+        validateForm();
       }, { once: true });
+    }
+
+    // Validate Form
+    function validateForm() {
+      const isFileSelected = !!selectedFile;
+      const audioUrl = audioUrlInput.value.trim();
+      const isAudioUrlValid = audioUrl ? validateAudioUrl() : false;
+      if (isFileSelected || isAudioUrlValid) {
+        submitButton.disabled = false;
+      } else {
+        submitButton.disabled = true;
+      }
     }
 
     // Handle Form Submission
     transcriptionForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (transcriptionInProgress) return;
+      console.log('Form submitted.');
 
       const audioUrlInputValue = audioUrlInput.value.trim();
       let audioUrl = audioUrlInputValue;
 
-      let isAudioUrlValid = true;
+      let isAudioUrlValid = validateAudioUrl();
       let isFileSelected = !!selectedFile;
 
-      // Validate Audio URL if provided
-      if (audioUrlInputValue) {
-        isAudioUrlValid = validateAudioUrl();
-      }
-
-      if (!isFileSelected && !audioUrl) {
-        showToast('error', 'Please select an audio file or enter an audio URL to transcribe.');
-        console.log('No audio file or URL provided.');
-        return;
-      }
-
-      if (!isAudioUrlValid) {
-        showToast('error', 'Please provide a valid audio URL.');
-        console.log('Invalid audio URL.');
+      if (!isFileSelected && !isAudioUrlValid) {
+        showToast('error', 'Please select an audio file or enter a valid audio URL to transcribe.');
+        console.log('No valid audio file or URL provided.');
+        validateForm();
         return;
       }
 
@@ -364,6 +417,13 @@
       resultSection.classList.add('hidden');
       transcriptionText.textContent = '';
       characterCount.textContent = '';
+      transcriptionProgressBar.style.width = '0%';
+      transcriptionProgressText.textContent = 'Starting transcription...';
+
+      // Start Timer
+      transcriptionStartTime = Date.now();
+      updateTranscriptionTimer();
+      transcriptionTimerInterval = setInterval(updateTranscriptionTimer, 1000);
 
       // Show upload progress bar if file is being uploaded
       if (selectedFile) {
@@ -407,10 +467,13 @@
           fileInput.value = '';
           updateFileUploadArea();
           fileAudioPreview.classList.add('hidden');
+          fileInput.disabled = false;
         }
 
         // Step 3: Send the audio URL to the transcription service
         console.log('Sending audio URL to transcription service.');
+        await simulateTranscriptionProgress(); // Simulate transcription progress
+
         const transcriptionResponse = await axios.post('https://7y2hygej6o5jvigtwwb3oqxsyy0jmeoe.lambda-url.us-west-2.on.aws/', {
           audio_url: audioUrl
         }, {
@@ -442,14 +505,44 @@
         transcriptionInProgress = false;
         cancelButton.disabled = true;
         submitButton.textContent = 'Transcribe';
-        submitButton.disabled = false;
+        submitButton.disabled = true;
         loader.classList.add('hidden');
         uploadProgressContainer.classList.add('hidden');
         progressBar.style.width = '0%';
         urlAudioPreview.classList.add('hidden');
         urlAudioPlayer.src = '';
+        clearInterval(transcriptionTimerInterval);
+        transcriptionTimer.textContent = 'Elapsed Time: 00:00';
+        transcriptionProgressBar.style.width = '0%';
+        transcriptionProgressText.textContent = '';
+        validateForm();
       }
     });
+
+    // Update Transcription Timer
+    function updateTranscriptionTimer() {
+      const elapsedTime = Date.now() - transcriptionStartTime;
+      const minutes = Math.floor(elapsedTime / 60000);
+      const seconds = Math.floor((elapsedTime % 60000) / 1000);
+      transcriptionTimer.textContent = `Elapsed Time: ${padZero(minutes)}:${padZero(seconds)}`;
+    }
+
+    function padZero(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    // Simulate Transcription Progress
+    async function simulateTranscriptionProgress() {
+      let percentCompleted = 0;
+      while (percentCompleted < 100) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        percentCompleted += Math.floor(Math.random() * 10) + 5; // Increase by 5-15%
+        if (percentCompleted > 100) percentCompleted = 100;
+        transcriptionProgressBar.style.width = percentCompleted + '%';
+        transcriptionProgressText.textContent = `Transcription Progress: ${percentCompleted}%`;
+        console.log(`Transcription progress: ${percentCompleted}%`);
+      }
+    }
 
     // Cancel Transcription
     cancelButton.addEventListener('click', () => {
@@ -507,7 +600,7 @@
               <p class="mt-1 text-sm text-gray-500">${message}</p>
             </div>
             <div class="ml-4 flex-shrink-0 flex">
-              <button class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" onclick="removeToast(this.parentElement.parentElement.parentElement)">
+              <button class="inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-red-500" onclick="removeToast(this.parentElement.parentElement.parentElement)">
                 <span class="sr-only">Close</span>
                 <!-- Close Icon -->
                 <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -542,11 +635,11 @@
                   </svg>`;
         case 'error':
           return `<svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.993-10.993a1 1 0 00-1.414-1.414L10 8.586 7.421 6.007a1 1 0 00-1.414 1.414L8.586 10l-2.579 2.579a1 1 0 001.414 1.414L10 11.414l2.579 2.579a1 1 0 001.414-1.414L11.414 10l2.579-2.579z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.993-10.993a1 1 0 00-1.414-1.414L10 8.586 7.421 6.007a1 1 0 00-1.414 1.414L8.586 10l-2.579 2.579a1 1 0 101.414 1.414L10 11.414l2.579 2.579a1 1 0 101.414-1.414L11.414 10l2.579-2.579z" clip-rule="evenodd"/>
                   </svg>`;
         case 'info':
           return `<svg class="h-6 w-6 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 7a2 2 0 10-4 0 2 2 0 004 0zM3 12a9 9 0 1118 0A9 9 0 013 12zm9 0a3 3 0 100-6 3 3 0 000 6z"/>
+                    <path fill-rule="evenodd" d="M10 2a8 8 0 016.32 12.906l-1.414-1.414A6 6 0 1012 4V1.993A8.001 8.001 0 0110 2zm-.707 5.707a1 1 0 00-1.414 0L6 9.586 7.414 11l1.586-1.586L10.586 11 12 9.586l-2.707-2.707z" clip-rule="evenodd"/>
                   </svg>`;
         default:
           return '';
