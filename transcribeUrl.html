@@ -55,11 +55,11 @@
                             <div class="flex text-sm text-gray-600">
                                 <label for="fileInput" class="relative cursor-pointer bg-white rounded-md font-medium text-red-600 hover:text-red-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-red-500">
                                     <span>Upload a file</span>
-                                    <input id="fileInput" name="fileInput" type="file" accept=".mp3, .wav, .ogg, .mp4" class="sr-only" aria-label="File Input">
+                                    <input id="fileInput" name="fileInput" type="file" accept=".mp3, .wav, .ogg, .mp4, .mov" class="sr-only" aria-label="File Input">
                                 </label>
                                 <p class="pl-1">or drag and drop</p>
                             </div>
-                            <p class="text-xs text-gray-500">MP3, WAV, OGG, MP4 up to 2GB</p>
+                            <p class="text-xs text-gray-500">MP3, WAV, OGG, MP4, MOV up to 2GB</p>
                         </div>
                     </div>
                     <!-- Audio Player for File Preview -->
@@ -177,7 +177,7 @@
             const transcriptionProgressBar = document.getElementById('transcriptionProgressBar');
             const transcriptionProgressText = document.getElementById('transcriptionProgressText');
             // Supported audio formats
-            const allowedExtensions = ['mp3', 'wav', 'ogg', 'mp4'];
+            const allowedExtensions = ['mp3', 'wav', 'ogg', 'mp4', 'mov'];
             // Handle File Input Change
             fileInput.addEventListener('change', (e) => {
                 handleFiles(e.target.files);
@@ -214,7 +214,7 @@
                     // Validate File Type
                     const fileExtension = selectedFile.name.split('.').pop().toLowerCase();
                     if (!allowedExtensions.includes(fileExtension)) {
-                        showToast('error', 'Unsupported file format. Please upload an MP3, WAV, OGG, or MP4 audio file.');
+                        showToast('error', 'Unsupported file format. Please upload an MP3, WAV, OGG, MP4, or MOV audio file.');
                         selectedFile = null;
                         fileInput.value = '';
                         updateFileUploadArea();
