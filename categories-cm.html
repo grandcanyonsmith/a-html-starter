@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categories and Subcategories</title>
+    <!-- Include Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen font-sans">
+    <!-- Header Section -->
+    <header class="bg-gray-800 shadow-md">
+        <div class="container mx-auto py-6">
+            <h1 class="text-4xl font-extrabold text-center text-indigo-400">Categories & Subcategories</h1>
+            <p class="text-center text-gray-400">Explore the content by navigating through categories and their subcategories</p>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main class="container mx-auto py-12 px-4">
+        <!-- Categories Section -->
+        <div id="categoriesSection" class="transition-opacity duration-500">
+            <h2 class="text-3xl font-semibold mb-6 text-indigo-400">Categories</h2>
+            <ul id="categoriesList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Categories will be loaded here -->
+            </ul>
+        </div>
+
+        <!-- Subcategories Section -->
+        <div id="subcategoriesSection" class="hidden transition-opacity duration-500">
+            <h2 id="subcategoryTitle" class="text-3xl font-semibold mb-6 text-indigo-400">Subcategories</h2>
+            <ul id="subcategoriesList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Subcategories will be loaded here -->
+            </ul>
+            <button id="backButton"
+                class="mt-8 py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200">
+                Back to Categories
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-800 py-4">
+        <p class="text-center text-gray-400 text-sm">Powered by Your Brand &copy; 2024</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('Page loaded.');
+
+            const categoriesList = document.getElementById('categoriesList');
+            const categoriesSection = document.getElementById('categoriesSection');
+            const subcategoriesSection = document.getElementById('subcategoriesSection');
+            const subcategoriesList = document.getElementById('subcategoriesList');
+            const backButton = document.getElementById('backButton');
+            const subcategoryTitle = document.getElementById('subcategoryTitle');
+
+            // Function to fetch and display all categories
+            function fetchCategories() {
+                console.log('Fetching all categories.');
+                const data = {
+                    operation: 'read_all'
+                };
+
+                fetch('https://soa6mp6e2rilqgb7xz675agzeq0stbff.lambda-url.us-west-2.on.aws/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok. Status code: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Categories data received:', data);
+                        displayCategories(data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching categories:', error);
+                        categoriesList.innerHTML = '<li class="text-red-500">Error fetching categories: ' + error.message + '</li>';
+                    });
+            }
+
+            // Function to display categories
+            function displayCategories(categories) {
+                console.log('Displaying categories.');
+                categoriesList.innerHTML = '';
+
+                if (categories.length === 0) {
+                    categoriesList.innerHTML = '<li>No categories available.</li>';
+                    return;
+                }
+
+                categories.forEach(category => {
+                    const li = document.createElement('li');
+                    li.classList.add('bg-gray-800', 'p-6', 'rounded-lg', 'shadow-lg', 'hover:shadow-xl', 'transition', 'duration-300');
+                    const button = document.createElement('button');
+                    button.classList.add('text-indigo-400', 'hover:text-indigo-300', 'font-semibold', 'block', 'w-full', 'text-left', 'truncate');
+                    button.innerText = category.CategoryName;
+                    button.addEventListener('click', function () {
+                        console.log('Category clicked:', category.CategoryID);
+                        displaySubcategories(category);
+                    });
+                    li.appendChild(button);
+                    categoriesList.appendChild(li);
+                });
+            }
+
+            // Function to display subcategories of a category
+            function displaySubcategories(category) {
+                console.log('Displaying subcategories for category:', category.CategoryName);
+                categoriesSection.classList.add('hidden');
+                subcategoriesSection.classList.remove('hidden');
+                subcategoriesList.innerHTML = '';
+                subcategoryTitle.innerText = 'Subcategories of ' + category.CategoryName;
+
+                if (Array.isArray(category.SubCategories) && category.SubCategories.length > 0) {
+                    category.SubCategories.forEach(subcategory => {
+                        const li = document.createElement('li');
+                        li.classList.add('bg-gray-800', 'p-4', 'rounded-lg', 'shadow-lg', 'hover:shadow-xl', 'transition', 'duration-300');
+                        li.innerText = subcategory.SubCategoryName;
+                        subcategoriesList.appendChild(li);
+                    });
+                } else {
+                    subcategoriesList.innerHTML = '<li>No subcategories available.</li>';
+                }
+            }
+
+            // Event listener for back button
+            backButton.addEventListener('click', function () {
+                console.log('Back button clicked.');
+                subcategoriesSection.classList.add('hidden');
+                categoriesSection.classList.remove('hidden');
+            });
+
+            // Fetch categories on page load
+            fetchCategories();
+        });
+    </script>
+</body>
+
+</html>
