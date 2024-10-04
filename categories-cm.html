@@ -28,6 +28,12 @@
         }
         /* Custom Styles for better UI/UX */
         /* Add any additional styles here */
+        /* Adjusted styles for desktop view */
+        @media (min-width: 1024px) {
+            #contentSection {
+                grid-template-columns: 1fr 3fr;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-900">
@@ -52,7 +58,7 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Categories and Subcategories Section -->
-        <div id="contentSection" class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <div id="contentSection" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Sidebar -->
             <aside class="lg:col-span-1 bg-white rounded-lg shadow p-4">
                 <h3 class="text-xl font-semibold mb-4">Categories</h3>
@@ -65,7 +71,7 @@
             </aside>
 
             <!-- Main Content Area -->
-            <section class="lg:col-span-4">
+            <section class="lg:col-span-1">
                 <!-- Subcategories Section -->
                 <div id="subcategoriesSection" class="hidden">
                     <div class="flex items-center justify-between mb-6">
@@ -79,7 +85,7 @@
                             </button>
                         </div>
                     </div>
-                    <div id="subcategoriesList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div id="subcategoriesList" class="grid grid-cols-1 gap-4">
                         <!-- Subcategories will be loaded here -->
                     </div>
                 </div>
@@ -141,6 +147,12 @@
                     <div class="mt-4">
                         <label for="subcategoryName" class="block text-sm font-medium">Subcategory Name</label>
                         <input type="text" id="subcategoryName" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" aria-required="true">
+
+                        <label for="subcategoryInstructions" class="block text-sm font-medium mt-4">Instructions</label>
+                        <textarea id="subcategoryInstructions" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
+
+                        <label for="subcategoryExamples" class="block text-sm font-medium mt-4">Examples</label>
+                        <textarea id="subcategoryExamples" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
@@ -162,6 +174,12 @@
                     <div class="mt-4">
                         <label for="editSubcategoryName" class="block text-sm font-medium">Subcategory Name</label>
                         <input type="text" id="editSubcategoryName" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" aria-required="true">
+
+                        <label for="editSubcategoryInstructions" class="block text-sm font-medium mt-4">Instructions</label>
+                        <textarea id="editSubcategoryInstructions" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
+
+                        <label for="editSubcategoryExamples" class="block text-sm font-medium mt-4">Examples</label>
+                        <textarea id="editSubcategoryExamples" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
@@ -174,6 +192,28 @@
                 </div>
             </div>
         </div>
+
+        <!-- Subcategory Details Modal -->
+        <div id="subcategoryDetailsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
+            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full">
+                <div class="px-6 py-4">
+                    <h3 id="detailsSubcategoryName" class="text-lg leading-6 font-medium">Subcategory Details</h3>
+                    <div class="mt-4">
+                        <h4 class="text-sm font-semibold">Instructions:</h4>
+                        <p id="detailsSubcategoryInstructions" class="mt-1 text-sm text-gray-700"></p>
+
+                        <h4 class="text-sm font-semibold mt-4">Examples:</h4>
+                        <p id="detailsSubcategoryExamples" class="mt-1 text-sm text-gray-700"></p>
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 flex justify-end">
+                    <button id="closeSubcategoryDetails" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- JavaScript -->
@@ -185,10 +225,10 @@
 
                 // Constants
                 const API_URL = 'https://soa6mp6e2rilqgb7xz675agzeq0stbff.lambda-url.us-west-2.on.aws/';
+                const DDB_TABLE_NAME = 'Categories';
 
                 // DOM Elements
                 const categoriesList = document.getElementById('categoriesList');
-                const categoriesSection = document.getElementById('contentSection');
                 const subcategoriesSection = document.getElementById('subcategoriesSection');
                 const subcategoriesList = document.getElementById('subcategoriesList');
                 const backButton = document.getElementById('backButton');
@@ -206,14 +246,23 @@
                 const newSubcategoryBtn = document.getElementById('newSubcategoryBtn');
                 const newSubcategoryModal = document.getElementById('newSubcategoryModal');
                 const subcategoryNameInput = document.getElementById('subcategoryName');
+                const subcategoryInstructionsInput = document.getElementById('subcategoryInstructions');
+                const subcategoryExamplesInput = document.getElementById('subcategoryExamples');
                 const saveNewSubcategoryBtn = document.getElementById('saveNewSubcategory');
                 const cancelNewSubcategoryBtn = document.getElementById('cancelNewSubcategory');
                 const editSubcategoryModal = document.getElementById('editSubcategoryModal');
                 const editSubcategoryNameInput = document.getElementById('editSubcategoryName');
+                const editSubcategoryInstructionsInput = document.getElementById('editSubcategoryInstructions');
+                const editSubcategoryExamplesInput = document.getElementById('editSubcategoryExamples');
                 const saveEditSubcategoryBtn = document.getElementById('saveEditSubcategory');
                 const cancelEditSubcategoryBtn = document.getElementById('cancelEditSubcategory');
                 const messageContainer = document.getElementById('messageContainer');
                 const placeholderSection = document.getElementById('placeholderSection');
+                const subcategoryDetailsModal = document.getElementById('subcategoryDetailsModal');
+                const detailsSubcategoryName = document.getElementById('detailsSubcategoryName');
+                const detailsSubcategoryInstructions = document.getElementById('detailsSubcategoryInstructions');
+                const detailsSubcategoryExamples = document.getElementById('detailsSubcategoryExamples');
+                const closeSubcategoryDetailsBtn = document.getElementById('closeSubcategoryDetails');
 
                 // Application State
                 let categoriesData = [];
@@ -235,7 +284,14 @@
                         if (!response.ok) {
                             throw new Error(`Network response was not ok. Status code: ${response.status}`);
                         }
-                        const result = await response.json();
+                        const text = await response.text();
+                        let result;
+                        try {
+                            result = JSON.parse(text);
+                        } catch (e) {
+                            console.error('Error parsing JSON response:', e, text);
+                            throw new Error('Error parsing JSON response');
+                        }
                         console.log('API Response:', result);
                         return result;
                     } catch (error) {
@@ -305,7 +361,7 @@
                             li.className = 'flex items-center justify-between hover:bg-gray-100 rounded-md px-3 py-2';
 
                             const button = document.createElement('button');
-                            button.className = 'flex items-center space-x-2 focus:outline-none';
+                            button.className = 'flex items-center space-x-2 focus:outline-none w-full text-left';
                             button.addEventListener('click', (event) => {
                                 event.preventDefault();
                                 console.log('Category clicked:', category.CategoryID);
@@ -316,10 +372,9 @@
                             const icon = document.createElement('svg');
                             icon.className = 'h-5 w-5 text-indigo-500';
                             icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-                            icon.setAttribute('fill', 'none');
-                            icon.setAttribute('viewBox', '0 0 24 24');
-                            icon.setAttribute('stroke', 'currentColor');
-                            icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>';
+                            icon.setAttribute('fill', 'currentColor');
+                            icon.setAttribute('viewBox', '0 0 20 20');
+                            icon.innerHTML = '<path d="M2 6a2 2 0 012-2h3.5a1 1 0 01.832.445l.668 1.11H14a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>';
 
                             const span = document.createElement('span');
                             span.className = 'text-sm font-medium text-gray-700';
@@ -335,27 +390,22 @@
                             const editBtn = document.createElement('button');
                             editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
                             editBtn.setAttribute('aria-label', 'Edit category');
-                            editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/><path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 001.5-1.5V9a1 1 0 112 0v8.5A3.5 3.5 0 0116.5 21h-13A3.5 3.5 0 010 17.5v-13A3.5 3.5 0 013.5 1h8.5a1 1 0 110 2H3.5A1.5 1.5 0 002 4.5v13z" clip-rule="evenodd"/></svg>';
-                            editBtn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                console.log('Edit category clicked:', category.CategoryID);
-                                editingCategory = category;
-                                editCategoryNameInput.value = category.CategoryName;
-                                editCategoryModal.classList.remove('hidden');
-                                editCategoryModal.setAttribute('aria-hidden', 'false');
+                            editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/><path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 003.5-4H3.5A1.5 1.5 0 003.5 19H2z" clip-rule="evenodd"/></svg>';
+                            editBtn.addEventListener('click', (event) => {
+                                event.stopPropagation();
+                                console.log('Edit category:', category.CategoryID);
+                                this.openEditCategoryModal(category);
                             });
 
                             // Delete Button
                             const deleteBtn = document.createElement('button');
-                            deleteBtn.classList.add('text-red-600', 'hover:text-red-800', 'focus:outline-none');
+                            deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
                             deleteBtn.setAttribute('aria-label', 'Delete category');
-                            deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.366-.36.858-.576 1.39-.576h.707c.531 0 1.023.216 1.389.576l1.036 1.036H15.5a1 1 0 110 2h-.097l-.867 12.172a2 2 0 01-1.996 1.828H7.46a2 2 0 01-1.996-1.828L4.596 6.135a1 1 0 01-.096-2h1.485l1.036-1.036zM6.5 7a1 1 0 000 2h7a1 1 0 100-2h-7z" clip-rule="evenodd"/></svg>';
-                            deleteBtn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                console.log('Delete category clicked:', category.CategoryID);
-                                if (confirm('Are you sure you want to delete this category?')) {
-                                    this.deleteCategory(category.CategoryID);
-                                }
+                            deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.292 4.292a1 1 0 011.416 0L10 8.584l4.292-4.292a1 1 0 011.416 1.416L11.416 10l4.292 4.292a1 1 0 01-1.416 1.416L10 11.416l-4.292 4.292a1 1 0 01-1.416-1.416L8.584 10 4.292 5.708a1 1 0 010-1.416z" clip-rule="evenodd"/></svg>';
+                            deleteBtn.addEventListener('click', (event) => {
+                                event.stopPropagation();
+                                console.log('Delete category:', category.CategoryID);
+                                this.deleteCategory(category);
                             });
 
                             actions.appendChild(editBtn);
@@ -368,97 +418,124 @@
                         });
                     }
 
+                    openNewCategoryModal() {
+                        categoryNameInput.value = '';
+                        newCategoryModal.classList.remove('hidden');
+                    }
+
+                    closeNewCategoryModal() {
+                        newCategoryModal.classList.add('hidden');
+                    }
+
                     async createCategory() {
                         const categoryName = categoryNameInput.value.trim();
-                        if (!categoryName) {
-                            alert('Please enter a category name.');
+                        if (categoryName === '') {
+                            showMessage('error', 'Category name cannot be empty.');
                             return;
                         }
-
                         saveNewCategoryBtn.disabled = true;
-                        saveNewCategoryBtn.innerText = 'Saving...';
-
+                        saveNewCategoryBtn.textContent = 'Saving...';
+                        const categoryID = this.generateUUID();
                         const data = {
                             entity: 'category',
                             operation: 'create',
                             item: {
-                                CategoryID: Date.now().toString(),
-                                CategoryName: categoryName
+                                CategoryID: categoryID,
+                                CategoryName: categoryName,
+                                SubCategories: []
                             }
                         };
-
                         try {
-                            await apiRequest(data);
+                            const response = await apiRequest(data);
+                            showMessage('success', `Category "${categoryName}" created successfully.`);
+                            this.closeNewCategoryModal();
                             saveNewCategoryBtn.disabled = false;
-                            saveNewCategoryBtn.innerText = 'Save';
-                            newCategoryModal.classList.add('hidden');
-                            newCategoryModal.setAttribute('aria-hidden', 'true');
-                            categoryNameInput.value = '';
-                            showMessage('success', 'Category created successfully.');
+                            saveNewCategoryBtn.textContent = 'Save';
                             this.fetchCategories();
                         } catch (error) {
+                            showMessage('error', 'Error creating category: ' + error.message);
+                            console.error('Error creating category:', error);
                             saveNewCategoryBtn.disabled = false;
-                            saveNewCategoryBtn.innerText = 'Save';
-                            showMessage('error', 'Error creating category.');
+                            saveNewCategoryBtn.textContent = 'Save';
                         }
                     }
 
+                    openEditCategoryModal(category) {
+                        editingCategory = category;
+                        editCategoryNameInput.value = category.CategoryName;
+                        editCategoryModal.classList.remove('hidden');
+                    }
+
+                    closeEditCategoryModal() {
+                        editCategoryModal.classList.add('hidden');
+                        editingCategory = null;
+                    }
+
                     async updateCategory() {
-                        const categoryName = editCategoryNameInput.value.trim();
-                        if (!categoryName) {
-                            alert('Please enter a category name.');
+                        if (!editingCategory) return;
+                        const newName = editCategoryNameInput.value.trim();
+                        if (newName === '') {
+                            showMessage('error', 'Category name cannot be empty.');
                             return;
                         }
-
                         saveEditCategoryBtn.disabled = true;
-                        saveEditCategoryBtn.innerText = 'Saving...';
-
+                        saveEditCategoryBtn.textContent = 'Saving...';
                         const data = {
                             entity: 'category',
                             operation: 'update',
                             CategoryID: editingCategory.CategoryID,
                             update_fields: {
-                                CategoryName: categoryName
+                                CategoryName: newName
                             }
                         };
-
                         try {
-                            await apiRequest(data);
+                            const response = await apiRequest(data);
+                            showMessage('success', `Category "${editingCategory.CategoryName}" updated successfully.`);
+                            this.closeEditCategoryModal();
                             saveEditCategoryBtn.disabled = false;
-                            saveEditCategoryBtn.innerText = 'Save Changes';
-                            editCategoryModal.classList.add('hidden');
-                            editCategoryModal.setAttribute('aria-hidden', 'true');
-                            editingCategory = null;
-                            showMessage('success', 'Category updated successfully.');
+                            saveEditCategoryBtn.textContent = 'Save Changes';
                             this.fetchCategories();
+                            if (currentCategory && currentCategory.CategoryID === editingCategory.CategoryID) {
+                                subcategoryTitle.textContent = newName;
+                            }
                         } catch (error) {
+                            showMessage('error', 'Error updating category: ' + error.message);
+                            console.error('Error updating category:', error);
                             saveEditCategoryBtn.disabled = false;
-                            saveEditCategoryBtn.innerText = 'Save Changes';
-                            showMessage('error', 'Error updating category.');
+                            saveEditCategoryBtn.textContent = 'Save Changes';
                         }
                     }
 
-                    async deleteCategory(categoryID) {
-                        console.log('Deleting category:', categoryID);
+                    async deleteCategory(category) {
+                        if (!confirm(`Are you sure you want to delete category "${category.CategoryName}"?`)) {
+                            return;
+                        }
                         const data = {
                             entity: 'category',
                             operation: 'delete',
-                            CategoryID: categoryID
+                            CategoryID: category.CategoryID
                         };
-
                         try {
-                            await apiRequest(data);
-                            showMessage('success', 'Category deleted successfully.');
+                            const response = await apiRequest(data);
+                            showMessage('success', `Category "${category.CategoryName}" deleted successfully.`);
                             this.fetchCategories();
-                            // Reset subcategories section if current category was deleted
-                            if (currentCategory && currentCategory.CategoryID === categoryID) {
+                            if (currentCategory && currentCategory.CategoryID === category.CategoryID) {
                                 subcategoriesSection.classList.add('hidden');
                                 placeholderSection.classList.remove('hidden');
                                 currentCategory = null;
                             }
                         } catch (error) {
-                            showMessage('error', 'Error deleting category.');
+                            showMessage('error', 'Error deleting category: ' + error.message);
+                            console.error('Error deleting category:', error);
                         }
+                    }
+
+                    generateUUID() {
+                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                            var r = Math.random() * 16 | 0,
+                                v = c == 'x' ? r : (r & 0x3 | 0x8);
+                            return v.toString(16);
+                        });
                     }
                 }
 
@@ -466,202 +543,246 @@
                 class SubcategoryManager {
                     displaySubcategories(category) {
                         console.log('Displaying subcategories for category:', category.CategoryName);
-                        placeholderSection.classList.add('hidden');
-                        subcategoriesSection.classList.remove('hidden');
                         subcategoriesList.innerHTML = '';
-                        subcategoryTitle.innerText = 'Subcategories of ' + category.CategoryName;
+                        subcategoryTitle.textContent = category.CategoryName;
+                        subcategoriesSection.classList.remove('hidden');
+                        placeholderSection.classList.add('hidden');
 
-                        if (Array.isArray(category.SubCategories) && category.SubCategories.length > 0) {
-                            category.SubCategories.forEach(subcategory => {
-                                const card = document.createElement('div');
-                                card.classList.add('bg-white', 'rounded-lg', 'shadow', 'p-4', 'flex', 'items-center', 'justify-between');
+                        const subcategories = category.SubCategories || [];
 
-                                const name = document.createElement('div');
-                                name.classList.add('text-sm', 'font-medium', 'text-gray-800');
-                                name.innerText = subcategory.SubCategoryName;
-
-                                const actions = document.createElement('div');
-                                actions.classList.add('flex', 'items-center', 'space-x-2');
-
-                                // Edit Button
-                                const editBtn = document.createElement('button');
-                                editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                                editBtn.setAttribute('aria-label', 'Edit subcategory');
-                                editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/><path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 001.5-1.5V9a1 1 0 112 0v8.5A3.5 3.5 0 0116.5 21h-13A3.5 3.5 0 010 17.5v-13A3.5 3.5 0 013.5 1h8.5a1 1 0 110 2H3.5A1.5 1.5 0 002 4.5v13z" clip-rule="evenodd"/></svg>';
-                                editBtn.addEventListener('click', () => {
-                                    console.log('Edit subcategory clicked:', subcategory.SubCategoryID);
-                                    editingSubcategory = subcategory;
-                                    editSubcategoryNameInput.value = subcategory.SubCategoryName;
-                                    editSubcategoryModal.classList.remove('hidden');
-                                    editSubcategoryModal.setAttribute('aria-hidden', 'false');
-                                });
-
-                                // Delete Button
-                                const deleteBtn = document.createElement('button');
-                                deleteBtn.classList.add('text-red-600', 'hover:text-red-800', 'focus:outline-none');
-                                deleteBtn.setAttribute('aria-label', 'Delete subcategory');
-                                deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.366-.36.858-.576 1.39-.576h.707c.531 0 1.023.216 1.389.576l1.036 1.036H15.5a1 1 0 110 2h-.097l-.867 12.172a2 2 0 01-1.996 1.828H7.46a2 2 0 01-1.996-1.828L4.596 6.135a1 1 0 01-.096-2h1.485l1.036-1.036zM6.5 7a1 1 0 000 2h7a1 1 0 100-2h-7z" clip-rule="evenodd"/></svg>';
-                                deleteBtn.addEventListener('click', () => {
-                                    console.log('Delete subcategory clicked:', subcategory.SubCategoryID);
-                                    if (confirm('Are you sure you want to delete this subcategory?')) {
-                                        this.deleteSubcategory(subcategory.SubCategoryID);
-                                    }
-                                });
-
-                                actions.appendChild(editBtn);
-                                actions.appendChild(deleteBtn);
-
-                                card.appendChild(name);
-                                card.appendChild(actions);
-
-                                subcategoriesList.appendChild(card);
-                            });
-                        } else {
-                            subcategoriesList.innerHTML = '<div class="col-span-1 md:col-span-2 text-center text-gray-500">No subcategories available.</div>';
+                        if (subcategories.length === 0) {
+                            subcategoriesList.innerHTML = '<p class="text-gray-500">No subcategories available.</p>';
+                            return;
                         }
+
+                        subcategories.forEach(subcategory => {
+                            const div = document.createElement('div');
+                            div.className = 'bg-white rounded-md shadow p-4 flex items-center justify-between';
+
+                            const details = document.createElement('div');
+                            details.className = 'flex items-center space-x-2';
+
+                            const icon = document.createElement('svg');
+                            icon.className = 'h-5 w-5 text-indigo-500';
+                            icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                            icon.setAttribute('fill', 'currentColor');
+                            icon.setAttribute('viewBox', '0 0 20 20');
+                            icon.innerHTML = '<path d="M4 2a2 2 0 012-2h8a2 2 0 012 2v16l-6-3-6 3V2z"/>';
+
+                            const title = document.createElement('span');
+                            title.className = 'text-sm font-medium text-gray-700';
+                            title.innerText = subcategory.SubCategoryName;
+
+                            details.appendChild(icon);
+                            details.appendChild(title);
+
+                            const actions = document.createElement('div');
+                            actions.classList.add('flex', 'items-center', 'space-x-2');
+
+                            // View Button
+                            const viewBtn = document.createElement('button');
+                            viewBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                            viewBtn.setAttribute('aria-label', 'View details');
+                            viewBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="View" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a7 7 0 017 7 7 7 0 01-7 7 7 7 0 01-7-7 7 7 0 017-7zm0 3a4 4 0 100 8 4 4 0 000-8z"/></svg>';
+                            viewBtn.addEventListener('click', (event) => {
+                                event.stopPropagation();
+                                console.log('View subcategory:', subcategory.SubCategoryID);
+                                this.openSubcategoryDetails(subcategory);
+                            });
+
+                            // Edit Button
+                            const editBtn = document.createElement('button');
+                            editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                            editBtn.setAttribute('aria-label', 'Edit subcategory');
+                            editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/><path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 003.5-4H3.5A1.5 1.5 0 003.5 19H2z" clip-rule="evenodd"/></svg>';
+                            editBtn.addEventListener('click', (event) => {
+                                event.stopPropagation();
+                                console.log('Edit subcategory:', subcategory.SubCategoryID);
+                                this.openEditSubcategoryModal(subcategory);
+                            });
+
+                            // Delete Button
+                            const deleteBtn = document.createElement('button');
+                            deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                            deleteBtn.setAttribute('aria-label', 'Delete subcategory');
+                            deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.292 4.292a1 1 0 011.416 0L10 8.584l4.292-4.292a1 1 0 011.416 1.416L11.416 10l4.292 4.292a1 1 0 01-1.416 1.416L10 11.416l-4.292 4.292a1 1 0 01-1.416-1.416L8.584 10 4.292 5.708a1 1 0 010-1.416z" clip-rule="evenodd"/></svg>';
+                            deleteBtn.addEventListener('click', (event) => {
+                                event.stopPropagation();
+                                console.log('Delete subcategory:', subcategory.SubCategoryID);
+                                this.deleteSubcategory(subcategory);
+                            });
+
+                            actions.appendChild(viewBtn);
+                            actions.appendChild(editBtn);
+                            actions.appendChild(deleteBtn);
+
+                            div.appendChild(details);
+                            div.appendChild(actions);
+
+                            subcategoriesList.appendChild(div);
+                        });
+                    }
+
+                    openNewSubcategoryModal() {
+                        subcategoryNameInput.value = '';
+                        subcategoryInstructionsInput.value = '';
+                        subcategoryExamplesInput.value = '';
+                        newSubcategoryModal.classList.remove('hidden');
+                    }
+
+                    closeNewSubcategoryModal() {
+                        newSubcategoryModal.classList.add('hidden');
                     }
 
                     async createSubcategory() {
+                        if (!currentCategory) return;
                         const subcategoryName = subcategoryNameInput.value.trim();
-                        if (!subcategoryName) {
-                            alert('Please enter a subcategory name.');
+                        const instructions = subcategoryInstructionsInput.value.trim();
+                        const examples = subcategoryExamplesInput.value.trim();
+                        if (subcategoryName === '') {
+                            showMessage('error', 'Subcategory name cannot be empty.');
                             return;
                         }
-
                         saveNewSubcategoryBtn.disabled = true;
-                        saveNewSubcategoryBtn.innerText = 'Saving...';
-
-                        const newSubcategory = {
-                            SubCategoryID: Date.now().toString(),
-                            SubCategoryName: subcategoryName
-                        };
-
-                        const updatedSubCategories = currentCategory.SubCategories ? currentCategory.SubCategories.slice() : [];
-                        updatedSubCategories.push(newSubcategory);
-
+                        saveNewSubcategoryBtn.textContent = 'Saving...';
+                        const subcategoryID = this.generateUUID();
                         const data = {
-                            entity: 'category',
-                            operation: 'update',
+                            entity: 'subcategory',
+                            operation: 'create',
                             CategoryID: currentCategory.CategoryID,
-                            update_fields: {
-                                SubCategories: updatedSubCategories
+                            SubCategory: {
+                                SubCategoryID: subcategoryID,
+                                SubCategoryName: subcategoryName,
+                                Instructions: instructions,
+                                Examples: examples
                             }
                         };
-
                         try {
-                            await apiRequest(data);
+                            const response = await apiRequest(data);
+                            showMessage('success', `Subcategory "${subcategoryName}" created successfully.`);
+                            this.closeNewSubcategoryModal();
                             saveNewSubcategoryBtn.disabled = false;
-                            saveNewSubcategoryBtn.innerText = 'Save';
-                            newSubcategoryModal.classList.add('hidden');
-                            newSubcategoryModal.setAttribute('aria-hidden', 'true');
-                            subcategoryNameInput.value = '';
-                            showMessage('success', 'Subcategory created successfully.');
-                            categoryManager.fetchCategories();
-                            // Refresh current category data
-                            currentCategory.SubCategories = updatedSubCategories;
+                            saveNewSubcategoryBtn.textContent = 'Save';
+                            await categoryManager.fetchCategories();
+                            currentCategory = categoriesData.find(cat => cat.CategoryID === currentCategory.CategoryID);
                             this.displaySubcategories(currentCategory);
                         } catch (error) {
+                            showMessage('error', 'Error creating subcategory: ' + error.message);
+                            console.error('Error creating subcategory:', error);
                             saveNewSubcategoryBtn.disabled = false;
-                            saveNewSubcategoryBtn.innerText = 'Save';
-                            showMessage('error', 'Error creating subcategory.');
+                            saveNewSubcategoryBtn.textContent = 'Save';
                         }
+                    }
+
+                    openEditSubcategoryModal(subcategory) {
+                        editingSubcategory = subcategory;
+                        editSubcategoryNameInput.value = subcategory.SubCategoryName;
+                        editSubcategoryInstructionsInput.value = subcategory.Instructions || '';
+                        editSubcategoryExamplesInput.value = subcategory.Examples || '';
+                        editSubcategoryModal.classList.remove('hidden');
+                    }
+
+                    closeEditSubcategoryModal() {
+                        editSubcategoryModal.classList.add('hidden');
+                        editingSubcategory = null;
                     }
 
                     async updateSubcategory() {
-                        const subcategoryName = editSubcategoryNameInput.value.trim();
-                        if (!subcategoryName) {
-                            alert('Please enter a subcategory name.');
+                        if (!currentCategory || !editingSubcategory) return;
+                        const newName = editSubcategoryNameInput.value.trim();
+                        const instructions = editSubcategoryInstructionsInput.value.trim();
+                        const examples = editSubcategoryExamplesInput.value.trim();
+                        if (newName === '') {
+                            showMessage('error', 'Subcategory name cannot be empty.');
                             return;
                         }
-
                         saveEditSubcategoryBtn.disabled = true;
-                        saveEditSubcategoryBtn.innerText = 'Saving...';
-
-                        const updatedSubCategories = currentCategory.SubCategories.map(subcat => {
-                            if (subcat.SubCategoryID === editingSubcategory.SubCategoryID) {
-                                return { ...subcat, SubCategoryName: subcategoryName };
-                            }
-                            return subcat;
-                        });
-
+                        saveEditSubcategoryBtn.textContent = 'Saving...';
                         const data = {
-                            entity: 'category',
+                            entity: 'subcategory',
                             operation: 'update',
                             CategoryID: currentCategory.CategoryID,
+                            SubCategoryID: editingSubcategory.SubCategoryID,
                             update_fields: {
-                                SubCategories: updatedSubCategories
+                                SubCategoryName: newName,
+                                Instructions: instructions,
+                                Examples: examples
                             }
                         };
-
                         try {
-                            await apiRequest(data);
+                            const response = await apiRequest(data);
+                            showMessage('success', `Subcategory "${editingSubcategory.SubCategoryName}" updated successfully.`);
+                            this.closeEditSubcategoryModal();
                             saveEditSubcategoryBtn.disabled = false;
-                            saveEditSubcategoryBtn.innerText = 'Save Changes';
-                            editSubcategoryModal.classList.add('hidden');
-                            editSubcategoryModal.setAttribute('aria-hidden', 'true');
-                            editingSubcategory = null;
-                            showMessage('success', 'Subcategory updated successfully.');
-                            categoryManager.fetchCategories();
-                            // Refresh current category data
-                            currentCategory.SubCategories = updatedSubCategories;
+                            saveEditSubcategoryBtn.textContent = 'Save Changes';
+                            await categoryManager.fetchCategories();
+                            currentCategory = categoriesData.find(cat => cat.CategoryID === currentCategory.CategoryID);
                             this.displaySubcategories(currentCategory);
                         } catch (error) {
+                            showMessage('error', 'Error updating subcategory: ' + error.message);
+                            console.error('Error updating subcategory:', error);
                             saveEditSubcategoryBtn.disabled = false;
-                            saveEditSubcategoryBtn.innerText = 'Save Changes';
-                            showMessage('error', 'Error updating subcategory.');
+                            saveEditSubcategoryBtn.textContent = 'Save Changes';
                         }
                     }
 
-                    async deleteSubcategory(subcategoryID) {
-                        console.log('Deleting subcategory:', subcategoryID);
-
-                        const updatedSubCategories = currentCategory.SubCategories.filter(subcat => subcat.SubCategoryID !== subcategoryID);
-
+                    async deleteSubcategory(subcategory) {
+                        if (!confirm(`Are you sure you want to delete subcategory "${subcategory.SubCategoryName}"?`)) {
+                            return;
+                        }
                         const data = {
-                            entity: 'category',
-                            operation: 'update',
+                            entity: 'subcategory',
+                            operation: 'delete',
                             CategoryID: currentCategory.CategoryID,
-                            update_fields: {
-                                SubCategories: updatedSubCategories
-                            }
+                            SubCategoryID: subcategory.SubCategoryID
                         };
-
                         try {
-                            await apiRequest(data);
-                            showMessage('success', 'Subcategory deleted successfully.');
-                            categoryManager.fetchCategories();
-                            // Refresh current category data
-                            currentCategory.SubCategories = updatedSubCategories;
+                            const response = await apiRequest(data);
+                            showMessage('success', `Subcategory "${subcategory.SubCategoryName}" deleted successfully.`);
+                            await categoryManager.fetchCategories();
+                            currentCategory = categoriesData.find(cat => cat.CategoryID === currentCategory.CategoryID);
                             this.displaySubcategories(currentCategory);
                         } catch (error) {
-                            showMessage('error', 'Error deleting subcategory.');
+                            showMessage('error', 'Error deleting subcategory: ' + error.message);
+                            console.error('Error deleting subcategory:', error);
                         }
+                    }
+
+                    openSubcategoryDetails(subcategory) {
+                        detailsSubcategoryName.textContent = subcategory.SubCategoryName;
+                        detailsSubcategoryInstructions.textContent = subcategory.Instructions || 'No instructions provided.';
+                        detailsSubcategoryExamples.textContent = subcategory.Examples || 'No examples provided.';
+                        subcategoryDetailsModal.classList.remove('hidden');
+                    }
+
+                    closeSubcategoryDetails() {
+                        subcategoryDetailsModal.classList.add('hidden');
+                    }
+
+                    generateUUID() {
+                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                            var r = Math.random() * 16 | 0,
+                                v = c == 'x' ? r : (r & 0x3 | 0x8);
+                            return v.toString(16);
+                        });
                     }
                 }
 
-                // Instantiate Managers
+                // Instantiate managers
                 const categoryManager = new CategoryManager();
                 const subcategoryManager = new SubcategoryManager();
 
                 // Event Listeners
                 newCategoryBtn.addEventListener('click', () => {
-                    console.log('New Category button clicked.');
-                    newCategoryModal.classList.remove('hidden');
-                    newCategoryModal.setAttribute('aria-hidden', 'false');
-                    categoryNameInput.focus();
+                    categoryManager.openNewCategoryModal();
                 });
 
                 newCategoryBtnSidebar.addEventListener('click', () => {
-                    console.log('New Category button clicked.');
-                    newCategoryModal.classList.remove('hidden');
-                    newCategoryModal.setAttribute('aria-hidden', 'false');
-                    categoryNameInput.focus();
+                    categoryManager.openNewCategoryModal();
                 });
 
                 cancelNewCategoryBtn.addEventListener('click', () => {
-                    newCategoryModal.classList.add('hidden');
-                    newCategoryModal.setAttribute('aria-hidden', 'true');
-                    categoryNameInput.value = '';
+                    categoryManager.closeNewCategoryModal();
                 });
 
                 saveNewCategoryBtn.addEventListener('click', () => {
@@ -669,26 +790,25 @@
                 });
 
                 cancelEditCategoryBtn.addEventListener('click', () => {
-                    editCategoryModal.classList.add('hidden');
-                    editCategoryModal.setAttribute('aria-hidden', 'true');
-                    editingCategory = null;
+                    categoryManager.closeEditCategoryModal();
                 });
 
                 saveEditCategoryBtn.addEventListener('click', () => {
                     categoryManager.updateCategory();
                 });
 
+                backButton.addEventListener('click', () => {
+                    subcategoriesSection.classList.add('hidden');
+                    placeholderSection.classList.remove('hidden');
+                    currentCategory = null;
+                });
+
                 newSubcategoryBtn.addEventListener('click', () => {
-                    console.log('New Subcategory button clicked.');
-                    newSubcategoryModal.classList.remove('hidden');
-                    newSubcategoryModal.setAttribute('aria-hidden', 'false');
-                    subcategoryNameInput.focus();
+                    subcategoryManager.openNewSubcategoryModal();
                 });
 
                 cancelNewSubcategoryBtn.addEventListener('click', () => {
-                    newSubcategoryModal.classList.add('hidden');
-                    newSubcategoryModal.setAttribute('aria-hidden', 'true');
-                    subcategoryNameInput.value = '';
+                    subcategoryManager.closeNewSubcategoryModal();
                 });
 
                 saveNewSubcategoryBtn.addEventListener('click', () => {
@@ -696,52 +816,19 @@
                 });
 
                 cancelEditSubcategoryBtn.addEventListener('click', () => {
-                    editSubcategoryModal.classList.add('hidden');
-                    editSubcategoryModal.setAttribute('aria-hidden', 'true');
-                    editingSubcategory = null;
+                    subcategoryManager.closeEditSubcategoryModal();
                 });
 
                 saveEditSubcategoryBtn.addEventListener('click', () => {
                     subcategoryManager.updateSubcategory();
                 });
 
-                backButton.addEventListener('click', () => {
-                    console.log('Back button clicked.');
-                    subcategoriesSection.classList.add('hidden');
-                    placeholderSection.classList.remove('hidden');
-                    currentCategory = null;
+                closeSubcategoryDetailsBtn.addEventListener('click', () => {
+                    subcategoryManager.closeSubcategoryDetails();
                 });
 
-                // Fetch initial categories
+                // Initial fetch
                 categoryManager.fetchCategories();
-
-                // Keyboard accessibility
-                document.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                        if (!newCategoryModal.classList.contains('hidden')) {
-                            cancelNewCategoryBtn.click();
-                        } else if (!editCategoryModal.classList.contains('hidden')) {
-                            cancelEditCategoryBtn.click();
-                        } else if (!newSubcategoryModal.classList.contains('hidden')) {
-                            cancelNewSubcategoryBtn.click();
-                        } else if (!editSubcategoryModal.classList.contains('hidden')) {
-                            cancelEditSubcategoryBtn.click();
-                        }
-                    }
-                });
-
-                // Focus management when modals are opened
-                const modals = [newCategoryModal, editCategoryModal, newSubcategoryModal, editSubcategoryModal];
-                modals.forEach(modal => {
-                    modal.addEventListener('transitionend', () => {
-                        if (!modal.classList.contains('hidden')) {
-                            const input = modal.querySelector('input');
-                            if (input) {
-                                input.focus();
-                            }
-                        }
-                    });
-                });
 
             });
         })();
