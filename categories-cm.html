@@ -26,8 +26,6 @@
             background-color: #cbd5e0;
             border-radius: 3px;
         }
-        /* Custom Styles for better UI/UX */
-        /* Add any additional styles here */
         /* Adjusted styles for desktop view */
         @media (min-width: 1024px) {
             #contentSection {
@@ -97,6 +95,7 @@
             </section>
         </div>
 
+        <!-- Modals -->
         <!-- New Category Modal -->
         <div id="newCategoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
             <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
@@ -218,620 +217,641 @@
 
     <!-- JavaScript -->
     <script>
-        (function() {
-            'use strict';
-            document.addEventListener('DOMContentLoaded', function() {
-                console.log('Page loaded.');
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Page loaded.');
 
-                // Constants
-                const API_URL = 'https://soa6mp6e2rilqgb7xz675agzeq0stbff.lambda-url.us-west-2.on.aws/';
-                const DDB_TABLE_NAME = 'Categories';
+            // Constants
+            const API_URL = 'https://soa6mp6e2rilqgb7xz675agzeq0stbff.lambda-url.us-west-2.on.aws/';
 
-                // DOM Elements
-                const categoriesList = document.getElementById('categoriesList');
-                const subcategoriesSection = document.getElementById('subcategoriesSection');
-                const subcategoriesList = document.getElementById('subcategoriesList');
-                const backButton = document.getElementById('backButton');
-                const subcategoryTitle = document.getElementById('subcategoryTitle');
-                const newCategoryBtn = document.getElementById('newCategoryBtn');
-                const newCategoryBtnSidebar = document.getElementById('newCategoryBtnSidebar');
-                const newCategoryModal = document.getElementById('newCategoryModal');
-                const editCategoryModal = document.getElementById('editCategoryModal');
-                const categoryNameInput = document.getElementById('categoryName');
-                const saveNewCategoryBtn = document.getElementById('saveNewCategory');
-                const cancelNewCategoryBtn = document.getElementById('cancelNewCategory');
-                const editCategoryNameInput = document.getElementById('editCategoryName');
-                const saveEditCategoryBtn = document.getElementById('saveEditCategory');
-                const cancelEditCategoryBtn = document.getElementById('cancelEditCategory');
-                const newSubcategoryBtn = document.getElementById('newSubcategoryBtn');
-                const newSubcategoryModal = document.getElementById('newSubcategoryModal');
-                const subcategoryNameInput = document.getElementById('subcategoryName');
-                const subcategoryInstructionsInput = document.getElementById('subcategoryInstructions');
-                const subcategoryExamplesInput = document.getElementById('subcategoryExamples');
-                const saveNewSubcategoryBtn = document.getElementById('saveNewSubcategory');
-                const cancelNewSubcategoryBtn = document.getElementById('cancelNewSubcategory');
-                const editSubcategoryModal = document.getElementById('editSubcategoryModal');
-                const editSubcategoryNameInput = document.getElementById('editSubcategoryName');
-                const editSubcategoryInstructionsInput = document.getElementById('editSubcategoryInstructions');
-                const editSubcategoryExamplesInput = document.getElementById('editSubcategoryExamples');
-                const saveEditSubcategoryBtn = document.getElementById('saveEditSubcategory');
-                const cancelEditSubcategoryBtn = document.getElementById('cancelEditSubcategory');
-                const messageContainer = document.getElementById('messageContainer');
-                const placeholderSection = document.getElementById('placeholderSection');
-                const subcategoryDetailsModal = document.getElementById('subcategoryDetailsModal');
-                const detailsSubcategoryName = document.getElementById('detailsSubcategoryName');
-                const detailsSubcategoryInstructions = document.getElementById('detailsSubcategoryInstructions');
-                const detailsSubcategoryExamples = document.getElementById('detailsSubcategoryExamples');
-                const closeSubcategoryDetailsBtn = document.getElementById('closeSubcategoryDetails');
+            // DOM Elements
+            const elements = {
+                categoriesList: document.getElementById('categoriesList'),
+                subcategoriesSection: document.getElementById('subcategoriesSection'),
+                subcategoriesList: document.getElementById('subcategoriesList'),
+                backButton: document.getElementById('backButton'),
+                subcategoryTitle: document.getElementById('subcategoryTitle'),
+                newCategoryBtn: document.getElementById('newCategoryBtn'),
+                newCategoryBtnSidebar: document.getElementById('newCategoryBtnSidebar'),
+                newCategoryModal: document.getElementById('newCategoryModal'),
+                editCategoryModal: document.getElementById('editCategoryModal'),
+                categoryNameInput: document.getElementById('categoryName'),
+                saveNewCategoryBtn: document.getElementById('saveNewCategory'),
+                cancelNewCategoryBtn: document.getElementById('cancelNewCategory'),
+                editCategoryNameInput: document.getElementById('editCategoryName'),
+                saveEditCategoryBtn: document.getElementById('saveEditCategory'),
+                cancelEditCategoryBtn: document.getElementById('cancelEditCategory'),
+                newSubcategoryBtn: document.getElementById('newSubcategoryBtn'),
+                newSubcategoryModal: document.getElementById('newSubcategoryModal'),
+                subcategoryNameInput: document.getElementById('subcategoryName'),
+                subcategoryInstructionsInput: document.getElementById('subcategoryInstructions'),
+                subcategoryExamplesInput: document.getElementById('subcategoryExamples'),
+                saveNewSubcategoryBtn: document.getElementById('saveNewSubcategory'),
+                cancelNewSubcategoryBtn: document.getElementById('cancelNewSubcategory'),
+                editSubcategoryModal: document.getElementById('editSubcategoryModal'),
+                editSubcategoryNameInput: document.getElementById('editSubcategoryName'),
+                editSubcategoryInstructionsInput: document.getElementById('editSubcategoryInstructions'),
+                editSubcategoryExamplesInput: document.getElementById('editSubcategoryExamples'),
+                saveEditSubcategoryBtn: document.getElementById('saveEditSubcategory'),
+                cancelEditSubcategoryBtn: document.getElementById('cancelEditSubcategory'),
+                messageContainer: document.getElementById('messageContainer'),
+                placeholderSection: document.getElementById('placeholderSection'),
+                subcategoryDetailsModal: document.getElementById('subcategoryDetailsModal'),
+                detailsSubcategoryName: document.getElementById('detailsSubcategoryName'),
+                detailsSubcategoryInstructions: document.getElementById('detailsSubcategoryInstructions'),
+                detailsSubcategoryExamples: document.getElementById('detailsSubcategoryExamples'),
+                closeSubcategoryDetailsBtn: document.getElementById('closeSubcategoryDetails'),
+            };
 
-                // Application State
-                let categoriesData = [];
-                let currentCategory = null;
-                let editingCategory = null;
-                let editingSubcategory = null;
+            // Application State
+            let state = {
+                categoriesData: [],
+                currentCategory: null,
+                editingCategory: null,
+                editingSubcategory: null,
+            };
 
-                // Helper Functions
-                const apiRequest = async (data) => {
-                    console.log('API Request:', data);
+            // Helper Functions
+            const apiRequest = async (data) => {
+                console.log('API Request:', data);
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ body: JSON.stringify(data) })
+                    });
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok. Status code: ${response.status}`);
+                    }
+                    const text = await response.text();
+                    let result;
                     try {
-                        const response = await fetch(API_URL, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ body: JSON.stringify(data) })
-                        });
-                        if (!response.ok) {
-                            throw new Error(`Network response was not ok. Status code: ${response.status}`);
-                        }
-                        const text = await response.text();
-                        let result;
-                        try {
-                            result = JSON.parse(text);
-                        } catch (e) {
-                            console.error('Error parsing JSON response:', e, text);
-                            throw new Error('Error parsing JSON response');
-                        }
-                        console.log('API Response:', result);
-                        return result;
-                    } catch (error) {
-                        console.error('API Error:', error);
-                        throw error;
+                        result = JSON.parse(text);
+                    } catch (e) {
+                        console.error('Error parsing JSON response:', e, text);
+                        throw new Error('Error parsing JSON response');
                     }
-                };
+                    console.log('API Response:', result);
+                    return result;
+                } catch (error) {
+                    console.error('API Error:', error);
+                    throw error;
+                }
+            };
 
-                const showMessage = (type, text) => {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `max-w-sm w-full ${type === 'error' ? 'bg-red-50 border border-red-500' : 'bg-green-50 border border-green-500'} text-sm rounded-md shadow-md p-4 flex items-center`;
-                    messageDiv.innerHTML = `
-                        <svg class="h-5 w-5 ${type === 'error' ? 'text-red-500' : 'text-green-500'} mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            ${type === 'error' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'}
-                        </svg>
-                        <span>${text}</span>
-                    `;
-                    messageContainer.appendChild(messageDiv);
+            const showMessage = (type, text) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `max-w-sm w-full ${type === 'error' ? 'bg-red-50 border border-red-500' : 'bg-green-50 border border-green-500'} text-sm rounded-md shadow-md p-4 flex items-center transition-opacity duration-300 ease-in-out`;
+                messageDiv.innerHTML = `
+                    <svg class="h-5 w-5 ${type === 'error' ? 'text-red-500' : 'text-green-500'} mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        ${type === 'error' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'}
+                    </svg>
+                    <span>${text}</span>
+                `;
+                elements.messageContainer.appendChild(messageDiv);
 
+                setTimeout(() => {
+                    messageDiv.classList.add('opacity-0');
                     setTimeout(() => {
-                        messageDiv.classList.add('opacity-0');
-                        setTimeout(() => {
-                            messageDiv.remove();
-                        }, 500);
-                    }, 3000);
-                };
+                        messageDiv.remove();
+                    }, 300);
+                }, 3000);
+            };
 
-                // Category Manager Class
-                class CategoryManager {
-                    async fetchCategories() {
-                        console.log('Fetching all categories.');
-                        categoriesList.innerHTML = `
-                            <li class="text-center py-4">
-                                <svg class="animate-spin h-5 w-5 text-gray-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M12 2a10 10 0 0110 10h-2a8 8 0 10-8 8v2a10 10 0 110-20z"></path>
-                                </svg>
-                            </li>
+            const generateUUID = () => {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    const r = Math.random() * 16 | 0,
+                        v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            };
+
+            // Category Manager Class
+            class CategoryManager {
+                async fetchCategories() {
+                    console.log('Fetching all categories.');
+                    elements.categoriesList.innerHTML = `
+                        <li class="text-center py-4">
+                            <svg class="animate-spin h-5 w-5 text-gray-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M12 2a10 10 0 0110 10h-2a8 8 0 10-8 8v2a10 10 0 110-20z"></path>
+                            </svg>
+                        </li>
+                    `;
+
+                    const data = {
+                        entity: 'category',
+                        operation: 'read_all'
+                    };
+
+                    try {
+                        const response = await apiRequest(data);
+                        state.categoriesData = response;
+                        this.displayCategories(response);
+                    } catch (error) {
+                        showMessage('error', 'Error fetching categories: ' + error.message);
+                        elements.categoriesList.innerHTML = '<li class="text-red-500 py-4 text-center">Error fetching categories.</li>';
+                    }
+                }
+
+                displayCategories(categories) {
+                    console.log('Displaying categories.');
+                    elements.categoriesList.innerHTML = '';
+
+                    if (categories.length === 0) {
+                        elements.categoriesList.innerHTML = '<li class="py-4 text-center text-gray-500">No categories available.</li>';
+                        return;
+                    }
+
+                    categories.forEach(category => {
+                        const li = document.createElement('li');
+                        li.className = 'flex items-center justify-between hover:bg-gray-100 rounded-md px-3 py-2';
+
+                        const button = document.createElement('button');
+                        button.className = 'flex items-center space-x-2 focus:outline-none w-full text-left';
+                        button.addEventListener('click', (event) => {
+                            event.preventDefault();
+                            console.log('Category clicked:', category.CategoryID);
+                            state.currentCategory = category;
+                            subcategoryManager.displaySubcategories(category);
+                        });
+
+                        const icon = document.createElement('svg');
+                        icon.className = 'h-5 w-5 text-indigo-500 flex-shrink-0';
+                        icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                        icon.setAttribute('fill', 'currentColor');
+                        icon.setAttribute('viewBox', '0 0 20 20');
+                        icon.innerHTML = '<path d="M2 6a2 2 0 012-2h3.5a1 1 0 01.832.445l.668 1.11H14a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>';
+
+                        const span = document.createElement('span');
+                        span.className = 'text-sm font-medium text-gray-700';
+                        span.innerText = category.CategoryName;
+
+                        button.appendChild(icon);
+                        button.appendChild(span);
+
+                        const actions = document.createElement('div');
+                        actions.classList.add('flex', 'items-center', 'space-x-2');
+
+                        // Edit Button
+                        const editBtn = document.createElement('button');
+                        editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                        editBtn.setAttribute('aria-label', 'Edit category');
+                        editBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/>
+                                <path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 003.5-4H3.5A1.5 1.5 0 003.5 19H2z" clip-rule="evenodd"/>
+                            </svg>
                         `;
-
-                        const data = {
-                            entity: 'category',
-                            operation: 'read_all'
-                        };
-
-                        try {
-                            const response = await apiRequest(data);
-                            categoriesData = response;
-                            this.displayCategories(response);
-                        } catch (error) {
-                            showMessage('error', 'Error fetching categories: ' + error.message);
-                            categoriesList.innerHTML = '<li class="text-red-500 py-4 text-center">Error fetching categories.</li>';
-                        }
-                    }
-
-                    displayCategories(categories) {
-                        console.log('Displaying categories.');
-                        categoriesList.innerHTML = '';
-
-                        if (categories.length === 0) {
-                            categoriesList.innerHTML = '<li class="py-4 text-center text-gray-500">No categories available.</li>';
-                            return;
-                        }
-
-                        categories.forEach(category => {
-                            const li = document.createElement('li');
-                            li.className = 'flex items-center justify-between hover:bg-gray-100 rounded-md px-3 py-2';
-
-                            const button = document.createElement('button');
-                            button.className = 'flex items-center space-x-2 focus:outline-none w-full text-left';
-                            button.addEventListener('click', (event) => {
-                                event.preventDefault();
-                                console.log('Category clicked:', category.CategoryID);
-                                currentCategory = category;
-                                subcategoryManager.displaySubcategories(category);
-                            });
-
-                            const icon = document.createElement('svg');
-                            icon.className = 'h-5 w-5 text-indigo-500';
-                            icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-                            icon.setAttribute('fill', 'currentColor');
-                            icon.setAttribute('viewBox', '0 0 20 20');
-                            icon.innerHTML = '<path d="M2 6a2 2 0 012-2h3.5a1 1 0 01.832.445l.668 1.11H14a2 2 0 012 2v7a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>';
-
-                            const span = document.createElement('span');
-                            span.className = 'text-sm font-medium text-gray-700';
-                            span.innerText = category.CategoryName;
-
-                            button.appendChild(icon);
-                            button.appendChild(span);
-
-                            const actions = document.createElement('div');
-                            actions.classList.add('flex', 'items-center', 'space-x-2');
-
-                            // Edit Button
-                            const editBtn = document.createElement('button');
-                            editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                            editBtn.setAttribute('aria-label', 'Edit category');
-                            editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/><path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 003.5-4H3.5A1.5 1.5 0 003.5 19H2z" clip-rule="evenodd"/></svg>';
-                            editBtn.addEventListener('click', (event) => {
-                                event.stopPropagation();
-                                console.log('Edit category:', category.CategoryID);
-                                this.openEditCategoryModal(category);
-                            });
-
-                            // Delete Button
-                            const deleteBtn = document.createElement('button');
-                            deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                            deleteBtn.setAttribute('aria-label', 'Delete category');
-                            deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.292 4.292a1 1 0 011.416 0L10 8.584l4.292-4.292a1 1 0 011.416 1.416L11.416 10l4.292 4.292a1 1 0 01-1.416 1.416L10 11.416l-4.292 4.292a1 1 0 01-1.416-1.416L8.584 10 4.292 5.708a1 1 0 010-1.416z" clip-rule="evenodd"/></svg>';
-                            deleteBtn.addEventListener('click', (event) => {
-                                event.stopPropagation();
-                                console.log('Delete category:', category.CategoryID);
-                                this.deleteCategory(category);
-                            });
-
-                            actions.appendChild(editBtn);
-                            actions.appendChild(deleteBtn);
-
-                            li.appendChild(button);
-                            li.appendChild(actions);
-
-                            categoriesList.appendChild(li);
+                        editBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            console.log('Edit category:', category.CategoryID);
+                            this.openEditCategoryModal(category);
                         });
-                    }
 
-                    openNewCategoryModal() {
-                        categoryNameInput.value = '';
-                        newCategoryModal.classList.remove('hidden');
-                    }
-
-                    closeNewCategoryModal() {
-                        newCategoryModal.classList.add('hidden');
-                    }
-
-                    async createCategory() {
-                        const categoryName = categoryNameInput.value.trim();
-                        if (categoryName === '') {
-                            showMessage('error', 'Category name cannot be empty.');
-                            return;
-                        }
-                        saveNewCategoryBtn.disabled = true;
-                        saveNewCategoryBtn.textContent = 'Saving...';
-                        const categoryID = this.generateUUID();
-                        const data = {
-                            entity: 'category',
-                            operation: 'create',
-                            item: {
-                                CategoryID: categoryID,
-                                CategoryName: categoryName,
-                                SubCategories: []
-                            }
-                        };
-                        try {
-                            const response = await apiRequest(data);
-                            showMessage('success', `Category "${categoryName}" created successfully.`);
-                            this.closeNewCategoryModal();
-                            saveNewCategoryBtn.disabled = false;
-                            saveNewCategoryBtn.textContent = 'Save';
-                            this.fetchCategories();
-                        } catch (error) {
-                            showMessage('error', 'Error creating category: ' + error.message);
-                            console.error('Error creating category:', error);
-                            saveNewCategoryBtn.disabled = false;
-                            saveNewCategoryBtn.textContent = 'Save';
-                        }
-                    }
-
-                    openEditCategoryModal(category) {
-                        editingCategory = category;
-                        editCategoryNameInput.value = category.CategoryName;
-                        editCategoryModal.classList.remove('hidden');
-                    }
-
-                    closeEditCategoryModal() {
-                        editCategoryModal.classList.add('hidden');
-                        editingCategory = null;
-                    }
-
-                    async updateCategory() {
-                        if (!editingCategory) return;
-                        const newName = editCategoryNameInput.value.trim();
-                        if (newName === '') {
-                            showMessage('error', 'Category name cannot be empty.');
-                            return;
-                        }
-                        saveEditCategoryBtn.disabled = true;
-                        saveEditCategoryBtn.textContent = 'Saving...';
-                        const data = {
-                            entity: 'category',
-                            operation: 'update',
-                            CategoryID: editingCategory.CategoryID,
-                            update_fields: {
-                                CategoryName: newName
-                            }
-                        };
-                        try {
-                            const response = await apiRequest(data);
-                            showMessage('success', `Category "${editingCategory.CategoryName}" updated successfully.`);
-                            this.closeEditCategoryModal();
-                            saveEditCategoryBtn.disabled = false;
-                            saveEditCategoryBtn.textContent = 'Save Changes';
-                            this.fetchCategories();
-                            if (currentCategory && currentCategory.CategoryID === editingCategory.CategoryID) {
-                                subcategoryTitle.textContent = newName;
-                            }
-                        } catch (error) {
-                            showMessage('error', 'Error updating category: ' + error.message);
-                            console.error('Error updating category:', error);
-                            saveEditCategoryBtn.disabled = false;
-                            saveEditCategoryBtn.textContent = 'Save Changes';
-                        }
-                    }
-
-                    async deleteCategory(category) {
-                        if (!confirm(`Are you sure you want to delete category "${category.CategoryName}"?`)) {
-                            return;
-                        }
-                        const data = {
-                            entity: 'category',
-                            operation: 'delete',
-                            CategoryID: category.CategoryID
-                        };
-                        try {
-                            const response = await apiRequest(data);
-                            showMessage('success', `Category "${category.CategoryName}" deleted successfully.`);
-                            this.fetchCategories();
-                            if (currentCategory && currentCategory.CategoryID === category.CategoryID) {
-                                subcategoriesSection.classList.add('hidden');
-                                placeholderSection.classList.remove('hidden');
-                                currentCategory = null;
-                            }
-                        } catch (error) {
-                            showMessage('error', 'Error deleting category: ' + error.message);
-                            console.error('Error deleting category:', error);
-                        }
-                    }
-
-                    generateUUID() {
-                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                            var r = Math.random() * 16 | 0,
-                                v = c == 'x' ? r : (r & 0x3 | 0x8);
-                            return v.toString(16);
+                        // Delete Button
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                        deleteBtn.setAttribute('aria-label', 'Delete category');
+                        deleteBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 6.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        `;
+                        deleteBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            console.log('Delete category:', category.CategoryID);
+                            this.deleteCategory(category);
                         });
+
+                        actions.appendChild(editBtn);
+                        actions.appendChild(deleteBtn);
+
+                        li.appendChild(button);
+                        li.appendChild(actions);
+
+                        elements.categoriesList.appendChild(li);
+                    });
+                }
+
+                openNewCategoryModal() {
+                    elements.categoryNameInput.value = '';
+                    elements.newCategoryModal.classList.remove('hidden');
+                    elements.categoryNameInput.focus();
+                }
+
+                closeNewCategoryModal() {
+                    elements.newCategoryModal.classList.add('hidden');
+                }
+
+                async createCategory() {
+                    const categoryName = elements.categoryNameInput.value.trim();
+                    if (categoryName === '') {
+                        showMessage('error', 'Category name cannot be empty.');
+                        return;
+                    }
+                    elements.saveNewCategoryBtn.disabled = true;
+                    elements.saveNewCategoryBtn.textContent = 'Saving...';
+
+                    const categoryID = generateUUID();
+                    const data = {
+                        entity: 'category',
+                        operation: 'create',
+                        item: {
+                            CategoryID: categoryID,
+                            CategoryName: categoryName,
+                            SubCategories: []
+                        }
+                    };
+                    try {
+                        await apiRequest(data);
+                        showMessage('success', `Category "${categoryName}" created successfully.`);
+                        this.closeNewCategoryModal();
+                        elements.saveNewCategoryBtn.disabled = false;
+                        elements.saveNewCategoryBtn.textContent = 'Save';
+                        await this.fetchCategories();
+                    } catch (error) {
+                        showMessage('error', 'Error creating category: ' + error.message);
+                        console.error('Error creating category:', error);
+                        elements.saveNewCategoryBtn.disabled = false;
+                        elements.saveNewCategoryBtn.textContent = 'Save';
                     }
                 }
 
-                // Subcategory Manager Class
-                class SubcategoryManager {
-                    displaySubcategories(category) {
-                        console.log('Displaying subcategories for category:', category.CategoryName);
-                        subcategoriesList.innerHTML = '';
-                        subcategoryTitle.textContent = category.CategoryName;
-                        subcategoriesSection.classList.remove('hidden');
-                        placeholderSection.classList.add('hidden');
+                openEditCategoryModal(category) {
+                    state.editingCategory = category;
+                    elements.editCategoryNameInput.value = category.CategoryName;
+                    elements.editCategoryModal.classList.remove('hidden');
+                    elements.editCategoryNameInput.focus();
+                }
 
-                        const subcategories = category.SubCategories || [];
+                closeEditCategoryModal() {
+                    elements.editCategoryModal.classList.add('hidden');
+                    state.editingCategory = null;
+                }
 
-                        if (subcategories.length === 0) {
-                            subcategoriesList.innerHTML = '<p class="text-gray-500">No subcategories available.</p>';
-                            return;
+                async updateCategory() {
+                    if (!state.editingCategory) return;
+                    const newName = elements.editCategoryNameInput.value.trim();
+                    if (newName === '') {
+                        showMessage('error', 'Category name cannot be empty.');
+                        return;
+                    }
+                    elements.saveEditCategoryBtn.disabled = true;
+                    elements.saveEditCategoryBtn.textContent = 'Saving...';
+
+                    const data = {
+                        entity: 'category',
+                        operation: 'update',
+                        CategoryID: state.editingCategory.CategoryID,
+                        update_fields: {
+                            CategoryName: newName
                         }
-
-                        subcategories.forEach(subcategory => {
-                            const div = document.createElement('div');
-                            div.className = 'bg-white rounded-md shadow p-4 flex items-center justify-between';
-
-                            const details = document.createElement('div');
-                            details.className = 'flex items-center space-x-2';
-
-                            const icon = document.createElement('svg');
-                            icon.className = 'h-5 w-5 text-indigo-500';
-                            icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-                            icon.setAttribute('fill', 'currentColor');
-                            icon.setAttribute('viewBox', '0 0 20 20');
-                            icon.innerHTML = '<path d="M4 2a2 2 0 012-2h8a2 2 0 012 2v16l-6-3-6 3V2z"/>';
-
-                            const title = document.createElement('span');
-                            title.className = 'text-sm font-medium text-gray-700';
-                            title.innerText = subcategory.SubCategoryName;
-
-                            details.appendChild(icon);
-                            details.appendChild(title);
-
-                            const actions = document.createElement('div');
-                            actions.classList.add('flex', 'items-center', 'space-x-2');
-
-                            // View Button
-                            const viewBtn = document.createElement('button');
-                            viewBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                            viewBtn.setAttribute('aria-label', 'View details');
-                            viewBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="View" viewBox="0 0 20 20" fill="currentColor"><path d="M10 3a7 7 0 017 7 7 7 0 01-7 7 7 7 0 01-7-7 7 7 0 017-7zm0 3a4 4 0 100 8 4 4 0 000-8z"/></svg>';
-                            viewBtn.addEventListener('click', (event) => {
-                                event.stopPropagation();
-                                console.log('View subcategory:', subcategory.SubCategoryID);
-                                this.openSubcategoryDetails(subcategory);
-                            });
-
-                            // Edit Button
-                            const editBtn = document.createElement('button');
-                            editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                            editBtn.setAttribute('aria-label', 'Edit subcategory');
-                            editBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/><path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 003.5-4H3.5A1.5 1.5 0 003.5 19H2z" clip-rule="evenodd"/></svg>';
-                            editBtn.addEventListener('click', (event) => {
-                                event.stopPropagation();
-                                console.log('Edit subcategory:', subcategory.SubCategoryID);
-                                this.openEditSubcategoryModal(subcategory);
-                            });
-
-                            // Delete Button
-                            const deleteBtn = document.createElement('button');
-                            deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                            deleteBtn.setAttribute('aria-label', 'Delete subcategory');
-                            deleteBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4.292 4.292a1 1 0 011.416 0L10 8.584l4.292-4.292a1 1 0 011.416 1.416L11.416 10l4.292 4.292a1 1 0 01-1.416 1.416L10 11.416l-4.292 4.292a1 1 0 01-1.416-1.416L8.584 10 4.292 5.708a1 1 0 010-1.416z" clip-rule="evenodd"/></svg>';
-                            deleteBtn.addEventListener('click', (event) => {
-                                event.stopPropagation();
-                                console.log('Delete subcategory:', subcategory.SubCategoryID);
-                                this.deleteSubcategory(subcategory);
-                            });
-
-                            actions.appendChild(viewBtn);
-                            actions.appendChild(editBtn);
-                            actions.appendChild(deleteBtn);
-
-                            div.appendChild(details);
-                            div.appendChild(actions);
-
-                            subcategoriesList.appendChild(div);
-                        });
-                    }
-
-                    openNewSubcategoryModal() {
-                        subcategoryNameInput.value = '';
-                        subcategoryInstructionsInput.value = '';
-                        subcategoryExamplesInput.value = '';
-                        newSubcategoryModal.classList.remove('hidden');
-                    }
-
-                    closeNewSubcategoryModal() {
-                        newSubcategoryModal.classList.add('hidden');
-                    }
-
-                    async createSubcategory() {
-                        if (!currentCategory) return;
-                        const subcategoryName = subcategoryNameInput.value.trim();
-                        const instructions = subcategoryInstructionsInput.value.trim();
-                        const examples = subcategoryExamplesInput.value.trim();
-                        if (subcategoryName === '') {
-                            showMessage('error', 'Subcategory name cannot be empty.');
-                            return;
+                    };
+                    try {
+                        await apiRequest(data);
+                        showMessage('success', `Category "${state.editingCategory.CategoryName}" updated successfully.`);
+                        this.closeEditCategoryModal();
+                        elements.saveEditCategoryBtn.disabled = false;
+                        elements.saveEditCategoryBtn.textContent = 'Save Changes';
+                        await this.fetchCategories();
+                        if (state.currentCategory && state.currentCategory.CategoryID === state.editingCategory.CategoryID) {
+                            elements.subcategoryTitle.textContent = newName;
                         }
-                        saveNewSubcategoryBtn.disabled = true;
-                        saveNewSubcategoryBtn.textContent = 'Saving...';
-                        const subcategoryID = this.generateUUID();
-                        const data = {
-                            entity: 'subcategory',
-                            operation: 'create',
-                            CategoryID: currentCategory.CategoryID,
-                            SubCategory: {
-                                SubCategoryID: subcategoryID,
-                                SubCategoryName: subcategoryName,
-                                Instructions: instructions,
-                                Examples: examples
-                            }
-                        };
-                        try {
-                            const response = await apiRequest(data);
-                            showMessage('success', `Subcategory "${subcategoryName}" created successfully.`);
-                            this.closeNewSubcategoryModal();
-                            saveNewSubcategoryBtn.disabled = false;
-                            saveNewSubcategoryBtn.textContent = 'Save';
-                            await categoryManager.fetchCategories();
-                            currentCategory = categoriesData.find(cat => cat.CategoryID === currentCategory.CategoryID);
-                            this.displaySubcategories(currentCategory);
-                        } catch (error) {
-                            showMessage('error', 'Error creating subcategory: ' + error.message);
-                            console.error('Error creating subcategory:', error);
-                            saveNewSubcategoryBtn.disabled = false;
-                            saveNewSubcategoryBtn.textContent = 'Save';
-                        }
-                    }
-
-                    openEditSubcategoryModal(subcategory) {
-                        editingSubcategory = subcategory;
-                        editSubcategoryNameInput.value = subcategory.SubCategoryName;
-                        editSubcategoryInstructionsInput.value = subcategory.Instructions || '';
-                        editSubcategoryExamplesInput.value = subcategory.Examples || '';
-                        editSubcategoryModal.classList.remove('hidden');
-                    }
-
-                    closeEditSubcategoryModal() {
-                        editSubcategoryModal.classList.add('hidden');
-                        editingSubcategory = null;
-                    }
-
-                    async updateSubcategory() {
-                        if (!currentCategory || !editingSubcategory) return;
-                        const newName = editSubcategoryNameInput.value.trim();
-                        const instructions = editSubcategoryInstructionsInput.value.trim();
-                        const examples = editSubcategoryExamplesInput.value.trim();
-                        if (newName === '') {
-                            showMessage('error', 'Subcategory name cannot be empty.');
-                            return;
-                        }
-                        saveEditSubcategoryBtn.disabled = true;
-                        saveEditSubcategoryBtn.textContent = 'Saving...';
-                        const data = {
-                            entity: 'subcategory',
-                            operation: 'update',
-                            CategoryID: currentCategory.CategoryID,
-                            SubCategoryID: editingSubcategory.SubCategoryID,
-                            update_fields: {
-                                SubCategoryName: newName,
-                                Instructions: instructions,
-                                Examples: examples
-                            }
-                        };
-                        try {
-                            const response = await apiRequest(data);
-                            showMessage('success', `Subcategory "${editingSubcategory.SubCategoryName}" updated successfully.`);
-                            this.closeEditSubcategoryModal();
-                            saveEditSubcategoryBtn.disabled = false;
-                            saveEditSubcategoryBtn.textContent = 'Save Changes';
-                            await categoryManager.fetchCategories();
-                            currentCategory = categoriesData.find(cat => cat.CategoryID === currentCategory.CategoryID);
-                            this.displaySubcategories(currentCategory);
-                        } catch (error) {
-                            showMessage('error', 'Error updating subcategory: ' + error.message);
-                            console.error('Error updating subcategory:', error);
-                            saveEditSubcategoryBtn.disabled = false;
-                            saveEditSubcategoryBtn.textContent = 'Save Changes';
-                        }
-                    }
-
-                    async deleteSubcategory(subcategory) {
-                        if (!confirm(`Are you sure you want to delete subcategory "${subcategory.SubCategoryName}"?`)) {
-                            return;
-                        }
-                        const data = {
-                            entity: 'subcategory',
-                            operation: 'delete',
-                            CategoryID: currentCategory.CategoryID,
-                            SubCategoryID: subcategory.SubCategoryID
-                        };
-                        try {
-                            const response = await apiRequest(data);
-                            showMessage('success', `Subcategory "${subcategory.SubCategoryName}" deleted successfully.`);
-                            await categoryManager.fetchCategories();
-                            currentCategory = categoriesData.find(cat => cat.CategoryID === currentCategory.CategoryID);
-                            this.displaySubcategories(currentCategory);
-                        } catch (error) {
-                            showMessage('error', 'Error deleting subcategory: ' + error.message);
-                            console.error('Error deleting subcategory:', error);
-                        }
-                    }
-
-                    openSubcategoryDetails(subcategory) {
-                        detailsSubcategoryName.textContent = subcategory.SubCategoryName;
-                        detailsSubcategoryInstructions.textContent = subcategory.Instructions || 'No instructions provided.';
-                        detailsSubcategoryExamples.textContent = subcategory.Examples || 'No examples provided.';
-                        subcategoryDetailsModal.classList.remove('hidden');
-                    }
-
-                    closeSubcategoryDetails() {
-                        subcategoryDetailsModal.classList.add('hidden');
-                    }
-
-                    generateUUID() {
-                        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                            var r = Math.random() * 16 | 0,
-                                v = c == 'x' ? r : (r & 0x3 | 0x8);
-                            return v.toString(16);
-                        });
+                    } catch (error) {
+                        showMessage('error', 'Error updating category: ' + error.message);
+                        console.error('Error updating category:', error);
+                        elements.saveEditCategoryBtn.disabled = false;
+                        elements.saveEditCategoryBtn.textContent = 'Save Changes';
                     }
                 }
 
-                // Instantiate managers
-                const categoryManager = new CategoryManager();
-                const subcategoryManager = new SubcategoryManager();
+                async deleteCategory(category) {
+                    if (!confirm(`Are you sure you want to delete category "${category.CategoryName}"?`)) {
+                        return;
+                    }
+                    const data = {
+                        entity: 'category',
+                        operation: 'delete',
+                        CategoryID: category.CategoryID
+                    };
+                    try {
+                        await apiRequest(data);
+                        showMessage('success', `Category "${category.CategoryName}" deleted successfully.`);
+                        await this.fetchCategories();
+                        if (state.currentCategory && state.currentCategory.CategoryID === category.CategoryID) {
+                            elements.subcategoriesSection.classList.add('hidden');
+                            elements.placeholderSection.classList.remove('hidden');
+                            state.currentCategory = null;
+                        }
+                    } catch (error) {
+                        showMessage('error', 'Error deleting category: ' + error.message);
+                        console.error('Error deleting category:', error);
+                    }
+                }
+            }
 
-                // Event Listeners
-                newCategoryBtn.addEventListener('click', () => {
-                    categoryManager.openNewCategoryModal();
-                });
+            // Subcategory Manager Class
+            class SubcategoryManager {
+                displaySubcategories(category) {
+                    console.log('Displaying subcategories for category:', category.CategoryName);
+                    elements.subcategoriesList.innerHTML = '';
+                    elements.subcategoryTitle.textContent = category.CategoryName;
+                    elements.subcategoriesSection.classList.remove('hidden');
+                    elements.placeholderSection.classList.add('hidden');
 
-                newCategoryBtnSidebar.addEventListener('click', () => {
-                    categoryManager.openNewCategoryModal();
-                });
+                    const subcategories = category.SubCategories || [];
 
-                cancelNewCategoryBtn.addEventListener('click', () => {
-                    categoryManager.closeNewCategoryModal();
-                });
+                    if (subcategories.length === 0) {
+                        elements.subcategoriesList.innerHTML = '<p class="text-gray-500">No subcategories available.</p>';
+                        return;
+                    }
 
-                saveNewCategoryBtn.addEventListener('click', () => {
-                    categoryManager.createCategory();
-                });
+                    subcategories.forEach(subcategory => {
+                        const div = document.createElement('div');
+                        div.className = 'bg-white rounded-md shadow p-4 flex items-center justify-between';
 
-                cancelEditCategoryBtn.addEventListener('click', () => {
-                    categoryManager.closeEditCategoryModal();
-                });
+                        const details = document.createElement('div');
+                        details.className = 'flex items-center space-x-2';
 
-                saveEditCategoryBtn.addEventListener('click', () => {
-                    categoryManager.updateCategory();
-                });
+                        const icon = document.createElement('svg');
+                        icon.className = 'h-5 w-5 text-indigo-500 flex-shrink-0';
+                        icon.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                        icon.setAttribute('fill', 'currentColor');
+                        icon.setAttribute('viewBox', '0 0 20 20');
+                        icon.innerHTML = '<path d="M4 2a2 2 0 012-2h8a2 2 0 012 2v16l-6-3-6 3V2z"/>';
 
-                backButton.addEventListener('click', () => {
-                    subcategoriesSection.classList.add('hidden');
-                    placeholderSection.classList.remove('hidden');
-                    currentCategory = null;
-                });
+                        const title = document.createElement('span');
+                        title.className = 'text-sm font-medium text-gray-700';
+                        title.innerText = subcategory.SubCategoryName;
 
-                newSubcategoryBtn.addEventListener('click', () => {
-                    subcategoryManager.openNewSubcategoryModal();
-                });
+                        details.appendChild(icon);
+                        details.appendChild(title);
 
-                cancelNewSubcategoryBtn.addEventListener('click', () => {
-                    subcategoryManager.closeNewSubcategoryModal();
-                });
+                        const actions = document.createElement('div');
+                        actions.classList.add('flex', 'items-center', 'space-x-2');
 
-                saveNewSubcategoryBtn.addEventListener('click', () => {
-                    subcategoryManager.createSubcategory();
-                });
+                        // View Button
+                        const viewBtn = document.createElement('button');
+                        viewBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                        viewBtn.setAttribute('aria-label', 'View details');
+                        viewBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="View" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 3a7 7 0 017 7 7 7 0 01-7 7 7 7 0 01-7-7 7 7 0 017-7zm0 3a4 4 0 100 8 4 4 0 000-8z"/>
+                            </svg>
+                        `;
+                        viewBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            console.log('View subcategory:', subcategory.SubCategoryID);
+                            this.openSubcategoryDetails(subcategory);
+                        });
 
-                cancelEditSubcategoryBtn.addEventListener('click', () => {
-                    subcategoryManager.closeEditSubcategoryModal();
-                });
+                        // Edit Button
+                        const editBtn = document.createElement('button');
+                        editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                        editBtn.setAttribute('aria-label', 'Edit subcategory');
+                        editBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/>
+                                <path fill-rule="evenodd" d="M2 17.5A1.5 1.5 0 003.5 19h13a1.5 1.5 0 003.5-4H3.5A1.5 1.5 0 003.5 19H2z" clip-rule="evenodd"/>
+                            </svg>
+                        `;
+                        editBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            console.log('Edit subcategory:', subcategory.SubCategoryID);
+                            this.openEditSubcategoryModal(subcategory);
+                        });
 
-                saveEditSubcategoryBtn.addEventListener('click', () => {
-                    subcategoryManager.updateSubcategory();
-                });
+                        // Delete Button
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
+                        deleteBtn.setAttribute('aria-label', 'Delete subcategory');
+                        deleteBtn.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 6.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        `;
+                        deleteBtn.addEventListener('click', (event) => {
+                            event.stopPropagation();
+                            console.log('Delete subcategory:', subcategory.SubCategoryID);
+                            this.deleteSubcategory(subcategory);
+                        });
 
-                closeSubcategoryDetailsBtn.addEventListener('click', () => {
-                    subcategoryManager.closeSubcategoryDetails();
-                });
+                        actions.appendChild(viewBtn);
+                        actions.appendChild(editBtn);
+                        actions.appendChild(deleteBtn);
 
-                // Initial fetch
-                categoryManager.fetchCategories();
+                        div.appendChild(details);
+                        div.appendChild(actions);
 
+                        elements.subcategoriesList.appendChild(div);
+                    });
+                }
+
+                openNewSubcategoryModal() {
+                    elements.subcategoryNameInput.value = '';
+                    elements.subcategoryInstructionsInput.value = '';
+                    elements.subcategoryExamplesInput.value = '';
+                    elements.newSubcategoryModal.classList.remove('hidden');
+                    elements.subcategoryNameInput.focus();
+                }
+
+                closeNewSubcategoryModal() {
+                    elements.newSubcategoryModal.classList.add('hidden');
+                }
+
+                async createSubcategory() {
+                    if (!state.currentCategory) return;
+                    const subcategoryName = elements.subcategoryNameInput.value.trim();
+                    const instructions = elements.subcategoryInstructionsInput.value.trim();
+                    const examples = elements.subcategoryExamplesInput.value.trim();
+                    if (subcategoryName === '') {
+                        showMessage('error', 'Subcategory name cannot be empty.');
+                        return;
+                    }
+                    elements.saveNewSubcategoryBtn.disabled = true;
+                    elements.saveNewSubcategoryBtn.textContent = 'Saving...';
+
+                    const subcategoryID = generateUUID();
+                    const data = {
+                        entity: 'subcategory',
+                        operation: 'create',
+                        CategoryID: state.currentCategory.CategoryID,
+                        SubCategory: {
+                            SubCategoryID: subcategoryID,
+                            SubCategoryName: subcategoryName,
+                            Instructions: instructions,
+                            Examples: examples
+                        }
+                    };
+                    try {
+                        await apiRequest(data);
+                        showMessage('success', `Subcategory "${subcategoryName}" created successfully.`);
+                        this.closeNewSubcategoryModal();
+                        elements.saveNewSubcategoryBtn.disabled = false;
+                        elements.saveNewSubcategoryBtn.textContent = 'Save';
+                        await categoryManager.fetchCategories();
+                        state.currentCategory = state.categoriesData.find(cat => cat.CategoryID === state.currentCategory.CategoryID);
+                        this.displaySubcategories(state.currentCategory);
+                    } catch (error) {
+                        showMessage('error', 'Error creating subcategory: ' + error.message);
+                        console.error('Error creating subcategory:', error);
+                        elements.saveNewSubcategoryBtn.disabled = false;
+                        elements.saveNewSubcategoryBtn.textContent = 'Save';
+                    }
+                }
+
+                openEditSubcategoryModal(subcategory) {
+                    state.editingSubcategory = subcategory;
+                    elements.editSubcategoryNameInput.value = subcategory.SubCategoryName;
+                    elements.editSubcategoryInstructionsInput.value = subcategory.Instructions || '';
+                    elements.editSubcategoryExamplesInput.value = subcategory.Examples || '';
+                    elements.editSubcategoryModal.classList.remove('hidden');
+                    elements.editSubcategoryNameInput.focus();
+                }
+
+                closeEditSubcategoryModal() {
+                    elements.editSubcategoryModal.classList.add('hidden');
+                    state.editingSubcategory = null;
+                }
+
+                async updateSubcategory() {
+                    if (!state.currentCategory || !state.editingSubcategory) return;
+                    const newName = elements.editSubcategoryNameInput.value.trim();
+                    const instructions = elements.editSubcategoryInstructionsInput.value.trim();
+                    const examples = elements.editSubcategoryExamplesInput.value.trim();
+                    if (newName === '') {
+                        showMessage('error', 'Subcategory name cannot be empty.');
+                        return;
+                    }
+                    elements.saveEditSubcategoryBtn.disabled = true;
+                    elements.saveEditSubcategoryBtn.textContent = 'Saving...';
+
+                    const data = {
+                        entity: 'subcategory',
+                        operation: 'update',
+                        CategoryID: state.currentCategory.CategoryID,
+                        SubCategoryID: state.editingSubcategory.SubCategoryID,
+                        update_fields: {
+                            SubCategoryName: newName,
+                            Instructions: instructions,
+                            Examples: examples
+                        }
+                    };
+                    try {
+                        await apiRequest(data);
+                        showMessage('success', `Subcategory "${state.editingSubcategory.SubCategoryName}" updated successfully.`);
+                        this.closeEditSubcategoryModal();
+                        elements.saveEditSubcategoryBtn.disabled = false;
+                        elements.saveEditSubcategoryBtn.textContent = 'Save Changes';
+                        await categoryManager.fetchCategories();
+                        state.currentCategory = state.categoriesData.find(cat => cat.CategoryID === state.currentCategory.CategoryID);
+                        this.displaySubcategories(state.currentCategory);
+                    } catch (error) {
+                        showMessage('error', 'Error updating subcategory: ' + error.message);
+                        console.error('Error updating subcategory:', error);
+                        elements.saveEditSubcategoryBtn.disabled = false;
+                        elements.saveEditSubcategoryBtn.textContent = 'Save Changes';
+                    }
+                }
+
+                async deleteSubcategory(subcategory) {
+                    if (!confirm(`Are you sure you want to delete subcategory "${subcategory.SubCategoryName}"?`)) {
+                        return;
+                    }
+                    const data = {
+                        entity: 'subcategory',
+                        operation: 'delete',
+                        CategoryID: state.currentCategory.CategoryID,
+                        SubCategoryID: subcategory.SubCategoryID
+                    };
+                    try {
+                        await apiRequest(data);
+                        showMessage('success', `Subcategory "${subcategory.SubCategoryName}" deleted successfully.`);
+                        await categoryManager.fetchCategories();
+                        state.currentCategory = state.categoriesData.find(cat => cat.CategoryID === state.currentCategory.CategoryID);
+                        this.displaySubcategories(state.currentCategory);
+                    } catch (error) {
+                        showMessage('error', 'Error deleting subcategory: ' + error.message);
+                        console.error('Error deleting subcategory:', error);
+                    }
+                }
+
+                openSubcategoryDetails(subcategory) {
+                    elements.detailsSubcategoryName.textContent = subcategory.SubCategoryName;
+                    elements.detailsSubcategoryInstructions.textContent = subcategory.Instructions || 'No instructions provided.';
+                    elements.detailsSubcategoryExamples.textContent = subcategory.Examples || 'No examples provided.';
+                    elements.subcategoryDetailsModal.classList.remove('hidden');
+                }
+
+                closeSubcategoryDetails() {
+                    elements.subcategoryDetailsModal.classList.add('hidden');
+                }
+            }
+
+            // Instantiate managers
+            const categoryManager = new CategoryManager();
+            const subcategoryManager = new SubcategoryManager();
+
+            // Event Listeners
+            elements.newCategoryBtn.addEventListener('click', () => {
+                categoryManager.openNewCategoryModal();
             });
-        })();
+
+            elements.newCategoryBtnSidebar.addEventListener('click', () => {
+                categoryManager.openNewCategoryModal();
+            });
+
+            elements.cancelNewCategoryBtn.addEventListener('click', () => {
+                categoryManager.closeNewCategoryModal();
+            });
+
+            elements.saveNewCategoryBtn.addEventListener('click', () => {
+                categoryManager.createCategory();
+            });
+
+            elements.cancelEditCategoryBtn.addEventListener('click', () => {
+                categoryManager.closeEditCategoryModal();
+            });
+
+            elements.saveEditCategoryBtn.addEventListener('click', () => {
+                categoryManager.updateCategory();
+            });
+
+            elements.backButton.addEventListener('click', () => {
+                elements.subcategoriesSection.classList.add('hidden');
+                elements.placeholderSection.classList.remove('hidden');
+                state.currentCategory = null;
+            });
+
+            elements.newSubcategoryBtn.addEventListener('click', () => {
+                subcategoryManager.openNewSubcategoryModal();
+            });
+
+            elements.cancelNewSubcategoryBtn.addEventListener('click', () => {
+                subcategoryManager.closeNewSubcategoryModal();
+            });
+
+            elements.saveNewSubcategoryBtn.addEventListener('click', () => {
+                subcategoryManager.createSubcategory();
+            });
+
+            elements.cancelEditSubcategoryBtn.addEventListener('click', () => {
+                subcategoryManager.closeEditSubcategoryModal();
+            });
+
+            elements.saveEditSubcategoryBtn.addEventListener('click', () => {
+                subcategoryManager.updateSubcategory();
+            });
+
+            elements.closeSubcategoryDetailsBtn.addEventListener('click', () => {
+                subcategoryManager.closeSubcategoryDetails();
+            });
+
+            // Initial fetch
+            categoryManager.fetchCategories();
+        });
     </script>
 </body>
 </html>
