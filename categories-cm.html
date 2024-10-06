@@ -895,25 +895,31 @@
 
                 displayConversionResults(data) {
                     elements.conversionResultsContent.innerHTML = '';
-                    if (Array.isArray(data) && data.length > 0) {
-                        data.forEach(item => {
-                            const resultDiv = document.createElement('div');
-                            resultDiv.className = 'bg-gray-100 p-4 rounded-md shadow-sm';
+                    let hasResults = false;
+                    if (data && typeof data === 'object') {
+                        for (let key in data) {
+                            if (data.hasOwnProperty(key)) {
+                                const item = data[key];
+                                const resultDiv = document.createElement('div');
+                                resultDiv.className = 'bg-gray-100 p-4 rounded-md shadow-sm';
 
-                            const title = document.createElement('h4');
-                            title.className = 'text-lg font-medium text-gray-800';
-                            title.textContent = item.SubCategoryName;
+                                const title = document.createElement('h4');
+                                title.className = 'text-lg font-medium text-gray-800';
+                                title.textContent = item.SubCategoryName;
 
-                            const output = document.createElement('p');
-                            output.className = 'mt-2 text-gray-700 whitespace-pre-wrap';
-                            output.textContent = item.Output;
+                                const output = document.createElement('p');
+                                output.className = 'mt-2 text-gray-700 whitespace-pre-wrap';
+                                output.textContent = item.Output;
 
-                            resultDiv.appendChild(title);
-                            resultDiv.appendChild(output);
+                                resultDiv.appendChild(title);
+                                resultDiv.appendChild(output);
 
-                            elements.conversionResultsContent.appendChild(resultDiv);
-                        });
-                    } else {
+                                elements.conversionResultsContent.appendChild(resultDiv);
+                                hasResults = true;
+                            }
+                        }
+                    }
+                    if (!hasResults) {
                         elements.conversionResultsContent.innerHTML = '<p class="text-gray-500">No results found.</p>';
                     }
                     elements.conversionResultsModal.classList.remove('hidden');
