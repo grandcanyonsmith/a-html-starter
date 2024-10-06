@@ -237,6 +237,23 @@
             </div>
         </div>
 
+        <!-- Conversion Results Modal -->
+        <div id="conversionResultsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
+            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full">
+                <div class="px-6 py-4">
+                    <h3 class="text-lg leading-6 font-medium">Conversion Results</h3>
+                    <div id="conversionResultsContent" class="mt-4 space-y-4">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 flex justify-end">
+                    <button id="closeConversionResults" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- JavaScript -->
@@ -289,6 +306,9 @@
                 transcriptionText: document.getElementById('transcriptionText'),
                 cancelConvertAudioBtn: document.getElementById('cancelConvertAudio'),
                 submitConvertAudioBtn: document.getElementById('submitConvertAudio'),
+                conversionResultsModal: document.getElementById('conversionResultsModal'),
+                conversionResultsContent: document.getElementById('conversionResultsContent'),
+                closeConversionResultsBtn: document.getElementById('closeConversionResults'),
             };
 
             // Application State
@@ -860,10 +880,10 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log('Convert Audio Response:', data);
-                        showMessage('success', 'Audio conversion completed.');
                         elements.submitConvertAudioBtn.disabled = false;
                         elements.submitConvertAudioBtn.textContent = originalButtonText;
                         this.closeConvertAudioModal();
+                        this.displayConversionResults(data);
                     })
                     .catch(error => {
                         console.error('Error converting audio:', error);
@@ -871,6 +891,36 @@
                         elements.submitConvertAudioBtn.disabled = false;
                         elements.submitConvertAudioBtn.textContent = originalButtonText;
                     });
+                }
+
+                displayConversionResults(data) {
+                    elements.conversionResultsContent.innerHTML = '';
+                    if (Array.isArray(data) && data.length > 0) {
+                        data.forEach(item => {
+                            const resultDiv = document.createElement('div');
+                            resultDiv.className = 'bg-gray-100 p-4 rounded-md shadow-sm';
+
+                            const title = document.createElement('h4');
+                            title.className = 'text-lg font-medium text-gray-800';
+                            title.textContent = item.SubCategoryName;
+
+                            const output = document.createElement('p');
+                            output.className = 'mt-2 text-gray-700 whitespace-pre-wrap';
+                            output.textContent = item.Output;
+
+                            resultDiv.appendChild(title);
+                            resultDiv.appendChild(output);
+
+                            elements.conversionResultsContent.appendChild(resultDiv);
+                        });
+                    } else {
+                        elements.conversionResultsContent.innerHTML = '<p class="text-gray-500">No results found.</p>';
+                    }
+                    elements.conversionResultsModal.classList.remove('hidden');
+                }
+
+                closeConversionResults() {
+                    elements.conversionResultsModal.classList.add('hidden');
                 }
             }
 
@@ -943,6 +993,10 @@
 
             elements.submitConvertAudioBtn.addEventListener('click', () => {
                 subcategoryManager.submitConvertAudio();
+            });
+
+            elements.closeConversionResultsBtn.addEventListener('click', () => {
+                subcategoryManager.closeConversionResults();
             });
 
             // Initial fetch
