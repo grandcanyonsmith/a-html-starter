@@ -33,6 +33,8 @@
             }
         }
     </style>
+    <!-- Include Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-900">
     <!-- Navbar -->
@@ -202,10 +204,10 @@
                     <h3 id="detailsSubcategoryName" class="text-lg leading-6 font-medium">Subcategory Details</h3>
                     <div class="mt-4">
                         <h4 class="text-sm font-semibold">Instructions:</h4>
-                        <p id="detailsSubcategoryInstructions" class="mt-1 text-sm text-gray-700"></p>
+                        <div id="detailsSubcategoryInstructions" class="mt-1 text-sm text-gray-700 markdown-content"></div>
 
                         <h4 class="text-sm font-semibold mt-4">Examples:</h4>
-                        <p id="detailsSubcategoryExamples" class="mt-1 text-sm text-gray-700"></p>
+                        <div id="detailsSubcategoryExamples" class="mt-1 text-sm text-gray-700 markdown-content"></div>
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
@@ -238,11 +240,11 @@
         </div>
 
         <!-- Conversion Results Modal -->
-        <div id="conversionResultsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full max-h-screen overflow-y-auto">
+        <div id="conversionResultsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden overflow-y-auto" aria-hidden="true">
+            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full max-h-screen">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Conversion Results</h3>
-                    <div id="conversionResultsContent" class="mt-4 space-y-4">
+                    <div id="conversionResultsContent" class="mt-4 space-y-4 markdown-content">
                         <!-- Results will be displayed here -->
                     </div>
                 </div>
@@ -772,8 +774,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         openSubcategoryDetails(subcategory) {
             elements.detailsSubcategoryName.textContent = subcategory.SubCategoryName;
-            elements.detailsSubcategoryInstructions.textContent = subcategory.Instructions || 'No instructions provided.';
-            elements.detailsSubcategoryExamples.textContent = subcategory.Examples || 'No examples provided.';
+            // Render Markdown for Instructions
+            elements.detailsSubcategoryInstructions.innerHTML = marked.parse(subcategory.Instructions || 'No instructions provided.');
+            // Render Markdown for Examples
+            elements.detailsSubcategoryExamples.innerHTML = marked.parse(subcategory.Examples || 'No examples provided.');
             elements.subcategoryDetailsModal.classList.remove('hidden');
         }
         closeSubcategoryDetails() {
@@ -875,16 +879,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         title.textContent = subCategoryName || 'Result';
         
                         const outputDiv = document.createElement('div');
-                        outputDiv.className = 'mt-2 text-gray-700 whitespace-pre-wrap';
+                        outputDiv.className = 'mt-2 text-gray-700 markdown-content';
         
                         if (output) {
-                            const p = document.createElement('p');
-                            p.textContent = output;
-                            outputDiv.appendChild(p);
+                            // Render Markdown content
+                            outputDiv.innerHTML = marked.parse(output);
                         } else {
-                            const p = document.createElement('p');
-                            p.textContent = 'No result available.';
-                            outputDiv.appendChild(p);
+                            outputDiv.innerHTML = '<p>No result available.</p>';
                         }
         
                         resultDiv.appendChild(title);
