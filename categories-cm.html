@@ -239,7 +239,7 @@
 
         <!-- Conversion Results Modal -->
         <div id="conversionResultsModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full">
+            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full max-h-screen overflow-y-auto">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Conversion Results</h3>
                     <div id="conversionResultsContent" class="mt-4 space-y-4">
@@ -896,29 +896,67 @@
                 displayConversionResults(data) {
                     elements.conversionResultsContent.innerHTML = '';
                     let hasResults = false;
-                    if (data && typeof data === 'object') {
-                        for (let key in data) {
-                            if (data.hasOwnProperty(key)) {
-                                const item = data[key];
-                                const resultDiv = document.createElement('div');
-                                resultDiv.className = 'bg-gray-100 p-4 rounded-md shadow-sm';
 
-                                const title = document.createElement('h4');
-                                title.className = 'text-lg font-medium text-gray-800';
-                                title.textContent = item.SubCategoryName;
+                    try {
+                        if (data && typeof data === 'object') {
+                            for (let key in data) {
+                                if (data.hasOwnProperty(key)) {
+                                    const item = data[key];
+                                    let subCategoryName = item.SubCategoryName || item.Title || 'Result';
 
-                                const output = document.createElement('p');
-                                output.className = 'mt-2 text-gray-700 whitespace-pre-wrap';
-                                output.textContent = item.Output;
+                                    const resultDiv = document.createElement('div');
+                                    resultDiv.className = 'bg-gray-100 p-4 rounded-md shadow-sm';
 
-                                resultDiv.appendChild(title);
-                                resultDiv.appendChild(output);
+                                    const title = document.createElement('h4');
+                                    title.className = 'text-lg font-medium text-gray-800';
+                                    title.textContent = subCategoryName;
 
-                                elements.conversionResultsContent.appendChild(resultDiv);
-                                hasResults = true;
+                                    const outputContent = document.createElement('div');
+                                    outputContent.className = 'mt-2 text-gray-700 whitespace-pre-wrap';
+
+                                    if (Array.isArray(item.Output)) {
+                                        item.Output.forEach((outputItem, index) => {
+                                            if (typeof outputItem === 'string') {
+                                                const p = document.createElement('p');
+                                                p.textContent = `${index + 1}. ${outputItem}`;
+                                                outputContent.appendChild(p);
+                                            } else if (typeof outputItem === 'object') {
+                                                for (let subKey in outputItem) {
+                                                    const p = document.createElement('p');
+                                                    p.innerHTML = `<strong>${subKey}:</strong> ${outputItem[subKey]}`;
+                                                    outputContent.appendChild(p);
+                                                }
+                                            }
+                                        });
+                                    } else if (typeof item.Output === 'string') {
+                                        const p = document.createElement('p');
+                                        p.textContent = item.Output;
+                                        outputContent.appendChild(p);
+                                    } else if (typeof item.Output === 'object') {
+                                        for (let subKey in item.Output) {
+                                            const p = document.createElement('p');
+                                            p.innerHTML = `<strong>${subKey}:</strong> ${item.Output[subKey]}`;
+                                            outputContent.appendChild(p);
+                                        }
+                                    } else {
+                                        const p = document.createElement('p');
+                                        p.textContent = 'No output available.';
+                                        outputContent.appendChild(p);
+                                    }
+
+                                    resultDiv.appendChild(title);
+                                    resultDiv.appendChild(outputContent);
+
+                                    elements.conversionResultsContent.appendChild(resultDiv);
+                                    hasResults = true;
+                                }
                             }
                         }
+                    } catch (error) {
+                        console.error('Error processing conversion results:', error);
+                        showMessage('error', 'Error processing conversion results.');
                     }
+
                     if (!hasResults) {
                         elements.conversionResultsContent.innerHTML = '<p class="text-gray-500">No results found.</p>';
                     }
