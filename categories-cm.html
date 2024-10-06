@@ -78,6 +78,9 @@
                             <button id="newSubcategoryBtn" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Create new subcategory">
                                 New Subcategory
                             </button>
+                            <button id="convertAudioBtn" class="py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" aria-label="Convert Audio">
+                                Convert Audio
+                            </button>
                             <button id="backButton" class="py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" aria-label="Back to categories">
                                 Back to Categories
                             </button>
@@ -213,6 +216,27 @@
             </div>
         </div>
 
+        <!-- Convert Audio Modal -->
+        <div id="convertAudioModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
+            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+                <div class="px-6 py-4">
+                    <h3 class="text-lg leading-6 font-medium">Convert Audio</h3>
+                    <div class="mt-4">
+                        <label for="transcriptionText" class="block text-sm font-medium">Transcription</label>
+                        <textarea id="transcriptionText" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 flex justify-end">
+                    <button id="cancelConvertAudio" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        Cancel
+                    </button>
+                    <button id="submitConvertAudio" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <!-- JavaScript -->
@@ -260,6 +284,11 @@
                 detailsSubcategoryInstructions: document.getElementById('detailsSubcategoryInstructions'),
                 detailsSubcategoryExamples: document.getElementById('detailsSubcategoryExamples'),
                 closeSubcategoryDetailsBtn: document.getElementById('closeSubcategoryDetails'),
+                convertAudioBtn: document.getElementById('convertAudioBtn'),
+                convertAudioModal: document.getElementById('convertAudioModal'),
+                transcriptionText: document.getElementById('transcriptionText'),
+                cancelConvertAudioBtn: document.getElementById('cancelConvertAudio'),
+                submitConvertAudioBtn: document.getElementById('submitConvertAudio'),
             };
 
             // Application State
@@ -788,6 +817,61 @@
                 closeSubcategoryDetails() {
                     elements.subcategoryDetailsModal.classList.add('hidden');
                 }
+
+                openConvertAudioModal() {
+                    elements.transcriptionText.value = '';
+                    elements.convertAudioModal.classList.remove('hidden');
+                    elements.transcriptionText.focus();
+                }
+
+                closeConvertAudioModal() {
+                    elements.convertAudioModal.classList.add('hidden');
+                }
+
+                submitConvertAudio() {
+                    if (!state.currentCategory) return;
+                    const transcriptionText = elements.transcriptionText.value.trim();
+                    if (transcriptionText === '') {
+                        showMessage('error', 'Transcription text cannot be empty.');
+                        return;
+                    }
+                    elements.submitConvertAudioBtn.disabled = true;
+                    const originalButtonText = elements.submitConvertAudioBtn.textContent;
+                    elements.submitConvertAudioBtn.textContent = 'Submitting...';
+
+                    // Prepare data to send
+                    const dataToSend = {
+                        Category: {
+                            CategoryID: state.currentCategory.CategoryID,
+                            CategoryName: state.currentCategory.CategoryName,
+                            SubCategories: state.currentCategory.SubCategories
+                        },
+                        TranscriptionText: transcriptionText
+                    };
+
+                    // Send POST request to the specified URL
+                    fetch('https://g6z7ciwxlngzx3t3knkkkvc2pi0mqsgs.lambda-url.us-west-2.on.aws/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(dataToSend)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Convert Audio Response:', data);
+                        showMessage('success', 'Audio conversion completed.');
+                        elements.submitConvertAudioBtn.disabled = false;
+                        elements.submitConvertAudioBtn.textContent = originalButtonText;
+                        this.closeConvertAudioModal();
+                    })
+                    .catch(error => {
+                        console.error('Error converting audio:', error);
+                        showMessage('error', 'Error converting audio: ' + error.message);
+                        elements.submitConvertAudioBtn.disabled = false;
+                        elements.submitConvertAudioBtn.textContent = originalButtonText;
+                    });
+                }
             }
 
             // Instantiate managers
@@ -847,6 +931,18 @@
 
             elements.closeSubcategoryDetailsBtn.addEventListener('click', () => {
                 subcategoryManager.closeSubcategoryDetails();
+            });
+
+            elements.convertAudioBtn.addEventListener('click', () => {
+                subcategoryManager.openConvertAudioModal();
+            });
+
+            elements.cancelConvertAudioBtn.addEventListener('click', () => {
+                subcategoryManager.closeConvertAudioModal();
+            });
+
+            elements.submitConvertAudioBtn.addEventListener('click', () => {
+                subcategoryManager.submitConvertAudio();
             });
 
             // Initial fetch
