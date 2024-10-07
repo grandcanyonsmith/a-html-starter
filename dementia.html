@@ -1,4 +1,5 @@
-        <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <!-- Meta Tags -->
     <meta charset="UTF-8">
@@ -18,15 +19,92 @@
                         'dark-background': '#1a202c',
                     }
                 }
-            };
+            }
         };
     </script>
 </head>
-        
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-8 text-center">Causes of Memory Loss and Dementia in Older Adults</h1>
+
+        <!-- Cause 1 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause1')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">1. Alzheimer’s Disease</h2>
+            </button>
+            <div id="cause1" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Plaques and tangles disrupt brain cell function, leading to cognitive decline.</p>
+                <p><span class="font-semibold">Key Findings:</span> Well-documented in research on amyloid plaques and tau proteins.</p>
+                <p><span class="font-semibold">Sources:</span> <em>National Institute on Aging</em>, <em>Alzheimer’s Association</em></p>
+            </div>
+        </section>
+
+        <!-- Cause 2 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause2')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">2. Vascular Dementia</h2>
+            </button>
+            <div id="cause2" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Caused by reduced blood flow to the brain, often from strokes or vascular conditions.</p>
+                <p><span class="font-semibold">Key Findings:</span> Stroke-related damage can lead to progressive cognitive decline.</p>
+                <p><span class="font-semibold">Sources:</span> <em>Stroke</em>, <em>The Lancet Neurology</em></p>
+            </div>
+        </section>
+
+        <!-- Cause 3 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause3')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">3. Lewy Body Dementia</h2>
+            </button>
+            <div id="cause3" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Abnormal protein deposits (Lewy bodies) in the brain disrupt memory and motor control.</p>
+                <p><span class="font-semibold">Key Findings:</span> Cognitive decline linked to Lewy bodies is well-researched.</p>
+                <p><span class="font-semibold">Sources:</span> <em>Brain</em>, <em>Nature Reviews Neurology</em></p>
+            </div>
+        </section>
+
+        <!-- Cause 4 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause4')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">4. Frontotemporal Dementia</h2>
+            </button>
+            <div id="cause4" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Affects frontal and temporal lobes, impacting behavior and memory.</p>
+                <p><span class="font-semibold">Key Findings:</span> Research shows genetic mutations and protein buildup as causes.</p>
+                <p><span class="font-semibold">Sources:</span> <em>Nature Reviews Neurology</em>, <em>Brain</em></p>
+            </div>
+        </section>
+
+        <!-- Cause 5 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause5')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">5. Parkinson’s Disease</h2>
+            </button>
+            <div id="cause5" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Neurodegenerative disorder that also leads to cognitive decline in later stages.</p>
+                <p><span class="font-semibold">Key Findings:</span> Cognitive impairment common in Parkinson’s patients.</p>
+                <p><span class="font-semibold">Sources:</span> <em>Movement Disorder Society</em>, <em>Parkinson’s Disease Foundation</em></p>
+            </div>
+        </section>
+
+        <!-- Cause 6 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause6')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">6. Chronic Traumatic Encephalopathy (CTE)</h2>
+            </button>
+            <div id="cause6" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Repeated head trauma leads to brain degeneration and cognitive decline.</p>
+                <p><span class="font-semibold">Key Findings:</span> Strong evidence from studies on athletes (e.g., football players).</p>
+                <p><span class="font-semibold">Sources:</span> <em>JAMA Neurology</em>, <em>The New England Journal of Medicine</em></p>
+            </div>
+        </section>
+
         <!-- Cause 7 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">7. Alcohol-related Brain Damage</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause7')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">7. Alcohol-related Brain Damage</h2>
+            </button>
+            <div id="cause7" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Prolonged alcohol abuse leads to memory issues, including Wernicke-Korsakoff syndrome.</p>
                 <p><span class="font-semibold">Key Findings:</span> Documented link between heavy alcohol use and brain damage.</p>
                 <p><span class="font-semibold">Sources:</span> <em>Alcoholism: Clinical &amp; Experimental Research</em></p>
@@ -34,9 +112,11 @@
         </section>
 
         <!-- Cause 8 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">8. Infections (HIV, Syphilis)</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause8')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">8. Infections (HIV, Syphilis)</h2>
+            </button>
+            <div id="cause8" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Certain infections can affect the brain and lead to cognitive decline.</p>
                 <p><span class="font-semibold">Key Findings:</span> Research shows HIV and untreated syphilis can cause dementia.</p>
                 <p><span class="font-semibold">Sources:</span> <em>The Lancet</em>, <em>Journal of Neurovirology</em></p>
@@ -44,9 +124,11 @@
         </section>
 
         <!-- Cause 9 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">9. Medications</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause9')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">9. Medications</h2>
+            </button>
+            <div id="cause9" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Some drugs, especially sedatives, can impair memory and cognition.</p>
                 <p><span class="font-semibold">Key Findings:</span> Certain drug classes (e.g., benzodiazepines) linked to memory issues.</p>
                 <p><span class="font-semibold">Sources:</span> <em>The British Journal of Clinical Pharmacology</em>, <em>JAMA Internal Medicine</em></p>
@@ -54,17 +136,59 @@
         </section>
 
         <!-- Cause 10 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">10. Nutritional Deficiencies (Vitamin B12, Thiamine)</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause10')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">10. Nutritional Deficiencies (Vitamin B12, Thiamine)</h2>
+            </button>
+            <div id="cause10" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Deficiency in vitamins like B12 and thiamine can impair brain function.</p>
                 <p><span class="font-semibold">Key Findings:</span> Research confirms B12 and other deficiencies contribute to cognitive decline.</p>
                 <p><span class="font-semibold">Sources:</span> <em>The American Journal of Clinical Nutrition</em></p>
-        
+            </div>
+        </section>
+
+        <!-- Cause 11 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause11')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">11. Sleep Disorders (Sleep Apnea)</h2>
+            </button>
+            <div id="cause11" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Poor sleep or lack of oxygen due to apnea affects cognitive function over time.</p>
+                <p><span class="font-semibold">Key Findings:</span> Sleep apnea linked to memory loss and dementia risk.</p>
+                <p><span class="font-semibold">Sources:</span> <em>Neurology</em>, <em>Sleep Medicine Reviews</em></p>
+            </div>
+        </section>
+
+        <!-- Cause 12 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause12')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">12. Chronic Illnesses (Diabetes, Hypertension)</h2>
+            </button>
+            <div id="cause12" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Conditions like diabetes and high blood pressure increase the risk of dementia.</p>
+                <p><span class="font-semibold">Key Findings:</span> Strong correlation between chronic diseases and cognitive decline.</p>
+                <p><span class="font-semibold">Sources:</span> <em>Journal of Alzheimer’s Disease</em>, <em>Diabetes Care</em></p>
+            </div>
+        </section>
+
+        <!-- Cause 13 -->
+        <section class="mb-6">
+            <button onclick="toggleContent('cause13')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">13. Depression and Anxiety</h2>
+            </button>
+            <div id="cause13" class="bg-white shadow-md rounded-lg p-6">
+                <p><span class="font-semibold">Description:</span> Mental health issues can exacerbate memory problems or mimic dementia.</p>
+                <p><span class="font-semibold">Key Findings:</span> Depression can cause pseudo-dementia, leading to memory loss.</p>
+                <p><span class="font-semibold">Sources:</span> <em>The American Journal of Geriatric Psychiatry</em></p>
+            </div>
+        </section>
+
         <!-- Cause 14 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">14. Hypothyroidism</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause14')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">14. Hypothyroidism</h2>
+            </button>
+            <div id="cause14" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Low levels of thyroid hormones affect brain function.</p>
                 <p><span class="font-semibold">Key Findings:</span> Research shows hypothyroidism is associated with memory loss.</p>
                 <p><span class="font-semibold">Sources:</span> <em>Endocrine Reviews</em>, <em>The Journal of Clinical Endocrinology &amp; Metabolism</em></p>
@@ -72,9 +196,11 @@
         </section>
 
         <!-- Cause 15 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">15. Dehydration and Electrolyte Imbalance</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause15')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">15. Dehydration and Electrolyte Imbalance</h2>
+            </button>
+            <div id="cause15" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Dehydration or imbalances in electrolytes can cause confusion and memory issues.</p>
                 <p><span class="font-semibold">Key Findings:</span> Dehydration is a common cause of confusion in older adults.</p>
                 <p><span class="font-semibold">Sources:</span> <em>The Journal of Gerontology</em>, <em>The American Journal of Kidney Diseases</em></p>
@@ -82,9 +208,11 @@
         </section>
 
         <!-- Cause 16 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">16. Brain Tumors</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause16')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">16. Brain Tumors</h2>
+            </button>
+            <div id="cause16" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Tumors in cognitive regions can lead to memory and cognitive problems.</p>
                 <p><span class="font-semibold">Key Findings:</span> Research shows brain tumors affecting memory and cognition.</p>
                 <p><span class="font-semibold">Sources:</span> <em>Neurosurgery</em>, <em>Neuro-Oncology</em></p>
@@ -92,14 +220,36 @@
         </section>
 
         <!-- Cause 17 -->
-        <section class="mb-8">
-            <h2 class="text-2xl font-semibold mb-4">17. Toxic Exposure (e.g., Heavy Metals)</h2>
-            <div class="bg-white shadow-md rounded-lg p-6">
+        <section class="mb-6">
+            <button onclick="toggleContent('cause17')" class="w-full text-left focus:outline-none">
+                <h2 class="text-2xl font-semibold mb-2 hover:text-blue-600">17. Toxic Exposure (e.g., Heavy Metals)</h2>
+            </button>
+            <div id="cause17" class="bg-white shadow-md rounded-lg p-6">
                 <p><span class="font-semibold">Description:</span> Exposure to environmental toxins can impair cognitive function.</p>
                 <p><span class="font-semibold">Key Findings:</span> Studies link toxic exposure to increased dementia risk.</p>
                 <p><span class="font-semibold">Sources:</span> <em>Environmental Health Perspectives</em>, <em>The Journal of Toxicology</em></p>
             </div>
         </section>
     </div>
+
+    <script>
+        function toggleContent(id) {
+            var content = document.getElementById(id);
+            if (content.style.display === "none" || content.style.display === "") {
+                content.style.display = "block";
+                console.log('Expanded ' + id);
+            } else {
+                content.style.display = "none";
+                console.log('Collapsed ' + id);
+            }
+        }
+        // Hide all contents initially
+        document.addEventListener("DOMContentLoaded", function() {
+            var contents = document.querySelectorAll("[id^='cause']");
+            contents.forEach(function(content) {
+                content.style.display = "none";
+            });
+        });
+    </script>
 </body>
 </html>
