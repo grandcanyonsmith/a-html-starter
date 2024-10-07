@@ -6,16 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Categories Management</title>
     <!-- Include Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+
     <!-- Include Inter font -->
-    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <!-- Include Marked.js for Markdown rendering -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" async></script>
+
     <!-- Custom Styles -->
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
@@ -34,6 +32,22 @@
                 grid-template-columns: 1fr 3fr;
             }
         }
+        /* Modal transition */
+        .modal-hidden {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .modal-visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease-in-out;
+        }
+        /* Focus outline for accessibility */
+        .focus-ring {
+            outline: 2px solid #5a67d8;
+            outline-offset: 2px;
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen text-gray-900">
@@ -41,11 +55,11 @@
     <nav class="bg-white shadow" role="navigation" aria-label="main navigation">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <img src="your-logo.png" alt="Your Brand" class="h-8 w-auto">
+                <img src="your-logo.png" alt="Your Brand Logo" class="h-8 w-auto">
                 <span class="text-2xl font-bold">Your Brand</span>
             </div>
             <div>
-                <button id="newCategoryBtn" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Create new category">
+                <button id="newCategoryBtn" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none" aria-label="Create new category">
                     New Category
                 </button>
             </div>
@@ -62,10 +76,11 @@
             <!-- Sidebar -->
             <aside class="lg:col-span-1 bg-white rounded-lg shadow p-4">
                 <h3 class="text-xl font-semibold mb-4">Categories</h3>
+                <input type="text" id="categorySearch" placeholder="Search categories..." class="mb-4 p-2 w-full border rounded-md" aria-label="Search categories">
                 <ul id="categoriesList" class="space-y-2">
                     <!-- Categories will be loaded here -->
                 </ul>
-                <button id="newCategoryBtnSidebar" class="mt-4 w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Create new category">
+                <button id="newCategoryBtnSidebar" class="mt-4 w-full py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none" aria-label="Create new category">
                     New Category
                 </button>
             </aside>
@@ -77,13 +92,13 @@
                     <div class="flex items-center justify-between mb-6">
                         <h2 id="subcategoryTitle" class="text-2xl font-semibold">Subcategories</h2>
                         <div class="flex items-center space-x-4">
-                            <button id="newSubcategoryBtn" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-label="Create new subcategory">
+                            <button id="newSubcategoryBtn" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none" aria-label="Create new subcategory">
                                 New Subcategory
                             </button>
-                            <button id="convertAudioBtn" class="py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2" aria-label="Convert Audio">
+                            <button id="convertAudioBtn" class="py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none" aria-label="Convert Audio">
                                 Convert Audio
                             </button>
-                            <button id="backButton" class="py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2" aria-label="Back to categories">
+                            <button id="backButton" class="py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none" aria-label="Back to categories">
                                 Back to Categories
                             </button>
                         </div>
@@ -102,8 +117,8 @@
 
         <!-- Modals -->
         <!-- New Category Modal -->
-        <div id="newCategoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+        <div id="newCategoryModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto modal-hidden" aria-hidden="true">
+            <div class="bg-white rounded-md shadow-xl transform transition-all sm:max-w-lg sm:w-full mt-10 mb-10">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Create New Category</h3>
                     <div class="mt-4">
@@ -112,10 +127,10 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                    <button id="cancelNewCategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <button id="cancelNewCategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none">
                         Cancel
                     </button>
-                    <button id="saveNewCategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <button id="saveNewCategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
                         Save
                     </button>
                 </div>
@@ -123,8 +138,8 @@
         </div>
 
         <!-- Edit Category Modal -->
-        <div id="editCategoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+        <div id="editCategoryModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto modal-hidden" aria-hidden="true">
+            <div class="bg-white rounded-md shadow-xl transform transition-all sm:max-w-lg sm:w-full mt-10 mb-10">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Edit Category</h3>
                     <div class="mt-4">
@@ -133,10 +148,10 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                    <button id="cancelEditCategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <button id="cancelEditCategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none">
                         Cancel
                     </button>
-                    <button id="saveEditCategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <button id="saveEditCategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
                         Save Changes
                     </button>
                 </div>
@@ -144,8 +159,8 @@
         </div>
 
         <!-- New Subcategory Modal -->
-        <div id="newSubcategoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+        <div id="newSubcategoryModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto modal-hidden" aria-hidden="true">
+            <div class="bg-white rounded-md shadow-xl transform transition-all sm:max-w-lg sm:w-full mt-10 mb-10">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Create New Subcategory</h3>
                     <div class="mt-4">
@@ -160,10 +175,10 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                    <button id="cancelNewSubcategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <button id="cancelNewSubcategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none">
                         Cancel
                     </button>
-                    <button id="saveNewSubcategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <button id="saveNewSubcategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
                         Save
                     </button>
                 </div>
@@ -171,8 +186,8 @@
         </div>
 
         <!-- Edit Subcategory Modal -->
-        <div id="editSubcategoryModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full">
+        <div id="editSubcategoryModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto modal-hidden" aria-hidden="true">
+            <div class="bg-white rounded-md shadow-xl transform transition-all sm:max-w-lg sm:w-full mt-10 mb-10">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Edit Subcategory</h3>
                     <div class="mt-4">
@@ -187,10 +202,10 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                    <button id="cancelEditSubcategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <button id="cancelEditSubcategory" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none">
                         Cancel
                     </button>
-                    <button id="saveEditSubcategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <button id="saveEditSubcategory" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 disabled:opacity-50 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
                         Save Changes
                     </button>
                 </div>
@@ -198,8 +213,8 @@
         </div>
 
         <!-- Subcategory Details Modal -->
-        <div id="subcategoryDetailsModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full mt-10 mb-10">
+        <div id="subcategoryDetailsModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto modal-hidden" aria-hidden="true">
+            <div class="bg-white rounded-md shadow-xl transform transition-all sm:max-w-xl sm:w-full mt-10 mb-10">
                 <div class="px-6 py-4">
                     <h3 id="detailsSubcategoryName" class="text-lg leading-6 font-medium">Subcategory Details</h3>
                     <div class="mt-4">
@@ -211,7 +226,7 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                    <button id="closeSubcategoryDetails" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <button id="closeSubcategoryDetails" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
                         Close
                     </button>
                 </div>
@@ -219,20 +234,20 @@
         </div>
 
         <!-- Convert Audio Modal -->
-        <div id="convertAudioModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-lg sm:w-full mt-10 mb-10">
+        <div id="convertAudioModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto modal-hidden" aria-hidden="true">
+            <div class="bg-white rounded-md shadow-xl transform transition-all sm:max-w-lg sm:w-full mt-10 mb-10">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Convert Audio</h3>
                     <div class="mt-4">
                         <label for="transcriptionText" class="block text-sm font-medium">Transcription</label>
-                        <textarea id="transcriptionText" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" rows="6"></textarea>
+                        <textarea id="transcriptionText" class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" rows="6" aria-required="true"></textarea>
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                    <button id="cancelConvertAudio" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <button id="cancelConvertAudio" class="mr-3 py-2 px-4 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:outline-none">
                         Cancel
                     </button>
-                    <button id="submitConvertAudio" class="py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 disabled:opacity-50 transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    <button id="submitConvertAudio" class="py-2 px-4 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 disabled:opacity-50 focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:outline-none">
                         Submit
                     </button>
                 </div>
@@ -240,8 +255,8 @@
         </div>
 
         <!-- Conversion Results Modal -->
-        <div id="conversionResultsModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto hidden" aria-hidden="true">
-            <div class="bg-white rounded-md overflow-hidden shadow-xl transform transition-all sm:max-w-xl sm:w-full mt-10 mb-10">
+        <div id="conversionResultsModal" class="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 overflow-y-auto modal-hidden" aria-hidden="true">
+            <div class="bg-white rounded-md shadow-xl transform transition-all sm:max-w-xl sm:w-full mt-10 mb-10">
                 <div class="px-6 py-4">
                     <h3 class="text-lg leading-6 font-medium">Conversion Results</h3>
                     <div id="conversionResultsContent" class="mt-4 space-y-4 markdown-content">
@@ -249,7 +264,7 @@
                     </div>
                 </div>
                 <div class="px-6 py-4 bg-gray-50 flex justify-end">
-                    <button id="closeConversionResults" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <button id="closeConversionResults" class="py-2 px-4 bg-indigo-600 text-white font-medium rounded-md hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none">
                         Close
                     </button>
                 </div>
@@ -264,9 +279,11 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Page loaded.');
     // Constants
     const API_URL = 'https://soa6mp6e2rilqgb7xz675agzeq0stbff.lambda-url.us-west-2.on.aws/';
+    const CONVERT_API_URL = 'https://g6z7ciwxlngzx3t3knkkkvc2pi0mqsgs.lambda-url.us-west-2.on.aws/';
     // DOM Elements
     const elements = {
         categoriesList: document.getElementById('categoriesList'),
+        categorySearchInput: document.getElementById('categorySearch'),
         subcategoriesSection: document.getElementById('subcategoriesSection'),
         subcategoriesList: document.getElementById('subcategoriesList'),
         backButton: document.getElementById('backButton'),
@@ -313,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Application state
     let state = {
         categoriesData: [],
+        filteredCategories: [],
         currentCategory: null,
         editingCategory: null,
         editingSubcategory: null,
@@ -353,7 +371,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <svg class="h-5 w-5 ${type === 'error' ? 'text-red-500' : 'text-green-500'} mr-2 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             ${type === 'error' ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>' : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'}
             </svg>
-            <span>${text}</span>
+            <span>${sanitizeHTML(text)}</span>
         `;
         elements.messageContainer.appendChild(messageDiv);
         setTimeout(() => {
@@ -363,12 +381,25 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 300);
         }, 3000);
     };
+    const sanitizeHTML = (str) => {
+        const temp = document.createElement('div');
+        temp.textContent = str;
+        return temp.innerHTML;
+    };
     const generateUUID = () => {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             const r = Math.random() * 16 | 0,
                 v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
+    };
+    // Debounce function
+    const debounce = (func, wait) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(this, args), wait);
+        };
     };
     // Category Manager class
     class CategoryManager {
@@ -389,6 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const response = await apiRequest(data);
                 state.categoriesData = response;
+                state.filteredCategories = response;
                 this.displayCategories(response);
             } catch (error) {
                 showMessage('error', 'Error fetching categories: ' + error.message);
@@ -407,6 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 li.className = 'flex items-center justify-between hover:bg-gray-100 rounded-md px-3 py-2';
                 const button = document.createElement('button');
                 button.className = 'flex items-center space-x-2 focus:outline-none w-full text-left';
+                button.setAttribute('aria-label', `Select category ${sanitizeHTML(category.CategoryName)}`);
                 button.addEventListener('click', (event) => {
                     event.preventDefault();
                     console.log('Category clicked:', category.CategoryID);
@@ -429,7 +462,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Edit button
                 const editBtn = document.createElement('button');
                 editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                editBtn.setAttribute('aria-label', 'Edit category');
+                editBtn.setAttribute('aria-label', `Edit category ${sanitizeHTML(category.CategoryName)}`);
                 editBtn.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/>
@@ -444,7 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Delete button
                 const deleteBtn = document.createElement('button');
                 deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                deleteBtn.setAttribute('aria-label', 'Delete category');
+                deleteBtn.setAttribute('aria-label', `Delete category ${sanitizeHTML(category.CategoryName)}`);
                 deleteBtn.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 6.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
@@ -464,11 +497,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         openNewCategoryModal() {
             elements.categoryNameInput.value = '';
-            elements.newCategoryModal.classList.remove('hidden');
+            this.showModal(elements.newCategoryModal);
             elements.categoryNameInput.focus();
         }
         closeNewCategoryModal() {
-            elements.newCategoryModal.classList.add('hidden');
+            this.hideModal(elements.newCategoryModal);
         }
         async createCategory() {
             const categoryName = elements.categoryNameInput.value.trim();
@@ -484,13 +517,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 operation: 'create',
                 item: {
                     CategoryID: categoryID,
-                    CategoryName: categoryName,
+                    CategoryName: sanitizeHTML(categoryName),
                     SubCategories: []
                 }
             };
             try {
                 await apiRequest(data);
-                showMessage('success', `Category "${categoryName}" created successfully.`);
+                showMessage('success', `Category "${sanitizeHTML(categoryName)}" created successfully.`);
                 this.closeNewCategoryModal();
                 elements.saveNewCategoryBtn.disabled = false;
                 elements.saveNewCategoryBtn.textContent = 'Save';
@@ -505,11 +538,11 @@ document.addEventListener('DOMContentLoaded', () => {
         openEditCategoryModal(category) {
             state.editingCategory = category;
             elements.editCategoryNameInput.value = category.CategoryName;
-            elements.editCategoryModal.classList.remove('hidden');
+            this.showModal(elements.editCategoryModal);
             elements.editCategoryNameInput.focus();
         }
         closeEditCategoryModal() {
-            elements.editCategoryModal.classList.add('hidden');
+            this.hideModal(elements.editCategoryModal);
             state.editingCategory = null;
         }
         async updateCategory() {
@@ -526,12 +559,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 operation: 'update',
                 CategoryID: state.editingCategory.CategoryID,
                 update_fields: {
-                    CategoryName: newName
+                    CategoryName: sanitizeHTML(newName)
                 }
             };
             try {
                 await apiRequest(data);
-                showMessage('success', `Category "${state.editingCategory.CategoryName}" updated successfully.`);
+                showMessage('success', `Category updated successfully.`);
                 this.closeEditCategoryModal();
                 elements.saveEditCategoryBtn.disabled = false;
                 elements.saveEditCategoryBtn.textContent = 'Save Changes';
@@ -557,7 +590,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             try {
                 await apiRequest(data);
-                showMessage('success', `Category "${category.CategoryName}" deleted successfully.`);
+                showMessage('success', `Category "${sanitizeHTML(category.CategoryName)}" deleted successfully.`);
                 await this.fetchCategories();
                 if (state.currentCategory && state.currentCategory.CategoryID === category.CategoryID) {
                     elements.subcategoriesSection.classList.add('hidden');
@@ -568,6 +601,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 showMessage('error', 'Error deleting category: ' + error.message);
                 console.error('Error deleting category:', error);
             }
+        }
+        filterCategories() {
+            const searchTerm = elements.categorySearchInput.value.trim().toLowerCase();
+            if (searchTerm === '') {
+                state.filteredCategories = state.categoriesData;
+            } else {
+                state.filteredCategories = state.categoriesData.filter(category => category.CategoryName.toLowerCase().includes(searchTerm));
+            }
+            this.displayCategories(state.filteredCategories);
+        }
+        showModal(modalElement) {
+            modalElement.classList.remove('modal-hidden');
+            modalElement.classList.add('modal-visible');
+            // Close modal on outside click or Escape key
+            const closeModal = (event) => {
+                if (event.target === modalElement || event.key === 'Escape') {
+                    modalElement.classList.remove('modal-visible');
+                    modalElement.classList.add('modal-hidden');
+                    window.removeEventListener('click', closeModal);
+                    window.removeEventListener('keydown', closeModal);
+                }
+            };
+            window.addEventListener('click', closeModal);
+            window.addEventListener('keydown', closeModal);
+        }
+        hideModal(modalElement) {
+            modalElement.classList.remove('modal-visible');
+            modalElement.classList.add('modal-hidden');
         }
     }
     // Subcategory Manager class
@@ -604,7 +665,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // View button
                 const viewBtn = document.createElement('button');
                 viewBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                viewBtn.setAttribute('aria-label', 'View details');
+                viewBtn.setAttribute('aria-label', `View details of subcategory ${sanitizeHTML(subcategory.SubCategoryName)}`);
                 viewBtn.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="View details" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10 3a7 7 0 017 7 7 7 0 01-7 7 7 7 0 01-7-7 7 7 0 017-7zm0 3a4 4 0 100 8 4 4 0 000-8z"/>
@@ -618,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Edit button
                 const editBtn = document.createElement('button');
                 editBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                editBtn.setAttribute('aria-label', 'Edit subcategory');
+                editBtn.setAttribute('aria-label', `Edit subcategory ${sanitizeHTML(subcategory.SubCategoryName)}`);
                 editBtn.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Edit subcategory" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"/>
@@ -633,7 +694,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Delete button
                 const deleteBtn = document.createElement('button');
                 deleteBtn.classList.add('text-gray-600', 'hover:text-gray-800', 'focus:outline-none');
-                deleteBtn.setAttribute('aria-label', 'Delete subcategory');
+                deleteBtn.setAttribute('aria-label', `Delete subcategory ${sanitizeHTML(subcategory.SubCategoryName)}`);
                 deleteBtn.innerHTML = `
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" role="img" aria-label="Delete subcategory" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 6.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
@@ -656,11 +717,11 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.subcategoryNameInput.value = '';
             elements.subcategoryInstructionsInput.value = '';
             elements.subcategoryExamplesInput.value = '';
-            elements.newSubcategoryModal.classList.remove('hidden');
+            categoryManager.showModal(elements.newSubcategoryModal);
             elements.subcategoryNameInput.focus();
         }
         closeNewSubcategoryModal() {
-            elements.newSubcategoryModal.classList.add('hidden');
+            categoryManager.hideModal(elements.newSubcategoryModal);
         }
         async createSubcategory() {
             if (!state.currentCategory) return;
@@ -680,14 +741,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 CategoryID: state.currentCategory.CategoryID,
                 SubCategory: {
                     SubCategoryID: subcategoryID,
-                    SubCategoryName: subcategoryName,
-                    Instructions: instructions,
-                    Examples: examples
+                    SubCategoryName: sanitizeHTML(subcategoryName),
+                    Instructions: sanitizeHTML(instructions),
+                    Examples: sanitizeHTML(examples)
                 }
             };
             try {
                 await apiRequest(data);
-                showMessage('success', `Subcategory "${subcategoryName}" created successfully.`);
+                showMessage('success', `Subcategory "${sanitizeHTML(subcategoryName)}" created successfully.`);
                 this.closeNewSubcategoryModal();
                 elements.saveNewSubcategoryBtn.disabled = false;
                 elements.saveNewSubcategoryBtn.textContent = 'Save';
@@ -706,11 +767,11 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.editSubcategoryNameInput.value = subcategory.SubCategoryName;
             elements.editSubcategoryInstructionsInput.value = subcategory.Instructions || '';
             elements.editSubcategoryExamplesInput.value = subcategory.Examples || '';
-            elements.editSubcategoryModal.classList.remove('hidden');
+            categoryManager.showModal(elements.editSubcategoryModal);
             elements.editSubcategoryNameInput.focus();
         }
         closeEditSubcategoryModal() {
-            elements.editSubcategoryModal.classList.add('hidden');
+            categoryManager.hideModal(elements.editSubcategoryModal);
             state.editingSubcategory = null;
         }
         async updateSubcategory() {
@@ -730,14 +791,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 CategoryID: state.currentCategory.CategoryID,
                 SubCategoryID: state.editingSubcategory.SubCategoryID,
                 update_fields: {
-                    SubCategoryName: newName,
-                    Instructions: instructions,
-                    Examples: examples
+                    SubCategoryName: sanitizeHTML(newName),
+                    Instructions: sanitizeHTML(instructions),
+                    Examples: sanitizeHTML(examples)
                 }
             };
             try {
                 await apiRequest(data);
-                showMessage('success', `Subcategory "${state.editingSubcategory.SubCategoryName}" updated successfully.`);
+                showMessage('success', `Subcategory updated successfully.`);
                 this.closeEditSubcategoryModal();
                 elements.saveEditSubcategoryBtn.disabled = false;
                 elements.saveEditSubcategoryBtn.textContent = 'Save Changes';
@@ -763,7 +824,7 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             try {
                 await apiRequest(data);
-                showMessage('success', `Subcategory "${subcategory.SubCategoryName}" deleted successfully.`);
+                showMessage('success', `Subcategory "${sanitizeHTML(subcategory.SubCategoryName)}" deleted successfully.`);
                 await categoryManager.fetchCategories();
                 state.currentCategory = state.categoriesData.find(cat => cat.CategoryID === state.currentCategory.CategoryID);
                 this.displaySubcategories(state.currentCategory);
@@ -778,20 +839,20 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.detailsSubcategoryInstructions.innerHTML = marked.parse(subcategory.Instructions || 'No instructions provided.');
             // Render Markdown for Examples
             elements.detailsSubcategoryExamples.innerHTML = marked.parse(subcategory.Examples || 'No examples provided.');
-            elements.subcategoryDetailsModal.classList.remove('hidden');
+            categoryManager.showModal(elements.subcategoryDetailsModal);
         }
         closeSubcategoryDetails() {
-            elements.subcategoryDetailsModal.classList.add('hidden');
+            categoryManager.hideModal(elements.subcategoryDetailsModal);
         }
         openConvertAudioModal() {
             elements.transcriptionText.value = '';
-            elements.convertAudioModal.classList.remove('hidden');
+            categoryManager.showModal(elements.convertAudioModal);
             elements.transcriptionText.focus();
         }
         closeConvertAudioModal() {
-            elements.convertAudioModal.classList.add('hidden');
+            categoryManager.hideModal(elements.convertAudioModal);
         }
-        submitConvertAudio() {
+        async submitConvertAudio() {
             if (!state.currentCategory) return;
             const transcriptionText = elements.transcriptionText.value.trim();
             if (transcriptionText === '') {
@@ -808,24 +869,23 @@ document.addEventListener('DOMContentLoaded', () => {
                     CategoryName: state.currentCategory.CategoryName,
                     SubCategories: state.currentCategory.SubCategories
                 },
-                TranscriptionText: transcriptionText
+                TranscriptionText: sanitizeHTML(transcriptionText)
             };
-            // Send POST request to the specified URL
-            fetch('https://g6z7ciwxlngzx3t3knkkkvc2pi0mqsgs.lambda-url.us-west-2.on.aws/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(dataToSend)
-            })
-            .then(response => response.text())
-            .then(text => {
-                console.log('Response to convert Audio :', text);
+            try {
+                const response = await fetch(CONVERT_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dataToSend)
+                });
+                if (!response.ok) {
+                    throw new Error(`Network response was not OK. Status code: ${response.status}`);
+                }
+                const text = await response.text();
                 let data;
                 try {
-                    // Parse the text response
                     data = JSON.parse(text);
-                    // If the result is still a string, parse it again
                     while (typeof data === 'string') {
                         data = JSON.parse(data);
                     }
@@ -837,53 +897,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 elements.submitConvertAudioBtn.textContent = originalButtonText;
                 this.closeConvertAudioModal();
                 this.displayConversionResults(data);
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error during audio conversion:', error);
                 showMessage('error', 'Error during audio conversion: ' + error.message);
                 elements.submitConvertAudioBtn.disabled = false;
                 elements.submitConvertAudioBtn.textContent = originalButtonText;
-            });
+            }
         }
         displayConversionResults(data) {
             // Clear previous results
             elements.conversionResultsContent.innerHTML = '';
             let hasResults = false;
-        
-            // Log the entire data for debugging
-            console.log("Conversion Results Data:", data);
-        
-            // Ensure data is an array
+
             if (Array.isArray(data) && data.length > 0) {
-                const resultItems = data[0]; // Since the actual array is nested inside data[0]
+                const resultItems = data[0];
                 if (Array.isArray(resultItems) && resultItems.length > 0) {
                     resultItems.forEach(item => {
-                        // Log each item for debugging
-                        console.log("Processing Item:", item);
-        
-                        // Extract fields
-                        const subCategoryID = item.SubCategoryID;
                         const subCategoryName = item.SubCategoryName;
                         const output = item.Output;
-        
-                        // Proceed to map and display the result
+
                         const resultDiv = document.createElement('div');
                         resultDiv.className = 'bg-gray-100 p-4 rounded-md shadow-sm mb-4';
-        
+
                         const title = document.createElement('h4');
                         title.className = 'text-lg font-medium text-gray-800 mb-2';
                         title.textContent = subCategoryName || 'Result';
-        
+
                         const outputDiv = document.createElement('div');
                         outputDiv.className = 'mt-2 text-gray-700 markdown-content';
-        
+
                         if (output) {
-                            // Render Markdown content
                             outputDiv.innerHTML = marked.parse(output);
                         } else {
                             outputDiv.innerHTML = '<p>No result available.</p>';
                         }
-        
+
                         resultDiv.appendChild(title);
                         resultDiv.appendChild(outputDiv);
                         elements.conversionResultsContent.appendChild(resultDiv);
@@ -896,16 +944,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Invalid conversion results format or empty data:', data);
                 showMessage('error', 'Invalid conversion results format or no results found.');
             }
-        
+
             if (!hasResults) {
                 elements.conversionResultsContent.innerHTML = '<p class="text-gray-500">No results found.</p>';
             }
-            
-            elements.conversionResultsModal.classList.remove('hidden');
+
+            categoryManager.showModal(elements.conversionResultsModal);
         }
-        
+
         closeConversionResults() {
-            elements.conversionResultsModal.classList.add('hidden');
+            categoryManager.hideModal(elements.conversionResultsModal);
         }
     }
     // Instantiate managers
@@ -965,6 +1013,9 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.closeConversionResultsBtn.addEventListener('click', () => {
         subcategoryManager.closeConversionResults();
     });
+    elements.categorySearchInput.addEventListener('input', debounce(() => {
+        categoryManager.filterCategories();
+    }, 300));
     // Initial fetch of categories
     categoryManager.fetchCategories();
 });
