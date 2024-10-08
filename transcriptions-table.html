@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Transcriptions Manager</title>
+    <!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <!-- Include FontAwesome for icons -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-100 p-4">
     <!-- Header -->
@@ -20,7 +19,10 @@
             <div class="relative">
                 <input type="text" id="search-input" class="border border-gray-300 rounded pl-8 pr-4 py-2" placeholder="Search...">
                 <span class="absolute left-0 top-0 mt-2 ml-2 text-gray-400">
-                    <i class="fas fa-search"></i>
+                    <!-- Search Icon (SVG) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
                 </span>
             </div>
             <!-- Add any additional filters or actions here -->
@@ -112,6 +114,12 @@
             fetchAllTranscriptions();
             // Add event listener for search input
             document.getElementById('search-input').addEventListener('input', handleSearch);
+            // Close action menus when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.action-button')) {
+                    closeAllActionMenus();
+                }
+            });
         });
 
         let transcriptions = []; // Store all transcriptions globally
@@ -161,35 +169,15 @@
                     showTranscription(item.TranscriptionId, item.Title);
                 });
 
-                const tdCreatedAt = document.createElement('td');
-                tdCreatedAt.className = 'py-2 px-4 border-b';
-                tdCreatedAt.textContent = item.CreatedAt || '';
-                tr.appendChild(tdCreatedAt);
+                // Format the CreatedAt date
+                const formattedDate = formatDate(item.CreatedAt);
 
-                const tdTitle = document.createElement('td');
-                tdTitle.className = 'py-2 px-4 border-b';
-                tdTitle.textContent = item.Title || '';
-                tr.appendChild(tdTitle);
-
-                const tdType = document.createElement('td');
-                tdType.className = 'py-2 px-4 border-b';
-                tdType.textContent = item.Type || '';
-                tr.appendChild(tdType);
-
-                const tdSubtype = document.createElement('td');
-                tdSubtype.className = 'py-2 px-4 border-b';
-                tdSubtype.textContent = item.Subtype || '';
-                tr.appendChild(tdSubtype);
-
-                const tdDepartment = document.createElement('td');
-                tdDepartment.className = 'py-2 px-4 border-b';
-                tdDepartment.textContent = item.Department || '';
-                tr.appendChild(tdDepartment);
-
-                const tdStatus = document.createElement('td');
-                tdStatus.className = 'py-2 px-4 border-b';
-                tdStatus.textContent = item.Status || '';
-                tr.appendChild(tdStatus);
+                addTableCell(tr, formattedDate);
+                addTableCell(tr, item.Title || '');
+                addTableCell(tr, item.Type || '');
+                addTableCell(tr, item.Subtype || '');
+                addTableCell(tr, item.Department || '');
+                addTableCell(tr, item.Status || '');
 
                 // Actions Column
                 const tdActions = document.createElement('td');
@@ -198,7 +186,12 @@
                 // Action Button (Three Dots)
                 const actionButton = document.createElement('button');
                 actionButton.className = 'action-button text-gray-600 hover:text-gray-800 focus:outline-none';
-                actionButton.innerHTML = '<i class="fas fa-ellipsis-v"></i>';
+                // Use inline SVG for the three-dot icon
+                actionButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z"/>
+                    </svg>
+                `;
                 actionButton.addEventListener('click', function(event) {
                     event.stopPropagation(); // Prevent triggering the row click event
                     toggleActionMenu(actionMenu);
@@ -249,6 +242,13 @@
                     sortTableByKey(key);
                 });
             });
+        }
+
+        function addTableCell(tr, textContent) {
+            const td = document.createElement('td');
+            td.className = 'py-2 px-4 border-b';
+            td.textContent = textContent;
+            tr.appendChild(td);
         }
 
         function toggleActionMenu(menu) {
@@ -333,6 +333,13 @@
                 Department: document.getElementById('edit-department').value,
                 // Add other fields as necessary
             };
+
+            // Disable the submit button and change text to "Saving..."
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = 'Saving...';
+
             fetch(functionUrl, {
                 method: 'POST',
                 headers: {
@@ -354,6 +361,11 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error updating transcription');
+            })
+            .finally(() => {
+                // Re-enable the submit button and restore its text
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
             });
         });
 
@@ -385,25 +397,6 @@
                 alert('Error deleting transcription');
             });
         }
-
-        // Close action menus when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.action-button')) {
-                closeAllActionMenus();
-            }
-        });
-
-        // Close modals when clicking outside content area
-        document.addEventListener('click', function(event) {
-            const transcriptionModal = document.getElementById('transcription-modal');
-            const editModal = document.getElementById('edit-modal');
-            if (event.target === transcriptionModal) {
-                closeModal('transcription-modal');
-            }
-            if (event.target === editModal) {
-                closeModal('edit-modal');
-            }
-        });
 
         // Sorting Functionality
         function sortTableByKey(key) {
@@ -453,6 +446,15 @@
             });
             renderTranscriptionsTable(filteredTranscriptions);
         }
+
+        // Format date to human-readable format
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            if (isNaN(date)) return dateString; // Return original if invalid date
+            return date.toISOString().split('.')[0] + 'Z'; // Format as 'YYYY-MM-DDTHH:mm:ssZ'
+        }
+
     </script>
 </body>
 </html>
