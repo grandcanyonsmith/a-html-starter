@@ -78,33 +78,33 @@
     const personaData = {
         profileImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToK4qEfbnd-RN82wdL2awn_PMviy_pelocqQ&s",
         name: "Shelly K",
-        familyStatus: "Mom in a demanding corporate role",
-        education: "Tech background; worked at Google for 14 years",
-        bio: "A seasoned professional aiming to empower women in tech to find clarity beyond corporate roles.",
-        frustrations: "She lacks time to build her own funnels and systems and wants an all-in-one solution without multiple tool integrations. She desires flexibility in plans, efficient communication, and customization, all at a $1,500/month price point without coaching.",
-        motivations: "To have an all-in-one platform managed by a done-for-you service, allowing her to focus on delivering her program and empowering women in tech.",
-        factors: "Prices, flexibility in the plan, customization options, and efficient communication with the team are critical in her buying decision.",
+        familyStatus: "<em>Mom</em> in a <strong>demanding corporate role</strong>",
+        education: "<strong>Tech background</strong>; worked at <strong>Google</strong> for 14 years",
+        bio: "A seasoned professional aiming to <em>empower women in tech</em> to find <strong>clarity</strong> beyond <strong>corporate roles</strong>.",
+        frustrations: "She lacks time to build her own <strong>funnels</strong> and systems and wants an <strong>all-in-one solution</strong> without multiple tool integrations. She desires <strong>flexibility in plans</strong>, efficient communication, and customization, all at a <strong>$1,500/month price point</strong> without coaching.",
+        motivations: "To have an <strong>all-in-one platform</strong> managed by a <strong>done-for-you service</strong>, allowing her to focus on delivering her program and <strong>empowering women in tech</strong>.",
+        factors: "<strong>Prices</strong>, <strong>flexibility in the plan</strong>, <strong>customization options</strong>, and efficient communication with the team are critical in her buying decision.",
         quote: "\"I did not want to set my business up in a platform that I have to duct tape 16 tools together.\"",
-        customerNeeds: "She needs an affordable, all-in-one, done-for-you service to build her online assets and manage her tech stack without multiple tools, with flexibility and minimal coaching.",
-        currentSoftwares: "She is part of Authority Accelerator but wants to consolidate her tools into a single platform.",
-        courseLaunchStatus: "Course is being created; prototype program scheduled to launch in November.",
-        courseDescription: "An empowering program for women in tech seeking clarity and freedom without burnout, using manifestation and holistic practices to unlock their potential."
+        customerNeeds: "She needs an <strong>affordable</strong>, <strong>all-in-one</strong>, <strong>done-for-you service</strong> to build her online assets and manage her tech stack without multiple tools, with flexibility and minimal coaching.",
+        currentSoftwares: "She is part of <strong>Authority Accelerator</strong> but wants to consolidate her tools into a <strong>single platform</strong>.",
+        courseLaunchStatus: "Course is being created; <strong>prototype program scheduled to launch in November</strong>.",
+        courseDescription: "An <strong>empowering program</strong> for <em>women in tech</em> seeking <strong>clarity</strong> and <strong>freedom without burnout</strong>, using <strong>manifestation</strong> and holistic practices to unlock their potential."
     };
 
     // Map data to HTML elements
     document.getElementById('profileImage').src = personaData.profileImage;
     document.getElementById('name').innerText = personaData.name;
-    document.getElementById('familyStatus').innerText = personaData.familyStatus;
-    document.getElementById('education').innerText = personaData.education;
-    document.getElementById('bio').innerText = personaData.bio;
-    document.getElementById('frustrations').innerText = personaData.frustrations;
-    document.getElementById('motivations').innerText = personaData.motivations;
-    document.getElementById('factors').innerText = personaData.factors;
-    document.getElementById('quote').innerText = personaData.quote;
-    document.getElementById('customerNeeds').innerText = personaData.customerNeeds;
-    document.getElementById('currentSoftwares').innerText = personaData.currentSoftwares;
-    document.getElementById('courseLaunchStatus').innerText = personaData.courseLaunchStatus;
-    document.getElementById('courseDescription').innerText = personaData.courseDescription;
+    document.getElementById('familyStatus').innerHTML = personaData.familyStatus;
+    document.getElementById('education').innerHTML = personaData.education;
+    document.getElementById('bio').innerHTML = personaData.bio;
+    document.getElementById('frustrations').innerHTML = personaData.frustrations;
+    document.getElementById('motivations').innerHTML = personaData.motivations;
+    document.getElementById('factors').innerHTML = personaData.factors;
+    document.getElementById('quote').innerHTML = personaData.quote;
+    document.getElementById('customerNeeds').innerHTML = personaData.customerNeeds;
+    document.getElementById('currentSoftwares').innerHTML = personaData.currentSoftwares;
+    document.getElementById('courseLaunchStatus').innerHTML = personaData.courseLaunchStatus;
+    document.getElementById('courseDescription').innerHTML = personaData.courseDescription;
   </script>
 </body>
 </html>
