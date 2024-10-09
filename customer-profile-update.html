@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Persona Template</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-5">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white p-5 rounded-lg shadow-lg">
+            <!-- Profile Info -->
+            <div class="flex flex-col lg:flex-row">
+                <div class="lg:w-1/3 text-center lg:text-left">
+                    <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Picture" class="w-40 h-40 rounded-full mx-auto lg:mx-0 mb-4 lg:mb-0">
+                    <h2 id="name" class="text-xl font-bold">Lloyd Senger</h2>
+                    <p class="text-gray-500">Age: <span id="age">28</span></p>
+                    <p class="text-gray-500">Location: <span id="location">Austin, Texas</span></p>
+                    <p class="text-gray-500">Family Status: <span id="familyStatus">Married, no children</span></p>
+                    <p class="text-gray-500">Education: <span id="education">Masters degree</span></p>
+                </div>
+
+                <!-- Details Grid -->
+                <div class="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                    <!-- Bio -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-gray-700">Bio</h3>
+                        <p id="bio" class="text-gray-600 text-sm">Create a backstory for your buyer persona. Summarize the most actionable details from their personal and professional life...</p>
+                    </div>
+                    
+                    <!-- Frustrations -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-gray-700">Frustrations (Pain Points)</h3>
+                        <p id="frustrations" class="text-gray-600 text-sm">Identify the main problems or challenges your persona is facing...</p>
+                    </div>
+                    
+                    <!-- Motivations -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-gray-700">Motivations (Goals)</h3>
+                        <p id="motivations" class="text-gray-600 text-sm">Add motivations that inspire your buyers to move forward...</p>
+                    </div>
+                    
+                    <!-- Brands & Influencers -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-gray-700">Brands and Influencers</h3>
+                        <p id="brandsInfluencers" class="text-gray-600 text-sm">List the influencers and brands your audience tend to follow...</p>
+                    </div>
+                    
+                    <!-- Factors Influencing Buying Decisions -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-gray-700">Factors Influencing Buying Decisions</h3>
+                        <p id="factors" class="text-gray-600 text-sm">Summarize the factors that influence the buyer's decisions...</p>
+                    </div>
+                    
+                    <!-- Communication -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-gray-700">Communication</h3>
+                        <p id="communicationChannels" class="text-gray-600 text-sm">Channels: Social Media</p>
+                        <p id="contentTypes" class="text-gray-600 text-sm">Content types and formats: Podcasts</p>
+                        <p id="contentThemes" class="text-gray-600 text-sm">Content themes and topics: Interior design and vintage clothing</p>
+                    </div>
+                    
+                    <!-- Quote -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm">
+                        <h3 class="font-semibold text-gray-700">Quote</h3>
+                        <p id="quote" class="text-gray-600 text-sm">Include a short quote that illustrates the essence of your persona...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Example of dynamic data mapping
+        const personaData = {
+            profileImage: "path/to/profile/image.jpg",
+            name: "Lloyd Senger",
+            age: 28,
+            location: "Austin, Texas",
+            familyStatus: "Married, no children",
+            education: "Masters degree",
+            bio: "Lloyd is a highly motivated professional, always looking for ways to improve their life...",
+            frustrations: "Lloyd struggles to balance work and personal life, especially with a demanding job.",
+            motivations: "Looking for career growth while maintaining personal life balance.",
+            brandsInfluencers: "Follows popular influencers in interior design and fashion.",
+            factors: "Price and quality are the most important factors influencing buying decisions.",
+            communicationChannels: "Social media",
+            contentTypes: "Podcasts",
+            contentThemes: "Interior design and vintage clothing",
+            quote: "Live life with passion and purpose, every single day."
+        };
+
+        document.getElementById('profileImage').src = personaData.profileImage;
+        document.getElementById('name').innerText = personaData.name;
+        document.getElementById('age').innerText = personaData.age;
+        document.getElementById('location').innerText = personaData.location;
+        document.getElementById('familyStatus').innerText = personaData.familyStatus;
+        document.getElementById('education').innerText = personaData.education;
+        document.getElementById('bio').innerText = personaData.bio;
+        document.getElementById('frustrations').innerText = personaData.frustrations;
+        document.getElementById('motivations').innerText = personaData.motivations;
+        document.getElementById('brandsInfluencers').innerText = personaData.brandsInfluencers;
+        document.getElementById('factors').innerText = personaData.factors;
+        document.getElementById('communicationChannels').innerText = `Channels: ${personaData.communicationChannels}`;
+        document.getElementById('contentTypes').innerText = `Content types and formats: ${personaData.contentTypes}`;
+        document.getElementById('contentThemes').innerText = `Content themes and topics: ${personaData.contentThemes}`;
+        document.getElementById('quote').innerText = personaData.quote;
+    </script>
+</body>
+</html>
