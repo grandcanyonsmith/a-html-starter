@@ -8,26 +8,41 @@
 <body class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="bg-white shadow-md rounded p-8 max-w-md w-full">
         <h1 class="text-2xl font-bold mb-4">Email Reply Checker</h1>
-        <textarea id="emailConversation" class="w-full border border-gray-300 p-2 rounded mb-4" rows="10" placeholder="Paste your email conversation here..."></textarea>
+        <label for="emailConversation" class="block text-gray-700 font-bold mb-2">Email Conversation</label>
+        <textarea id="emailConversation" class="w-full border border-gray-300 p-2 rounded mb-4" rows="10" placeholder="Paste your email conversation here..." aria-label="Email Conversation"></textarea>
         <button id="submitBtn" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Check for Reply</button>
-        <div id="result" class="mt-4"></div>
+        <div id="errorMessage" class="mt-4 text-red-600" role="alert" aria-live="assertive"></div>
+        <div id="result" class="mt-4" aria-live="polite"></div>
     </div>
     
     <script>
         document.getElementById('submitBtn').addEventListener('click', async function() {
+            const submitBtn = document.getElementById('submitBtn');
+            const emailConversationElem = document.getElementById('emailConversation');
+            const resultDiv = document.getElementById('result');
+            const errorMessageDiv = document.getElementById('errorMessage');
+
             console.log('Submit button clicked');
-            const emailConversation = document.getElementById('emailConversation').value;
+            const emailConversation = emailConversationElem.value;
             console.log('Email conversation:', emailConversation);
-            
+
+            // Clear previous messages
+            errorMessageDiv.textContent = '';
+            resultDiv.textContent = '';
+
             if (!emailConversation.trim()) {
-                alert('Please enter an email conversation.');
+                errorMessageDiv.textContent = 'Please enter an email conversation.';
                 return;
             }
-            
+
+            // Disable the button and change its text
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
             const payload = {
                 email_conversation: emailConversation
             };
-            
+
             try {
                 const response = await fetch('https://l2sac5q2luvcz45mqwzpuqepcm0brwxz.lambda-url.us-west-2.on.aws/', {
                     method: 'POST',
@@ -36,28 +51,42 @@
                     },
                     body: JSON.stringify(payload)
                 });
-                
+
                 console.log('Response status:', response.status);
-                
+
                 if (!response.ok) {
                     const errorData = await response.json();
                     console.error('Error response:', errorData);
-                    alert('Error: ' + (errorData.error || 'Unknown error'));
+                    errorMessageDiv.textContent = 'Error: ' + (errorData.error || 'Unknown error');
                     return;
                 }
-                
+
                 const data = await response.json();
                 console.log('Response data:', data);
-                
-                const resultDiv = document.getElementById('result');
+
                 if (data.reply_needed) {
-                    resultDiv.innerHTML = `<p class="text-green-600 font-bold">Reply Needed:</p><p>${data.response}</p>`;
+                    const replyNeededP = document.createElement('p');
+                    replyNeededP.className = 'text-green-600 font-bold';
+                    replyNeededP.textContent = 'Reply Needed:';
+
+                    const responseP = document.createElement('p');
+                    responseP.textContent = data.response;
+
+                    resultDiv.appendChild(replyNeededP);
+                    resultDiv.appendChild(responseP);
                 } else {
-                    resultDiv.innerHTML = `<p class="text-red-600 font-bold">No Reply Needed.</p>`;
+                    const noReplyP = document.createElement('p');
+                    noReplyP.className = 'text-red-600 font-bold';
+                    noReplyP.textContent = 'No Reply Needed.';
+                    resultDiv.appendChild(noReplyP);
                 }
             } catch (error) {
                 console.error('Fetch error:', error);
-                alert('An error occurred while processing your request.');
+                errorMessageDiv.textContent = 'An error occurred while processing your request.';
+            } finally {
+                // Re-enable the button and reset its text
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Check for Reply';
             }
         });
     </script>
