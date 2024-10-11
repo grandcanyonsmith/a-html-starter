@@ -64,6 +64,11 @@
                 const data = await response.json();
                 console.log('Response data:', data);
 
+                // Log the threadId if present
+                if (data.threadId) {
+                    console.log('Thread ID:', data.threadId);
+                }
+
                 if (data.reply_needed) {
                     const replyNeededP = document.createElement('p');
                     replyNeededP.className = 'text-green-600 font-bold';
@@ -80,6 +85,15 @@
                     noReplyP.textContent = 'No Reply Needed.';
                     resultDiv.appendChild(noReplyP);
                 }
+
+                // Display the threadId if present
+                if (data.threadId) {
+                    const threadIdP = document.createElement('p');
+                    threadIdP.className = 'text-gray-600 italic mt-2';
+                    threadIdP.textContent = 'Thread ID: ' + data.threadId;
+                    resultDiv.appendChild(threadIdP);
+                }
+
             } catch (error) {
                 console.error('Fetch error:', error);
                 errorMessageDiv.textContent = 'An error occurred while processing your request.';
