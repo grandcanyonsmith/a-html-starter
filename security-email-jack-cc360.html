@@ -2,127 +2,366 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Task Details</title>
+  <title>Task List</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    /* Smooth transitions */
+    .transition {
+      transition: all 0.2s ease-in-out;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-6 font-sans" style="font-family: 'Inter', sans-serif;">
-  <div class="max-w-3xl w-full bg-white rounded-lg shadow-lg p-8">
-    <!-- Header -->
-    <div class="mb-8">
-      <div class="flex items-center">
-        <div class="flex-shrink-0 h-10 w-10 bg-indigo-600 text-white rounded-full flex items-center justify-center">
-          <!-- Icon -->
-          <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M9 12V8h2v4H9z"/>
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13H9v6h2V5z" clip-rule="evenodd"/>
-          </svg>
-        </div>
-        <h1 class="ml-4 text-4xl font-bold text-gray-900">Task Title</h1>
-      </div>
-      <p class="text-gray-700 mt-4 text-lg leading-relaxed">
-        This is the task description. It provides details about the task that needs to be completed.
-      </p>
-    </div>
-
-    <!-- Labels -->
-    <div class="mb-8">
-      <h2 class="text-gray-800 font-semibold mb-4">Labels</h2>
-      <div class="flex flex-wrap -m-1">
-        <span class="m-1 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-          Marketing
-        </span>
-        <span class="m-1 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-          Sales
-        </span>
-        <span class="m-1 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
-          Product
-        </span>
-        <span class="m-1 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
-          Customer Success
-        </span>
-        <span class="m-1 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-          Admin
-        </span>
-      </div>
-    </div>
-
-    <!-- Task Details -->
-    <div class="mb-8">
-      <h2 class="text-gray-800 font-semibold mb-4">Task Details</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-gray-600 font-medium">Estimated Completion Time</h3>
-          <p class="text-gray-900 mt-1 font-semibold">5 hours</p>
-        </div>
-        <div>
-          <h3 class="text-gray-600 font-medium">Due Date</h3>
-          <p class="text-gray-900 mt-1 font-semibold">2023-10-31</p>
-        </div>
-        <div>
-          <h3 class="text-gray-600 font-medium">Priority</h3>
-          <p class="mt-1">
-            <span class="inline-flex items-center px-2 py-1 rounded text-sm font-semibold bg-red-100 text-red-600">
-              High
-            </span>
-          </p>
-        </div>
-        <div>
-          <h3 class="text-gray-600 font-medium">Status</h3>
-          <p class="mt-1">
-            <span class="inline-flex items-center px-2 py-1 rounded text-sm font-semibold bg-yellow-100 text-yellow-600">
-              In Progress
-            </span>
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Subtasks -->
-    <div class="mb-8">
-      <h2 class="text-gray-800 font-semibold mb-4">Subtasks</h2>
-      <ul class="space-y-4">
-        <li class="flex items-center">
-          <input type="checkbox" id="subtask1" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer" />
-          <label for="subtask1" class="ml-3 text-gray-700 cursor-pointer">Subtask 1</label>
-        </li>
-        <li class="flex items-center">
-          <input type="checkbox" id="subtask2" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer" />
-          <label for="subtask2" class="ml-3 text-gray-700 cursor-pointer">Subtask 2</label>
-        </li>
-        <li class="flex items-center">
-          <input type="checkbox" id="subtask3" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded cursor-pointer" />
-          <label for="subtask3" class="ml-3 text-gray-700 cursor-pointer">Subtask 3</label>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Assigned Users -->
-    <div>
-      <h2 class="text-gray-800 font-semibold mb-4">Assigned to</h2>
-      <div class="flex -space-x-4">
-        <img class="w-12 h-12 rounded-full border-2 border-white hover:z-10" src="https://via.placeholder.com/48" alt="User 1" title="User 1" />
-        <img class="w-12 h-12 rounded-full border-2 border-white hover:z-10" src="https://via.placeholder.com/48" alt="User 2" title="User 2" />
-      </div>
+<body class="bg-gray-50">
+  <div class="container mx-auto p-6">
+    <div id="taskContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Task cards will be injected here -->
     </div>
   </div>
-
+  
   <script>
-    // Event handler for subtasks
-    const subtasks = document.querySelectorAll('input[type="checkbox"][id^="subtask"]');
-    subtasks.forEach(subtask => {
-      subtask.addEventListener('change', function() {
-        if (this.checked) {
-          console.log(`"${this.nextElementSibling.textContent}" marked as completed`);
-          this.nextElementSibling.classList.add('line-through', 'text-gray-500');
-        } else {
-          console.log(`"${this.nextElementSibling.textContent}" marked as incomplete`);
-          this.nextElementSibling.classList.remove('line-through', 'text-gray-500');
-        }
+    // Sample tasks data
+    const tasks = [
+      {
+        id: 1,
+        title: 'Task One',
+        description: 'This is the first task description. It provides details about the task that needs to be completed.',
+        labels: ['Marketing', 'Sales'],
+        estimatedTime: '5 hours',
+        priority: 'High',
+        status: 'In Progress',
+        subtasks: [
+          { title: 'Subtask 1', completed: false },
+          { title: 'Subtask 2', completed: false },
+          { title: 'Subtask 3', completed: false },
+        ],
+        assignedUsers: [
+          { name: 'User 1', avatar: 'https://via.placeholder.com/48' },
+          { name: 'User 2', avatar: 'https://via.placeholder.com/48' },
+        ],
+      },
+      {
+        id: 2,
+        title: 'Task Two',
+        description: 'This is the second task description. It provides additional information about another task.',
+        labels: ['Product', 'Customer Success'],
+        estimatedTime: '3 hours',
+        priority: 'Medium',
+        status: 'Pending',
+        subtasks: [
+          { title: 'Subtask A', completed: true },
+          { title: 'Subtask B', completed: false },
+        ],
+        assignedUsers: [
+          { name: 'User 3', avatar: 'https://via.placeholder.com/48' },
+        ],
+      },
+      // Add more tasks as needed
+    ];
+
+    // Function to create a task card
+    function createTaskCard(task) {
+      // Create card container
+      const card = document.createElement('div');
+      card.classList.add('bg-white', 'rounded-lg', 'shadow-lg', 'p-6', 'transition', 'hover:shadow-xl');
+
+      // Header
+      const header = document.createElement('div');
+      header.classList.add('mb-6');
+
+      const titleDiv = document.createElement('div');
+      titleDiv.classList.add('flex', 'items-center');
+
+      const iconDiv = document.createElement('div');
+      iconDiv.classList.add('flex-shrink-0', 'h-10', 'w-10', 'bg-indigo-600', 'text-white', 'rounded-full', 'flex', 'items-center', 'justify-center');
+
+      // Icon
+      const iconSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      iconSvg.setAttribute('class', 'h-6 w-6');
+      iconSvg.setAttribute('fill', 'currentColor');
+      iconSvg.setAttribute('viewBox', '0 0 20 20');
+
+      const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path1.setAttribute('d', 'M9 12V8h2v4H9z');
+      const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path2.setAttribute('fill-rule', 'evenodd');
+      path2.setAttribute('d', 'M10 18a8 8 0 100-16 8 8 0 000 16zm1-13H9v6h2V5z');
+      path2.setAttribute('clip-rule', 'evenodd');
+
+      iconSvg.appendChild(path1);
+      iconSvg.appendChild(path2);
+      iconDiv.appendChild(iconSvg);
+      titleDiv.appendChild(iconDiv);
+
+      const title = document.createElement('h2');
+      title.classList.add('ml-4', 'text-2xl', 'font-bold', 'text-gray-900');
+      title.textContent = task.title;
+      titleDiv.appendChild(title);
+
+      header.appendChild(titleDiv);
+
+      const description = document.createElement('p');
+      description.classList.add('text-gray-700', 'mt-4', 'text-base', 'leading-relaxed');
+      description.textContent = task.description;
+      header.appendChild(description);
+
+      card.appendChild(header);
+
+      // Labels
+      if (task.labels && task.labels.length > 0) {
+        const labelsDiv = document.createElement('div');
+        labelsDiv.classList.add('mb-6');
+        const labelsTitle = document.createElement('h3');
+        labelsTitle.classList.add('text-gray-800', 'font-semibold', 'mb-2');
+        labelsTitle.textContent = 'Labels';
+        labelsDiv.appendChild(labelsTitle);
+
+        const labelsContainer = document.createElement('div');
+        labelsContainer.classList.add('flex', 'flex-wrap', '-m-1');
+
+        task.labels.forEach(label => {
+          const labelSpan = document.createElement('span');
+          labelSpan.classList.add('m-1', 'inline-flex', 'items-center', 'px-3', 'py-1', 'rounded-full', 'text-sm', 'font-medium', 'transition', 'cursor-pointer');
+          labelSpan.textContent = label;
+          // Assign color based on label
+          switch (label) {
+            case 'Marketing':
+              labelSpan.classList.add('bg-blue-100', 'text-blue-800', 'hover:bg-blue-200');
+              break;
+            case 'Sales':
+              labelSpan.classList.add('bg-green-100', 'text-green-800', 'hover:bg-green-200');
+              break;
+            case 'Product':
+              labelSpan.classList.add('bg-purple-100', 'text-purple-800', 'hover:bg-purple-200');
+              break;
+            case 'Customer Success':
+              labelSpan.classList.add('bg-yellow-100', 'text-yellow-800', 'hover:bg-yellow-200');
+              break;
+            case 'Admin':
+              labelSpan.classList.add('bg-red-100', 'text-red-800', 'hover:bg-red-200');
+              break;
+            default:
+              labelSpan.classList.add('bg-gray-100', 'text-gray-800', 'hover:bg-gray-200');
+          }
+
+          // Hover effect
+          labelSpan.addEventListener('mouseenter', function() {
+            this.classList.add('shadow-inner');
+          });
+          labelSpan.addEventListener('mouseleave', function() {
+            this.classList.remove('shadow-inner');
+          });
+
+          labelsContainer.appendChild(labelSpan);
+        });
+
+        labelsDiv.appendChild(labelsContainer);
+        card.appendChild(labelsDiv);
+      }
+
+      // Task Details
+      const detailsDiv = document.createElement('div');
+      detailsDiv.classList.add('mb-6');
+
+      const detailsTitle = document.createElement('h3');
+      detailsTitle.classList.add('text-gray-800', 'font-semibold', 'mb-2');
+      detailsTitle.textContent = 'Task Details';
+      detailsDiv.appendChild(detailsTitle);
+
+      const detailsGrid = document.createElement('div');
+      detailsGrid.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'gap-4');
+
+      // Estimated Completion Time
+      const timeDiv = document.createElement('div');
+      const timeTitle = document.createElement('h4');
+      timeTitle.classList.add('text-gray-600', 'font-medium');
+      timeTitle.textContent = 'Estimated Completion Time';
+      timeDiv.appendChild(timeTitle);
+
+      const timeValue = document.createElement('p');
+      timeValue.classList.add('text-gray-900', 'mt-1', 'font-semibold');
+      timeValue.textContent = task.estimatedTime;
+      timeDiv.appendChild(timeValue);
+
+      detailsGrid.appendChild(timeDiv);
+
+      // Priority
+      const priorityDiv = document.createElement('div');
+      const priorityTitle = document.createElement('h4');
+      priorityTitle.classList.add('text-gray-600', 'font-medium');
+      priorityTitle.textContent = 'Priority';
+      priorityDiv.appendChild(priorityTitle);
+
+      const priorityValue = document.createElement('p');
+      priorityValue.classList.add('mt-1');
+
+      const prioritySpan = document.createElement('span');
+      prioritySpan.classList.add('inline-flex', 'items-center', 'px-2', 'py-1', 'rounded', 'text-sm', 'font-semibold');
+
+      switch (task.priority) {
+        case 'High':
+          prioritySpan.classList.add('bg-red-100', 'text-red-600');
+          break;
+        case 'Medium':
+          prioritySpan.classList.add('bg-yellow-100', 'text-yellow-600');
+          break;
+        case 'Low':
+          prioritySpan.classList.add('bg-green-100', 'text-green-600');
+          break;
+        default:
+          prioritySpan.classList.add('bg-gray-100', 'text-gray-600');
+      }
+      prioritySpan.textContent = task.priority;
+      priorityValue.appendChild(prioritySpan);
+      priorityDiv.appendChild(priorityValue);
+      detailsGrid.appendChild(priorityDiv);
+
+      // Status
+      const statusDiv = document.createElement('div');
+      const statusTitle = document.createElement('h4');
+      statusTitle.classList.add('text-gray-600', 'font-medium');
+      statusTitle.textContent = 'Status';
+      statusDiv.appendChild(statusTitle);
+
+      const statusValue = document.createElement('p');
+      statusValue.classList.add('mt-1');
+
+      const statusSpan = document.createElement('span');
+      statusSpan.classList.add('inline-flex', 'items-center', 'px-2', 'py-1', 'rounded', 'text-sm', 'font-semibold');
+
+      switch (task.status) {
+        case 'In Progress':
+          statusSpan.classList.add('bg-yellow-100', 'text-yellow-600');
+          break;
+        case 'Pending':
+          statusSpan.classList.add('bg-gray-100', 'text-gray-600');
+          break;
+        case 'Completed':
+          statusSpan.classList.add('bg-green-100', 'text-green-600');
+          break;
+        default:
+          statusSpan.classList.add('bg-gray-100', 'text-gray-600');
+      }
+      statusSpan.textContent = task.status;
+      statusValue.appendChild(statusSpan);
+      statusDiv.appendChild(statusValue);
+      detailsGrid.appendChild(statusDiv);
+
+      detailsDiv.appendChild(detailsGrid);
+      card.appendChild(detailsDiv);
+
+      // Subtasks
+      if (task.subtasks && task.subtasks.length > 0) {
+        const subtasksDiv = document.createElement('div');
+        subtasksDiv.classList.add('mb-6');
+
+        const subtasksTitle = document.createElement('h3');
+        subtasksTitle.classList.add('text-gray-800', 'font-semibold', 'mb-2');
+        subtasksTitle.textContent = 'Subtasks';
+        subtasksDiv.appendChild(subtasksTitle);
+
+        const subtasksList = document.createElement('ul');
+        subtasksList.classList.add('space-y-2');
+
+        task.subtasks.forEach((subtask, index) => {
+          const subtaskItem = document.createElement('li');
+          subtaskItem.classList.add('flex', 'items-center');
+
+          const subtaskId = `task${task.id}_subtask${index}`;
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.id = subtaskId;
+          checkbox.classList.add('h-5', 'w-5', 'text-indigo-600', 'focus:ring-indigo-500', 'border-gray-300', 'rounded', 'cursor-pointer');
+          checkbox.checked = subtask.completed;
+
+          const label = document.createElement('label');
+          label.htmlFor = subtaskId;
+          label.classList.add('ml-3', 'text-gray-700', 'cursor-pointer', 'transition');
+
+          if (subtask.completed) {
+            label.classList.add('line-through', 'text-gray-500');
+          }
+
+          label.textContent = subtask.title;
+
+          // Event handler for checkbox
+          checkbox.addEventListener('change', function() {
+            if (this.checked) {
+              console.log(`"${subtask.title}" marked as completed`);
+              label.classList.add('line-through', 'text-gray-500');
+              // Add animation effect
+              label.animate([{ opacity: 0.5 }, { opacity: 1 }], { duration: 300 });
+            } else {
+              console.log(`"${subtask.title}" marked as incomplete`);
+              label.classList.remove('line-through', 'text-gray-500');
+              label.animate([{ opacity: 0.5 }, { opacity: 1 }], { duration: 300 });
+            }
+          });
+
+          subtaskItem.appendChild(checkbox);
+          subtaskItem.appendChild(label);
+          subtasksList.appendChild(subtaskItem);
+        });
+
+        subtasksDiv.appendChild(subtasksList);
+        card.appendChild(subtasksDiv);
+      }
+
+      // Assigned Users
+      if (task.assignedUsers && task.assignedUsers.length > 0) {
+        const usersDiv = document.createElement('div');
+
+        const usersTitle = document.createElement('h3');
+        usersTitle.classList.add('text-gray-800', 'font-semibold', 'mb-2');
+        usersTitle.textContent = 'Assigned to';
+        usersDiv.appendChild(usersTitle);
+
+        const usersContainer = document.createElement('div');
+        usersContainer.classList.add('flex', '-space-x-4');
+
+        task.assignedUsers.forEach(user => {
+          const img = document.createElement('img');
+          img.classList.add('w-10', 'h-10', 'rounded-full', 'border-2', 'border-white', 'hover:z-10', 'transition', 'transform', 'hover:scale-110');
+          img.src = user.avatar;
+          img.alt = user.name;
+          img.title = user.name;
+
+          // Hover effect
+          img.addEventListener('mouseenter', function() {
+            this.classList.add('shadow-lg');
+          });
+          img.addEventListener('mouseleave', function() {
+            this.classList.remove('shadow-lg');
+          });
+
+          usersContainer.appendChild(img);
+        });
+
+        usersDiv.appendChild(usersContainer);
+        card.appendChild(usersDiv);
+      }
+
+      return card;
+    }
+
+    // Main function to render tasks
+    function renderTasks() {
+      const taskContainer = document.getElementById('taskContainer');
+      tasks.forEach(task => {
+        const taskCard = createTaskCard(task);
+        taskContainer.appendChild(taskCard);
       });
-    });
+    }
+
+    // Call the main function
+    renderTasks();
+
   </script>
 </body>
 </html>
