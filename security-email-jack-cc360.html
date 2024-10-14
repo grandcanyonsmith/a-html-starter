@@ -1,250 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Answers to Your Questions from Our Zoom Call</title>
+  <title>Trello Task</title>
   <meta charset="UTF-8">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body style="background-color:#f7fafc; font-family:sans-serif; color:#2d3748; margin:0; padding:0;">
+<body class="bg-gray-100 p-6">
+  <div class="max-w-lg mx-auto bg-white rounded-lg shadow-md p-6">
+    <h1 class="text-2xl font-bold mb-4">Task Title</h1>
+    <p class="text-gray-700 mb-4">
+      This is the task description. It provides details about the task that needs to be completed.
+    </p>
+    <div class="mb-4">
+      <span class="inline-block bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full mr-2">Label 1</span>
+      <span class="inline-block bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full mr-2">Label 2</span>
+    </div>
+    <div class="mb-4">
+      <strong>Due Date:</strong> <span>2023-10-31</span>
+    </div>
+    <div class="mb-4">
+      <strong>Assigned to:</strong>
+      <div class="flex mt-2">
+        <img class="w-10 h-10 rounded-full mr-2" src="https://via.placeholder.com/40" alt="User 1">
+        <img class="w-10 h-10 rounded-full mr-2" src="https://via.placeholder.com/40" alt="User 2">
+      </div>
+    </div>
+    <div class="flex space-x-4">
+      <button id="completeBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Complete Task</button>
+      <button id="editBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Edit Task</button>
+      <button id="commentBtn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">Add Comment</button>
+    </div>
+  </div>
 
-  <!-- Preheader Text -->
-  <span style="display:none !important; visibility:hidden; mso-hide:all;">
-    We have answered your questions from our Zoom call. Read more inside!
-  </span>
-
-  <!-- Container Table -->
-  <table align="center" width="100%" style="max-width:600px; margin:0 auto; background-color:#ffffff; margin-top:20px;" cellpadding="0" cellspacing="0" border="0">
-
-    <!-- Header -->
-    <tr>
-      <td align="center" style="background-color:#1a202c; padding:32px;">
-        <img src="https://cc360-publicbucketszoomrecord.s3.us-west-2.amazonaws.com/LIGHTBULB+360+HEX+WHITE.png" alt="Course Creator 360 Logo" style="display:block; margin:0 auto; width:150px;">
-      </td>
-    </tr>
-
-    <!-- Content -->
-    <tr>
-      <td style="padding:32px;">
-
-        <!-- Main Heading -->
-        <table width="100%">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:24px; font-weight:bold; margin-bottom:20px;">Answers to Your Questions</p>
-              <p>Hi Brad,</p>
-              <p style="margin-top:16px;">It was great speaking with you earlier. I truly understand how frustrating it can be when technical hassles and platform limitations get in the way of your passion for teaching. I wanted to take a moment to personally address your concerns and show you how Course Creator 360 can support you.</p>
-            </td>
-          </tr>
-        </table>
-
-      </td>
-    </tr>
-
-    <!-- Section 1: Affiliate Program -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="border-bottom:1px solid #cbd5e0; margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">1. Affiliate Program</p>
-              <p style="font-weight:bold;">Do you have an affiliate program that I can offer to have my own affiliates promote my courses, or is it an affiliate program to promote?</p>
-              <p style="color:#4a5568; margin-top:8px;">Yes, Course Creator 360 offers a built-in affiliate management system that allows you to create and manage your own affiliate program. You can easily recruit affiliates to promote your courses, set custom commission rates, and track their performance directly within the platform.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Section 2: Tracking Pixel Integrations -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="border-bottom:1px solid #cbd5e0; margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">2. Tracking Pixel Integrations</p>
-              <p style="font-weight:bold;">Do you have it set up pretty easily to implement tracking pixels like YouTube, Google Ad, and Facebook Ad pixels?</p>
-              <p style="color:#4a5568; margin-top:8px;">Absolutely! We know how important it is for you to monitor your marketing efforts without getting bogged down in technical details. Course Creator 360 allows you to easily integrate tracking pixels from YouTube, Google Ads, Facebook Ads, and other platforms by simply adding your tracking codes directly in the platform's settings. This helps you monitor conversions and optimize your ad campaigns effectively, saving you time and effort.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Section 3: Payment Processors -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="border-bottom:1px solid #cbd5e0; margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">3. Payment Processors</p>
-              <p style="font-weight:bold;">What payment processors can I use? Are you guys using like Stripe or?</p>
-              <p style="color:#4a5568; margin-top:8px;">Yes, Course Creator 360 integrates seamlessly with popular payment processors like Stripe and PayPal. We understand that managing payments smoothly is crucial for your business, and we aim to make it as effortless as possible so you can focus on what you do best—teaching your courses.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Section 4: Accounting Integrations -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="border-bottom:1px solid #cbd5e0; margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">4. Accounting Integrations</p>
-              <p style="font-weight:bold;">Do you have any integrations at all with QuickBooks for accounting or anything like that?</p>
-              <p style="color:#4a5568; margin-top:8px;">Currently, Course Creator 360 does not have a direct integration with QuickBooks. However, we provide easy options to export your financial data in formats compatible with QuickBooks and other accounting software. We want to ensure that managing your finances is as straightforward as possible, without adding extra work to your plate.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Section 5: Shopify Integration -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="border-bottom:1px solid #cbd5e0; margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">5. Shopify Integration</p>
-              <p style="font-weight:bold;">What can you do with your Shopify integration? Because my two different print stores are through Shopify.</p>
-              <p style="color:#4a5568; margin-top:8px;">Our Shopify integration is designed to bridge your physical products and digital courses effortlessly. You can connect your Shopify stores with Course Creator 360 to sync customer data, manage cross-promotions, and offer bundled products. While unified checkout is not supported, we'll help you set up automations that grant course access upon product purchase in Shopify, ensuring a smooth experience for your students.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Section 6: Community Features -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="border-bottom:1px solid #cbd5e0; margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">6. Community Features</p>
-              <p style="font-weight:bold;">In the community, are you able to post photos and videos?</p>
-              <p style="color:#4a5568; margin-top:8px;">Yes! We know how important interaction is for your courses. Our community feature allows members to post photos and videos, encouraging engagement and fostering a vibrant learning environment.</p>
-
-              <p style="font-weight:bold; margin-top:20px;">From a course module, how will that link to the community if it's packaged together as a course and a community included in one offer?</p>
-              <p style="color:#4a5568; margin-top:8px;">When you package a course and community together in one offer, your students have seamless access to both from their dashboard. We can assist you in linking the community directly within your course modules, so your students can easily participate in discussions without any confusion. Our goal is to make this process as smooth as possible for you and your students.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Section 7: Platform Access -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="border-bottom:1px solid #cbd5e0; margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">7. Platform Access</p>
-              <p style="font-weight:bold;">Is that almost like a website that they go to?</p>
-              <p style="color:#4a5568; margin-top:8px;">Yes, Course Creator 360 provides a user-friendly web-based platform. Your students can access your courses and community through a responsive website that works beautifully on both desktop and mobile browsers.</p>
-
-              <p style="font-weight:bold; margin-top:20px;">As far as it being an app, is it just like a mobile website almost?</p>
-              <p style="color:#4a5568; margin-top:8px;">While we don't offer a native mobile app, our platform is fully optimized for mobile. We understand the importance of accessibility, so your students will have an app-like experience when accessing your content on their mobile devices.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Section 8: Pricing Options -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">8. Pricing Options</p>
-              <p style="font-weight:bold;">I saw that you had basically two different options as far as the software membership for kind of what I would need to be in the same realm as what I'm paying for Kajabi. There's one for like $147, and then I saw one for $197.</p>
-              <p style="color:#4a5568; margin-top:8px;">That's correct! And I know that switching platforms can be a big decision, especially when considering costs and features. We offer two plans that might suit your needs:</p>
-              <ul style="list-style-type: disc; margin-left:24px; color:#4a5568; margin-top:8px;">
-                <li><strong>Premium Plan ($147/month):</strong> This plan includes all the essential features you need to build and launch your courses, including unlimited courses, community features, and basic integrations.</li>
-                <li><strong>Elite Plan ($197/month):</strong> In addition to everything in the Premium Plan, the Elite Plan offers advanced features like priority support, enhanced automation, and additional integrations.</li>
-              </ul>
-              <p style="color:#4a5568; margin-top:8px;">Based on your requirements and to match what you're getting with Kajabi, the Premium Plan might be the best fit. However, if you need more advanced features, the Elite Plan would be ideal.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- New Section: Dedicated Migration Support -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">Additional Support: Migration Assistance</p>
-              <p style="color:#4a5568; margin-top:8px;">Brad, I understand that the thought of migrating all your content from Kajabi can feel overwhelming, especially when you're aiming to launch before your busy season. That's why we're here to help. Our team offers dedicated migration assistance to ensure that your existing courses, content, and student data are transferred smoothly to Course Creator 360. We'll handle the technical details so you don't have to worry about losing any of your hard work or valuable time.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- New Section: Emphasizing Time-Saving and Technical Ease -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <table width="100%" style="margin-top:32px; padding-bottom:20px;">
-          <tr>
-            <td>
-              <p style="color:#e53e3e; font-size:20px; font-weight:bold; margin-bottom:16px;">Why Course Creator 360 is Right for You</p>
-              <p style="color:#4a5568; margin-top:8px;">We designed Course Creator 360 with ease of use in mind, eliminating many of the technical hassles that you've experienced with other platforms:</p>
-              <ul style="list-style-type: disc; margin-left:24px; color:#4a5568; margin-top:8px;">
-                <li><strong>No DNS Settings Required:</strong> Get your courses online without fiddling with complicated DNS configurations. Our platform handles it for you.</li>
-                <li><strong>Easy Integrations:</strong> Connect your favorite tools and services effortlessly, saving you valuable time.</li>
-                <li><strong>User-Friendly Interface:</strong> An intuitive dashboard lets you manage your courses, students, and community without any technical barriers.</li>
-              </ul>
-              <p style="color:#4a5568; margin-top:8px;">We know that time is of the essence for you, especially with your busy season approaching. Our goal is to help you launch quickly and efficiently, so you can focus on delivering amazing content to your students.</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-
-    <!-- Closing -->
-    <tr>
-      <td style="padding:0 32px 32px 32px;">
-        <p style="margin-top:32px;">Please don't hesitate to reach out if you have any more questions or need further assistance. I'm here to support you every step of the way. Together, we can make your transition to Course Creator 360 smooth and successful.</p>
-        <p style="margin-top:16px;">Looking forward to working with you!<br>Best regards,<br>Jack</p>
-      </td>
-    </tr>
-
-    <!-- Call-to-Action Button -->
-    <tr>
-      <td align="center" style="padding:0 32px 32px 32px;">
-        <p style="margin-top:32px;">If you're ready to get started, you can proceed to purchase the Premium Plan:</p>
-        <!-- Button -->
-        <a href="https://checkout.coursecreator360.com/b/fZe9BpgeSc7s0ogaEP" target="_blank" id="cta-button" onclick="changeButtonText()" style="display:inline-block; margin-top:16px; padding:12px 24px; background-color:#e53e3e; color:#ffffff; font-size:16px; font-weight:600; text-decoration:none; border-radius:4px;">Purchase Premium Plan</a>
-      </td>
-    </tr>
-
-    <!-- Footer -->
-    <tr>
-      <td align="center" style="background-color:#f7fafc; color:#718096; font-size:12px; padding:20px;">
-        &copy; 2024 Course Creator 360. All rights reserved.<br>
-        1234 Course Creator Lane, City, State, ZIP Code<br>
-        <a href="https://yourdomain.com/unsubscribe" style="color:#3182ce; text-decoration:underline;">Unsubscribe</a>
-      </td>
-    </tr>
-
-  </table>
-
-  <!-- JavaScript -->
   <script>
-    function changeButtonText() {
-      var button = document.getElementById("cta-button");
-      button.innerText = "Processing...";
-      console.log("Button clicked, processing purchase.");
-      // Simulate API response delay
-      setTimeout(function() {
-        button.innerText = "Purchase Premium Plan";
-        console.log("Response received.");
+    // Event handlers
+    document.getElementById('completeBtn').addEventListener('click', function() {
+      console.log('Complete Task button clicked');
+      // Simulate changing button text until response is returned
+      this.textContent = 'Completing...';
+      setTimeout(() => {
+        this.textContent = 'Complete Task';
+        console.log('Task marked as complete');
       }, 2000);
-    }
-  </script>
+    });
 
+    document.getElementById('editBtn').addEventListener('click', function() {
+      console.log('Edit Task button clicked');
+      // Logic for editing task would go here
+    });
+
+    document.getElementById('commentBtn').addEventListener('click', function() {
+      console.log('Add Comment button clicked');
+      // Logic for adding comment would go here
+    });
+  </script>
 </body>
 </html>
