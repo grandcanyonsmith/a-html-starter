@@ -46,7 +46,8 @@
                     <input type="text" id="locationSearch" name="locationSearch" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter location name">
                     <div id="autocompleteList" class="hidden"></div>
                     <label for="location_id" class="block text-gray-700 font-bold mb-2 mt-4">Location ID:</label>
-                    <input type="text" id="location_id" name="location_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter location ID" readonly>
+                    <!-- Removed readonly attribute from the input field -->
+                    <input type="text" id="location_id" name="location_id" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter location ID">
                 </div>
                 <div class="mb-4 hidden" id="nonExistingFields">
                     <label for="customer_name" class="block text-gray-700 font-bold mb-2">Customer Name:</label>
@@ -230,14 +231,14 @@
                 existingFieldsFunnel.classList.toggle('hidden', customerType !== 'existing');
 
                 // Show Website Details section if Customer Information is completed
-                const isCustomerInfoCompleted = (customerType === 'existing' && locationIdInput.value) || (customerType === 'non-existing' && customerNameInput.value);
+                const isCustomerInfoCompleted = (customerType === 'existing' && locationIdInput.value.trim()) || (customerType === 'non-existing' && customerNameInput.value.trim());
                 websiteDetails.classList.toggle('hidden', !isCustomerInfoCompleted);
 
                 // Website Type fields
                 websiteUrlField.classList.toggle('hidden', websiteType !== 'existing');
 
                 // Show Branding and Profile Information section if Website Details is completed
-                const isWebsiteDetailsCompleted = websiteType && (websiteType !== 'existing' || websiteUrlInput.value);
+                const isWebsiteDetailsCompleted = websiteType && (websiteType !== 'existing' || websiteUrlInput.value.trim());
                 brandingProfileInformation.classList.toggle('hidden', !isWebsiteDetailsCompleted);
             };
 
@@ -245,7 +246,7 @@
             const validateForm = () => {
                 const customerType = customerTypeSelect.value;
                 const websiteType = websiteTypeSelect.value;
-                const websiteUrl = websiteUrlInput.value;
+                const websiteUrl = websiteUrlInput.value.trim();
                 const courseDescription = courseDescriptionInput.value.trim();
                 const phoneNumber = phoneNumberInput.value.trim();
 
@@ -258,7 +259,7 @@
                     const locationId = locationIdInput.value.trim();
                     const funnelName = funnelNameSelect.value;
                     if (!locationId) {
-                        alert('Please select a location.');
+                        alert('Please enter a location ID.');
                         return false;
                     }
                     if (!funnelName) {
@@ -361,13 +362,14 @@
                 }, 3000);
 
                 try {
+                    console.log('Sending data to API...');
                     const response = await fetch('https://4xcngukvmk4y3a6apfwekmnbwi0wfwsy.lambda-url.us-west-2.on.aws/', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify(eventData)
                     });
                     const responseData = await response.json();
-                    console.log('Response:', responseData);
+                    console.log('Response from API:', responseData);
                     document.getElementById('response').innerText = JSON.stringify(responseData, null, 2);
                 } catch (error) {
                     console.error('Error:', error);
