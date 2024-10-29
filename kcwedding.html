@@ -3,64 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <title>Kaitlyn &amp; Canyon's Wedding Website</title>
+    <meta name="description" content="Join Kaitlyn and Canyon as they celebrate their wedding on March 23, 2024. Find all the details about their story, photos, wedding party, Q&A, and travel information here.">
+    <meta name="keywords" content="Kaitlyn and Canyon, Wedding, March 23 2024, Wedding Website, Hawaii Wedding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="font-sans text-black bg-white">
-    <header class="text-center py-20 bg-white bg-opacity-90 border-b-4 border-black">
-        <h1 class="text-4xl text-black">Kaitlyn &amp; Canyon</h1>
-        <h2 class="text-2xl mt-2">March 23, 2024</h2>
-        <div id="countdown" class="text-lg mt-5 font-bold">[Insert Countdown Here]</div>
+<body class="font-sans text-gray-800 bg-gray-50">
+    <!-- Header -->
+    <header class="relative bg-white bg-opacity-90 border-b-4 border-gray-300">
+        <div class="container mx-auto text-center py-12 px-4 sm:py-16">
+            <h1 class="text-5xl font-bold text-gray-900">Kaitlyn &amp; Canyon</h1>
+            <h2 class="text-2xl mt-2 text-gray-700">March 23, 2024</h2>
+            <div id="countdown" class="text-lg mt-5 font-semibold text-gray-600">Loading countdown...</div>
+        </div>
     </header>
 
-    <nav class="my-5 text-center">
-        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="home-content">Home</a>
-        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="our-story-content">Our Story</a>
-        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="photos-content">Photos</a>
-        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="wedding-party-content">Wedding Party</a>
-        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="qa-content">Q + A</a>
-        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="travel-content">Travel</a>
+    <!-- Navigation -->
+    <nav class="bg-white shadow">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-center space-x-4 sm:space-x-8 py-4">
+                <a href="#home-content" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Home</a>
+                <a href="#our-story-content" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Our Story</a>
+                <a href="#photos-content" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Photos</a>
+                <a href="#wedding-party-content" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Wedding Party</a>
+                <a href="#qa-content" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Q + A</a>
+                <a href="#travel-content" class="nav-link text-gray-700 hover:text-gray-900 font-medium">Travel</a>
+            </div>
+        </div>
     </nav>
 
-    <section id="home-content" class="content mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
-        <h2 class="text-2xl mb-4">Welcome to Our Wedding Website</h2>
-        <p>Thank you for visiting our wedding website. We are thrilled to share this special time in our lives with you!</p>
-    </section>
+    <!-- Main Content -->
+    <main>
+        <!-- Home Section -->
+        <section id="home-content" class="content container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-4">Welcome to Our Wedding Website</h2>
+            <p class="text-gray-700">Thank you for visiting our wedding website. We are thrilled to share this special time in our lives with you!</p>
+        </section>
 
-    <section id="our-story-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
-        <h2 class="text-2xl mb-4">Our Story</h2>
-        <p>It all began with a chance meeting at a friend's party. From there, our connection grew into something magical.</p>
-        <p>Over the years, we have shared countless adventures and cherished moments. We can't wait to start this new chapter together and are so grateful to have you all with us on our special day.</p>
-    </section>
+        <!-- Our Story Section -->
+        <section id="our-story-content" class="content container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg hidden">
+            <h2 class="text-3xl font-bold mb-4">Our Story</h2>
+            <p class="text-gray-700">It all began with a chance meeting at a friend's party. From there, our connection grew into something magical.</p>
+            <p class="text-gray-700 mt-4">Over the years, we have shared countless adventures and cherished moments. We can't wait to start this new chapter together and are so grateful to have you all with us on our special day.</p>
+        </section>
 
-    <section id="photos-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
-        <h2 class="text-2xl mb-4">Photos</h2>
-        <p>Here are some of our favorite memories captured in photos.</p>
-        <p>We hope you enjoy browsing through some of our cherished moments. Each photo holds a special place in our hearts.</p>
-        <p>[Gallery of Photos]</p>
-    </section>
+        <!-- Photos Section -->
+        <section id="photos-content" class="content container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg hidden">
+            <h2 class="text-3xl font-bold mb-4">Photos</h2>
+            <p class="text-gray-700">Here are some of our favorite memories captured in photos.</p>
+            <!-- Photo Gallery -->
+            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Sample Image -->
+                <div class="relative">
+                    <img src="your-image-url-1.jpg" alt="A cherished moment" class="w-full h-64 object-cover rounded-lg shadow-md">
+                </div>
+                <!-- Repeat similar blocks for more images -->
+                <!-- ... -->
+            </div>
+        </section>
 
-    <section id="wedding-party-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
-        <h2 class="text-2xl mb-4">Wedding Party</h2>
-        <p>Meet our wonderful wedding party, who have been by our sides every step of the way.</p>
-        <p>Our friends and family have supported us throughout this journey, and we are honored to have them stand with us as we say 'I do'.</p>
-    </section>
+        <!-- Wedding Party Section -->
+        <section id="wedding-party-content" class="content container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg hidden">
+            <h2 class="text-3xl font-bold mb-4">Wedding Party</h2>
+            <p class="text-gray-700">Meet our wonderful wedding party, who have been by our sides every step of the way.</p>
+            <!-- Add details about wedding party members -->
+            <!-- ... -->
+        </section>
 
-    <section id="qa-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
-        <h2 class="text-2xl mb-4">Q + A</h2>
-        <p>Have questions about the big day? We've got answers!</p>
-        <p>The dress code for our wedding is <strong>black tie</strong>. Please join us in your most elegant attire to celebrate this special occasion.</p>
-    </section>
+        <!-- Q + A Section -->
+        <section id="qa-content" class="content container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg hidden">
+            <h2 class="text-3xl font-bold mb-4">Q + A</h2>
+            <p class="text-gray-700">Have questions about the big day? We've got answers!</p>
+            <div class="mt-6 space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold">What's the dress code?</h3>
+                    <p class="text-gray-700 mt-2">The dress code for our wedding is <strong>black tie</strong>. Please join us in your most elegant attire to celebrate this special occasion.</p>
+                </div>
+                <!-- Add more Q&A items -->
+                <!-- ... -->
+            </div>
+        </section>
 
-    <section id="travel-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
-        <h2 class="text-2xl mb-4">Travel</h2>
-        <p>Planning to join us in Hawaii? Here’s all the information you need to make your travel arrangements.</p>
-        <p>We've secured special rates at local hotels and have compiled a list of activities to enjoy during your stay. We look forward to seeing you there!</p>
-    </section>
+        <!-- Travel Section -->
+        <section id="travel-content" class="content container mx-auto my-10 p-6 bg-white rounded-lg shadow-lg hidden">
+            <h2 class="text-3xl font-bold mb-4">Travel</h2>
+            <p class="text-gray-700">Planning to join us in Hawaii? Here’s all the information you need to make your travel arrangements.</p>
+            <!-- Add travel details -->
+            <!-- ... -->
+        </section>
+    </main>
 
-    <!-- Footer removed as per user request -->
+    <!-- Footer -->
+    <footer class="bg-gray-100 py-6">
+        <div class="container mx-auto text-center">
+            <p class="text-gray-600">&copy; 2023 Kaitlyn &amp; Canyon's Wedding. All rights reserved.</p>
+        </div>
+    </footer>
 
     <!-- JavaScript code -->
-    <script>
+    <script defer>
         // Countdown Timer
         function initializeCountdown() {
             const countdownElement = document.getElementById('countdown');
@@ -70,25 +112,29 @@
                 const now = new Date().getTime();
                 const distance = weddingDate - now;
 
-                // Time calculations for days, hours, minutes and seconds
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                // Display the result
-                countdownElement.innerHTML = days + 'd ' + hours + 'h '
-                    + minutes + 'm ' + seconds + 's ';
-
-                // If the countdown is finished, write some text
                 if (distance < 0) {
                     clearInterval(x);
                     countdownElement.innerHTML = 'We\'re Married!';
+                    return;
                 }
+
+                // Time calculations
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((distance / (1000 * 60)) % 60);
+                const seconds = Math.floor((distance / 1000) % 60);
+
+                // Display the result
+                countdownElement.innerHTML = `
+                    <span class="mr-2">${days}d</span>
+                    <span class="mr-2">${hours}h</span>
+                    <span class="mr-2">${minutes}m</span>
+                    <span>${seconds}s</span>
+                `;
             }
 
             // Update the countdown every 1 second
-            updateCountdown(); // initial call
+            updateCountdown();
             const x = setInterval(updateCountdown, 1000);
         }
 
@@ -99,13 +145,18 @@
             const navLinks = document.querySelectorAll('nav a');
             const contentSections = document.querySelectorAll('.content');
 
+            function deactivateLinks() {
+                navLinks.forEach(link => {
+                    link.classList.remove('text-gray-900', 'font-semibold');
+                });
+            }
+
             navLinks.forEach(link => {
                 link.addEventListener('click', function(event) {
                     event.preventDefault();
 
-                    // Get the section ID from data-section attribute
-                    const sectionId = this.getAttribute('data-section');
-                    console.log('Navigating to ' + sectionId);
+                    // Get the section ID from href attribute
+                    const sectionId = this.getAttribute('href').substring(1);
 
                     // Hide all sections
                     contentSections.forEach(section => {
@@ -116,9 +167,18 @@
                     const activeSection = document.getElementById(sectionId);
                     if (activeSection) {
                         activeSection.classList.remove('hidden');
+                        activeSection.scrollIntoView({ behavior: 'smooth' });
                     }
+
+                    // Update active link style
+                    deactivateLinks();
+                    this.classList.add('text-gray-900', 'font-semibold');
                 });
             });
+
+            // Show home section by default
+            document.getElementById('home-content').classList.remove('hidden');
+            navLinks[0].classList.add('text-gray-900', 'font-semibold');
         });
     </script>
 </body>
