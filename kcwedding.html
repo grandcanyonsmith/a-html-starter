@@ -1,157 +1,125 @@
-
-
-
-    
-    
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <title>Kaitlyn &amp; Canyon's Wedding Website</title>
-    
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Antic Didone', 'Jost', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #ffffff;
-            color: #000000;
-        }
-        header {
-            text-align: center;
-            padding: 80px 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-bottom: 5px solid #000000;
-        }
-        h1 {
-            font-size: 36px;
-            color: #000000;
-        }
-        h2 {
-            font-size: 20px;
-            margin: 10px 0;
-        }
-        nav {
-            margin: 20px 0;
-            text-align: center;
-        }
-        nav a {
-            margin: 0 10px;
-            text-decoration: none;
-            color: #000000;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        nav a:hover {
-            color: #888888;
-        }
-        .countdown {
-            font-size: 16px;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        .content {
-            display: none;
-            text-align: center;
-            margin: 20px;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
-        }
-        footer a {
-            color: #000000;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-            color: #888888;
-        }
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="font-sans text-black bg-white">
+    <header class="text-center py-20 bg-white bg-opacity-90 border-b-4 border-black">
+        <h1 class="text-4xl text-black">Kaitlyn &amp; Canyon</h1>
+        <h2 class="text-2xl mt-2">March 23, 2024</h2>
+        <div id="countdown" class="text-lg mt-5 font-bold">[Insert Countdown Here]</div>
+    </header>
 
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 28px;
+    <nav class="my-5 text-center">
+        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="home-content">Home</a>
+        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="our-story-content">Our Story</a>
+        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="photos-content">Photos</a>
+        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="wedding-party-content">Wedding Party</a>
+        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="qa-content">Q + A</a>
+        <a href="#" class="mx-2 md:mx-4 text-black font-bold hover:text-gray-500" data-section="travel-content">Travel</a>
+    </nav>
+
+    <section id="home-content" class="content mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
+        <h2 class="text-2xl mb-4">Welcome to Our Wedding Website</h2>
+        <p>Thank you for visiting our wedding website. We are thrilled to share this special time in our lives with you!</p>
+    </section>
+
+    <section id="our-story-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
+        <h2 class="text-2xl mb-4">Our Story</h2>
+        <p>It all began with a chance meeting at a friend's party. From there, our connection grew into something magical.</p>
+        <p>Over the years, we have shared countless adventures and cherished moments. We can't wait to start this new chapter together and are so grateful to have you all with us on our special day.</p>
+    </section>
+
+    <section id="photos-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
+        <h2 class="text-2xl mb-4">Photos</h2>
+        <p>Here are some of our favorite memories captured in photos.</p>
+        <p>We hope you enjoy browsing through some of our cherished moments. Each photo holds a special place in our hearts.</p>
+        <p>[Gallery of Photos]</p>
+    </section>
+
+    <section id="wedding-party-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
+        <h2 class="text-2xl mb-4">Wedding Party</h2>
+        <p>Meet our wonderful wedding party, who have been by our sides every step of the way.</p>
+        <p>Our friends and family have supported us throughout this journey, and we are honored to have them stand with us as we say 'I do'.</p>
+    </section>
+
+    <section id="qa-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
+        <h2 class="text-2xl mb-4">Q + A</h2>
+        <p>Have questions about the big day? We've got answers!</p>
+        <p>The dress code for our wedding is <strong>black tie</strong>. Please join us in your most elegant attire to celebrate this special occasion.</p>
+    </section>
+
+    <section id="travel-content" class="content hidden mx-5 my-5 p-5 bg-white bg-opacity-90 rounded-lg shadow-lg">
+        <h2 class="text-2xl mb-4">Travel</h2>
+        <p>Planning to join us in Hawaii? Here’s all the information you need to make your travel arrangements.</p>
+        <p>We've secured special rates at local hotels and have compiled a list of activities to enjoy during your stay. We look forward to seeing you there!</p>
+    </section>
+
+    <!-- Footer removed as per user request -->
+
+    <!-- JavaScript code -->
+    <script>
+        // Countdown Timer
+        function initializeCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            const weddingDate = new Date('March 23, 2024 00:00:00').getTime();
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = weddingDate - now;
+
+                // Time calculations for days, hours, minutes and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result
+                countdownElement.innerHTML = days + 'd ' + hours + 'h '
+                    + minutes + 'm ' + seconds + 's ';
+
+                // If the countdown is finished, write some text
+                if (distance < 0) {
+                    clearInterval(x);
+                    countdownElement.innerHTML = 'We\'re Married!';
+                }
             }
-            h2 {
-                font-size: 18px;
-            }
-            .countdown {
-                font-size: 14px;
-            }
+
+            // Update the countdown every 1 second
+            updateCountdown(); // initial call
+            const x = setInterval(updateCountdown, 1000);
         }
-        
-        @media (max-width: 400px) {
-            nav a {
-                margin: 0 5px;
-            }
-            .content {
-                margin: 30px 5px;
-                padding: 15px;
-            }
-            footer {
-                font-size: 10px;
-            }
-        }
-    </style>
-    
 
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCountdown();
 
+            // Navigation code
+            const navLinks = document.querySelectorAll('nav a');
+            const contentSections = document.querySelectorAll('.content');
 
-<header>
-    <h1>Kaitlyn &amp; Canyon</h1>
-    <h2>March 23, 2024</h2>
-    <div class="countdown">[Insert Countdown Here]</div>
-</header>
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
 
-<nav>
-    <a>Home</a>
-    <a>Our Story</a>
-    <a>Photos</a>
-    <a>Wedding Party</a>
-    <a>Q + A</a>
-    <a>Travel</a>
-</nav>
+                    // Get the section ID from data-section attribute
+                    const sectionId = this.getAttribute('data-section');
+                    console.log('Navigating to ' + sectionId);
 
-<section id="home-content" class="content">
-    <h2>Welcome to Our Wedding Website</h2>
-    <p>Thank you for visiting our wedding website. We are thrilled to share this special time in our lives with you!</p>
-</section>
+                    // Hide all sections
+                    contentSections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
 
-<section id="our-story-content" class="content">
-    <h2>Our Story</h2>
-    <p>It all began with a chance meeting at a friend's party. From there, our connection grew into something magical.</p>
-</section>
-
-<section id="photos-content" class="content">
-    <h2>Photos</h2>
-    <p>Here are some of our favorite memories captured in photos.</p>
-    <p>[Gallery of Photos]</p>
-</section>
-
-<section id="wedding-party-content" class="content">
-    <h2>Wedding Party</h2>
-    <p>Meet our wonderful wedding party, who have been by our sides every step of the way.</p>
-</section>
-
-<section id="qa-content" class="content">
-    <h2>Q + A</h2>
-    <p>Have questions about the big day? We've got answers!</p>
-</section>
-
-<section id="travel-content" class="content">
-    <h2>Travel</h2>
-    <p>Planning to join us in Hawaii? Here’s all the information you need to make your travel arrangements.</p>
-</section>
-
-<footer>
-    <p>Created on The Knot</p>
-    <p>Getting married? <a href="#">Create your wedding website for free.</a></p>
-    <p>Your Privacy Choices</p>
-</footer>
-
-
+                    // Show the selected section
+                    const activeSection = document.getElementById(sectionId);
+                    if (activeSection) {
+                        activeSection.classList.remove('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
