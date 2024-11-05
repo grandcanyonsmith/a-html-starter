@@ -104,7 +104,7 @@
                         expense: "Bridal Party Gifts",
                         national: "$100 - $300 per person",
                         idaho: "$75 - $200 per person",
-                        personal: "$150 - $300",
+                        personal: "$150 - $300", // Total budget for gifts
                         description: "Gifts for bridesmaids",
                         data: {
                             national: "$100-$300",
@@ -164,7 +164,7 @@
     
                 // Function to parse price ranges
                 const parseRange = (rangeStr) => {
-                    return rangeStr.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
+                    return rangeStr.split('-').map(val => parseFloat(val.replace(/[\$,]/g, '').trim()));
                 };
     
                 // Sort expenses by personal budget (descending)
@@ -173,6 +173,11 @@
                     const bRange = parseRange(b.data.personal);
                     return bRange[1] - aRange[1];
                 });
+    
+                // Initialize total variables
+                let totalNationalAvg = 0;
+                let totalIdahoAvg = 0;
+                let totalPersonalAvg = 0;
     
                 // Generate table rows dynamically
                 const tbody = document.getElementById('expenses-body');
@@ -186,7 +191,7 @@
                         row.classList.add('bg-gray-50');
                     }
                     row.setAttribute('tabindex', '0');
-
+    
                     // Expense Name
                     const expenseCell = document.createElement('th');
                     expenseCell.classList.add('py-3', 'px-6', 'text-left', 'whitespace-nowrap', 'font-medium', 'text-gray-900');
@@ -194,46 +199,75 @@
                     expenseCell.textContent = item.expense;
                     row.appendChild(expenseCell);
     
-                    // National Average
+                    // Cells for National, Idaho, Personal budgets
                     const nationalCell = document.createElement('td');
                     nationalCell.classList.add('py-3', 'px-6', 'text-left');
-                    nationalCell.textContent = item.national;
-                    row.appendChild(nationalCell);
     
-                    // Idaho Average
                     const idahoCell = document.createElement('td');
                     idahoCell.classList.add('py-3', 'px-6', 'text-left');
-                    idahoCell.textContent = item.idaho;
-                    row.appendChild(idahoCell);
     
-                    // Personal Budget
                     const personalCell = document.createElement('td');
                     personalCell.classList.add('py-3', 'px-6', 'text-left', 'font-semibold');
-                    personalCell.textContent = item.personal;
-                    row.appendChild(personalCell);
     
-                    // Description
+                    // Description Cell
                     const descriptionCell = document.createElement('td');
                     descriptionCell.classList.add('py-3', 'px-6', 'text-left');
                     descriptionCell.textContent = item.description;
                     row.appendChild(descriptionCell);
     
-                    // Calculate averages for comparison
-                    const nationalAvg = parseRange(item.data.national).reduce((a, b) => a + b) / 2;
-                    const idahoAvg = parseRange(item.data.idaho).reduce((a, b) => a + b) / 2;
-                    const personalAvg = parseRange(item.data.personal).reduce((a, b) => a + b) / 2;
-    
-                    // Highlight personal budget based on comparison
+                    // Parse ranges and calculate averages
                     if (item.expense === "Bridal Party Gifts") {
-                        const totalPersonal = parseRange(item.data.personal)[0];
-                        if (totalPersonal < nationalAvg && totalPersonal < idahoAvg) {
+                        const numPersons = 3; // Assuming 3 bridesmaids
+                        const nationalRange = parseRange(item.data.national);
+                        const idahoRange = parseRange(item.data.idaho);
+                        const personalRange = parseRange(item.data.personal);
+    
+                        const nationalAvgPerPerson = (nationalRange[0] + nationalRange[1]) / 2;
+                        const idahoAvgPerPerson = (idahoRange[0] + idahoRange[1]) / 2;
+                        const personalAvgPerPerson = (personalRange[0] + personalRange[1]) / 2;
+    
+                        const nationalAvg = nationalAvgPerPerson * numPersons;
+                        const idahoAvg = idahoAvgPerPerson * numPersons;
+                        const personalAvg = personalAvgPerPerson * numPersons;
+    
+                        // Accumulate totals
+                        totalNationalAvg += nationalAvg;
+                        totalIdahoAvg += idahoAvg;
+                        totalPersonalAvg += personalAvg;
+    
+                        // Update cell values
+                        nationalCell.textContent = "$" + nationalAvg.toLocaleString();
+                        idahoCell.textContent = "$" + idahoAvg.toLocaleString();
+                        personalCell.textContent = "$" + personalAvg.toLocaleString();
+    
+                        // Highlight personal budget based on comparison
+                        if (personalAvg < nationalAvg && personalAvg < idahoAvg) {
                             personalCell.classList.add('text-green-700');
-                        } else if (totalPersonal > nationalAvg && totalPersonal > idahoAvg) {
+                        } else if (personalAvg > nationalAvg && personalAvg > idahoAvg) {
                             personalCell.classList.add('text-red-700');
                         } else {
                             personalCell.classList.add('text-yellow-700');
                         }
                     } else {
+                        const nationalRange = parseRange(item.data.national);
+                        const idahoRange = parseRange(item.data.idaho);
+                        const personalRange = parseRange(item.data.personal);
+    
+                        const nationalAvg = (nationalRange[0] + nationalRange[1]) / 2;
+                        const idahoAvg = (idahoRange[0] + idahoRange[1]) / 2;
+                        const personalAvg = (personalRange[0] + personalRange[1]) / 2;
+    
+                        // Accumulate totals
+                        totalNationalAvg += nationalAvg;
+                        totalIdahoAvg += idahoAvg;
+                        totalPersonalAvg += personalAvg;
+    
+                        // Update cell values
+                        nationalCell.textContent = "$" + nationalAvg.toLocaleString();
+                        idahoCell.textContent = "$" + idahoAvg.toLocaleString();
+                        personalCell.textContent = item.personal;
+    
+                        // Highlight personal budget based on comparison
                         if (personalAvg > nationalAvg && personalAvg > idahoAvg) {
                             personalCell.classList.add('text-red-700');
                         } else if (personalAvg < nationalAvg && personalAvg < idahoAvg) {
@@ -243,6 +277,12 @@
                         }
                     }
     
+                    // Append cells to row
+                    row.appendChild(nationalCell);
+                    row.appendChild(idahoCell);
+                    row.appendChild(personalCell);
+                    row.appendChild(descriptionCell);
+    
                     // Append row to table body
                     tbody.appendChild(row);
                 });
@@ -250,7 +290,7 @@
                 // Add Total Estimated Cost Row
                 const totalRow = document.createElement('tr');
                 totalRow.classList.add('bg-gray-300', 'font-bold');
-
+    
                 const createTotalCell = (content, colspan = 1) => {
                     const cell = document.createElement('td');
                     cell.classList.add('py-3', 'px-6', 'text-left');
@@ -260,9 +300,9 @@
                 };
     
                 totalRow.appendChild(createTotalCell("Total Estimated Cost"));
-                totalRow.appendChild(createTotalCell("$12,500 - $28,700+"));
-                totalRow.appendChild(createTotalCell("$10,075 - $21,000+"));
-                totalRow.appendChild(createTotalCell("$11,275 - $17,075"));
+                totalRow.appendChild(createTotalCell("$" + totalNationalAvg.toLocaleString()));
+                totalRow.appendChild(createTotalCell("$" + totalIdahoAvg.toLocaleString()));
+                totalRow.appendChild(createTotalCell("$" + totalPersonalAvg.toLocaleString()));
                 totalRow.appendChild(createTotalCell("Sum of the bride's expenses"));
     
                 tbody.appendChild(totalRow);
