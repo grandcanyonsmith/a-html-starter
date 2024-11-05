@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bride's Expenses</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom Styles -->
     <style>
         th {
             position: sticky;
@@ -14,147 +17,253 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 p-8">
+<body class="bg-gray-50 p-8">
     <div class="container mx-auto">
-        <h1 class="text-2xl font-bold mb-4">Bride's Expenses</h1>
-        <div class="overflow-x-auto max-h-96">
-            <table class="min-w-full bg-white border border-gray-200">
-                <thead>
+        <!-- Header -->
+        <h1 class="text-3xl font-extrabold mb-6 text-center text-gray-800">Bride's Expenses Overview</h1>
+        <!-- Expenses Table -->
+        <div class="overflow-x-auto max-h-[70vh]">
+            <table class="min-w-full bg-white shadow-md rounded-lg">
+                <!-- Table Head -->
+                <thead class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
                     <tr>
-                        <th class="py-2 px-4 border-b">Expense</th>
-                        <th class="py-2 px-4 border-b">National Avg. Cost</th>
-                        <th class="py-2 px-4 border-b">Idaho Avg. Cost</th>
-                        <th class="py-2 px-4 border-b">Personal Budget</th>
-                        <th class="py-2 px-4 border-b">Description</th>
+                        <th class="py-3 px-6 text-left">Expense</th>
+                        <th class="py-3 px-6 text-left">National Avg. Cost</th>
+                        <th class="py-3 px-6 text-left">Idaho Avg. Cost</th>
+                        <th class="py-3 px-6 text-left">Personal Budget</th>
+                        <th class="py-3 px-6 text-left">Description</th>
                     </tr>
                 </thead>
-                <tbody id="expenses-body">
-                    <tr>
-                        <td class="py-2 px-4 border-b">Photography and Videography</td>
-                        <td class="py-2 px-4 border-b" data-national="$3000-$5000">$3,000 - $5,000</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$2500-$4000">$2,500 - $4,000</td>
-                        <td class="py-2 px-4 border-b" data-personal="$2500-$4000">$2,500 - $4,000</td>
-                        <td class="py-2 px-4 border-b">Professional photography and videography services for the entire event</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Bride's Dress and Accessories</td>
-                        <td class="py-2 px-4 border-b" data-national="$1500-$3000">$1,500 - $3,000</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$1200-$2500">$1,200 - $2,500</td>
-                        <td class="py-2 px-4 border-b" data-personal="$2300-$3000">$2,300 - $3,000</td>
-                        <td class="py-2 px-4 border-b">Includes the cost of the wedding dress, veil, shoes, and jewelry</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Flowers</td>
-                        <td class="py-2 px-4 border-b" data-national="$1500-$2500">$1,500 - $2,500</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$1200-$2000">$1,200 - $2,000</td>
-                        <td class="py-2 px-4 border-b" data-personal="$1000-$2000">$1,000 - $2,000</td>
-                        <td class="py-2 px-4 border-b">Bouquets, boutonnieres, and decorative floral arrangements</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Hair and Makeup</td>
-                        <td class="py-2 px-4 border-b" data-national="$300-$600">$300 - $600</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$250-$500">$250 - $500</td>
-                        <td class="py-2 px-4 border-b" data-personal="$0-$0">$0 - $0</td>
-                        <td class="py-2 px-4 border-b">Professional hair and makeup services for the bride</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Bridal Party Gifts</td>
-                        <td class="py-2 px-4 border-b" data-national="$100-$300">$100 - $300 per person</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$75-$200">$75 - $200 per person</td>
-                        <td class="py-2 px-4 border-b" data-personal="$150-$300">$150 - $300</td>
-                        <td class="py-2 px-4 border-b">Gifts for bridesmaids</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Venue</td>
-                        <td class="py-2 px-4 border-b" data-national="$5000-$15000">$5,000 - $15,000</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$4000-$10000">$4,000 - $10,000</td>
-                        <td class="py-2 px-4 border-b" data-personal="$5000-$7000">$5,000 - $7,000</td>
-                        <td class="py-2 px-4 border-b">Bride's share of the cost for a paid venue in Hawaii</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Cake</td>
-                        <td class="py-2 px-4 border-b" data-national="$500-$1000">$500 - $1,000</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$400-$800">$400 - $800</td>
-                        <td class="py-2 px-4 border-b" data-personal="$150-$300">$150 - $300</td>
-                        <td class="py-2 px-4 border-b">Bride's share of the cost for a wedding cake</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Invitations and Stationery</td>
-                        <td class="py-2 px-4 border-b" data-national="$400-$800">$400 - $800</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$300-$600">$300 - $600</td>
-                        <td class="py-2 px-4 border-b" data-personal="$100-$250">$100 - $250</td>
-                        <td class="py-2 px-4 border-b">Bride's share of the cost for invitations, programs, and other stationery</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b">Wedding Favors</td>
-                        <td class="py-2 px-4 border-b" data-national="$200-$500">$200 - $500</td>
-                        <td class="py-2 px-4 border-b" data-idaho="$150-$400">$150 - $400</td>
-                        <td class="py-2 px-4 border-b" data-personal="$75-$225">$75 - $225</td>
-                        <td class="py-2 px-4 border-b">Bride's share of the cost for favors for guests</td>
-                    </tr>
-                    <tr>
-                        <td class="py-2 px-4 border-b font-bold">Total Estimated Cost</td>
-                        <td class="py-2 px-4 border-b font-bold">$12,500 - $28,700+</td>
-                        <td class="py-2 px-4 border-b font-bold">$10,075 - $21,000+</td>
-                        <td class="py-2 px-4 border-b font-bold">$11,275 - $17,075</td>
-                        <td class="py-2 px-4 border-b font-bold">Sum of the bride's expenses</td>
-                    </tr>
+                <!-- Table Body -->
+                <tbody id="expenses-body" class="text-gray-600 text-sm font-light">
+                    <!-- Rows will be injected by JavaScript -->
                 </tbody>
             </table>
         </div>
     </div>
+    <!-- Script Section -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            console.log('Bride\'s Expenses Page Loaded');
-            const rows = Array.from(document.querySelectorAll('#expenses-body tr'));
-
-            // Sort rows by the most expensive price for the personal budget
-            rows.sort((a, b) => {
-                const aPersonal = a.querySelector('[data-personal]');
-                const bPersonal = b.querySelector('[data-personal]');
-                if (!aPersonal || !bPersonal) return 0; // Skip rows without data-personal
-                const aPersonalRange = aPersonal.dataset.personal.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
-                const bPersonalRange = bPersonal.dataset.personal.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
-                return bPersonalRange[1] - aPersonalRange[1]; // Sort by the highest value in the range
-            });
-
-            // Append sorted rows back to the table body
-            const tbody = document.getElementById('expenses-body');
-            tbody.innerHTML = '';
-            rows.forEach(row => tbody.appendChild(row));
-
-            // Highlight personal budget cells based on comparison
-            rows.forEach(row => {
-                const nationalAvg = row.querySelector('[data-national]');
-                const idahoAvg = row.querySelector('[data-idaho]');
-                const personalBudget = row.querySelector('[data-personal]');
-                if (nationalAvg && idahoAvg && personalBudget) {
-                    const nationalRange = nationalAvg.dataset.national.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
-                    const idahoRange = idahoAvg.dataset.idaho.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
-                    const personalRange = personalBudget.dataset.personal.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
-                    const avgNational = (nationalRange[0] + nationalRange[1]) / 2;
-                    const avgIdaho = (idahoRange[0] + idahoRange[1]) / 2;
-                    const avgPersonal = (personalRange[0] + personalRange[1]) / 2;
-                    if (row.cells[0].textContent.trim() === "Bridal Party Gifts") {
-                        const totalPersonal = personalRange[0]; // Since the personal budget is total, not per person
-                        if (totalPersonal < avgNational && totalPersonal < avgIdaho) {
-                            personalBudget.classList.add('text-green-500');
-                        } else if (totalPersonal > avgNational && totalPersonal > avgIdaho) {
-                            personalBudget.classList.add('text-red-500');
-                        } else {
-                            personalBudget.classList.add('text-yellow-500');
-                        }
-                    } else {
-                        if (avgPersonal > avgNational && avgPersonal > avgIdaho) {
-                            personalBudget.classList.add('text-red-500');
-                        } else if (avgPersonal < avgNational && avgPersonal < avgIdaho) {
-                            personalBudget.classList.add('text-green-500');
-                        } else {
-                            personalBudget.classList.add('text-yellow-500');
-                        }
+            console.log("Bride's Expenses Page Loaded");
+            const expensesData = [
+                {
+                    expense: "Photography and Videography",
+                    national: "$3,000 - $5,000",
+                    idaho: "$2,500 - $4,000",
+                    personal: "$2,500 - $4,000",
+                    description: "Professional photography and videography services for the entire event",
+                    data: {
+                        national: "$3000-$5000",
+                        idaho: "$2500-$4000",
+                        personal: "$2500-$4000"
+                    }
+                },
+                {
+                    expense: "Bride's Dress and Accessories",
+                    national: "$1,500 - $3,000",
+                    idaho: "$1,200 - $2,500",
+                    personal: "$2,300 - $3,000",
+                    description: "Includes the cost of the wedding dress, veil, shoes, and jewelry",
+                    data: {
+                        national: "$1500-$3000",
+                        idaho: "$1200-$2500",
+                        personal: "$2300-$3000"
+                    }
+                },
+                {
+                    expense: "Flowers",
+                    national: "$1,500 - $2,500",
+                    idaho: "$1,200 - $2,000",
+                    personal: "$1,000 - $2,000",
+                    description: "Bouquets, boutonnieres, and decorative floral arrangements",
+                    data: {
+                        national: "$1500-$2500",
+                        idaho: "$1200-$2000",
+                        personal: "$1000-$2000"
+                    }
+                },
+                {
+                    expense: "Hair and Makeup",
+                    national: "$300 - $600",
+                    idaho: "$250 - $500",
+                    personal: "$0 - $0",
+                    description: "Professional hair and makeup services for the bride",
+                    data: {
+                        national: "$300-$600",
+                        idaho: "$250-$500",
+                        personal: "$0-$0"
+                    }
+                },
+                {
+                    expense: "Bridal Party Gifts",
+                    national: "$100 - $300 per person",
+                    idaho: "$75 - $200 per person",
+                    personal: "$150 - $300",
+                    description: "Gifts for bridesmaids",
+                    data: {
+                        national: "$100-$300",
+                        idaho: "$75-$200",
+                        personal: "$150-$300"
+                    }
+                },
+                {
+                    expense: "Venue",
+                    national: "$5,000 - $15,000",
+                    idaho: "$4,000 - $10,000",
+                    personal: "$5,000 - $7,000",
+                    description: "Bride's share of the cost for a paid venue in Hawaii",
+                    data: {
+                        national: "$5000-$15000",
+                        idaho: "$4000-$10000",
+                        personal: "$5000-$7000"
+                    }
+                },
+                {
+                    expense: "Cake",
+                    national: "$500 - $1,000",
+                    idaho: "$400 - $800",
+                    personal: "$150 - $300",
+                    description: "Bride's share of the cost for a wedding cake",
+                    data: {
+                        national: "$500-$1000",
+                        idaho: "$400-$800",
+                        personal: "$150-$300"
+                    }
+                },
+                {
+                    expense: "Invitations and Stationery",
+                    national: "$400 - $800",
+                    idaho: "$300 - $600",
+                    personal: "$100 - $250",
+                    description: "Bride's share of the cost for invitations, programs, and other stationery",
+                    data: {
+                        national: "$400-$800",
+                        idaho: "$300-$600",
+                        personal: "$100-$250"
+                    }
+                },
+                {
+                    expense: "Wedding Favors",
+                    national: "$200 - $500",
+                    idaho: "$150 - $400",
+                    personal: "$75 - $225",
+                    description: "Bride's share of the cost for favors for guests",
+                    data: {
+                        national: "$200-$500",
+                        idaho: "$150-$400",
+                        personal: "$75-$225"
                     }
                 }
+            ];
+
+            // Function to parse price ranges
+            const parseRange = (rangeStr) => {
+                return rangeStr.split('-').map(val => parseInt(val.replace(/[\$,]/g, '')));
+            };
+
+            // Sort expenses by personal budget (descending)
+            expensesData.sort((a, b) => {
+                const aRange = parseRange(a.data.personal);
+                const bRange = parseRange(b.data.personal);
+                return bRange[1] - aRange[1];
             });
+
+            // Generate table rows dynamically
+            const tbody = document.getElementById('expenses-body');
+            expensesData.forEach(item => {
+                // Create table row
+                const row = document.createElement('tr');
+                row.classList.add('border-b', 'border-gray-200', 'hover:bg-gray-100');
+
+                // Expense Name
+                const expenseCell = document.createElement('td');
+                expenseCell.classList.add('py-3', 'px-6', 'text-left', 'whitespace-nowrap', 'font-medium');
+                expenseCell.textContent = item.expense;
+                row.appendChild(expenseCell);
+
+                // National Average
+                const nationalCell = document.createElement('td');
+                nationalCell.classList.add('py-3', 'px-6', 'text-left');
+                nationalCell.textContent = item.national;
+                row.appendChild(nationalCell);
+
+                // Idaho Average
+                const idahoCell = document.createElement('td');
+                idahoCell.classList.add('py-3', 'px-6', 'text-left');
+                idahoCell.textContent = item.idaho;
+                row.appendChild(idahoCell);
+
+                // Personal Budget
+                const personalCell = document.createElement('td');
+                personalCell.classList.add('py-3', 'px-6', 'text-left', 'font-semibold');
+                personalCell.textContent = item.personal;
+                row.appendChild(personalCell);
+
+                // Description
+                const descriptionCell = document.createElement('td');
+                descriptionCell.classList.add('py-3', 'px-6', 'text-left');
+                descriptionCell.textContent = item.description;
+                row.appendChild(descriptionCell);
+
+                // Calculate averages for comparison
+                const nationalAvg = parseRange(item.data.national).reduce((a, b) => a + b) / 2;
+                const idahoAvg = parseRange(item.data.idaho).reduce((a, b) => a + b) / 2;
+                const personalAvg = parseRange(item.data.personal).reduce((a, b) => a + b) / 2;
+
+                // Highlight personal budget based on comparison
+                if (item.expense === "Bridal Party Gifts") {
+                    const totalPersonal = parseRange(item.data.personal)[0];
+                    if (totalPersonal < nationalAvg && totalPersonal < idahoAvg) {
+                        personalCell.classList.add('text-green-600');
+                    } else if (totalPersonal > nationalAvg && totalPersonal > idahoAvg) {
+                        personalCell.classList.add('text-red-600');
+                    } else {
+                        personalCell.classList.add('text-yellow-600');
+                    }
+                } else {
+                    if (personalAvg > nationalAvg && personalAvg > idahoAvg) {
+                        personalCell.classList.add('text-red-600');
+                    } else if (personalAvg < nationalAvg && personalAvg < idahoAvg) {
+                        personalCell.classList.add('text-green-600');
+                    } else {
+                        personalCell.classList.add('text-yellow-600');
+                    }
+                }
+
+                // Append row to table body
+                tbody.appendChild(row);
+            });
+
+            // Add Total Estimated Cost Row
+            const totalRow = document.createElement('tr');
+            totalRow.classList.add('bg-gray-200', 'font-bold');
+
+            const totalExpenseCell = document.createElement('td');
+            totalExpenseCell.classList.add('py-3', 'px-6', 'text-left');
+            totalExpenseCell.textContent = "Total Estimated Cost";
+            totalRow.appendChild(totalExpenseCell);
+
+            const totalNationalCell = document.createElement('td');
+            totalNationalCell.classList.add('py-3', 'px-6', 'text-left');
+            totalNationalCell.textContent = "$12,500 - $28,700+";
+            totalRow.appendChild(totalNationalCell);
+
+            const totalIdahoCell = document.createElement('td');
+            totalIdahoCell.classList.add('py-3', 'px-6', 'text-left');
+            totalIdahoCell.textContent = "$10,075 - $21,000+";
+            totalRow.appendChild(totalIdahoCell);
+
+            const totalPersonalCell = document.createElement('td');
+            totalPersonalCell.classList.add('py-3', 'px-6', 'text-left');
+            totalPersonalCell.textContent = "$11,275 - $17,075";
+            totalRow.appendChild(totalPersonalCell);
+
+            const totalDescriptionCell = document.createElement('td');
+            totalDescriptionCell.classList.add('py-3', 'px-6', 'text-left');
+            totalDescriptionCell.textContent = "Sum of the bride's expenses";
+            totalRow.appendChild(totalDescriptionCell);
+
+            tbody.appendChild(totalRow);
         });
     </script>
 </body>
