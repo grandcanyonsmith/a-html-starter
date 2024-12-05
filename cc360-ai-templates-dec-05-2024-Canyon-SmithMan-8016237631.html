@@ -191,6 +191,7 @@
             });
 
             const data = await response.json();
+console.log(data,'data');
             if (response.status === 200) {
                 const { hours, minutes, seconds, customer_name, email } = data;
                 const totalSeconds = hours * 3600 + minutes * 60 + seconds;
