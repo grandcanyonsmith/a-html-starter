@@ -145,107 +145,223 @@
 <body>
     <!-- Banner and Countdown Script -->
     <script>
-    (function() {
-        const tailwindLink = document.createElement('link');
-        tailwindLink.href = 'https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css';
-        tailwindLink.rel = 'stylesheet';
-        document.head.appendChild(tailwindLink);
+    
+// A self-invoking async function to encapsulate all logic
+(async function() {
+  // Utility function to load an external script and return a promise when it finishes loading
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error(`Failed to load script ${src}`));
+      document.head.appendChild(s);
+    });
+  }
 
-        // Create the banner and expiration message elements
-        const banner = document.createElement('div');
-        const expirationMessage = document.createElement('div');
-        const expirationText = document.createElement('p');
-        const redirectLink = document.createElement('button');
+  // Utility function to load a stylesheet
+  function loadStylesheet(href) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+  }
 
-        // Apply styles to the banner
-        banner.id = 'banner';
-        banner.className = 'fixed top-0 w-full bg-red-100 text-red-700 text-center p-2 z-50 text-xs';
-        banner.innerHTML = `
-            <span id="banner-text">This website expires after 24 hours and will be deleted. If you would like to keep this webpage, sign up for a 30-day free trial and it will be transferred into your account.</span>
-            <span>Time remaining: <span id="countdown" class="font-bold">24:00:00</span></span>
-            <button id="signup-button" class="bg-blue-500 text-white font-bold py-1 px-2 ml-2 rounded hover:bg-blue-700 text-xs">Sign Up</button>
-        `;
+  // Insert our custom styles via a <style> tag created from script
+  const style = document.createElement('style');
+  style.textContent = `
+    /* Spinner Styles */
+    #loading-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    #loading-indicator .spinner {
+      border: 8px solid #f3f3f3; /* Light grey */
+      border-top: 8px solid #3498db; /* Blue */
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
-        // Apply styles to the expiration message
-        expirationMessage.className = 'fixed top-0 w-full h-full flex items-center justify-center bg-gray-100 text-center';
-        expirationMessage.style.display = 'none';
-        expirationText.className = 'text-lg font-bold';
-        expirationText.textContent = "Time has expired. To get access to this website, sign up for a free trial.";
-        redirectLink.id = 'signup-button';
-        redirectLink.className = 'bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-700';
-        redirectLink.textContent = 'Sign Up';
+    /* Banner and expiration message will use Tailwind for styles once loaded */
+  `;
+  document.head.appendChild(style);
 
-        // Append elements
-        expirationMessage.appendChild(expirationText);
-        expirationMessage.appendChild(redirectLink);
-        document.body.appendChild(banner);
+  // Create the loading indicator
+  const loadingIndicator = document.createElement('div');
+  loadingIndicator.id = 'loading-indicator';
+  const spinner = document.createElement('div');
+  spinner.className = 'spinner';
+  loadingIndicator.appendChild(spinner);
+  document.body.appendChild(loadingIndicator);
+
+  // Load Tailwind CSS
+  loadStylesheet('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+
+  // Load Stripe JS
+  await loadScript('https://js.stripe.com/v3/');
+
+  // Now Stripe is loaded, proceed
+  const fallbackUrl = "https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF";
+  let sessionId = null;
+  let stripe = null;
+  if (typeof Stripe === 'function') {
+    stripe = Stripe("pk_live_51LNznbBnnqL8bKFQDpqXsQJ00WefQSSLMf2CZWr0sarinvaalkyY0BE7q7swLzIt49RSiCgBAP5uPHjU8fBNDsf0008MSXCQFU");
+  }
+
+  // Extract the ai_website_id from the URL query parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const aiWebsiteId = urlParams.get("ai_website_id") || null;
+
+  // Attempt to fetch the session ID
+  try {
+    const requestBody = aiWebsiteId ? { ai_website_id: aiWebsiteId } : {};
+    const response = await fetch("https://3k62eq3mjyecfujkgbmrophvwq0xigra.lambda-url.us-west-2.on.aws/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch the Checkout Session from backend.");
+    }
+
+    const data = await response.json();
+    sessionId = data.clientSecret;
+    if (!sessionId) {
+      throw new Error("No session ID returned by backend.");
+    }
+
+    console.log("Session ID fetched:", sessionId);
+
+  } catch (error) {
+    console.error("Error initializing checkout:", error);
+    // If we fail to get sessionId, we can still proceed, but we will fallback on signup or expiration
+  }
+
+  // Remove loading indicator
+  if (loadingIndicator) loadingIndicator.remove();
+
+  // Create banner elements
+  const banner = document.createElement('div');
+  banner.id = 'banner';
+  banner.className = 'fixed top-0 w-full bg-red-100 text-red-700 text-center p-2 z-50 text-xs';
+
+  // Banner inner HTML
+  banner.innerHTML = `
+    <span id="banner-text" class="inline-block">This website expires after 24 hours and will be deleted. If you would like to keep this webpage, sign up for a 30-day free trial and it will be transferred into your account.</span>
+    <span>Time remaining: <span id="countdown" class="font-bold">24:00:00</span></span>
+    <button id="signup-button" class="bg-blue-500 text-white font-bold py-1 px-2 ml-2 rounded hover:bg-blue-700 text-xs">Sign Up</button>
+  `;
+
+  document.body.appendChild(banner);
+
+  // Create expiration message elements
+  const expirationMessage = document.createElement('div');
+  expirationMessage.className = 'fixed top-0 w-full h-full flex items-center justify-center bg-gray-100 text-center';
+  expirationMessage.style.display = 'none';
+
+  const expirationText = document.createElement('p');
+  expirationText.className = 'text-lg font-bold';
+  expirationText.textContent = "Time has expired. To get access to this website, sign up for a free trial.";
+
+  const redirectLink = document.createElement('button');
+  redirectLink.id = 'expiration-signup-button';
+  redirectLink.className = 'bg-blue-500 text-white font-bold py-2 px-4 mt-4 rounded hover:bg-blue-700';
+  redirectLink.textContent = 'Sign Up';
+
+  expirationMessage.appendChild(expirationText);
+  expirationMessage.appendChild(redirectLink);
+  document.body.appendChild(expirationMessage);
+
+  async function checkExpiry(url) {
+    const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ temporary_website_url: url })
+    });
+
+    const data = await response.json();
+    if (response.status === 200) {
+      const { hours, minutes, seconds } = data;
+      const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+      startCountdown(totalSeconds);
+    } else {
+      console.error('Error fetching expiry time:', data.message || 'An error occurred');
+    }
+  }
+
+  function startCountdown(duration) {
+    const countdownElement = document.getElementById('countdown');
+    let timer = duration, hours, minutes, seconds;
+    const interval = setInterval(function () {
+      hours = parseInt(timer / 3600, 10);
+      minutes = parseInt((timer % 3600) / 60, 10);
+      seconds = parseInt(timer % 60, 10);
+
+      hours = hours < 10 ? "0" + hours : hours;
+      minutes = minutes < 10 ? "0" + minutes : minutes;
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+
+      countdownElement.textContent = hours + ":" + minutes + ":" + seconds;
+
+      if (--timer < 0) {
+        clearInterval(interval);
+        document.body.innerHTML = '';
         document.body.appendChild(expirationMessage);
+        expirationMessage.style.display = 'flex';
 
-        async function checkExpiry(url) {
-            const response = await fetch('https://xhvc4u76mu3j4uoyc5eehtm5ai0vhnxu.lambda-url.us-west-2.on.aws/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ temporary_website_url: url })
-            });
-
-            const data = await response.json();
-            if (response.status === 200) {
-                const { hours, minutes, seconds, customer_name, email } = data;
-                const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-                const [firstName, lastName] = customer_name.split(' ').length > 1 ? customer_name.split(' ') : [customer_name, ''];
-                const currentUrl = window.location.href;
-                const redirectUrl = `https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF`;
-                startCountdown(totalSeconds, redirectUrl);
-            } else {
-                console.error('Error fetching expiry time:', data.message || 'An error occurred');
-            }
+        // When expired, redirect to checkout if we have sessionId else fallback
+        if (stripe && sessionId) {
+          stripe.redirectToCheckout({ sessionId: sessionId });
+        } else {
+          window.location.href = fallbackUrl;
         }
+      }
+    }, 1000);
+  }
 
-        function startCountdown(duration, redirectUrl) {
-            let timer = duration, hours, minutes, seconds;
-            const countdownElement = document.getElementById('countdown');
-            const interval = setInterval(function () {
-                hours = parseInt(timer / 3600, 10);
-                minutes = parseInt((timer % 3600) / 60, 10);
-                seconds = parseInt(timer % 60, 10);
+  const temporaryWebsiteUrl = window.location.href;
+  await checkExpiry(temporaryWebsiteUrl);
 
-                hours = hours < 10 ? "0" + hours : hours;
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
+  // Sign up button logic on the banner
+  const signupButton = document.getElementById('signup-button');
+  signupButton.onclick = function() {
+    if (stripe && sessionId) {
+      stripe.redirectToCheckout({ sessionId: sessionId });
+    } else {
+      window.location.href = fallbackUrl;
+    }
+  };
 
-                countdownElement.textContent = hours + ":" + minutes + ":" + seconds;
+  // Sign up button on expiration message
+  redirectLink.onclick = function() {
+    if (stripe && sessionId) {
+      stripe.redirectToCheckout({ sessionId: sessionId });
+    } else {
+      window.location.href = fallbackUrl;
+    }
+  };
 
-                if (--timer < 0) {
-                    clearInterval(interval);
-                    document.body.innerHTML = '';
-                    document.body.appendChild(expirationMessage);
-                    expirationMessage.style.display = 'flex';
-                    window.location.href = redirectUrl;
-                }
-            }, 1000);
-        }
-
-        document.addEventListener('DOMContentLoaded', async function() {
-            const temporaryWebsiteUrl = window.location.href;
-            await checkExpiry(temporaryWebsiteUrl);
-
-            document.getElementById('signup-button').onclick = async function() {
-                const redirectUrl = `https://checkout.coursecreator360.com/b/dR6cNB7Im6N85IA9AF`;
-                window.location.href = redirectUrl;
-            };
-        });
-
-        window.onscroll = function() {
-            const bannerText = document.getElementById('banner-text');
-            if (window.scrollY > 0) {
-                bannerText.style.display = 'none';
-            } else {
-                bannerText.style.display = 'inline';
-            }
-        };
-    })();
+  window.onscroll = function() {
+    const bannerText = document.getElementById('banner-text');
+    if (window.scrollY > 0) {
+      bannerText.style.display = 'none';
+    } else {
+      bannerText.style.display = 'inline';
+    }
+  };
+})();
     </script>
 
     <!-- Hyros Tracking Tag -->
