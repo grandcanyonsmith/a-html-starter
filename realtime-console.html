@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+  />
+  <title>Realtime Console with External Tools</title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.bunny.net" />
+  <link
+    href="https://fonts.bunny.net/css?family=jetbrains-mono:400,600|inter:400,500,700"
+    rel="stylesheet"
+  />
+
+  <!-- Custom Styles -->
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f9fafb;
+      color: #1f2937;
+    }
+
+    /* Custom scrollbar for the event log */
+    .event-log::-webkit-scrollbar {
+      width: 8px;
+    }
+    .event-log::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .event-log::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    /* Smooth mobile tools panel animation */
+    #toolsPanel {
+      transition: transform 0.3s ease-in-out;
+    }
+  </style>
+</head>
+<body class="h-full w-full flex flex-col">
+
+  <!-- Top Navigation -->
+  <header
+    class="h-14 flex items-center px-4 bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg"
+    aria-label="Main Navigation"
+  >
+    <div class="flex items-center gap-3">
+      <!-- Replace with your logo if needed -->
+      <img
+        src="/openai-logomark.svg"
+        alt="OpenAI Logo"
+        class="w-6 h-6"
+      />
+      <h1 class="text-lg font-semibold text-white tracking-wide">
+        Realtime Console (No Duplicates)
+      </h1>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main
+    class="flex-1 flex flex-col md:flex-row overflow-hidden relative"
+    role="main"
+  >
+    <!-- Console Panel & Session Controls -->
+    <section
+      id="consolePanel"
+      class="flex-1 relative border-gray-200 md:border-r flex flex-col overflow-hidden"
+      aria-label="Console Panel"
+    >
+      <!-- Event Log -->
+      <div
+        id="eventLog"
+        class="event-log flex-1 overflow-y-auto p-4 space-y-2 bg-white"
+      >
+        <!-- Messages appended here -->
+        <div class="text-gray-500 italic">Awaiting events...</div>
+      </div>
+
+      <!-- Session Controls -->
+      <div
+        id="sessionControls"
+        class="border-t border-gray-200 bg-white p-4 flex flex-col gap-3"
+        aria-label="Session Controls"
+      >
+        <!-- Start/Stop Session Buttons -->
+        <div class="flex gap-2">
+          <button
+            id="startSessionBtn"
+            class="flex-1 px-4 py-2 bg-indigo-600 text-white font-medium rounded
+                   hover:bg-indigo-700 active:bg-indigo-800 focus:outline-none
+                   focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+                   text-sm transition-colors"
+          >
+            Start Session
+          </button>
+          <button
+            id="stopSessionBtn"
+            class="flex-1 px-4 py-2 bg-red-600 text-white font-medium rounded
+                   hover:bg-red-700 active:bg-red-800 focus:outline-none
+                   focus:ring-2 focus:ring-red-500 focus:ring-offset-2
+                   text-sm transition-colors"
+            disabled
+          >
+            Stop
+          </button>
+        </div>
+
+        <!-- Send Message -->
+        <div class="flex gap-2">
+          <input
+            type="text"
+            id="userMessage"
+            placeholder="Type a message..."
+            class="border border-gray-300 p-2 rounded flex-1 focus:outline-none
+                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent
+                   text-sm"
+            aria-label="User Message Input"
+          />
+          <button
+            id="sendMessageBtn"
+            class="px-4 py-2 bg-green-600 text-white font-medium rounded
+                   hover:bg-green-700 active:bg-green-800 focus:outline-none
+                   focus:ring-2 focus:ring-green-500 focus:ring-offset-2
+                   text-sm transition-colors"
+          >
+            Send
+          </button>
+        </div>
+
+        <!-- Session Status -->
+        <p
+          id="sessionStatus"
+          class="text-sm text-gray-700"
+          aria-live="polite"
+        >
+          Not Connected
+        </p>
+      </div>
+    </section>
+
+    <!-- Tools Panel -->
+    <aside
+      id="toolsPanel"
+      class="w-full md:w-96 bg-indigo-700 text-white flex flex-col
+             md:border-l border-indigo-600 md:relative absolute md:static top-0
+             bottom-0 right-0 transform translate-x-full md:translate-x-0
+             transition-transform duration-300"
+      aria-label="Tools Panel"
+    >
+      <!-- Tools Header -->
+      <div
+        class="p-4 border-b border-indigo-600 flex items-center justify-between"
+      >
+        <h2 class="text-xl font-semibold tracking-wide">Tools</h2>
+        <!-- Close button for mobile -->
+        <button
+          id="closeToolsBtn"
+          class="md:hidden p-1 rounded hover:bg-indigo-600
+                 focus:outline-none focus:ring-2 focus:ring-indigo-500
+                 focus:ring-offset-2"
+          title="Close Tools"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="white"
+            class="w-5 h-5"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Tools Main Content -->
+      <div
+        id="toolsContent"
+        class="overflow-auto flex-1 p-4 text-sm space-y-4"
+      >
+        <!-- Default Tools View -->
+        <div id="toolsMainView">
+          <!-- Color Palette Section -->
+          <p class="mb-2">Need a color palette? Request one here:</p>
+          <button
+            id="askColorPaletteBtn"
+            class="px-4 py-2 bg-gray-50 text-gray-800 font-medium rounded
+                   hover:bg-gray-100 active:bg-gray-200 focus:outline-none
+                   focus:ring-2 focus:ring-offset-2 focus:ring-gray-300
+                   text-sm transition-colors"
+          >
+            Get Color Palette
+          </button>
+
+          <!-- Color Palette UI -->
+          <div
+            id="colorPalette"
+            class="mt-2 hidden"
+            aria-live="polite"
+            aria-label="Color Palette Output"
+          >
+            <h3 class="text-white font-semibold mb-2 text-base">
+              Color Palette
+            </h3>
+            <div id="colorBoxes"></div>
+          </div>
+
+          <!-- Function Call Output Section -->
+          <div
+            id="functionCallOutput"
+            class="mt-4 hidden"
+            aria-label="Function Call Output"
+          >
+            <h3 class="text-white font-semibold mb-2 text-base">
+              Color Palette Tool Output
+            </h3>
+            <div id="functionCallDetails"></div>
+          </div>
+
+          <!-- View HTML Snippets Trigger -->
+          <div
+            id="viewHtmlSnippets"
+            class="mt-4 hidden"
+            aria-label="HTML Snippet Tools"
+          >
+            <button
+              id="viewHtmlBtn"
+              class="px-4 py-2 bg-gray-900 text-white font-medium rounded
+                     hover:bg-gray-800 active:bg-gray-700 focus:outline-none
+                     focus:ring-2 focus:ring-offset-2 focus:ring-gray-600
+                     text-sm transition-colors"
+            >
+              View HTML Snippets
+            </button>
+          </div>
+        </div>
+
+        <!-- HTML Snippets Panel View -->
+        <div
+          id="htmlPanelView"
+          class="hidden text-gray-900"
+          aria-label="HTML Snippet Panel"
+        >
+          <!-- HTML Panel Header -->
+          <div class="flex items-center justify-between mb-2">
+            <p class="text-white">HTML Snippet Versions:</p>
+            <button
+              id="htmlBackBtn"
+              class="bg-indigo-600 text-white px-3 py-1 rounded
+                     hover:bg-indigo-500 active:bg-indigo-400
+                     focus:outline-none focus:ring-2 focus:ring-indigo-500
+                     focus:ring-offset-2 text-sm transition-colors"
+            >
+              Back
+            </button>
+          </div>
+
+          <!-- Version Selector -->
+          <div class="flex gap-2 items-center mb-2">
+            <label
+              for="versionSelect"
+              class="text-white text-sm"
+            >
+              Version:
+            </label>
+            <select
+              id="versionSelect"
+              class="text-sm border border-gray-300 p-1 rounded
+                     focus:outline-none focus:ring-1 focus:ring-indigo-500
+                     bg-white text-gray-800"
+            >
+            </select>
+          </div>
+
+          <!-- Toggle Code / Render & Copy Buttons -->
+          <div class="relative mb-2">
+            <div class="absolute top-2 right-2 flex gap-2">
+              <button
+                id="toggleViewBtn"
+                class="p-1 hover:bg-gray-100 rounded
+                       focus:outline-none focus:ring-2 focus:ring-gray-300
+                       transition-colors"
+                title="Toggle Code/Render"
+                aria-label="Toggle Code or Rendered HTML"
+              ></button>
+              <button
+                id="copyCodeBtn"
+                class="p-1 hover:bg-gray-100 rounded
+                       focus:outline-none focus:ring-2 focus:ring-gray-300
+                       transition-colors"
+                title="Copy Code"
+                aria-label="Copy HTML Code"
+              ></button>
+            </div>
+
+            <!-- HTML Code Textarea -->
+            <textarea
+              id="htmlCodeTextarea"
+              class="hidden w-full h-48 border border-gray-300 p-2 rounded
+                     text-sm font-mono bg-gray-50 resize-vertical
+                     text-gray-800"
+            ></textarea>
+
+            <!-- Render Container -->
+            <div
+              id="renderContainer"
+              class="hidden border border-gray-300 p-4 rounded
+                     bg-gray-50 text-gray-800"
+            ></div>
+          </div>
+
+          <!-- Raw JSON Output for Debugging -->
+          <pre
+            id="htmlOutputJson"
+            class="text-xs bg-gray-100 rounded-md p-2 overflow-x-auto
+                   border border-gray-200 text-gray-800"
+          ></pre>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav
+    id="mobileBottomNav"
+    class="md:hidden border-t border-gray-200 bg-white flex
+           justify-evenly items-center h-12"
+    aria-label="Mobile Navigation"
+  >
+    <button
+      id="mobileConsoleBtn"
+      class="flex-1 text-center text-sm py-2 hover:bg-gray-100
+             active:bg-gray-200 focus:outline-none focus:ring-2
+             focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+      aria-label="Console View"
+    >
+      Console
+    </button>
+    <button
+      id="mobileToolsBtn"
+      class="flex-1 text-center text-sm py-2 hover:bg-gray-100
+             active:bg-gray-200 focus:outline-none focus:ring-2
+             focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+      aria-label="Tools View"
+    >
+      Tools
+    </button>
+  </nav>
+
+  <!-- Hidden audio element for remote stream -->
+  <audio id="remoteAudio" autoplay class="hidden"></audio>
+
+  <!-- Main Script (ES Module) -->
+  <script type="module">
+    /**************************************************
+     * 1) Import Tools & Session Update from tools.js
+     **************************************************/
+    import {
+      sessionUpdate,
+      escapeHTML,
+      displayColorPaletteFromOutput,
+      handleDisplayHtmlSnippet,
+      lookupAnswer
+    } from './consoletools.js';
+
+    /**************************************************
+     * 2) Global State & Element References
+     **************************************************/
+    let isSessionActive = false;
+    let dataChannel = null;
+    let peerConnection = null;
+
+    const messageContainers = {};
+
+    // Tool & UI State
+    let functionCallOutput = null;
+    let htmlVersions = [];
+    let currentVersionIndex = 0;
+    let showHtmlPanel = false;
+    let showRaw = false;
+    let copied = false;
+
+    // Refs: Session elements
+    const eventLog = document.getElementById('eventLog');
+    const userMessageInput = document.getElementById('userMessage');
+    const sessionStatus = document.getElementById('sessionStatus');
+    const startSessionBtn = document.getElementById('startSessionBtn');
+    const stopSessionBtn = document.getElementById('stopSessionBtn');
+    const sendMessageBtn = document.getElementById('sendMessageBtn');
+
+    // Refs: Tools panel elements
+    const toolsPanel = document.getElementById('toolsPanel');
+    const closeToolsBtn = document.getElementById('closeToolsBtn');
+    const askColorPaletteBtn = document.getElementById('askColorPaletteBtn');
+    const colorPaletteDiv = document.getElementById('colorPalette');
+    const colorBoxesDiv = document.getElementById('colorBoxes');
+    const functionCallOutputDiv = document.getElementById('functionCallOutput');
+    const functionCallDetailsDiv = document.getElementById('functionCallDetails');
+    const viewHtmlSnippetsDiv = document.getElementById('viewHtmlSnippets');
+    const viewHtmlBtn = document.getElementById('viewHtmlBtn');
+
+    // Refs: HTML Snippet Panel
+    const htmlPanelView = document.getElementById('htmlPanelView');
+    const toolsMainView = document.getElementById('toolsMainView');
+    const versionSelect = document.getElementById('versionSelect');
+    const htmlOutputJson = document.getElementById('htmlOutputJson');
+    const htmlCodeTextarea = document.getElementById('htmlCodeTextarea');
+    const renderContainer = document.getElementById('renderContainer');
+    const toggleViewBtn = document.getElementById('toggleViewBtn');
+    const copyCodeBtn = document.getElementById('copyCodeBtn');
+    const htmlBackBtn = document.getElementById('htmlBackBtn');
+
+    // Refs: Mobile navigation
+    const mobileConsoleBtn = document.getElementById('mobileConsoleBtn');
+    const mobileToolsBtn = document.getElementById('mobileToolsBtn');
+
+    /**************************************************
+     * 3) attachEventListeners
+     **************************************************/
+    attachEventListeners();
+    function attachEventListeners() {
+      // Session
+      startSessionBtn.addEventListener('click', startSession);
+      stopSessionBtn.addEventListener('click', stopSession);
+      sendMessageBtn.addEventListener('click', sendTextMessage);
+
+      // Tools
+      askColorPaletteBtn.addEventListener('click', requestColorPalette);
+      viewHtmlBtn.addEventListener('click', handleViewHtml);
+      htmlBackBtn.addEventListener('click', handleHtmlBack);
+      versionSelect.addEventListener('change', handleVersionChange);
+      toggleViewBtn.addEventListener('click', toggleCodeView);
+      copyCodeBtn.addEventListener('click', copyCodeToClipboard);
+
+      // Mobile nav
+      mobileConsoleBtn.addEventListener('click', () => {
+        toolsPanel.style.transform = 'translateX(100%)';
+      });
+      mobileToolsBtn.addEventListener('click', () => {
+        toolsPanel.style.transform = 'translateX(0)';
+      });
+      closeToolsBtn.addEventListener('click', () => {
+        toolsPanel.style.transform = 'translateX(100%)';
+      });
+    }
+
+    /**************************************************
+     * 4) Session Management
+     **************************************************/
+    async function startSession() {
+      startSessionBtn.disabled = true;
+      stopSessionBtn.disabled = false;
+      sessionStatus.textContent = 'Connecting...';
+      sessionStatus.classList.remove('text-gray-700');
+      sessionStatus.classList.remove('text-green-600', 'font-medium');
+      sessionStatus.classList.add('text-indigo-600', 'font-medium');
+
+      try {
+        // 1. Fetch ephemeral key
+        const tokenResponse = await fetch(
+          'https://cmlhnbvqxqeiwa3cyamdm2ouxm0zecoi.lambda-url.us-west-2.on.aws/token'
+        );
+        const data = await tokenResponse.json();
+
+        if (!data.client_secret || !data.client_secret.value) {
+          resetSessionUI();
+          return;
+        }
+
+        const EPHEMERAL_KEY = data.client_secret.value;
+
+        // 2. Create RTCPeerConnection
+        peerConnection = new RTCPeerConnection();
+
+        // Handle remote track (audio)
+        peerConnection.ontrack = (event) => {
+          document.getElementById('remoteAudio').srcObject = event.streams[0];
+        };
+
+        // Get local microphone
+        const localStream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
+        peerConnection.addTrack(localStream.getTracks()[0], localStream);
+
+        // Create a data channel
+        dataChannel = peerConnection.createDataChannel('oai-events');
+        dataChannel.addEventListener('open', handleDataChannelOpen);
+        dataChannel.addEventListener('message', handleServerMessage);
+
+        // 3. Exchange SDP (offer/answer)
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
+
+        const baseUrl = 'https://api.openai.com/v1/realtime';
+        const model = 'gpt-4o-realtime-preview-2024-12-17';
+        const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
+          method: 'POST',
+          body: offer.sdp,
+          headers: {
+            Authorization: `Bearer ${EPHEMERAL_KEY}`,
+            'Content-Type': 'application/sdp',
+          },
+        });
+
+        if (!sdpResponse.ok) {
+          resetSessionUI();
+          return;
+        }
+
+        const answerSdp = await sdpResponse.text();
+        await peerConnection.setRemoteDescription({
+          type: 'answer',
+          sdp: answerSdp,
+        });
+        sessionStatus.textContent = 'Connected';
+        sessionStatus.classList.remove('text-indigo-600');
+        sessionStatus.classList.add('text-green-600');
+      } catch (err) {
+        resetSessionUI();
+      }
+    }
+
+    function handleDataChannelOpen() {
+      isSessionActive = true;
+      // Immediately tell the model about our tools (imported from tools.js)
+      sendClientEvent(sessionUpdate);
+    }
+
+    function stopSession() {
+      if (dataChannel) dataChannel.close();
+      if (peerConnection) peerConnection.close();
+      resetSessionUI();
+    }
+
+    function resetSessionUI() {
+      isSessionActive = false;
+      dataChannel = null;
+      peerConnection = null;
+
+      startSessionBtn.disabled = false;
+      stopSessionBtn.disabled = true;
+      sessionStatus.textContent = 'Not Connected';
+      sessionStatus.classList.remove('text-green-600', 'font-medium');
+      sessionStatus.classList.remove('text-indigo-600');
+      sessionStatus.classList.add('text-gray-700');
+
+      functionCallOutput = null;
+      htmlVersions = [];
+      showHtmlPanel = false;
+
+      // Clear out the message containers visually and from memory
+      for (const key in messageContainers) {
+        const containerObj = messageContainers[key];
+        if (containerObj.element) {
+          containerObj.element.remove();
+        }
+      }
+      for (const key in messageContainers) {
+        delete messageContainers[key];
+      }
+
+      updateToolsUI();
+    }
+
+    /**************************************************
+     * 5) Communication Helpers
+     **************************************************/
+    function sendClientEvent(msg) {
+      if (dataChannel && isSessionActive) {
+        msg.event_id = msg.event_id || self.crypto.randomUUID();
+        dataChannel.send(JSON.stringify(msg));
+      }
+    }
+
+    function sendTextMessage() {
+      const message = userMessageInput.value.trim();
+      if (!message || !dataChannel || !isSessionActive) return;
+
+      const event = {
+        type: 'conversation.item.create',
+        item: {
+          type: 'message',
+          role: 'user',
+          content: [{ type: 'text', text: message }],
+        },
+      };
+      sendClientEvent(event);
+      sendClientEvent({ type: 'response.create' });
+      userMessageInput.value = '';
+    }
+
+    /**************************************************
+     * 6) Receiving Messages from the Server
+     **************************************************/
+    function handleServerMessage(event) {
+      const eventData = JSON.parse(event.data);
+
+      // Partial transcripts
+      if (eventData.type === 'response.audio_transcript.delta') {
+        const itemId = eventData.item_id;
+        const deltaText = eventData.delta || '';
+        appendToContainer(itemId, deltaText, 'assistant');
+      }
+
+      // Final text
+      if (
+        eventData.type === 'response.output_item.done' &&
+        eventData.item &&
+        eventData.item.type === 'message' &&
+        (eventData.item.role === 'assistant' || eventData.item.role === 'user')
+      ) {
+        const itemId = eventData.item.id;
+        const role = eventData.item.role || 'assistant';
+        const finalText = parseUserContent(eventData.item.content) || '';
+
+        // Avoid duplicates
+        const containerObj = messageContainers[itemId];
+        if (containerObj && containerObj.text.trim() === finalText.trim()) {
+          // do nothing
+        } else {
+          appendToContainer(itemId, finalText, role);
+        }
+      }
+
+      // Function calls
+      if (eventData.type === 'response.done' && eventData.response && eventData.response.output) {
+        eventData.response.output.forEach((output) => {
+          if (output.type === 'function_call') {
+            handleFunctionCall(output);
+          }
+        });
+      }
+    }
+
+    // Parse content array for "text" or "audio/transcript"
+    function parseUserContent(contentArray) {
+      if (!contentArray) return null;
+      for (const c of contentArray) {
+        if (c.type === 'text' && c.text) {
+          return c.text;
+        }
+        if (c.type === 'audio' && c.transcript) {
+          return c.transcript;
+        }
+      }
+      return null;
+    }
+
+    /**************************************************
+     * 7) Handling Function Calls
+     **************************************************/
+    function handleFunctionCall(output) {
+      console.log('Function called:', output.name);
+      const callName = output.name;
+      const args = output.arguments ? JSON.parse(output.arguments) : {};
+
+      if (callName === 'display_color_palette') {
+        functionCallOutput = output;
+        displayColorPaletteFromOutput(
+          output,
+          colorPaletteDiv,
+          colorBoxesDiv,
+          functionCallOutputDiv,
+          functionCallDetailsDiv
+        );
+        updateToolsUI();
+      } else if (callName === 'display_html_snippet') {
+        handleDisplayHtmlSnippet(args, htmlVersions, viewHtmlSnippetsDiv);
+        updateToolsUI();
+      } else if (callName === 'lookup_answer') {
+        const { question } = args;
+        lookupAnswer(question)
+          .then((answer) => {
+            const event = {
+              type: 'conversation.item.create',
+              item: {
+                type: 'message',
+                role: 'assistant',
+                content: [{ type: 'text', text: answer }],
+              },
+            };
+            sendClientEvent(event);
+            sendClientEvent({ type: 'response.create' });
+          })
+          .catch(() => {});
+      }
+    }
+
+    /**************************************************
+     * 8) UI: Tools & Requests
+     **************************************************/
+    function requestColorPalette() {
+      if (!isSessionActive) return;
+      // instruct the model to provide a color palette
+      sendClientEvent({
+        type: 'response.create',
+        response: {
+          instructions: "Please provide a color palette with a theme 'sunset' and 5 hex colors.",
+        },
+      });
+    }
+
+    /**************************************************
+     * 9) UI: Container / Transcript Helpers
+     **************************************************/
+    function getOrCreateMessageContainer(itemId, role = 'assistant') {
+      if (!messageContainers[itemId]) {
+        const container = document.createElement('div');
+        container.className =
+          'relative bg-gray-50 rounded shadow-sm w-fit max-w-full my-2 p-3 border border-gray-200';
+
+        // Distinguish user vs assistant messages
+        if (role === 'user') {
+          container.classList.add('bg-blue-50');
+          container.classList.add('self-end');
+        } else {
+          container.classList.add('self-start');
+        }
+
+        container.dataset.itemId = itemId;
+        eventLog.append(container);
+
+        messageContainers[itemId] = {
+          element: container,
+          text: '',
+        };
+      }
+      return messageContainers[itemId];
+    }
+
+    function appendToContainer(itemId, text, role) {
+      const containerObj = getOrCreateMessageContainer(itemId, role);
+      const oldText = containerObj.text;
+      const newText = oldText + text;
+      containerObj.text = newText;
+      containerObj.element.textContent = newText;
+      eventLog.scrollTop = eventLog.scrollHeight;
+    }
+
+    /**************************************************
+     * 10) Tools Panel: HTML Snippets
+     **************************************************/
+    function handleViewHtml() {
+      if (htmlVersions.length > 0) {
+        showHtmlPanel = true;
+        updateToolsUI();
+      }
+    }
+
+    function handleHtmlBack() {
+      showHtmlPanel = false;
+      updateToolsUI();
+    }
+
+    function handleVersionChange(event) {
+      currentVersionIndex = parseInt(event.target.value, 10);
+      updateHtmlPanel();
+    }
+
+    function toggleCodeView() {
+      showRaw = !showRaw;
+      updateHtmlPanel();
+    }
+
+    async function copyCodeToClipboard() {
+      try {
+        await navigator.clipboard.writeText(htmlCodeTextarea.value);
+        copied = true;
+        setTimeout(() => {
+          copied = false;
+          updateHtmlPanel();
+        }, 2000);
+        updateHtmlPanel();
+      } catch {}
+    }
+
+    function populateHtmlPanel() {
+      versionSelect.innerHTML = '';
+      htmlVersions.forEach((v, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.text = `Version ${idx + 1}`;
+        versionSelect.appendChild(opt);
+      });
+      currentVersionIndex = htmlVersions.length - 1;
+      versionSelect.value = currentVersionIndex;
+      updateHtmlPanel();
+    }
+
+    function updateHtmlPanel() {
+      const currentVersion = htmlVersions[currentVersionIndex];
+      if (!currentVersion) return;
+
+      const currentCode = currentVersion.htmlContent || '';
+      htmlCodeTextarea.value = currentCode;
+      htmlCodeTextarea.classList.toggle('hidden', !showRaw);
+      renderContainer.classList.toggle('hidden', showRaw);
+
+      toggleViewBtn.textContent = showRaw ? '👀' : '💻';
+      copyCodeBtn.textContent = copied ? '✅' : '📋';
+
+      if (!showRaw) {
+        renderContainer.innerHTML = `
+          <div
+            style="border:1px solid #ccc; padding:16px; border-radius:4px;
+                   background:#fafafa; font-family:sans-serif; color:#333;">
+            ${currentCode}
+          </div>
+        `;
+      }
+
+      htmlOutputJson.textContent = JSON.stringify(currentVersion, null, 2);
+    }
+
+    /**************************************************
+     * 11) Tools UI Updates
+     **************************************************/
+    function updateToolsUI() {
+      if (!isSessionActive) {
+        // Hide everything if not connected
+        colorPaletteDiv.classList.add('hidden');
+        functionCallOutputDiv.classList.add('hidden');
+        viewHtmlSnippetsDiv.classList.add('hidden');
+        htmlPanelView.classList.add('hidden');
+        toolsMainView.classList.remove('hidden');
+        return;
+      }
+
+      // Show or hide the HTML panel
+      if (showHtmlPanel && htmlVersions.length > 0) {
+        toolsMainView.classList.add('hidden');
+        htmlPanelView.classList.remove('hidden');
+        populateHtmlPanel();
+      } else {
+        htmlPanelView.classList.add('hidden');
+        toolsMainView.classList.remove('hidden');
+
+        // If we have a color palette output
+        if (functionCallOutput) {
+          functionCallOutputDiv.classList.remove('hidden');
+        }
+        // If we have HTML snippets
+        if (htmlVersions.length > 0) {
+          viewHtmlSnippetsDiv.classList.remove('hidden');
+        }
+      }
+    }
+
+  </script>
+</body>
+</html>
