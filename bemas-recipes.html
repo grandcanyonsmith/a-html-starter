@@ -3,55 +3,156 @@
 <head>
   <meta charset="UTF-8" />
   <title>Bema's Recipes</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link 
+    rel="stylesheet" 
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+  >
+
   <style>
+    /* GLOBAL STYLES */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
-      font-family: Arial, sans-serif;
-      margin: 2rem;
-      background-color: #f4f4f4;
+      font-family: 'Montserrat', sans-serif;
+      background: linear-gradient(135deg, #FAFAFA 0%, #ECECEC 100%);
+      color: #333;
+      line-height: 1.6;
     }
 
-    h1 {
+    /* HEADER / TITLE */
+    header {
+      background: #f5936c; /* a warm, soft orange */
+      background: linear-gradient(135deg, #f5936c 0%, #f06d4f 100%);
+      color: #fff;
       text-align: center;
-      margin-bottom: 1rem;
+      padding: 2rem 1rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    }
+    header h1 {
+      font-weight: 600;
+      font-size: 2.5rem;
+      margin: 0.5rem 0;
+    }
+    header p.subtitle {
+      font-size: 1rem;
+      opacity: 0.9;
     }
 
+    /* MAIN CONTAINER */
+    .container {
+      width: 95%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    /* RECIPE CARD STYLES */
     .recipe {
       background: #fff;
-      border-radius: 6px;
+      border-radius: 8px;
       margin-bottom: 2rem;
-      padding: 1rem 2rem;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .recipe:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
 
+    /* RECIPE HEADINGS */
     .recipe h2 {
-      color: #333;
-      margin-top: 0;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+      color: #f06d4f;
     }
-
+    .recipe p {
+      margin-bottom: 0.75rem;
+    }
     .recipe .variations {
       font-style: italic;
-      margin-bottom: 0.5rem;
-      color: #666;
+      color: #555;
+    }
+    .recipe .serves-yield {
+      color: #888;
+      font-size: 0.95rem;
     }
 
+    /* INGREDIENTS */
     .ingredients-title {
-      font-weight: bold;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #444;
+      text-decoration: underline;
+    }
+    ul.ingredients-list {
+      list-style-type: none;
+      margin-left: 0;
+      padding-left: 0.5rem;
+    }
+    ul.ingredients-list li {
+      margin: 0.3rem 0;
+      display: flex;
+      align-items: center;
+    }
+    ul.ingredients-list li::before {
+      content: '•';
+      color: #f06d4f;
+      margin-right: 0.5rem;
+      font-weight: bold;
+    }
+    ul.ingredients-list li strong {
+      color: #333;
     }
 
-    .ingredients-list {
-      margin-bottom: 1rem;
+    /* INSTRUCTIONS */
+    .instructions-title {
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #444;
+      text-decoration: underline;
     }
-
     .instructions {
-      white-space: pre-line; /* Preserve line breaks if needed */
+      white-space: pre-line; /* preserve line breaks if in JSON data */
+      background: #fdf7f5;   /* subtle background for instructions */
+      padding: 1rem;
+      border-radius: 6px;
+      border-left: 3px solid #f06d4f;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      .recipe {
+        padding: 1rem;
+      }
+      .recipe h2 {
+        font-size: 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Bema's Recipes</h1>
-  <div id="recipe-container"></div>
+
+  <header>
+    <h1>Bema's Recipes</h1>
+    <p class="subtitle">Delicious recipes, beautifully presented</p>
+  </header>
+
+  <main class="container">
+    <div id="recipe-container"></div>
+  </main>
 
   <script>
     // Fetch the JSON file containing all the recipes
@@ -65,7 +166,7 @@
         Object.keys(data).forEach(recipeName => {
           const recipe = data[recipeName];
 
-          // Create a container for each recipe
+          // Create a container (card) for each recipe
           const recipeDiv = document.createElement('div');
           recipeDiv.classList.add('recipe');
 
@@ -74,7 +175,7 @@
           title.textContent = recipeName;
           recipeDiv.appendChild(title);
 
-          // If there are variations, display them
+          // Variations?
           if (recipe.variations) {
             const variationsPara = document.createElement('p');
             variationsPara.classList.add('variations');
@@ -82,21 +183,18 @@
             recipeDiv.appendChild(variationsPara);
           }
 
-          // If there's a 'yield' or 'serves' key, display that
+          // Yield or Serves?
           if (recipe.yield) {
             const yieldPara = document.createElement('p');
+            yieldPara.classList.add('serves-yield');
             yieldPara.textContent = `Yield: ${recipe.yield}`;
             recipeDiv.appendChild(yieldPara);
           } else if (recipe.serves) {
             const servesPara = document.createElement('p');
+            servesPara.classList.add('serves-yield');
             servesPara.textContent = `Serves: ${recipe.serves}`;
             recipeDiv.appendChild(servesPara);
           }
-
-          // Ingredients
-          // Some recipes use sub-objects for ingredients (e.g. "ingredients_for_sauté")
-          // We'll handle the common pattern "ingredients": { ... }
-          // and also loop if any other ingredient objects exist.
 
           // Helper function to render an ingredients object
           function renderIngredients(ingredientObj, headerText) {
@@ -113,17 +211,15 @@
               li.innerHTML = `<strong>${key}:</strong> ${value}`;
               ul.appendChild(li);
             });
-
             recipeDiv.appendChild(ul);
           }
 
-          // Primary "ingredients" block
+          // Check top-level "ingredients"
           if (recipe.ingredients) {
             renderIngredients(recipe.ingredients, 'Ingredients');
           }
 
-          // Check for any other sub-ingredient objects (like sauce_ingredients, etc.)
-          // We'll exclude 'instructions', 'frosting', 'yield', 'serves', 'variations' keys
+          // Check sub-ingredient objects (e.g. sauce_ingredients, frosting, etc.)
           Object.keys(recipe).forEach(key => {
             if (
               key.toLowerCase().includes('ingredient') &&
@@ -133,20 +229,24 @@
             }
           });
 
-          // If there's a "frosting" key, treat it as another ingredient set
           if (recipe.frosting) {
             renderIngredients(recipe.frosting, 'Frosting');
           }
 
-          // Instructions (may be a string or there could be multiple blocks)
+          // Instructions
           if (recipe.instructions) {
-            const instructionsPara = document.createElement('p');
-            instructionsPara.classList.add('instructions');
-            instructionsPara.textContent = recipe.instructions;
-            recipeDiv.appendChild(instructionsPara);
+            const instructionsTitle = document.createElement('div');
+            instructionsTitle.classList.add('instructions-title');
+            instructionsTitle.textContent = 'Instructions';
+            recipeDiv.appendChild(instructionsTitle);
+
+            const instructionsBlock = document.createElement('div');
+            instructionsBlock.classList.add('instructions');
+            instructionsBlock.textContent = recipe.instructions;
+            recipeDiv.appendChild(instructionsBlock);
           }
 
-          // Finally, add the recipe block to the page
+          // Finally, add the recipe card to the container
           recipeContainer.appendChild(recipeDiv);
         });
       })
@@ -154,5 +254,6 @@
         console.error('Error loading recipes:', error);
       });
   </script>
+
 </body>
 </html>
