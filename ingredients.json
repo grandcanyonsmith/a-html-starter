@@ -1,407 +1,407 @@
 {
   "CREAM PIE": {
-    "variations": ["banana", "coconut", "chocolate"],
+    "variations": ["Banana", "Coconut", "Chocolate"],
     "ingredients": {
-      "sugar": "3/4 cup (1 cup if chocolate)",
-      "cornstarch_or_flour": "1/4 cup cornstarch or 1/2 cup flour",
-      "milk": "3 cups",
-      "butter": "1 tbsp",
-      "vanilla": "1 1/2 tsp",
-      "eggs": "4 (whites may be used for meringue)"
+      "Sugar": "3/4 cup (1 cup if chocolate)",
+      "Cornstarch or Flour": "1/4 cup cornstarch or 1/2 cup flour",
+      "Milk": "3 cups",
+      "Butter": "1 tbsp",
+      "Vanilla": "1 1/2 tsp",
+      "Eggs": "4 (whites may be used for meringue)"
     },
-    "instructions": "In a saucepan, mix sugar and cornstarch (or flour). Slowly add milk and bring to a gentle boil, stirring until thickened. Remove from heat, add butter and vanilla. Temper egg yolks and stir back into mixture. Cook briefly to set. Pour into baked pie shell. Top with meringue or whipped cream."
+    "instructions": "In a saucepan, mix Sugar and Cornstarch (or Flour). Slowly add Milk and bring to a gentle boil, stirring until thickened.\nRemove from heat, add Butter and Vanilla.\nTemper the Egg yolks and stir them back into the mixture. Cook briefly to set.\nPour into a baked pie shell.\nTop with meringue or whipped cream."
   },
 
   "CHILI VERDE": {
     "ingredients": {
-      "pork_shoulder": "5 lb, cut into 1-inch cubes",
-      "whole_tomatoes": "2 cans",
-      "dried_onions": "2 (or equivalent fresh)",
-      "diced_green_chilis": "16 oz (Ortega)",
-      "oregano": "1/2 tsp",
-      "cumin": "1/4 tsp",
-      "garlic_powder_salt_pepper": "to taste"
+      "Pork Shoulder": "5 lb, cut into 1-inch cubes",
+      "Whole Tomatoes": "2 cans",
+      "Dried Onions": "2 (or equivalent fresh)",
+      "Diced Green Chilis": "16 oz (Ortega)",
+      "Oregano": "1/2 tsp",
+      "Cumin": "1/4 tsp",
+      "Garlic Powder, Salt, Pepper": "to taste"
     },
-    "instructions": "Brown pork with onions, spices. Combine all ingredients in a crock pot. Cook on low all day (or simmer on stove at least 1 hour), stirring occasionally."
+    "instructions": "Brown Pork with Onions and spices.\nCombine all ingredients in a crock pot.\nCook on low all day (or simmer on the stove at least 1 hour), stirring occasionally."
   },
 
   "SALMON BALL": {
     "ingredients": {
-      "canned_salmon": "1 can (about 2 cups, sockeye preferred)",
-      "cream_cheese": "1 package (8 oz)",
-      "lemon_juice": "2 tbsp",
-      "grated_onion": "2 tsp",
-      "horseradish": "1 tsp",
-      "salt": "1/4 tsp",
-      "chopped_pecans_for_rolling": "as needed"
+      "Canned Salmon": "1 can (about 2 cups, sockeye preferred)",
+      "Cream Cheese": "1 package (8 oz)",
+      "Lemon Juice": "2 tbsp",
+      "Grated Onion": "2 tsp",
+      "Horseradish": "1 tsp",
+      "Salt": "1/4 tsp",
+      "Chopped Pecans (for rolling)": "as needed"
     },
-    "instructions": "Combine all ingredients thoroughly. Shape into a ball and chill. Roll in chopped pecans. Serve with crackers (e.g., Triscuit) and garnish with parsley."
+    "instructions": "Combine all ingredients thoroughly.\nShape into a ball and chill.\nRoll in chopped pecans.\nServe with crackers and garnish with parsley."
   },
 
   "STRAWBERRY DREAM CAKE": {
     "ingredients": {
-      "white_cake": "Half-sheet or jelly-roll size (use mix or bakery cake)",
-      "heavy_whipping_cream": "1 pint (whip with 1 cup powdered sugar)",
-      "cream_cheese": "1 package (8 oz)",
-      "powdered_sugar": "1 cup (plus 1 cup used in whipped cream)",
-      "vanilla": "1 tsp",
-      "danish_dessert_mix_strawberry": "1 box, prepared",
-      "fresh_strawberries": "4 baskets, sliced"
+      "White Cake": "Half-sheet or jelly-roll size (use mix or bakery cake)",
+      "Heavy Whipping Cream": "1 pint (whip with 1 cup powdered sugar)",
+      "Cream Cheese": "1 package (8 oz)",
+      "Powdered Sugar": "1 cup (plus 1 cup used in whipped cream)",
+      "Vanilla": "1 tsp",
+      "Danish Dessert Mix (Strawberry)": "1 box, prepared",
+      "Fresh Strawberries": "4 baskets, sliced"
     },
-    "instructions": "Prepare cake as a thin layer. Whip cream with 1 cup powdered sugar, set aside. Beat cream cheese with 1 cup powdered sugar; fold in whipped cream and vanilla. Spread on cooled cake (top/sides). Prepare Danish Dessert, fold in sliced strawberries, and spoon over cream layer. Chill. Serves ~20."
+    "instructions": "Prepare a thin layer of white cake.\nWhip Cream with 1 cup Powdered Sugar; set aside.\nBeat Cream Cheese with 1 cup Powdered Sugar; fold in whipped Cream and Vanilla.\nSpread on cooled cake (top and sides).\nPrepare Danish Dessert; fold in sliced Strawberries.\nSpoon over the cream layer.\nChill. Serves ~20."
   },
 
   "4Bs OLD FASHIONED CREAM OF TOMATO SOUP": {
     "yield": "Half gallon",
     "ingredients": {
-      "chicken_base_paste_form": "1 tbsp",
-      "water": "1 cup",
-      "butter": "1 oz",
-      "sugar": "2 tbsp",
-      "chopped_onion": "1 tbsp",
-      "baking_soda": "1/2 tsp",
-      "diced_tomatoes_in_puree": "16 oz can",
-      "crushed_tomatoes": "16 oz can",
-      "heavy_whipping_cream": "8 oz",
-      "half_and_half": "8 oz",
-      "additional_half_and_half": "as needed"
+      "Chicken Base (paste form)": "1 tbsp",
+      "Water": "1 cup",
+      "Butter": "1 oz",
+      "Sugar": "2 tbsp",
+      "Chopped Onion": "1 tbsp",
+      "Baking Soda": "1/2 tsp",
+      "Diced Tomatoes in Purée": "16 oz can",
+      "Crushed Tomatoes": "16 oz can",
+      "Heavy Whipping Cream": "8 oz",
+      "Half and Half": "8 oz",
+      "Additional Half and Half": "as needed"
     },
-    "instructions": "Combine chicken base, water, butter, onion, and sugar in a pot; simmer until onion is clear. Add tomatoes and baking soda, stir well. Add creams and gently heat. Serve hot."
+    "instructions": "Combine Chicken Base, Water, Butter, Onion, and Sugar in a pot; simmer until Onion is clear.\nAdd Tomatoes and Baking Soda; stir well.\nAdd Creams and gently heat. Serve hot."
   },
 
   "ORANGE BOW KNOTS": {
     "ingredients": {
-      "dry_yeast": "1 package",
-      "warm_water": "1 cup",
-      "scalded_milk": "1 cup (cooled to lukewarm)",
-      "shortening": "1/2 cup",
-      "sugar": "1/3 cup",
-      "salt": "1 tsp",
-      "flour": "2 cups initially + more as needed",
-      "eggs": "2 (beaten)",
-      "orange_juice": "1/4 cup",
-      "grated_orange_peel": "2 tbsp"
+      "Dry Yeast": "1 package",
+      "Warm Water": "1 cup",
+      "Scalded Milk (cooled)": "1 cup",
+      "Shortening": "1/2 cup",
+      "Sugar": "1/3 cup",
+      "Salt": "1 tsp",
+      "Flour": "2 cups initially + more as needed",
+      "Eggs (beaten)": "2",
+      "Orange Juice": "1/4 cup",
+      "Grated Orange Peel": "2 tbsp"
     },
-    "instructions": "Dissolve yeast in warm water. In a large bowl, combine lukewarm milk, shortening, sugar, salt, and 2 cups flour. Stir in eggs, yeast, orange juice, and peel. Add more flour for a soft dough. Let rest 10 min, then knead 8-10 min. Let rise ~2 hours, punch down, rest 10 min. Shape into bow knots, let rise ~45 min. Bake at 350°F until lightly browned."
+    "instructions": "Dissolve Yeast in Warm Water.\nIn a large bowl, combine lukewarm Milk, Shortening, Sugar, Salt, and 2 cups Flour.\nStir in Eggs, Yeast, Orange Juice, and Peel. Add more Flour for a soft dough.\nLet rest 10 minutes, then knead 8-10 minutes.\nLet rise ~2 hours; punch down, rest 10 minutes.\nShape into bow knots; let rise ~45 minutes.\nBake at 350°F until lightly browned."
   },
 
   "BEEF FRENCH DIP": {
     "ingredients": {
-      "beef_roast": "trimmed (size as needed)",
-      "kitchen_bouquet": "to rub all over roast",
-      "garlic_cloves_crushed": "2",
-      "dehydrated_vegetable_flakes": "2 tbsp or more",
-      "garlic_salt_celery_salt_salt_pepper": "to taste",
-      "water": "enough to fill half the roaster",
-      "ketchup": "1/2 bottle",
-      "dry_mustard": "a knife-full",
-      "onions_quartered": "2",
-      "carrots_chunks": "2",
-      "celery_stalk": "1"
+      "Beef Roast": "trimmed (size as needed)",
+      "Kitchen Bouquet": "to rub all over roast",
+      "Garlic Cloves (crushed)": "2",
+      "Dehydrated Vegetable Flakes": "2 tbsp or more",
+      "Seasonings (garlic salt, celery salt, etc.)": "to taste",
+      "Water": "enough to fill half the roaster",
+      "Ketchup": "1/2 bottle",
+      "Dry Mustard": "a knife-full",
+      "Onions (quartered)": "2",
+      "Carrots (chunks)": "2",
+      "Celery Stalk": "1"
     },
-    "instructions": "Rub roast with kitchen bouquet, garlic, and seasonings. Place in deep roaster with water half full, add ketchup, mustard, onions, carrots, celery. Cover and cook at 200°F for ~20 hours. Slice and use juices for dipping."
+    "instructions": "Rub Roast with Kitchen Bouquet, Garlic, and seasonings.\nPlace in a deep roaster with Water half full, add Ketchup, Mustard, Onions, Carrots, Celery.\nCover and cook at 200°F for ~20 hours.\nSlice and use juices for dipping."
   },
 
   "PRIME RIB": {
     "ingredients": {
-      "prime_rib_roast": "size as needed"
+      "Prime Rib Roast": "size as needed"
     },
-    "instructions": "Roast at 300°F for ~20 minutes per pound. Let stand 1 hour (in the turned-off oven) before carving."
+    "instructions": "Roast at 300°F for ~20 minutes per pound.\nLet stand 1 hour (in the turned-off oven) before carving."
   },
 
   "POLLO PASTORELLA": {
     "ingredients_for_sauté": {
-      "butter": "1/4 cup",
-      "mushrooms": "2 cups, diced",
-      "onions": "1 cup, thinly sliced"
+      "Butter": "1/4 cup",
+      "Mushrooms (diced)": "2 cups",
+      "Onions (thinly sliced)": "1 cup"
     },
     "sauce_ingredients": {
-      "butter": "4 tbsp",
-      "flour": "4 tbsp",
-      "chicken_broth": "3+ cups (added gradually)",
-      "white_wine": "1 cup",
-      "lemon_juice": "1/4 cup",
-      "capers": "to taste",
-      "frozen_green_peas": "3/4 cup (rinsed in hot water)"
+      "Butter": "4 tbsp",
+      "Flour": "4 tbsp",
+      "Chicken Broth": "3+ cups (added gradually)",
+      "White Wine": "1 cup",
+      "Lemon Juice": "1/4 cup",
+      "Capers": "to taste",
+      "Frozen Green Peas (rinsed)": "3/4 cup"
     },
-    "instructions": "Sauté mushrooms and onions in 1/4 cup butter; set aside. In a large pan, melt 4 tbsp butter, whisk in 4 tbsp flour. Gradually add chicken broth, wine, and lemon juice. Stir until thickened. Add mushrooms, onions, and capers. Just before serving, stir in peas. Serve over broiled chicken breasts. Thin sauce with heated broth if needed."
+    "instructions": "Sauté Mushrooms and Onions in 1/4 cup Butter; set aside.\nIn a large pan, melt 4 tbsp Butter, whisk in 4 tbsp Flour.\nGradually add Broth, Wine, and Lemon Juice; stir until thickened.\nAdd Mushrooms, Onions, and Capers.\nJust before serving, stir in Peas.\nServe over broiled Chicken Breasts.\nThin sauce with heated Broth if needed."
   },
 
   "FOOL PROOF PIE CRUST": {
     "ingredients": {
-      "flour": "4 cups",
-      "salt": "1 tbsp",
-      "shortening": "1 3/4 cups (Crisco)",
-      "water": "1/2 cup",
-      "white_vinegar": "1 tbsp",
-      "egg": "1 large",
-      "sugar": "1 tbsp"
+      "Flour": "4 cups",
+      "Salt": "1 tbsp",
+      "Shortening (Crisco)": "1 3/4 cups",
+      "Water": "1/2 cup",
+      "White Vinegar": "1 tbsp",
+      "Egg": "1 large",
+      "Sugar": "1 tbsp"
     },
-    "instructions": "Stir flour, sugar, and salt in a bowl. Cut in shortening until crumbly. In a separate bowl, beat egg, water, and vinegar. Add to flour mixture until moistened. Divide dough into 4 portions, flatten, wrap, and chill 30+ minutes. Roll each between wax paper to fit 9-10 inch pie pans."
+    "instructions": "Stir Flour, Sugar, and Salt in a bowl.\nCut in Shortening until crumbly.\nIn a separate bowl, beat Egg, Water, and Vinegar; add to Flour mixture until moistened.\nDivide dough into 4 portions, flatten, wrap, and chill 30+ minutes.\nRoll each between wax paper to fit 9-10 inch pie pans."
   },
 
   "RICE PILAF": {
     "ingredients": {
-      "chicken_broth": "5 cups (brought to a boil)",
-      "butter": "1 cube (1/2 cup)",
-      "uncle_bens_converted_rice": "2 1/2 cups",
-      "curly_vermicelli": "2 or 3 handfuls (broken pieces)",
-      "sliced_almonds": "1/2 cup",
-      "fresh_or_dry_rosemary": "3 tbsp fresh or 2 tbsp dry",
-      "salt": "1/2 tsp",
-      "pepper": "1/4 tsp"
+      "Chicken Broth (boiling)": "5 cups",
+      "Butter": "1 cube (1/2 cup)",
+      "Uncle Ben's Converted Rice": "2 1/2 cups",
+      "Curly Vermicelli (broken)": "2 or 3 handfuls",
+      "Sliced Almonds": "1/2 cup",
+      "Rosemary (fresh or dry)": "3 tbsp fresh or 2 tbsp dry",
+      "Salt": "1/2 tsp",
+      "Pepper": "1/4 tsp"
     },
-    "instructions": "Melt butter, add rice, brown slightly (do not burn butter). Add vermicelli, almonds, rosemary, salt, and pepper. Pour simmering broth over rice mixture, cover, reduce heat, and simmer ~20 minutes. Turn off heat and fluff. Can hold for 2 hours without reheating."
+    "instructions": "Melt Butter; add Rice and brown slightly (do not burn Butter).\nAdd Vermicelli, Almonds, Rosemary, Salt, and Pepper.\nPour simmering Broth over Rice mixture, cover, reduce heat, and simmer ~20 minutes.\nTurn off heat and fluff.\nCan hold for 2 hours without reheating."
   },
 
   "CLAM CHOWDER": {
     "large_quantity_note": "Uses a 21.5 oz flour mix and 4 qts half-and-half.",
     "ingredients": {
-      "flour_mix": "21 1/2 oz (with 2 tbsp salt, 2 tsp pepper mixed in)",
-      "dried_potatoes": "2 cups",
-      "celery_diced": "1 cup",
-      "onion_diced": "1 cup",
-      "water_for_vegetables": "enough to cover veggies",
-      "canned_chopped_clams": "51 oz can (juice included)",
-      "butter": "1/2 lb",
-      "half_and_half": "4 qts total",
-      "additional_water_or_broth": "1 1/2 qts (approx)"
+      "Flour Mix": "21 1/2 oz (with 2 tbsp salt, 2 tsp pepper mixed in)",
+      "Dried Potatoes": "2 cups",
+      "Celery (diced)": "1 cup",
+      "Onion (diced)": "1 cup",
+      "Water for Vegetables": "enough to cover veggies",
+      "Canned Chopped Clams": "51 oz can (juice included)",
+      "Butter": "1/2 lb",
+      "Half and Half": "4 qts total",
+      "Additional Water or Broth": "1 1/2 qts (approx)"
     },
-    "instructions": "Simmer potatoes, celery, and onion in water until tender; do not drain. In top of double boiler, combine clams, juice, cooked veggies, butter, and ~1.5 qts water/broth. Heat to melt butter. Stir in flour mix with ~2 qts half-and-half. Then add remaining 2 qts half-and-half. Heat 25-30 min, stirring frequently, until thickened."
+    "instructions": "Simmer Potatoes, Celery, and Onion in Water until tender; do not drain.\nIn the top of a double boiler, combine Clams, juice, cooked Veggies, Butter, and ~1.5 qts Water/Broth.\nHeat to melt Butter.\nStir in Flour Mix with ~2 qts Half-and-Half.\nThen add the remaining 2 qts Half-and-Half.\nHeat 25-30 min, stirring frequently, until thickened."
   },
 
   "CHOCOLATE CREAM PIE": {
     "ingredients": {
-      "egg_yolks": "4",
-      "sugar": "1 cup",
-      "cornstarch": "1/4 cup",
-      "milk": "3 cups",
-      "unsweetened_chocolate": "3 oz, cut up",
-      "butter": "1 tbsp",
-      "vanilla": "1 1/2 tsp"
+      "Egg Yolks": "4",
+      "Sugar": "1 cup",
+      "Cornstarch": "1/4 cup",
+      "Milk": "3 cups",
+      "Unsweetened Chocolate": "3 oz, cut up",
+      "Butter": "1 tbsp",
+      "Vanilla": "1 1/2 tsp"
     },
-    "instructions": "Combine sugar and cornstarch. Stir in milk and chocolate. Cook over medium heat, stirring, until bubbling. Cook 2 minutes more. Temper egg yolks and return to hot filling. Bring to boil, cook 2 more minutes. Remove from heat, stir in butter and vanilla. Pour into baked crust."
+    "instructions": "Combine Sugar and Cornstarch. Stir in Milk and Chocolate.\nCook over medium heat, stirring, until it bubbles.\nCook 2 minutes more.\nTemper Egg Yolks and return them to the hot filling.\nBring to a boil; cook 2 more minutes.\nRemove from heat; stir in Butter and Vanilla.\nPour into a baked crust."
   },
 
   "CHEESE SOUFFLE": {
     "ingredients": {
-      "white_bread_slices": "10, crusts removed",
-      "butter_or_margarine": "enough to spread on bread + grease dish",
-      "sharp_cheddar_grated": "12 oz",
-      "mozzarella_grated": "12 oz",
-      "eggs": "8, slightly beaten",
-      "half_and_half": "3 1/2 cups",
-      "paprika": "1/4 tsp",
-      "minced_onion": "1 tsp",
-      "curry_powder": "1/2 tsp",
-      "red_pepper": "1/8 tsp",
-      "worcestershire_sauce": "1 tsp",
-      "dry_mustard": "1 tsp",
-      "cooked_sausage_links": "several (e.g., German sausage)"
+      "White Bread Slices": "10, crusts removed",
+      "Butter or Margarine": "enough to grease dish + spread on bread",
+      "Sharp Cheddar (grated)": "12 oz",
+      "Mozzarella (grated)": "12 oz",
+      "Eggs (slightly beaten)": "8",
+      "Half and Half": "3 1/2 cups",
+      "Paprika": "1/4 tsp",
+      "Minced Onion": "1 tsp",
+      "Curry Powder": "1/2 tsp",
+      "Red Pepper": "1/8 tsp",
+      "Worcestershire Sauce": "1 tsp",
+      "Dry Mustard": "1 tsp",
+      "Cooked Sausage Links": "several (e.g., German sausage)"
     },
-    "instructions": "Butter a 9x13 dish. Butter bread, cut into cubes. Layer half bread cubes, half cheeses, half sausage. Repeat. Whisk eggs, half-and-half, and seasonings. Pour over layers. Cover and refrigerate overnight. Bake at 325°F ~1 hour, until set and lightly browned."
+    "instructions": "Butter a 9x13 dish.\nButter Bread, cut into cubes.\nLayer half the Bread cubes, half the Cheeses, half the Sausage. Repeat layers.\nWhisk Eggs, Half-and-Half, and seasonings.\nPour over layers. Cover and refrigerate overnight.\nBake at 325°F ~1 hour, until set and lightly browned."
   },
 
   "POTATOES AUGRATIN": {
     "serves": "6-8",
     "ingredients": {
-      "potatoes": "8-10 medium/large, peeled & sliced like fries",
-      "sharp_cheddar_cheese": "1 lb, grated",
-      "onion_chopped": "1 large",
-      "salt_pepper": "to taste",
-      "whipping_cream": "1 pint"
+      "Potatoes": "8-10 medium/large, peeled & sliced like fries",
+      "Sharp Cheddar Cheese (grated)": "1 lb",
+      "Onion (chopped)": "1 large",
+      "Salt and Pepper": "to taste",
+      "Whipping Cream": "1 pint"
     },
-    "instructions": "Layer potatoes, salt/pepper, onion, cheese in a baking dish, repeating layers with cheese on top. Pour cream over. Cover and bake at 350°F ~45 min. Uncover and bake 15-20 min longer or until potatoes are tender."
+    "instructions": "Layer Potatoes, Salt/Pepper, Onion, and Cheese in a baking dish, repeating layers with Cheese on top.\nPour Cream over.\nCover and bake at 350°F ~45 min.\nUncover and bake 15-20 min longer or until Potatoes are tender."
   },
 
   "PEANUT BRITTLE": {
     "ingredients": {
-      "spanish_peanuts": "2 1/2 cups (or 1 whole bag)",
-      "water": "3/4 cup",
-      "light_corn_syrup": "3/4 cup (Karo)",
-      "sugar": "2 1/2 cups",
-      "butter": "2 tbsp",
-      "baking_soda": "3 tsp",
-      "vanilla": "1 tsp",
-      "salt": "1/2 tsp (add with peanuts)"
+      "Spanish Peanuts": "2 1/2 cups (or 1 whole bag)",
+      "Water": "3/4 cup",
+      "Light Corn Syrup (Karo)": "3/4 cup",
+      "Sugar": "2 1/2 cups",
+      "Butter": "2 tbsp",
+      "Baking Soda": "3 tsp",
+      "Vanilla": "1 tsp",
+      "Salt": "1/2 tsp (add with peanuts)"
     },
-    "instructions": "Cook water, sugar, syrup to 250°F. Add peanuts + salt. Continue cooking to 295°F. Remove from heat, add butter, vanilla, baking soda. Stir and pour onto greased cookie sheets."
+    "instructions": "Cook Water, Sugar, and Syrup to 250°F.\nAdd Peanuts + Salt.\nContinue cooking to 295°F.\nRemove from heat; add Butter, Vanilla, and Baking Soda.\nStir and pour onto greased cookie sheets."
   },
 
   "2 DOZEN ENCHILADAS": {
-    "note": "Recipe actually makes ~4 dozen tortillas but final yield is 2 dozen filled enchiladas if desired.",
+    "note": "Recipe makes ~4 dozen tortillas but final yield is about 2 dozen filled enchiladas if desired.",
     "ingredients": {
-      "corn_tortillas": "4 dozen",
-      "vegetable_oil": "1/2 to 1 cup (for frying/dipping)",
-      "enchilada_sauce": "1 large can (Las Palmas or Rosarita, mild)",
-      "cream_of_chicken_soup": "2 cans (10 oz each, undiluted)",
-      "cheddar_cheese_grated": "2 lbs",
-      "longhorn_cheese_grated": "1 lb",
-      "black_olives_sliced": "2 cans",
-      "onions_chopped": "2 medium"
+      "Corn Tortillas": "4 dozen",
+      "Vegetable Oil": "1/2 to 1 cup (for frying/dipping)",
+      "Enchilada Sauce": "1 large can (Las Palmas or Rosarita, mild)",
+      "Cream of Chicken Soup": "2 cans (10 oz each, undiluted)",
+      "Cheddar Cheese (grated)": "2 lbs",
+      "Longhorn Cheese (grated)": "1 lb",
+      "Black Olives (sliced)": "2 cans",
+      "Onions (chopped)": "2 medium"
     },
-    "instructions": "Heat oil in pan. Quickly dip tortillas in hot oil. Dip in warmed enchilada sauce/soup mixture. Fill each tortilla with cheese, olives, onion. Roll and place in baking pan. Top with remaining cheese. Bake at 350°F ~15-20 min until bubbly. Serve with sour cream."
+    "instructions": "Heat Oil in a pan.\nQuickly dip Tortillas in hot Oil, then in warmed Enchilada Sauce/Soup mixture.\nFill each Tortilla with Cheese, Olives, Onion.\nRoll and place in a baking pan.\nTop with remaining Cheese.\nBake at 350°F ~15-20 min until bubbly.\nServe with Sour Cream."
   },
 
   "O’BRIEN POTATOES": {
     "serves": "12-15",
     "ingredients": {
-      "butter": "6 tbsp",
-      "flour": "6 tbsp",
-      "milk": "3 cups",
-      "salt_pepper": "to taste",
-      "cooked_diced_potatoes": "6 cups",
-      "grated_cheddar_cheese": "3 cups total (2 cups go in sauce, 1 cup topping)",
-      "pimento_chopped": "1/4 cup",
-      "green_pepper_finely_chopped": "1/4 cup",
-      "onion_minced": "1/4 cup"
+      "Butter": "6 tbsp",
+      "Flour": "6 tbsp",
+      "Milk": "3 cups",
+      "Salt and Pepper": "to taste",
+      "Cooked Diced Potatoes": "6 cups",
+      "Grated Cheddar Cheese": "3 cups total (2 cups in sauce, 1 cup topping)",
+      "Pimento (chopped)": "1/4 cup",
+      "Green Pepper (finely chopped)": "1/4 cup",
+      "Onion (minced)": "1/4 cup"
     },
-    "instructions": "Make a white sauce with butter, flour, milk. Season to taste. Stir in 2 cups cheese, pimento, green pepper, onion. Layer half the potatoes in a 9x13 pan, season, top with half the sauce and a bit of cheese. Repeat. Bake at 350°F ~45 min."
+    "instructions": "Make a white sauce with Butter, Flour, and Milk. Season to taste.\nStir in 2 cups Cheese, Pimento, Green Pepper, and Onion.\nLayer half the Potatoes in a 9x13 pan, season, top with half the sauce and some Cheese.\nAdd remaining Potatoes, season, top with remaining sauce and Cheese.\nBake at 350°F ~45 minutes."
   },
 
   "PAELLA SALAD": {
     "ingredients_for_rice": {
-      "cooking_oil": "6 tbsp",
-      "onion_finely_chopped": "3/4 cup",
-      "chicken_bouillon": "5 cups",
-      "hot_pepper_sauce": "1/2 tsp",
-      "curry_powder": "1/2 tsp",
-      "saffron": "1 tsp",
-      "long_grain_rice": "2 cups"
+      "Cooking Oil": "6 tbsp",
+      "Onion (finely chopped)": "3/4 cup",
+      "Chicken Bouillon": "5 cups",
+      "Hot Pepper Sauce": "1/2 tsp",
+      "Curry Powder": "1/2 tsp",
+      "Saffron": "1 tsp",
+      "Long Grain Rice": "2 cups"
     },
     "salad_additions": {
-      "shrimp_cooked": "2 1/2 lbs",
-      "chicken_cooked_diced": "2-4 lbs",
-      "green_bell_peppers_diced": "2",
-      "capers": "4 tbsp",
-      "diced_pimento": "14 oz can",
-      "celery_diced": "1 cup",
-      "italian_dressing": "about 1 cup (or as needed)",
-      "cherry_tomatoes_black_olives": "for garnish"
+      "Shrimp (cooked)": "2 1/2 lbs",
+      "Chicken (cooked, diced)": "2-4 lbs",
+      "Green Bell Peppers (diced)": "2",
+      "Capers": "4 tbsp",
+      "Diced Pimento": "14 oz can",
+      "Celery (diced)": "1 cup",
+      "Italian Dressing": "about 1 cup (or as needed)",
+      "Cherry Tomatoes, Black Olives": "for garnish"
     },
-    "instructions": "Heat oil, sauté onion. Add bouillon and spices, bring to boil. Stir in rice, cover, cook on low ~30 min or until liquid is absorbed. Chill. Combine chilled rice with shrimp, chicken, peppers, capers, pimento, celery, and enough Italian dressing to moisten. Garnish with tomatoes and olives."
+    "instructions": "Heat Oil, sauté Onion.\nAdd Bouillon and spices; bring to a boil.\nStir in Rice, cover, cook on low ~30 min or until liquid is absorbed.\nChill.\nCombine chilled Rice with Shrimp, Chicken, Peppers, Capers, Pimento, Celery, and enough Italian Dressing to moisten.\nGarnish with Tomatoes and Olives."
   },
 
   "OLD FASHIONED CARROT CAKE": {
     "ingredients": {
-      "sugar": "2 cups",
-      "flour": "2 cups",
-      "grated_carrots": "3 cups",
-      "oil": "1 cup",
-      "eggs": "4, slightly beaten",
-      "cinnamon": "2 tsp",
-      "baking_powder": "2 tsp",
-      "baking_soda": "1/2 tsp",
-      "salt": "1 tsp"
+      "Sugar": "2 cups",
+      "Flour": "2 cups",
+      "Grated Carrots": "3 cups",
+      "Oil": "1 cup",
+      "Eggs (slightly beaten)": "4",
+      "Cinnamon": "2 tsp",
+      "Baking Powder": "2 tsp",
+      "Baking Soda": "1/2 tsp",
+      "Salt": "1 tsp"
     },
-    "instructions": "Combine dry ingredients. Add oil, mix well. Add eggs and carrots, mix again. Bake at 350°F for 30-40 min. Cool before frosting.",
+    "instructions": "Combine dry ingredients.\nAdd Oil; mix well.\nAdd Eggs and Carrots; mix again.\nBake at 350°F for 30-40 minutes.\nCool before frosting.",
     "frosting": {
-      "powdered_sugar": "1 box",
-      "cream_cheese": "8 oz",
-      "butter": "1 stick (softened)",
-      "vanilla": "2 tsp",
-      "dash_salt": "optional"
+      "Powdered Sugar": "1 box",
+      "Cream Cheese": "8 oz",
+      "Butter (softened)": "1 stick",
+      "Vanilla": "2 tsp",
+      "Dash Salt": "optional"
     }
   },
 
   "GREEN CHILI SALSA": {
     "ingredients": {
-      "diced_tomatoes_large_can": "1 (about 2 lbs)",
-      "tomato_sauce_medium_can": "1",
-      "ortega_diced_green_chilis": "4 oz can",
-      "garlic_minced": "2 cloves",
-      "green_onions_chopped": "1 bunch",
-      "celery_chopped": "5 stalks",
-      "salt": "1 tbsp",
-      "oregano_crushed": "1 heaping tbsp",
-      "chili_tepin_or_hot_peppers": "to taste"
+      "Diced Tomatoes (large can)": "1 (about 2 lbs)",
+      "Tomato Sauce (medium can)": "1",
+      "Ortega Diced Green Chilis": "4 oz can",
+      "Garlic (minced)": "2 cloves",
+      "Green Onions (chopped)": "1 bunch",
+      "Celery (chopped)": "5 stalks",
+      "Salt": "1 tbsp",
+      "Oregano (crushed)": "1 heaping tbsp",
+      "Chili Tepin or Hot Peppers": "to taste"
     },
-    "instructions": "Mix everything in a large bowl. Chill. Serve cold."
+    "instructions": "Mix everything in a large bowl.\nChill.\nServe cold."
   },
 
   "ROQUEFORT DRESSING": {
     "ingredients": {
-      "cottage_cheese_small_curd": "1 cup",
-      "sour_cream": "1 cup",
-      "mayonnaise_best_foods": "1 cup",
-      "garlic_powder": "1/4 tsp",
-      "worcestershire_sauce": "1/4 tsp",
-      "vegetable_oil": "1/2 tbsp",
-      "blue_or_roquefort_cheese": "1-2 oz, crumbled",
-      "salt": "1/2 tbsp",
-      "pepper": "1/4 tbsp",
-      "buttermilk": "to thin if needed"
+      "Cottage Cheese (small curd)": "1 cup",
+      "Sour Cream": "1 cup",
+      "Mayonnaise (Best Foods)": "1 cup",
+      "Garlic Powder": "1/4 tsp",
+      "Worcestershire Sauce": "1/4 tsp",
+      "Vegetable Oil": "1/2 tbsp",
+      "Blue or Roquefort Cheese": "1-2 oz, crumbled",
+      "Salt": "1/2 tbsp",
+      "Pepper": "1/4 tbsp",
+      "Buttermilk": "to thin if needed"
     },
-    "instructions": "Combine all ingredients. Thin with buttermilk if too thick. Chill before serving."
+    "instructions": "Combine all ingredients.\nThin with Buttermilk if too thick.\nChill before serving."
   },
 
   "CHEESE CHICKEN BROCCOLI CASSEROLE": {
     "ingredients": {
-      "chicken_breasts_boneless": "6",
-      "egg_noodles": "as needed",
-      "broccoli_spears": "as needed (fresh or frozen)",
-      "cheese_sauce": "made from chicken broth + cheese",
-      "grated_cheddar": "additional, for topping",
-      "bread_crumbs": "for topping"
+      "Chicken Breasts (boneless)": "6",
+      "Egg Noodles": "as needed",
+      "Broccoli Spears": "as needed (fresh or frozen)",
+      "Cheese Sauce": "made from chicken broth + cheese",
+      "Grated Cheddar": "additional, for topping",
+      "Bread Crumbs": "for topping"
     },
-    "instructions": "Steam chicken; reserve broth. Make a white sauce with broth, melt cheese into it. Cook noodles, drain. Layer noodles, broccoli, chicken, sauce; repeat. Top with more cheese and bread crumbs. Bake at 350°F for 30-40 min."
+    "instructions": "Steam Chicken; reserve broth.\nMake a white sauce with broth; melt Cheese into it.\nCook Noodles, drain.\nLayer Noodles, Broccoli, Chicken, Sauce; repeat.\nTop with more Cheese and Bread Crumbs.\nBake at 350°F for 30-40 min."
   },
 
   "POLLO ORANGE SAUCE (SERVES 20)": {
     "ingredients": {
-      "fresh_orange_juice": "1/2 gallon",
-      "cherry_wine": "2 cups",
-      "white_wine": "1 cup",
-      "honey": "1 large spoonful",
-      "berries": "7 oz (type unspecified, possibly cranberries or mixed berries)",
-      "brown_sugar": "1 cup",
-      "lemon_juice": "from 1 1/2 lemons",
-      "white_pepper": "1 tsp",
-      "cornstarch": "8 tbsp (to thicken)"
+      "Fresh Orange Juice": "1/2 gallon",
+      "Cherry Wine": "2 cups",
+      "White Wine": "1 cup",
+      "Honey": "1 large spoonful",
+      "Berries": "7 oz (possibly cranberries or mixed berries)",
+      "Brown Sugar": "1 cup",
+      "Lemon Juice": "from 1 1/2 lemons",
+      "White Pepper": "1 tsp",
+      "Cornstarch": "8 tbsp (to thicken)"
     },
-    "instructions": "Heat all (except cornstarch) to just under boiling. Before serving, whisk in cornstarch slurry to thicken. Ladle over broiled chicken breasts garnished with an orange slice."
+    "instructions": "Heat everything except Cornstarch to just under boiling.\nBefore serving, whisk in a Cornstarch slurry to thicken.\nLadle over broiled Chicken Breasts, each garnished with an orange slice."
   },
 
   "TACO SOUP": {
     "ingredients": {
-      "ground_beef_or_turkey": "1 lb",
-      "onion_chopped": "1/2 cup or 1 whole onion",
-      "garlic_salt": "to taste",
-      "water": "3 cups",
-      "kidney_beans": "2 cans (16 oz each) with liquid",
-      "stewed_tomatoes_mex_style": "2 cans (16 oz each)",
-      "tomato_sauce": "2 cans (8 oz each)",
-      "taco_seasoning": "1 package"
+      "Ground Beef or Turkey": "1 lb",
+      "Onion (chopped)": "1/2 cup or 1 whole onion",
+      "Garlic Salt": "to taste",
+      "Water": "3 cups",
+      "Kidney Beans": "2 cans (16 oz each) with liquid",
+      "Stewed Tomatoes (Mex style)": "2 cans (16 oz each)",
+      "Tomato Sauce": "2 cans (8 oz each)",
+      "Taco Seasoning": "1 package"
     },
-    "instructions": "Brown meat and onion, season with garlic salt. Add water, beans, tomatoes, sauce, and taco seasoning. Simmer ~15 min. Adjust seasoning with cumin/chili powder if desired. Serve with cheese, avocado, sour cream, fritos."
+    "instructions": "Brown Meat and Onion; season with Garlic Salt.\nAdd Water, Beans, Tomatoes, Sauce, and Taco Seasoning.\nSimmer ~15 min.\nAdjust seasoning (Cumin, Chili Powder) if desired.\nServe with Cheese, Avocado, Sour Cream, Fritos."
   },
 
   "YEAST ROLLS": {
     "ingredients": {
-      "milk_scaled_cooled": "1 cup",
-      "yeast": "1 package",
-      "sugar": "1/3 to 1/2 cup",
-      "eggs": "3",
-      "shortening": "1/2 cup",
-      "salt": "1 tsp",
-      "flour": "about 4 cups (or more if needed)"
+      "Milk (scalded, cooled)": "1 cup",
+      "Yeast": "1 package",
+      "Sugar": "1/3 to 1/2 cup",
+      "Eggs": "3",
+      "Shortening": "1/2 cup",
+      "Salt": "1 tsp",
+      "Flour": "about 4 cups (or more if needed)"
     },
-    "instructions": "Dissolve yeast in cooled scalded milk with sugar. Let stand 5 min. Add eggs, shortening, salt, and flour. Knead 10 min. Let rise 1 hr, punch down, shape into rolls, let rise again 1 hr. Bake at 425°F until golden."
+    "instructions": "Dissolve Yeast in cooled, scalded Milk with Sugar.\nLet stand 5 min.\nAdd Eggs, Shortening, Salt, and Flour.\nKnead 10 min.\nLet rise 1 hr; punch down.\nShape into rolls, let rise another 1 hr.\nBake at 425°F until golden."
   },
 
   "PUMPKIN CHOCOLATE CHIP COOKIES": {
     "ingredients": {
-      "shortening": "1 cup (Crisco)",
-      "sugar": "1 1/2 cups",
-      "egg": "1",
-      "canned_pumpkin": "1 1/4 cups",
-      "flour": "2 1/2 cups",
-      "baking_soda": "1 tsp",
-      "spices_nutmeg_cinnamon": "to taste (about 1 tsp each)",
-      "salt": "1/2 tsp",
-      "vanilla": "1 tsp",
-      "chocolate_chips": "6-8 oz"
+      "Shortening (Crisco)": "1 cup",
+      "Sugar": "1 1/2 cups",
+      "Egg": "1",
+      "Canned Pumpkin": "1 1/4 cups",
+      "Flour": "2 1/2 cups",
+      "Baking Soda": "1 tsp",
+      "Spices (Nutmeg, Cinnamon)": "to taste (about 1 tsp each)",
+      "Salt": "1/2 tsp",
+      "Vanilla": "1 tsp",
+      "Chocolate Chips": "6-8 oz"
     },
-    "instructions": "Cream shortening and sugar. Add egg, pumpkin, then dry ingredients. Stir in chocolate chips. Drop spoonfuls on cookie sheet. Bake at 350°F ~10-12 min until lightly browned."
+    "instructions": "Cream Shortening and Sugar.\nAdd Egg and Pumpkin.\nStir in dry ingredients.\nFold in Chocolate Chips.\nDrop spoonfuls onto cookie sheet.\nBake at 350°F ~10-12 min, until lightly browned."
   }
 }
