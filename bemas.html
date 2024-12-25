@@ -12,61 +12,29 @@
   >
 
   <style>
-    /* RESET / GLOBAL STYLES */
+    /* GLOBAL STYLES */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
-    :root {
-      /* Light Mode Colors */
-      --color-bg: #FAFAFA;
-      --color-bg-secondary: #ECECEC;
-      --color-text: #333;
-      --color-accent1: #f5936c; 
-      --color-accent2: #f06d4f;
-      --color-card-bg: #fff;
-      --color-card-hover-shadow: rgba(0, 0, 0, 0.1);
-      --color-instructions-bg: #fdf7f5;
-      --color-border: #f06d4f;
-      --color-input-border: #f06d4f;
-
-      /* Dark Mode Colors */
-      --color-bg-dark: #141414;
-      --color-bg-secondary-dark: #1c1c1c;
-      --color-text-dark: #f0f0f0;
-      --color-card-bg-dark: #292929;
-      --color-card-hover-shadow-dark: rgba(255, 255, 255, 0.1);
-      --color-instructions-bg-dark: #3a3a3a;
-      --color-border-dark: #f5936c;
-      --color-input-border-dark: #f5936c;
-    }
-
     body {
       font-family: 'Montserrat', sans-serif;
-      background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-bg-secondary) 100%);
-      color: var(--color-text);
+      background: linear-gradient(135deg, #FAFAFA 0%, #ECECEC 100%);
+      color: #333;
       line-height: 1.6;
       position: relative;
       min-height: 100vh;
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-    /* Dark mode override */
-    body.dark {
-      background: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-secondary-dark) 100%);
-      color: var(--color-text-dark);
     }
 
     /* HEADER / TITLE */
     header {
-      background: linear-gradient(135deg, var(--color-accent1) 0%, var(--color-accent2) 100%);
+      background: linear-gradient(135deg, #f5936c 0%, #f06d4f 100%);
       color: #fff;
       text-align: center;
       padding: 2rem 1rem;
       margin-bottom: 2rem;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-      position: relative;
     }
     header h1 {
       font-weight: 600;
@@ -78,39 +46,10 @@
       opacity: 0.9;
     }
 
-    /* DARK MODE TOGGLE BUTTON */
-    .theme-toggle {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-      border: none;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      border-radius: 4px;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-    .theme-toggle:hover {
-      background: rgba(255, 255, 255, 0.35);
-    }
-
-    /* SEARCH BAR + BUTTONS CONTAINER */
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      max-width: 800px;
-      margin: 0 auto 2rem;
-      position: relative;
-    }
-
+    /* SEARCH BAR */
     .search-bar {
-      flex: 1;
-      min-width: 220px;
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
       display: flex;
       align-items: center;
       position: relative;
@@ -119,47 +58,17 @@
       width: 100%;
       padding: 0.75rem 1rem;
       font-size: 1rem;
-      border: 2px solid var(--color-input-border);
+      border: 2px solid #f06d4f;
       border-radius: 6px;
       outline: none;
-      transition: border 0.2s;
-    }
-    body.dark .search-bar input {
-      border: 2px solid var(--color-input-border-dark);
-      background: #2a2a2a;
-      color: #fff;
     }
     .search-bar svg {
       position: absolute;
       right: 1rem;
-      fill: var(--color-accent2);
+      fill: #f06d4f;
       width: 20px;
       height: 20px;
       pointer-events: none;
-    }
-    body.dark .search-bar svg {
-      fill: var(--color-border-dark);
-    }
-
-    .expand-collapse-buttons {
-      display: flex;
-      gap: 0.5rem;
-    }
-    .expand-collapse-buttons button {
-      background: var(--color-accent2);
-      color: #fff;
-      border: none;
-      padding: 0.75rem 1rem;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 0.9rem;
-      transition: background 0.2s;
-    }
-    .expand-collapse-buttons button:hover {
-      background: var(--color-accent1);
-    }
-    body.dark .expand-collapse-buttons button {
-      background: var(--color-border-dark);
     }
 
     /* MAIN CONTAINER */
@@ -170,41 +79,25 @@
       padding: 1rem;
     }
 
-    /* GRID LAYOUT FOR RECIPES */
-    #recipe-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 2rem;
-    }
-
     /* RECIPE CARD STYLES */
     .recipe {
-      background: var(--color-card-bg);
+      background: #fff;
       border-radius: 8px;
+      margin-bottom: 2rem;
       padding: 1.5rem;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .recipe:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 12px var(--color-card-hover-shadow);
-    }
-    body.dark .recipe {
-      background: var(--color-card-bg-dark);
-      box-shadow: 0 2px 6px rgba(255, 255, 255, 0.05);
-    }
-    body.dark .recipe:hover {
-      box-shadow: 0 6px 12px var(--color-card-hover-shadow-dark);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     }
 
     /* RECIPE HEADINGS */
     .recipe h2 {
       font-size: 1.6rem;
       margin-bottom: 0.5rem;
-      color: var(--color-accent2);
-    }
-    body.dark .recipe h2 {
-      color: var(--color-border-dark);
+      color: #f06d4f;
     }
     .recipe p {
       margin-bottom: 0.75rem;
@@ -218,9 +111,11 @@
       font-size: 0.95rem;
       margin-bottom: 0.5rem;
     }
-    body.dark .recipe .variations,
-    body.dark .recipe .serves-yield {
-      color: #ccc;
+    .category-label {
+      color: #888;
+      font-size: 0.95rem;
+      font-style: italic;
+      margin-bottom: 0.5rem;
     }
 
     /* INGREDIENTS */
@@ -230,9 +125,6 @@
       font-weight: 600;
       color: #444;
       text-decoration: underline;
-    }
-    body.dark .ingredients-title {
-      color: #ddd;
     }
     ul.ingredients-list {
       list-style-type: none;
@@ -246,18 +138,12 @@
     }
     ul.ingredients-list li::before {
       content: '•';
-      color: var(--color-border);
+      color: #f06d4f;
       margin-right: 0.5rem;
       font-weight: bold;
     }
-    body.dark ul.ingredients-list li::before {
-      color: var(--color-border-dark);
-    }
     ul.ingredients-list li strong {
-      color: var(--color-text);
-    }
-    body.dark ul.ingredients-list li strong {
-      color: var(--color-text-dark);
+      color: #333;
     }
 
     /* INSTRUCTIONS ACCORDION */
@@ -265,18 +151,13 @@
       margin-top: 1.5rem;
       margin-bottom: 0.5rem;
       font-weight: 600;
+      color: #444;
       text-decoration: underline;
       cursor: pointer;
       user-select: none;
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-    .instructions-title span {
-      color: #444;
-    }
-    body.dark .instructions-title span {
-      color: #ddd;
     }
     .instructions-arrow {
       font-size: 1rem;
@@ -288,29 +169,15 @@
     }
     .instructions {
       white-space: pre-line; 
-      background: var(--color-instructions-bg);
+      background: #fdf7f5; 
       padding: 1rem;
       border-radius: 6px;
-      border-left: 3px solid var(--color-border);
+      border-left: 3px solid #f06d4f;
       margin-bottom: 1rem;
       display: none; /* hidden by default, toggled by JS */
     }
-    body.dark .instructions {
-      background: var(--color-instructions-bg-dark);
-      border-left: 3px solid var(--color-border-dark);
-    }
     .instructions.open {
       display: block; /* show when toggled */
-    }
-
-    /* HIGHLIGHTING SEARCH PHRASE */
-    mark {
-      background: yellow;
-      color: black;
-    }
-    body.dark mark {
-      background: goldenrod;
-      color: black;
     }
 
     /* BACK TO TOP BUTTON */
@@ -320,7 +187,7 @@
       bottom: 40px; 
       right: 40px; 
       z-index: 99; 
-      background-color: var(--color-accent2); 
+      background-color: #f06d4f; 
       color: white; 
       padding: 0.75rem 1rem; 
       border: none; 
@@ -331,10 +198,23 @@
       transition: opacity 0.2s;
     }
     #backToTopBtn:hover {
-      background-color: var(--color-accent1);
+      background-color: #f5936c;
     }
-    body.dark #backToTopBtn {
-      background-color: var(--color-border-dark);
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      .recipe {
+        padding: 1rem;
+      }
+      .recipe h2 {
+        font-size: 1.4rem;
+      }
+      .search-bar input {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
@@ -343,31 +223,20 @@
   <header>
     <h1>Bema's Recipes</h1>
     <p class="subtitle">Delicious recipes, beautifully presented</p>
-    <!-- Dark Mode Toggle Button -->
-    <button class="theme-toggle" id="themeToggle">Dark Mode</button>
   </header>
 
   <div class="container">
-    <!-- CONTROLS: SEARCH BAR + EXPAND/COLLAPSE BUTTONS -->
-    <div class="controls">
-      <!-- SEARCH BAR -->
-      <div class="search-bar">
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Search recipes by name..."
-          aria-label="Search recipes"
-        />
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-          <path d="M508.5 481.6l-129.9-130c28-34.8 45-79.2 45-128.2C423.6 100.4 329.2 6 211.8 6S0 100.4 0 223.4s94.4 217.4 211.8 217.4c49 0 93.5-17.1 128.3-45.1l129.9 130c2.5 2.5 5.8 3.8 9.3 3.8 3.4 0 6.8-1.3 9.3-3.8 5.2-5.2 5.2-13.5 0-18.6zM211.8 397.2c-95.8 0-173.8-78-173.8-173.8S116 49.6 211.8 49.6 385.6 127.6 385.6 223.4s-78 173.8-173.8 173.8z"/>
-        </svg>
-      </div>
-
-      <!-- EXPAND / COLLAPSE BUTTONS -->
-      <div class="expand-collapse-buttons">
-        <button id="expandAllBtn">Expand All</button>
-        <button id="collapseAllBtn">Collapse All</button>
-      </div>
+    <!-- SEARCH BAR -->
+    <div class="search-bar">
+      <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search recipes by name..."
+        aria-label="Search recipes"
+      />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M508.5 481.6l-129.9-130c28-34.8 45-79.2 45-128.2C423.6 100.4 329.2 6 211.8 6S0 100.4 0 223.4s94.4 217.4 211.8 217.4c49 0 93.5-17.1 128.3-45.1l129.9 130c2.5 2.5 5.8 3.8 9.3 3.8 3.4 0 6.8-1.3 9.3-3.8 5.2-5.2 5.2-13.5 0-18.6zM211.8 397.2c-95.8 0-173.8-78-173.8-173.8S116 49.6 211.8 49.6 385.6 127.6 385.6 223.4s-78 173.8-173.8 173.8z"/>
+      </svg>
     </div>
   </div>
 
@@ -382,29 +251,13 @@
     const searchInput = document.getElementById('searchInput');
     const recipeContainer = document.getElementById('recipe-container');
     const backToTopBtn = document.getElementById('backToTopBtn');
-    const expandAllBtn = document.getElementById('expandAllBtn');
-    const collapseAllBtn = document.getElementById('collapseAllBtn');
-    const themeToggle = document.getElementById('themeToggle');
 
-    // -- DARK MODE SETUP --
-    // Load user preference from localStorage, if available
-    const savedTheme = localStorage.getItem('bemaTheme');
-    if (savedTheme === 'dark') {
-      document.body.classList.add('dark');
-      themeToggle.textContent = 'Light Mode';
+    // Simple function to convert **bold** markup to <strong> tags
+    function parseBoldText(text) {
+      // Replace double-asterisk sections with <strong>...</strong>
+      // e.g. "Combine **Sugar** and **Flour**." -> "Combine <strong>Sugar</strong> and <strong>Flour</strong>."
+      return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     }
-
-    // Toggle dark mode
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark');
-      if (document.body.classList.contains('dark')) {
-        localStorage.setItem('bemaTheme', 'dark');
-        themeToggle.textContent = 'Light Mode';
-      } else {
-        localStorage.removeItem('bemaTheme');
-        themeToggle.textContent = 'Dark Mode';
-      }
-    });
 
     // Fetch the JSON file containing all the recipes
     fetch('ingredients.json')
@@ -412,13 +265,12 @@
       .then(data => {
         // Store data globally for easy search filtering
         window.allRecipes = data; 
-        displayRecipes(data, '');
+        displayRecipes(data);
       })
       .catch(error => console.error('Error loading recipes:', error));
 
     // Function to display recipes from a data object
-    // 'searchTerm' helps with highlighting
-    function displayRecipes(recipeData, searchTerm) {
+    function displayRecipes(recipeData) {
       recipeContainer.innerHTML = '';
 
       // Loop through each top-level recipe name
@@ -432,8 +284,16 @@
 
         // Recipe Title
         const title = document.createElement('h2');
-        title.innerHTML = highlightSearch(recipeName, searchTerm);
+        title.textContent = recipeName;
         recipeDiv.appendChild(title);
+
+        // Category (if present)
+        if (recipe.category) {
+          const categoryPara = document.createElement('p');
+          categoryPara.classList.add('category-label');
+          categoryPara.textContent = `Category: ${recipe.category}`;
+          recipeDiv.appendChild(categoryPara);
+        }
 
         // Variations?
         if (recipe.variations) {
@@ -501,20 +361,21 @@
           const instructionsTitle = document.createElement('div');
           instructionsTitle.classList.add('instructions-title');
 
-          const titleSpan = document.createElement('span');
-          titleSpan.textContent = 'Instructions';
-
           const arrowSpan = document.createElement('span');
           arrowSpan.classList.add('instructions-arrow');
           arrowSpan.textContent = '▶'; // or '▸', etc.
 
-          instructionsTitle.appendChild(titleSpan);
+          instructionsTitle.textContent = 'Instructions';
           instructionsTitle.appendChild(arrowSpan);
+
           recipeDiv.appendChild(instructionsTitle);
 
           const instructionsBlock = document.createElement('div');
           instructionsBlock.classList.add('instructions');
-          instructionsBlock.textContent = recipe.instructions;
+
+          // Convert the double-asterisk markup to <strong> tags
+          instructionsBlock.innerHTML = parseBoldText(recipe.instructions);
+
           recipeDiv.appendChild(instructionsBlock);
 
           // Accordion toggle
@@ -529,13 +390,6 @@
       });
     }
 
-    // Highlight matching search term in text
-    function highlightSearch(text, term) {
-      if (!term) return text;
-      const regex = new RegExp(`(${term})`, 'gi');
-      return text.replace(regex, '<mark>$1</mark>');
-    }
-
     // SEARCH: Filter recipes by name
     searchInput.addEventListener('input', () => {
       const searchTerm = searchInput.value.toLowerCase();
@@ -548,32 +402,20 @@
         }
       });
 
-      // Re-render with filtered data & highlight searchTerm
-      displayRecipes(filteredData, searchTerm);
-    });
-
-    // EXPAND / COLLAPSE ALL
-    expandAllBtn.addEventListener('click', () => {
-      const instructionsBlocks = document.querySelectorAll('.instructions');
-      const arrowSpans = document.querySelectorAll('.instructions-arrow');
-      instructionsBlocks.forEach(block => block.classList.add('open'));
-      arrowSpans.forEach(arrow => arrow.classList.add('open'));
-    });
-    collapseAllBtn.addEventListener('click', () => {
-      const instructionsBlocks = document.querySelectorAll('.instructions');
-      const arrowSpans = document.querySelectorAll('.instructions-arrow');
-      instructionsBlocks.forEach(block => block.classList.remove('open'));
-      arrowSpans.forEach(arrow => arrow.classList.remove('open'));
+      // Re-render with filtered data
+      displayRecipes(filteredData);
     });
 
     // BACK TO TOP BUTTON
     window.onscroll = function() {
+      // If user scrolls down 300px, show button
       if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
         backToTopBtn.style.display = 'block';
       } else {
         backToTopBtn.style.display = 'none';
       }
     };
+
     backToTopBtn.addEventListener('click', () => {
       document.body.scrollTop = 0;
       document.documentElement.scrollTop = 0;
