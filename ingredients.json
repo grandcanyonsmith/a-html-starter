@@ -447,5 +447,80 @@
       "Chocolate Chips": "6-8 oz"
     },
     "instructions": "Cream **Shortening** and **Sugar**.\nAdd **Egg** and **Pumpkin**.\nStir in dry ingredients.\nFold in **Chocolate Chips**.\nDrop spoonfuls onto cookie sheet.\nBake at 350°F ~10-12 min, until lightly browned."
+  },
+
+  "TWO TERIYAKI MARINADES": {
+    "category": "Marinade",
+    "marinade_one": {
+      "ingredients": {
+        "Orange Juice": "2/5 cup",
+        "Soy Sauce": "3 tbsp",
+        "Garlic Cloves (minced)": "5",
+        "Rosemary": "1 tsp",
+        "Salt and Pepper": "to taste"
+      },
+      "instructions": "Combine **Orange Juice**, **Soy Sauce**, **Garlic**, **Rosemary**, and **Salt and Pepper**. Marinate pork tenderloin or chicken, letting it sit all afternoon if possible for best flavor."
+    },
+    "marinade_two": {
+      "ingredients": {
+        "Vegetable Oil": "1/2 cup",
+        "Soy Sauce": "1/4 cup",
+        "Vinegar": "2 tbsp",
+        "Honey": "2 tbsp",
+        "Hoison Sauce": "1/2 cup",
+        "Garlic Clove (minced)": "1"
+      },
+      "instructions": "Combine **Oil**, **Soy Sauce**, **Vinegar**, **Honey**, **Hoison Sauce**, and **Garlic**. Use with pork tenderloin or chicken, marinating for several hours. Great on shish kabobs or chicken tenderloin skewers."
+    }
+  },
+
+  "CHICKEN SALAD": {
+    "category": "Salad",
+    "ingredients": {
+      "Chicken Breasts (halves, cooked, diced)": "6",
+      "Celery (diced)": "5 cups",
+      "Pecans (chopped)": "1 cup",
+      "Salt": "1 tsp",
+      "Grated Onion": "4 tsp",
+      "Lemon Juice": "1/4 cup",
+      "Best Foods Mayonnaise": "1 1/2 cups",
+      "Pepper": "to taste"
+    },
+    "instructions": "Blend **Salt**, **Onion**, **Lemon Juice**, **Mayonnaise**, and **Pepper**. Pour half of this mix over the diced **Chicken** and refrigerate overnight. Before serving, add the **Celery**, **Pecans**, and remaining dressing. Serve in a tomato bowl or use as a sandwich filling."
+  },
+
+  "GREEN BEAN SALAD": {
+    "category": "Salad",
+    "ingredients": {
+      "Whole Almonds": "1/2 cup",
+      "Soy Sauce": "8 tsp",
+      "Green Beans": "2 lbs, washed and cut (1-inch pieces)",
+      "Rice Vinegar": "4 tbsp",
+      "Sesame Oil": "2 tbsp",
+      "Garlic Cloves (pressed)": "2 large",
+      "Fresh Ginger (minced)": "2 tsp",
+      "Green Onions (thinly sliced)": "4 tbsp",
+      "Fresh Cilantro Leaves": "2/3 cup"
+    },
+    "instructions": "Toast **Almonds** in a non-stick pan, add **Soy Sauce**, and stir constantly until moisture is gone. Cool and chop coarsely.\nSteam or microwave **Green Beans** until just tender, then cool.\nIn a bowl, combine **Rice Vinegar**, **Sesame Oil**, **Garlic**, **Ginger**, **Green Onions**, and **Cilantro**. Add the cooled beans and toss.\nSprinkle roasted almonds on top and serve."
+  },
+
+  "WENDI’S OATMEAL CHOCOLATE CHIP COOKIES": {
+    "category": "Dessert",
+    "ingredients": {
+      "Butter (softened)": "1 lb",
+      "Eggs (room temperature)": "4",
+      "Granulated Sugar": "2 cups",
+      "Light Brown Sugar (firmly packed)": "2 cups",
+      "Salt": "1 tsp",
+      "Baking Soda": "2 tsp",
+      "Baking Powder": "2 tsp",
+      "Mexican Vanilla": "2 tsp",
+      "Flour": "?? cups (see notes below)",
+      "Old Fashioned Oats": "?? cups (see notes below)",
+      "Semi-Sweet Chocolate Chips": "1-2 cups",
+      "Pecans (optional)": "as desired"
+    },
+    "instructions": "Cream together **Sugars** and **Butter** for a couple of minutes. Add **Eggs** one at a time until fully incorporated. Sprinkle in **Salt**, **Baking Soda**, **Baking Powder**, and **Vanilla**, blending well.\nAlternate adding **Flour** and **Oats** until mixed thoroughly. Stir in **Chocolate Chips** (and **Pecans** if desired).\nScoop dough with a small cookie scoop. Bake in a preheated oven at 400°F for ~11 minutes. Cookies should be golden, firm on the outside, and softer inside. Let rest on the cookie sheet a couple of minutes before moving to a cooling rack."
   }
 }
