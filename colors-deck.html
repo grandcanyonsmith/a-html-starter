@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Color Palette - Separate Variables</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- React & ReactDOM from CDNs -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+
+    <!-- Tailwind CSS from CDN (development use) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- You’ll see a console warning about using the Tailwind CDN in production. -->
+    <!-- In production, install Tailwind via npm & a bundler/CLI. -->
+
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+      .color-card {
+        border-radius: 14.81px;
+        overflow: hidden;
+        border: 1px solid #7d7d7d;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Our main script that references index.js as a module. -->
+    <script type="module" src="./index.js"></script>
+
+  </body>
+</html>
