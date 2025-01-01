@@ -202,7 +202,7 @@ export const neutral5Color = {
  */
 export const successColor = {
   name: "Success",
-  color: "#2D5A27",
+  color: "#2D5A27", // Same as accentDarkColor for example
   type: "STATUS",
   textColor: "#FFFFFF",
   specs: {
@@ -215,7 +215,7 @@ export const successColor = {
 
 export const warningColor = {
   name: "Warning",
-  color: "#FC8540",
+  color: "#FC8540", // Same as accentBaseColor for example
   type: "STATUS",
   textColor: "#000000",
   specs: {
