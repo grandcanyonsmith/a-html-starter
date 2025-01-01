@@ -1,11 +1,3 @@
-/*******************************************************
- * High-Stakes Healthcare–Inspired Color Variables
- * (Renamed to match the new structure & naming)
- ******************************************************/
-
-/**
- * PRIMARY
- */
 export const primaryLightColor = {
   name: "Primary Light Tint",
   color: "#4D81F5", // Example "lighter" blue
@@ -239,9 +231,7 @@ export const errorColor = {
   }
 };
 
-/**
- * BACKGROUND COLORS (primary, secondary, accent)
- */
+
 export const primaryBgColor = {
   name: "Primary BG",
   color: "#FFFFFF",
