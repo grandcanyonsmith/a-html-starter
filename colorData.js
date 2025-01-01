@@ -1,10 +1,4 @@
-// colorData.js
-// We export a single array of objects.
-// The first 3 objects are your “top row” colors.
-// The next 15 are the rest.
-
-export default [
-  // ========== TOP 3 COLORS ==========
+export const colorData =[
   {
     name: "Future Green",
     color: "#b2ff00",
