@@ -1,13 +1,16 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <title>Color Deck - Two Files Setup</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- React and Babel -->
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <!-- Tailwind from CDN (fine for dev, not for production). -->
     <script src="https://cdn.tailwindcss.com"></script>
-
     <style>
       body {
         font-family: "Inter", sans-serif;
@@ -21,17 +24,12 @@
         border: 1px solid #7d7d7d;
       }
     </style>
+
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- MAIN SCRIPT: type="module" so we can do ES module imports -->
-    <script type="module">
-      // Import React & ReactDOM from ES modules-friendly CDNs
-      import React from "https://cdn.skypack.dev/react";
-      import ReactDOM from "https://cdn.skypack.dev/react-dom";
-
-      // Import your array of color objects
+    <script type="text/babel">
       import colorData from "./colorData.js";
 
       /*******************************************************
