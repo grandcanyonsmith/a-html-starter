@@ -1,12 +1,12 @@
 // index.js
-// Our main React code that imports the variables from "variables.js"
+// Main React code. We import React & ReactDOM from an ES modules-friendly CDN.
+// Also import all color variables from "variables.js".
 
-import React from "react";
-import ReactDOM from "react-dom";
+import React from "https://cdn.skypack.dev/react";
+import ReactDOM from "https://cdn.skypack.dev/react-dom";
 
-// Import all variables
 import {
-  // TOP 3
+  // top 3
   primaryColorName,
   primaryColorHexCode,
   primaryColorType,
@@ -34,7 +34,7 @@ import {
   secondaryBackgroundColorHexSpec,
   secondaryBackgroundColorPantone,
 
-  // 15 items
+  // color data (15 items)
   primaryColor2Name,
   primaryColor2HexCode,
   primaryColor2Type,
@@ -144,7 +144,7 @@ const topThreeColors = [
     textColor: primaryColorTextColor,
     specs: {
       rgb: primaryColorRgb,
-      cmyk: primaryColorCmyk,
+      cmyk: primaryColorCmyk,   // hidden on mobile
       hex: primaryColorHexSpec,
       pantone: primaryColorPantone
     }
@@ -175,7 +175,7 @@ const topThreeColors = [
   }
 ];
 
-// 2) Build colorData
+// 2) Build colorData (15 items)
 const colorData = [
   {
     name: primaryColor2Name,
@@ -307,7 +307,7 @@ const colorData = [
   }
 ];
 
-// 3) useDynamicScale: smaller text/circles on mobile
+// 3) Hook: useDynamicScale => smaller text/circles on mobile
 function useDynamicScale() {
   const [scale, setScale] = React.useState({
     circleSize: 24,
@@ -320,18 +320,18 @@ function useDynamicScale() {
       if (w > 1200) w = 1200;
 
       if (w <= 600) {
-        const ratioA = w / 600;
+        const ratio = w / 600;
         // Circles => 4..24
-        const circleA = 4 + (24 - 4) * ratioA;
+        const circleA = 4 + (24 - 4) * ratio;
         // Text => 6..14
-        const textA   = 6 + (14 - 6) * ratioA;
+        const textA   = 6 + (14 - 6) * ratio;
         setScale({ circleSize: circleA, baseTextSize: textA });
       } else {
-        const ratioB = (w - 600) / 600;
+        const ratio = (w - 600) / 600;
         // Circles => 24..60
-        const circleB = 24 + (60 - 24) * ratioB;
+        const circleB = 24 + (60 - 24) * ratio;
         // Text => 14..20
-        const textB   = 14 + (20 - 14) * ratioB;
+        const textB   = 14 + (20 - 14) * ratio;
         setScale({ circleSize: circleB, baseTextSize: textB });
       }
     }
@@ -343,9 +343,9 @@ function useDynamicScale() {
   return scale;
 }
 
-// 4) Card component
+// 4) Card Component => hides CMYK on mobile
 function Card({ type = "short", mainColor, circleColors = [], layout = "vertical" }) {
-  const isTall = (type === "tall");
+  const isTall = type === "tall";
   const containerClass = "w-full rounded-xl shadow-md p-3 flex overflow-hidden";
 
   const circlesLayout =
@@ -366,95 +366,84 @@ function Card({ type = "short", mainColor, circleColors = [], layout = "vertical
   }
 
   const bgColor = mainColor?.color || "#C4FC50";
-  const textCol = mainColor?.textColor || "#000";
+  const textCol = mainColor?.textColor || "#000000";
 
   // Smaller multipliers
   const nameSize  = isTall ? baseTextSize * 1.2 : baseTextSize * 1.0;
   const typeSize  = isTall ? baseTextSize * 1.0 : baseTextSize * 0.7;
   const specsSize = isTall ? baseTextSize * 0.7 : baseTextSize * 0.5;
 
-  return React.createElement(
-    "div",
-    { className: containerClass, style: { backgroundColor: bgColor } },
-    // Left side
-    React.createElement(
-      "div",
-      { className: "flex flex-col justify-between", style: { color: textCol, maxWidth: "50%" } },
-      // First child => name & type
-      React.createElement(
-        "div",
-        null,
-        React.createElement(
-          "h2",
-          { style: { fontSize: nameSize, fontWeight: 700, marginBottom: "0.4rem" } },
-          mainColor.name
-        ),
-        mainColor.type && (
-          isTall
-            ? mainColor.type.split(" ").map((word, idx) => (
-                React.createElement(
-                  "p",
-                  { key: idx, style: { fontSize: typeSize, fontWeight: 600, lineHeight: 1.2 } },
-                  word
-                )
-              ))
-            : React.createElement(
-                "p",
-                { style: { fontSize: typeSize, fontWeight: 600, lineHeight: 1.2 } },
-                mainColor.type
-              )
-        )
-      ),
-      // Specs
-      mainColor.specs && (
-        React.createElement(
-          "div",
-          null,
-          Object.entries(mainColor.specs).map(([key, val], i) => {
-            if (key.toUpperCase() === "CMYK") {
-              // hide on mobile => "hidden sm:block"
-              return React.createElement(
-                "p",
-                {
-                  key: i,
-                  className: "hidden sm:block",
-                  style: { fontSize: specsSize, lineHeight: 1.3, marginBottom: "0.25rem" }
-                },
-                `${key.toUpperCase()}: ${val}`
+  return (
+    <div className={containerClass} style={{ backgroundColor: bgColor }}>
+      <div className="flex flex-col justify-between" style={{ color: textCol, maxWidth: "50%" }}>
+        <div>
+          <h2
+            style={{
+              fontSize: nameSize,
+              fontWeight: 700,
+              marginBottom: "0.4rem"
+            }}
+          >
+            {mainColor.name}
+          </h2>
+          {mainColor.type && (
+            isTall
+              ? mainColor.type.split(" ").map((word, idx) => (
+                  <p
+                    key={idx}
+                    style={{ fontSize: typeSize, fontWeight: 600, lineHeight: 1.2 }}
+                  >
+                    {word}
+                  </p>
+                ))
+              : <p style={{ fontSize: typeSize, fontWeight: 600, lineHeight: 1.2 }}>
+                  {mainColor.type}
+                </p>
+          )}
+        </div>
+        {mainColor.specs && (
+          <div>
+            {Object.entries(mainColor.specs).map(([key, val], i) => {
+              if (key.toUpperCase() === "CMYK") {
+                // hide on mobile => "hidden sm:block"
+                return (
+                  <p
+                    key={i}
+                    className="hidden sm:block"
+                    style={{ fontSize: specsSize, lineHeight: 1.3, marginBottom: "0.25rem" }}
+                  >
+                    {key.toUpperCase()}: {val}
+                  </p>
+                );
+              }
+              return (
+                <p
+                  key={i}
+                  style={{ fontSize: specsSize, lineHeight: 1.3, marginBottom: "0.25rem" }}
+                >
+                  {key.toUpperCase()}: {val}
+                </p>
               );
-            }
-            return React.createElement(
-              "p",
-              {
-                key: i,
-                style: { fontSize: specsSize, lineHeight: 1.3, marginBottom: "0.25rem" }
-              },
-              `${key.toUpperCase()}: ${val}`
-            );
-          })
-        )
-      )
-    ),
-    // Right side => circles
-    React.createElement(
-      "div",
-      { className: `${circlesLayout} flex-grow` },
-      circleColors.map((c, idx) =>
-        React.createElement(
-          "div",
-          {
-            key: idx,
-            className: "rounded-full shrink-0",
-            style: { width: finalCircleSize, height: finalCircleSize, backgroundColor: c.color },
-            title: c.name
-          }
-        )
-      )
-    )
+            })}
+          </div>
+        )}
+      </div>
+
+      <div className={`${circlesLayout} flex-grow`}>
+        {circleColors.map((c, idx) => (
+          <div
+            key={idx}
+            className="rounded-full shrink-0"
+            style={{ width: finalCircleSize, height: finalCircleSize, backgroundColor: c.color }}
+            title={c.name}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
-// 5) Rows
+// 5) Define the rows
 const row1CircleSet = colorData.slice(3, 10);
 const row1 = {
   id: "row1",
@@ -498,41 +487,40 @@ const rows = [row1, row2, row3, row4];
 
 // Row component => "grid grid-cols-N gap-2 mb-2"
 function Row({ rowType, columns, layout, mainColors }) {
-  return React.createElement(
-    "div",
-    { className: `grid grid-cols-${columns} gap-2 mb-2` },
-    mainColors.map((arr, idx) => {
-      const [ mainC, ...rest ] = arr;
-      return React.createElement(
-        Card,
-        { key: idx, type: rowType, mainColor: mainC, circleColors: rest, layout }
-      );
-    })
+  return (
+    <div className={`grid grid-cols-${columns} gap-2 mb-2`}>
+      {mainColors.map((arr, idx) => {
+        const [ mainC, ...rest ] = arr;
+        return (
+          <Card
+            key={idx}
+            type={rowType}
+            mainColor={mainC}
+            circleColors={rest}
+            layout={layout}
+          />
+        );
+      })}
+    </div>
   );
 }
 
 // 6) App => container
 function App() {
-  return React.createElement(
-    "div",
-    { style: { maxWidth: "1200px", margin: "0 auto", padding: "1rem" } },
-    rows.map(r =>
-      React.createElement(
-        Row,
-        {
-          key: r.id,
-          rowType: r.type,
-          columns: r.columns,
-          layout: r.layout,
-          mainColors: r.mainColors
-        }
-      )
-    )
+  return (
+    <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "1rem" }}>
+      {rows.map(r => (
+        <Row
+          key={r.id}
+          rowType={r.type}
+          columns={r.columns}
+          layout={r.layout}
+          mainColors={r.mainColors}
+        />
+      ))}
+    </div>
   );
 }
 
-// Render
-ReactDOM.render(
-  React.createElement(App, null),
-  document.getElementById("root")
-);
+// 7) Render
+ReactDOM.render(<App />, document.getElementById("root"));
