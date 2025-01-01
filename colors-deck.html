@@ -2,22 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Color Palette - Separate Variables</title>
+    <title>Color Palette - Separate Variables with ES Modules</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <!-- React & ReactDOM from CDNs -->
-        <!-- React + Babel -->
-    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Tailwind CSS -->
-    
-
-    <!-- Tailwind CSS from CDN (development use) -->
+    <!-- 
+      Load Tailwind from CDN (fine for dev, not recommended for production).
+      We'll see a console warning about that.
+    -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- You’ll see a console warning about using the Tailwind CDN in production. -->
-    <!-- In production, install Tailwind via npm & a bundler/CLI. -->
 
     <style>
       body {
@@ -36,8 +28,7 @@
   <body>
     <div id="root"></div>
 
-    <!-- Our main script that references index.js as a module. -->
+    <!-- Our main script that references "index.js" as a module -->
     <script type="module" src="./index.js"></script>
-
   </body>
 </html>
