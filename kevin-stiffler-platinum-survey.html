@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Platinum Strategy Survey</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .star {
+            color: #FFD700; /* Gold color for stars */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <header class="bg-gray-800 text-white py-4">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold" id="header-title">Platinum Strategy Survey</h1>
+        </div>
+    </header>
+    <main class="container mx-auto mt-6">
+        <!-- General Business Information -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">General Business Information</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Overview of the business.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Email</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="email"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Revenue</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="revenue"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Currency</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="currency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Last Month's Revenue</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="last-month-revenue"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Last Month's Currency</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="last-month-currency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Goals</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="goals"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Obstacles</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="obstacles"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Tracking System</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="tracking-system"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Structure -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Team Structure</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Details about the team.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Members</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="team-members"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Market -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Target Market</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Details about the target market.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Ideal Customer</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="ideal-customer"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Offer and Product -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Offer and Product</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Details about offers and products.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Free Offers</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="free-offers"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Low-Ticket Offers</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="low-ticket-offers"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Mid-Ticket Offers</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="mid-ticket-offers"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">High-Ticket Offers</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="high-ticket-offers"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Subscription Offers</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="subscription-offers"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ads and Marketing -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Ads and Marketing</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Details about ads and marketing strategies.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Ads Strategy</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="ads-strategy"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Service Expectations -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Service Expectations</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Details about service expectations.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Success Expectations</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="success-expectations"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Additional Help Needed</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="additional-help"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Miscellaneous -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Miscellaneous</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Additional information.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Existing Websites</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="existing-websites"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Creation -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Content Creation</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Proficiency in content creation.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Filming, Audio, Lighting & Gear</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="filming-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Editing</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="editing-proficiency"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Development -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Product Development</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Proficiency in product development.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Market Research</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="market-research-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Product Offering Development</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="product-offering-proficiency"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Traffic Generation -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Traffic Generation</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Proficiency in traffic generation.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Facebook & Instagram Ads</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="facebook-ads-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">YouTube Ads</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="youtube-ads-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Lead Generation</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="lead-generation-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Webinar</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="webinar-proficiency"></dd>
+                        </div>
+                    </dl>
+                </div>
+                           </div>
+            </div>
+        </section>
+
+        <!-- Closing Sales -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Closing Sales</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Proficiency in closing sales.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Appointment Setting</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="appointment-setting-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Phone Sales</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="phone-sales-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Flash Sales</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="flash-sales-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Email Campaigns</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="email-campaigns-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Retargeting</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="retargeting-proficiency"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+
+        <!-- Infrastructure -->
+        <section class="mb-6">
+            <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+                <div class="px-4 py-6 sm:px-6">
+                    <h3 class="text-base font-semibold leading-7 text-gray-900">Infrastructure</h3>
+                    <p class="mt-1 max-w-2xl text-sm leading-6 text-gray-500">Proficiency in infrastructure.</p>
+                </div>
+                <div class="border-t border-gray-100">
+                    <dl class="divide-y divide-gray-100">
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Funnels & Landing Pages</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="funnels-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Website Designing</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="website-designing-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Backend Automations</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="backend-automations-proficiency"></dd>
+                        </div>
+                        <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                            <dt class="text-sm font-medium text-gray-900">Email Sequences</dt>
+                            <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0" id="email-sequences-proficiency"></dd>
+                        </div>
+                    </dl>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+
+<script>
+const surveyData = {
+    email: "coachkevin@rideready.bike",
+    revenue: "25,000 USD",
+    currency: "USD",
+    lastMonthRevenue: "null null",
+    lastMonthCurrency: "USD",
+    goals: ["$10k month over month. I can consistently hit $10k in summer, seeking year round."],
+    obstacles: ["Time for dollar dependence. Transitioning to more online to shift that"],
+    trackingSystem: "Stripe, SquareSpace, and now GHL",
+    teamMembers: [
+        "Kevin Stiffler (Owner/operator)",
+        "Lester Pardoe (Coach)",
+        "Jeni Arbuckle (Coach)",
+        "Joe Boyd (Coach)"
+    ],
+    idealCustomer: "Ideal customer is 30-50 yr old, predominantly male, mountain biker looking to progress their riding for more confidence, speed, and safety",
+    freeOffers: [
+        "Don’t have anything live currently. Have developed webinar script, downloadable resources, and preparing some free course content along with a free ride assessment. Also have community built, and free training peaks virtual rides/FTP test. All will need finalization to go live."
+    ],
+    lowTicketOffers: "Current LTO is 2hr in person skills clinic at $350. Developing an online LTO to include a 30 day challenge course, downloadable content, community, and virtual rides.",
+    midTicketOffers: "A 4hr in person skills clinic ($750) and full day skills clinic ($1000). Developing an online MTO to include annual course access pass, self paced course, downloadable content, community, virtual rides",
+    highTicketOffers: "$3500 3 month 1:1 coaching program. On- bike skills, on-bike fitness, off-bike strength and mobility training. In person and remote. This will be used to guide the build out of the online course.",
+    subscriptionOffers: "$750 pmo 1:1 coaching program, and a $350 pmo 1:1 coaching program. Meet weekly or biweekly for 1hr skill sessions",
+    adsStrategy: "FB ads. A/B testing, photo and text. Would like to develop cohesive strategy to include video ads, reels, etc",
+    successExpectations: [
+        "Built for you course design. There’s so many intricacies within GHL. For instance, automations, funnels, sites, etc."
+    ],
+    additionalHelp: [
+        "Coach Kevin To Do List check-offs",
+        "Automations:",
+        "WAIVER AUTOMATION. Waiver MUST be signed prior to accessing paid content (smartwaiver or built in)",
+        "Intake questionnaire (from squarespace)",
+        "Funnel to free resources",
+        "Bike Setup Form",
+        "Email nurturing sequences",
+        "Coupon (29r → 29% off)",
+        "Anytime use, promotions, etc",
+        "Followups.",
+        "Tell a friend credit",
+        "Abandoned cart sequence/automation",
+        "Membership",
+        "30 Days  - 4 weeks, 4 skills calendar/rubric style with links for ease of use",
+        "Products:",
+        "Webinar",
+        "Low ticket (x2)",
+        "Mid ticket",
+        "High Ticket",
+        "Scripts:",
+        "for webinar/storytelling in vids/hooks",
+        "Sites:",
+        "Migration of Squarespace site, intake forms, email sequence, & products to CC360 & reworked for optimization",
+        "https://help.gohighlevel.com/support/solutions/articles/155000003394-squarespace-to-highlevel-migration-guide-",
+        "2hr, Half-day (4hr), & Full Day (8hr) Skills Sessions",
+        "$350 & $750 Monthly Memberships? (current offering)",
+        "$750*3mo (avg duration) =$2250 (12hrs F2F)",
+        "$299 Mid + 12hrs F2F @29% = $1793 (better & cheaper)",
+        "High $1999 (better & cheaper)",
+        "Lower cost cuz lower overhead",
+        "Funnel(s):",
+        "Book a Call homework or one-time offer/ THANK YOU Page offer",
+        "Lead gen to Webinar sign up with email nurturing/LTO (above)",
+        "Mid (above)",
+        "HTO (above)",
+        "upsells/downsells",
+        "1 coaching session $1",
+        "Free Riding Assessment (20min, video/ask questions/lead gen, upsell)",
+        "PreLaunch & live webinar script.",
+        "See online curriculum map funnels",
+        "Calendar:",
+        "appts (and ability for members to book calls/Skills Sessions)",
+        "Quarterly celebration/destination trips - open to all paying members",
+        "App",
+        "GET IT OUT!",
+        "https://help.gohighlevel.com/support/solutions/articles/48001224426-how-to-create-a-whitelabel-membership-app-pwa-",
+        "Achievement Unlocked Skills Based Gamification",
+        "Forms:",
+        "Video submit. Seems unsupported format currently. Workaround?",
+        "Feedback (Rubric - client input and coach input uses)",
+        "Bubble select?",
+        "Adaptive learning - links to relevant lessons?",
+        "Sub-Accounts:",
+        "Coach/Teams",
+        "Ability to add riders/skills reference/skills checklist/certificate (Appsheet?)",
+        "Attendance/check in (QR scan?!)",
+        "“Report card”? (integrate 3rd party? Something like educloud.app? JotForm)",
+        "Skills Based Gamification (achievement unlocked! Black trails, etc)",
+        "Affiliates:",
+        "Bike Shops unique accounts w/QR poster",
+        "Docs/Guides professionally standardized:",
+        "Refined Pyramid",
+        "Preride Check",
+        "Approaching Features",
+        "Bike Setup Guide",
+        "MTB Courses Guide",
+        "Training Plan Supporting Doc",
+        "Social Media ads planning/calendar:",
+        "Regular, coherent content posting Insta/FB",
+        "Ads",
+        "FB, Insta, YouTube",
+        "Partner ads for DirtLabs, RacersEdge, TrainToRide, Gates, Pearl Izumi, Zerode, Magura, etc.",
+        "Email sequences/nurturing/warmup",
+        "SEO"
+    ],
+    existingWebsites: '<a href="http://www.rideready.bike" class="text-blue-500 underline">www.rideready.bike</a>',
+    proficiencies: {
+        filming: 3,
+        editing: 2,
+        marketResearch: 4,
+        productOffering: 4,
+        facebookAds: 2,
+        youtubeAds: 1,
+        leadGeneration: 2,
+        webinar: 1,
+        appointmentSetting: 3,
+        phoneSales: 3,
+        flashSales: 1,
+        emailCampaigns: 1,
+        retargeting: 1,
+        funnels: 1,
+        websiteDesigning: 2,
+        backendAutomations: 1,
+        emailSequences: 1
+    }
+};
+
+function populateData() {
+    document.getElementById('email').innerText = surveyData.email;
+    document.getElementById('revenue').innerText = surveyData.revenue;
+    document.getElementById('currency').innerText = surveyData.currency;
+    document.getElementById('last-month-revenue').innerText = surveyData.lastMonthRevenue;
+    document.getElementById('last-month-currency').innerText = surveyData.lastMonthCurrency;
+    document.getElementById('goals').innerHTML = surveyData.goals.map(goal => `<li>${goal}</li>`).join('');
+    document.getElementById('obstacles').innerHTML = surveyData.obstacles.map(obstacle => `<li>${obstacle}</li>`).join('');
+    document.getElementById('tracking-system').innerText = surveyData.trackingSystem;
+    document.getElementById('team-members').innerHTML = surveyData.teamMembers.map(member => `<li>${member}</li>`).join('');
+    document.getElementById('ideal-customer').innerText = surveyData.idealCustomer;
+    document.getElementById('free-offers').innerHTML = surveyData.freeOffers.map(offer => `<li>${offer}</li>`).join('');
+    document.getElementById('low-ticket-offers').innerText = surveyData.lowTicketOffers;
+    document.getElementById('mid-ticket-offers').innerText = surveyData.midTicketOffers;
+    document.getElementById('high-ticket-offers').innerHTML = surveyData.highTicketOffers;
+    document.getElementById('subscription-offers').innerText = surveyData.subscriptionOffers;
+    document.getElementById('ads-strategy').innerText = surveyData.adsStrategy;
+    document.getElementById('success-expectations').innerHTML = surveyData.successExpectations.map(expectation => `<li>${expectation}</li>`).join('');
+    document.getElementById('additional-help').innerHTML = surveyData.additionalHelp.map(help => `<li>${help}</li>`).join('');
+    document.getElementById('existing-websites').innerHTML = surveyData.existingWebsites;
+    displayStars('filming-proficiency', surveyData.proficiencies.filming);
+    displayStars('editing-proficiency', surveyData.proficiencies.editing);
+    displayStars('market-research-proficiency', surveyData.proficiencies.marketResearch);
+    displayStars('product-offering-proficiency', surveyData.proficiencies.productOffering);
+    displayStars('facebook-ads-proficiency', surveyData.proficiencies.facebookAds);
+    displayStars('youtube-ads-proficiency', surveyData.proficiencies.youtubeAds);
+    displayStars('lead-generation-proficiency', surveyData.proficiencies.leadGeneration);
+    displayStars('webinar-proficiency', surveyData.proficiencies.webinar);
+    displayStars('appointment-setting-proficiency', surveyData.proficiencies.appointmentSetting);
+    displayStars('phone-sales-proficiency', surveyData.proficiencies.phoneSales);
+    displayStars('flash-sales-proficiency', surveyData.proficiencies.flashSales);
+    displayStars('email-campaigns-proficiency', surveyData.proficiencies.emailCampaigns);
+    displayStars('retargeting-proficiency', surveyData.proficiencies.retargeting);
+    displayStars('funnels-proficiency', surveyData.proficiencies.funnels);
+    displayStars('website-designing-proficiency', surveyData.proficiencies.websiteDesigning);
+    displayStars('backend-automations-proficiency', surveyData.proficiencies.backendAutomations);
+    displayStars('email-sequences-proficiency', surveyData.proficiencies.emailSequences);
+    
+    // Update title and header with the first team member's full name
+    const firstMemberFullName = surveyData.teamMembers[0].split(' (')[0];
+    document.getElementById('page-title').innerText = firstMemberFullName + ' - Platinum Strategy Survey';
+    document.getElementById('header-title').innerText = firstMemberFullName + ' - Platinum Strategy Survey';
+}
+
+function displayStars(elementId, rating) {
+    const element = document.getElementById(elementId);
+    let stars = '';
+    for (let i = 0; i < rating; i++) {
+        stars += '<span class="star">★</span>';
+    }
+    element.innerHTML = stars;
+}
+
+// Populate data on page load
+document.addEventListener('DOMContentLoaded', populateData);
+</script>
+
+</body>
+</html>
